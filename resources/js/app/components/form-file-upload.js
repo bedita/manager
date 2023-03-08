@@ -10,11 +10,12 @@
  * @prop {int} defaultActive index of the default active label in labels
  */
 
+import { Icon } from '@iconify/vue2';
+
 export default {
 
     components: {
-        // icons
-        IconUpload: () => import(/* webpackChunkName: "icon-upload" */'@carbon/icons-vue/es/upload/16.js'),
+        Icon,
     },
 
     data() {

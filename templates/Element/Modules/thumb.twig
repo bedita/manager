@@ -13,24 +13,24 @@
 
     {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
         <div class="missing-image has-text-size-largest" title="{{ __('Thumb not available') }}">
-            <icon-help></icon-help>
+            <Icon icon="carbon:help"></Icon>
         </div>
     {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_READY') %}
         <div class="missing-image has-text-size-largest" title="{{ __('Thumb not ready: coming soon') }}">
-            <icon-hourglass></icon-hourglass>
+            <Icon icon="carbon:hourglass"></Icon>
         </div>
     {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
         <div class="missing-image has-text-size-largest" title="{{ __('Image not acceptable for thumb') }}">
-            <icon-help></icon-help>
+            <Icon icon="carbon:help"></Icon>
         </div>
     {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NO_URL') %}
         <div class="missing-image has-text-size-largest" title="{{ __('Missing thumb url') }}">
-            <icon-help></icon-help>
+            <Icon icon="carbon:help"></Icon>
         </div>
     {% else %}
         <img src={{ thumb }} />
     {% endif %}
 
 {% elseif object.type == 'files' %}
-    <icon-document></icon-document>
+    <Icon icon="carbon:document"></Icon>
 {% endif %}

@@ -24,7 +24,7 @@
             {{ Form.hidden('objectType', {'value': objectType})|raw }}
 
             <button class="button button-outlined" @click.prevent="exportSelected" :disabled="!selectedRows.length">
-                <icon-export></icon-export>
+                <Icon icon="carbon:export"></Icon>
                 <span class="ml-05">{{ __('Export') }}</span>
             </button>
 
@@ -40,7 +40,7 @@
             {% endif %}
 
             <button class="button button-outlined" @click.prevent="exportAll">
-                <icon-export></icon-export>
+                <Icon icon="carbon:export"></Icon>
                 <span class="ml-05">{{ exportLabel }}</span>
             </button>
         </div>

@@ -6,18 +6,14 @@
  */
 
 import { confirm } from 'app/components/dialog/dialog';
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
     components: {
+        Icon,
         PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
-        // icons
-        IconCopy: () => import(/* webpackChunkName: "icon-copy" */'@carbon/icons-vue/es/copy/16.js'),
-        IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
-        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
-        IconViewFilled: () => import(/* webpackChunkName: "icon-view-filled" */'@carbon/icons-vue/es/view--filled/16.js'),
-        IconViewOffFilled: () => import(/* webpackChunkName: "icon-view-off-filled" */'@carbon/icons-vue/es/view--off--filled/16.js'),
     },
     data() {
         return {

@@ -17,6 +17,7 @@ import { PaginatedContentMixin } from 'app/mixins/paginated-content';
 import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
 import { error as showError } from 'app/components/dialog/dialog';
+import { Icon } from '@iconify/vue2';
 import sleep from 'sleep-promise';
 import { t } from 'ttag';
 import { warning } from 'app/components/dialog/dialog';
@@ -35,11 +36,7 @@ export default {
 
     components: {
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
-        // icons
-        IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
-        IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
-        IconCube16: () => import(/* webpackChunkName: "icon-cube-16" */'@carbon/icons-vue/es/cube/16.js'),
-        IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
+        Icon,
     },
 
     props: {

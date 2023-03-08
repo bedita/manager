@@ -22,6 +22,7 @@
 *
 */
 
+import { Icon } from '@iconify/vue2';
 import Vue from 'vue';
 
 /**
@@ -29,9 +30,7 @@ import Vue from 'vue';
  */
 export const PanelEvents = new Vue({
     components: {
-        // icons
-        IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
-        IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
+        Icon,
     },
     methods: {
         /**

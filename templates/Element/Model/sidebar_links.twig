@@ -1,21 +1,21 @@
 {% if in_array(resourceType, ['object_types', 'relations']) %}
     {% do _view.append(
         'app-module-buttons',
-        '<a href="' ~ Url.build({'_name': 'model:create:' ~ resourceType}) ~ '" class="button button-primary button-primary-hover-module-model"><icon-add></icon-add><span class="ml-05">' ~ __('Create') ~ '</span></a>'
+        '<a href="' ~ Url.build({'_name': 'model:create:' ~ resourceType}) ~ '" class="button button-primary button-primary-hover-module-model"><Icon icon="carbon:add" /><span class="ml-05">' ~ __('Create') ~ '</span></a>'
     ) %}
 {% endif %}
 
 {% do _view.append(
     'app-module-buttons',
-    '<a href="' ~ Url.build({'_name': 'model:export'}) ~ '" class="button button-outlined"><icon-export></icon-export><span class="ml-05">' ~ __('Export') ~ '</span></a>'
+    '<a href="' ~ Url.build({'_name': 'model:export'}) ~ '" class="button button-outlined"><Icon icon="carbon:export"></Icon><span class="ml-05">' ~ __('Export') ~ '</span></a>'
 ) %}
 
 {# append links to sidebar #}
 {% do _view.append(
     'app-module-links',
-      '<a href="' ~ Url.build({'_name': 'model:list:object_types'}) ~ '"><icon-switcher></icon-switcher><span class="ml-05">' ~ __('Object types') ~ '</span></a>'
-    ~ '<a href="' ~ Url.build({'_name': 'model:list:relations'}) ~ '"><icon-chart-relationship></icon-chart-relationship><span class="ml-05">' ~ __('Relations') ~ '</span></a>'
-    ~ '<a href="' ~ Url.build({'_name': 'model:list:property_types'}) ~ '"><icon-edit></icon-edit><span class="ml-05">' ~ __('Property types') ~ '</span></a>'
-    ~ '<a href="' ~ Url.build({'_name': 'model:list:categories'}) ~ '"><icon-tag></icon-tag><span class="ml-05">' ~ __('Categories') ~ '</span></a>'
-    ~ '<a href="' ~ Url.build({'_name': 'model:list:tags'}) ~ '"><icon-tag></icon-tag><span class="ml-05">' ~ __('Tags') ~ '</span></a>'
+      '<a href="' ~ Url.build({'_name': 'model:list:object_types'}) ~ '"><Icon icon="carbon:switcher"></Icon><span class="ml-05">' ~ __('Object types') ~ '</span></a>'
+    ~ '<a href="' ~ Url.build({'_name': 'model:list:relations'}) ~ '"><Icon icon="carbon:chart-relationship"></Icon><span class="ml-05">' ~ __('Relations') ~ '</span></a>'
+    ~ '<a href="' ~ Url.build({'_name': 'model:list:property_types'}) ~ '"><Icon icon="carbon:edit"></Icon><span class="ml-05">' ~ __('Property types') ~ '</span></a>'
+    ~ '<a href="' ~ Url.build({'_name': 'model:list:categories'}) ~ '"><Icon icon="carbon:tag"></Icon><span class="ml-05">' ~ __('Categories') ~ '</span></a>'
+    ~ '<a href="' ~ Url.build({'_name': 'model:list:tags'}) ~ '"><Icon icon="carbon:tag"></Icon><span class="ml-05">' ~ __('Tags') ~ '</span></a>'
 ) %}

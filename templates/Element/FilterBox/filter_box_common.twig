@@ -16,18 +16,18 @@
 
         <div class="filter-buttons">
             <button class="button button-secondary button-primary-hover-module-{{ currentModule.name }}" type="button" @click.prevent="applyFilter">
-                <icon-search></icon-search>
+                <Icon icon="carbon:search"></Icon>
                 <span class="ml-05">{{ __('Search') }}</span>
             </button>
 
             <button class="button button-outlined" type="button" @click="resetFilter">
-                <icon-filter-reset></icon-filter-reset>
+                <Icon icon="carbon:filter-reset"></Icon>
                 <span class="ml-05">{{ __('Reset filters') }}</span>
             </button>
 
             <button class="toggle-filters button button-outlined is-width-auto" type="button" @click="moreFilters = !moreFilters" v-if="canShowAdvanced">
-                <icon-filter-edit v-if="!moreFilters"></icon-filter-edit><span class="mt-05" v-show="!moreFilters">{{ __('More filters') }}</span>
-                <icon-filter v-if="moreFilters"></icon-filter><span class="mt-05" v-show="moreFilters">{{ __('Less filters') }}</span>
+                <Icon icon="carbon:filter-edit" v-if="!moreFilters"></Icon><span class="mt-05" v-show="!moreFilters">{{ __('More filters') }}</span>
+                <Icon icon="carbon:filter" v-if="moreFilters"></Icon><span class="mt-05" v-show="moreFilters">{{ __('Less filters') }}</span>
             </button>
         </div>
     </div>
@@ -165,7 +165,7 @@
 
 <div v-if="filterActive">
     <p class="is-expanded tag mt-1">
-        <icon-filter></icon-filter>
+        <Icon icon="carbon:filter"></Icon>
         <span class="ml-05">{{ __('Data is filtered') }}</span>
     </p>
 </div>

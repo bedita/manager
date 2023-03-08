@@ -53,7 +53,7 @@
     {% if not translation %}
     <div class="thumbnail" :class="'has-text-module-' + related.type">
         <figure class="center-icon icon-opaque" :class="(related.meta && related.meta.thumb_url)? '' : `icon-${related.type}`">
-            <icon-cube-16 v-if="!related.meta || !related.meta.thumb_url"></icon-cube-16>
+            <Icon icon="carbon:cube" v-if="!related.meta || !related.meta.thumb_url"></Icon>
             <img :src="related.meta.thumb_url" v-if="related.meta && related.meta.thumb_url" />
         </figure>
     </div>
@@ -165,12 +165,12 @@
     <footer class="is-flex space-between mt-05 p-05">
         {% if stage %}
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">
-                <icon-launch></icon-launch>
+                <Icon icon="carbon:launch"></Icon>
                 <span class="ml-05">{{ __('Edit') }}</span>
             </a>
             {% if not readonly %}
             <a class="button button-outlined-white is-small" @click.prevent="removeAddedRelations(related.id)">
-                <icon-trash-can-16></icon-trash-can-16>
+                <Icon icon="carbon:trash-can"></Icon>
                 <span class="ml-05">{{ __('Remove') }}</span>
             </a>
             {% endif %}
@@ -180,37 +180,37 @@
                 v-html="(selectedObjects.indexOf(related) !== -1)? '{{ __('Discard') }}' : '{{ __('Pick') }}'"
                 :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check button-secondary' : 'button-outlined-white button-text icon-check-empty'"></button>
             <a class="button button-outlined-white is-small" @click.stop :href="$helpers.buildViewUrl(related.id)" target="_blank">
-                <icon-launch></icon-launch>
+                <Icon icon="carbon:launch"></Icon>
                 <span class="ml-05">{{ __('Open') }}</span>
             </a>
 
         {% elseif translation %}
             {% set baseUrl= Url.build({ '_name': 'translations:edit', 'object_type': object.type, 'id': object.id, 'lang': ''}, {'fullBase': true}) %}
             <a class="button button-outlined-white is-small mr-1" :href="`{{ baseUrl }}${related.attributes.lang}`" target="_blank">
-                <icon-launch></icon-launch>
+                <Icon icon="carbon:launch"></Icon>
                 <span class="ml-05">{{ __('Open') }}</span>
             </a>
             <a class="button button-text is-small" @click.prevent="relationToggle(related)" v-if="containsId(removedRelated, related.id)">
-                <icon-undo></icon-undo>
+                <Icon icon="carbon:undo"></Icon>
                 <span class="ml-05">{{ __('undo remove') }}</span>
             </a>
             <a class="button button-text is-small" @click.prevent="relationToggle(related)" v-else>
-                <icon-unlink></icon-unlink>
+                <Icon icon="carbon:unlink"></Icon>
                 <span class="ml-05">{{ __('remove') }}</span>
             </a>
 
         {% else %}
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)">
-                <icon-launch></icon-launch>
+                <Icon icon="carbon:launch"></Icon>
                 <span class="ml-05">{{ __('Edit') }}</span>
             </a>
             {% if not readonly %}
             <a class="button button-text is-small" @click.prevent="relationToggle(related)" v-if="containsId(removedRelated, related.id)">
-                <icon-undo></icon-undo>
+                <Icon icon="carbon:undo"></Icon>
                 <span class="ml-05">{{ __('undo') }}</span>
             </a>
             <a class="button button-text is-small" @click.prevent="relationToggle(related)" v-else>
-                <icon-unlink></icon-unlink>
+                <Icon icon="carbon:unlink"></Icon>
                 <span class="ml-05">{{ __('remove') }}</span>
             </a>
             {% endif %}

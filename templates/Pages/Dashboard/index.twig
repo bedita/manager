@@ -12,9 +12,9 @@
                     {% set url = module.route ? Url.build(module.route) : Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
                     <a href="{{ url }}" class="{{ class }}">
                         <span>{{ Layout.tr(module.label|default(name)) }}</span>
-                        {% if module.hints.multiple_types and not module.class %}<icon-grid-32></icon-grid-32>{% endif %}
-                        {% if name == 'publications' %}<icon-wikis-32></icon-wikis-32>{% endif %}
-                        {% if name == 'folders' %}<icon-tree-view></icon-tree-view>{% endif %}
+                        {% if module.hints.multiple_types and not module.class %}<Icon icon="carbon:grid"></Icon>{% endif %}
+                        {% if name == 'publications' %}<Icon icon="carbon:wikis"></Icon>{% endif %}
+                        {% if name == 'folders' %}<Icon icon="carbon:tree-view"></Icon>{% endif %}
                     </a>
                 {% endif %}
             {% endfor %}
@@ -32,37 +32,37 @@
                 {% if modules.trash %}
                     <a href="{{ Url.build({ '_name': 'trash:list' }) }}" title="{{ __('Trash') }}" class="dashboard-item has-background-black">
                         {{ __('Trash can') }}
-                        <icon-trash-can-32></icon-trash-can-32>
+                        <Icon icon="carbon:trash-can"></Icon>
                     </a>
                 {% endif %}
 
                 {% if modules.users %}
                     <a href="{{ Url.build({'_name': 'modules:list', 'object_type': 'users'}) }}" title="{{ __('System users') }}" class="dashboard-item has-background-black">
                         {{ __('System users') }}
-                        <icon-user-admin></icon-user-admin>
+                        <Icon icon="carbon:user-admin"></Icon>
                     </a>
                 {% endif %}
 
                 <a href="{{ Url.build({'_name': 'user_profile:view'}) }}" title="{{ __('User Profile') }}" class="dashboard-item has-background-black">
                     {{ __('User Profile') }}
-                    <icon-user-profile></icon-user-profile>
+                    <Icon icon="carbon:user-profile"></Icon>
                 </a>
 
                 {% if config('Filters.import') %}
                     <a href="{{ Url.build({'_name': 'import:index'}) }}" title="{{ __('Import') }}" class="dashboard-item has-background-black">
                         {{ __('Import') }}
-                        <icon-download></icon-download>
+                        <Icon icon="carbon:download"></Icon>
                     </a>
                 {% endif %}
 
                 {% if in_array('admin', user.roles) %}
                     <a href="{{ Url.build({'_name': 'admin:list:appearance'}) }}" title="{{ __('Administration') }}" class="dashboard-item has-background-black">
                         {{ __('Administration') }}
-                        <icon-settings></icon-settings>
+                        <Icon icon="carbon:settings"></Icon>
                     </a>
                     <a href="{{ Url.build({'_name': 'model:list:object_types'}) }}" title="{{ __('Data modeling') }}" class="dashboard-item has-background-black">
                         {{ __('Data modeling') }}
-                        <icon-concept></icon-concept>
+                        <Icon icon="carbon:concept"></Icon>
                     </a>
                 {% endif %}
             </div>
@@ -76,7 +76,7 @@
             <nav role="search">
                 <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
                 <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">
-                    <icon-search></icon-search>
+                    <Icon icon="carbon:search"></Icon>
                     {{ __('Search') }}
                 </button>
             </nav>

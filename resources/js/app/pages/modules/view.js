@@ -1,5 +1,6 @@
 import { AjaxLogin } from '../../components/ajax-login/ajax-login.js';
 import Vue from 'vue';
+import { Icon } from '@iconify/vue2';
 
 /**
  * Templates that uses this component (directly or indirectly):
@@ -18,24 +19,7 @@ export default {
         ObjectNav: () => import(/* webpackChunkName: "object-nav" */'app/components/object-nav/object-nav'),
         ObjectProperty: () => import(/* webpackChunkName: "object-property" */'app/components/object-property/object-property'),
         ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
-        // icons
-        IconChevronLeft: () => import(/* webpackChunkName: "icon-chevron-left" */'@carbon/icons-vue/es/chevron--left/32.js'),
-        IconChevronRight: () => import(/* webpackChunkName: "icon-chevron-right" */'@carbon/icons-vue/es/chevron--right/32.js'),
-        IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
-        IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/16.js'),
-        IconExport: () => import(/* webpackChunkName: "icon-export" */'@carbon/icons-vue/es/export/16.js'),
-        IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
-        IconLocked: () => import(/* webpackChunkName: "icon-locked" */'@carbon/icons-vue/es/locked/16.js'),
-        IconReplicate: () => import(/* webpackChunkName: "icon-replicate" */'@carbon/icons-vue/es/replicate/16.js'),
-        IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
-        IconStop: () => import(/* webpackChunkName: "icon-stop" */'@carbon/icons-vue/es/stop/16.js'),
-        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
-        IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
-        IconUnlink: () => import(/* webpackChunkName: "icon-unlink" */'@carbon/icons-vue/es/unlink/16.js'),
-        IconUnlocked: () => import(/* webpackChunkName: "icon-unlocked" */'@carbon/icons-vue/es/unlocked/16.js'),
-        IconUpload: () => import(/* webpackChunkName: "icon-upload" */'@carbon/icons-vue/es/upload/16.js'),
-        IconView: () => import(/* webpackChunkName: "icon-view" */'@carbon/icons-vue/es/view/16.js'),
-        IconWikis16: () => import(/* webpackChunkName: "icon-wikis-16" */'@carbon/icons-vue/es/wikis/16.js'),
+        Icon,
     },
 
     props: {

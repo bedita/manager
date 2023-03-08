@@ -127,7 +127,7 @@
 
             <div>
                 <button v-if="isPanelOpen({{object.id|json_encode}})" @click.prevent.stop="closePanel()">
-                    <icon-close></icon-close>
+                    <Icon icon="carbon:close"></Icon>
                     <span class="ml-05">{{ __('cancel') }}</span>
                 </button>
 
@@ -139,7 +139,7 @@
                         alreadyInView: alreadyInView,
                         relationTypes: relationTypes,
                     })">
-                        <icon-add></icon-add>
+                        <Icon icon="carbon:add"></Icon>
                         <span class="ml-05">{{ __('add objects') }}</span>
                     </button>
             </div>
@@ -165,7 +165,7 @@
 
             {% for label, format in formats %}
                 <a v-if="exportFormat === '{{ format }}'" class="button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">
-                    <icon-export></icon-export>
+                    <Icon icon="carbon:export"></Icon>
                     <span class="ml-05">{{ __('Export') }}</span>
                 </a>
             {% endfor %}

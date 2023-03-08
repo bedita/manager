@@ -12,6 +12,7 @@
  * @prop {String} label label of the property view
  *
  */
+import { Icon } from '@iconify/vue2';
 
 const API_URL = new URL(BEDITA.base).pathname;
 const API_OPTIONS = {
@@ -35,19 +36,7 @@ export default {
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
         StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
-        // icons
-        IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
-        IconDownload: () => import(/* webpackChunkName: "icon-download" */'@carbon/icons-vue/es/download/16.js'),
-        IconExport: () => import(/* webpackChunkName: "icon-export" */'@carbon/icons-vue/es/export/16.js'),
-        IconGrid16: () => import(/* webpackChunkName: "icon-grid-16" */'@carbon/icons-vue/es/grid/16.js'),
-        IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
-        IconListBulleted16: () => import(/* webpackChunkName: "icon-list-bulleted-16" */'@carbon/icons-vue/es/list--bulleted/16.js'),
-        IconStop: () => import(/* webpackChunkName: "icon-stop" */'@carbon/icons-vue/es/stop/16.js'),
-        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
-        IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
-        IconUnlink: () => import(/* webpackChunkName: "icon-unlink" */'@carbon/icons-vue/es/unlink/16.js'),
-        IconView: () => import(/* webpackChunkName: "icon-view" */'@carbon/icons-vue/es/view/16.js'),
-        IconWikis16: () => import(/* webpackChunkName: "icon-wikis-16" */'@carbon/icons-vue/es/wikis/16.js'),
+        Icon,
     },
 
     props: {

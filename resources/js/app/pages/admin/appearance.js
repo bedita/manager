@@ -1,8 +1,8 @@
+import { Icon } from '@iconify/vue2';
+
 export default {
     components: {
-        // icons
-        IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
-        IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
+        Icon,
     },
     props: {
         configkey: {

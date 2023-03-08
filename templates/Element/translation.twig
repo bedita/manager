@@ -88,7 +88,7 @@
                             }) %}
                             {{ Form.control('lang', options)|raw }}
                             <a class="button has-background-module-{{ object.type }}" href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id }) }}">
-                                <icon-launch></icon-launch>
+                                <Icon icon="carbon:launch"></Icon>
                                 <span class="ml-05">{{ __('Edit') }}</span>
                             </a>
                         </div>
@@ -119,7 +119,7 @@
 
             {# Append "Save" to sidebar #}
             {% do _view.append('app-module-buttons',
-                '<button form="form-translate" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" onclick="this.classList.add(\'is-loading-spinner\')"><icon-save></icon-save><span class="ml-05">' ~ __('Save') ~ '</span></button>'
+                '<button form="form-translate" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" onclick="this.classList.add(\'is-loading-spinner\')"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __('Save') ~ '</span></button>'
             ) %}
 
             {% if translation.id %}
@@ -131,7 +131,7 @@
                 {# Append "Remove" to sidebar #}
                 {% do _view.append(
                     'app-module-buttons',
-                    '<button form="form-delete-translation" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><icon-trash-can-16></icon-trash-can-16><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
+                    '<button form="form-delete-translation" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:trash-can"></Icon><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
                 ) %}
             {% endif %}
 

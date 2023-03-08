@@ -5,12 +5,11 @@
  * <menu> component
  *
  */
+import { Icon } from '@iconify/vue2';
 
 export default {
     components: {
-        IconCube20: () => import(/* webpackChunkName: "icon-cube-20" */'@carbon/icons-vue/es/cube/20.js'),
-        IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/20.js'),
-        IconTrashCan20: () => import(/* webpackChunkName: "icon-trash-can-20" */'@carbon/icons-vue/es/trash-can/20.js'),
+        Icon,
     },
     data() {
         return {

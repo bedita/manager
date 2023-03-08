@@ -40,8 +40,8 @@
         {{ Form.end()|raw }}
         {% do _view.append(
             'app-module-buttons',
-            '<button form="form-main" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto"><icon-save></icon-save><span class="ml-05">' ~ __('Save') ~ '</span></button>'
-            ~ '<button form="form-delete-relation" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto"><icon-trash-can-16></icon-trash-can-16><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
+            '<button form="form-main" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __('Save') ~ '</span></button>'
+            ~ '<button form="form-delete-relation" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:trash-can"></Icon><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
         ) %}
     </div>
 

@@ -33,7 +33,7 @@
 
                     {% set propIndex = loop.index0 %}
                     <div class="first-cell">{{ resource.id }}
-                        <icon-edit v-if="containsId(editPropertyTypes, {{ resource.id }})"></icon-edit>
+                        <Icon icon="carbon:edit" v-if="containsId(editPropertyTypes, {{ resource.id }})"></Icon>
                     </div>
 
                     {% for prop in properties %}
@@ -65,10 +65,10 @@
 
                     <div class="action-cell">
                         <button class="center-icon inverted remove-action" @click.prevent="removePropertyType({{resource.id}})">
-                            <icon-trash-can-16></icon-trash-can-16>
+                            <Icon icon="carbon:trash-can"></Icon>
                         </button>
                         <button class="center-icon inverted undo-remove-action" @click.prevent="undoRemovePropertyType({{resource.id}})">
-                            <icon-undo></icon-undo>
+                            <Icon icon="carbon:undo"></Icon>
                         </button>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
 
                 <div class="first-cell">
                     <: propertyType.id :>
-                    <icon-edit v-if="containsId(editPropertyTypes, propertyType.id)"></icon-edit>
+                    <Icon icon="carbon:edit" v-if="containsId(editPropertyTypes, propertyType.id)"></Icon>
                 </div>
                 <div class="primary">
                     <input type="text" name="" placeholder="name"
@@ -100,10 +100,10 @@
                 </div>
                 <div class="action-cell">
                     <button class="center-icon inverted remove-action" @click="removePropertyType(propertyType.id)">
-                        <icon-trash-can-16></icon-trash-can-16>
+                        <Icon icon="carbon:trash-can"></Icon>
                     </button>
                     <button class="center-icon inverted undo-remove-action" @click="undoRemovePropertyType(propertyType.id)">
-                        <icon-undo></icon-undo>
+                        <Icon icon="carbon:undo"></Icon>
                     </button>
                 </div>
             </div>
@@ -128,7 +128,7 @@
             <div class="index-entry">
                 <div v-if="formIsModified">
                     <button @click.prevent.stop="save" class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto">
-                        <icon-save></icon-save>
+                        <Icon icon="carbon:save"></Icon>
                         <span class="ml-05">{{ __('Save') }}</span>
                     </button>
                 </div>

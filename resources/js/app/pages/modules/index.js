@@ -1,6 +1,3 @@
-import { confirm } from 'app/components/dialog/dialog';
-import { t } from 'ttag';
-
 /**
  * Templates that uses this component (directly or indirectly)
  *  Template/Modules/index.twig
@@ -8,6 +5,10 @@ import { t } from 'ttag';
  * <modules-index> component used for ModulesPage -> Index
  *
  */
+import { confirm } from 'app/components/dialog/dialog';
+import { Icon } from '@iconify/vue2';
+import { t } from 'ttag';
+
 export default {
     components: {
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
@@ -17,22 +18,7 @@ export default {
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         FilterBoxView: () => import(/* webpackChunkName: "tree-view" */'app/components/filter-box'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
-        // icons
-        IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/32.js'),
-        IconCategories: () => import(/* webpackChunkName: "icon-categories" */'@carbon/icons-vue/es/categories/16.js'),
-        IconCheckmark: () => import(/* webpackChunkName: "icon-checkmark" */'@carbon/icons-vue/es/checkmark/16.js'),
-        IconCopy: () => import(/* webpackChunkName: "icon-copy" */'@carbon/icons-vue/es/copy/16.js'),
-        IconDocument: () => import(/* webpackChunkName: "icon-document" */'@carbon/icons-vue/es/document/16.js'),
-        IconExport: () => import(/* webpackChunkName: "icon-export" */'@carbon/icons-vue/es/export/16.js'),
-        IconFilter: () => import(/* webpackChunkName: "icon-filter" */'@carbon/icons-vue/es/filter/16.js'),
-        IconFilterEdit: () => import(/* webpackChunkName: "icon-filter-edit" */'@carbon/icons-vue/es/filter--edit/16.js'),
-        IconFilterReset: () => import(/* webpackChunkName: "icon-filter-reset" */'@carbon/icons-vue/es/filter--reset/16.js'),
-        IconHelp: () => import(/* webpackChunkName: "icon-help" */'@carbon/icons-vue/es/help/16.js'),
-        IconHourglass: () => import(/* webpackChunkName: "icon-hourglass" */'@carbon/icons-vue/es/hourglass/16.js'),
-        IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
-        IconRedo: () => import(/* webpackChunkName: "icon-redo" */'@carbon/icons-vue/es/redo/16.js'),
-        IconSearch: () => import(/* webpackChunkName: "icon-search" */'@carbon/icons-vue/es/search/16.js'),
-        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
+        Icon,
     },
 
     /**

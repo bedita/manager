@@ -6,6 +6,7 @@
  */
 
 import { FetchMixin } from 'app/mixins/fetch';
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
@@ -32,12 +33,12 @@ export default {
                         <span class="name" :class="info.cancelled? 'has-text-gray-500' : ''"><: info.file.name :></span>
 
                         <button v-show="!info.error && !info.cancelled && !info.done && !info.pending" class="button-outlined" @click.stop.prevent="abortUpload(info.file)">
-                            <icon-stop></icon-stop>
+                            <Icon icon="carbon:stop"></Icon>
                             <span class="ml-05">${t`stop`}</span>
                         </button>
 
                         <button v-show="(info.error || info.cancelled) && !info.done" class="button-outlined" @click.stop.prevent="removeProgressItem(info.file)">
-                            <icon-trash-can-16></icon-trash-can-16>
+                            <Icon icon="carbon:trash-can"></Icon>
                             <span class="ml-05">${t`remove`}</span>
                         </button>
 
@@ -60,9 +61,7 @@ export default {
     `,
 
     components: {
-        // icons
-        IconStop: () => import(/* webpackChunkName: "icon-stop" */'@carbon/icons-vue/es/stop/16.js'),
-        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
+        Icon,
     },
 
     props: {

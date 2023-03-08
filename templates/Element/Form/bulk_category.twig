@@ -11,7 +11,7 @@
         {% do Form.unlockField('ids') %}
 
         <button class="button button-outlined" @click.prevent="bulkActions('bulk-categories')" :disabled="!selectedRows.length">
-            <icon-checkmark></icon-checkmark>
+            <Icon icon="carbon:checkmark"></Icon>
             <span class="ml-05">{{ __('Ok') }}</span>
         </button>
     </div>

@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 import { error as showError } from 'app/components/dialog/dialog';
 
@@ -6,12 +7,12 @@ export default {
         <form class="table-row">
             <div class="name-cell">
                 <input type="text" name="name" autocomplete="off" autocorrect="off" autocapitalize="off" size="50" maxlength="50" @change="onChangeName($event)" v-model="name" />
-                <span class="ml-05" v-title="this.$helpers.minLength(3)"><icon-information></icon-information></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><Icon icon="carbon:information"></Icon></span>
                 <div v-if="nameInUse()" v-text="errorAlreadyInUse"></div>
             </div>
             <div class="label-cell">
                 <input type="text" name="label" autocomplete="off" autocorrect="off" autocapitalize="off" v-model="label" />
-                <span class="ml-05" v-title="this.$helpers.minLength(3)"><icon-information></icon-information></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><Icon icon="carbon:information"></Icon></span>
             </div>
             <div class="parent_id-cell">
                 <select v-model="parent">
@@ -32,7 +33,7 @@ export default {
             </div>
             <div v-show="!id" class="buttons-cell narrow">
                 <button :disabled="name.length < 3 || label.length < 3 || nameInUse() || type === ''" class="button button-text-white is-width-auto" @click.stop.prevent="onCreate()">
-                    <icon-save></icon-save>
+                    <Icon icon="carbon:save"></Icon>
                     <span class="ml-05">${t`Create`}</span>
                 </button>
             </div>
@@ -41,13 +42,13 @@ export default {
             </div>
             <div v-show="id" class="buttons-cell narrow">
                 <button :disabled="name.length < 3 || label.length < 3 || unchanged() || nameInUse()" class="button button-text-white is-width-auto" @click.stop.prevent="onModify()">
-                    <icon-save></icon-save>
+                    <Icon icon="carbon:save"></Icon>
                     <span class="ml-05">${t`Modify`}</span>
                 </button>
             </div>
             <div v-show="id" class="buttons-cell narrow">
                 <button class="button button-text-white is-width-auto" @click.stop.prevent="onDelete()">
-                    <icon-trash-can-16></icon-trash-can-16>
+                    <Icon icon="carbon:trash-can"></Icon>
                     <span class="ml-05">${t`Delete`}</span>
                 </button>
             </div>
@@ -55,12 +56,7 @@ export default {
     `,
 
     components: {
-        // icons
-        IconEdit: () => import(/* webpackChunkName: "icon-edit" */'@carbon/icons-vue/es/edit/16.js'),
-        IconInformation: () => import(/* webpackChunkName: "icon-information" */'@carbon/icons-vue/es/information/16.js'),
-        IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
-        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
-        IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
+        Icon,
     },
 
     props: {

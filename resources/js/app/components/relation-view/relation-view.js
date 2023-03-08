@@ -16,6 +16,7 @@
  */
 
 import flatpickr from 'flatpickr';
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 import { PaginatedContentMixin } from 'app/mixins/paginated-content';
@@ -36,18 +37,7 @@ export default {
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         DropUpload: () => import(/* webpackChunkName: "drop-upload" */'app/components/drop-upload'),
         LocationsView: () => import(/* webpackChunkName: "locations-view" */'app/components/locations-view/locations-view'),
-        // icons
-        IconAdd: () => import(/* webpackChunkName: "icon-add" */'@carbon/icons-vue/es/add/16.js'),
-        IconClose: () => import(/* webpackChunkName: "icon-close" */'@carbon/icons-vue/es/close/16.js'),
-        IconCube16: () => import(/* webpackChunkName: "icon-cube-16" */'@carbon/icons-vue/es/cube/16.js'),
-        IconExport: () => import(/* webpackChunkName: "icon-export" */'@carbon/icons-vue/es/export/16.js'),
-        IconGrid16: () => import(/* webpackChunkName: "icon-grid-16" */'@carbon/icons-vue/es/grid/16.js'),
-        IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
-        IconListBulleted16: () => import(/* webpackChunkName: "icon-list-bulleted-16" */'@carbon/icons-vue/es/list--bulleted/16.js'),
-        IconStop: () => import(/* webpackChunkName: "icon-stop" */'@carbon/icons-vue/es/stop/16.js'),
-        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
-        IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
-        IconUnlink: () => import(/* webpackChunkName: "icon-unlink" */'@carbon/icons-vue/es/unlink/16.js'),
+        Icon,
     },
 
     props: {

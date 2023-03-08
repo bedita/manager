@@ -52,14 +52,14 @@
         {% if Perms.canCreate() %}
             {% do _view.append(
                 'app-module-buttons',
-                '<a href="' ~ Url.build({'_name': 'modules:create', 'object_type': objectType}) ~ '" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ '"><icon-add></icon-add><span class="ml-05">' ~ __('Create') ~ '</span></a>'
+                '<a href="' ~ Url.build({'_name': 'modules:create', 'object_type': objectType}) ~ '" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ '"><Icon icon="carbon:add"></Icon><span class="ml-05">' ~ __('Create') ~ '</span></a>'
             ) %}
         {% endif %}
 
         {% if schema.properties.categories %}
             {% do _view.append(
                 'app-module-buttons',
-                '<a href="' ~ Url.build({'_name': 'modules:categories:index', 'object_type': objectType}) ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><icon-categories></icon-categories><span class="ml-05">' ~ __('Categories') ~ '</span></a>'
+                '<a href="' ~ Url.build({'_name': 'modules:categories:index', 'object_type': objectType}) ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><Icon icon="carbon:categories"></Icon><span class="ml-05">' ~ __('Categories') ~ '</span></a>'
             ) %}
         {% endif %}
 

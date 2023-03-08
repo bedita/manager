@@ -249,7 +249,7 @@ class LayoutHelper extends Helper
         $filter = ['type' => [$type]];
 
         return $this->Html->link(
-            sprintf('<span class="is-sr-only">%s</span><icon-trash-can-20></icon-trash-can-20>', __('Trash')),
+            sprintf('<span class="is-sr-only">%s</span><Icon icon="carbon:trash-can"></Icon>', __('Trash')),
             ['_name' => 'trash:list', '?' => compact('filter')],
             ['class' => $classes, 'title' => $title, 'escape' => false]
         );

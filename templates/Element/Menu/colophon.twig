@@ -5,13 +5,13 @@
 
 <div class="menu-colophon">
     <span>
-        <icon-checkmark></icon-checkmark>
+        <Icon icon="carbon:checkmark"></Icon>
         {{ Html.link('Manager', 'https://github.com/bedita/manager', {'target': '_blank'})|raw }} {{ config('Manager.version') }}
     </span>
     {% if project.version %}
     <span class="{{ apiClass }}" title="{{ warn }}">
-        {% if apiCheck == 1 %}<icon-checkmark></icon-checkmark>{% endif %}
-        {% if apiCheck != 1 %}<icon-error></icon-error>{% endif %}
+        {% if apiCheck == 1 %}<Icon icon="carbon:checkmark"></Icon>{% endif %}
+        {% if apiCheck != 1 %}<Icon icon="carbon:error"></Icon>{% endif %}
         {{ Html.link('API', 'https://github.com/bedita/bedita', {'target': '_blank'})|raw }} {{ project.version }}
     </span>
     {% endif %}

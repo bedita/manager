@@ -1149,18 +1149,6 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@carbon/icon-helpers@^10.38.0":
-  version "10.38.0"
-  resolved "https://registry.npmjs.org/@carbon/icon-helpers/-/icon-helpers-10.38.0.tgz#9e4e8f79fdd20327c9f31a7a7e916f51c8c44617"
-  integrity sha512-m3v05nKXQvxDZLFEZPYDHt94WiBwOraIHk3dHmdoTpQbYPVd2zTggpJiUOYbm+4vot7nLcsUkClQfna85BlWKA==
-
-"@carbon/icons-vue@^10.56.0":
-  version "10.65.0"
-  resolved "https://registry.npmjs.org/@carbon/icons-vue/-/icons-vue-10.65.0.tgz#819f83c3c1e35b1a8cfa9aa20cb6b1f4a18970b8"
-  integrity sha512-Y36p3vT94OVzD5R2mFHIIpkesiBD+Gfkq46XmNs2gaJamT2DQ5+qsLFyWFYr+TasANDT6RRm3uPQ79aD1oKjrA==
-  dependencies:
-    "@carbon/icon-helpers" "^10.38.0"
-
 "@chialab/typos@^0.1.1":
   version "0.1.1"
   resolved "https://registry.npmjs.org/@chialab/typos/-/typos-0.1.1.tgz#05b67f71d551b6511353ebc7b8c8105c5f242a0d"
@@ -1204,6 +1192,18 @@
   version "1.2.1"
   resolved "https://registry.npmjs.org/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
+
+"@iconify/types@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/@iconify/types/-/types-2.0.0.tgz#ab0e9ea681d6c8a1214f30cd741fe3a20cc57f57"
+  integrity sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==
+
+"@iconify/vue2@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@iconify/vue2/-/vue2-2.1.0.tgz#fbeaf02955c1ed31fbb0a935516679daaff4f6fd"
+  integrity sha512-+R4T9EqrUecMKh/tdiscju/mJS+HCzHFFuJ9XnNcFLaIj3lBOdh8RJolPY9n4k7XRG5V/tY16Lzx+mv+vOmjhA==
+  dependencies:
+    "@iconify/types" "^2.0.0"
 
 "@jest/schemas@^29.4.2":
   version "29.4.2"

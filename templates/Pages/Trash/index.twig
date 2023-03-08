@@ -38,7 +38,7 @@
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
                         {% do Form.unlockField('ids') %}
                         <button @click.prevent="restoreItem" class="button button-primary is-width-auto" :disabled="!selectedRows.length">
-                            <icon-redo></icon-redo>
+                            <Icon icon="carbon:redo"></Icon>
                             <span class="ml-05">{{ __('Restore') }}</span>
                         </button>
                     {{ Form.end()|raw }}
@@ -48,7 +48,7 @@
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
                         {% do Form.unlockField('ids') %}
                         <button @click.prevent="deleteItem" class="button button-primary is-width-auto" :disabled="!selectedRows.length">
-                            <icon-trash-can-16></icon-trash-can-16>
+                            <Icon icon="carbon:trash-can"></Icon>
                             <span class="ml-05">{{ __('Delete') }}</span>
                         </button>
                     {{ Form.end()|raw }}
@@ -64,7 +64,7 @@
         {# Append "Remove" to sidebar #}
         {% do _view.append(
             'app-module-buttons',
-            '<button form="form-empty-trash" class="button button-primary button-primary-hover-module-model is-width-auto"><icon-trash-can-16></icon-trash-can-16><span class="ml-05">' ~ __('Empty-verb') ~ '</span></button>'
+            '<button form="form-empty-trash" class="button button-primary button-primary-hover-module-model is-width-auto"><Icon icon="carbon:trash-can"></Icon><span class="ml-05">' ~ __('Empty-verb') ~ '</span></button>'
         ) %}
     </div>
 </trash-index>

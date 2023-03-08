@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
@@ -18,8 +19,8 @@ export default {
             </div>
             <div>
                 <button @click.prevent.stop="toggleShow" class="button button-primary" style="min-width: 32px;" :disabled="!this.password || this.password.length == 0">
-                    <icon-view-filled v-if="show"></icon-view-filled>
-                    <icon-view-off-filled v-if="!show"></icon-view-off-filled>
+                    <Icon icon="carbon:view-filled" v-if="show"></Icon>
+                    <Icon icon="carbon:view-off-filled" v-if="!show"></Icon>
                 </button>
             </div>
         </div>
@@ -27,9 +28,7 @@ export default {
     `,
 
     components: {
-        // icons
-        IconViewFilled: () => import(/* webpackChunkName: "icon-view-filled" */'@carbon/icons-vue/es/view--filled/16.js'),
-        IconViewOffFilled: () => import(/* webpackChunkName: "icon-view-off-filled" */'@carbon/icons-vue/es/view--off--filled/16.js'),
+        Icon,
     },
 
     data() {

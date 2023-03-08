@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 import { confirm, error as showError, info as showInfo } from 'app/components/dialog/dialog';
 
@@ -19,18 +20,18 @@ export default {
             </div>
             <div v-if="canSave && !editMode">
                 <button @click.prevent="editMode = !editMode" class="button button-outlined">
-                    <icon-edit></icon-edit>
+                    <Icon icon="carbon:edit"></Icon>
                     <span class="ml-05">${t`Edit`}</span>
                 </button>
             </div>
 
             <div v-if="editMode">
                 <input type="text" size="50" maxlength="50" v-model="name" @change="onChangeName($event)" />
-                <span class="ml-05" v-title="this.$helpers.minLength(3)"><icon-information></icon-information></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><Icon icon="carbon:information"></Icon></span>
             </div>
             <div v-if="editMode">
                 <input type="text" v-model="label" />
-                <span class="ml-05" v-title="this.$helpers.minLength(3)"><icon-information></icon-information></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><Icon icon="carbon:information"></Icon></span>
             </div>
             <div v-if="editMode">
                 <input type="checkbox" v-model="enabled" />
@@ -41,15 +42,15 @@ export default {
             </div>
             <div v-if="editMode">
                 <button @click.prevent="cancel" class="button button-outlined" v-if="obj?.id">
-                    <icon-undo></icon-undo>
+                    <Icon icon="carbon:undo"></Icon>
                     <span class="ml-05">${t`Cancel`}</span>
                 </button>
                 <button @click.prevent="save" class="button button-primary" :disabled="name.length < 3 || label.length < 3">
-                    <icon-save></icon-save>
+                    <Icon icon="carbon:save"></Icon>
                     <span class="ml-05">${t`Save`}</span>
                 </button>
                 <button @click.prevent="remove" class="button button-outlined" v-if="obj?.id">
-                    <icon-trash-can-16></icon-trash-can-16>
+                    <Icon icon="carbon:trash-can"></Icon>
                     <span class="ml-05">${t`Remove`}</span>
                 </button>
             </div>
@@ -57,12 +58,7 @@ export default {
     `,
 
     components: {
-        // icons
-        IconEdit: () => import(/* webpackChunkName: "icon-edit" */'@carbon/icons-vue/es/edit/16.js'),
-        IconInformation: () => import(/* webpackChunkName: "icon-information" */'@carbon/icons-vue/es/information/16.js'),
-        IconSave: () => import(/* webpackChunkName: "icon-save" */'@carbon/icons-vue/es/save/16.js'),
-        IconTrashCan16: () => import(/* webpackChunkName: "icon-trash-can-16" */'@carbon/icons-vue/es/trash-can/16.js'),
-        IconUndo: () => import(/* webpackChunkName: "icon-undo" */'@carbon/icons-vue/es/undo/16.js'),
+        Icon,
     },
 
     props: {

@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 const options = {
@@ -94,7 +95,7 @@ export default {
                         <div class="is-flex">
                             <input class="coordinates" type="text" v-model="coordinates" @change="onChange" :disabled="!!id" />
                             <button class="get-coordinates" @click.prevent="geocode" :disabled="!apiKey || !address">
-                                <icon-wikis-16></icon-wikis-16>
+                                <Icon icon="carbon:wikis"></Icon>
                                 <span class="ml-05">${t`GET`}</span>
                             </button>
                         </div>
@@ -121,11 +122,11 @@ export default {
             </div>
             <div class="location-buttons">
                 <a v-if="id" class="button button-text-white" :href="$helpers.buildViewUrl(id)" target="_blank">
-                    <icon-launch></icon-launch>
+                    <Icon icon="carbon:launch"></Icon>
                     <span class="ml-05">${t`edit`}</span>
                 </a>
                 <button @click.prevent="onRemove" class="button button-text-white remove">
-                    <icon-unlink></icon-unlink>
+                <Icon icon="carbon:unlink"></Icon>
                     <span class="ml-05">${t`remove`}</span>
                 </button>
             </div>
@@ -133,10 +134,7 @@ export default {
     </div>`,
 
     components: {
-        // icons
-        IconLaunch: () => import(/* webpackChunkName: "icon-launch" */'@carbon/icons-vue/es/launch/16.js'),
-        IconUnlink: () => import(/* webpackChunkName: "icon-unlink" */'@carbon/icons-vue/es/unlink/16.js'),
-        IconWikis16: () => import(/* webpackChunkName: "icon-wikis-16" */'@carbon/icons-vue/es/wikis/16.js'),
+        Icon,
     },
 
     props: {

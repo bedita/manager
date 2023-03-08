@@ -7,7 +7,7 @@
                 'v-on:change': 'onFileChange($event, "' ~ object.type ~ '")'
             }) | raw }}
             <span class="file-cta file-label" v-show="!file?.name">
-                <icon-upload></icon-upload>
+                <Icon icon="carbon:upload"></Icon>
                 <span class="ml-05">{{ __('Choose a file') }}</span>
             </span>
             <span class="file-name" v-cloak v-show="!file?.name">

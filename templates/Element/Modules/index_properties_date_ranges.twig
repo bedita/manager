@@ -6,11 +6,11 @@
 
         {% if dateRanges|length > 1 %}
             <button class="show-toggle icon icon-only-icon" title="{{ __('More') }}" v-on:click.stop.prevent="showAll = !showAll" v-if="showAll">
-                <icon-subtract></icon-subtract>
+                <Icon icon="carbon:subtract"></Icon>
                 <span class="is-sr-only">{{ __('More') }}</span>
             </button>
             <button class="show-toggle icon icon-only-icon" title="{{ __('More') }}" v-on:click.stop.prevent="showAll = !showAll" v-else>
-                <icon-add></icon-add>
+                <Icon icon="carbon:add"></Icon>
                 <span class="is-sr-only">{{ __('More') }}</span>
             </button>
         {% endif %}
