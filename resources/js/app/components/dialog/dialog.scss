@@ -75,6 +75,14 @@
             }
         }
 
+        &.success {
+            border-color: $success;
+
+            .icon-ok-circled-1 {
+                color: $success;
+            }
+        }
+
         header {
             .icon-cancel-1 {
                 cursor: pointer;
@@ -88,6 +96,24 @@
         input[type=text] {
             width: 100%;
             border: 1px solid $gray-600;
+        }
+
+        details {
+            summary {
+                cursor: pointer;
+            }
+
+            .dump {
+                width: 100%;
+                max-height: 400px;
+                overflow: auto;
+                margin-top: $gutter * .75;
+                padding: $gutter * .75;
+                flex: 1;
+                background-color: $gray-200;
+                font-family: monospace;
+                font-size: $font-size-sm;
+            }
         }
     }
 }

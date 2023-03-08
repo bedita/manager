@@ -87,7 +87,12 @@ class ThumbsComponent extends Component
         $errors = (array)Hash::extract($thumbs, '{*}[acceptable=false].message');
 
         if (!empty($errors)) {
-            $this->Flash->error(__('There where errors creating the thumbnail(s)'), ['params' => $errors]);
+            $message = __('There where errors creating the thumbnail(s)');
+            if (count($errors) === 1) {
+                $message = array_shift($errors);
+            }
+
+            $this->Flash->error($message, ['params' => $errors]);
         }
     }
 
