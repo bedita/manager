@@ -4,10 +4,6 @@
         <div class="background-mask" v-if="level === 'error' && viewName.toLowerCase() !== 'login'" v-show="isVisible" v-on:click.self="hide"></div>
 
         <div :class="['message', level, (params?.class || '').trim()]">
-            <label v-if="viewName.toLowerCase() !== 'login'" @click="hide">
-                <Icon icon="carbon:close-outline"></Icon>
-            </label>
-
             <h2>
                 <i v-if="viewName.toLowerCase() !== 'login'">
                     <Icon icon="carbon:checkmark" color="green" v-if="level === 'success'"></Icon>
@@ -22,7 +18,13 @@
                 <summary>{{ dumpLabel }}</summary>
                 <pre class="dump">{{ dumpMessage }}</pre>
             </details>
+
             <p v-if="shouldShowDump && !isAdmin">{{ dumpLabel }}</p>
+
+            <label v-if="viewName.toLowerCase() !== 'login'" @click="hide">
+                <Icon icon="carbon:close-outline"></Icon>
+                {{ t('Close') }}
+            </label>
         </div>
     </div>
 </template>
