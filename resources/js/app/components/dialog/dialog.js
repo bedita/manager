@@ -20,7 +20,9 @@ export const Dialog = Vue.extend({
                         <Icon icon="carbon:warning" color="orange" v-if="dialogType === 'warning'"></Icon>
                         <Icon icon="carbon:misuse" color="red" v-if="dialogType === 'error'"></Icon>
                     </div>
-                    <Icon icon="carbon:close" @click="hide"></Icon>
+                    <i @click="hide()">
+                        <Icon icon="carbon:close"></Icon>
+                    </i>
                 </header>
                 <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>
                 <details v-if="!!dumpMessage">
