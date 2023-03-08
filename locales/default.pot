@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2023-02-16 07:59:18 \n"
+"POT-Creation-Date: 2023-03-06 16:09:45 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -803,6 +803,9 @@ msgstr ""
 msgid "The thumbnail is not available"
 msgstr ""
 
+msgid "There where errors creating the thumbnail(s)"
+msgstr ""
+
 msgid "Thumb not available"
 msgstr ""
 
@@ -939,9 +942,6 @@ msgid "application_id"
 msgstr ""
 
 msgid "cancel"
-msgstr ""
-
-msgid "code"
 msgstr ""
 
 msgid "completed"
@@ -1190,6 +1190,12 @@ msgid "Items"
 msgstr ""
 
 msgid "Search text too short. Minimum length is 3. Retry"
+msgstr ""
+
+msgid "code"
+msgstr ""
+
+msgid "details"
 msgstr ""
 
 msgid "Open Uri"

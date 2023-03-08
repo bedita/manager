@@ -470,4 +470,12 @@ return [
     //     // Object types for which to call API to generate the thumbnails
     //     'objectTypes' => ['images', 'videos'],
     // ],
+
+    /**
+     * Configuration for flash messages.
+     *  - 'modal': whether to show flash messages as modal or not (default: false)
+     */
+    // 'Flash' => [
+    //     'modal' => false,
+    // ],
 ];

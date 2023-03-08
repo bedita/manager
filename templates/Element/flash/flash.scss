@@ -62,21 +62,18 @@
             [class^="icon-"] { margin-top: 2px; }
         }
 
-        a { cursor: pointer; }
+        details { width: 100%; }
+        summary { cursor: pointer; }
         .dump {
             margin-top: $gutter * .75;
             padding: $gutter * .75;
             width: 100%;
+            max-height: 400px;
             flex: 1;
             overflow: auto;
             background-color: $gray-200;
-            code {
-                font-family: monospace;
-                font-size: $font-size-sm;
-                pre {
-                    font-size: 11px;
-                }
-            }
+            font-family: monospace;
+            font-size: $font-size-sm;
         }
 
         .icon-cancel-1 {

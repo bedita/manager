@@ -19,8 +19,12 @@ export const Dialog = Vue.extend({
                     <i class="icon-cancel-1 has-text-size-larger" @click="hide()"></i>
                 </header>
                 <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>
-                <input class="mt-1" type="text" v-if="dialogType == 'prompt'" v-model.lazy="inputValue" />
-                <div class="mt-1" v-if="dialogType == 'prompt'" v-show="checkLabel">
+                <details v-if="!!dumpMessage">
+                    <summary><: t('details') :></summary>
+                    <pre class="dump"><: dumpMessage :></pre>
+                </details>
+                <input class="mt-1" type="text" v-if="dialogType === 'prompt'" v-model.lazy="inputValue" />
+                <div class="mt-1" v-if="dialogType === 'prompt'" v-show="checkLabel">
                     <input type="checkbox" id="_check" v-model.lazy="checkValue"  />
                     <label for="_check"><: checkLabel :></label>
                 </div>
@@ -53,9 +57,10 @@ export const Dialog = Vue.extend({
             headerText: '',
             icon: 'icon-attention-circled',
             message: '',
+            dumpMessage: false,
             confirmMessage: 'ok',
             confirmCallback: this.hide,
-            cancelMessage: t`cancel`,
+            cancelMessage: false,
             inputValue: '',
             checkValue: '',
             checkLabel: '',
@@ -89,19 +94,26 @@ export const Dialog = Vue.extend({
             this.dialogType = 'warning';
             this.show(message, this.dialogType, root);
         },
-        error(message, root = document.body) {
+        error(message, root = document.body, dumpMessage = false) {
             this.dialogType = 'error';
+            this.dumpMessage = dumpMessage;
             this.show(message, this.dialogType, root);
         },
         info(message, root = document.body) {
             this.dialogType = 'info';
             this.icon = 'icon-info-1';
-            this.show(message, '', root);
+            this.show(message, this.dialogType, root);
+        },
+        success(message, root = document.body) {
+            this.dialogType = 'success';
+            this.icon = 'icon-ok-circled-1';
+            this.show(message, this.dialogType, root);
         },
         confirm(message, confirmMessage, confirmCallback, type = 'warning', root = document.body) {
             this.dialogType = type;
             this.confirmMessage = confirmMessage;
             this.confirmCallback = confirmCallback;
+            this.cancelMessage = t`cancel`;
             this.show(message, this.dialogType, root);
         },
         prompt(message, defaultValue, confirmCallback, root = document.body, options = {}) {
@@ -111,6 +123,7 @@ export const Dialog = Vue.extend({
             this.checkValue = options?.checkValue || '';
             this.checkLabel = options?.checkLabel || '';
             this.confirmCallback = confirmCallback;
+            this.cancelMessage = t`cancel`;
             this.show(message, '', root);
         },
         prepareCallback() {
@@ -128,9 +141,9 @@ export const warning = (message, root) => {
     return dialog;
 };
 
-export const error = (message, root) => {
+export const error = (message, root, dumpMessage = false) => {
     const dialog = new Dialog();
-    dialog.error(message, root);
+    dialog.error(message, root, dumpMessage);
 
     return dialog;
 };
@@ -138,6 +151,13 @@ export const error = (message, root) => {
 export const info = (message, root) => {
     const dialog = new Dialog();
     dialog.info(message, root);
+
+    return dialog;
+};
+
+export const success = (message, root) => {
+    const dialog = new Dialog();
+    dialog.success(message, root);
 
     return dialog;
 };
