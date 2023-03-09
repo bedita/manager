@@ -5,6 +5,7 @@
         <select id="newPropType" name="prop_type" v-model="propType">
             <option v-for="(t,idx) in propTypes" :value="t.value" :key="idx">{{ t.text }}</option>
         </select>
+        <input type="text" v-model="propDescription" />
         <button @click.prevent="add" :disabled="!propName || !propType">{{ t('Add') }}</button>
     </div>
 </template>
@@ -20,6 +21,7 @@ export default {
 
     data() {
         return {
+            propDescription: '',
             propName: '',
             propType: 'string',
             properties: [],
@@ -39,6 +41,7 @@ export default {
                 },
             });
             this.updateAdded();
+            this.propDescription = '';
             this.propName = '';
             this.propType = '';
             const button = document.querySelector('button[form=form-main]');
@@ -49,6 +52,7 @@ export default {
         updateAdded() {
             let addedProperties = JSON.parse(document.getElementById('addedProperties').value || '[]') || [];
             addedProperties.push({
+                description: this.propDescription,
                 name: this.propName,
                 type: this.propType,
             });

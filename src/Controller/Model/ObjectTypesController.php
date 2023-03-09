@@ -51,6 +51,17 @@ class ObjectTypesController extends ModelBaseController
     /**
      * @inheritDoc
      */
+    public function create(): ?Response
+    {
+        parent::create();
+        $this->set('propertyTypesOptions', $this->Properties->typesOptions());
+
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function view($id): ?Response
     {
         parent::view($id);
@@ -197,6 +208,7 @@ class ObjectTypesController extends ModelBaseController
             $data = [
                 'type' => 'properties',
                 'attributes' => [
+                    'description' => Hash::get($prop, 'description'),
                     'name' => Hash::get($prop, 'name'),
                     'property_type_name' => Hash::get($prop, 'type'),
                     'object_type_name' => $objectTypeName,

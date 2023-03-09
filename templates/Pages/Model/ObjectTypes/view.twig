@@ -131,7 +131,7 @@
             </header>
             <div v-show="isOpen">
                 <object-properties
-                    :init-properties="{{ objectTypeProperties.core|json_encode }}"
+                    :init-properties="{{ objectTypeProperties.core|default([])|json_encode }}"
                     type="core"
                     :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
                 >
@@ -149,7 +149,7 @@
             </header>
             <div v-show="isOpen">
                 <object-properties
-                    :init-properties="{{ objectTypeProperties.inherited|json_encode }}"
+                    :init-properties="{{ objectTypeProperties.inherited|default([])|json_encode }}"
                     type="inherited"
                     :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
                 >
@@ -167,7 +167,7 @@
             </header>
             <div v-show="isOpen">
                 <object-properties
-                    :init-properties="{{ objectTypeProperties.custom|json_encode }}"
+                    :init-properties="{{ objectTypeProperties.custom|default([])|json_encode }}"
                     type="custom"
                     :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
                 >
