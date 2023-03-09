@@ -17,7 +17,7 @@
                 {% for group, attributes in properties %}
                     {% if group != 'other' and group != 'password_change' and attributes %}
                         <section class="fieldset">
-                            <header class="tab unselectable">
+                            <header>
                                 {% if group|trim  %}
                                     <h2>{{ __(group|humanize) }}</h2>
                                 {% else %}
@@ -44,7 +44,7 @@
                 {% for group, attributes in properties %}
                     {% if group == 'password_change' and attributes %}
                         <section class="fieldset">
-                            <header class="tab unselectable">
+                            <header>
                                 <h2>{{ __('Change password') }}</h2>
                             </header>
 
