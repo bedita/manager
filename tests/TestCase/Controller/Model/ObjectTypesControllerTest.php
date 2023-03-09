@@ -92,10 +92,7 @@ class ObjectTypesControllerTest extends TestCase
             'REQUEST_METHOD' => 'POST',
         ],
         'post' => [
-            'addedProperties' => [
-                'name' => 'my_prop',
-                'type' => 'datetime',
-            ],
+            'addedProperties' => '[{"name": "my_prop", "type": "datetime"}]',
         ],
         'params' => [
             'resource_type' => 'object_types',
