@@ -1,11 +1,11 @@
 <template>
     <div class="mt-25" v-if="type == 'custom'">
         <h3>{{ t('Create') }}</h3>
-        <input id="newPropName" type="text" :placeholder="t('Property name')" v-model="propName" />
+        <input id="newPropName" type="text" :placeholder="t('Name')" v-model="propName" />
         <select id="newPropType" name="prop_type" v-model="propType">
             <option v-for="(t,idx) in propTypes" :value="t.value" :key="idx">{{ t.text }}</option>
         </select>
-        <input type="text" v-model="propDescription" />
+        <input type="text" v-model="propDescription" :placeholder="t('Description')" />
         <button @click.prevent="add" :disabled="!propName || !propType">{{ t('Add') }}</button>
     </div>
 </template>
