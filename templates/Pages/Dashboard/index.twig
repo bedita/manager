@@ -31,37 +31,37 @@
 
                 {% if modules.trash %}
                     <a href="{{ Url.build({ '_name': 'trash:list' }) }}" title="{{ __('Trash') }}" class="dashboard-item has-background-black">
-                        {{ __('Trash can') }}
+                        <span>{{ __('Trash can') }}</span>
                         <Icon icon="carbon:trash-can"></Icon>
                     </a>
                 {% endif %}
 
                 {% if modules.users %}
                     <a href="{{ Url.build({'_name': 'modules:list', 'object_type': 'users'}) }}" title="{{ __('System users') }}" class="dashboard-item has-background-black">
-                        {{ __('System users') }}
+                        <span>{{ __('System users') }}</span>
                         <Icon icon="carbon:user-admin"></Icon>
                     </a>
                 {% endif %}
 
                 <a href="{{ Url.build({'_name': 'user_profile:view'}) }}" title="{{ __('User Profile') }}" class="dashboard-item has-background-black">
-                    {{ __('User Profile') }}
+                    <span>{{ __('User Profile') }}</span>
                     <Icon icon="carbon:user-profile"></Icon>
                 </a>
 
                 {% if config('Filters.import') %}
                     <a href="{{ Url.build({'_name': 'import:index'}) }}" title="{{ __('Import') }}" class="dashboard-item has-background-black">
-                        {{ __('Import') }}
+                        <span>{{ __('Import') }}</span>
                         <Icon icon="carbon:download"></Icon>
                     </a>
                 {% endif %}
 
                 {% if in_array('admin', user.roles) %}
                     <a href="{{ Url.build({'_name': 'admin:list:appearance'}) }}" title="{{ __('Administration') }}" class="dashboard-item has-background-black">
-                        {{ __('Administration') }}
+                        <span>{{ __('Administration') }}</span>
                         <Icon icon="carbon:settings"></Icon>
                     </a>
                     <a href="{{ Url.build({'_name': 'model:list:object_types'}) }}" title="{{ __('Data modeling') }}" class="dashboard-item has-background-black">
-                        {{ __('Data modeling') }}
+                        <span>{{ __('Data modeling') }}</span>
                         <Icon icon="carbon:concept"></Icon>
                     </a>
                 {% endif %}
