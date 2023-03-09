@@ -8,6 +8,7 @@ export default {
         <div class="is-flex">
             <div class="is-expanded">
                 <input
+                    style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
                     :type="type"
                     id="password"
                     name="password"
@@ -18,7 +19,7 @@ export default {
                     @keydown="onKeydown($event)" />
             </div>
             <div>
-                <button @click.prevent.stop="toggleShow" class="button button-primary" style="min-width: 32px;" :disabled="!this.password || this.password.length == 0">
+                <button @click.prevent.stop="toggleShow" class="button button-primary" style="min-width: 32px; border-top-left-radius: 0; border-bottom-left-radius: 0;" :disabled="!this.password || this.password.length == 0">
                     <Icon icon="carbon:view-filled" v-if="show"></Icon>
                     <Icon icon="carbon:view-off-filled" v-if="!show"></Icon>
                 </button>

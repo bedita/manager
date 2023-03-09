@@ -26,8 +26,8 @@
             </button>
 
             <button class="toggle-filters button button-outlined is-width-auto" type="button" @click="moreFilters = !moreFilters" v-if="canShowAdvanced">
-                <Icon icon="carbon:filter-edit" v-if="!moreFilters"></Icon><span class="mt-05" v-show="!moreFilters">{{ __('More filters') }}</span>
-                <Icon icon="carbon:filter" v-if="moreFilters"></Icon><span class="mt-05" v-show="moreFilters">{{ __('Less filters') }}</span>
+                <Icon icon="carbon:filter-edit" v-if="!moreFilters"></Icon><span class="ml-05" v-show="!moreFilters">{{ __('More filters') }}</span>
+                <Icon icon="carbon:filter" v-if="moreFilters"></Icon><span class="ml-05" v-show="moreFilters">{{ __('Less filters') }}</span>
             </button>
         </div>
     </div>
