@@ -170,9 +170,12 @@
                     :init-properties="{{ objectTypeProperties.custom|json_encode }}"
                     type="custom"
                     :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
-                    :prop-types="{{ propertyTypesOptions.options|default([])|json_encode }}"
                 >
                 </object-properties>
+                <object-property-add
+                    type="custom"
+                    :prop-types="{{ propertyTypesOptions.options|default([])|json_encode }}">
+                </object-property-add>
             </div>
         </section>
     </property-view>

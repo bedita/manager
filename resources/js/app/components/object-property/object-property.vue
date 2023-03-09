@@ -41,6 +41,7 @@ export default {
 
     data() {
         return {
+            confirm: null,
             hidden: false,
             display: true,
         };
@@ -99,7 +100,7 @@ export default {
             }
         },
         remove() {
-            BEDITA.confirm(
+            this.confirm = BEDITA.confirm(
                 t`If you confirm, this resource will be gone forever. Are you sure?`,
                 t`yes, proceed`,
                 () => {
@@ -132,6 +133,8 @@ export default {
                 }
             } catch (error) {
                 BEDITA.showError(`${prefix}: ${error}`);
+            } finally {
+                this.confirm.hide();
             }
         },
     },

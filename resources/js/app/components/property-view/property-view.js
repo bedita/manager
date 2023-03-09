@@ -36,6 +36,7 @@ export default {
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
         StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
         ObjectProperties: () => import(/* webpackChunkName: "string-list" */'app/components/object-property/object-properties'),
+        ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */'app/components/object-property/object-property-add'),
     },
 
     props: {
