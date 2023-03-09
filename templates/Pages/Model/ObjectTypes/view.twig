@@ -83,12 +83,10 @@
 
         {{ Form.end()|raw }}
 
-        {% do _view.append('app-module-buttons', Form.button( __('Save'),
-            {
-                'form': 'form-main',
-                'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto',
-            }
-        )) %}
+        {% do _view.append(
+            'app-module-buttons',
+            '<button form="form-main" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __('Save') ~ '</span></button>',
+        ) %}
         {% if not resource.meta.core_type %}
             {{ Form.create(null, {'id': 'form-delete-object-type', 'url': Url.build({'_name': 'model:remove:object_types', 'id': resource.id,})})|raw }}
             {{ Form.end()|raw }}

@@ -65,11 +65,9 @@
 
         {% if currentModule.sidebar.index %}
         {% for item in currentModule.sidebar.index %}
-            {% do _view.append('app-module-buttons',
-                Html.link(__(item.label),
-                    item.url,
-                    {'class': item.class|default('icon-check-1 button button-outlined button-outlined-hover-module-' ~ currentModule.name)}
-                )|raw
+            {% do _view.append(
+                'app-module-buttons',
+                '<a href="' ~ item.url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __(item.label) ~ '</span></a>',
             ) %}
         {% endfor %}
         {% endif %}
