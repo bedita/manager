@@ -37,6 +37,7 @@ body.view-dashboard {
             justify-content: center;
 
             span {
+                flex: 1;
                 display: inline-block;
                 transform: translateY(0);
                 transition: transform .3s;
