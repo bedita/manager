@@ -153,10 +153,10 @@ return [
                     'description',
                     'enabled',
                     'is_abstract',
-                    'hidden',
                     'associations',
                     'table',
                     'parent_name',
+                    'is_translatable',
                 ],
             ],
             'index' => [

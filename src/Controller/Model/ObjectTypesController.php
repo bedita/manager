@@ -157,7 +157,11 @@ class ObjectTypesController extends ModelBaseController
             }
         }
 
-        return compact('inherited', 'core', 'custom');
+        return [
+            'core' => Hash::sort($core, '{n}.attributes.name'),
+            'inherited' => Hash::sort($inherited, '{n}.attributes.name'),
+            'custom' => Hash::sort($custom, '{n}.attributes.name'),
+        ];
     }
 
     /**
@@ -167,9 +171,8 @@ class ObjectTypesController extends ModelBaseController
      */
     public function save(): ?Response
     {
-        $this->addCustomProperty();
-        $this->request = $this->request->withoutData('prop_name')
-            ->withoutData('prop_type');
+        $this->addCustomProperties();
+        $this->request = $this->request->withoutData('addedProperties');
         if ($this->request->getData('associations') === '') {
             $this->request = $this->request->withData('associations', null);
         }
@@ -182,21 +185,24 @@ class ObjectTypesController extends ModelBaseController
      *
      * @return void
      */
-    protected function addCustomProperty(): void
+    protected function addCustomProperties(): void
     {
-        $name = $this->request->getData('prop_name');
-        $type = $this->request->getData('prop_type');
-        if (empty($name) || empty($type)) {
+        $added = json_decode((string)$this->request->getData('addedProperties'), true);
+        if (empty($added) || !is_array($added)) {
             return;
         }
+        $objectTypeName = $this->request->getData('name');
 
-        $data = [
-            'type' => 'properties',
-            'attributes' => compact('name') + [
-                'property_type_name' => $type,
-                'object_type_name' => $this->request->getData('name'),
-            ],
-        ];
-        $this->apiClient->post('/model/properties', json_encode(compact('data')));
+        foreach ($added as $prop) {
+            $data = [
+                'type' => 'properties',
+                'attributes' => [
+                    'name' => Hash::get($prop, 'name'),
+                    'property_type_name' => Hash::get($prop, 'type'),
+                    'object_type_name' => $objectTypeName,
+                ],
+            ];
+            $this->apiClient->post('/model/properties', json_encode(compact('data')));
+        }
     }
 }
