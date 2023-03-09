@@ -128,6 +128,22 @@ class ObjectTypesControllerTest extends TestCase
     }
 
     /**
+     * Test `create` method
+     *
+     * @covers ::create()
+     * @return void
+     */
+    public function testCreate(): void
+    {
+        $this->setupController();
+        $this->ModelController->create();
+        $vars = ['resource', 'schema', 'properties', 'propertyTypesOptions'];
+        foreach ($vars as $var) {
+            static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
+        }
+    }
+
+    /**
      * Test `view` method
      *
      * @covers ::view()
