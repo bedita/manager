@@ -92,8 +92,10 @@ class ObjectTypesControllerTest extends TestCase
             'REQUEST_METHOD' => 'POST',
         ],
         'post' => [
-            'prop_name' => 'my_prop',
-            'prop_type' => 'datetime',
+            'addedProperties' => [
+                'name' => 'my_prop',
+                'type' => 'datetime',
+            ],
         ],
         'params' => [
             'resource_type' => 'object_types',
@@ -215,7 +217,7 @@ class ObjectTypesControllerTest extends TestCase
      * Test `save` method
      *
      * @covers ::save()
-     * @covers ::addCustomProperty()
+     * @covers ::addCustomProperties()
      * @return void
      */
     public function testSave(): void
@@ -227,27 +229,25 @@ class ObjectTypesControllerTest extends TestCase
         $controller->save();
 
         $data = $controller->getRequest()->getData();
-        static::assertArrayNotHasKey('prop_name', $data);
-        static::assertArrayNotHasKey('prop_type', $data);
+        static::assertArrayNotHasKey('addedProperties', $data);
     }
 
     /**
      * Test `save` method with empty data
      *
-     * @covers ::addCustomProperty()
+     * @covers ::addCustomProperties()
      * @return void
      */
     public function testSaveEmpty(): void
     {
         $this->saveApiMock();
         $config = $this->saveRequestConfig;
-        $config['post'] = ['prop_name' => '', 'prop_type' => ''];
+        $config['post'] = ['addedProperties' => '[]'];
         $controller = new ObjectTypesController(new ServerRequest($config));
         $controller->save();
 
         $data = $controller->getRequest()->getData();
-        static::assertArrayNotHasKey('prop_name', $data);
-        static::assertArrayNotHasKey('prop_type', $data);
+        static::assertArrayNotHasKey('addedProperties', $data);
     }
 
     /**
