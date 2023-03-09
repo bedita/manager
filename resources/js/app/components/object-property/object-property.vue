@@ -86,7 +86,6 @@ export default {
                 hiddenProperties.splice(index, 1);
                 const newVal = JSON.stringify(hiddenProperties);
                 document.getElementById('hidden').value = newVal;
-                // document.getElementById('hidden').setAttribute('data-original-value', newVal);
 
                 return;
             }
@@ -96,7 +95,6 @@ export default {
                 hiddenProperties.sort();
                 const newVal = JSON.stringify(hiddenProperties);
                 document.getElementById('hidden').value = newVal;
-                // document.getElementById('hidden').setAttribute('data-original-value', newVal);
             }
         },
         remove() {

@@ -1,8 +1,8 @@
 <template>
-    <div class="mt-25" v-if="type == 'custom'">
+    <div class="mt-25">
         <h3>{{ t('Create') }}</h3>
-        <input id="newPropName" type="text" :placeholder="t('Name')" v-model="propName" />
-        <select id="newPropType" name="prop_type" v-model="propType">
+        <input type="text" :placeholder="t('Name')" v-model="propName" />
+        <select v-model="propType">
             <option v-for="(t,idx) in propTypes" :value="t.value" :key="idx">{{ t.text }}</option>
         </select>
         <input type="text" v-model="propDescription" :placeholder="t('Description')" />
@@ -16,7 +16,6 @@ export default {
 
     props: {
         propTypes: [],
-        type: '',
     },
 
     data() {
@@ -24,29 +23,20 @@ export default {
             propDescription: '',
             propName: '',
             propType: 'string',
-            properties: [],
         };
     },
 
     methods: {
         add() {
-            if (!this.propName || !this.propType) {
-                return;
-            }
-            this.properties.push({
-                id: 0,
-                attributes: {
-                    name: this.propName,
-                    property_type_name: this.propType,
-                },
-            });
             this.updateAdded();
+            this.$eventBus.$emit('prop-added', {
+                name: this.propName,
+                property_type_name: this.propType,
+                description: this.propDescription,
+            });
             this.propDescription = '';
             this.propName = '';
             this.propType = '';
-            const button = document.querySelector('button[form=form-main]');
-            button.classList.add('is-loading-spinner');
-            button.click();
         },
 
         updateAdded() {

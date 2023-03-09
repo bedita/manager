@@ -29,7 +29,6 @@ export default {
 
     components: {
         ObjectProperty: () => import(/* webpackChunkName: "object-property" */'app/components/object-property/object-property'),
-        ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */'app/components/object-property/object-property-add'),
     },
 
     data() {
@@ -41,6 +40,15 @@ export default {
 
     mounted() {
         this.properties = this.initProperties;
+        if (this.type !== 'custom') {
+            return;
+        }
+        this.$eventBus.$on('prop-added', (item) => {
+            this.properties.push({
+                id: 0,
+                attributes: item,
+            });
+        });
     },
 }
 </script>
