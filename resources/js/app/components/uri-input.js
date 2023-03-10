@@ -36,6 +36,7 @@ export default {
         span.id = `valid_${this.el.id}`;
         span.style = 'padding-left: 10px';
         this.el.parentElement.appendChild(span);
+        this.el.parentElement.classList.add('uri');
         this.el.onchange = this.onChange.bind(this);
     },
 

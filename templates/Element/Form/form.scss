@@ -20,7 +20,7 @@
             text-decoration: underline dotted;
         }
 
-        .input.title {
+        .input.title, .input.uri {
             input[type=text] {
                 font-size: $font-size-llg;
             }
@@ -39,7 +39,7 @@
                 width: 100%;
             }
 
-            .input.title, .input.textarea, .stream, .grid-span-full {
+            .input.title, .input.uri, .input.textarea, .stream, .grid-span-full {
                 grid-column: 1/-1;
             }
         }
