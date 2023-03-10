@@ -27,7 +27,7 @@ export default {
             return this.showImage() ? '' : `icon-${this.related?.type}`;
         },
         showIcon() {
-            const iconTypes = ['documents', 'folders', 'news'];
+            const iconTypes = ['documents', 'events', 'files', 'folders', 'news', 'profiles', 'users'];
 
             return !this.showImage() && !iconTypes.includes(this.related?.type);
         },
