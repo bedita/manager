@@ -44,8 +44,11 @@ body.view-dashboard {
             }
 
             svg {
-                margin: 0 auto;
+                position:absolute;
                 display: block;
+                top:40%;
+                height: 24px;
+                width: 24px;
             }
 
             padding: .375rem .375rem calc(#{$dashboard-items-ratio} - .375rem);
