@@ -66,7 +66,7 @@ const _vueInstance = new Vue({
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
         StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
-        // icons
+        Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         Icon,
     },
 

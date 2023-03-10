@@ -37,6 +37,7 @@ export default {
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         DropUpload: () => import(/* webpackChunkName: "drop-upload" */'app/components/drop-upload'),
         LocationsView: () => import(/* webpackChunkName: "locations-view" */'app/components/locations-view/locations-view'),
+        Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         Icon,
     },
 

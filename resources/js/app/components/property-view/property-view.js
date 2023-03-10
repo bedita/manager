@@ -36,6 +36,7 @@ export default {
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
         StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
+        Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         Icon,
     },
 

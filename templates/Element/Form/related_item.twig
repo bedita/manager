@@ -51,12 +51,7 @@
 
     {# THUMBNAIL #}
     {% if not translation %}
-    <div class="thumbnail" :class="'has-text-module-' + related.type">
-        <figure class="center-icon icon-opaque" :class="(related.meta && related.meta.thumb_url)? '' : `icon-${related.type}`">
-            <Icon icon="carbon:cube" v-if="!related.meta || !related.meta.thumb_url"></Icon>
-            <img :src="related.meta.thumb_url" v-if="related.meta && related.meta.thumb_url" />
-        </figure>
-    </div>
+        <thumbnail :related="related"></thumbnail>
     {% endif %}
 
 

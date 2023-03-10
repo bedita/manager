@@ -171,6 +171,15 @@
         left: 0;
         margin-top: -.5em;
     }
+    svg {
+        position:absolute;
+        display: block;
+        top:35%;
+        left: 40%;
+        height: 40px;
+        width: 40px;
+        text-align: center;
+    }
 }
 
 .icon-only-icon {
