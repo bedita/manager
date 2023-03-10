@@ -150,6 +150,7 @@ ul.concurrent-editors {
             color:$gray-600;
             font-size:4em;
             text-align: center;
+            width: $dashboard-item-width * .8;
             a {
                 background-color: transparent;
                 color:$gray-400;

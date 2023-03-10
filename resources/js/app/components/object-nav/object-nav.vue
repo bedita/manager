@@ -1,17 +1,27 @@
+<template>
+    <div class="listobjnav">
+        <div>
+            <a :href="urlPrev()" v-if="prev">
+                <Icon icon="carbon:chevron-left" class="hw-30"></Icon>
+            </a>
+            <span v-else>
+                <Icon icon="carbon:chevron-left" class="hw-30"></Icon>
+            </span>
+            <a :href="urlNext()" v-if="next">
+                <Icon icon="carbon:chevron-right" class="hw-30"></Icon>
+            </a>
+            <span v-else>
+                <Icon icon="carbon:chevron-right" class="hw-30"></Icon>
+            </span>
+        </div>
+        <div>{{ index }} / {{ total }}</div>
+    </div>
+</template>
+
+<script>
 import { Icon } from '@iconify/vue2';
 
 export default {
-    template: `<div class="listobjnav">
-        <a :href="urlPrev()" v-if="prev">
-            <Icon icon="carbon:chevron-left"></Icon>
-        </a>
-        <Icon icon="carbon:chevron-left" v-else></Icon>
-        <a :href="urlNext()" v-if="next">
-            <Icon icon="carbon:chevron-right"></Icon>
-        </a>
-        <Icon icon="carbon:chevron-right" v-else></Icon>
-        <div><: index :> / <: total :></div>
-    </div>`,
 
     components: {
         Icon,
@@ -50,3 +60,4 @@ export default {
         },
     },
 }
+</script>
