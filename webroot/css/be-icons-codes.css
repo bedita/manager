@@ -1,4 +1,5 @@
 
+.icon-space:before { content: ' ' }
 .icon-glass-1:before { content: '\e800'; } /* '' */
 .icon-music-1:before { content: '\e801'; } /* '' */
 .icon-search-2:before { content: '\e802'; } /* '' */

@@ -24,7 +24,7 @@ export default {
 
     methods: {
         figureClass() {
-            return this.showImage() ? '' : `icon-${this.related?.type}`;
+            return this.showImage() ? 'icon-space' : `icon-${this.related?.type}`;
         },
         showIcon() {
             const iconTypes = ['documents', 'events', 'files', 'folders', 'news', 'profiles', 'users'];
