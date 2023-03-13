@@ -45,6 +45,7 @@ const _vueInstance = new Vue({
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
         ObjectProperty: () => import(/* webpackChunkName: "object-property" */'app/components/object-property/object-property'),
+        ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */'app/components/object-property/object-property-add'),
         ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
         TrashIndex: () => import(/* webpackChunkName: "trash-index" */'app/pages/trash/index'),
         TrashView: () => import(/* webpackChunkName: "trash-view" */'app/pages/trash/view'),

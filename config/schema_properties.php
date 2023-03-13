@@ -90,6 +90,26 @@ return [
                 'title' => 'Hidden',
                 'description' => 'Object type hidden properties',
             ],
+            'is_translatable' => [
+                'type' => 'boolean',
+                '$id' => '/properties/is_translatable',
+                'title' => 'Is translatable',
+                'description' => 'this object type is translatable?',
+                'default' => true,
+            ],
+            'translation_rules' => [
+                'oneOf' => [
+                    [
+                        'type' => 'null',
+                    ],
+                    [
+                        'type' => 'object',
+                    ],
+                ],
+                '$id' => '/properties/translation_rules',
+                'title' => 'Translation Rules',
+                'description' => 'rules to use when translating an object: properties always and never translatable	',
+            ],
         ],
 
         // model/property_types

@@ -20,66 +20,67 @@
 
             {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
             {{ Form.hidden('_actualAttributes', {'value': currentAttributes})|raw }}
+            {# Handle `hidden` and `translation_rules` via hidden input for now #}
+            {{ Form.hidden('hidden', {
+                id: 'hidden',
+                value: resource.attributes.hidden|default([])|json_encode,
+            })|raw }}
+            {% do Form.unlockField('hidden') %}
+            {# TODO: handle translation rules in properties directly, like `hidden` #}
+            {# {{ Form.hidden('translation_rules', {
+                id: 'translation_rules',
+                value: resource.attributes.translation_rules|default({})|json_encode,
+            })|raw }}
+            {% do Form.unlockField('translation_rules') %} #}
 
-            <div class="main-view-column">
-                <section class="fieldset">
-                    <div class="tab-container">
-                        {% for key, value in properties.core %}
-                            {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-                            {% if options.class != 'json' %}
-                                {% if resource.meta.core_type %}
-                                    {% if key in ['name', 'singular', 'table', 'is_abstract', 'parent_name'] %}
-                                        {% set options = options|merge({
-                                            'readonly' : true,
-                                        }) %}
-                                     {% endif %}
+            {# Handle newly created custom props via `addedProperties` hidden input for now #}
+            {{ Form.hidden('addedProperties', {
+                id: 'addedProperties',
+                value: []|json_encode,
+            })|raw }}
+            {% do Form.unlockField('addedProperties') %}
+
+                <property-view inline-template :tab-open="tabsOpen" :is-default-open=true tab-name="general">
+                    <section class="fieldset">
+                        <header @click.prevent="toggleVisibility()"
+                            class="tab unselectable"
+                            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                            <h2>{{ __('General') }}</h2>
+                        </header>
+                        <div v-show="isOpen" class="tab-container">
+                            {% for key, value in properties.core %}
+                                {% if key == 'associations' %}
+                                    {{ Form.control(key, {
+                                        'id': key,
+                                        'value': value,
+                                        'type': 'select',
+                                        'multiple': 'checkbox',
+                                        'options': associationsOptions
+                                    })|raw }}
+                                {% else %}
+
+                                    {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
+                                    {% if resource.meta.core_type %}
+                                        {% if key in ['name', 'singular', 'table', 'is_abstract', 'parent_name'] %}
+                                            {% set options = options|merge({
+                                                'readonly' : true,
+                                            }) %}
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {{ Property.control(key, value, options)|raw }}
+
+                                    {% if key == 'parent_name' %}
+                                        <a href="{{ Url.build({'_name': 'model:view:object_types', 'id': value}) }}" class="link-to-parent">› {{ __('view parent') }}</a>
+                                    {% endif %}
                                 {% endif %}
-
-                                {{ Property.control(key, value, options)|raw }}
-
-                                {% if key == 'parent_name' %}
-                                    <a href="{{ Url.build({'_name': 'model:view:object_types', 'id': value}) }}" class="link-to-parent">› {{ __('view parent') }}</a>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </section>
-
-                <section class="fieldset">
-                    <div class="tab-container">
-                        <header class="unselectable"><h2>{{ __('Add custom property') }}</h2></header>
-                        {{ Property.control('prop_name', '', {'label': __('Name'), 'placeholder': 'property name'})|raw }}
-                        {{ Property.control('prop_type', '', propertyTypesOptions|default([]))|raw }}
-                    </div>
-                </section>
-
-            </div>
-
-            <div class="side-view-column">
-                <section class="fieldset">
-                    <div class="tab-container">
-                        {% for key, value in properties.core %}
-                            {% if key == 'hidden' %}
-                                {% set options = Schema.controlOptions(key, value, schema.properties[key]) %}
-                                {{ Property.control(key, value, options|merge({'id': key}))|raw }}
-                            {% elseif key == 'associations' %}
-                                {{ Form.control(key, {
-                                    'id': key,
-                                    'value': value,
-                                    'type': 'select',
-                                    'multiple': 'checkbox',
-                                    'options': associationsOptions
-                                })|raw }}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </section>
-
-                {{ element('Form/meta') }}
-            </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                </property-view>
 
         {# Set `_jsonKeys` hidden input from config #}
-        {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
+        {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|merge(['hidden'])|join(',')})|raw }}
 
         {{ Form.end()|raw }}
 
@@ -100,75 +101,84 @@
         {% endif %}
     </div>
 
+    <property-view inline-template :tab-open="tabsOpen" :is-default-open=true tab-name="relations">
+        <section class="fieldset">
+            <header @click.prevent="toggleVisibility()"
+                class="tab unselectable"
+                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                <h2>{{ __('Relations') }}</h2>
+            </header>
+            <div v-show="isOpen" class="relations-container">
+                {% if resource.meta.relations %}
+                    <div class="relations-group">
+                    {% for relation in resource.meta.relations %}
+                        <a class="tag is-black" href="{{ Url.build({'_name': 'model:view:relations', 'id': relation}) }}">{{ relation }}</a>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No Relations</p>
+                {% endif %}
+            </div>
+        </section>
+    </property-view>
 
-    <section class="relations">
-        <header class="unselectable"><h2>{{ __('Relations') }}</h2></header>
-        <div class="relations-container">
-        {% if resource.meta.relations %}
-            <div class="relations-group">
-            {% for relation in resource.meta.relations %}
-                <a class="tag is-black" href="{{ Url.build({'_name': 'model:view:relations', 'id': relation}) }}">{{ relation }}</a>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <p>No Relations</p>
-        {% endif %}
-        </div>
-    </section>
+    <property-view inline-template :tab-open="tabsOpen" :is-default-open=true tab-name="core-props">
+        <section class="fieldset">
+            <header @click.prevent="toggleVisibility()"
+                class="tab unselectable"
+                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                <h2>{{ __('Core properties') }}</h2>
+            </header>
+            <div v-show="isOpen">
+                <object-properties
+                    :init-properties="{{ objectTypeProperties.core|default([])|json_encode }}"
+                    type="core"
+                    :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
+                >
+                </object-properties>
+            </div>
+        </section>
+    </property-view>
 
+    <property-view inline-template :tab-open="tabsOpen" :is-default-open=true tab-name="inherited-props">
+        <section class="fieldset">
+            <header @click.prevent="toggleVisibility()"
+                class="tab unselectable"
+                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                <h2>{{ __('Inherited properties') }}</h2>
+            </header>
+            <div v-show="isOpen">
+                <object-properties
+                    :init-properties="{{ objectTypeProperties.inherited|default([])|json_encode }}"
+                    type="inherited"
+                    :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
+                >
+                </object-properties>
+            </div>
+        </section>
+    </property-view>
 
-    <section class="properties">
-        <header class="unselectable"><h2>{{ __('Core properties') }}</h2></header>
-        <div class="properties-container">
-            {% for prop in objectTypeProperties.core %}
-                {% set h = prop.attributes.name in properties.core.hidden|default([]) %}
-                <object-property
-                    :prop="{{ prop|json_encode }}"
-                    :type="{{ 'core'|json_encode }}"
-                    :ishidden="{{ h|json_encode }}"
-                    :nobuttonsfor="{{ []|json_encode }}">
-                </object-property>
-            {% else %}
-                <p>{{ __('No core properties') }}</p>
-            {% endfor %}
-        </div>
-    </section>
-
-
-    <section class="properties">
-        <header class="unselectable"><h2>{{ __('Inherited properties') }}</h2></header>
-        <div class="properties-container">
-            {% for prop in objectTypeProperties.inherited %}
-                {% set h = prop.attributes.name in properties.core.hidden|default([]) %}
-                <object-property
-                    :prop="{{ prop|json_encode }}"
-                    :type="{{ 'inherited'|json_encode }}"
-                    :ishidden="{{ h|json_encode }}"
-                    :nobuttonsfor="{{ ['id', 'status', 'uname']|json_encode }}">
-                </object-property>
-            {% else %}
-                <p>{{ __('No inherited properties') }}</p>
-            {% endfor %}
-        </div>
-    </section>
-
-
-    <section class="properties">
-        <header class="unselectable"><h2>{{ __('Custom properties') }}</h2></header>
-        <div class="properties-container">
-            {% for prop in objectTypeProperties.custom %}
-                {% set h = prop.attributes.name in properties.core.hidden|default([]) %}
-                <object-property
-                    :prop="{{ prop|json_encode }}"
-                    :type="{{ 'custom'|json_encode }}"
-                    :ishidden="{{ h|json_encode }}"
-                    :nobuttonsfor="{{ []|json_encode }}">
-                </object-property>
-            {% else %}
-                <p>{{ __('No custom properties') }}</p>
-            {% endfor %}
-        </div>
-    </section>
+    <property-view inline-template :tab-open="tabsOpen" :is-default-open=true tab-name="custom-props">
+        <section class="fieldset">
+            <header @click.prevent="toggleVisibility()"
+                class="tab unselectable"
+                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                <h2>{{ __('Custom properties') }}</h2>
+            </header>
+            <div v-show="isOpen">
+                <object-properties
+                    :init-properties="{{ objectTypeProperties.custom|default([])|json_encode }}"
+                    type="custom"
+                    :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
+                >
+                </object-properties>
+                <object-property-add
+                    type="custom"
+                    :prop-types="{{ propertyTypesOptions.options|default([])|json_encode }}">
+                </object-property-add>
+            </div>
+        </section>
+    </property-view>
 
     {{ element('Model/sidebar_links') }}
 
