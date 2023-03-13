@@ -1,54 +1,63 @@
-import { t } from 'ttag';
-
-export default {
-    template: `<div :class="boxClass()">
+<template>
+    <div :class="boxClass()" v-show="display">
         <div class="columns">
             <div class="column">
-                <span :class="tagClass()"><: prop.attributes.name :></span>
-                <p>${t`Label`}: <: prop.attributes.label || '-' :></p>
-                <p>${t`Type`}: <: prop.attributes.property_type_name :></p>
-                <p>${t`Hidden`}:
-                    <span v-if="hidden">${t`Yes`}</span>
-                    <span v-if="!hidden">${t`No`}</span>
+                <span :class="tagClass()">{{ prop.attributes.name }}</span>
+                <p>{{ t('Label') }}: {{ prop.attributes.label || '-' }}</p>
+                <p>{{ t('Type') }}: {{ prop.attributes.property_type_name }}</p>
+                <p>{{ t('Hidden') }}:
+                    <span v-if="hidden">{{ t('Yes') }}</span>
+                    <span v-if="!hidden">{{ t('No') }}</span>
                 </p>
                 <p v-if="type === 'inherited'">
-                    ${t`Inherited from`}:
-                    <: prop.attributes.object_type_name :>
+                    {{ t('Inherited from') }}:
+                    {{ prop.attributes.object_type_name }}
                 </p>
                 <p v-if="prop.attributes.description">&nbsp;</p>
-                <p v-if="prop.attributes.description"><: prop.attributes.description :></p>
+                <p v-if="prop.attributes.description">{{ prop.attributes.description }}</p>
             </div>
-            <div v-if="!(prop.attributes.name in nobuttonsfor)" class="column is-narrow">
+            <div v-if="!nobuttonsfor.includes(prop.attributes.name)" class="column is-narrow">
                 <div class="buttons-container">
-                    <button v-if="type === 'custom'" @click.prevent="remove()" class="icon-cancel button button-outlined button-text-white is-expanded">${t`Delete`}</button>
-                    <button v-if="hidden" @click.prevent="toggle(false)" class="icon-eye button button-outlined button-text-white is-expanded">${t`Show`}</button>
-                    <button v-if="!hidden" @click.prevent="toggle(true)" class="icon-eye-off button button-outlined button-text-white is-expanded">${t`Hide`}</button>
+                    <button v-if="type === 'custom'" @click.prevent="remove()" class="icon-cancel button button-outlined button-text-white is-expanded">{{ t('Delete') }}</button>
+                    <button v-if="hidden" @click.prevent="toggle(false)" class="icon-eye button button-outlined button-text-white is-expanded">{{ t('Show') }}</button>
+                    <button v-if="!hidden" @click.prevent="toggle(true)" class="icon-eye-off button button-outlined button-text-white is-expanded">{{ t('Hide') }}</button>
                 </div>
             </div>
         </div>
-    </div>`,
+    </div>
+</template>
+<script>
 
+import { t } from 'ttag';
+
+export default {
     props: {
         prop: [],
         nobuttonsfor: [],
         type: '',
-        ishidden: false,
+        isHidden: false,
+        isNew: false,
     },
 
     data() {
         return {
+            confirm: null,
             hidden: false,
+            display: true,
         };
     },
 
     mounted() {
         this.$nextTick(() => {
-            this.hidden = this.ishidden || false;
+            this.hidden = this.isHidden || false;
         });
     },
 
     methods: {
         boxClass() {
+            if (this.hidden) {
+                return 'box pb-05 has-background-gray-600 has-text-white';
+            }
             if (this.type === 'custom') {
                 return 'box pb-05 has-background-info has-text-white';
             }
@@ -77,7 +86,6 @@ export default {
                 hiddenProperties.splice(index, 1);
                 const newVal = JSON.stringify(hiddenProperties);
                 document.getElementById('hidden').value = newVal;
-                document.getElementById('hidden').setAttribute('data-original-value', newVal);
 
                 return;
             }
@@ -87,11 +95,10 @@ export default {
                 hiddenProperties.sort();
                 const newVal = JSON.stringify(hiddenProperties);
                 document.getElementById('hidden').value = newVal;
-                document.getElementById('hidden').setAttribute('data-original-value', newVal);
             }
         },
         remove() {
-            BEDITA.confirm(
+            this.confirm = BEDITA.confirm(
                 t`If you confirm, this resource will be gone forever. Are you sure?`,
                 t`yes, proceed`,
                 () => {
@@ -100,6 +107,11 @@ export default {
             );
         },
         async delete() {
+            if (this.isNew) {
+                this.display = false;
+
+                return;
+            }
             const prefix = t`Error on deleting property`;
             try {
                 const options = {
@@ -112,17 +124,17 @@ export default {
                 };
                 const response = await fetch(`${BEDITA.base}/api/model/properties/${this.prop.id}`, options);
                 if (response.status === 200) {
-                    document.location.reload();
-
-                    return;
-                }
-                if (response.error) {
+                    this.display = false;
+                } else if (response.error) {
                     BEDITA.showError(`${prefix}: ${response.error}`);
                     this.handleError(response.error, prefix);
                 }
             } catch (error) {
                 BEDITA.showError(`${prefix}: ${error}`);
+            } finally {
+                this.confirm.hide();
             }
         },
     },
 }
+</script>
