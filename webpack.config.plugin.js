@@ -3,6 +3,7 @@ require('./webpack.config.environment');
 
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 const path = require('path');
 
 // auto load installed plugins
@@ -48,9 +49,12 @@ module.exports = {
         minimize: true,
     },
 
-    plugins: [new MiniCssExtractPlugin({
-        filename: '[name]/webroot/css/[name].plugin.css',
-    })],
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: '[name]/webroot/css/[name].plugin.css',
+        }),
+        new VueLoaderPlugin(),
+    ],
 
     module: {
         rules: [
@@ -94,6 +98,12 @@ module.exports = {
                 use: [
                     { loader: 'json-loader' },
                     { loader: './webpack-gettext-loader' },
+                ],
+            },
+            {
+                test: /\.vue$/,
+                use: [
+                    { loader: 'vue-loader' },
                 ],
             },
         ]
