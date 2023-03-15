@@ -599,23 +599,32 @@ class ModulesComponentTest extends TestCase
                 ['events' => ['hints' => ['allow' => []]], 'news' => []],
             ],
             'multi roles' => [
-                ['documents' => [], 'events' => [], 'news' => []],
+                ['documents' => [], 'events' => [], 'news' => [], 'articles' => [], 'festivals' => []],
                 [
                     'role1' => [
-                        'hidden' => ['news'],
-                        'readonly' => ['events'],
+                        'hidden' => ['articles', 'documents', 'events', 'festivals', 'news'],
                     ],
                     'role2' => [
-                        'hidden' => ['documents', 'news'],
-                        'readonly' => ['events'],
+                        'hidden' => ['articles', 'festivals'],
+                        'readonly' => ['documents'],
                     ],
                     'role3' => [
-                        'hidden' => ['documents', 'news'],
-                        'readonly' => ['events'],
+                        'hidden' => ['articles', 'festivals'],
+                        'readonly' => ['documents'],
+                    ],
+                    'role4' => [
+                        'hidden' => ['articles', 'festivals'],
+                        'readonly' => ['documents'],
                     ],
                 ],
-                ['id' => 1, 'roles' => ['role1', 'role2', 'role3']],
-                ['documents' => [], 'events' => ['hints' => ['allow' => []]]],
+                ['id' => 1, 'roles' => ['role1', 'role2', 'role3', 'role4']],
+                [
+                    // 'articles' hidden
+                    'documents' => ['hints' => ['allow' => []]], // readonly
+                    'events' => [], // write
+                    // 'festivals' hidden
+                    'news' => [], // write
+                ],
             ],
         ];
     }
