@@ -189,14 +189,20 @@ class ModulesComponent extends Component
         }
 
         $roles = (array)$user->get('roles');
+        $modules = (array)array_keys($this->modules);
         $hidden = [];
         $readonly = [];
+        $write = [];
         foreach ($roles as $role) {
             $h = (array)Hash::get($accessControl, sprintf('%s.hidden', $role));
             $hidden = empty($hidden) ? $h : array_intersect($hidden, $h);
             $r = (array)Hash::get($accessControl, sprintf('%s.readonly', $role));
             $readonly = empty($readonly) ? $r : array_intersect($readonly, $r);
+            $write = array_unique(array_merge($write, array_diff($modules, $hidden, $readonly)));
         }
+        // Note: https://github.com/bedita/manager/issues/969 Accesses priority is "write" > "read" > "hidden"
+        $readonly = array_diff($readonly, $write);
+        $hidden = array_diff($hidden, $readonly, $write);
         if (empty($hidden) && empty($readonly)) {
             return;
         }
