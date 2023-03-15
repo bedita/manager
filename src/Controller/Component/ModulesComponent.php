@@ -201,18 +201,8 @@ class ModulesComponent extends Component
             $write = array_unique(array_merge($write, array_diff($modules, $hidden, $readonly)));
         }
         // Note: https://github.com/bedita/manager/issues/969 Accesses priority is "write" > "read" > "hidden"
-        $readonly = array_filter(
-            $readonly,
-            function ($item) use ($write) {
-                return !in_array($item, $write);
-            }
-        );
-        $hidden = array_filter(
-            $hidden,
-            function ($item) use ($readonly, $write) {
-                return !in_array($item, $readonly) && !in_array($item, $write);
-            }
-        );
+        $readonly = array_diff($readonly, $write);
+        $hidden = array_diff($hidden, $readonly, $write);
         if (empty($hidden) && empty($readonly)) {
             return;
         }
