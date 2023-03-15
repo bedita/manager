@@ -605,16 +605,16 @@ class ModulesComponentTest extends TestCase
                         'hidden' => ['articles', 'documents', 'events', 'festivals', 'news'],
                     ],
                     'role2' => [
-                        'hidden' => ['articles', 'festivals'],
-                        'readonly' => ['documents'],
+                        'hidden' => ['articles', 'events', 'festivals'],
+                        'readonly' => ['documents', 'news'],
                     ],
                     'role3' => [
                         'hidden' => ['articles', 'festivals'],
                         'readonly' => ['documents'],
                     ],
                     'role4' => [
-                        'hidden' => ['articles', 'festivals'],
-                        'readonly' => ['documents'],
+                        'hidden' => ['articles', 'festivals', 'news'],
+                        'readonly' => ['documents', 'events'],
                     ],
                 ],
                 ['id' => 1, 'roles' => ['role1', 'role2', 'role3', 'role4']],
