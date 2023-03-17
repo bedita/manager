@@ -6,10 +6,12 @@
  */
 
 import { confirm } from 'app/components/dialog/dialog';
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
     components: {
+        Icon,
         PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
     },
@@ -21,7 +23,8 @@ export default {
     methods: {
         remove(e) {
             const message = t`Remove item. Are you sure?`;
-            const form = document.getElementById(e.target.getAttribute('form'));
+            const formId = e.target.closest('button').getAttribute('form');
+            const form = document.getElementById(formId);
             confirm(message, t`yes, proceed`, form.submit.bind(form));
         },
     }

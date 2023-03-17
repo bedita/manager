@@ -1,10 +1,10 @@
-<section class="error-page-container">
+<section class="px-1">
     <header>
         <h1>{{ __('Error ') }} {{ error.code }}</h1>
     </header>
 
     <div>
-        <p class="error-message">
+        <p class="my-1">
             {{ message }}
         </p>
 
@@ -12,7 +12,7 @@
 
             {% if error %}
             <hr>
-            <p class="error-message">
+            <p class="my-1">
                 <strong>Error in: </strong>
                 {{ error.getFile }}, line {{ error.getLine }}
             </p>
@@ -21,18 +21,20 @@
         {% endif %}
     </div>
 
-    <div>
-        <p class="error-message">
-            <a href="/" class="icon-backward button button-outlined">{{ __('Return to Dashboard') }}</a>
-        </p>
+    <div class="my-1">
+        <a href="/" class="button button-outlined">
+            <Icon icon="carbon:undo"></Icon>
+            <span class="ml-05">{{ __('Return to Dashboard') }}</span>
+        </a>
     </div>
 
     <div></div>
 
-    <div>
-        <p class="error-message">
-            <a href="/logout" class="icon-off button button-outlined">{{ __('Log out') }}</a>
-        </p>
+    <div class="my-1">
+        <a href="/logout" class="button button-outlined">
+            <Icon icon="carbon:logout"></Icon>
+            <span class="ml-05">{{ __('Log out') }}</span>
+        </a>
     </div>
 
 </section>

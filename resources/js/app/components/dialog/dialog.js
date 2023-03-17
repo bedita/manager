@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 import Vue from 'vue';
 
@@ -14,9 +15,14 @@ export const Dialog = Vue.extend({
                 <header class="is-flex space-between align-center is-expanded">
                     <div class="is-flex align-center">
                         <span class="is-capitalized mr-05" v-if="headerText"><: t(headerText) :></span>
-                        <i :class="icon" class="has-text-size-larger" v-if="icon"></i>
+                        <Icon icon="carbon:checkmark" color="green" v-if="dialogType === 'success'"></Icon>
+                        <Icon icon="carbon:information" color="blue" v-if="dialogType === 'info'"></Icon>
+                        <Icon icon="carbon:warning" color="orange" v-if="dialogType === 'warning'"></Icon>
+                        <Icon icon="carbon:misuse" color="red" v-if="dialogType === 'error'"></Icon>
                     </div>
-                    <i class="icon-cancel-1 has-text-size-larger" @click="hide()"></i>
+                    <i @click="hide()">
+                        <Icon icon="carbon:close"></Icon>
+                    </i>
                 </header>
                 <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>
                 <details v-if="!!dumpMessage">
@@ -49,13 +55,16 @@ export const Dialog = Vue.extend({
         </transition>
     </div>`,
 
+    components: {
+        Icon,
+    },
+
     data() {
         return {
             destroyOnHide: true,
             isOpen: false,
             dialogType: 'warning',
             headerText: '',
-            icon: 'icon-attention-circled',
             message: '',
             dumpMessage: false,
             confirmMessage: 'ok',
@@ -101,12 +110,10 @@ export const Dialog = Vue.extend({
         },
         info(message, root = document.body) {
             this.dialogType = 'info';
-            this.icon = 'icon-info-1';
             this.show(message, this.dialogType, root);
         },
         success(message, root = document.body) {
             this.dialogType = 'success';
-            this.icon = 'icon-ok-circled-1';
             this.show(message, this.dialogType, root);
         },
         confirm(message, confirmMessage, confirmCallback, type = 'warning', root = document.body) {
@@ -118,7 +125,6 @@ export const Dialog = Vue.extend({
         },
         prompt(message, defaultValue, confirmCallback, root = document.body, options = {}) {
             this.dialogType = 'prompt';
-            this.icon = 'icon-info-1';
             this.inputValue = defaultValue || '';
             this.checkValue = options?.checkValue || '';
             this.checkLabel = options?.checkLabel || '';

@@ -69,20 +69,23 @@
 
                     {% if attributes.url %}
                     <a href="{{ attributes.url }}" target="_blank"
-                        class="icon-eye mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
-                        {{ __('View file') }}
+                        class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
+                        <Icon icon="carbon:view"></Icon>
+                        <span class="ml-05">{{ __('View file') }}</span>
                     </a>
                     {% endif %}
 
                     <a href="{{ Url.build({'_name': 'stream:download', 'id': stream.id}) }}"
-                        class="icon-download-1 mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
-                        {{ __('Download file') }}
+                        class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
+                        <Icon icon="carbon:download"></Icon>
+                        <span class="ml-05">{{ __('Download file') }}</span>
                     </a>
 
-                    <a class="icon-cancel mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}"
+                    <a class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}"
                         @click.prevent.stop=resetFile("{{ thumb }}")
                         v-if="fileChanged">
-                        {{ __('Undo Change File') }}
+                        <Icon icon="carbon:undo"></Icon>
+                        <span class="ml-05">{{ __('Undo Change File') }}</span>
                     </a>
 
                     <div class="mr-1 has-text-size-large" v-show="!fileChanged">{{ __('Change File') }}:</div>

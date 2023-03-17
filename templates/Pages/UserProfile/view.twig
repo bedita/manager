@@ -17,7 +17,7 @@
                 {% for group, attributes in properties %}
                     {% if group != 'other' and group != 'password_change' and attributes %}
                         <section class="fieldset">
-                            <header class="tab unselectable">
+                            <header>
                                 {% if group|trim  %}
                                     <h2>{{ __(group|humanize) }}</h2>
                                 {% else %}
@@ -44,7 +44,7 @@
                 {% for group, attributes in properties %}
                     {% if group == 'password_change' and attributes %}
                         <section class="fieldset">
-                            <header class="tab unselectable">
+                            <header>
                                 <h2>{{ __('Change password') }}</h2>
                             </header>
 
@@ -65,11 +65,9 @@
         {{ Form.end()|raw }}
 
         {# append "save" to sidebar #}
-        {% do _view.append('app-module-buttons', Form.button( __('Save'),
-            {
-                'form': 'form-main',
-                'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto',
-            })
+        {% do _view.append(
+            'app-module-buttons',
+            '<button form="form-main" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __('Save') ~ '</span></button>'
         ) %}
     </div>
 

@@ -1,6 +1,3 @@
-import { confirm } from 'app/components/dialog/dialog';
-import { t } from 'ttag';
-
 /**
  * Templates that uses this component (directly or indirectly)
  *  Template/Modules/index.twig
@@ -8,6 +5,10 @@ import { t } from 'ttag';
  * <modules-index> component used for ModulesPage -> Index
  *
  */
+import { confirm } from 'app/components/dialog/dialog';
+import { Icon } from '@iconify/vue2';
+import { t } from 'ttag';
+
 export default {
     components: {
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
@@ -17,6 +18,7 @@ export default {
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         FilterBoxView: () => import(/* webpackChunkName: "tree-view" */'app/components/filter-box'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
+        Icon,
     },
 
     /**

@@ -19,6 +19,7 @@
 
 import { DEFAULT_PAGINATION, getDefaultFilter } from 'app/mixins/paginated-content';
 import merge from 'deepmerge';
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 import { warning } from 'app/components/dialog/dialog';
 
@@ -28,6 +29,7 @@ export default {
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
+        Icon,
     },
 
     props: {

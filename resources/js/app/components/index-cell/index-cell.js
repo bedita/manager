@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
@@ -6,10 +7,14 @@ export default {
     template: `
     <div :class="className()" untitled-label="${t`Untitled`}" @mouseover="onMouseover()" @mouseleave="onMouseleave()">
         <: !msg ? truncated : '' :>
-        <span v-if="showCopyIcon()" class="is-width-auto icon-doc" @click.stop.prevent="copy()"></span>
+        <Icon icon="carbon:copy" v-if="showCopyIcon()" @click.stop.prevent="copy()"></Icon>
         <div v-if="msg" v-text="msg" style="color: gray"></div>
     </div>
     `,
+
+    components: {
+        Icon,
+    },
 
     props: {
         settings: {},

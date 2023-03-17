@@ -12,6 +12,7 @@
  * @prop {String} label label of the property view
  *
  */
+import { Icon } from '@iconify/vue2';
 
 const API_URL = new URL(BEDITA.base).pathname;
 const API_OPTIONS = {
@@ -37,6 +38,8 @@ export default {
         StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
         ObjectProperties: () => import(/* webpackChunkName: "string-list" */'app/components/object-property/object-properties'),
         ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */'app/components/object-property/object-property-add'),
+        Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
+        Icon,
     },
 
     props: {

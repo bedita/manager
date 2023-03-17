@@ -49,11 +49,14 @@ __('Properties')
                     {{ Form.control('property_name', {'type': 'hidden', 'value': property})|raw }}
                 </div>
                 <div class="column">
-                    {{ Form.button(__('Save'), {
-                        'class': 'icon-check-1 button button-primary button-primary-hover-module-admin is-width-auto',
-                        'onclick': 'this.classList.add(\'is-loading-spinner\')',
-                    }) | raw }}
-                    <a href="{{ wikis[property] }}" class="icon-info-1 button button-outlined" target="_blank">{{ __('See Wiki for help') }}</a>
+                    <button class="button button-primary button-primary-hover-module-admin is-width-auto" onclick="this.classList.add(\'is-loading-spinner\')">
+                        <Icon icon="carbon:save"></Icon>
+                        <span class="ml-05">{{ __('Save') }}</span>
+                    </button>
+                    <a href="{{ wikis[property] }}" class="button button-outlined" target="_blank">
+                        <Icon icon="carbon:launch"></Icon>
+                        <span class="ml-05">{{ __('See Wiki for help') }}</span>
+                    </a>
                 </div>
             {{ Form.end()|raw }}
         </div>

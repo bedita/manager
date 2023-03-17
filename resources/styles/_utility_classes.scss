@@ -88,6 +88,7 @@
 .has-border-gray-900    { border-color: $gray-900 !important; }
 .has-border-danger      { border-color: $danger !important; }
 .has-border-info        { border-color: $info !important; }
+.has-border-none        { border: none !important; }
 
 
 // spacing
@@ -143,6 +144,8 @@
 .pb-2     { padding-bottom: $gutter * 2; }
 .pb-25    { padding-bottom: $gutter * 2.5; }
 
+// fixed height and width
+.hw-30    { height: 30px; width: 30px; }
 
 // screen readers only
 .is-sr-only {
@@ -167,6 +170,15 @@
         top: 50%;
         left: 0;
         margin-top: -.5em;
+    }
+    svg {
+        position:absolute;
+        display: block;
+        top:35%;
+        left: 40%;
+        height: 40px;
+        width: 40px;
+        text-align: center;
     }
 }
 

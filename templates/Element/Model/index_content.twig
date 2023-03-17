@@ -53,16 +53,10 @@
                     {% endfor %}
 
                     <div class="buttons-cell narrow">
-                        <button
-                            title="{{ __('Edit') }} {{ resource.attributes.name }}"
-                            class="icon-link-ext button button-text-white is-width-auto">{{ __('Edit') }}</button>
-
-                        {# TODO: uncomment `delete` action once controller part is available #}
-                        {# <div class="buttons">
-                        {% if in_array('DELETE', currentModule.hints.allow) %}
-                            {{ Form.postButton(__('Delete'), {'_name': 'model:delete', 'resource_type': resource.type}, {'class': '', 'data': {'id': resource.id}})|raw }}
-                        {% endif %}
-                        </div> #}
+                        <button class="button button-text-white is-width-auto" title="{{ __('Edit') }} {{ resource.attributes.name }}">
+                            <Icon icon="carbon:launch"></Icon>
+                            <span class="ml-05">{{ __('Edit') }}</span>
+                        </button>
                     </div>
 
                 </a>

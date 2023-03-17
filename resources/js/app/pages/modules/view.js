@@ -1,5 +1,6 @@
 import { AjaxLogin } from '../../components/ajax-login/ajax-login.js';
 import Vue from 'vue';
+import { Icon } from '@iconify/vue2';
 
 /**
  * Templates that uses this component (directly or indirectly):
@@ -15,9 +16,11 @@ export default {
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
         HorizontalTabView: () => import(/* webpackChunkName: "horizontal-tab-view" */'app/components/horizontal-tab-view'),
+        ObjectNav: () => import(/* webpackChunkName: "object-nav" */'app/components/object-nav/object-nav'),
         ObjectProperty: () => import(/* webpackChunkName: "object-property" */'app/components/object-property/object-property'),
         ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */'app/components/object-property/object-property-add'),
         ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
+        Icon,
     },
 
     props: {

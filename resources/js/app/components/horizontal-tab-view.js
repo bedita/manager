@@ -11,9 +11,12 @@
  *
  */
 
+import { Icon } from '@iconify/vue2';
+
 export default {
     components: {
         FormFileUpload: () => import(/* webpackChunkName: "form-file-upload" */'app/components/form-file-upload'),
+        Icon,
     },
 
     props: {

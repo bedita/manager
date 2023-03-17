@@ -8,11 +8,12 @@
 
     <div class="fieldset">
         <button
-            class="icon-trash button button-outlined"
+            class="button button-outlined"
             @click.prevent="trash"
             :disabled="!selectedRows.length"
         >
-            {{ __('Move to trash') }}
+            <Icon icon="carbon:trash-can"></Icon>
+            <span class="ml-05">{{ __('Move to trash') }}</span>
         </button>
     </div>
 {{ Form.end()|raw }}

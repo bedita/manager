@@ -1,16 +1,18 @@
 {% set apiCheck = System.checkBeditaApiVersion() %}
-{% set apiClass = apiCheck == 1 ? 'icon-check ok' : 'icon-cancel error' %}
+{% set apiClass = apiCheck == 1 ? 'ok' : 'error' %}
 {% set authors = [Html.link('Chialab', 'https://www.chialab.it', {'target': '_blank'}), Html.link('ChannelWeb', 'https://www.channelweb.it', {'target': '_blank'})] %}
 {% set warn = __('API version required: {0}', config('BEditaAPI.versions')|join(' | ')) %}
 
 <div class="menu-colophon">
-    <span class="icon-check">
+    <span>
+        <Icon icon="carbon:checkmark"></Icon>
         {{ Html.link('Manager', 'https://github.com/bedita/manager', {'target': '_blank'})|raw }} {{ config('Manager.version') }}
     </span>
     {% if project.version %}
-    <span class="{{ apiClass }}">
+    <span class="{{ apiClass }}" title="{{ warn }}">
+        {% if apiCheck == 1 %}<Icon icon="carbon:checkmark"></Icon>{% endif %}
+        {% if apiCheck != 1 %}<Icon icon="carbon:error"></Icon>{% endif %}
         {{ Html.link('API', 'https://github.com/bedita/bedita', {'target': '_blank'})|raw }} {{ project.version }}
-        <i class="icon-info-1" title="{{ warn }}"></i>
     </span>
     {% endif %}
     <span>©{{ 'now'|date('Y') }} {{ authors|shuffle|toList(__('&'))|raw }}</span>

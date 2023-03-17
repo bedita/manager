@@ -7,7 +7,10 @@
                 <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}
                 {% for obj in included %}
                     {% if obj.type == 'streams' %}
-                        <a class="button button-outlined icon-forward mx-1" href="{{ obj.meta.url }}" target="_blank">{{ __('Open File') }}</a>
+                        <a class="button button-outlined mx-1" href="{{ obj.meta.url }}" target="_blank">
+                            <Icon icon="carbon:launch"></Icon>
+                            <span class="ml-05">{{ __('Open File') }}</span>
+                        </a>
                     {% endif %}
                 {% endfor %}</h1>
             {% else %}
@@ -100,63 +103,61 @@
             {# append buttons to sidebar #}
             {# Append "Save" #}
             {% if Perms.canSave() %}
-                {% do _view.append('app-module-buttons', Form.button( __('Save'),
-                    {
-                        'form': 'form-main',
-                        'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto',
-                    })
+                {% do _view.append(
+                    'app-module-buttons',
+                    '<button class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" form="form-main"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __('Save') ~ '</span></button>',
                 ) %}
             {% endif %}
 
             {# Append "Clone" #}
             {% if object.id and Perms.canCreate() %}
-                {% do _view.append('app-module-buttons', Html.link(
-                    __('Clone'),
-                    {'_name': 'modules:clone', 'object_type': objectType, 'id': object.id},
-                    {'@click.prevent': 'clone', 'class': 'icon-link-ext button button-outlined button-outlined-hover-module-' ~ currentModule.name }
-                )) %}
+                {% do _view.append(
+                    'app-module-buttons',
+                    '<a @click.prevent="clone" href="' ~ Url.build({'_name': 'modules:clone', 'object_type': objectType, 'id': object.id}) ~ '" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:replicate"></Icon><span class="ml-05">' ~ __('Clone') ~ '</span></a>',
+                ) %}
             {% endif %}
 
             {# Append "Lock/Unlock" #}
             {% if object.id and Perms.canLock() %}
                 {% if object.meta.locked %}
-                    {% do _view.append('app-module-buttons', Html.link(
-                        __('Unlock'),
-                        {'_name': 'lock:remove', 'object_type': objectType, 'id': object.id},
-                        {'class': 'icon-lock-open button button-outlined button-outlined-hover-module-' ~ currentModule.name }
-                    )) %}
+                    {% do _view.append(
+                        'app-module-buttons',
+                        '<a href="' ~ Url.build({'_name': 'lock:remove', 'object_type': objectType, 'id': object.id}) ~ '" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:unlocked"></Icon><span class="ml-05">' ~ __('Unlock') ~ '</span></a>',
+                    ) %}
                 {% else %}
-                    {% do _view.append('app-module-buttons', Html.link(
-                        __('Lock'),
-                        {'_name': 'lock:add', 'object_type': objectType, 'id': object.id},
-                        {'class': 'icon-lock button button-outlined button-outlined-hover-module-' ~ currentModule.name }
-                    )) %}
+                    {% do _view.append(
+                        'app-module-buttons',
+                        '<a href="' ~ Url.build({'_name': 'lock:add', 'object_type': objectType, 'id': object.id}) ~ '" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:locked"></Icon><span class="ml-05">' ~ __('Lock') ~ '</span></a>',
+                    ) %}
                 {% endif %}
             {% endif %}
 
             {# Append "Trash (move to)" #}
             {% if object.id and Perms.canDelete(object) %}
-                {% do _view.append('app-module-buttons',
-                    Form.postButton(
-                        __('Trash-verb'),
-                        {'_name': 'modules:delete', 'object_type': objectType},
-                        {'data': {'id': object.id}, 'class': 'icon-trash button button-outlined button-outlined-hover-module-' ~ currentModule.name }
-                    )
+                {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'modules:delete', 'object_type': objectType}})|raw }}
+                    <input type="hidden" name="id" value="{{ object.id }}">
+                    {% do Form.unlockField('id') %}
+                {{ Form.end()|raw }}
+                {% do _view.append(
+                    'app-module-buttons',
+                    '<button class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto" form="form-delete"><Icon icon="carbon:trash-can"></Icon><span class="ml-05">' ~ __('Trash-verb') ~ '</span></button>',
                 ) %}
             {% endif %}
 
             {# Append "Prev" and "Next" #}
             {% if object.id and objectNav %}
-                {% do _view.append('app-module-buttons', Link.objectNav(objectNav)) %}
+                {% set onav = objectNav|json_encode %}
+                {% do _view.append(
+                    'app-module-buttons',
+                    '<object-nav :obj=' ~ onav ~ '></object-nav>'
+                ) %}
             {% endif %}
 
             {# Append "new" button #}
             {% if object.id and Perms.canCreate() %}
-                {% do _view.append('app-module-buttons',
-                    Html.link(__('Create'),
-                        {'_name': 'modules:create', 'object_type': objectType},
-                        {'class': 'icon-link-ext button button-outlined button-outlined-hover-module-' ~ currentModule.name}
-                    )|raw
+                {% do _view.append(
+                    'app-module-buttons',
+                    '<a href="' ~ Url.build({'_name': 'modules:create', 'object_type': objectType}) ~ '" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ '"><Icon icon="carbon:add" /><span class="ml-05">' ~ __('Create') ~ '</span></a>'
                 ) %}
             {% endif %}
 

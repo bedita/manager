@@ -205,12 +205,12 @@ class TranslationsController extends ModulesController
     /**
      * Delete single translation.
      * Expected request:
-     *     data: [
+     *     data:
      *         {
      *             id: <translation id>,
      *             object_id: <translated object id>,
+     *             lang: <lang>
      *         }
-     *     ]
      *
      * @return \Cake\Http\Response
      */
@@ -218,13 +218,8 @@ class TranslationsController extends ModulesController
     {
         $this->getRequest()->allowMethod(['post']);
         $this->objectType = $this->typeFromUrl();
-        $requestData = $this->getRequest()->getData();
-        $translation = [];
+        $translation = $this->getRequest()->getData();
         try {
-            if (empty($requestData[0])) {
-                throw new BadRequestException(__('Empty request data'));
-            }
-            $translation = $requestData[0];
             if (empty($translation['id'])) {
                 throw new BadRequestException(__('Empty translation "id"'));
             }
@@ -233,17 +228,18 @@ class TranslationsController extends ModulesController
             }
             // remove completely the translation
             $this->apiClient->delete(sprintf('/translations/%s', $translation['id']));
+            $this->Flash->success(__('Translation(s) deleted'));
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-            // redir to main object view
-            return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $translation['object_id']]);
         }
-        $this->Flash->success(__('Translation(s) deleted'));
 
         // redir to main object view
-        return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $translation['object_id']]);
+        return $this->redirect([
+            '_name' => 'modules:view',
+            'object_type' => $this->objectType,
+            'id' => $translation['object_id'],
+        ]);
     }
 
     /**

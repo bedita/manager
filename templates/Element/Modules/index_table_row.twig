@@ -46,45 +46,44 @@
         {% if isTrash %}
 
             {% if Perms.canSave(object.type) %}
-                {{ Form.postButton(__('Restore'),
-                    {'_name': 'trash:restore'},
-                    {
-                        'data': {'ids': object.id, 'query': q},
-                        'title': __('Restore') ~ ' ' ~ object.attributes.title|escape,
-                        'class': 'icon-up-2 button button-text-white is-width-auto',
-                    }
-                )|raw }}
+                {{ Form.create(null, {'id': 'form-restore-' ~ object.id, 'url': {'_name': 'trash:restore'}})|raw }}
+                    {{ Form.hidden('ids', {'value': object.id})|raw }}
+                    {{ Form.hidden('query', {'value': q})|raw }}
+                    <button class="button button-text-white is-width-auto" form="form-restore-{{ object.id }}" title="{{ __('Restore') ~ ' ' ~ object.attributes.title|escape }}">
+                        <Icon icon="carbon:redo"></Icon>
+                        <span class="ml-05">{{ __('Restore') }}</span>
+                    </button>
+                {{ Form.end()|raw }}
             {% endif %}
 
             {% if Perms.canDelete(object) %}
-                {{ Form.postButton(__('Delete'),
-                    {'_name': 'trash:delete'},
-                    {
-                        'data': {'ids': object.id, 'query': q},
-                        'class': 'icon-cancel button button-text-white is-width-auto',
-                        'title': __('Permanently delete') ~ ' ' ~ object.attributes.title|escape,
-                        'onclick': confirm,
-                    }
-                )|raw }}
+                {{ Form.create(null, {'id': 'form-delete-' ~ object.id, 'url': {'_name': 'trash:delete'}})|raw }}
+                    {{ Form.hidden('ids', {'value': object.id})|raw }}
+                    {{ Form.hidden('query', {'value': q})|raw }}
+                    <button class="button button-text-white is-width-auto" form="form-restore-{{ object.id }}" title="{{ __('Permanently delete') ~ ' ' ~ object.attributes.title|escape }}" onclick="confirm">
+                        <Icon icon="carbon:trash-can"></Icon>
+                        <span class="ml-05">{{ __('Delete') }}</span>
+                    </button>
+                {{ Form.end()|raw }}
             {% endif %}
 
         {% else %}
 
             {% if Perms.canRead(object.type) %}
-            <button
-                title="{{ __('Edit') }} {{ object.attributes.title }}"
-                class="icon-link-ext button button-text-white is-width-auto">{{ __('Edit') }}</button>
+                <button title="{{ __('Edit') }} {{ object.attributes.title }}" class="button button-text-white is-width-auto">
+                    <Icon icon="carbon:launch"></Icon>
+                    <span class="ml-05">{{ __('Edit') }}</span>
+                </button>
             {% endif %}
 
             {% if Perms.canDelete(object) %}
-                {{ Form.postButton(__('Trash-verb'),
-                    {'_name': 'modules:delete', 'object_type': object.type},
-                    {
-                        'data': {'id': object.id},
-                        'title': __('Move to trash') ~ ' ' ~ object.attributes.title|escape,
-                        'class': 'icon-trash button button-text-white is-width-auto',
-                    }
-                )|raw}}
+                {{ Form.create(null, {'url': {'_name': 'modules:delete', 'object_type': object.type}})|raw }}
+                    {{ Form.hidden('id', {'value': object.id})|raw }}
+                    <button title="{{ __('Move to trash') ~ ' ' ~ object.attributes.title|escape }}" class="button button-text-white is-width-auto">
+                        <Icon icon="carbon:trash-can"></Icon>
+                        <span class="ml-05">{{ __('Trash-verb') }}</span>
+                    </button>
+                {{ Form.end()|raw }}
             {% endif %}
 
         {% endif %}
