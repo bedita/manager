@@ -117,13 +117,15 @@ export default {
         /**
          * Submit bulk actions form
          *
+         * @param {Event} event The event
          * @param {String} formId The form ID
          * @return {void}
          */
-        bulkActions(formId) {
+        bulkActions(event, formId) {
             if (this.selectedRows.length < 1) {
                 return;
             }
+            event.target.classList.add('is-loading-spinner');
             document.querySelector(`form#${formId}`).submit();
         },
 

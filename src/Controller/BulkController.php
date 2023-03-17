@@ -252,7 +252,7 @@ class BulkController extends AppController
                 $this->apiClient->addRelated($position, 'folders', 'children', [
                     [
                         'id' => $id,
-                        'type' => $this->objectType,
+                        'type' => $this->getType($id, $this->objectType),
                     ],
                 ]);
             } catch (BEditaClientException $e) {
@@ -272,7 +272,7 @@ class BulkController extends AppController
         $ids = array_reverse($this->ids);
         foreach ($ids as $id) {
             try {
-                $this->apiClient->replaceRelated($id, $this->objectType, 'parents', [
+                $this->apiClient->replaceRelated($id, $this->getType($id, $this->objectType), 'parents', [
                     'id' => $position,
                     'type' => 'folders',
                 ]);
@@ -307,5 +307,22 @@ class BulkController extends AppController
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    /**
+     * Get object type, when it is abstract
+     *
+     * @param string $id The object ID
+     * @param string $type The object type
+     * @return string
+     */
+    protected function getType(string $id, string $type): string
+    {
+        if (!in_array($type, ['media','objects'])) {
+            return $type;
+        }
+        $response = (array)$this->apiClient->get(sprintf('/objects/%s', $id));
+
+        return (string)Hash::get($response, 'data.type');
     }
 }

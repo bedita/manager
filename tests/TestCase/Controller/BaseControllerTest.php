@@ -32,6 +32,13 @@ class BaseControllerTest extends TestCase
     protected $folderUname = 'controller-test-folder';
 
     /**
+     * Uname for test media
+     *
+     * @var string
+     */
+    protected $mediaUname = 'controller-test-media';
+
+    /**
      * Test request config
      *
      * @var array
@@ -70,6 +77,22 @@ class BaseControllerTest extends TestCase
     protected function getTestFolder(): ?array
     {
         $response = $this->client->getObjects('folders', ['filter' => ['uname' => $this->folderUname]]);
+
+        if (!empty($response['data'][0])) {
+            return $response['data'][0];
+        }
+
+        return null;
+    }
+
+    /**
+     * Get a media for test purposes
+     *
+     * @return array|null
+     */
+    protected function getTestMedia(): ?array
+    {
+        $response = $this->client->getObjects('files', ['filter' => ['uname' => $this->mediaUname]]);
 
         if (!empty($response['data'][0])) {
             return $response['data'][0];
@@ -122,6 +145,25 @@ class BaseControllerTest extends TestCase
             $response = $this->client->save('folders', [
                 'title' => 'controller test folder',
                 'uname' => $this->folderUname,
+            ]);
+            $o = $response['data'];
+        }
+
+        return $o;
+    }
+
+    /**
+     * Create a object for test purposes (if not available already)
+     *
+     * @return array
+     */
+    protected function createTestMedia(): array
+    {
+        $o = $this->getTestMedia();
+        if ($o == null) {
+            $response = $this->client->save('files', [
+                'title' => 'controller test media',
+                'uname' => $this->mediaUname,
             ]);
             $o = $response['data'];
         }

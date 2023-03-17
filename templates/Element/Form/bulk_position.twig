@@ -27,7 +27,7 @@
 
         <button
             class="icon-ok button button-outlined"
-            @click.prevent="bulkActions('bulk-folder')"
+            @click.prevent="bulkActions($event, 'bulk-folder')"
             :disabled="!selectedRows.length || !bulkAction || !bulkFolder"
         >
             {{ __('Ok') }}

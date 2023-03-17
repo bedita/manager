@@ -73,6 +73,7 @@ class BulkControllerTest extends BaseControllerTest
         $this->controller->Modules->startup();
         $this->setupApi();
         $this->createTestObject();
+        $this->createTestMedia();
     }
 
     /**
@@ -593,5 +594,28 @@ class BulkControllerTest extends BaseControllerTest
         static::assertEquals(1, count($message['flash']));
         static::assertEquals('Bulk Action failed on: ', $message['flash'][0]['message']);
         static::assertEquals('flash/error', $message['flash'][0]['element']);
+    }
+
+    /**
+     * Test `getType` method
+     *
+     * @return void
+     * @covers ::getType()
+     */
+    public function testGetType(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        $reflectionClass = new \ReflectionClass($this->controller);
+        $method = $reflectionClass->getMethod('getType');
+        $method->setAccessible(true);
+        $media = $this->getTestMedia();
+        $type = $expected = $media['type'];
+        $id = $media['id'];
+        $actual = $method->invokeArgs($this->controller, [$id, 'media']);
+        static::assertSame($expected, $actual);
+        $actual = $method->invokeArgs($this->controller, [$id, $type]);
+        static::assertSame($expected, $actual);
     }
 }
