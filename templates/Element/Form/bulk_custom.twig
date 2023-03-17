@@ -21,7 +21,6 @@
                     {{ __(label|humanize) }}
                 {%- endif -%}
             </label>
-
             <button id="icon-link-ext custom-bulk-{{ key }}" class="button button-outlined" @click.prevent="bulkActions($event, '{{ bulkFormId }}')" :disabled="!selectedRows.length">{{ __('Ok') }}</button>
         </div>
         {{ Form.end()|raw }}
