@@ -34,7 +34,7 @@ class BulkController extends AppController
     /**
      * Object type is abstract
      *
-     * @var string
+     * @var bool
      */
     protected $abstractType = null;
 
