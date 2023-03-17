@@ -32,6 +32,13 @@ class BulkController extends AppController
     protected $objectType = null;
 
     /**
+     * Object type is abstract
+     *
+     * @var string
+     */
+    protected $abstractType = null;
+
+    /**
      * Selected objects IDs
      *
      * @var array
@@ -60,6 +67,7 @@ class BulkController extends AppController
         parent::initialize();
 
         $this->objectType = $this->getRequest()->getParam('object_type');
+        $this->abstractType = in_array($this->objectType, $this->Schema->abstractTypes());
     }
 
     /**
@@ -252,7 +260,7 @@ class BulkController extends AppController
                 $this->apiClient->addRelated($position, 'folders', 'children', [
                     [
                         'id' => $id,
-                        'type' => $this->getType($id, $this->objectType),
+                        'type' => $this->getType($id),
                     ],
                 ]);
             } catch (BEditaClientException $e) {
@@ -272,7 +280,7 @@ class BulkController extends AppController
         $ids = array_reverse($this->ids);
         foreach ($ids as $id) {
             try {
-                $this->apiClient->replaceRelated($id, $this->getType($id, $this->objectType), 'parents', [
+                $this->apiClient->replaceRelated($id, $this->getType($id), 'parents', [
                     'id' => $position,
                     'type' => 'folders',
                 ]);
@@ -310,19 +318,17 @@ class BulkController extends AppController
     }
 
     /**
-     * Get object type, when it is abstract
+     * Get concrete object type when it is abstract, otherwise just return object type.
      *
      * @param string $id The object ID
-     * @param string $type The object type
      * @return string
      */
-    protected function getType(string $id, string $type): string
+    protected function getType(string $id): string
     {
-        $schema = $this->Schema->getSchema($type);
-        if (!empty($schema)) {
-            return $type;
+        if (!$this->abstractType) {
+            return $this->objectType;
         }
-        $response = (array)$this->apiClient->get(sprintf('/%s/%s', $type, $id));
+        $response = (array)$this->apiClient->get(sprintf('/%s/%s', $this->objectType, $id));
 
         return (string)Hash::get($response, 'data.type');
     }
