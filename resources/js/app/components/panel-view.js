@@ -22,12 +22,16 @@
 *
 */
 
+import { Icon } from '@iconify/vue2';
 import Vue from 'vue';
 
 /**
  * Event bus to communicate from/to PanelView
  */
 export const PanelEvents = new Vue({
+    components: {
+        Icon,
+    },
     methods: {
         /**
          * set listener for events and if "from" is set, it extract its _uid and use it to match the evant signature

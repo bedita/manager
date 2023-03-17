@@ -18,8 +18,12 @@
                     ]">
                         <h2>{{ Layout.tr(relationLabel) }}</h2>
                         <div class="buttons" v-show="isOpen">
-                            <button @click.prevent @click.stop="switchBlockView()" :data-active="!dataList" class="switch-view icon-th-large"></button>
-                            <button @click.prevent @click.stop="switchListView()" :data-active="dataList" class="switch-view icon-th-list"></button>
+                            <button @click.prevent @click.stop="switchBlockView()" :data-active="!dataList" class="switch-view">
+                                <Icon icon="carbon:grid"></Icon>
+                            </button>
+                            <button @click.prevent @click.stop="switchListView()" :data-active="dataList" class="switch-view">
+                                <Icon icon="carbon:list-bulleted"></Icon>
+                            </button>
                         </div>
                         <span class="tag is-smallest is-black mx-05" v-show="!isLoading"
                             :class="!totalObjects? 'empty' : ''"><: totalObjects :>

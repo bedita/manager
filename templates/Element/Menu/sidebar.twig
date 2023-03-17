@@ -69,9 +69,10 @@
         </div>
 
         <div>
-            <p>
-                <a href="{{ Url.build({'_name': 'logout'}) }}" class="icon-logout button button-outlined">{{ __('Log out') }}</a>
-            </p>
+            <a href="{{ Url.build({'_name': 'logout'}) }}" class="button button-outlined">
+                <Icon icon="carbon:logout"></Icon>
+                <span class="ml-05">{{ __('Log out') }}</span>
+            </a>
         </div>
 
     </div>

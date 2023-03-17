@@ -27,16 +27,28 @@ body.view-dashboard {
 
         &-item {
             position: relative;
-            height: 0;
             background-color: $gray-700;
             font-size: $font-size-base;
             line-height: 1;
             letter-spacing: .5px;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            justify-content: center;
 
             span {
+                flex: 1;
                 display: inline-block;
                 transform: translateY(0);
                 transition: transform .3s;
+            }
+
+            svg {
+                position:absolute;
+                display: block;
+                top:40%;
+                height: 24px;
+                width: 24px;
             }
 
             padding: .375rem .375rem calc(#{$dashboard-items-ratio} - .375rem);

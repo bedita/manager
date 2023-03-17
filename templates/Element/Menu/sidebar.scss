@@ -118,7 +118,7 @@ ul.concurrent-editors {
     // > *:not(:last-child) { margin-bottom: $gutter;}
 
     button, .button {
-        width: $dashboard-item-width * .5;
+        width: $dashboard-item-width * .8;
     }
 
     &-bedita-logo {
@@ -146,10 +146,11 @@ ul.concurrent-editors {
             > *:not(:last-child) { margin-bottom: $gutter; }
         }
 
-        // TODO: facacare, muovere in commands-link
         .listobjnav  {
             color:$gray-600;
             font-size:4em;
+            text-align: center;
+            width: $dashboard-item-width * .8;
             a {
                 background-color: transparent;
                 color:$gray-400;
@@ -160,7 +161,7 @@ ul.concurrent-editors {
             }
             > div {
                 color:$gray-100;
-                font-size:11px;
+                font-size:0.3em;
             }
         }
     }

@@ -37,14 +37,20 @@
                     })|raw }}
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
                         {% do Form.unlockField('ids') %}
-                        <button @click.prevent="restoreItem" class="icon-up-2 button button-primary is-width-auto" :disabled="!selectedRows.length">{{ __('Restore') }}</button>
+                        <button @click.prevent="restoreItem" class="button button-primary is-width-auto" :disabled="!selectedRows.length">
+                            <Icon icon="carbon:redo"></Icon>
+                            <span class="ml-05">{{ __('Restore') }}</span>
+                        </button>
                     {{ Form.end()|raw }}
                 {% endif %}
                 {% if (objects) and Perms.canDelete({type: objectType}) %}
                     {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': objectType}})|raw }}
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
                         {% do Form.unlockField('ids') %}
-                        <button @click.prevent="deleteItem" class="icon-cancel button button-primary is-width-auto" :disabled="!selectedRows.length">{{ __('Delete') }}</button>
+                        <button @click.prevent="deleteItem" class="button button-primary is-width-auto" :disabled="!selectedRows.length">
+                            <Icon icon="carbon:trash-can"></Icon>
+                            <span class="ml-05">{{ __('Delete') }}</span>
+                        </button>
                     {{ Form.end()|raw }}
                 {% endif %}
             </div>
@@ -52,11 +58,13 @@
         {% endif %}
 
         {# Append "Empty" button in commands menu. #}
-        {% do _view.append('app-module-buttons',
-            Form.postButton(__('Empty-verb'), {'_name': 'trash:empty'}, {
-                'data': {'query': q},
-                'class': 'icon-cancel button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto'
-            })|raw
-        )%}
+        {{ Form.create(null, {'id': 'form-empty-trash', 'url': Url.build({'_name': 'trash:empty'})})|raw }}
+            {{ Form.hidden('query', {'value': q})|raw }}
+        {{ Form.end()|raw }}
+        {# Append "Remove" to sidebar #}
+        {% do _view.append(
+            'app-module-buttons',
+            '<button form="form-empty-trash" class="button button-primary button-primary-hover-module-model is-width-auto"><Icon icon="carbon:trash-can"></Icon><span class="ml-05">' ~ __('Empty-verb') ~ '</span></button>'
+        ) %}
     </div>
 </trash-index>

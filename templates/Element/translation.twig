@@ -87,8 +87,9 @@
                                 'disabled' : true,
                             }) %}
                             {{ Form.control('lang', options)|raw }}
-                            <a class="icon-link-ext button has-background-module-{{ object.type }}" href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id }) }}">
-                                {{ __('Edit') }}
+                            <a class="button has-background-module-{{ object.type }}" href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id }) }}">
+                                <Icon icon="carbon:launch"></Icon>
+                                <span class="ml-05">{{ __('Edit') }}</span>
                             </a>
                         </div>
                         {% for key in translatable %}
@@ -117,29 +118,20 @@
             {{ Form.end()|raw }}
 
             {# Append "Save" to sidebar #}
-            {% do _view.append('app-module-buttons', Form.button( __('Save'),
-                {
-                    'form': 'form-translate',
-                    'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto',
-                    'onclick': 'this.classList.add(\'is-loading-spinner\')',
-                })
+            {% do _view.append('app-module-buttons',
+                '<button form="form-translate" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" onclick="this.classList.add(\'is-loading-spinner\')"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __('Save') ~ '</span></button>'
             ) %}
 
             {% if translation.id %}
+                {{ Form.create(null, {'id': 'form-delete-translation', 'url': Url.build({'_name': 'translations:delete', 'object_type': objectType})})|raw }}
+                    {{ Form.hidden('id', {'value': translation.id})|raw }}
+                    {{ Form.hidden('object_id', {'value': object.id})|raw }}
+                    {{ Form.hidden('lang', {'value': translation.attributes.lang})|raw }}
+                {{ Form.end()|raw }}
                 {# Append "Remove" to sidebar #}
-                {% do _view.append('app-module-buttons', Form.postButton(__('Remove'),
-                    {
-                        '_name': 'translations:delete',
-                        'object_type': objectType
-                    },
-                    {
-                        'data': [{
-                            'id': translation.id,
-                            'object_id': object.id,
-                            'lang': translation.attributes.lang
-                        }],
-                        'class': 'icon-cancel button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto',
-                    })
+                {% do _view.append(
+                    'app-module-buttons',
+                    '<button form="form-delete-translation" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:trash-can"></Icon><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
                 ) %}
             {% endif %}
 

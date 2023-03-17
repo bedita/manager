@@ -25,6 +25,8 @@ import { buildSearchParams } from '../libs/urlUtils.js';
 
 import vTitle from 'vuejs-title';
 
+import { Icon } from '@iconify/vue2';
+
 const _vueInstance = new Vue({
     el: 'main',
 
@@ -44,6 +46,7 @@ const _vueInstance = new Vue({
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
+        ObjectNav: () => import(/* webpackChunkName: "object-nav" */'app/components/object-nav/object-nav'),
         ObjectProperty: () => import(/* webpackChunkName: "object-property" */'app/components/object-property/object-property'),
         ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */'app/components/object-property/object-property-add'),
         ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
@@ -64,6 +67,8 @@ const _vueInstance = new Vue({
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
         StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
+        Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
+        Icon,
     },
 
     data() {

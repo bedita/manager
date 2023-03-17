@@ -2,10 +2,17 @@
  * Templates that uses this component (directly or indirectly):
  *  Template/Import/index.twig
  *
- * <modules-view> component used for ModulesPage -> View
+ * <import-view> component
  */
 
+import { Icon } from '@iconify/vue2';
+
 export default {
+
+    components: {
+        Icon,
+    },
+
     props: {
         jobs: {
             type: Array,

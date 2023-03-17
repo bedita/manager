@@ -16,6 +16,7 @@
  */
 
 import flatpickr from 'flatpickr';
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 import { PaginatedContentMixin } from 'app/mixins/paginated-content';
@@ -36,6 +37,8 @@ export default {
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         DropUpload: () => import(/* webpackChunkName: "drop-upload" */'app/components/drop-upload'),
         LocationsView: () => import(/* webpackChunkName: "locations-view" */'app/components/locations-view/locations-view'),
+        Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
+        Icon,
     },
 
     props: {
@@ -748,7 +751,10 @@ export default {
          * @return {Boolean} true if id is in Array relations
          */
         containsId(relations, id) {
-            return !!relations.find((rel) => rel.id === id);
+            if (!relations || !id) {
+                return false;
+            }
+            return !!relations?.find((rel) => rel.id === id);
         },
 
         /**

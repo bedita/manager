@@ -50,30 +50,24 @@
 
         {# commands to append in side bar (commands menu) #}
         {% if Perms.canCreate() %}
-            {% do _view.append('app-module-buttons',
-                Html.link(__('Create'),
-                    {'_name': 'modules:create', 'object_type': objectType},
-                    {'class': 'icon-check-1 button button-primary button-primary-hover-module-' ~ currentModule.name}
-                )|raw
+            {% do _view.append(
+                'app-module-buttons',
+                '<a href="' ~ Url.build({'_name': 'modules:create', 'object_type': objectType}) ~ '" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ '"><Icon icon="carbon:add"></Icon><span class="ml-05">' ~ __('Create') ~ '</span></a>'
             ) %}
         {% endif %}
 
         {% if schema.properties.categories %}
-        {% do _view.append('app-module-buttons',
-            Html.link(__('Categories'),
-                {'_name': 'modules:categories:index', 'object_type': objectType},
-                {'class': 'icon-check-1 button button-outlined button-outlined-hover-module-' ~ currentModule.name}
-            )|raw
-        ) %}
+            {% do _view.append(
+                'app-module-buttons',
+                '<a href="' ~ Url.build({'_name': 'modules:categories:index', 'object_type': objectType}) ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><Icon icon="carbon:categories"></Icon><span class="ml-05">' ~ __('Categories') ~ '</span></a>'
+            ) %}
         {% endif %}
 
         {% if currentModule.sidebar.index %}
         {% for item in currentModule.sidebar.index %}
-            {% do _view.append('app-module-buttons',
-                Html.link(__(item.label),
-                    item.url,
-                    {'class': item.class|default('icon-check-1 button button-outlined button-outlined-hover-module-' ~ currentModule.name)}
-                )|raw
+            {% do _view.append(
+                'app-module-buttons',
+                '<a href="' ~ item.url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __(item.label) ~ '</span></a>',
             ) %}
         {% endfor %}
         {% endif %}

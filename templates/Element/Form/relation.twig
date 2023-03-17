@@ -126,18 +126,22 @@
             {% endif %}
 
             <div>
-                <button v-if="isPanelOpen({{object.id|json_encode}})" class="icon-cancel"
-                    @click.prevent.stop="closePanel()">{{ __('cancel') }}</button>
+                <button v-if="isPanelOpen({{object.id|json_encode}})" @click.prevent.stop="closePanel()">
+                    <Icon icon="carbon:close"></Icon>
+                    <span class="ml-05">{{ __('cancel') }}</span>
+                </button>
 
                 <button v-else
-                    class="icon-hdd"
                     @click.prevent.stop="addRelatedObjects({
                         object: {{object|json_encode}},
                         relationName: relationName,
                         relationLabel: relationLabel,
                         alreadyInView: alreadyInView,
                         relationTypes: relationTypes,
-                    })">{{ __('add objects') }}</button>
+                    })">
+                        <Icon icon="carbon:add"></Icon>
+                        <span class="ml-05">{{ __('add objects') }}</span>
+                    </button>
             </div>
         </div>
         {% endif %} {# Perms #}
@@ -160,7 +164,10 @@
             </select>
 
             {% for label, format in formats %}
-               <a v-if="exportFormat === '{{ format }}'" class="icon-export button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">{{ __('Export') }}</a>
+                <a v-if="exportFormat === '{{ format }}'" class="button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">
+                    <Icon icon="carbon:export"></Icon>
+                    <span class="ml-05">{{ __('Export') }}</span>
+                </a>
             {% endfor %}
         </div>
 

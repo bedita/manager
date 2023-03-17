@@ -7,29 +7,14 @@
             <div class="dashboard-items">
             {% for name, module in modules %}
                 {% if not in_array(name, ['trash', 'users']) %}
-                    {# Special cases - set defaults on objects, publications, folders #}
-                    {% if name == 'objects' %}
-                        {% set module = {'label': __('All objects')}|merge(module) %}
-                    {% elseif name == 'publications' %}
-                        {% set module = {'class': 'icon-globe-1'}|merge(module) %}
-                    {% elseif name == 'folders' %}
-                        {% set module = {'class': 'icon-folder'}|merge(module) %}
-                    {% endif %}
-
-                    {% set title = Layout.tr(module.label|default(name)) %}
-
+                    {% set module = name == 'objects' ? {'label': __('All objects')}|merge(module) : module %}
                     {% set class = 'dashboard-item has-background-module-%s %s'|format(name, module.class|default('')) %}
-                    {% if module.hints.multiple_types and not module.class %}
-                        {% set class = class ~ ' icon-th-large-1' %}
-                    {% endif %}
-
-                    {% if module.route %}
-                        {% set url = Url.build(module.route) %}
-                    {% else %}
-                        {% set url = Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
-                    {% endif %}
+                    {% set url = module.route ? Url.build(module.route) : Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
                     <a href="{{ url }}" class="{{ class }}">
-                        <span>{{ title }}</span>
+                        <span>{{ Layout.tr(module.label|default(name)) }}</span>
+                        {% if module.hints.multiple_types and not module.class %}<Icon icon="carbon:grid"></Icon>{% endif %}
+                        {% if name == 'publications' %}<Icon icon="carbon:wikis"></Icon>{% endif %}
+                        {% if name == 'folders' %}<Icon icon="carbon:tree-view"></Icon>{% endif %}
                     </a>
                 {% endif %}
             {% endfor %}
@@ -45,34 +30,40 @@
             <div class="dashboard-items">
 
                 {% if modules.trash %}
-                    {{ Html.link(__('Trash can'),
-                        { '_name': 'trash:list' },
-                        { 'title': __('Trash'), 'class': 'dashboard-item has-background-black icon-trash-2' } )|raw }}
+                    <a href="{{ Url.build({ '_name': 'trash:list' }) }}" title="{{ __('Trash') }}" class="dashboard-item has-background-black">
+                        <span>{{ __('Trash can') }}</span>
+                        <Icon icon="carbon:trash-can"></Icon>
+                    </a>
                 {% endif %}
 
                 {% if modules.users %}
-                    {{ Html.link(__('System users'),
-                        {'_name': 'modules:list', 'object_type': 'users'},
-                        {'title': __('System users'), 'class': 'dashboard-item has-background-black icon-group' } )|raw }}
+                    <a href="{{ Url.build({'_name': 'modules:list', 'object_type': 'users'}) }}" title="{{ __('System users') }}" class="dashboard-item has-background-black">
+                        <span>{{ __('System users') }}</span>
+                        <Icon icon="carbon:user-admin"></Icon>
+                    </a>
                 {% endif %}
 
-                {{ Html.link(__('User Profile'),
-                    { '_name': 'user_profile:view' },
-                    { 'title': __('User Profile'), 'class': 'dashboard-item has-background-black icon-user' } )|raw }}
+                <a href="{{ Url.build({'_name': 'user_profile:view'}) }}" title="{{ __('User Profile') }}" class="dashboard-item has-background-black">
+                    <span>{{ __('User Profile') }}</span>
+                    <Icon icon="carbon:user-profile"></Icon>
+                </a>
 
                 {% if config('Filters.import') %}
-                    {{ Html.link(__('Import'),
-                        { '_name': 'import:index' },
-                        { 'title': __('Import'), 'class': 'dashboard-item has-background-black icon-download-alt' } )|raw }}
+                    <a href="{{ Url.build({'_name': 'import:index'}) }}" title="{{ __('Import') }}" class="dashboard-item has-background-black">
+                        <span>{{ __('Import') }}</span>
+                        <Icon icon="carbon:download"></Icon>
+                    </a>
                 {% endif %}
 
                 {% if in_array('admin', user.roles) %}
-                    {{ Html.link(__('Administration'),
-                        { '_name': 'admin:list:appearance' },
-                        { 'title': __('Administration'), 'class': 'dashboard-item has-background-black icon-wrench' } )|raw }}
-                    {{ Html.link(__('Data modeling'),
-                        { '_name': 'model:list:object_types' },
-                        { 'title': __('Data modeling'), 'class': 'dashboard-item has-background-black icon-database' } )|raw }}
+                    <a href="{{ Url.build({'_name': 'admin:list:appearance'}) }}" title="{{ __('Administration') }}" class="dashboard-item has-background-black">
+                        <span>{{ __('Administration') }}</span>
+                        <Icon icon="carbon:settings"></Icon>
+                    </a>
+                    <a href="{{ Url.build({'_name': 'model:list:object_types'}) }}" title="{{ __('Data modeling') }}" class="dashboard-item has-background-black">
+                        <span>{{ __('Data modeling') }}</span>
+                        <Icon icon="carbon:concept"></Icon>
+                    </a>
                 {% endif %}
             </div>
         </section>
@@ -84,7 +75,10 @@
 
             <nav role="search">
                 <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
-                <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">{{ __('Search') }}</button>
+                <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">
+                    <Icon icon="carbon:search"></Icon>
+                    {{ __('Search') }}
+                </button>
             </nav>
 
         </section>
@@ -100,7 +94,7 @@
 
                     {% for object in recentItems %}
                         <a href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}" class="table-row object-status-{{ object.attributes.status }}">
-                            <div class="narrow">{{ object.attributes.title|default(__('untitled')) }}</div>
+                            <div class="narrow">{{ object.attributes.title|truncate(100)|default(__('untitled')) }}</div>
                             <div class="type-cell"><span class="tag has-background-module-{{ object.type }}">{{ __(object.type) }}</span></div>
                             <div class="narrow">{{ object.attributes.status }}</div>
                             {# <div class="narrow">{{ object.attributes.lang }}</div> #}

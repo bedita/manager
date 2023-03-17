@@ -6,6 +6,7 @@
  */
 
 import { FetchMixin } from 'app/mixins/fetch';
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
@@ -31,13 +32,15 @@ export default {
                     <div class="upload-item-header" :class="{'is-loading-spinner': info.pending }">
                         <span class="name" :class="info.cancelled? 'has-text-gray-500' : ''"><: info.file.name :></span>
 
-                        <button v-show="!info.error && !info.cancelled && !info.done && !info.pending"
-                            class="button-outlined icon-stop"
-                            @click.stop.prevent="abortUpload(info.file)">${t`stop`}</button>
+                        <button v-show="!info.error && !info.cancelled && !info.done && !info.pending" class="button-outlined" @click.stop.prevent="abortUpload(info.file)">
+                            <Icon icon="carbon:stop"></Icon>
+                            <span class="ml-05">${t`stop`}</span>
+                        </button>
 
-                        <button v-show="(info.error || info.cancelled) && !info.done"
-                            class="button-outlined icon-cancel"
-                            @click.stop.prevent="removeProgressItem(info.file)">${t`remove`}</button>
+                        <button v-show="(info.error || info.cancelled) && !info.done" class="button-outlined" @click.stop.prevent="removeProgressItem(info.file)">
+                            <Icon icon="carbon:trash-can"></Icon>
+                            <span class="ml-05">${t`remove`}</span>
+                        </button>
 
                         <span v-show="!info.error && !info.cancelled && info.done" class="icon-ok"></span>
                     </div>
@@ -56,6 +59,10 @@ export default {
             </div>
         </div>
     `,
+
+    components: {
+        Icon,
+    },
 
     props: {
         placeholder: {

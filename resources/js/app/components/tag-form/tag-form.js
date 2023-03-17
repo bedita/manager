@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 import { confirm, error as showError, info as showInfo } from 'app/components/dialog/dialog';
 
@@ -18,16 +19,19 @@ export default {
                 <: id :>
             </div>
             <div v-if="canSave && !editMode">
-                <button @click.prevent="editMode = !editMode" class="button button-outlined icon-pencil">${t`Edit`}</button>
+                <button @click.prevent="editMode = !editMode" class="button button-outlined">
+                    <Icon icon="carbon:edit"></Icon>
+                    <span class="ml-05">${t`Edit`}</span>
+                </button>
             </div>
 
             <div v-if="editMode">
                 <input type="text" size="50" maxlength="50" v-model="name" @change="onChangeName($event)" />
-                <span class="icon-info-1" v-title="this.$helpers.minLength(3)"></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><Icon icon="carbon:information"></Icon></span>
             </div>
             <div v-if="editMode">
                 <input type="text" v-model="label" />
-                <span class="icon-info-1" v-title="this.$helpers.minLength(3)"></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><Icon icon="carbon:information"></Icon></span>
             </div>
             <div v-if="editMode">
                 <input type="checkbox" v-model="enabled" />
@@ -37,12 +41,25 @@ export default {
                 <: id :>
             </div>
             <div v-if="editMode">
-                <button @click.prevent="cancel" class="button button-outlined icon-backward-circled" v-if="obj?.id">${t`Cancel`}</button>
-                <button @click.prevent="save" class="button button-primary icon-check-1" :disabled="name.length < 3 || label.length < 3">${t`Save`}</button>
-                <button @click.prevent="remove" class="button button-outlined icon-trash" v-if="obj?.id">${t`Remove`}</button>
+                <button @click.prevent="cancel" class="button button-outlined" v-if="obj?.id">
+                    <Icon icon="carbon:undo"></Icon>
+                    <span class="ml-05">${t`Cancel`}</span>
+                </button>
+                <button @click.prevent="save" class="button button-primary" :disabled="name.length < 3 || label.length < 3">
+                    <Icon icon="carbon:save"></Icon>
+                    <span class="ml-05">${t`Save`}</span>
+                </button>
+                <button @click.prevent="remove" class="button button-outlined" v-if="obj?.id">
+                    <Icon icon="carbon:trash-can"></Icon>
+                    <span class="ml-05">${t`Remove`}</span>
+                </button>
             </div>
         </form>
     `,
+
+    components: {
+        Icon,
+    },
 
     props: {
         cansave: Boolean,
