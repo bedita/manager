@@ -318,10 +318,11 @@ class BulkController extends AppController
      */
     protected function getType(string $id, string $type): string
     {
-        if (!in_array($type, ['media','objects'])) {
+        $schema = $this->Schema->getSchema($type);
+        if (!empty($schema)) {
             return $type;
         }
-        $response = (array)$this->apiClient->get(sprintf('/objects/%s', $id));
+        $response = (array)$this->apiClient->get(sprintf('/%s/%s', $type, $id));
 
         return (string)Hash::get($response, 'data.type');
     }
