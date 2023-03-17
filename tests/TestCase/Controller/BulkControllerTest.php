@@ -604,7 +604,25 @@ class BulkControllerTest extends BaseControllerTest
      */
     public function testGetType(): void
     {
-        // Setup controller for test
+        // media
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'media',
+            ],
+        ]);
+        $reflectionClass = new \ReflectionClass($this->controller);
+        $method = $reflectionClass->getMethod('getType');
+        $method->setAccessible(true);
+        $media = $this->getTestMedia();
+        $expected = $media['type'];
+        $id = $media['id'];
+        $actual = $method->invokeArgs($this->controller, [$id]);
+        static::assertSame($expected, $actual);
+
+        // files
         $this->setupController([
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
@@ -613,16 +631,13 @@ class BulkControllerTest extends BaseControllerTest
                 'object_type' => 'files',
             ],
         ]);
-
         $reflectionClass = new \ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('getType');
         $method->setAccessible(true);
         $media = $this->getTestMedia();
-        $type = $expected = $media['type'];
+        $expected = $media['type'];
         $id = $media['id'];
-        $actual = $method->invokeArgs($this->controller, [$id, 'media']);
-        static::assertSame($expected, $actual);
-        $actual = $method->invokeArgs($this->controller, [$id, $type]);
+        $actual = $method->invokeArgs($this->controller, [$id]);
         static::assertSame($expected, $actual);
     }
 }
