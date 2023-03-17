@@ -54,6 +54,9 @@ class SchemaComponent extends Component
      * @var array
      */
     protected $objectsSchema = [
+        'type' => 'object',
+        'associations' => [],
+        'relations' => [],
         'properties' => [
             'title' => [
                 'oneOf' => [

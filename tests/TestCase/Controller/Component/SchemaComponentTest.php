@@ -75,6 +75,29 @@ class SchemaComponentTest extends TestCase
                     'type' => 'object',
                     'associations' => [],
                     'relations' => [],
+                    'properties' => [
+                        'title' => [
+                            'oneOf' => [
+                                ['type' => null],
+                                ['type' => 'string', 'contentMediaType' => 'text/html'],
+                            ],
+                            '$id' => '/properties/title',
+                            'title' => 'Title',
+                            'description' => null,
+                        ],
+                        'status' => [
+                            'type' => 'string',
+                            'enum' => [
+                                'on',
+                                'off',
+                                'draft',
+                            ],
+                            '$id' => '/properties/status',
+                            'title' => 'Status',
+                            'description' => 'object status: on, draft, off',
+                            'default' => 'draft',
+                        ],
+                    ],
                 ],
                 [
                     'type' => 'object',
