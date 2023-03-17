@@ -605,7 +605,14 @@ class BulkControllerTest extends BaseControllerTest
     public function testGetType(): void
     {
         // Setup controller for test
-        $this->setupController();
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'files',
+            ],
+        ]);
 
         $reflectionClass = new \ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('getType');
