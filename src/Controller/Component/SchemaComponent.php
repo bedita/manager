@@ -49,40 +49,6 @@ class SchemaComponent extends Component
     ];
 
     /**
-     * Minimal schema for type objects.
-     *
-     * @var array
-     */
-    protected $objectsSchema = [
-        'type' => 'object',
-        'associations' => [],
-        'relations' => [],
-        'properties' => [
-            'title' => [
-                'oneOf' => [
-                    ['type' => null],
-                    ['type' => 'string', 'contentMediaType' => 'text/html'],
-                ],
-                '$id' => '/properties/title',
-                'title' => 'Title',
-                'description' => null,
-            ],
-            'status' => [
-                'type' => 'string',
-                'enum' => [
-                    'on',
-                    'off',
-                    'draft',
-                ],
-                '$id' => '/properties/status',
-                'title' => 'Status',
-                'description' => 'object status: on, draft, off',
-                'default' => 'draft',
-            ],
-        ],
-    ];
-
-    /**
      * Read type JSON Schema from API using internal cache.
      *
      * @param string|null $type Type to get schema for. By default, configured type is used.
@@ -108,7 +74,7 @@ class SchemaComponent extends Component
             $schema = Cache::remember(
                 CacheTools::cacheKey($type),
                 function () use ($type) {
-                    return $type === 'objects' ? $this->objectsSchema : $this->fetchSchema($type);
+                    return $this->fetchSchema($type);
                 },
                 self::CACHE_CONFIG
             );
