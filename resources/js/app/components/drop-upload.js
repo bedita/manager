@@ -103,17 +103,24 @@ export default {
 
         async uploadFiles(files) {
             this.$el.classList.remove('dragover');
-            // add files to view
-            [...files].forEach(f => this.setProgressInfo(f));
-            // upload in serial mode
-            for (const f of [...files]) {
-                if (this.$helpers.checkMaxFileSize(f) === false) {
-                    return;
-                }
-                await this.upload(f)
+            // show all files in view
+            [...files].forEach(file => this.setProgressInfo(file));
+            const [uniqueFiles, duplicatesFiles] = this.filterFiles(files);
+            uniqueFiles.forEach((file) => {
+                this.upload(file)
                     .then((object) => {
                         this.$emit('new-relations', [object]);
-                        this.removeProgressItem(f);
+                        this.removeProgressItem(file);
+                    });
+            });
+
+            // use queue for file with same name
+            for (const file of duplicatesFiles) {
+                this.setProgressInfo(file);
+                await this.upload(file)
+                    .then((object) => {
+                        this.$emit('new-relations', [object]);
+                        this.removeProgressItem(file);
                     });
             }
         },
@@ -128,6 +135,10 @@ export default {
 
         // return promise
         upload(file) {
+            if (this.$helpers.checkMaxFileSize(file) === false) {
+                return;
+            }
+
             const objectType = this.getObjectType(file);
             const formData = new FormData();
             formData.append('title', this.$helpers.titleFromFileName(file?.name || ''));
@@ -196,6 +207,23 @@ export default {
 
             // force vue to render (an object Map is not reactive in vue)
             this.$forceUpdate();
+        },
+
+        getBaseNameFile(file) {
+            return file?.name?.split('.')[0];
+        },
+
+        filterFiles(files) {
+            const duplicates = [...files]
+                .filter((file, index, array) =>
+                    array.some((val, i) =>
+                        (index !== i && this.getBaseNameFile(val) === this.getBaseNameFile(file))
+                    )
+                );
+
+            const unique = [...files].filter(f => !duplicates.includes(f));
+
+            return [unique, duplicates];
         },
 
         getObjectType(file) {
