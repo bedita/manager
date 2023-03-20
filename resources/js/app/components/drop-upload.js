@@ -101,19 +101,21 @@ export default {
             this.uploadFiles(files);
         },
 
-        uploadFiles(files) {
+        async uploadFiles(files) {
             this.$el.classList.remove('dragover');
-            ([...files]).forEach(f => {
+            // add files to view
+            [...files].forEach(f => this.setProgressInfo(f));
+            // upload in serial mode
+            for (const f of [...files]) {
                 if (this.$helpers.checkMaxFileSize(f) === false) {
                     return;
                 }
-                this.upload(f)
+                await this.upload(f)
                     .then((object) => {
                         this.$emit('new-relations', [object]);
                         this.removeProgressItem(f);
                     });
-
-            });
+            }
         },
 
         onDragOver() {
