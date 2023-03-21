@@ -105,7 +105,7 @@ export default {
             this.$el.classList.remove('dragover');
             // show all files in view
             [...files].forEach(file => this.setProgressInfo(file));
-            const [uniqueFiles, duplicatesFiles] = this.filterFiles(files);
+            const [uniqueFiles, duplicatesFiles] = this.filterFiles([...files]);
             uniqueFiles.forEach((file) => {
                 // skip file not allowed by size and remove it from view
                 if (this.$helpers.checkMaxFileSize(file) === false) {
@@ -219,14 +219,14 @@ export default {
         },
 
         filterFiles(files) {
-            const duplicates = [...files]
+            const duplicates = files
                 .filter((file, index, array) =>
                     array.some((val, i) =>
                         (index !== i && this.getBaseNameFile(val) === this.getBaseNameFile(file))
                     )
                 );
 
-            const unique = [...files].filter(f => !duplicates.includes(f));
+            const unique = files.filter(f => !duplicates.includes(f));
 
             return [unique, duplicates];
         },
