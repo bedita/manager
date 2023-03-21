@@ -32,31 +32,17 @@
                 @count="onCount">
 
                 <div>
+                    {% set rolesGroups = config('RolesGroups') ? config('RolesGroups') : {}  %}
                     <roles-list-view
-                        inline-template
                         relation-name={{ relationName }}
                         relation-label="{{ Layout.tr(relationName) }}"
                         :related-objects="objects"
+                        :groups="{{ rolesGroups|length == 0 ? '{}' : rolesGroups|json_encode }}"
+                        :management-roles="{{ config('ManagementRoles')|default([])|json_encode }}"
+                        :user-roles="{{ user.roles|default([])|json_encode }}"
                         @remove-relations="setRemovedRelated">
-
-                        <div class="roles-list-view">
-                            <div v-for="res in objects">
-                                <input type="checkbox" :value="res" v-model="checkedRelations"/>
-                                <span class="mx-05"><: res.attributes.name :></span>
-                            </div>
-
-                            <div class="save-relations">
-                                {# Relations serialized json form element #}
-                                {{ Form.control(relationName ~ 'addRelated', {
-                                    'type': 'hidden',
-                                    'name': 'relations[' ~ relationName ~ '][addRelated]',
-                                    'v-model': 'relationsData'
-                                })|raw }}
-                                {% do Form.unlockField('relations.' ~ relationName ~ '.addRelated') %}
-                            </div>
-                        </div>
-
                     </roles-list-view>
+                    {% do Form.unlockField('relations.' ~ relationName ~ '.addRelated') %}
 
                     <div class="remove-relations">
                         {# Relations serialized json form element #}
