@@ -107,21 +107,25 @@ export default {
             [...files].forEach(file => this.setProgressInfo(file));
             const [uniqueFiles, duplicatesFiles] = this.filterFiles(files);
             uniqueFiles.forEach((file) => {
-                this.upload(file)
-                    .then((object) => {
-                        this.$emit('new-relations', [object]);
-                        this.removeProgressItem(file);
-                    });
+                // skip file not allowed by size and remove it from view
+                if (this.$helpers.checkMaxFileSize(file) === false) {
+                    this.removeProgressItem(file);
+                    return;
+                }
+
+                this.upload(file).then((object) => this.uploadSuccessful(file, object));
             });
 
             // use queue for file with same name
             for (const file of duplicatesFiles) {
-                this.setProgressInfo(file);
-                await this.upload(file)
-                    .then((object) => {
-                        this.$emit('new-relations', [object]);
-                        this.removeProgressItem(file);
-                    });
+                // skip file not allowed by size and remove it from view
+                if (this.$helpers.checkMaxFileSize(file) === false) {
+                    this.removeProgressItem(file);
+                    return;
+                }
+
+                const object = await this.upload(file);
+                this.uploadSuccessful(file, object);
             }
         },
 
@@ -135,10 +139,6 @@ export default {
 
         // return promise
         upload(file) {
-            if (this.$helpers.checkMaxFileSize(file) === false) {
-                return;
-            }
-
             const objectType = this.getObjectType(file);
             const formData = new FormData();
             formData.append('title', this.$helpers.titleFromFileName(file?.name || ''));
@@ -207,6 +207,11 @@ export default {
 
             // force vue to render (an object Map is not reactive in vue)
             this.$forceUpdate();
+        },
+
+        uploadSuccessful(file, object) {
+            this.$emit('new-relations', [object]);
+            this.removeProgressItem(file);
         },
 
         getBaseNameFile(file) {
