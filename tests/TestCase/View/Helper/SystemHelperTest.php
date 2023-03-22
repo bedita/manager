@@ -87,13 +87,13 @@ class SystemHelperTest extends TestCase
         $actual = $this->System->checkBeditaApiVersion();
         static::assertFalse($actual);
 
-        // project version 4.9.5
-        $this->System->getView()->set('project', ['version' => '4.9.5']);
+        // project version 4.11.0
+        $this->System->getView()->set('project', ['version' => '4.11.0']);
         $actual = $this->System->checkBeditaApiVersion();
         static::assertTrue($actual);
 
-        // project version 5.5.7
-        $this->System->getView()->set('project', ['version' => '5.5.7']);
+        // project version 5.7.0
+        $this->System->getView()->set('project', ['version' => '5.7.0']);
         $actual = $this->System->checkBeditaApiVersion();
         static::assertTrue($actual);
     }

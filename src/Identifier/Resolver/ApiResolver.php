@@ -68,8 +68,17 @@ class ApiResolver implements ResolverInterface
         }
 
         $roles = Hash::extract($result, 'included.{n}.attributes.name');
+        // check if meta.priority is available (api versions >= 4.11.0|5.7.0)
+        $hasPriority = false;
+        foreach ($result['included'] as $included) {
+            if (Hash::check($included, 'meta.priority')) {
+                $hasPriority = true;
+                break;
+            }
+        }
         $priorities = Hash::extract($result, 'included.{n}.meta.priority');
-        $rolePriority = min($priorities);
+        // if api do not expose meta.priority, user priority is 0 (admin)
+        $rolePriority = $hasPriority ? min($priorities) : 0;
         $tokens = $apiClient->getTokens();
 
         return $result['data'] + compact('tokens') + compact('roles', 'rolePriority');
