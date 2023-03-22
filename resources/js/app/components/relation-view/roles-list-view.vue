@@ -2,7 +2,7 @@
     <div class="roles-list-view">
         <div v-if="Object.keys(this.groups).length === 0">
             <div v-for="role in objects">
-                <input type="checkbox" :value="role" :disabled="isDisabled(role.attributes.name)" v-model="checkedRelations"/>
+                <input type="checkbox" :value="role" :disabled="userRolePriority > role.meta.priority" v-model="checkedRelations"/>
                 <span class="mx-05">{{ role.attributes.name }}</span>
             </div>
         </div>
@@ -11,7 +11,7 @@
             <div v-for="groupName in Object.keys(objectsByGroups)">
                 <h4 class="is-small has-font-weight-bold has-text-transform-upper">{{ groupName }}</h4>
                 <div v-for="role in objectsByGroups[groupName]">
-                    <input type="checkbox" :value="role" :disabled="isDisabled(role.attributes.name)" v-model="checkedRelations"/>
+                    <input type="checkbox" :value="role" :disabled="userRolePriority > role.meta.priority" v-model="checkedRelations"/>
                     <span class="mx-05">{{ role.attributes.name }}</span>
                 </div>
             </div>
@@ -36,13 +36,13 @@ export default {
             type: Object,
             default: {},
         },
-        managementRoles: {
-            type: Array,
-            default: () => [],
-        },
         relatedObjects: {
             type: Array,
             default: () => [],
+        },
+        userRolePriority: {
+            type: Number,
+            default: () => 500,
         },
         userRoles: {
             type: Array,
@@ -52,8 +52,6 @@ export default {
 
     data() {
         return {
-            isAdmin: false,
-            isManagement: false,
             method: 'resources',
             objectsByGroups: {},
             removedRelations: [],
@@ -71,12 +69,6 @@ export default {
                 }
             }
             this.objectsByGroups = {...this.objectsByGroups};
-            this.isAdmin = this.userRoles.includes('admin');
-            for (let role of this.managementRoles) {
-                if (this.userRoles.includes(role)) {
-                    this.isManagement = true;
-                }
-            }
         });
     },
 
@@ -100,22 +92,6 @@ export default {
                 this.$emit('remove-relations', relationsToRemove);
             }
         },
-    },
-
-    methods: {
-        isDisabled(roleName) {
-            if (this.isAdmin === true) {
-                return false;
-            }
-            if (roleName === 'admin') {
-                return true;
-            }
-            if (this.managementRoles.includes(roleName)) {
-                return this.isManagement === false;
-            }
-
-            return false;
-        }
     },
 }
 </script>

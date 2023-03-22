@@ -68,8 +68,10 @@ class ApiResolver implements ResolverInterface
         }
 
         $roles = Hash::extract($result, 'included.{n}.attributes.name');
+        $priorities = Hash::extract($result, 'included.{n}.meta.priority');
+        $rolePriority = min($priorities);
         $tokens = $apiClient->getTokens();
 
-        return $result['data'] + compact('tokens') + compact('roles');
+        return $result['data'] + compact('tokens') + compact('roles', 'rolePriority');
     }
 }
