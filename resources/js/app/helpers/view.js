@@ -92,6 +92,15 @@ export default {
                 return true;
             },
 
+            /**
+             * Get file name without extension
+             * @param {Object} file file
+             * @returns {String} basename file
+             */
+            getBaseNameFile(file) {
+                return file?.name?.split('.')[0];
+            },
+
             slugify(str, len) {
                 if (!str) {
                     return str;

@@ -101,19 +101,32 @@ export default {
             this.uploadFiles(files);
         },
 
-        uploadFiles(files) {
+        async uploadFiles(files) {
             this.$el.classList.remove('dragover');
-            ([...files]).forEach(f => {
-                if (this.$helpers.checkMaxFileSize(f) === false) {
+            // show all files in view
+            [...files].forEach(file => this.setProgressInfo(file));
+            const [uniqueFiles, duplicatesFiles] = this.filterFiles([...files]);
+            uniqueFiles.forEach((file) => {
+                // skip file not allowed by size and remove it from view
+                if (this.$helpers.checkMaxFileSize(file) === false) {
+                    this.removeProgressItem(file);
                     return;
                 }
-                this.upload(f)
-                    .then((object) => {
-                        this.$emit('new-relations', [object]);
-                        this.removeProgressItem(f);
-                    });
 
+                this.upload(file).then((object) => this.uploadSuccessful(file, object));
             });
+
+            // use queue for file with same name
+            for (const file of duplicatesFiles) {
+                // skip file not allowed by size and remove it from view
+                if (this.$helpers.checkMaxFileSize(file) === false) {
+                    this.removeProgressItem(file);
+                    continue;
+                }
+
+                const object = await this.upload(file);
+                this.uploadSuccessful(file, object);
+            }
         },
 
         onDragOver() {
@@ -194,6 +207,24 @@ export default {
 
             // force vue to render (an object Map is not reactive in vue)
             this.$forceUpdate();
+        },
+
+        uploadSuccessful(file, object) {
+            this.$emit('new-relations', [object]);
+            this.removeProgressItem(file);
+        },
+
+        filterFiles(files) {
+            const duplicates = files
+                .filter((file, index, array) =>
+                    array.some((val, i) =>
+                        (index !== i && this.$helpers.getBaseNameFile(val) === this.$helpers.getBaseNameFile(file))
+                    )
+                );
+
+            const unique = files.filter(f => !duplicates.includes(f));
+
+            return [unique, duplicates];
         },
 
         getObjectType(file) {
