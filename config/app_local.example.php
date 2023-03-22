@@ -478,4 +478,12 @@ return [
     // 'Flash' => [
     //     'modal' => false,
     // ],
+
+    /**
+     * Configuration to organize roles in groups.
+     */
+    // 'RolesGroups' => [
+    //     'BEdita Manager' => ['admin', 'manager', 'guest'],
+    //     'Website' => ['frontend'],
+    // ],
 ];
