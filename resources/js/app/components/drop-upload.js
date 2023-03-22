@@ -121,7 +121,7 @@ export default {
                 // skip file not allowed by size and remove it from view
                 if (this.$helpers.checkMaxFileSize(file) === false) {
                     this.removeProgressItem(file);
-                    return;
+                    continue;
                 }
 
                 const object = await this.upload(file);
@@ -214,15 +214,11 @@ export default {
             this.removeProgressItem(file);
         },
 
-        getBaseNameFile(file) {
-            return file?.name?.split('.')[0];
-        },
-
         filterFiles(files) {
             const duplicates = files
                 .filter((file, index, array) =>
                     array.some((val, i) =>
-                        (index !== i && this.getBaseNameFile(val) === this.getBaseNameFile(file))
+                        (index !== i && this.$helpers.getBaseNameFile(val) === this.$helpers.getBaseNameFile(file))
                     )
                 );
 
