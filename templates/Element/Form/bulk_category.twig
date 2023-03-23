@@ -10,7 +10,7 @@
         <input type="hidden" name="ids" :value="selectedRows"/>
         {% do Form.unlockField('ids') %}
 
-        <button class="button button-outlined" @click.prevent="bulkActions('bulk-categories')" :disabled="!selectedRows.length">
+        <button class="button button-outlined" @click.prevent="bulkActions($event, 'bulk-categories')" :disabled="!selectedRows.length">
             <Icon icon="carbon:checkmark"></Icon>
             <span class="ml-05">{{ __('Ok') }}</span>
         </button>

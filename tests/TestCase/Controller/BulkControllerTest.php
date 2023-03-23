@@ -73,6 +73,7 @@ class BulkControllerTest extends BaseControllerTest
         $this->controller->Modules->startup();
         $this->setupApi();
         $this->createTestObject();
+        $this->createTestMedia();
     }
 
     /**
@@ -593,5 +594,50 @@ class BulkControllerTest extends BaseControllerTest
         static::assertEquals(1, count($message['flash']));
         static::assertEquals('Bulk Action failed on: ', $message['flash'][0]['message']);
         static::assertEquals('flash/error', $message['flash'][0]['element']);
+    }
+
+    /**
+     * Test `getType` method
+     *
+     * @return void
+     * @covers ::getType()
+     */
+    public function testGetType(): void
+    {
+        // media
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'media',
+            ],
+        ]);
+        $reflectionClass = new \ReflectionClass($this->controller);
+        $method = $reflectionClass->getMethod('getType');
+        $method->setAccessible(true);
+        $media = $this->getTestMedia();
+        $expected = $media['type'];
+        $id = $media['id'];
+        $actual = $method->invokeArgs($this->controller, [$id]);
+        static::assertSame($expected, $actual);
+
+        // files
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'files',
+            ],
+        ]);
+        $reflectionClass = new \ReflectionClass($this->controller);
+        $method = $reflectionClass->getMethod('getType');
+        $method->setAccessible(true);
+        $media = $this->getTestMedia();
+        $expected = $media['type'];
+        $id = $media['id'];
+        $actual = $method->invokeArgs($this->controller, [$id]);
+        static::assertSame($expected, $actual);
     }
 }

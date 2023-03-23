@@ -27,7 +27,7 @@
 
         <button
             class="button button-outlined"
-            @click.prevent="bulkActions('bulk-folder')"
+            @click.prevent="bulkActions($event, 'bulk-folder')"
             :disabled="!selectedRows.length || !bulkAction || !bulkFolder"
         >
             <Icon icon="carbon:checkmark"></Icon>

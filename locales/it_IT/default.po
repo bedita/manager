@@ -102,7 +102,7 @@ msgid "Bulk Action failed on: "
 msgstr "Operazione massiva non riuscita:"
 
 msgid "Bulk action performed on {0} objects"
-msgstr "Operazione massiva eseguita su {n} oggetti"
+msgstr "Operazione massiva eseguita su {0} oggetti"
 
 msgid "Calendar"
 msgstr "Calendario"

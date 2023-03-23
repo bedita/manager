@@ -5,8 +5,8 @@
 
         {% set bulkFormId = 'bulk-' ~ key|dasherize|replace({'.': '-', '/': '-', '\\': '-'}) %}
         {{ Form.create(null, {
-                'id': bulkFormId,
-                'url': {'_name': 'modules:bulkCustom', 'object_type': objectType, '?': _view.request.getQuery()},
+            'id': bulkFormId,
+            'url': {'_name': 'modules:bulkCustom', 'object_type': objectType, '?': _view.request.getQuery()},
         })|raw }}
         <div class="fieldset" :disabled="!selectedRows.length">
             <input type="hidden" name="ids" v-bind:value="selectedRows">
@@ -21,7 +21,7 @@
                     {{ __(label|humanize) }}
                 {%- endif -%}
             </label>
-            <button id="custom-bulk-{{ key }}" class="button button-outlined" @click.prevent="bulkActions('{{ bulkFormId }}')" :disabled="!selectedRows.length">
+            <button id="custom-bulk-{{ key }}" class="button button-outlined" @click.prevent="bulkActions($event, '{{ bulkFormId }}')" :disabled="!selectedRows.length">
                 <Icon icon="carbon:checkmark"></Icon>
                 <span class="ml-05">{{ __('Ok') }}</span>
             </button>

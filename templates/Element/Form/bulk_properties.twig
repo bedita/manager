@@ -44,7 +44,7 @@
                 {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge([key])) }}
             {% endif %}
 
-            <button class="button button-outlined" @click.prevent="bulkActions('bulk-{{ key }}')" :disabled="!selectedRows.length">
+            <button class="button button-outlined" @click.prevent="bulkActions($event, 'bulk-{{ key }}')" :disabled="!selectedRows.length">
                 <Icon icon="carbon:checkmark"></Icon>
                 <span class="ml-05">{{ __('Ok') }}</span>
             </button>

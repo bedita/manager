@@ -32,6 +32,13 @@ class BulkController extends AppController
     protected $objectType = null;
 
     /**
+     * Object type is abstract
+     *
+     * @var bool
+     */
+    protected $abstractType = null;
+
+    /**
      * Selected objects IDs
      *
      * @var array
@@ -60,6 +67,7 @@ class BulkController extends AppController
         parent::initialize();
 
         $this->objectType = $this->getRequest()->getParam('object_type');
+        $this->abstractType = in_array($this->objectType, $this->Schema->abstractTypes());
     }
 
     /**
@@ -252,7 +260,7 @@ class BulkController extends AppController
                 $this->apiClient->addRelated($position, 'folders', 'children', [
                     [
                         'id' => $id,
-                        'type' => $this->objectType,
+                        'type' => $this->getType($id),
                     ],
                 ]);
             } catch (BEditaClientException $e) {
@@ -272,7 +280,7 @@ class BulkController extends AppController
         $ids = array_reverse($this->ids);
         foreach ($ids as $id) {
             try {
-                $this->apiClient->replaceRelated($id, $this->objectType, 'parents', [
+                $this->apiClient->replaceRelated($id, $this->getType($id), 'parents', [
                     'id' => $position,
                     'type' => 'folders',
                 ]);
@@ -307,5 +315,21 @@ class BulkController extends AppController
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    /**
+     * Get concrete object type when it is abstract, otherwise just return object type.
+     *
+     * @param string $id The object ID
+     * @return string
+     */
+    protected function getType(string $id): string
+    {
+        if (!$this->abstractType) {
+            return $this->objectType;
+        }
+        $response = (array)$this->apiClient->get(sprintf('/%s/%s', $this->objectType, $id));
+
+        return (string)Hash::get($response, 'data.type');
     }
 }
