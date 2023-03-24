@@ -111,14 +111,25 @@ body.translation-module {
         opacity: .8;
     }
 
-    // TODO: refactor this css
-    .module-form form { grid-template-columns: 1fr 1fr !important; }
-
-    .main-view-column .field-actions {
-        text-align: right;
+    .column {
+        float: left;
+        width: 50%;
+        padding: 10px;
+        border-top: dashed gray 1px;
     }
-    .original .field-align-aid {
-        height: $gutter * 2; // match button on the other column
+
+    .column:first-child {
+        border-right: dashed gray 1px;
+    }
+
+    .row {
+        width: 100%;
+    }
+
+    .row:after {
+        content: '';
+        display: table;
+        clear: both;
     }
 }
 
