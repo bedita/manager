@@ -69,9 +69,14 @@ class PropertyHelper extends Helper
      */
     public function control(string $name, $value, array $options = [], ?string $type = null): string
     {
+        $forceReadonly = !empty(Hash::get($options, 'readonly'));
         $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, $type));
         $controlOptions['label'] = $this->fieldLabel($name, $type);
-        $readonly = Hash::get($controlOptions, 'readonly');
+        $readonly = Hash::get($controlOptions, 'readonly') || $forceReadonly;
+        if ($readonly === true && array_key_exists('html', $controlOptions)) {
+            $controlOptions['html'] = str_replace('readonly="false"', 'readonly="true"', $controlOptions['html']);
+            $controlOptions['html'] = str_replace(':readonly=false', ':readonly=true', $controlOptions['html']);
+        }
         if ($readonly === true && array_key_exists('v-datepicker', $controlOptions)) {
             unset($controlOptions['v-datepicker']);
         }
@@ -84,6 +89,37 @@ class PropertyHelper extends Helper
         }
 
         return $this->Form->control($name, array_merge($controlOptions, $options));
+    }
+
+    /**
+     * Generates a form control for translation property
+     *
+     * @param string $name The property name
+     * @param mixed|null $value The property value
+     * @param array $options The form element options, if any
+     * @return string
+     */
+    public function translationControl(string $name, $value, array $options = []): string
+    {
+        $formControlName = sprintf('translated_fields[%s]', $name);
+        $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, null));
+        if (array_key_exists('html', $controlOptions)) {
+            $controlOptions['html'] = str_replace(sprintf('name="%s"', $name), sprintf('name="%s"', $formControlName), $controlOptions['html']);
+        }
+        $controlOptions['label'] = $this->fieldLabel($name, null);
+        $readonly = Hash::get($controlOptions, 'readonly');
+        if ($readonly === true && array_key_exists('v-datepicker', $controlOptions)) {
+            unset($controlOptions['v-datepicker']);
+        }
+        if (Hash::get($controlOptions, 'class') === 'json' || Hash::get($controlOptions, 'type') === 'json') {
+            $jsonKeys = (array)Configure::read('_jsonKeys');
+            Configure::write('_jsonKeys', array_merge($jsonKeys, [$formControlName]));
+        }
+        if (Hash::check($controlOptions, 'html')) {
+            return (string)Hash::get($controlOptions, 'html', '');
+        }
+
+        return $this->Form->control($formControlName, array_merge($controlOptions, $options));
     }
 
     /**

@@ -2,27 +2,39 @@
     <div class="input textarea text">
         <label :for="name">{{ label|humanize }}</label>
         <div :id="name">
-            <div class="key-value-item mb-1" v-for="(item, index) in items">
-                <div>
+            <div class="key-value-item mb-1 is-flex" v-for="(item, index) in items">
+                <div class="is-expanded">
                     <input type="text" v-model="item.value" @change="onChanged()" :readonly="readonly"/>
                 </div>
-                <div class="mb-2" v-if="!readonly">
-                    <button @click.prevent="remove(index)">{{  t('Remove') }}</button>
+                <div v-if="!readonly">
+                    <button @click.prevent="remove(index)" class="button button-primary" style="min-width: 32px; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                        <Icon icon="carbon:trash-can"></Icon>
+                        <span class="ml-05">{{ t('Remove') }}</span>
+                    </button>
                 </div>
             </div>
         </div>
-        <button @click.prevent="add" v-if="!readonly">{{  t('Add') }}</button>
+        <button @click.prevent="add" v-if="!readonly">
+            <Icon icon="carbon:add"></Icon>
+            <span class="ml-05">{{ t('Add') }}</span>
+        </button>
 
         <input type="hidden" :name="name" v-model="result" />
     </div>
 </template>
 
 <script>
+import { Icon } from '@iconify/vue2';
 
 /**
  * <string-list> component to handle simple JSON array of strings
  */
 export default {
+
+    components: {
+        Icon,
+    },
+
     props: {
         value: String,
         name: String,
@@ -87,4 +99,3 @@ export default {
     },
 }
 </script>
-

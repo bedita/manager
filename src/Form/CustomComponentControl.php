@@ -43,7 +43,7 @@ class CustomComponentControl implements CustomHandlerInterface
             $tag,
         );
 
-        return compact('type', 'html');
+        return compact('type', 'html', 'readonly');
     }
 
     /**

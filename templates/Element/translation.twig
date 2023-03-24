@@ -4,17 +4,15 @@
 
 <modules-view inline-template ref="moduleView">
     <div class="modules-view">
+        {{ Form.create(null, {
+            'url': {'_name': 'translations:save', 'object_type': objectType},
+            'id': 'form-translate',
+            'class': 'object-form'
+        })|raw }}
+            <section class="fieldset">
 
-        <div class="module-form">
-
-            {{ Form.create(null, {
-                'url': {'_name': 'translations:save', 'object_type': objectType},
-                'id': 'form-translate',
-            })|raw }}
-
-            <div class="main-view-column">
-                <section class="fieldset">
-                    <div class="tab-container">
+                <div class="row">
+                    <div class="column">
                         <div class="lang-header is-flex align-center">
                             {% set languageLabel = "#{__('Language')}" %}
                             {% set options = Schema.controlOptions('lang', null, [])|default({})|merge({
@@ -44,41 +42,14 @@
                                         }
                                     }) %}
                                 {% endfor %}
-                                <button class="mt-1" @click.prevent="translateAll({{ data|json_encode }}, $event)">
-                                    {{ __('Auto-translate all fields') }}
-                                </button>
+                                <a class="button has-background-module-translations" @click.prevent="translateAll({{ data|json_encode }}, $event)">
+                                    <Icon icon="carbon:translate"></Icon>
+                                    <span class="ml-05 has-text-size-smallest">{{ __('Auto-translate all fields') }}</span>
+                                </a>
                             {% endif %}
-
-                            {{ Property.control('status', translation.attributes.status|default('draft'))|raw }}
                         </div>
-                        {% for key in translatable %}
-                            {% set options = Schema.controlOptions(key, translation.attributes.translated_fields[key], schema.properties[key]) %}
-                            {% set options = options|merge({'ref': key}) %}
-                            {{ Form.control('translated_fields.' ~ key, options)|raw }}
-
-                            {# automatic translate button #}
-                            {% if config('Translator.class') %}
-                                {% set translationParams = {
-                                    'field': key,
-                                    'content': object.attributes[key],
-                                    'from': object.attributes.lang,
-                                    'to': translation.attributes.lang
-                                } %}
-                                <div class="field-actions">
-                                    <button @click.prevent="translate({{ translationParams|json_encode }}, $event)">
-                                        {{ __('Auto-translate') }} {{ key }}
-                                    </button>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
                     </div>
-                </section>
-                {{ element('Form/meta', { 'object' : translation }) }}
-            </div>
-
-            <div class="side-view-column original">
-                <section class="fieldset">
-                    <div class="tab-container">
+                    <div class="column">
                         <div class="lang-header is-flex align-bottom">
                             {% set languageLabel = "#{__('Original language')}" %}
                             {% set options = Schema.controlOptions('lang', null, [])|merge({
@@ -92,17 +63,52 @@
                                 <span class="ml-05">{{ __('Edit') }}</span>
                             </a>
                         </div>
-                        {% for key in translatable %}
-                            {{ Property.control(key, object.attributes[key], {'disabled': 'disabled'})|raw }}
-                            {# spacer when auto translate is available #}
-                            {% if config('Translator.class') %}
-                                <div class="field-align-aid"></div>
-                            {% endif %}
-                        {% endfor %}
                     </div>
-                </section>
-                {{ element('Form/meta', { 'object' : object }) }}
-            </div>
+                </div>
+                <div class="row">
+                    <div class="column">
+                        {{ Property.control('status', translation.attributes.status|default('draft'))|raw }}
+                    </div>
+                    <div class="column">
+                        <label>{{ __('Status') }}</label>
+                        {{ object.attributes.status|default('draft') }}
+                    </div>
+                </div>
+                {% for key in translatable %}
+                <div class="row tab-container" style="display: table">
+                    <div class="column">
+                        {{ Property.translationControl(key, translation.attributes.translated_fields[key], {'ref': key})|raw }}
+
+                        {# automatic translate button #}
+                        {% if config('Translator.class') %}
+                            {% set translationParams = {
+                                'field': key,
+                                'content': object.attributes[key],
+                                'from': object.attributes.lang,
+                                'to': translation.attributes.lang
+                            } %}
+                            <button class="mt-05" @click.prevent="translate({{ translationParams|json_encode }}, $event)">
+                                <Icon icon="carbon:translate"></Icon>
+                                <span class="ml-05 has-text-size-smallest">{{ __('Auto-translate') }} {{ key }}</span>
+                            </button>
+                        {% endif %}
+                    </div>
+                    <div class="column">
+                        {{ Property.control(key, object.attributes[key], {'disabled': 'disabled', 'readonly': 'readonly'})|raw }}
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="row">
+                    <div class="column">
+                        {{ element('Form/meta', { 'object' : translation }) }}
+                    </div>
+                    <div class="column">
+                        {{ element('Form/meta', { 'object' : object }) }}
+                    </div>
+                </div>
+
+            </section>
 
             {# Set `_jsonKeys` hidden input from config #}
             {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|join(',')})|raw }}
@@ -115,28 +121,25 @@
                 {{ Form.hidden('id', {'value': translation.id})|raw }}
             {% endif %}
 
-            {{ Form.end()|raw }}
-
             {# Append "Save" to sidebar #}
             {% do _view.append('app-module-buttons',
                 '<button form="form-translate" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" onclick="this.classList.add(\'is-loading-spinner\')"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __('Save') ~ '</span></button>'
             ) %}
 
-            {% if translation.id %}
-                {{ Form.create(null, {'id': 'form-delete-translation', 'url': Url.build({'_name': 'translations:delete', 'object_type': objectType})})|raw }}
-                    {{ Form.hidden('id', {'value': translation.id})|raw }}
-                    {{ Form.hidden('object_id', {'value': object.id})|raw }}
-                    {{ Form.hidden('lang', {'value': translation.attributes.lang})|raw }}
-                {{ Form.end()|raw }}
-                {# Append "Remove" to sidebar #}
-                {% do _view.append(
-                    'app-module-buttons',
-                    '<button form="form-delete-translation" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:trash-can"></Icon><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
-                ) %}
-            {% endif %}
+        {{ Form.end()|raw }}
 
+        {% if translation.id %}
+            {{ Form.create(null, {'id': 'form-delete-translation', 'url': Url.build({'_name': 'translations:delete', 'object_type': objectType})})|raw }}
+                {{ Form.hidden('id', {'value': translation.id})|raw }}
+                {{ Form.hidden('object_id', {'value': object.id})|raw }}
+                {{ Form.hidden('lang', {'value': translation.attributes.lang})|raw }}
             {{ Form.end()|raw }}
-        </div>
+            {# Append "Remove" to sidebar #}
+            {% do _view.append(
+                'app-module-buttons',
+                '<button form="form-delete-translation" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:trash-can"></Icon><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
+            ) %}
+        {% endif %}
 
     </div>
 </modules-view>
