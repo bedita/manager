@@ -91,7 +91,7 @@
                             </a>
                         </div>
                         {% for key in translatable %}
-                            {{ Property.control(key, object.attributes[key], {'disabled': 'disabled'})|raw }}
+                            {{ Property.control(key, object.attributes[key], {'disabled': 'disabled', 'readonly': 'readonly'})|raw }}
                             {# spacer when auto translate is available #}
                             {% if config('Translator.class') %}
                                 <div class="field-align-aid"></div>
