@@ -6,9 +6,10 @@
                 <div class="is-expanded">
                     <input type="text" v-model="item.value" @change="onChanged()" :readonly="readonly"/>
                 </div>
-                <div class="mb-2" v-if="!readonly">
+                <div v-if="!readonly">
                     <button @click.prevent="remove(index)" class="button button-primary" style="min-width: 32px; border-top-left-radius: 0; border-bottom-left-radius: 0;">
                         <Icon icon="carbon:trash-can"></Icon>
+                        <span class="ml-05">{{ t('Remove') }}</span>
                     </button>
                 </div>
             </div>
