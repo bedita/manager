@@ -74,16 +74,8 @@ class PropertyHelper extends Helper
         $controlOptions['label'] = $this->fieldLabel($name, $type);
         $readonly = Hash::get($controlOptions, 'readonly') || $forceReadonly;
         if ($readonly === true && array_key_exists('html', $controlOptions)) {
-            $controlOptions['html'] = str_replace(
-                'readonly="false"',
-                'readonly="true"',
-                $controlOptions['html']
-            );
-            $controlOptions['html'] = str_replace(
-                ':readonly=false',
-                ':readonly=true',
-                $controlOptions['html']
-            );
+            $controlOptions['html'] = str_replace('readonly="false"', 'readonly="true"', $controlOptions['html']);
+            $controlOptions['html'] = str_replace(':readonly=false', ':readonly=true', $controlOptions['html']);
         }
         if ($readonly === true && array_key_exists('v-datepicker', $controlOptions)) {
             unset($controlOptions['v-datepicker']);
@@ -112,11 +104,7 @@ class PropertyHelper extends Helper
         $formControlName = sprintf('translated_fields[%s]', $name);
         $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, null));
         if (array_key_exists('html', $controlOptions)) {
-            $controlOptions['html'] = str_replace(
-                sprintf('name="%s"', $name),
-                sprintf('name="%s"', $formControlName),
-                $controlOptions['html']
-            );
+            $controlOptions['html'] = str_replace(sprintf('name="%s"', $name), sprintf('name="%s"', $formControlName), $controlOptions['html']);
         }
         $controlOptions['label'] = $this->fieldLabel($name, null);
         $readonly = Hash::get($controlOptions, 'readonly');
