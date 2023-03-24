@@ -99,13 +99,3 @@ export default {
     },
 }
 </script>
-<style type="text/css">
-.tag {
-    background-color:#000;
-    color:#fff;
-    display:inline-block;
-    padding-left:8px;
-    padding-right:8px;
-    text-align:center
-}
-</style>
