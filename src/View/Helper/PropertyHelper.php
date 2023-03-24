@@ -69,7 +69,7 @@ class PropertyHelper extends Helper
      */
     public function control(string $name, $value, array $options = [], ?string $type = null): string
     {
-        $forceReadonly = Hash::get($options, 'readonly') === 'readonly';
+        $forceReadonly = !empty(Hash::get($options, 'readonly'));
         $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, $type));
         $controlOptions['label'] = $this->fieldLabel($name, $type);
         $readonly = Hash::get($controlOptions, 'readonly') || $forceReadonly;

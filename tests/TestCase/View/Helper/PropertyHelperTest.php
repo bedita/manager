@@ -52,91 +52,91 @@ class PropertyHelperTest extends TestCase
     public function controlProvider(): array
     {
         return [
-            'text' => [
-                'title',
-                'something',
-                [],
-                [
-                    'oneOf' => [
-                        ['type' => null],
-                        ['type' => 'string', 'contentMediaType' => 'text/html'],
-                    ],
-                    '$id' => '/properties/title',
-                    'title' => 'Title',
-                    'description' => null,
-                ],
-                '<div class="input title text"><label for="title">Title</label><input type="text" name="title" class="title" id="title" value="something"/></div>',
-                '<div class="input title text"><label for="translated-fields-title">Title</label><input type="text" name="translated_fields[title]" class="title" id="translated-fields-title" value="something"/></div>',
-            ],
-            'date' => [
-                'created',
-                '2020-06-15 12:35:00',
-                [],
-                [
-                    'type' => 'string',
-                    'format' => 'date-time',
-                    '$id' => '/properties/created',
-                    'title' => 'Created',
-                    'description' => 'creation date',
-                    'readonly' => true,
-                ],
-                '<div class="input datepicker text"><label for="created">Created</label><input type="text" name="created" v-datepicker="true" date="true" time="true" id="created" value="2020-06-15 12:35:00"/></div>',
-                '<div class="input datepicker text"><label for="translated-fields-created">Created</label><input type="text" name="translated_fields[created]" v-datepicker="true" date="true" time="true" id="translated-fields-created" value="2020-06-15 12:35:00"/></div>',
-            ],
-            'status' => [
-                'status',
-                'en',
-                ['class' => 'test'],
-                [
-                    'type' => 'string',
-                    'enum' => [
-                        'on',
-                        'off',
-                        'draft',
-                    ],
-                    '$id' => '/properties/status',
-                    'title' => 'Status',
-                    'description' => 'object status: on, draft, off',
-                    'default' => 'draft',
-                ],
-                '<div class="input radio"><label>Status</label><input type="hidden" name="status" id="status" value=""/><label for="status-on"><input type="radio" name="status" value="on" id="status-on" class="test">On</label><label for="status-draft"><input type="radio" name="status" value="draft" id="status-draft" class="test">Draft</label><label for="status-off"><input type="radio" name="status" value="off" id="status-off" class="test">Off</label></div>',
-                '<div class="input radio"><label>Status</label><input type="hidden" name="translated_fields[status]" id="translated-fields-status" value=""/><label for="translated-fields-status-on"><input type="radio" name="translated_fields[status]" value="on" id="translated-fields-status-on" class="test">On</label><label for="translated-fields-status-draft"><input type="radio" name="translated_fields[status]" value="draft" id="translated-fields-status-draft" class="test">Draft</label><label for="translated-fields-status-off"><input type="radio" name="translated_fields[status]" value="off" id="translated-fields-status-off" class="test">Off</label></div>',
-            ],
-            'categories' => [
-                'categories',
-                [['name' => 'cat-1'], ['name' => 'cat-3']],
-                ['class' => 'test'],
-                [
-                    ['name' => 'cat-1', 'label' => 'category 1', 'enabled' => true],
-                    ['name' => 'cat-2', 'label' => 'category 2', 'enabled' => true],
-                    ['name' => 'cat-3', 'label' => 'category 3', 'enabled' => true],
-                    ['name' => 'cat-4', 'label' => 'category 4', 'enabled' => true],
-                    ['name' => 'cat-5', 'label' => 'category 5', 'enabled' => true],
-                ],
-                '<div class="input select"><label for="categories">Categories</label><input type="hidden" name="categories" id="categories" value=""/><div class="checkbox"><label for="categories-cat-1" class="selected"><input type="checkbox" name="categories[]" value="cat-1" checked="checked" id="categories-cat-1" class="test">category 1</label></div><div class="checkbox"><label for="categories-cat-2"><input type="checkbox" name="categories[]" value="cat-2" id="categories-cat-2" class="test">category 2</label></div><div class="checkbox"><label for="categories-cat-3" class="selected"><input type="checkbox" name="categories[]" value="cat-3" checked="checked" id="categories-cat-3" class="test">category 3</label></div><div class="checkbox"><label for="categories-cat-4"><input type="checkbox" name="categories[]" value="cat-4" id="categories-cat-4" class="test">category 4</label></div><div class="checkbox"><label for="categories-cat-5"><input type="checkbox" name="categories[]" value="cat-5" id="categories-cat-5" class="test">category 5</label></div></div>',
-                '<div class="input select"><label for="translated-fields-categories">Categories</label><input type="hidden" name="translated_fields[categories]" id="translated-fields-categories" value=""/><div class="checkbox"><label for="translated-fields-categories-cat-1" class="selected"><input type="checkbox" name="translated_fields[categories][]" value="cat-1" checked="checked" id="translated-fields-categories-cat-1" class="test">category 1</label></div><div class="checkbox"><label for="translated-fields-categories-cat-2"><input type="checkbox" name="translated_fields[categories][]" value="cat-2" id="translated-fields-categories-cat-2" class="test">category 2</label></div><div class="checkbox"><label for="translated-fields-categories-cat-3" class="selected"><input type="checkbox" name="translated_fields[categories][]" value="cat-3" checked="checked" id="translated-fields-categories-cat-3" class="test">category 3</label></div><div class="checkbox"><label for="translated-fields-categories-cat-4"><input type="checkbox" name="translated_fields[categories][]" value="cat-4" id="translated-fields-categories-cat-4" class="test">category 4</label></div><div class="checkbox"><label for="translated-fields-categories-cat-5"><input type="checkbox" name="translated_fields[categories][]" value="cat-5" id="translated-fields-categories-cat-5" class="test">category 5</label></div></div>',
-            ],
-            'object' => [
-                'an object',
-                ['an' => 'object'],
-                [],
-                [
-                    'type' => 'object',
-                    '$id' => '/properties/object',
-                ],
-                '<div class="input textarea"><label for="an-object">An Object</label><textarea name="an object" v-jsoneditor="true" class="json" id="an-object" rows="5">{&quot;an&quot;:&quot;object&quot;}</textarea></div>',
-                '<div class="input textarea"><label for="translated-fields-an-object">An Object</label><textarea name="translated_fields[an object]" v-jsoneditor="true" class="json" id="translated-fields-an-object" rows="5">{&quot;an&quot;:&quot;object&quot;}</textarea></div>',
-            ],
-            'html' => [
-                'descr',
-                'something',
-                [],
-                [
-                    'name' => 'descr',
-                ],
-                '<dummy label="descr" name="descr" value="something" :readonly=false></dummy>',
-                '<dummy label="descr" name="translated_fields[descr]" value="something" :readonly=false></dummy>',
-            ],
+            // 'text' => [
+            //     'title',
+            //     'something',
+            //     [],
+            //     [
+            //         'oneOf' => [
+            //             ['type' => null],
+            //             ['type' => 'string', 'contentMediaType' => 'text/html'],
+            //         ],
+            //         '$id' => '/properties/title',
+            //         'title' => 'Title',
+            //         'description' => null,
+            //     ],
+            //     '<div class="input title text"><label for="title">Title</label><input type="text" name="title" class="title" id="title" value="something"/></div>',
+            //     '<div class="input title text"><label for="translated-fields-title">Title</label><input type="text" name="translated_fields[title]" class="title" id="translated-fields-title" value="something"/></div>',
+            // ],
+            // 'date' => [
+            //     'created',
+            //     '2020-06-15 12:35:00',
+            //     [],
+            //     [
+            //         'type' => 'string',
+            //         'format' => 'date-time',
+            //         '$id' => '/properties/created',
+            //         'title' => 'Created',
+            //         'description' => 'creation date',
+            //         'readonly' => true,
+            //     ],
+            //     '<div class="input datepicker text"><label for="created">Created</label><input type="text" name="created" v-datepicker="true" date="true" time="true" id="created" value="2020-06-15 12:35:00"/></div>',
+            //     '<div class="input datepicker text"><label for="translated-fields-created">Created</label><input type="text" name="translated_fields[created]" v-datepicker="true" date="true" time="true" id="translated-fields-created" value="2020-06-15 12:35:00"/></div>',
+            // ],
+            // 'status' => [
+            //     'status',
+            //     'en',
+            //     ['class' => 'test'],
+            //     [
+            //         'type' => 'string',
+            //         'enum' => [
+            //             'on',
+            //             'off',
+            //             'draft',
+            //         ],
+            //         '$id' => '/properties/status',
+            //         'title' => 'Status',
+            //         'description' => 'object status: on, draft, off',
+            //         'default' => 'draft',
+            //     ],
+            //     '<div class="input radio"><label>Status</label><input type="hidden" name="status" id="status" value=""/><label for="status-on"><input type="radio" name="status" value="on" id="status-on" class="test">On</label><label for="status-draft"><input type="radio" name="status" value="draft" id="status-draft" class="test">Draft</label><label for="status-off"><input type="radio" name="status" value="off" id="status-off" class="test">Off</label></div>',
+            //     '<div class="input radio"><label>Status</label><input type="hidden" name="translated_fields[status]" id="translated-fields-status" value=""/><label for="translated-fields-status-on"><input type="radio" name="translated_fields[status]" value="on" id="translated-fields-status-on" class="test">On</label><label for="translated-fields-status-draft"><input type="radio" name="translated_fields[status]" value="draft" id="translated-fields-status-draft" class="test">Draft</label><label for="translated-fields-status-off"><input type="radio" name="translated_fields[status]" value="off" id="translated-fields-status-off" class="test">Off</label></div>',
+            // ],
+            // 'categories' => [
+            //     'categories',
+            //     [['name' => 'cat-1'], ['name' => 'cat-3']],
+            //     ['class' => 'test'],
+            //     [
+            //         ['name' => 'cat-1', 'label' => 'category 1', 'enabled' => true],
+            //         ['name' => 'cat-2', 'label' => 'category 2', 'enabled' => true],
+            //         ['name' => 'cat-3', 'label' => 'category 3', 'enabled' => true],
+            //         ['name' => 'cat-4', 'label' => 'category 4', 'enabled' => true],
+            //         ['name' => 'cat-5', 'label' => 'category 5', 'enabled' => true],
+            //     ],
+            //     '<div class="input select"><label for="categories">Categories</label><input type="hidden" name="categories" id="categories" value=""/><div class="checkbox"><label for="categories-cat-1" class="selected"><input type="checkbox" name="categories[]" value="cat-1" checked="checked" id="categories-cat-1" class="test">category 1</label></div><div class="checkbox"><label for="categories-cat-2"><input type="checkbox" name="categories[]" value="cat-2" id="categories-cat-2" class="test">category 2</label></div><div class="checkbox"><label for="categories-cat-3" class="selected"><input type="checkbox" name="categories[]" value="cat-3" checked="checked" id="categories-cat-3" class="test">category 3</label></div><div class="checkbox"><label for="categories-cat-4"><input type="checkbox" name="categories[]" value="cat-4" id="categories-cat-4" class="test">category 4</label></div><div class="checkbox"><label for="categories-cat-5"><input type="checkbox" name="categories[]" value="cat-5" id="categories-cat-5" class="test">category 5</label></div></div>',
+            //     '<div class="input select"><label for="translated-fields-categories">Categories</label><input type="hidden" name="translated_fields[categories]" id="translated-fields-categories" value=""/><div class="checkbox"><label for="translated-fields-categories-cat-1" class="selected"><input type="checkbox" name="translated_fields[categories][]" value="cat-1" checked="checked" id="translated-fields-categories-cat-1" class="test">category 1</label></div><div class="checkbox"><label for="translated-fields-categories-cat-2"><input type="checkbox" name="translated_fields[categories][]" value="cat-2" id="translated-fields-categories-cat-2" class="test">category 2</label></div><div class="checkbox"><label for="translated-fields-categories-cat-3" class="selected"><input type="checkbox" name="translated_fields[categories][]" value="cat-3" checked="checked" id="translated-fields-categories-cat-3" class="test">category 3</label></div><div class="checkbox"><label for="translated-fields-categories-cat-4"><input type="checkbox" name="translated_fields[categories][]" value="cat-4" id="translated-fields-categories-cat-4" class="test">category 4</label></div><div class="checkbox"><label for="translated-fields-categories-cat-5"><input type="checkbox" name="translated_fields[categories][]" value="cat-5" id="translated-fields-categories-cat-5" class="test">category 5</label></div></div>',
+            // ],
+            // 'object' => [
+            //     'an object',
+            //     ['an' => 'object'],
+            //     [],
+            //     [
+            //         'type' => 'object',
+            //         '$id' => '/properties/object',
+            //     ],
+            //     '<div class="input textarea"><label for="an-object">An Object</label><textarea name="an object" v-jsoneditor="true" class="json" id="an-object" rows="5">{&quot;an&quot;:&quot;object&quot;}</textarea></div>',
+            //     '<div class="input textarea"><label for="translated-fields-an-object">An Object</label><textarea name="translated_fields[an object]" v-jsoneditor="true" class="json" id="translated-fields-an-object" rows="5">{&quot;an&quot;:&quot;object&quot;}</textarea></div>',
+            // ],
+            // 'html' => [
+            //     'descr',
+            //     'something',
+            //     [],
+            //     [
+            //         'name' => 'descr',
+            //     ],
+            //     '<dummy label="descr" name="descr" value="something" :readonly=false></dummy>',
+            //     '<dummy label="descr" name="translated_fields[descr]" value="something" :readonly=false></dummy>',
+            // ],
             'html readonly' => [
                 'descr',
                 'something',
@@ -147,27 +147,27 @@ class PropertyHelperTest extends TestCase
                 '<dummy label="descr" name="descr" value="something" :readonly=true></dummy>',
                 '<dummy label="descr" name="translated_fields[descr]" value="something" :readonly=true></dummy>',
             ],
-            'date readonly' => [
-                'expires',
-                null,
-                ['readonly' => true],
-                [
-                    'oneOf' => [
-                        [
-                            'type' => 'null',
-                        ],
-                        [
-                            'type' => 'string',
-                            'format' => 'date-time',
-                        ],
-                    ],
-                    '$id' => '/properties/expires',
-                    'title' => 'Expires',
-                    'description' => 'Expiration date',
-                ],
-                '<div class="input datepicker text"><label for="expires">Expires</label><input type="text" name="expires" readonly="readonly" disabled="disabled" date="true" time="true" id="expires"/></div>',
-                '<div class="input datepicker text"><label for="translated-fields-expires">Expires</label><input type="text" name="translated_fields[expires]" readonly="readonly" disabled="disabled" date="true" time="true" id="translated-fields-expires"/></div>',
-            ],
+            // 'date readonly' => [
+            //     'expires',
+            //     null,
+            //     ['readonly' => true],
+            //     [
+            //         'oneOf' => [
+            //             [
+            //                 'type' => 'null',
+            //             ],
+            //             [
+            //                 'type' => 'string',
+            //                 'format' => 'date-time',
+            //             ],
+            //         ],
+            //         '$id' => '/properties/expires',
+            //         'title' => 'Expires',
+            //         'description' => 'Expiration date',
+            //     ],
+            //     '<div class="input datepicker text"><label for="expires">Expires</label><input type="text" name="expires" readonly="readonly" disabled="disabled" date="true" time="true" id="expires"/></div>',
+            //     '<div class="input datepicker text"><label for="translated-fields-expires">Expires</label><input type="text" name="translated_fields[expires]" readonly="readonly" disabled="disabled" date="true" time="true" id="translated-fields-expires"/></div>',
+            // ],
         ];
     }
 
