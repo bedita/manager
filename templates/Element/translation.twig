@@ -52,9 +52,7 @@
                             {{ Property.control('status', translation.attributes.status|default('draft'))|raw }}
                         </div>
                         {% for key in translatable %}
-                            {% set options = Schema.controlOptions(key, translation.attributes.translated_fields[key], schema.properties[key]) %}
-                            {% set options = options|merge({'ref': key}) %}
-                            {{ Form.control('translated_fields.' ~ key, options)|raw }}
+                            {{ Property.translationControl(key, translation.attributes.translated_fields[key], {'ref': key})|raw }}
 
                             {# automatic translate button #}
                             {% if config('Translator.class') %}

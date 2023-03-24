@@ -87,6 +87,41 @@ class PropertyHelper extends Helper
     }
 
     /**
+     * Generates a form control for translation property
+     *
+     * @param string $name The property name
+     * @param mixed|null $value The property value
+     * @param array $options The form element options, if any
+     * @return string
+     */
+    public function translationControl(string $name, $value, array $options = []): string
+    {
+        $formControlName = sprintf('translated_fields[%s]', $name);
+        $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, null));
+        if (array_key_exists('html', $controlOptions)) {
+            $controlOptions['html'] = str_replace(
+                sprintf('name="%s"', $name),
+                sprintf('name="%s"', $formControlName),
+                $controlOptions['html']
+            );
+        }
+        $controlOptions['label'] = $this->fieldLabel($name, null);
+        $readonly = Hash::get($controlOptions, 'readonly');
+        if ($readonly === true && array_key_exists('v-datepicker', $controlOptions)) {
+            unset($controlOptions['v-datepicker']);
+        }
+        if (Hash::get($controlOptions, 'class') === 'json' || Hash::get($controlOptions, 'type') === 'json') {
+            $jsonKeys = (array)Configure::read('_jsonKeys');
+            Configure::write('_jsonKeys', array_merge($jsonKeys, [$formControlName]));
+        }
+        if (Hash::check($controlOptions, 'html')) {
+            return (string)Hash::get($controlOptions, 'html', '');
+        }
+
+        return $this->Form->control($formControlName, array_merge($controlOptions, $options));
+    }
+
+    /**
      * Return label for field by name and type.
      * If there's a config for the field and type, return it.
      * Return translation of name, otherwise.

@@ -20,6 +20,8 @@ export default {
         ObjectProperty: () => import(/* webpackChunkName: "object-property" */'app/components/object-property/object-property'),
         ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */'app/components/object-property/object-property-add'),
         ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
+        KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
+        StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
         Icon,
     },
 
