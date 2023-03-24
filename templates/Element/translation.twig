@@ -71,7 +71,7 @@
                     </div>
                     <div class="column">
                         <label>{{ __('Status') }}</label>
-                        {{ object.status|default('draft') }}
+                        {{ object.attributes.status|default('draft') }}
                     </div>
                 </div>
                 {% for key in translatable %}
