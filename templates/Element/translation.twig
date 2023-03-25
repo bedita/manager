@@ -87,7 +87,7 @@
                                 'from': object.attributes.lang,
                                 'to': translation.attributes.lang
                             } %}
-                            <button class="mt-05" @click.prevent="translate({{ translationParams|json_encode }}, $event)">
+                            <button class="mt-05" :disabled="!isTranslatable({{ object.attributes[key]|json_encode }})" @click.prevent="translate({{ translationParams|json_encode }}, $event)">
                                 <Icon icon="carbon:translate"></Icon>
                                 <span class="ml-05 has-text-size-smallest">{{ __('Auto-translate') }} {{ key }}</span>
                             </button>

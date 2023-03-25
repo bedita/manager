@@ -1,7 +1,7 @@
 <template>
     <div class="input textarea text">
-        <label :for="name">{{ label|humanize }}</label>
-        <div :id="name">
+        <label :for="`container-${name}`">{{ label|humanize }}</label>
+        <div :id="`container-${name}`">
             <div class="key-value-item mb-1 is-flex" v-for="(item, index) in items">
                 <div class="is-expanded">
                     <input type="text" v-model="item.value" @change="onChanged()" :readonly="readonly"/>
@@ -19,7 +19,7 @@
             <span class="ml-05">{{ t('Add') }}</span>
         </button>
 
-        <input type="hidden" :name="name" v-model="result" />
+        <input type="hidden" :id="getId(name)" :name="name" v-model="result" @change="updateList($event)" />
     </div>
 </template>
 
@@ -95,6 +95,19 @@ export default {
         remove(index) {
             this.items.splice(index, 1);
             this.onChanged();
+        },
+
+        getId(name) {
+            return name.replaceAll('_', '-').replaceAll('[', '-').replaceAll(']', '');
+        },
+
+        updateList(event) {
+            this.items = [];
+            this.result = event?.target?.value || '';
+            const items = this.result.split(',') || [];
+            for (let item of items) {
+                this.items.push({value: item});
+            }
         },
     },
 }
