@@ -65,9 +65,13 @@
 
         {% if currentModule.sidebar.index %}
         {% for item in currentModule.sidebar.index %}
+            {% set url = item.url %}
+            {% if item.url is iterable %}
+                {% set url = Url.build(url) %}
+            {% endif %}
             {% do _view.append(
                 'app-module-buttons',
-                '<a href="' ~ item.url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __(item.label) ~ '</span></a>',
+                '<a href="' ~ url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __(item.label) ~ '</span></a>',
             ) %}
         {% endfor %}
         {% endif %}
