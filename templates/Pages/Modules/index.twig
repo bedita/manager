@@ -65,7 +65,7 @@
 
         {% if currentModule.sidebar.index %}
         {% for item in currentModule.sidebar.index %}
-            {% set url = item.url is iterable ? Url.build(url) : item.url %}
+            {% set url = item.url is iterable ? Url.build(item.url) : item.url %}
             {% do _view.append(
                 'app-module-buttons',
                 '<a href="' ~ url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __(item.label) ~ '</span></a>',
