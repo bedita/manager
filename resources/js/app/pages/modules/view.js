@@ -164,10 +164,13 @@ export default {
                     )
                 );
             } catch (error) {
-                alert(error);
-                console.log(error);
+                BEDITA.error(error);
             }
             el.classList.remove('is-loading-spinner');
+        },
+
+        isTranslatable(content) {
+            return content && content.length > 0;
         },
 
         translate(object, e) {
@@ -176,8 +179,7 @@ export default {
 
             this.fetchTranslation(object)
                 .catch((error) => {
-                    alert(error);
-                    console.log(error);
+                    BEDITA.error(error);
                 })
                 .finally(() => {
                     el.classList.remove('is-loading-spinner');
@@ -185,8 +187,10 @@ export default {
         },
 
         fetchTranslation(object) {
-            if (!object.content) {
-                return;
+            if (!object || !this.isTranslatable(object?.content)) {
+                // skip translation, content empty
+
+                return Promise.resolve();
             }
             if (!object.to) {
                 // use `value` from select on new translations
@@ -205,6 +209,13 @@ export default {
                     }
 
                     let input = this.$refs[object.field];
+                    if (!input) {
+                        input = document.getElementById('translated-fields-' + object.field.replaceAll('_', '-'));
+                    }
+                    if (Array.isArray(r.translation)) {
+                        // this to avoid "," could be problematic as separator for contents
+                        r.translation = r.translation.join('|||');
+                    }
                     input.value = r.translation;
                     input.dispatchEvent(new CustomEvent('change'));
                 });
