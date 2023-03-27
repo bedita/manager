@@ -212,6 +212,10 @@ export default {
                     if (!input) {
                         input = document.getElementById('translated-fields-' + object.field.replaceAll('_', '-'));
                     }
+                    if (Array.isArray(r.translation)) {
+                        // this to avoid "," could be problematic as separator for contents
+                        r.translation = r.translation.join('|||');
+                    }
                     input.value = r.translation;
                     input.dispatchEvent(new CustomEvent('change'));
                 });

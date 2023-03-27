@@ -104,10 +104,11 @@ export default {
         updateList(event) {
             this.items = [];
             this.result = event?.target?.value || '';
-            const items = this.result.split(',') || [];
+            const items = this.result.split('|||') || [];
             for (let item of items) {
                 this.items.push({value: item});
             }
+            this.onChanged();
         },
     },
 }

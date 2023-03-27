@@ -22,7 +22,13 @@ const methods = {
         const formData = new FormData();
         formData.append('from', from);
         formData.append('to', to);
-        formData.append('text', text);
+        if (Array.isArray(text)) {
+            for (let t of text) {
+                formData.append('text[]', t);
+            }
+        } else {
+            formData.append('text', text);
+        }
         const options = {
             method: 'POST',
             credentials: 'same-origin',
