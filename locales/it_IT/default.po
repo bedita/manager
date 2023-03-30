@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-03-30 16:45:10 \n"
+"POT-Creation-Date: 2023-03-30 16:50:15 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1249,6 +1249,13 @@ msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
+
+#.  i18n, @see https://github.com/ttag-org/ttag/issues/201
+msgid "Inherited"
+msgstr "Ereditato"
+
+msgid "Your roles"
+msgstr "I tuoi ruoli"
 
 msgid "Hide"
 msgstr "Nascondi"
