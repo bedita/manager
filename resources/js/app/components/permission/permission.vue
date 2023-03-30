@@ -40,7 +40,7 @@ export default {
         help() {
             const inherit = this.inherited ? this.msgInherited : '';
 
-            return `${msgYourRoles}: ${this.userRoles.join(',')} ${inherit}`;
+            return `${this.msgYourRoles}: ${this.userRoles.join(',')} ${inherit}`;
         },
         isLocked() {
             if (this.userRoles.includes('admin')) {
