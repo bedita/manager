@@ -244,4 +244,71 @@ class PermsHelperTest extends TestCase
         $actual = $this->Perms->access($accessControl, $roleName, $moduleName);
         static::assertSame($expected, $actual);
     }
+
+    /**
+     * Test `userIsAdmin`
+     *
+     * @return void
+     * @covers ::userIsAdmin()
+     */
+    public function testUserIsAdmin(): void
+    {
+        $this->Perms->getView()->set('user', new Identity([]));
+        $actual = $this->Perms->userIsAdmin();
+        static::assertFalse($actual);
+
+        $this->Perms->getView()->set('user', new Identity(['roles' => ['admin']]));
+        $actual = $this->Perms->userIsAdmin();
+        static::assertTrue($actual);
+    }
+
+    /**
+     * Test `userIsAllowed
+     *
+     * @return void
+     * @covers ::userIsAllowed()
+     */
+    public function testUserIsAllowed(): void
+    {
+        // not folders
+        $this->Perms->getView()->set('objectType', 'documents');
+        $actual = $this->Perms->userIsAllowed(null);
+        static::assertTrue($actual);
+
+        // user admin
+        $this->Perms->getView()->set('objectType', 'folders');
+        $this->Perms->getView()->set('user', new Identity(['roles' => ['admin']]));
+        $actual = $this->Perms->userIsAllowed(null);
+        static::assertTrue($actual);
+
+        // empty meta.perms.roles
+        $this->Perms->getView()->set('object', ['meta' => []]);
+        $this->Perms->getView()->set('user', new Identity(['roles' => ['guest', 'manager', 'other']]));
+        $actual = $this->Perms->userIsAllowed(null);
+        static::assertTrue($actual);
+
+        // has permission
+        $this->Perms->getView()->set('object', ['meta' => ['perms' => ['roles' => ['a', 'b', 'manager', 'c', 'd']]]]);
+        $actual = $this->Perms->userIsAllowed(null);
+        static::assertTrue($actual);
+
+        // no permission
+        $this->Perms->getView()->set('object', ['meta' => ['perms' => ['roles' => ['a', 'b', 'c', 'd']]]]);
+        $actual = $this->Perms->userIsAllowed(null);
+        static::assertFalse($actual);
+    }
+
+    /**
+     * Test `userRoles`
+     *
+     * @return void
+     * @covers ::userRoles()
+     */
+    public function testUserRoles(): void
+    {
+        $expected = ['a', 'b', 'c'];
+        $this->Perms->getView()->set('user', new Identity(['roles' => $expected]));
+        $actual = $this->Perms->userRoles();
+        static::assertSame($expected, $actual);
+    }
 }

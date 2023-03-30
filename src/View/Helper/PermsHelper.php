@@ -62,10 +62,7 @@ class PermsHelper extends Helper
      */
     public function canLock(): bool
     {
-        /** @var \Authentication\Identity $identity */
-        $identity = $this->_View->get('user');
-
-        return in_array('admin', (array)$identity->get('roles'));
+        return $this->userIsAdmin();
     }
 
     /**
@@ -76,7 +73,7 @@ class PermsHelper extends Helper
      */
     public function canCreate(?string $module = null): bool
     {
-        return $this->isAllowed('POST', $module);
+        return $this->isAllowed('POST', $module) && $this->userIsAllowed($module);
     }
 
     /**
@@ -90,7 +87,7 @@ class PermsHelper extends Helper
         $locked = (bool)Hash::get($object, 'meta.locked', false);
         $module = (string)Hash::get($object, 'type');
 
-        return !$locked && $this->isAllowed('DELETE', $module);
+        return !$locked && $this->isAllowed('DELETE', $module) && $this->userIsAllowed($module);
     }
 
     /**
@@ -101,7 +98,7 @@ class PermsHelper extends Helper
      */
     public function canSave(?string $module = null): bool
     {
-        return $this->isAllowed('PATCH', $module);
+        return $this->isAllowed('PATCH', $module) && $this->userIsAllowed($module);
     }
 
     /**
@@ -158,5 +155,50 @@ class PermsHelper extends Helper
         $readonlyModules = Hash::get($roleAccesses, 'readonly', []);
 
         return in_array($moduleName, $readonlyModules) ? 'read' : 'write';
+    }
+
+    /**
+     * Return true if authenticated user has role admin
+     *
+     * @return bool
+     */
+    public function userIsAdmin(): bool
+    {
+        return in_array('admin', $this->userRoles());
+    }
+
+    /**
+     * Check permissions for user if object is a folder.
+     *
+     * @param string|null $module The module, if passed.
+     * @return bool
+     */
+    public function userIsAllowed(?string $module): bool
+    {
+        $objectType = !empty($module) ? $module : $this->_View->get('objectType');
+        if ($objectType !== 'folders' || $this->userIsAdmin()) {
+            return true;
+        }
+
+        $object = $this->_View->get('object');
+        $permsRoles = (array)Hash::get((array)$object, 'meta.perms.roles');
+        if (empty($permsRoles)) {
+            return true;
+        }
+
+        return !empty(array_intersect($permsRoles, (array)$this->userRoles()));
+    }
+
+    /**
+     * Return authenticated user roles
+     *
+     * @return array
+     */
+    public function userRoles(): array
+    {
+        /** @var \Authentication\Identity $identity */
+        $identity = $this->_View->get('user');
+
+        return (array)$identity->get('roles');
     }
 }
