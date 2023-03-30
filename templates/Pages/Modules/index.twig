@@ -9,7 +9,7 @@
 <modules-index inline-template ids='{{ ids|json_encode }}'>
     <div class="module-index">
         {% if treeView %}
-            <tree-view></tree-view>
+            <tree-view :user-roles="{{ user.roles|json_encode}}"></tree-view>
         {% else %}
             <div class="table-container">
                 <div class="list-objects">

@@ -1,0 +1,16 @@
+<property-view inline-template :tab-open="tabsOpen" tab-name="permissions">
+    <section class="fieldset">
+        <header @click.prevent="toggleVisibility()"
+            class="tab unselectable"
+            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+            <h2>{{ __('Permissions') }}</h2>
+        </header>
+
+        <div v-show="isOpen" class="tab-container">
+            <permissions
+                :object-roles="{{ object.meta.perms.roles|default([])|json_encode }}"
+                :user-roles="{{ user.roles|default([])|json_encode }}">
+            </permissions>
+        </div>
+    </section>
+</property-view>

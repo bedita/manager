@@ -14,6 +14,7 @@
  * @property {Array} parents The list of current item parents.
  */
 
+import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 const API_URL = new URL(BEDITA.base).pathname;
@@ -57,6 +58,10 @@ export default {
                     />
                     <: node.attributes.title :>
                 </label>
+                <span v-if="hasPermissions" v-title="node.meta.perms.roles.join(',')">
+                    <Icon icon="carbon:locked" v-if="isLocked"></Icon>
+                    <Icon icon="carbon:unlocked" v-if="!isLocked"></Icon>
+                </span>
                 <button
                     v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id)"
                     :class="{
@@ -66,7 +71,8 @@ export default {
                     }"
                     @click="toggle"
                 ></button>
-                <a :href="url">${t`edit`}</a>
+                <a :href="url" v-if="hasPermissions && isLocked">${t('view')}</a>
+                <a :href="url" v-else>${t('edit')}</a>
                 <div class="tree-params">
                     <div
                         v-if="relationName && isParent"
@@ -111,10 +117,15 @@ export default {
                     :relation-name="relationName"
                     :relation-label="relationLabel"
                     :multiple-choice="multipleChoice"
+                    :user-roles="userRoles"
                 ></tree-view>
             </div>
         </div>
     `,
+
+    components: {
+        Icon,
+    },
 
     props: {
         store: {
@@ -142,6 +153,7 @@ export default {
             type: Boolean,
             default: true,
         },
+        userRoles: Array,
     },
 
     data() {
@@ -195,6 +207,21 @@ export default {
                 return false;
             }
             return !!this.node.meta?.relation?.canonical;
+        },
+
+        hasPermissions() {
+            const roles = this.node?.meta?.perms?.roles || [];
+
+            return roles.length > 0
+        },
+
+        isLocked() {
+            if (this.userRoles.includes('admin')) {
+                return false;
+            }
+            const roles = this.node?.meta?.perms?.roles || [];
+
+            return !roles.some(item => this.userRoles.includes(item))
         },
 
         /**

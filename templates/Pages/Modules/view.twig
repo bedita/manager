@@ -43,6 +43,10 @@
 
                 {{ element('Form/core_properties') }}
 
+                {% if objectType == 'folders' %}
+                    {{ element('Form/permissions') }}
+                {% endif %}
+
                 {{ element('Form/custom_left') }}
 
                 {# calendar using `date_ranges` #}
