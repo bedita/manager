@@ -60,6 +60,21 @@
     </div>
 </template>
 <script>
+/**
+ * Templates that uses this component (directly or indirectly):
+ *  Template/Elements/trees.twig
+ *
+ * <tree-view> component used for ModulesPage -> View
+ *
+ * @property {Object} store The folders store.
+ * @property {string} parent The parent of the tree item.
+ * @property {Object} node The model of the tree item.
+ * @property {Object} object The current item to place in the tree.
+ * @property {string} relationName The name of the relation to save.
+ * @property {string} relationLabel The label of the relation to save.
+ * @property {boolean} multipleChoice Should handle multiple relations.
+ * @property {Array} parents The list of current item parents.
+ */
 import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
@@ -449,5 +464,4 @@ export default {
         },
     },
 }
-
 </script>
