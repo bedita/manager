@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-03-30 16:50:15 \n"
+"POT-Creation-Date: 2023-03-30 16:59:12 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1242,6 +1242,13 @@ msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
 msgid "Error while creating new object."
+msgstr ""
+
+#.  i18n, @see https://github.com/ttag-org/ttag/issues/201
+msgid "You can modify the permissions"
+msgstr ""
+
+msgid "You cannot modify the permissions"
 msgstr ""
 
 #.  i18n, @see https://github.com/ttag-org/ttag/issues/201

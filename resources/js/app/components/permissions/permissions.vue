@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div v-if="canModify">{{ t('You can modify the permissions') }}</div>
-        <div v-else>{{ t('You cannot modify the permissions') }}</div>
+        <div v-if="canModify">{{ msgYouCanModify }}</div>
+        <div v-else>{{ msgYouCannotModify }}</div>
         <label v-for="role in roles" v-if="role.attributes.name != 'admin'">
             <input type="checkbox" :checked="objectRoles.includes(role.attributes.name)" :disabled="!canModify" />
             {{ role.attributes.name }}
@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { t } from 'ttag';
 import { Icon } from '@iconify/vue2';
 
 export default {
@@ -30,9 +31,12 @@ export default {
 
     data() {
         return {
-            'canModify': false,
-            'objectRoles': [],
-            'roles': [],
+            canModify: false,
+            objectRoles: [],
+            roles: [],
+            // i18n, @see https://github.com/ttag-org/ttag/issues/201
+            msgYouCanModify: t`You can modify the permissions`,
+            msgYouCannotModify: t`You cannot modify the permissions`,
         };
     },
 
