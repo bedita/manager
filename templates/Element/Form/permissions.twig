@@ -8,7 +8,7 @@
 
         <div v-show="isOpen" class="tab-container">
             <permissions
-                :object-roles="{{ object.meta.perms.roles|default([])|json_encode }}"
+                :object-perms="{{ object.meta.perms|default([])|json_encode }}"
                 :user-roles="{{ user.roles|default([])|json_encode }}">
             </permissions>
         </div>

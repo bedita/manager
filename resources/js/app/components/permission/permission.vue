@@ -2,6 +2,7 @@
     <span v-if="hasPermission(role)" v-title="help()">
         <Icon icon="carbon:locked" v-if="isLocked()"></Icon>
         <Icon icon="carbon:unlocked" v-if="!isLocked()"></Icon>
+        <Icon icon="carbon:tree-view" v-if="inherited"></Icon>
     </span>
 </template>
 
@@ -18,6 +19,7 @@ export default {
     },
 
     props: {
+        inherited: false,
         objectRoles: [],
         role: '',
         userRoles: [],
@@ -28,7 +30,9 @@ export default {
             return this.objectRoles.includes(this.role);
         },
         help() {
-            return `${t('Your roles')}: ${this.userRoles.join(',')}`;
+            const inherit = this.inherited ? t('inherited') : '';
+
+            return `${t('Your roles')}: ${this.userRoles.join(',')} ${inherit}`;
         },
         isLocked() {
             if (this.userRoles.includes('admin')) {

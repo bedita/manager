@@ -11,9 +11,10 @@
                     @change="toggleFolderRelation" />
                 {{ node.attributes.title }}
             </label>
-            <span v-if="hasPermissions" v-title="node.meta.perms.roles.join(',')">
+            <span v-if="hasPermissions" v-title="node.meta.perms.roles.join(', ')">
                 <Icon icon="carbon:locked" v-if="isLocked"></Icon>
                 <Icon icon="carbon:unlocked" v-if="!isLocked"></Icon>
+                <Icon icon="carbon:tree-view" v-if="node.meta.perms.inherited"></Icon>
             </span>
             <button v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id)"
                 :class="{'is-loading-spinner': isLoading, 'icon-down-open': !isLoading && isOpen, 'icon-right-open': !isLoading && !isOpen}"
@@ -28,7 +29,7 @@
                         :checked="isMenu"
                         @change="toggleFolderRelationMenu" />
                     <label :for="'tree-menu-' + node.id">
-                        {{ t('Menu') }}
+                        {{ t(`Menu`) }}
                     </label>
                 </div>
                 <div v-if="relationName && isParent && multipleChoice" class="tree-param">
