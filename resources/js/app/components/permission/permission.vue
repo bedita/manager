@@ -1,7 +1,7 @@
 <template>
     <span v-if="hasPermission(role)" v-title="help()">
-        <Icon icon="carbon:locked" v-if="isLocked(role)"></Icon>
-        <Icon icon="carbon:unlocked" v-if="!isLocked(role)"></Icon>
+        <Icon icon="carbon:locked" v-if="isLocked()"></Icon>
+        <Icon icon="carbon:unlocked" v-if="!isLocked()"></Icon>
     </span>
 </template>
 
@@ -35,7 +35,7 @@ export default {
                 return false;
             }
 
-            return this.userRoles.includes(this.role);
+            return !this.userRoles.includes(this.role);
         },
     },
 }
