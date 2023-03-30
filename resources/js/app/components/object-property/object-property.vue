@@ -3,14 +3,14 @@
         <div class="columns">
             <div class="column">
                 <span :class="tagClass()">{{ prop.attributes.name }}</span>
-                <p>{{ t('Label') }}: {{ prop.attributes.label || '-' }}</p>
-                <p>{{ t('Type') }}: {{ prop.attributes.property_type_name }}</p>
-                <p>{{ t('Hidden') }}:
-                    <span v-if="hidden">{{ t('Yes') }}</span>
-                    <span v-if="!hidden">{{ t('No') }}</span>
+                <p>{{ msgLabel }}: {{ prop.attributes.label || '-' }}</p>
+                <p>{{ msgType }}: {{ prop.attributes.property_type_name }}</p>
+                <p>{{ msgHidden }}:
+                    <span v-if="hidden">{{ msgYes }}</span>
+                    <span v-if="!hidden">{{ msgNo }}</span>
                 </p>
                 <p v-if="type === 'inherited'">
-                    {{ t('Inherited from') }}:
+                    {{ msgInheritedFrom }}:
                     {{ prop.attributes.object_type_name }}
                 </p>
                 <p v-if="prop.attributes.description">&nbsp;</p>
@@ -18,9 +18,9 @@
             </div>
             <div v-if="!nobuttonsfor.includes(prop.attributes.name)" class="column is-narrow">
                 <div class="buttons-container">
-                    <button v-if="type === 'custom'" @click.prevent="remove()" class="icon-cancel button button-outlined button-text-white is-expanded">{{ t('Delete') }}</button>
-                    <button v-if="hidden" @click.prevent="toggle(false)" class="icon-eye button button-outlined button-text-white is-expanded">{{ t('Show') }}</button>
-                    <button v-if="!hidden" @click.prevent="toggle(true)" class="icon-eye-off button button-outlined button-text-white is-expanded">{{ t('Hide') }}</button>
+                    <button v-if="type === 'custom'" @click.prevent="remove()" class="icon-cancel button button-outlined button-text-white is-expanded">{{ msgDelete }}</button>
+                    <button v-if="hidden" @click.prevent="toggle(false)" class="icon-eye button button-outlined button-text-white is-expanded">{{ msgShow }}</button>
+                    <button v-if="!hidden" @click.prevent="toggle(true)" class="icon-eye-off button button-outlined button-text-white is-expanded">{{ msgHide }}</button>
                 </div>
             </div>
         </div>
@@ -44,6 +44,16 @@ export default {
             confirm: null,
             hidden: false,
             display: true,
+            // i18n @see https://github.com/ttag-org/ttag/issues/201
+            msgDelete: t`Delete`,
+            msgHidden: t`Hidden`,
+            msgHide: t`Hide`,
+            msgInheritedFrom: t`Inherited from`,
+            msgLabel: t`Label`,
+            msgNo: t`No`,
+            msgShow: t`Show`,
+            msgType: t`Type`,
+            msgYes: t`Yes`,
         };
     },
 

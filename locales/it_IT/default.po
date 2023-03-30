@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-03-30 16:22:13 \n"
+"POT-Creation-Date: 2023-03-30 16:45:10 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1204,11 +1204,15 @@ msgstr "Indirizzo valido"
 msgid "Uri is not valid"
 msgstr "Indirizzo non valido"
 
-msgid "edit"
-msgstr "modifica"
+#.  i18n, @see https://github.com/ttag-org/ttag/issues/201
+msgid "Canonical"
+msgstr "Canonica"
 
 msgid "Menu"
 msgstr "Menù"
+
+msgid "View"
+msgstr "Vedi"
 
 msgid "Search existing tags"
 msgstr "Cerca tag esistenti"
@@ -1246,14 +1250,14 @@ msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 
+msgid "Hide"
+msgstr "Nascondi"
+
 msgid "Inherited from"
 msgstr "Ereditato da"
 
 msgid "Show"
 msgstr "Mostra"
-
-msgid "Hide"
-msgstr "Nascondi"
 
 msgid "Error on deleting property"
 msgstr "Errore nella cancellazione della proprietà"

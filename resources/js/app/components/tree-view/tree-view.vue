@@ -20,8 +20,8 @@
                 :class="{'is-loading-spinner': isLoading, 'icon-down-open': !isLoading && isOpen, 'icon-right-open': !isLoading && !isOpen}"
                 @click="toggle">
             </button>
-            <a :href="url" v-if="hasPermissions && isLocked">{{ t('view') }}</a>
-            <a :href="url" v-else>{{ t('edit') }}</a>
+            <a :href="url" v-if="hasPermissions && isLocked">{{ msgView }}</a>
+            <a :href="url" v-else>{{ msgEdit }}</a>
             <div class="tree-params">
                 <div v-if="relationName && isParent" class="tree-param">
                     <input :id="'tree-menu-' + node.id"
@@ -29,7 +29,7 @@
                         :checked="isMenu"
                         @change="toggleFolderRelationMenu" />
                     <label :for="'tree-menu-' + node.id">
-                        {{ t(`Menu`) }}
+                        {{ msgMenu }}
                     </label>
                 </div>
                 <div v-if="relationName && isParent && multipleChoice" class="tree-param">
@@ -39,7 +39,7 @@
                         :checked="isCanonical"
                         @change="toggleFolderRelationCanonical" />
                     <label :for="'tree-canonical-' + node.id">
-                        {{ t('Canonical') }}
+                        {{ msgCanonical }}
                     </label>
                 </div>
             </div>
@@ -127,6 +127,11 @@ export default {
         return {
             isOpen: false,
             isLoading: false,
+            // i18n, @see https://github.com/ttag-org/ttag/issues/201
+            msgCanonical: t`Canonical`,
+            msgEdit: t`Edit`,
+            msgMenu: t`Menu`,
+            msgView: t`View`,
         };
     },
 

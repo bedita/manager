@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-03-30 16:04:57 \n"
+"POT-Creation-Date: 2023-03-30 16:45:10 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1198,6 +1198,16 @@ msgstr ""
 msgid "Uri is not valid"
 msgstr ""
 
+#.  i18n, @see https://github.com/ttag-org/ttag/issues/201
+msgid "Canonical"
+msgstr ""
+
+msgid "Menu"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
 msgid "Search existing tags"
 msgstr ""
 
@@ -1232,6 +1242,15 @@ msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
 msgid "Error while creating new object."
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Inherited from"
+msgstr ""
+
+msgid "Show"
 msgstr ""
 
 msgid "Error on deleting property"
