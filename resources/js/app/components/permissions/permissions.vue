@@ -11,7 +11,11 @@
         <label v-for="role in roles" v-if="role.attributes.name != 'admin'">
             <input type="checkbox" :checked="objectRoles.includes(role.attributes.name)" :disabled="!canModify" />
             {{ role.attributes.name }}
-            <permission :inherited="objectPerms?.inherited || false" :role="role.attributes.name" :object-roles="objectRoles" :user-roles="userRoles">
+            <permission
+                :inherited="objectPerms?.inherited || false"
+                :role="role.attributes.name"
+                :object-roles="objectRoles"
+                :user-roles="userRoles">
             </permission>
         </label>
     </div>

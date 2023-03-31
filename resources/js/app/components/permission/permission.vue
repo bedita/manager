@@ -1,5 +1,5 @@
 <template>
-    <span v-if="hasPermission(role)" v-title="help()">
+    <span v-if="hasPermission()" v-title="title()">
         <Icon icon="carbon:locked" v-if="isLocked()"></Icon>
         <Icon icon="carbon:unlocked" v-if="!isLocked()"></Icon>
         <Icon icon="carbon:tree-view" v-if="inherited"></Icon>
@@ -36,17 +36,15 @@ export default {
         hasPermission() {
             return this.objectRoles.includes(this.role);
         },
-        help() {
-            const inherit = this.inherited ? this.msgInherited : '';
-
-            return inherit;
-        },
         isLocked() {
             if (this.userRoles.includes('admin')) {
                 return false;
             }
 
             return !this.userRoles.includes(this.role);
+        },
+        title() {
+            return this.inherited ? this.msgInherited : '';
         },
     },
 }
