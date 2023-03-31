@@ -1,3 +1,4 @@
+{% if object.meta.perms is defined %}
 <property-view inline-template :tab-open="tabsOpen" tab-name="permissions">
     <section class="fieldset">
         <header @click.prevent="toggleVisibility()"
@@ -14,3 +15,4 @@
         </div>
     </section>
 </property-view>
+{% endif %}
