@@ -1,12 +1,12 @@
 <template>
     <div>
         <div v-if="canModify" class="mb-05">
-            <Icon icon="carbon:information" class="info"></Icon>
-            <span class="ml-05 info">{{ msgYouCanModify }}. {{ msgYourRoles }}: {{ userRoles.join(',') }}</span>
+            <Icon icon="carbon:information" class="has-text-info"></Icon>
+            <span class="ml-05 has-text-info">{{ msgYouCanModify }}. {{ msgYourRoles }}: {{ userRoles.join(',') }}</span>
         </div>
         <div v-else class="mb-05">
-            <Icon icon="carbon:warning" class="warning"></Icon>
-            <span class="ml-05 warning">{{ msgYouCannotModify }}. {{ msgYourRoles }}: {{ userRoles.join(',') }}</span>
+            <Icon icon="carbon:warning" class="has-text-danger"></Icon>
+            <span class="ml-05 has-text-danger">{{ msgYouCannotModify }}. {{ msgYourRoles }}: {{ userRoles.join(',') }}</span>
         </div>
         <label v-for="role in roles" v-if="role.attributes.name != 'admin'">
             <input type="checkbox" :checked="objectRoles.includes(role.attributes.name)" :disabled="!canModify" />
@@ -66,13 +66,3 @@ export default {
     },
 }
 </script>
-<style>
-.info {
-    color: hsl(204, 86%, 40%);
-    font-size: small;
-}
-.warning {
-    color: rgb(231, 200, 24);
-    font-size: small;
-}
-</style>

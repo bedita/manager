@@ -69,8 +69,6 @@ bundle-report.*.html
 /webroot/vendors/async/*.hot-update.*
 /webroot/css/app*
 /webroot/css/*.lazy.css
-/webroot/css/permissions.*
-/webroot/css/thumbnail.*
 /webroot/css/vendors*
 /webroot/css/**/*.map
 /webroot/css/vendors/async
