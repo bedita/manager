@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-03-30 16:59:12 \n"
+"POT-Creation-Date: 2023-03-31 07:05:33 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1251,11 +1251,11 @@ msgstr ""
 msgid "You cannot modify the permissions"
 msgstr ""
 
-#.  i18n, @see https://github.com/ttag-org/ttag/issues/201
-msgid "Inherited"
+msgid "Your roles"
 msgstr ""
 
-msgid "Your roles"
+#.  i18n, @see https://github.com/ttag-org/ttag/issues/201
+msgid "Inherited"
 msgstr ""
 
 msgid "Hide"

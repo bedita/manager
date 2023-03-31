@@ -29,7 +29,6 @@ export default {
         return {
             // i18n, @see https://github.com/ttag-org/ttag/issues/201
             msgInherited: t`Inherited`,
-            msgYourRoles: t`Your roles`,
         };
     },
 
@@ -40,7 +39,7 @@ export default {
         help() {
             const inherit = this.inherited ? this.msgInherited : '';
 
-            return `${this.msgYourRoles}: ${this.userRoles.join(',')} ${inherit}`;
+            return inherit;
         },
         isLocked() {
             if (this.userRoles.includes('admin')) {

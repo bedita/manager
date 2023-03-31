@@ -2,11 +2,11 @@
     <div>
         <div v-if="canModify" class="mb-05">
             <Icon icon="carbon:information" class="info"></Icon>
-            <span class="ml-05 info">{{ msgYouCanModify }}</span>
+            <span class="ml-05 info">{{ msgYouCanModify }}. {{ msgYourRoles }}: {{ userRoles.join(',') }}</span>
         </div>
         <div v-else class="mb-05">
             <Icon icon="carbon:warning" class="warning"></Icon>
-            <span class="ml-05 warning">{{ msgYouCannotModify }}</span>
+            <span class="ml-05 warning">{{ msgYouCannotModify }}. {{ msgYourRoles }}: {{ userRoles.join(',') }}</span>
         </div>
         <label v-for="role in roles" v-if="role.attributes.name != 'admin'">
             <input type="checkbox" :checked="objectRoles.includes(role.attributes.name)" :disabled="!canModify" />
@@ -43,6 +43,7 @@ export default {
             // i18n, @see https://github.com/ttag-org/ttag/issues/201
             msgYouCanModify: t`You can modify the permissions`,
             msgYouCannotModify: t`You cannot modify the permissions`,
+            msgYourRoles: t`Your roles`,
         };
     },
 
