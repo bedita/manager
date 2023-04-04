@@ -24,16 +24,11 @@
 </template>
 
 <script>
-import { Icon } from '@iconify/vue2';
 
 /**
  * <string-list> component to handle simple JSON array of strings
  */
 export default {
-
-    components: {
-        Icon,
-    },
 
     props: {
         value: String,

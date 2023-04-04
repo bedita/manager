@@ -17,7 +17,6 @@ import { PaginatedContentMixin } from 'app/mixins/paginated-content';
 import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
 import { error as showError } from 'app/components/dialog/dialog';
-import { Icon } from '@iconify/vue2';
 import sleep from 'sleep-promise';
 import { t } from 'ttag';
 import { warning } from 'app/components/dialog/dialog';
@@ -36,7 +35,6 @@ export default {
 
     components: {
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
-        Icon,
     },
 
     props: {

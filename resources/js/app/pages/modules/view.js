@@ -1,6 +1,5 @@
 import { AjaxLogin } from '../../components/ajax-login/ajax-login.js';
 import Vue from 'vue';
-import { Icon } from '@iconify/vue2';
 
 /**
  * Templates that uses this component (directly or indirectly):
@@ -22,7 +21,6 @@ export default {
         ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
         StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
-        Icon,
     },
 
     props: {

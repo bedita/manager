@@ -1,4 +1,3 @@
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 import { confirm, error as showError, info as showInfo } from 'app/components/dialog/dialog';
 
@@ -56,10 +55,6 @@ export default {
             </div>
         </form>
     `,
-
-    components: {
-        Icon,
-    },
 
     props: {
         cansave: Boolean,

@@ -6,7 +6,6 @@
  *
  */
 import { confirm } from 'app/components/dialog/dialog';
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
@@ -18,7 +17,6 @@ export default {
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         FilterBoxView: () => import(/* webpackChunkName: "tree-view" */'app/components/filter-box'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
-        Icon,
     },
 
     /**

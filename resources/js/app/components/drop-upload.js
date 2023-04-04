@@ -6,7 +6,6 @@
  */
 
 import { FetchMixin } from 'app/mixins/fetch';
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
@@ -59,10 +58,6 @@ export default {
             </div>
         </div>
     `,
-
-    components: {
-        Icon,
-    },
 
     props: {
         placeholder: {

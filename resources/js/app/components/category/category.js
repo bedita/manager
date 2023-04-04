@@ -1,4 +1,3 @@
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 import { error as showError } from 'app/components/dialog/dialog';
 
@@ -54,10 +53,6 @@ export default {
             </div>
         </form>
     `,
-
-    components: {
-        Icon,
-    },
 
     props: {
         source: Object,
