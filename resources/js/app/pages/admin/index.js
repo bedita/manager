@@ -6,12 +6,10 @@
  */
 
 import { confirm } from 'app/components/dialog/dialog';
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
     components: {
-        Icon,
         PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
     },

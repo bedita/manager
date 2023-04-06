@@ -1,4 +1,3 @@
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
@@ -27,10 +26,6 @@ export default {
         </div>
     </div>
     `,
-
-    components: {
-        Icon,
-    },
 
     data() {
         return {

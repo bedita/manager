@@ -1,4 +1,3 @@
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
@@ -11,10 +10,6 @@ export default {
         <div v-if="msg" v-text="msg" style="color: gray"></div>
     </div>
     `,
-
-    components: {
-        Icon,
-    },
 
     props: {
         settings: {},

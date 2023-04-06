@@ -1,4 +1,3 @@
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 import Vue from 'vue';
 
@@ -54,10 +53,6 @@ export const Dialog = Vue.extend({
             </div>
         </transition>
     </div>`,
-
-    components: {
-        Icon,
-    },
 
     data() {
         return {

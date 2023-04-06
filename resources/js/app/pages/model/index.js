@@ -9,7 +9,6 @@
 
 import ModulesIndex from 'app/pages/modules/index';
 import { confirm, error as showError} from 'app/components/dialog/dialog';
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
@@ -18,7 +17,6 @@ export default {
     components: {
         AutosizeTextarea: () => import(/* webpackChunkName: "autosize-textarea" */'app/components/autosize-textarea'),
         TagForm: () => import(/* webpackChunkName: "tag-form" */'app/components/tag-form/tag-form'),
-        Icon,
     },
 
     props: {

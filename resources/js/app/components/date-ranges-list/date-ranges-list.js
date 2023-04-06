@@ -4,13 +4,7 @@
  *
  * <date-ranges-list> component used for ModulesPage -> Index
  */
-import { Icon } from '@iconify/vue2';
-
 export default {
-
-    components: {
-        Icon,
-    },
 
     data() {
         return {

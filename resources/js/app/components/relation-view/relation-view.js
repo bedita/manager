@@ -16,7 +16,6 @@
  */
 
 import flatpickr from 'flatpickr';
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 import { PaginatedContentMixin } from 'app/mixins/paginated-content';
@@ -38,7 +37,6 @@ export default {
         DropUpload: () => import(/* webpackChunkName: "drop-upload" */'app/components/drop-upload'),
         LocationsView: () => import(/* webpackChunkName: "locations-view" */'app/components/locations-view/locations-view'),
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
-        Icon,
     },
 
     props: {
