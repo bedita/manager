@@ -12,8 +12,6 @@
  * @prop {String} label label of the property view
  *
  */
-import { Icon } from '@iconify/vue2';
-
 const API_URL = new URL(BEDITA.base).pathname;
 const API_OPTIONS = {
     credentials: 'same-origin',
@@ -41,7 +39,6 @@ export default {
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         Permission:() => import(/* webpackChunkName: "permission" */'app/components/permission/permission'),
         Permissions:() => import(/* webpackChunkName: "permissions" */'app/components/permissions/permissions'),
-        Icon,
     },
 
     props: {

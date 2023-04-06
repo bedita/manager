@@ -7,13 +7,8 @@
     </div>
 </template>
 <script>
-import { Icon } from '@iconify/vue2';
 
 export default {
-
-    components: {
-        Icon,
-    },
 
     props: {
         related: {

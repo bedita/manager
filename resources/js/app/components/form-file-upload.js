@@ -9,14 +9,7 @@
  * @prop {Array} labels
  * @prop {int} defaultActive index of the default active label in labels
  */
-
-import { Icon } from '@iconify/vue2';
-
 export default {
-
-    components: {
-        Icon,
-    },
 
     data() {
         return {

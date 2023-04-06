@@ -1,4 +1,3 @@
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 const options = {
@@ -132,10 +131,6 @@ export default {
             </div>
         </div>
     </div>`,
-
-    components: {
-        Icon,
-    },
 
     props: {
         index: Number,

@@ -559,3 +559,6 @@ const _vueInstance = new Vue({
 });
 
 window._vueInstance = _vueInstance;
+
+// use component everywhere in Manager
+Vue.component('Icon', Icon);

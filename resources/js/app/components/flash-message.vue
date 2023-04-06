@@ -30,14 +30,10 @@
 </template>
 
 <script>
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 import { error, warning, info, success } from 'app/components/dialog/dialog';
 
 export default {
-    components: {
-        Icon,
-    },
 
     props: {
         level: {
