@@ -76,7 +76,6 @@
  * @property {boolean} multipleChoice Should handle multiple relations.
  * @property {Array} parents The list of current item parents.
  */
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 const API_URL = new URL(BEDITA.base).pathname;
@@ -89,10 +88,6 @@ const API_OPTIONS = {
 
 export default {
     name: 'tree-view',
-
-    components: {
-        Icon,
-    },
 
     props: {
         store: {

@@ -7,16 +7,11 @@
 </template>
 
 <script>
-import { Icon } from '@iconify/vue2';
 import { t } from 'ttag';
 
 export default {
 
     name: 'permission',
-
-    components: {
-        Icon,
-    },
 
     props: {
         inherited: false,

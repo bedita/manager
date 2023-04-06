@@ -23,7 +23,6 @@
 
 <script>
 import { t } from 'ttag';
-import { Icon } from '@iconify/vue2';
 
 export default {
 
@@ -31,7 +30,6 @@ export default {
 
     components: {
         Permission:() => import(/* webpackChunkName: "permission" */'app/components/permission/permission'),
-        Icon,
     },
 
     props: {
