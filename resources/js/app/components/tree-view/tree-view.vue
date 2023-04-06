@@ -8,6 +8,7 @@
                     :name="'relations[' + relationName + '][replaceRelated][]'"
                     :value="value"
                     :checked="isParent"
+                    :disabled="isDisabled"
                     @change="toggleFolderRelation" />
                 {{ node.attributes.title }}
             </label>
@@ -153,6 +154,21 @@ export default {
         },
 
         /**
+         * Disabled true when folder has permissions and is locked for user
+         */
+        isDisabled() {
+            if (this.userRoles.includes('admin')) {
+                return false;
+            }
+            const roles = this.node?.meta?.perms?.roles || [];
+            if (roles.length === 0) {
+                return false;
+            }
+
+            return !roles.some(item => this.userRoles.includes(item));
+        },
+
+        /**
          * Check if the child item is part of the menu.
          *
          * @return {boolean}
@@ -188,7 +204,7 @@ export default {
             }
             const roles = this.node?.meta?.perms?.roles || [];
 
-            return !roles.some(item => this.userRoles.includes(item))
+            return !roles.some(item => this.userRoles.includes(item));
         },
 
         /**
