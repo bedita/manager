@@ -107,7 +107,7 @@ class LayoutHelper extends Helper
         $title = '';
         if (!empty($currentModule) && !empty($currentModule['name'])) {
             $currentModuleName = $currentModule['name'];
-            if (!empty($object) && !empty($object['attributes']['title'])) {
+            if (Hash::check($object, 'attributes.title')) {
                 $title = $object['attributes']['title'] . ' | ';
             }
             $title = $title . $currentModuleName;
