@@ -311,6 +311,7 @@ class PropertiesComponent extends Component
             'Streams',
             'Categories',
             'Tags',
+            'Permissions',
         ];
         $fields = array_unique(array_merge($fields, $value));
         foreach ($fields as $text) {
