@@ -253,7 +253,7 @@ class LayoutHelperTest extends TestCase
      * @dataProvider titleProvider()
      * @covers ::title()
      */
-    public function testTitle($expected, $name, array $viewVars = []): void
+    public function testTitle(string $expected, string $name, array $viewVars = []): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
