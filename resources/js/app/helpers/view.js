@@ -234,6 +234,17 @@ export default {
             minLength(len) {
                 return t`At least ${len} characters`;
             },
+
+            debounce(fn, timeout = 500) {
+                let timer = null;
+
+                return (...args) => {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        fn.apply(this, args);
+                    }, timeout);
+                };
+            },
         }
     }
 };
