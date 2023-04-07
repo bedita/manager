@@ -1,4 +1,4 @@
-{% do _view.assign('title', currentModule.name|humanize) %}
+{% do _view.assign('title', Layout.title()) %}
 
 <modules-view inline-template ref="moduleView" :object="{{ object|json_encode }}">
     <div class="modules-view">
