@@ -198,6 +198,75 @@ class LayoutHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testTitle` test case.
+     *
+     * @return array
+     */
+    public function titleProvider(): array
+    {
+        return [
+            'empty' => [
+                '',
+                'Module',
+                [],
+            ],
+            'only module' => [
+                'objects',
+                'Module',
+                [
+                    'currentModule' => ['name' => 'objects'],
+                ],
+            ],
+            'objects' => [
+                'Object title | objects',
+                'Module',
+                [
+                    'object' => [
+                        'attributes' => [
+                            'title' => 'Object title',
+                        ],
+                    ],
+                    'currentModule' => ['name' => 'objects'],
+                ],
+            ],
+            'video' => [
+                'Video title | video',
+                'Module',
+                [
+                    'object' => [
+                        'attributes' => [
+                            'title' => 'Video title',
+                        ],
+                    ],
+                    'currentModule' => ['name' => 'video'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `title` method
+     *
+     * @param string $expected The expected title
+     * @param string $name The view name
+     * @param array $viewVars The view vars
+     * @dataProvider titleProvider()
+     * @covers ::title()
+     */
+    public function testTitle(string $expected, string $name, array $viewVars = []): void
+    {
+        $request = $response = $events = null;
+        $data = ['name' => $name];
+        $view = new View($request, $response, $events, $data);
+        foreach ($viewVars as $key => $value) {
+            $view->set($key, $value);
+        }
+        $layout = new LayoutHelper($view);
+        $result = $layout->title();
+        static::assertSame($expected, $result);
+    }
+
+    /**
      * Data provider for `testCustomElement` test case.
      *
      * @return array

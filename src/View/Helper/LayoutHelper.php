@@ -96,6 +96,21 @@ class LayoutHelper extends Helper
     }
 
     /**
+     * Return title with object title and current module name
+     *
+     * @return string title with object title and current module name separated by '|'
+     */
+    public function title(): string
+    {
+        $module = (array)$this->getView()->get('currentModule');
+        $name = (string)Hash::get($module, 'name');
+        $object = (array)$this->getView()->get('object');
+        $title = (string)Hash::get($object, 'attributes.title');
+
+        return empty($title) ? $name : sprintf('%s | %s', $title, $name);
+    }
+
+    /**
      * Module main link
      *
      * @return string The link
