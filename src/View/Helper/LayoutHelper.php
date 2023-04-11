@@ -102,18 +102,12 @@ class LayoutHelper extends Helper
      */
     public function title(): string
     {
-        $currentModule = (array)$this->getView()->get('currentModule');
+        $module = (array)$this->getView()->get('currentModule');
+        $name = (string)Hash::get($module, 'name');
         $object = (array)$this->getView()->get('object');
-        $title = '';
-        if (!empty($currentModule) && !empty($currentModule['name'])) {
-            $currentModuleName = $currentModule['name'];
-            if (Hash::check($object, 'attributes.title')) {
-                $title = $object['attributes']['title'] . ' | ';
-            }
-            $title = $title . $currentModuleName;
-        }
+        $title = (string)Hash::get($object, 'attributes.title');
 
-        return $title;
+        return empty($title) ? $name : sprintf('%s | %s', $title, $name);
     }
 
     /**
