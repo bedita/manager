@@ -218,6 +218,7 @@ class LayoutHelper extends Helper
             'csrfToken' => $this->getCsrfToken(),
             'maxFileSize' => $this->System->getMaxFileSize(),
             'canReadUsers' => $this->Perms->canRead('users'),
+            'canSave' => $this->Perms->canSave(),
             'uploadConfig' => $this->System->uploadConfig(),
         ];
     }

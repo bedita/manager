@@ -420,6 +420,7 @@ class LayoutHelperTest extends TestCase
             'csrfToken' => 'my-token',
             'maxFileSize' => $system->getMaxFileSize(),
             'canReadUsers' => false,
+            'canSave' => true,
             'uploadConfig' => $system->uploadConfig(),
         ];
         static::assertSame($expected, $conf);

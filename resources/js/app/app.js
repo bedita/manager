@@ -556,6 +556,9 @@ const _vueInstance = new Vue({
         },
 
         onResourceChanged() {
+            if (!BEDITA.canSave) {
+                return;
+            }
             const moduleBox = document.getElementById('module-icon');
             if (moduleBox) {
                 // Show floppy icon inside module box
