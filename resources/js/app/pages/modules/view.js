@@ -42,6 +42,7 @@ export default {
         window.addEventListener('keydown', this.toggleTabs);
         if (this.$refs.formMain) {
             this.$refs.formMain.addEventListener('submit', this.submitForm);
+            this.$refs.formMain.addEventListener('change', () => window._vueInstance.$emit('resource-changed'));
         }
     },
 

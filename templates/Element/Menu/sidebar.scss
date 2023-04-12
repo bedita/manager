@@ -50,6 +50,10 @@
     &.draft a {
         background-image: url('/svg/iconDraft.svg');
     }
+
+    .resource-changed {
+        background-image: url('/svg/iconFloppy.svg');
+    }
 }
 
 .app-module-box-concurrent-editors a {

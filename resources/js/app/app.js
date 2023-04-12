@@ -149,6 +149,7 @@ const _vueInstance = new Vue({
         // listen events emitted on this vue instance
         this.$on('filter-update-page-size', this.onUpdatePageSize);
         this.$on('filter-update-current-page', this.onUpdateCurrentPage);
+        this.$on('resource-changed', () => document.getElementById('module-icon').classList.add('resource-changed'));
 
         Vue.prototype.$eventBus = new Vue();
     },
