@@ -149,7 +149,7 @@ const _vueInstance = new Vue({
         // listen events emitted on this vue instance
         this.$on('filter-update-page-size', this.onUpdatePageSize);
         this.$on('filter-update-current-page', this.onUpdateCurrentPage);
-        this.$on('resource-changed', () => document.getElementById('module-icon').classList.add('resource-changed'));
+        this.$on('resource-changed', () => this.onResourceChanged);
 
         Vue.prototype.$eventBus = new Vue();
     },
@@ -554,6 +554,14 @@ const _vueInstance = new Vue({
         isNumeric(num) {
             return !isNaN(num);
         },
+
+        onResourceChanged() {
+            const moduleBox = document.getElementById('module-icon');
+            if (moduleBox) {
+                // Show floppy icon inside module box
+                moduleBox.classList.add('resource-changed')
+            }
+        }
     }
 });
 
