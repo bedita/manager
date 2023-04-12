@@ -124,11 +124,10 @@ class LayoutHelper extends Helper
 
             return $this->Html->link(
                 $this->tr($label),
-
                 ['_name' => 'modules:list', 'object_type' => $name],
                 [
                     'id' => 'module-icon',
-                    'class' => sprintf('has-background-module-%s', $name)
+                    'class' => sprintf('has-background-module-%s', $name),
                 ]
             );
         }
