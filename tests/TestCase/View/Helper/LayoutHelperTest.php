@@ -165,7 +165,7 @@ class LayoutHelperTest extends TestCase
                 ],
             ],
             'objects' => [
-                '<a href="/objects" class="has-background-module-objects">Objects</a>',
+                '<a href="/objects" id="module-icon" class="has-background-module-objects">Objects</a>',
                 'Module',
                 [
                     'currentModule' => ['name' => 'objects'],
@@ -420,6 +420,7 @@ class LayoutHelperTest extends TestCase
             'csrfToken' => 'my-token',
             'maxFileSize' => $system->getMaxFileSize(),
             'canReadUsers' => false,
+            'canSave' => true,
             'uploadConfig' => $system->uploadConfig(),
         ];
         static::assertSame($expected, $conf);

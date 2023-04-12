@@ -125,7 +125,10 @@ class LayoutHelper extends Helper
             return $this->Html->link(
                 $this->tr($label),
                 ['_name' => 'modules:list', 'object_type' => $name],
-                ['class' => sprintf('has-background-module-%s', $name)]
+                [
+                    'id' => 'module-icon',
+                    'class' => sprintf('has-background-module-%s', $name),
+                ]
             );
         }
 
@@ -215,6 +218,7 @@ class LayoutHelper extends Helper
             'csrfToken' => $this->getCsrfToken(),
             'maxFileSize' => $this->System->getMaxFileSize(),
             'canReadUsers' => $this->Perms->canRead('users'),
+            'canSave' => $this->Perms->canSave(),
             'uploadConfig' => $this->System->uploadConfig(),
         ];
     }

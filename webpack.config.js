@@ -134,6 +134,7 @@ module.exports = {
                     'timezone.js',
                     'concurrent-editors.svg',
                     'iconDraft.svg',
+                    'iconFloppy.svg',
                     'iconExpired.svg',
                     'iconExpired.png',
                     'iconFuture.svg',

@@ -35,6 +35,10 @@
         background-position: center center;
     }
 
+    .resource-changed {
+        background-image: url('/svg/iconFloppy.svg') !important;
+    }
+
     &.locked a {
         background-image: url('/svg/iconLocked.svg');
     }
