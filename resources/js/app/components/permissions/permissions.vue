@@ -42,7 +42,6 @@ export default {
             canModify: false,
             objectRoles: [],
             roles: [],
-            // i18n, @see https://github.com/ttag-org/ttag/issues/201
             msgYouCanModify: t`You can modify the permissions`,
             msgYouCannotModify: t`You cannot modify the permissions`,
             msgYourRoles: t`Your roles`,

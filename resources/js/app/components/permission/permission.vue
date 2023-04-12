@@ -22,7 +22,6 @@ export default {
 
     data() {
         return {
-            // i18n, @see https://github.com/ttag-org/ttag/issues/201
             msgInherited: t`Inherited`,
         };
     },
@@ -32,11 +31,7 @@ export default {
             return this.objectRoles.includes(this.role);
         },
         isLocked() {
-            if (this.userRoles.includes('admin')) {
-                return false;
-            }
-
-            return !this.userRoles.includes(this.role);
+            return !this.userRoles.includes('admin') && !this.userRoles.includes(this.role);
         },
         title() {
             return this.inherited ? this.msgInherited : '';

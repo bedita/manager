@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-03-31 07:05:33 \n"
+"POT-Creation-Date: 2023-04-12 07:11:02 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1250,7 +1250,6 @@ msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 
-#.  i18n, @see https://github.com/ttag-org/ttag/issues/201
 msgid "You can modify the permissions"
 msgstr "Puoi modificare i permessi"
 
@@ -1260,7 +1259,6 @@ msgstr "Non puoi modificare i permessi"
 msgid "Your roles"
 msgstr "I tuoi ruoli"
 
-#.  i18n, @see https://github.com/ttag-org/ttag/issues/201
 msgid "Inherited"
 msgstr "Ereditato"
 

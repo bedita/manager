@@ -44,7 +44,6 @@ export default {
             confirm: null,
             hidden: false,
             display: true,
-            // i18n @see https://github.com/ttag-org/ttag/issues/201
             msgDelete: t`Delete`,
             msgHidden: t`Hidden`,
             msgHide: t`Hide`,
