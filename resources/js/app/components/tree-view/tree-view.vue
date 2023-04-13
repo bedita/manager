@@ -118,11 +118,11 @@ export default {
         },
         relationName: {
             type: String,
-            default: () => '',
+            default: '',
         },
         relationLabel: {
             type: String,
-            default: () => '',
+            default: '',
         },
         multipleChoice: {
             type: Boolean,
@@ -241,16 +241,16 @@ export default {
          */
         value() {
             let menu = false;
-            if (this.node.meta.relation && ('menu' in this.node.meta.relation)) {
+            if (this.node?.meta?.relation && ('menu' in this.node?.meta?.relation)) {
                 menu = !!this.node.meta.relation.menu;
             }
             let canonical = false;
-            if (this.node.meta.relation && ('canonical' in this.node.meta.relation)) {
-                canonical = !!this.node.meta.relation.canonical;
+            if (this.node?.meta?.relation && ('canonical' in this.node?.meta?.relation)) {
+                canonical = !!this.node?.meta?.relation?.canonical;
             }
             return JSON.stringify({
-                id: this.node.id,
-                type: this.node.type,
+                id: this.node?.id,
+                type: this.node?.type,
                 meta: {
                     relation: {
                         menu,
@@ -475,7 +475,7 @@ export default {
                 document.getElementById('changedParents').value = 1;
             }
 
-            let relation = this.node.meta.relation || {};
+            let relation = this.node?.meta?.relation || {};
             relation.menu = event.target.checked;
         },
 
@@ -490,7 +490,7 @@ export default {
                 document.getElementById('changedParents').value = 1;
             }
 
-            let relation = this.node.meta.relation || {};
+            let relation = this.node?.meta?.relation || {};
             relation.canonical = event.target.checked;
         },
     },
