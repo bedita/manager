@@ -138,7 +138,6 @@ export default {
         return {
             isOpen: false,
             isLoading: false,
-            // i18n, @see https://github.com/ttag-org/ttag/issues/201
             msgCanonical: t`Canonical`,
             msgEdit: t`Edit`,
             msgMenu: t`Menu`,

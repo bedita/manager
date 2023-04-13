@@ -1204,7 +1204,6 @@ msgstr "Indirizzo valido"
 msgid "Uri is not valid"
 msgstr "Indirizzo non valido"
 
-#.  i18n, @see https://github.com/ttag-org/ttag/issues/201
 msgid "Canonical"
 msgstr "Canonica"
 
