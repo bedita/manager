@@ -95,7 +95,10 @@ export default {
             type: Object,
             default: () => ({}),
         },
-        parent: Object,
+        parent: {
+            type: Object,
+            default: () => ({}),
+        },
         parents: {
             type: Array,
             default: () => ([]),
@@ -109,9 +112,18 @@ export default {
                 children: [],
             }),
         },
-        object: Object,
-        relationName: String,
-        relationLabel: String,
+        object: {
+            type: Object,
+            default: () => ({}),
+        },
+        relationName: {
+            type: String,
+            default: () => '',
+        },
+        relationLabel: {
+            type: String,
+            default: () => '',
+        },
         multipleChoice: {
             type: Boolean,
             default: true,
