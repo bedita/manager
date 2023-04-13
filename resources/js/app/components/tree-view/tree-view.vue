@@ -116,7 +116,10 @@ export default {
             type: Boolean,
             default: true,
         },
-        userRoles: Array,
+        userRoles: {
+            type: Array,
+            default: () => ([]),
+        },
     },
 
     data() {
