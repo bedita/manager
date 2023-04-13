@@ -1,7 +1,7 @@
 <template>
-    <span v-if="hasPermission()" v-title="title()">
-        <Icon icon="carbon:locked" v-if="isLocked()"></Icon>
-        <Icon icon="carbon:unlocked" v-if="!isLocked()"></Icon>
+    <span v-if="hasPermission" v-title="title">
+        <Icon icon="carbon:locked" v-if="isLocked"></Icon>
+        <Icon icon="carbon:unlocked" v-if="!isLocked"></Icon>
         <Icon icon="carbon:tree-view" v-if="inherited"></Icon>
     </span>
 </template>
@@ -38,7 +38,7 @@ export default {
         };
     },
 
-    methods: {
+    computed: {
         hasPermission() {
             return this.objectRoles.includes(this.role);
         },
