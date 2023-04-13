@@ -14,10 +14,22 @@ export default {
     name: 'permission',
 
     props: {
-        inherited: false,
-        objectRoles: [],
-        role: '',
-        userRoles: [],
+        inherited: {
+            type: Boolean,
+            default: false,
+        },
+        objectRoles: {
+            type: Array,
+            default: () => ([]),
+        },
+        role: {
+            type: String,
+            default: '',
+        },
+        userRoles: {
+            type: Array,
+            default: () => ([]),
+        },
     },
 
     data() {
