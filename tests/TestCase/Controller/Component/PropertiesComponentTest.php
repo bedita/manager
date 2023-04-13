@@ -537,6 +537,7 @@ class PropertiesComponentTest extends TestCase
             ['text' => 'Streams', 'value' => 'Streams'],
             ['text' => 'Categories', 'value' => 'Categories'],
             ['text' => 'Tags', 'value' => 'Tags'],
+            ['text' => 'Permissions', 'value' => 'Permissions'],
             ['text' => 'Dummy', 'value' => 'Dummy'],
         ];
         $actual = $this->Properties->associationsOptions(['Dummy']);

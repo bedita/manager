@@ -22,7 +22,8 @@
                 relation-name={{ relationName }}
                 relation-label="{{ Layout.tr(relationName) }}"
                 :object='{{ { id: object.id, type: object.type }|json_encode }}'
-                :multiple-choice={{ options.multiple }}>
+                :multiple-choice={{ options.multiple }}
+                :user-roles="{{ user.roles|json_encode}}">
             </tree-view>
             {% do Form.unlockField('relations.' ~ relationName ~ '.replaceRelated') %}
             {{ Form.hidden('_changedParents', {'value': '0', 'id': 'changedParents'})|raw }}

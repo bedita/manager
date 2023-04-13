@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-03-06 16:09:45 \n"
+"POT-Creation-Date: 2023-04-12 07:11:02 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -25,9 +25,6 @@ msgstr "Azioni sugli oggetti selezionati"
 
 msgid "Add"
 msgstr "Aggiungi"
-
-msgid "Add custom property"
-msgstr "Aggiungi proprietà custom"
 
 msgid "Add translation"
 msgstr "Aggiungi traduzione"
@@ -265,9 +262,6 @@ msgstr "E-mail"
 
 msgid "Embed online content"
 msgstr "Incorpora contenuti online"
-
-msgid "Empty request data"
-msgstr "Nessuno dato in request"
 
 msgid "Empty translation \"id\""
 msgstr "Identificatore traduzione vuoto (\"id\")"
@@ -515,15 +509,6 @@ msgstr "No"
 msgid "No application"
 msgstr "Nessuna applicazione"
 
-msgid "No core properties"
-msgstr "Nessuna proprietà di base"
-
-msgid "No custom properties"
-msgstr "Nessuna proprietà personalizzata"
-
-msgid "No inherited properties"
-msgstr "Nessuna proprietà ereditata"
-
 msgid "No items found"
 msgstr "Nessun elemento trovato"
 
@@ -619,6 +604,9 @@ msgstr "Richiesta di reimpostazione password inviata"
 
 msgid "Permanently delete"
 msgstr "Elimina definitivamente"
+
+msgid "Permissions"
+msgstr "Permessi"
 
 msgid "Person Title"
 msgstr "Titolo Persona"
@@ -1216,11 +1204,14 @@ msgstr "Indirizzo valido"
 msgid "Uri is not valid"
 msgstr "Indirizzo non valido"
 
-msgid "edit"
-msgstr "modifica"
+msgid "Canonical"
+msgstr "Canonica"
 
 msgid "Menu"
 msgstr "Menù"
+
+msgid "View"
+msgstr "Vedi"
 
 msgid "Search existing tags"
 msgstr "Cerca tag esistenti"
@@ -1258,14 +1249,26 @@ msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 
+msgid "You can modify the permissions"
+msgstr "Puoi modificare i permessi"
+
+msgid "You cannot modify the permissions"
+msgstr "Non puoi modificare i permessi"
+
+msgid "Your roles"
+msgstr "I tuoi ruoli"
+
+msgid "Inherited"
+msgstr "Ereditato"
+
+msgid "Hide"
+msgstr "Nascondi"
+
 msgid "Inherited from"
 msgstr "Ereditato da"
 
 msgid "Show"
 msgstr "Mostra"
-
-msgid "Hide"
-msgstr "Nascondi"
 
 msgid "Error on deleting property"
 msgstr "Errore nella cancellazione della proprietà"
@@ -1296,6 +1299,14 @@ msgstr "Indirizzo"
 #.
 msgid "GET"
 msgstr ""
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.
+msgid "edit"
+msgstr "modifica"
 
 #. *
 #.  * Templates that uses this component (directly or indirectly):

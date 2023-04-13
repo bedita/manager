@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2023-03-06 16:09:45 \n"
+"POT-Creation-Date: 2023-04-12 07:11:02 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -21,9 +21,6 @@ msgid "Actions on selected items"
 msgstr ""
 
 msgid "Add"
-msgstr ""
-
-msgid "Add custom property"
 msgstr ""
 
 msgid "Add translation"
@@ -261,9 +258,6 @@ msgid "Email"
 msgstr ""
 
 msgid "Embed online content"
-msgstr ""
-
-msgid "Empty request data"
 msgstr ""
 
 msgid "Empty translation \"id\""
@@ -512,15 +506,6 @@ msgstr ""
 msgid "No application"
 msgstr ""
 
-msgid "No core properties"
-msgstr ""
-
-msgid "No custom properties"
-msgstr ""
-
-msgid "No inherited properties"
-msgstr ""
-
 msgid "No items found"
 msgstr ""
 
@@ -615,6 +600,9 @@ msgid "Password reset request sent"
 msgstr ""
 
 msgid "Permanently delete"
+msgstr ""
+
+msgid "Permissions"
 msgstr ""
 
 msgid "Person Title"
@@ -1207,10 +1195,13 @@ msgstr ""
 msgid "Uri is not valid"
 msgstr ""
 
-msgid "edit"
+msgid "Canonical"
 msgstr ""
 
 msgid "Menu"
+msgstr ""
+
+msgid "View"
 msgstr ""
 
 msgid "Search existing tags"
@@ -1249,13 +1240,25 @@ msgstr ""
 msgid "Error while creating new object."
 msgstr ""
 
+msgid "You can modify the permissions"
+msgstr ""
+
+msgid "You cannot modify the permissions"
+msgstr ""
+
+msgid "Your roles"
+msgstr ""
+
+msgid "Inherited"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
 msgid "Inherited from"
 msgstr ""
 
 msgid "Show"
-msgstr ""
-
-msgid "Hide"
 msgstr ""
 
 msgid "Error on deleting property"
@@ -1286,6 +1289,14 @@ msgstr ""
 #.  * Handle Locations and reverse geocoding from addresses
 #.
 msgid "GET"
+msgstr ""
+
+#. *
+#.  * <location-view> component used for ModulesPage -> View
+#.  *
+#.  * Handle Locations and reverse geocoding from addresses
+#.
+msgid "edit"
 msgstr ""
 
 #. *

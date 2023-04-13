@@ -37,6 +37,8 @@ export default {
         ObjectProperties: () => import(/* webpackChunkName: "string-list" */'app/components/object-property/object-properties'),
         ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */'app/components/object-property/object-property-add'),
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
+        Permission:() => import(/* webpackChunkName: "permission" */'app/components/permission/permission'),
+        Permissions:() => import(/* webpackChunkName: "permissions" */'app/components/permissions/permissions'),
     },
 
     props: {

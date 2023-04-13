@@ -1,3 +1,67 @@
+<template>
+    <div class="tree-view-node" :class="{'is-root': isRoot}">
+        <div v-if="isLoading && !parent" class="is-loading-spinner"></div>
+        <div v-if="parent" class="node-element py-05" :data-status="node.attributes.status">
+            <label class="node-label" :class="{'icon-folder': !relationName, 'has-text-gray-550 disabled': object && node.id == object.id}" v-on="{ click: relationName ? () => {} : toggle }">
+                <input v-if="relationName"
+                    :type="multipleChoice ? 'checkbox' : 'radio'"
+                    :name="'relations[' + relationName + '][replaceRelated][]'"
+                    :value="value"
+                    :checked="isParent"
+                    :disabled="isDisabled"
+                    @change="toggleFolderRelation" />
+                {{ node.attributes.title }}
+            </label>
+            <span v-if="hasPermissions" v-title="node.meta.perms.roles.join(', ')">
+                <Icon icon="carbon:locked" v-if="isLocked"></Icon>
+                <Icon icon="carbon:unlocked" v-if="!isLocked"></Icon>
+                <Icon icon="carbon:tree-view" v-if="node.meta.perms.inherited"></Icon>
+            </span>
+            <button v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id)"
+                :class="{'is-loading-spinner': isLoading, 'icon-down-open': !isLoading && isOpen, 'icon-right-open': !isLoading && !isOpen}"
+                @click="toggle">
+            </button>
+            <a :href="url" v-if="hasPermissions && isLocked">{{ msgView }}</a>
+            <a :href="url" v-else>{{ msgEdit }}</a>
+            <div class="tree-params">
+                <div v-if="relationName && isParent" class="tree-param">
+                    <input :id="'tree-menu-' + node.id"
+                        type="checkbox"
+                        :checked="isMenu"
+                        @change="toggleFolderRelationMenu" />
+                    <label :for="'tree-menu-' + node.id">
+                        {{ msgMenu }}
+                    </label>
+                </div>
+                <div v-if="relationName && isParent && multipleChoice" class="tree-param">
+                    <input :id="'tree-canonical-' + node.id"
+                        name="_changedCanonical"
+                        type="radio"
+                        :checked="isCanonical"
+                        @change="toggleFolderRelationCanonical" />
+                    <label :for="'tree-canonical-' + node.id">
+                        {{ msgCanonical }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="node-children" v-show="isOpen || !parent">
+            <tree-view v-for="(child, index) in node.children"
+                :store="store"
+                :parents="parents"
+                :parent="node"
+                :key="index"
+                :node="child"
+                :object="object"
+                :relation-name="relationName"
+                :relation-label="relationLabel"
+                :multiple-choice="multipleChoice"
+                :user-roles="userRoles">
+            </tree-view>
+        </div>
+    </div>
+</template>
+<script>
 /**
  * Templates that uses this component (directly or indirectly):
  *  Template/Elements/trees.twig
@@ -13,7 +77,6 @@
  * @property {boolean} multipleChoice Should handle multiple relations.
  * @property {Array} parents The list of current item parents.
  */
-
 import { t } from 'ttag';
 
 const API_URL = new URL(BEDITA.base).pathname;
@@ -27,101 +90,15 @@ const API_OPTIONS = {
 export default {
     name: 'tree-view',
 
-    template: `
-        <div
-            class="tree-view-node"
-            :class="{
-                'is-root': isRoot,
-            }">
-            <div v-if="isLoading && !parent" class="is-loading-spinner"></div>
-            <div
-                v-if="parent"
-                class="node-element py-05"
-                :data-status="node.attributes.status"
-            >
-                <label
-                    class="node-label"
-                    :class="{
-                        'icon-folder': !relationName,
-                        'has-text-gray-550 disabled': object && node.id == object.id,
-                    }"
-                    v-on="{ click: relationName ? () => {} : toggle }"
-                >
-                    <input
-                        v-if="relationName"
-                        :type="multipleChoice ? 'checkbox' : 'radio'"
-                        :name="'relations[' + relationName + '][replaceRelated][]'"
-                        :value="value"
-                        :checked="isParent"
-                        @change="toggleFolderRelation"
-                    />
-                    <: node.attributes.title :>
-                </label>
-                <button
-                    v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id)"
-                    :class="{
-                        'is-loading-spinner': isLoading,
-                        'icon-down-open': !isLoading && isOpen,
-                        'icon-right-open': !isLoading && !isOpen,
-                    }"
-                    @click="toggle"
-                ></button>
-                <a :href="url">${t`edit`}</a>
-                <div class="tree-params">
-                    <div
-                        v-if="relationName && isParent"
-                        class="tree-param"
-                    >
-                        <input
-                            :id="'tree-menu-' + node.id"
-                            type="checkbox"
-                            :checked="isMenu"
-                            @change="toggleFolderRelationMenu"
-                        />
-                        <label :for="'tree-menu-' + node.id">
-                            ${t`Menu`}
-                        </label>
-                    </div>
-                    <div
-                        v-if="relationName && isParent && multipleChoice"
-                        class="tree-param"
-                    >
-                        <input
-                            :id="'tree-canonical-' + node.id"
-                            name="_changedCanonical"
-                            type="radio"
-                            :checked="isCanonical"
-                            @change="toggleFolderRelationCanonical"
-                        />
-                        <label :for="'tree-canonical-' + node.id">
-                            ${`Canonical`}
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="node-children" v-show="isOpen || !parent">
-                <tree-view
-                    v-for="(child, index) in node.children"
-                    :store="store"
-                    :parents="parents"
-                    :parent="node"
-                    :key="index"
-                    :node="child"
-                    :object="object"
-                    :relation-name="relationName"
-                    :relation-label="relationLabel"
-                    :multiple-choice="multipleChoice"
-                ></tree-view>
-            </div>
-        </div>
-    `,
-
     props: {
         store: {
             type: Object,
             default: () => ({}),
         },
-        parent: Object,
+        parent: {
+            type: Object,
+            default: () => ({}),
+        },
         parents: {
             type: Array,
             default: () => ([]),
@@ -135,12 +112,25 @@ export default {
                 children: [],
             }),
         },
-        object: Object,
-        relationName: String,
-        relationLabel: String,
+        object: {
+            type: Object,
+            default: () => ({}),
+        },
+        relationName: {
+            type: String,
+            default: '',
+        },
+        relationLabel: {
+            type: String,
+            default: '',
+        },
         multipleChoice: {
             type: Boolean,
             default: true,
+        },
+        userRoles: {
+            type: Array,
+            default: () => ([]),
         },
     },
 
@@ -148,6 +138,10 @@ export default {
         return {
             isOpen: false,
             isLoading: false,
+            msgCanonical: t`Canonical`,
+            msgEdit: t`Edit`,
+            msgMenu: t`Menu`,
+            msgView: t`View`,
         };
     },
 
@@ -174,6 +168,21 @@ export default {
         },
 
         /**
+         * Disabled true when folder has permissions and is locked for user
+         */
+        isDisabled() {
+            if (this.userRoles.includes('admin')) {
+                return false;
+            }
+            const roles = this.node?.meta?.perms?.roles || [];
+            if (roles.length === 0) {
+                return false;
+            }
+
+            return !roles.some(item => this.userRoles.includes(item));
+        },
+
+        /**
          * Check if the child item is part of the menu.
          *
          * @return {boolean}
@@ -197,6 +206,21 @@ export default {
             return !!this.node.meta?.relation?.canonical;
         },
 
+        hasPermissions() {
+            const roles = this.node?.meta?.perms?.roles || [];
+
+            return roles.length > 0
+        },
+
+        isLocked() {
+            if (this.userRoles.includes('admin')) {
+                return false;
+            }
+            const roles = this.node?.meta?.perms?.roles || [];
+
+            return !roles.some(item => this.userRoles.includes(item));
+        },
+
         /**
          * The folders link.
          *
@@ -217,16 +241,16 @@ export default {
          */
         value() {
             let menu = false;
-            if (this.node.meta.relation && ('menu' in this.node.meta.relation)) {
+            if (this.node?.meta?.relation && ('menu' in this.node?.meta?.relation)) {
                 menu = !!this.node.meta.relation.menu;
             }
             let canonical = false;
-            if (this.node.meta.relation && ('canonical' in this.node.meta.relation)) {
-                canonical = !!this.node.meta.relation.canonical;
+            if (this.node?.meta?.relation && ('canonical' in this.node?.meta?.relation)) {
+                canonical = !!this.node?.meta?.relation?.canonical;
             }
             return JSON.stringify({
-                id: this.node.id,
-                type: this.node.type,
+                id: this.node?.id,
+                type: this.node?.type,
                 meta: {
                     relation: {
                         menu,
@@ -451,7 +475,7 @@ export default {
                 document.getElementById('changedParents').value = 1;
             }
 
-            let relation = this.node.meta.relation || {};
+            let relation = this.node?.meta?.relation || {};
             relation.menu = event.target.checked;
         },
 
@@ -466,8 +490,9 @@ export default {
                 document.getElementById('changedParents').value = 1;
             }
 
-            let relation = this.node.meta.relation || {};
+            let relation = this.node?.meta?.relation || {};
             relation.canonical = event.target.checked;
         },
     },
 }
+</script>
