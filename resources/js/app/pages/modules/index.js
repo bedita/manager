@@ -27,7 +27,11 @@ export default {
     props: {
         ids: {
             type: String,
-            default: () => [],
+            default: () => ([]),
+        },
+        showForbidden: {
+            type: Boolean,
+            default: true,
         },
     },
 
@@ -66,7 +70,23 @@ export default {
     computed: {
         allChecked() {
             return JSON.stringify(this.selectedRows.sort()) == JSON.stringify(this.allIds.sort());
-        }
+        },
+
+        msgShowForbidden() {
+            if (this.showForbidden) {
+                return t`Showing forbidden folders`;
+            }
+
+            return t`Hiding forbidden folders`;
+        },
+
+        iconShowForbidden() {
+            if (this.showForbidden) {
+                return 'carbon:view';
+            }
+
+            return 'carbon:view-off';
+        },
     },
 
     watch: {
@@ -87,6 +107,11 @@ export default {
      * component methods
      */
     methods: {
+        toggleShowForbidden() {
+            // TODO: call API to set in session
+            this.showForbidden = !this.showForbidden;
+        },
+
         /**
          * Click con check/uncheck all
          *
