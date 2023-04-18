@@ -27,6 +27,12 @@ class SessionController extends AppController
         $this->viewBuilder()->setClassName('Json');
     }
 
+    /**
+     * Get session variable.
+     *
+     * @param string $name Name of the session variable.
+     * @return void
+     */
     public function view(string $name): void
     {
         $this->request->allowMethod(['GET']);
@@ -39,6 +45,11 @@ class SessionController extends AppController
         $this->viewBuilder()->setOption('serialize', ['value']);
     }
 
+    /**
+     * Save session variable.
+     *
+     * @return void
+     */
     public function save(): void
     {
         $this->request->allowMethod(['POST', 'PATCH']);
@@ -52,6 +63,12 @@ class SessionController extends AppController
         $this->viewBuilder()->setOption('serialize', ['value', 'name']);
     }
 
+    /**
+     * Delete session variable.
+     *
+     * @param string $name Name of the session variable.
+     * @return void
+     */
     public function delete(string $name): void
     {
         $this->request->allowMethod(['DELETE']);
