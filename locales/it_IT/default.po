@@ -1118,6 +1118,12 @@ msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr "Confermi la cancellazione di ${ number } elementi dal cestino?"
 
+msgid "Show forbidden folders"
+msgstr "Mostra folder bloccati"
+
+msgid "Hide forbidden folders"
+msgstr "Nascondi file bloccati"
+
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
