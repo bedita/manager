@@ -97,7 +97,7 @@ export default {
         },
         parent: {
             type: Object,
-            default: () => ({}),
+            default: null,
         },
         parents: {
             type: Array,
@@ -114,7 +114,7 @@ export default {
         },
         object: {
             type: Object,
-            default: () => ({}),
+            default: null,
         },
         relationName: {
             type: String,
