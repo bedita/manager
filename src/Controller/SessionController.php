@@ -23,6 +23,7 @@ class SessionController extends AppController
     {
         parent::initialize();
 
+        $this->Security->setConfig('unlockedActions', ['save', 'delete']);
         $this->viewBuilder()->setClassName('Json');
     }
 
