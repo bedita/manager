@@ -48,6 +48,7 @@ export default {
             bulkValue: null,
             bulkAction: null,
             selectedIds: null,
+            internalShowForbidden: true,
             /**
              * Selected folder for bulk copy or move.
              * Used to enable/disable confirmation button.
@@ -60,6 +61,8 @@ export default {
      * @inheritDoc
      */
     created() {
+        this.internalShowForbidden = this.showForbidden;
+
         try {
             this.allIds = JSON.parse(this.ids);
         } catch (error) {
@@ -73,7 +76,7 @@ export default {
         },
 
         msgShowForbidden() {
-            if (this.showForbidden) {
+            if (this.internalShowForbidden) {
                 return t`Showing forbidden folders`;
             }
 
@@ -81,7 +84,7 @@ export default {
         },
 
         iconShowForbidden() {
-            if (this.showForbidden) {
+            if (this.internalShowForbidden) {
                 return 'carbon:view';
             }
 
@@ -108,8 +111,20 @@ export default {
      */
     methods: {
         toggleShowForbidden() {
-            // TODO: call API to set in session
-            this.showForbidden = !this.showForbidden;
+            this.internalShowForbidden = !this.internalShowForbidden;
+            const options = {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                    'X-CSRF-Token': BEDITA.csrfToken,
+                },
+                body: JSON.stringify({
+                    name: 'showForbidden',
+                    value: this.internalShowForbidden,
+                }),
+            };
+            fetch(`${new URL(BEDITA.base).pathname}session`, options);
         },
 
         /**

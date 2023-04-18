@@ -430,4 +430,21 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Lock', 'action' => 'remove'],
         ['_name' => 'lock:remove']
     );
+
+    // Session
+    $routes->get(
+        '/session/{name}',
+        ['controller' => 'Session', 'action' => 'view'],
+        'session:view'
+    )->setPass(['name']);
+    $routes->connect(
+        '/session',
+        ['controller' => 'Session', 'action' => 'save'],
+        ['_name' => 'session:save']
+    )->setMethods(['POST', 'PATCH']);
+    $routes->delete(
+        '/session/{name}',
+        ['controller' => 'Session', 'action' => 'delete'],
+        'session:delete'
+    )->setPass(['name']);
 });
