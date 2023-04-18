@@ -13,7 +13,6 @@
 namespace App\Controller;
 
 use Cake\Http\Exception\NotFoundException;
-use Cake\Http\Response;
 
 class SessionController extends AppController
 {

@@ -122,7 +122,6 @@ class SessionControllerTest extends \Cake\TestSuite\TestCase
      */
     public function testDelete(): void
     {
-
         $session = new Session();
         $session->write('test', 'tost');
         $controller = new SessionController(
