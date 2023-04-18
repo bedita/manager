@@ -17,7 +17,9 @@ use Cake\Http\Exception\NotFoundException;
 class SessionController extends AppController
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @codeCoverageIgnore
      */
     public function initialize(): void
     {
