@@ -29,10 +29,6 @@ export default {
             type: String,
             default: () => ([]),
         },
-        showForbidden: {
-            type: Boolean,
-            default: true,
-        },
     },
 
     /**
@@ -48,7 +44,7 @@ export default {
             bulkValue: null,
             bulkAction: null,
             selectedIds: null,
-            internalShowForbidden: true,
+            showForbidden: null,
             /**
              * Selected folder for bulk copy or move.
              * Used to enable/disable confirmation button.
@@ -60,8 +56,8 @@ export default {
     /**
      * @inheritDoc
      */
-    created() {
-        this.internalShowForbidden = this.showForbidden;
+    async created() {
+        this.showForbidden = (await (await fetch(`${new URL(BEDITA.base).pathname}session/showForbidden`)).json())?.value ?? true;
 
         try {
             this.allIds = JSON.parse(this.ids);
@@ -76,15 +72,15 @@ export default {
         },
 
         msgShowForbidden() {
-            if (this.internalShowForbidden) {
-                return t`Showing forbidden folders`;
+            if (this.showForbidden) {
+                return t`Show forbidden folders`;
             }
 
-            return t`Hiding forbidden folders`;
+            return t`Hide forbidden folders`;
         },
 
         iconShowForbidden() {
-            if (this.internalShowForbidden) {
+            if (this.showForbidden) {
                 return 'carbon:view';
             }
 
@@ -111,17 +107,18 @@ export default {
      */
     methods: {
         toggleShowForbidden() {
-            this.internalShowForbidden = !this.internalShowForbidden;
+            this.showForbidden = !this.showForbidden;
             const options = {
                 method: 'POST',
                 credentials: 'same-origin',
                 headers: {
                     'accept': 'application/json',
+                    'content-type': 'application/json',
                     'X-CSRF-Token': BEDITA.csrfToken,
                 },
                 body: JSON.stringify({
                     name: 'showForbidden',
-                    value: this.internalShowForbidden,
+                    value: this.showForbidden,
                 }),
             };
             fetch(`${new URL(BEDITA.base).pathname}session`, options);

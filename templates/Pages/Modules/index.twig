@@ -6,7 +6,7 @@
 {{ element('Modules/index_header', { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': treeView}) }}
 
 {% set ids = Array.extract(objects, '{*}.id') %}
-<modules-index inline-template ids='{{ ids|json_encode }}' :show-forbidden="{{ _view.getRequest().getSession().read('showForbidden', true)|json_encode }}">
+<modules-index inline-template ids='{{ ids|json_encode }}'>
     <div class="module-index">
         {% if treeView %}
             {% set hasPermissions = 'Permissions' in schema.associations %}

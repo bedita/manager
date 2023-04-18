@@ -1,5 +1,5 @@
 <template>
-    <div class="tree-view-node" :class="{'is-root': isRoot}" v-show="showLeaf">
+    <div class="tree-view-node" :class="{'is-root': isRoot}" v-show="showNode">
         <div v-if="isLoading && !parent" class="is-loading-spinner"></div>
         <div v-if="parent" class="node-element py-05" :data-status="node.attributes.status">
             <label class="node-label" :class="{'icon-folder': !relationName, 'has-text-gray-550 disabled': object && node.id == object.id}" v-on="{ click: relationName ? () => {} : toggle }">
@@ -17,7 +17,7 @@
                 <Icon icon="carbon:unlocked" v-if="!isLocked"></Icon>
                 <Icon icon="carbon:tree-view" v-if="node.meta.perms.inherited"></Icon>
             </span>
-            <button v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id) && showLeaf"
+            <button v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id) && showNode"
                 :class="{'is-loading-spinner': isLoading, 'icon-down-open': !isLoading && isOpen, 'icon-right-open': !isLoading && !isOpen}"
                 @click="toggle">
             </button>
@@ -259,7 +259,7 @@ export default {
             });
         },
 
-        showLeaf() {
+        showNode() {
             if (!this.hasPermissions) {
                 return true;
             }
