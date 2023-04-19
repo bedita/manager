@@ -71,20 +71,8 @@ export default {
             return JSON.stringify(this.selectedRows.sort()) == JSON.stringify(this.allIds.sort());
         },
 
-        msgShowForbidden() {
-            if (this.showForbidden) {
-                return t`Show forbidden folders`;
-            }
-
-            return t`Hide forbidden folders`;
-        },
-
-        iconShowForbidden() {
-            if (this.showForbidden) {
-                return 'carbon:view';
-            }
-
-            return 'carbon:view-off';
+        msgForbidden() {
+            return this.showForbidden ? t`Show forbidden folders` : t`Hide forbidden folders`;
         },
     },
 
