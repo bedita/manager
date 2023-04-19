@@ -10,7 +10,7 @@
     <div class="module-index">
         {% if treeView %}
             {% set hasPermissions = 'Permissions' in schema.associations %}
-            {% if hasPermissions %}
+            {% if hasPermissions and not ('admin' in user.roles) %}
                 <button @click.prevent="toggleShowForbidden">
                     <Icon :icon="iconShowForbidden"></Icon><span><: msgShowForbidden :></span>
                 </button>
