@@ -57,7 +57,7 @@ export default {
      * @inheritDoc
      */
     async created() {
-        this.showForbidden = (await (await fetch(`${new URL(BEDITA.base).pathname}session/showForbidden`)).json())?.value ?? true;
+        this.showForbidden = await this.getShowForbidden();
 
         try {
             this.allIds = JSON.parse(this.ids);
@@ -122,6 +122,22 @@ export default {
                 }),
             };
             fetch(`${new URL(BEDITA.base).pathname}session`, options);
+        },
+
+        async getShowForbidden() {
+            try {
+                const response = await fetch(`${new URL(BEDITA.base).pathname}session/showForbidden`);
+                // Default to true
+                if (!response.ok) {
+                    return true;
+                }
+
+                return (await response.json())?.value;
+            } catch (e) {
+                console.error('Error retrieving session variable', e);
+
+                return true;
+            }
         },
 
         /**
