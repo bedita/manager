@@ -268,7 +268,7 @@ export default {
                 return true;
             }
 
-            if (this.isLocked && this.node.meta?.perms?.descendant_have_perms) {
+            if (this.isLocked && this.node.meta?.perms?.descendant_perms_granted) {
                 return true;
             }
 
