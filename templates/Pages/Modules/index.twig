@@ -12,7 +12,8 @@
             {% set hasPermissions = 'Permissions' in schema.associations %}
             {% if hasPermissions and not ('admin' in user.roles) %}
                 <button @click.prevent="toggleShowForbidden">
-                    <Icon :icon="iconShowForbidden"></Icon><span><: msgShowForbidden :></span>
+                    <Icon :icon="iconShowForbidden"></Icon>
+                    <span class="ml-05"><: msgShowForbidden :></span>
                 </button>
             {% endif %}
             <tree-view :user-roles="{{ user.roles|json_encode }}" :has-permissions="{{ hasPermissions|json_encode }}" :show-forbidden="showForbidden"></tree-view>
