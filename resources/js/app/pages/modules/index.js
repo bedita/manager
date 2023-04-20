@@ -17,6 +17,7 @@ export default {
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         FilterBoxView: () => import(/* webpackChunkName: "tree-view" */'app/components/filter-box'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
+        PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
     },
 
     /**
@@ -44,7 +45,6 @@ export default {
             bulkValue: null,
             bulkAction: null,
             selectedIds: null,
-            showForbidden: null,
             /**
              * Selected folder for bulk copy or move.
              * Used to enable/disable confirmation button.
@@ -57,8 +57,6 @@ export default {
      * @inheritDoc
      */
     async created() {
-        this.showForbidden = await this.getShowForbidden();
-
         try {
             this.allIds = JSON.parse(this.ids);
         } catch (error) {
@@ -69,10 +67,6 @@ export default {
     computed: {
         allChecked() {
             return JSON.stringify(this.selectedRows.sort()) == JSON.stringify(this.allIds.sort());
-        },
-
-        msgForbidden() {
-            return this.showForbidden ? t`Show all folders` : t`Hide forbidden folders`;
         },
     },
 
@@ -94,40 +88,6 @@ export default {
      * component methods
      */
     methods: {
-        toggleShowForbidden() {
-            this.showForbidden = !this.showForbidden;
-            const options = {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: {
-                    'accept': 'application/json',
-                    'content-type': 'application/json',
-                    'X-CSRF-Token': BEDITA.csrfToken,
-                },
-                body: JSON.stringify({
-                    name: 'showForbidden',
-                    value: this.showForbidden,
-                }),
-            };
-            fetch(`${new URL(BEDITA.base).pathname}session`, options);
-        },
-
-        async getShowForbidden() {
-            try {
-                const response = await fetch(`${new URL(BEDITA.base).pathname}session/showForbidden`);
-                // Default to true
-                if (!response.ok) {
-                    return true;
-                }
-
-                return (await response.json())?.value;
-            } catch (e) {
-                console.error('Error retrieving session variable', e);
-
-                return true;
-            }
-        },
-
         /**
          * Click con check/uncheck all
          *
