@@ -143,20 +143,6 @@
     </div>
     {% endif %}
 
-    {# CHILDREN position #}
-    {% if positionInUse %}
-        <div class="children-position container-grid p-05">
-            <dl>
-                <dt>{{ __('Move to position') }}:</dt>
-                <dd>
-                    <input class="input-narrow" type="number" min="1" step="1"
-                        v-model="positions[related.id]" @change="onInputPosition(related)" @keyup="onInputPosition(related)"/>
-                </dd>
-            </dl>
-        </div>
-    {% endif %} #}
-
-
     {# BUTTONS #}
     {% if Perms.canSave() %}
     <footer class="is-flex space-between mt-05 p-05">
