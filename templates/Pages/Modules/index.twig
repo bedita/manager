@@ -9,7 +9,9 @@
 <modules-index inline-template ids='{{ ids|json_encode }}'>
     <div class="module-index">
         {% if treeView %}
-            <tree-view :user-roles="{{ user.roles|json_encode}}"></tree-view>
+            {% set hasPermissions = 'Permissions' in schema.associations %}
+            <permission-toggle :user-roles="{{ user.roles|json_encode }}" :has-permissions="{{ hasPermissions|json_encode }}"></permission-toggle>
+            <tree-view :user-roles="{{ user.roles|json_encode }}" :has-permissions="{{ hasPermissions|json_encode }}"></tree-view>
         {% else %}
             <div class="table-container">
                 <div class="list-objects">

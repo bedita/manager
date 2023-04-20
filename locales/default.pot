@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2023-04-12 07:11:02 \n"
+"POT-Creation-Date: 2023-04-18 12:29:42 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1109,6 +1109,12 @@ msgstr ""
 
 #, javascript-format
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
+msgstr ""
+
+msgid "Show all folders"
+msgstr ""
+
+msgid "Hide forbidden folders"
 msgstr ""
 
 #, javascript-format

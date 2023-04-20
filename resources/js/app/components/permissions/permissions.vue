@@ -35,7 +35,7 @@ export default {
     props: {
         objectPerms: {
             type: Object,
-            default: () => ([]),
+            default: () => ({}),
         },
         userRoles: {
             type: Array,

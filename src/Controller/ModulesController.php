@@ -169,6 +169,7 @@ class ModulesController extends AppController
         $this->History->load($id, $object);
         $this->set(compact('object', 'included', 'schema', 'streams'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
+        $this->set('foldersSchema', $this->Schema->getSchema('folders'));
 
         $computedRelations = array_reduce(
             array_keys($object['relationships']),

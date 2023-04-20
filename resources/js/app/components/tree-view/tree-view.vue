@@ -1,5 +1,5 @@
 <template>
-    <div class="tree-view-node" :class="{'is-root': isRoot}">
+    <div class="tree-view-node" :class="{'is-root': isRoot}" v-show="showNode">
         <div v-if="isLoading && !parent" class="is-loading-spinner"></div>
         <div v-if="parent" class="node-element py-05" :data-status="node.attributes.status">
             <label class="node-label" :class="{'icon-folder': !relationName, 'has-text-gray-550 disabled': object && node.id == object.id}" v-on="{ click: relationName ? () => {} : toggle }">
@@ -8,20 +8,20 @@
                     :name="'relations[' + relationName + '][replaceRelated][]'"
                     :value="value"
                     :checked="isParent"
-                    :disabled="isDisabled"
+                    :disabled="isLocked"
                     @change="toggleFolderRelation" />
                 {{ node.attributes.title }}
             </label>
-            <span v-if="hasPermissions" v-title="node.meta.perms.roles.join(', ')">
+            <span v-if="hasPermissionRoles" v-title="node.meta.perms.roles.join(', ')">
                 <Icon icon="carbon:locked" v-if="isLocked"></Icon>
                 <Icon icon="carbon:unlocked" v-if="!isLocked"></Icon>
                 <Icon icon="carbon:tree-view" v-if="node.meta.perms.inherited"></Icon>
             </span>
-            <button v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id)"
+            <button v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id) && showNode"
                 :class="{'is-loading-spinner': isLoading, 'icon-down-open': !isLoading && isOpen, 'icon-right-open': !isLoading && !isOpen}"
                 @click="toggle">
             </button>
-            <a :href="url" v-if="hasPermissions && isLocked">{{ msgView }}</a>
+            <a :href="url" v-if="hasPermissionRoles && isLocked">{{ msgView }}</a>
             <a :href="url" v-else>{{ msgEdit }}</a>
             <div class="tree-params">
                 <div v-if="relationName && isParent" class="tree-param">
@@ -56,7 +56,9 @@
                 :relation-name="relationName"
                 :relation-label="relationLabel"
                 :multiple-choice="multipleChoice"
-                :user-roles="userRoles">
+                :user-roles="userRoles"
+                :has-permissions="hasPermissions"
+                :show-forbidden="showForbidden">
             </tree-view>
         </div>
     </div>
@@ -77,6 +79,7 @@
  * @property {boolean} multipleChoice Should handle multiple relations.
  * @property {Array} parents The list of current item parents.
  */
+import { PermissionEvents } from '../permission-toggle/permission-toggle.vue';
 import { t } from 'ttag';
 
 const API_URL = new URL(BEDITA.base).pathname;
@@ -132,6 +135,10 @@ export default {
             type: Array,
             default: () => ([]),
         },
+        hasPermissions: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
@@ -142,7 +149,18 @@ export default {
             msgEdit: t`Edit`,
             msgMenu: t`Menu`,
             msgView: t`View`,
+            showForbidden: true,
         };
+    },
+
+    async mounted() {
+        if (!this.node.id) {
+            this.isLoading = true;
+            await this.loadRoots();
+            this.isLoading = false;
+        }
+        this.isOpen = !!this.node.children;
+        PermissionEvents.$on('toggle-forbidden', (value) => this.showForbidden = value);
     },
 
     computed: {
@@ -165,21 +183,6 @@ export default {
          */
         isParent() {
             return !!this.parents.find(({ id }) => id == this.node.id);
-        },
-
-        /**
-         * Disabled true when folder has permissions and is locked for user
-         */
-        isDisabled() {
-            if (this.userRoles.includes('admin')) {
-                return false;
-            }
-            const roles = this.node?.meta?.perms?.roles || [];
-            if (roles.length === 0) {
-                return false;
-            }
-
-            return !roles.some(item => this.userRoles.includes(item));
         },
 
         /**
@@ -206,7 +209,7 @@ export default {
             return !!this.node.meta?.relation?.canonical;
         },
 
-        hasPermissions() {
+        hasPermissionRoles() {
             const roles = this.node?.meta?.perms?.roles || [];
 
             return roles.length > 0
@@ -216,7 +219,11 @@ export default {
             if (this.userRoles.includes('admin')) {
                 return false;
             }
+
             const roles = this.node?.meta?.perms?.roles || [];
+            if (roles.length === 0) {
+                return false;
+            }
 
             return !roles.some(item => this.userRoles.includes(item));
         },
@@ -259,15 +266,22 @@ export default {
                 },
             });
         },
-    },
 
-    async mounted() {
-        if (!this.node.id) {
-            this.isLoading = true;
-            await this.loadRoots();
-            this.isLoading = false;
-        }
-        this.isOpen = !!this.node.children;
+        showNode() {
+            if (!this.hasPermissions) {
+                return true;
+            }
+
+            if (!this.isLocked) {
+                return true;
+            }
+
+            if (this.isLocked && this.node.meta?.perms?.descendant_perms_granted) {
+                return true;
+            }
+
+            return this.showForbidden;
+        },
     },
 
     methods: {
