@@ -91,6 +91,28 @@ class PermissionsTraitTest extends BaseControllerTest
     }
 
     /**
+     * Test `objectPermissionsIds` method
+     *
+     * @return void
+     * @covers ::objectPermissionsIds()
+     */
+    public function testObjectPermissionsIds(): void
+    {
+        $objectPermissions = [
+            'data' => [
+                ['id' => 11, 'attributes' => ['object_id' => 111, 'role_id' => 1111]],
+                ['id' => 12, 'attributes' => ['object_id' => 112, 'role_id' => 1112]],
+                ['id' => 13, 'attributes' => ['object_id' => 113, 'role_id' => 1113]],
+                ['id' => 14, 'attributes' => ['object_id' => 114, 'role_id' => 1114]],
+            ],
+        ];
+        $roles = [1111, 1112, 1113, 1114];
+        $expected = [11, 12, 13, 14];
+        $actual = $this->objectPermissionsIds($objectPermissions, $roles);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
      * Test `setupPermissionsRoles` method
      *
      * @return void

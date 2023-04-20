@@ -38,16 +38,13 @@ trait PermissionsTrait
             return false;
         }
         $query = ['filter' => ['object_id' => $objectId], 'page_size' => 100];
-        $oldPermissions = (array)ApiClientProvider::getApiClient()->getObjects('object_permissions', $query);
-        $objectPermissions = (array)Hash::combine($oldPermissions, 'data.{n}.attributes.role_id', 'data.{n}.id');
-        $oldPermissions = (array)Hash::extract($oldPermissions, 'data.{n}.attributes.role_id');
+        $objectPermissions = (array)ApiClientProvider::getApiClient()->getObjects('object_permissions', $query);
+        $oldPermissions = (array)Hash::extract($objectPermissions, 'data.{n}.attributes.role_id');
         $oldPermissions = $this->setupPermissionsRoles($oldPermissions);
         $newPermissions = $this->setupPermissionsRoles($newPermissions);
         $toRemove = array_keys(array_diff($oldPermissions, $newPermissions));
         $toAdd = array_keys(array_diff($newPermissions, $oldPermissions));
-        $toRemove = array_map(function ($roleId) use ($objectPermissions) {
-            return $objectPermissions[$roleId];
-        }, $toRemove);
+        $toRemove = $this->objectPermissionsIds($toRemove, $objectPermissions);
         $this->removePermissions($toRemove);
         $this->addPermissions($objectId, $toAdd);
 
@@ -82,6 +79,22 @@ trait PermissionsTrait
         foreach ($objectPermissionIds as $id) {
             ApiClientProvider::getApiClient()->deleteObject($id, 'object_permissions');
         }
+    }
+
+    /**
+     * Object permissions IDs per role IDs.
+     *
+     * @param array $objectPermissions The object permissions
+     * @param array $roleIds The role IDs
+     * @return array
+     */
+    public function objectPermissionsIds(array $objectPermissions, array $roleIds): array
+    {
+        $objectPermissions = (array)Hash::combine($objectPermissions, 'data.{n}.attributes.role_id', 'data.{n}.id');
+
+        return array_map(function ($roleId) use ($objectPermissions) {
+            return $objectPermissions[$roleId];
+        }, $roleIds);
     }
 
     /**
