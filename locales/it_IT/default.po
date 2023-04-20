@@ -1119,10 +1119,10 @@ msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr "Confermi la cancellazione di ${ number } elementi dal cestino?"
 
 msgid "Show all folders"
-msgstr "Mostra cartelle disponibili"
+msgstr "Mostra non disponibili"
 
 msgid "Hide forbidden folders"
-msgstr "Nascondi cartelle disponibili"
+msgstr "Nascondi non disponibili"
 
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
