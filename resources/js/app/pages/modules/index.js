@@ -17,6 +17,7 @@ export default {
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         FilterBoxView: () => import(/* webpackChunkName: "tree-view" */'app/components/filter-box'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
+        PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
     },
 
     /**
@@ -27,7 +28,7 @@ export default {
     props: {
         ids: {
             type: String,
-            default: () => [],
+            default: () => ([]),
         },
     },
 
@@ -55,7 +56,7 @@ export default {
     /**
      * @inheritDoc
      */
-    created() {
+    async created() {
         try {
             this.allIds = JSON.parse(this.ids);
         } catch (error) {
@@ -66,7 +67,7 @@ export default {
     computed: {
         allChecked() {
             return JSON.stringify(this.selectedRows.sort()) == JSON.stringify(this.allIds.sort());
-        }
+        },
     },
 
     watch: {
