@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-05 p-1" v-if="hasPermissions && !userRoles.includes('admin')">
+    <div v-if="hasPermissions && !userRoles.includes('admin')">
         <span class="ml-05 mr-05">{{ msgForbidden }}</span>
         <button class="button button-outlined" @click.prevent="toggleShowForbidden">
             <Icon icon="carbon:view" v-if="showForbidden"></Icon>
