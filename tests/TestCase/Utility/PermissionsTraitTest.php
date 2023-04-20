@@ -69,6 +69,7 @@ class PermissionsTraitTest extends BaseControllerTest
             ->getMock();
         $apiClient->method('save')->willReturn([]);
         ApiClientProvider::setApiClient($apiClient);
+        /** @phpstan-ignore-next-line */
         $this->assertNull($this->addPermissions('999', [1,2,3]));
     }
 
@@ -85,6 +86,7 @@ class PermissionsTraitTest extends BaseControllerTest
             ->getMock();
         $apiClient->method('deleteObject')->willReturn([]);
         ApiClientProvider::setApiClient($apiClient);
+        /** @phpstan-ignore-next-line */
         $this->assertNull($this->removePermissions([1,2,3]));
     }
 
