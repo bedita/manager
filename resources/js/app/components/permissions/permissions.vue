@@ -9,7 +9,7 @@
             <span class="ml-05 has-text-danger">{{ msgYouCannotModify }}. {{ msgYourRoles }}: {{ userRoles.join(',') }}</span>
         </div>
         <label v-for="role in roles" v-if="role.attributes.name != 'admin'">
-            <input type="checkbox" :checked="objectRoles.includes(role.attributes.name)" :disabled="!canModify" />
+            <input type="checkbox" name="permissions[]" :value="role.id" :checked="objectRoles.includes(role.attributes.name)" :disabled="!canModify" />
             {{ role.attributes.name }}
             <permission
                 :inherited="objectPerms?.inherited || false"

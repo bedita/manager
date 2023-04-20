@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -34,6 +35,8 @@ use Psr\Log\LogLevel;
  */
 class ModulesController extends AppController
 {
+    use PermissionsTrait;
+
     /**
      * Object type currently used
      *
@@ -277,6 +280,11 @@ class ModulesController extends AppController
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
             $objectId = (string)Hash::get($response, 'data.id');
+            $this->savePermissions(
+                $objectId,
+                (array)$this->Schema->getSchema($this->objectType),
+                $requestData
+            );
             $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
         } catch (BEditaClientException $error) {
             $this->log($error->getMessage(), LogLevel::ERROR);
