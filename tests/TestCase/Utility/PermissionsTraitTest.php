@@ -46,7 +46,6 @@ class PermissionsTraitTest extends BaseControllerTest
         // test with 'Permissions' in schema.associations
         $schema['associations'] = ['Permissions'];
         // mock api save
-        /** @var \BEdita\SDK\BEditaClient $apiClient */
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
