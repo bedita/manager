@@ -12,6 +12,10 @@
  */
 namespace App\Controller\Admin;
 
+use Cake\Cache\Cache;
+use Cake\Http\Response;
+use Cake\Utility\Hash;
+
 /**
  * Roles Controller
  *
@@ -19,6 +23,8 @@ namespace App\Controller\Admin;
  */
 class RolesController extends AdministrationBaseController
 {
+    public const CACHE_KEY_ROLES = 'roles';
+
     /**
      * @inheritDoc
      */
@@ -41,4 +47,18 @@ class RolesController extends AdministrationBaseController
         'name' => 'string',
         'description' => 'text',
     ];
+
+    /**
+     * Save data
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function save(): ?Response
+    {
+        $response = parent::save();
+        $roles = Hash::combine((array)$this->apiClient->get('/roles'), 'data.{n}.id', 'data.{n}.attributes.name');
+        Cache::write(self::CACHE_KEY_ROLES, $roles);
+
+        return $response;
+    }
 }

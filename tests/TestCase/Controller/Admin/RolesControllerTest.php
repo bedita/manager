@@ -2,16 +2,18 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\RolesController;
+use App\Test\TestCase\Controller\BaseControllerTest;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
-use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\Admin\RolesController} Test Case
  *
  * @coversDefaultClass \App\Controller\Admin\RolesController
  */
-class RolesControllerTest extends TestCase
+class RolesControllerTest extends BaseControllerTest
 {
     public $RlsController;
 
@@ -34,7 +36,7 @@ class RolesControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    public $client;
 
     /**
      * @inheritDoc
@@ -43,7 +45,18 @@ class RolesControllerTest extends TestCase
     {
         parent::setUp();
 
+        $this->loadRoutes();
         $this->init([]);
+        Cache::enable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        Cache::disable();
     }
 
     /**
@@ -94,5 +107,30 @@ class RolesControllerTest extends TestCase
         }
         static::assertEquals('roles', $viewVars['resourceType']);
         static::assertEquals(['name'], $viewVars['properties']);
+    }
+
+    /**
+     * Test save role and check cached val
+     *
+     * @return void
+     */
+    public function testSave(): void
+    {
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'name' => 'dummy',
+            ],
+        ];
+        $this->init($config);
+        Cache::clearAll();
+        $this->RlsController->save();
+        $expected = ApiClientProvider::getApiClient()->get('roles');
+        $expected = (array)Hash::combine($expected, 'data.{n}.id', 'data.{n}.attributes.name');
+        $actual = Cache::read(RolesController::CACHE_KEY_ROLES);
+        static::assertSame($expected, $actual);
     }
 }

@@ -14,7 +14,9 @@ declare(strict_types=1);
  */
 namespace App\Utility;
 
+use App\Controller\Admin\RolesController;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
 use Cake\Utility\Hash;
 
 /**
@@ -25,20 +27,83 @@ trait PermissionsTrait
     /**
      * Save permissions for single object.
      *
-     * @param string $id The object ID
+     * @param string $objectId The object ID
      * @param array $schema The object type schema
-     * @param array $permissions The permissions to save
+     * @param array $newPermissions The permissions to save
      * @return bool
      */
-    public function savePermissions(string $id, array $schema, array $permissions): bool
+    public function savePermissions(string $objectId, array $schema, array $newPermissions): bool
     {
         if (!in_array('Permissions', (array)Hash::get($schema, 'associations'))) {
             return false;
         }
-        foreach ($permissions as $roleId) {
-            ApiClientProvider::getApiClient()->save('permissions', ['object_id' => $id, 'role_id' => $roleId]);
-        }
+        $query = ['filter' => ['object_id' => $objectId], 'page_size' => 100];
+        $oldPermissions = (array)ApiClientProvider::getApiClient()->getObjects('object_permissions', $query);
+        $objectPermissions = (array)Hash::combine($oldPermissions, 'data.{n}.attributes.role_id', 'data.{n}.id');
+        $oldPermissions = (array)Hash::extract($oldPermissions, 'data.{n}.attributes.role_id');
+        $oldPermissions = $this->setupPermissionsRoles($oldPermissions);
+        $newPermissions = $this->setupPermissionsRoles($newPermissions);
+        $toRemove = array_keys(array_diff($oldPermissions, $newPermissions));
+        $toAdd = array_keys(array_diff($newPermissions, $oldPermissions));
+        $toRemove = array_map(function ($roleId) use ($objectPermissions) {
+            return $objectPermissions[$roleId];
+        }, $toRemove);
+        $this->removePermissions($toRemove);
+        $this->addPermissions($objectId, $toAdd);
 
         return true;
+    }
+
+    /**
+     * Add permissions per object by ID
+     *
+     * @param string $objectId The object ID
+     * @param array $roleIds The role IDs
+     * @return void
+     */
+    public function addPermissions(string $objectId, array $roleIds): void
+    {
+        foreach ($roleIds as $roleId) {
+            ApiClientProvider::getApiClient()->save(
+                'object_permissions',
+                ['object_id' => $objectId, 'role_id' => $roleId]
+            );
+        }
+    }
+
+    /**
+     * Remove permissions by object permission IDs
+     *
+     * @param array $objectPermissionIds The object permission IDs
+     * @return void
+     */
+    public function removePermissions(array $objectPermissionIds): void
+    {
+        foreach ($objectPermissionIds as $id) {
+            ApiClientProvider::getApiClient()->deleteObject($id, 'object_permissions');
+        }
+    }
+
+    /**
+     * Setup permission roles
+     *
+     * @param array $permissions The permissions
+     * @return array
+     */
+    public function setupPermissionsRoles(array $permissions): array
+    {
+        $roles = Cache::remember(RolesController::CACHE_KEY_ROLES, function () {
+            return Hash::combine(
+                (array)ApiClientProvider::getApiClient()->get('/roles'),
+                'data.{n}.id',
+                'data.{n}.attributes.name'
+            );
+        });
+        $result = [];
+        foreach ($permissions as $roleId) {
+            $result[$roleId] = (string)Hash::get($roles, $roleId);
+        }
+
+        return $result;
     }
 }

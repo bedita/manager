@@ -284,7 +284,7 @@ class ModulesController extends AppController
             $this->savePermissions(
                 $objectId,
                 (array)$this->Schema->getSchema($this->objectType),
-                $requestData
+                (array)Hash::get($requestData, 'permissions')
             );
             $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
         } catch (BEditaClientException $error) {

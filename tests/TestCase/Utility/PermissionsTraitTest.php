@@ -39,7 +39,7 @@ class PermissionsTraitTest extends BaseControllerTest
         // test with schema.associations empty
         $folder = ['id' => '999'];
         $schema = ['associations' => []];
-        $permissions = [['object_id' => $folder['id'], 'role_id' => 2]];
+        $permissions = [1];
         $actual = $this->savePermissions($folder['id'], $schema, $permissions);
         static::assertFalse($actual);
 
@@ -50,8 +50,54 @@ class PermissionsTraitTest extends BaseControllerTest
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
         $apiClient->method('save')->willReturn([]);
+        $apiClient->method('deleteObject')->willReturn([]);
         ApiClientProvider::setApiClient($apiClient);
         $actual = $this->savePermissions($folder['id'], $schema, $permissions);
         static::assertTrue($actual);
+    }
+
+    /**
+     * Test `addPermissions` method
+     *
+     * @return void
+     * @covers ::addPermissions()
+     */
+    public function testAddPermissions(): void
+    {
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('save')->willReturn([]);
+        ApiClientProvider::setApiClient($apiClient);
+        $this->assertNull($this->addPermissions('999', [1,2,3]));
+    }
+
+    /**
+     * Test `removePermissions` method
+     *
+     * @return void
+     * @covers ::removePermissions()
+     */
+    public function testRemovePermissions(): void
+    {
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('deleteObject')->willReturn([]);
+        ApiClientProvider::setApiClient($apiClient);
+        $this->assertNull($this->removePermissions([1,2,3]));
+    }
+
+    /**
+     * Test `setupPermissionsRoles` method
+     *
+     * @return void
+     * @covers ::setupPermissionsRoles()
+     */
+    public function testSetupPermissionsRoles(): void
+    {
+        $actual = $this->setupPermissionsRoles([1,2,3]);
+        $expected = [1 => '', 2 => '', 3 => ''];
+        static::assertSame($expected, $actual);
     }
 }
