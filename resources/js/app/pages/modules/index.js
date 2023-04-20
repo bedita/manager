@@ -72,7 +72,7 @@ export default {
         },
 
         msgForbidden() {
-            return this.showForbidden ? t`Show forbidden folders` : t`Hide forbidden folders`;
+            return this.showForbidden ? t`Show all folders` : t`Hide forbidden folders`;
         },
     },
 

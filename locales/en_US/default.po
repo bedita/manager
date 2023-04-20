@@ -1114,7 +1114,7 @@ msgstr ""
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
-msgid "Show forbidden folders"
+msgid "Show all folders"
 msgstr ""
 
 msgid "Hide forbidden folders"
