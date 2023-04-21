@@ -128,9 +128,37 @@ class RolesControllerTest extends BaseControllerTest
         $this->init($config);
         Cache::clearAll();
         $this->RlsController->save();
-        $expected = ApiClientProvider::getApiClient()->get('roles');
-        $expected = (array)Hash::combine($expected, 'data.{n}.id', 'data.{n}.attributes.name');
-        $actual = Cache::read(RolesController::CACHE_KEY_ROLES);
+        static::assertEmpty(Cache::read(RolesController::CACHE_KEY_ROLES));
+    }
+
+    /**
+     * Test `remove` method
+     *
+     * @return void
+     */
+    public function testRemove(): void
+    {
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'name' => 'dummy',
+            ],
+        ];
+        $this->init($config);
+        $response = ApiClientProvider::getApiClient()->get('roles', ['filter' => ['name' => 'dummy']]);
+        $this->RlsController->remove($response['data'][0]['id']);
+        $roles = ApiClientProvider::getApiClient()->get('roles');
+        $expected = false;
+        $actual = false;
+        foreach ($roles['data'] as $role) {
+            if ($role['attributes']['name'] === 'dummy') {
+                $actual = true;
+            }
+        }
         static::assertSame($expected, $actual);
+        static::assertEmpty(Cache::read(RolesController::CACHE_KEY_ROLES));
     }
 }

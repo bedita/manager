@@ -48,14 +48,22 @@ class RolesController extends AdministrationBaseController
     ];
 
     /**
-     * Save data
-     *
-     * @return \Cake\Http\Response|null
+     * @inheritDoc
      */
     public function save(): ?Response
     {
         Cache::delete(self::CACHE_KEY_ROLES);
 
         return parent::save();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function remove(string $id): ?Response
+    {
+        Cache::delete(self::CACHE_KEY_ROLES);
+
+        return parent::remove($id);
     }
 }
