@@ -54,9 +54,8 @@ class RolesController extends AdministrationBaseController
      */
     public function save(): ?Response
     {
-        $response = parent::save();
         Cache::delete(self::CACHE_KEY_ROLES);
 
-        return $response;
+        return parent::save();
     }
 }
