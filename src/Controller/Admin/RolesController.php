@@ -56,8 +56,7 @@ class RolesController extends AdministrationBaseController
     public function save(): ?Response
     {
         $response = parent::save();
-        $roles = Hash::combine((array)$this->apiClient->get('/roles'), 'data.{n}.id', 'data.{n}.attributes.name');
-        Cache::write(self::CACHE_KEY_ROLES, $roles);
+        Cache::delete(self::CACHE_KEY_ROLES);
 
         return $response;
     }
