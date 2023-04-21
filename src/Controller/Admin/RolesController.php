@@ -14,7 +14,6 @@ namespace App\Controller\Admin;
 
 use Cake\Cache\Cache;
 use Cake\Http\Response;
-use Cake\Utility\Hash;
 
 /**
  * Roles Controller
