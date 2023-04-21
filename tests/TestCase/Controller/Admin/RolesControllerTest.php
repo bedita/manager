@@ -6,7 +6,6 @@ use App\Test\TestCase\Controller\BaseControllerTest;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
-use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\Admin\RolesController} Test Case
