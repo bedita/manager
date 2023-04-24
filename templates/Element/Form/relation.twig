@@ -14,7 +14,7 @@
         {# Lookup in properties configuration if a custom element for this relation is set
         in `Properties.{moduleName}.relations._element.{relationName}`.
         Then load custom element or use default relation view #}
-        {% set customElement = Layout.customElement(relationName) %}
+        {% set customElement = Element.custom(relationName) %}
         {% if customElement %}
             {{ element(customElement, {
                 'relationName': relationName,

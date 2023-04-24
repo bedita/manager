@@ -267,65 +267,6 @@ class LayoutHelperTest extends TestCase
     }
 
     /**
-     * Data provider for `testCustomElement` test case.
-     *
-     * @return array
-     */
-    public function customElementProvider(): array
-    {
-        return [
-            'empty' => [
-                '',
-                'test',
-            ],
-            'empty relation' => [
-                'empty',
-                'my_relation',
-                'relation',
-                [
-                    'relations' => [
-                        '_element' => [
-                            'my_relation' => 'empty',
-                        ],
-                    ],
-                ],
-            ],
-            'my_element' => [
-                'MyPlugin.my_element',
-                'my_group',
-                'group',
-                [
-                    'view' => [
-                        'my_group' => ['_element' => 'MyPlugin.my_element'],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Test `customElement` method
-     *
-     * @param string $expected The expected element
-     * @param string $item The item
-     * @param string $type The item type
-     * @param array $conf Configuration to use
-     * @return void
-     * @dataProvider customElementProvider()
-     * @covers ::customElement()
-     */
-    public function testCustomElement(string $expected, string $item, string $type = 'relation', array $conf = []): void
-    {
-        Configure::write('Properties.documents', $conf);
-        $view = new View();
-        $view->set('currentModule', ['name' => 'documents']);
-        $layout = new LayoutHelper($view);
-
-        $result = $layout->customElement($item, $type);
-        static::assertSame($expected, $result);
-    }
-
-    /**
      * Test `tr` method
      *
      * @return void
