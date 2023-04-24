@@ -23,7 +23,7 @@ class ElementHelper extends Helper
         $name = (string)Hash::get($currentModule, 'name');
         $path = sprintf('Modules.%s.categories._element', $name);
 
-        return Configure::read($path, 'Modules/categories');
+        return (string)Configure::read($path, 'Modules/categories');
     }
 
     /**
@@ -58,6 +58,6 @@ class ElementHelper extends Helper
         $name = (string)Hash::get($currentModule, 'name');
         $path = sprintf('Modules.%s.sidebar._element', $name);
 
-        return Configure::read($path, 'Modules/sidebar');
+        return (string)Configure::read($path, 'Modules/sidebar');
     }
 }
