@@ -13,7 +13,6 @@
 namespace App\View\Helper;
 
 use App\Utility\Translate;
-use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 
