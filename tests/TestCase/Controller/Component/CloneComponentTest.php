@@ -293,9 +293,9 @@ class CloneComponentTest extends BaseControllerTest
         static::assertNull($actual);
         static::assertArrayNotHasKey('id', $attributes);
 
-        // test clone, uuid null
-        $schema = ['associations' => []];
-        $source = ['type' => 'documents'];
+        // test clone stream with uuid null
+        $schema = ['associations' => ['Streams']];
+        $source = ['type' => 'images'];
         $attributes = [];
         $actual = $this->Clone->stream($schema, $source, $attributes);
         static::assertNull($actual);

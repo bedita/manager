@@ -124,7 +124,7 @@ class CloneComponent extends Component
     }
 
     /**
-     * Clone stream if schema has Streams in associations.
+     * Clone stream if schema has Streams in associations and source object has a related stream.
      * Return media ID, or null.
      *
      * @param array $schema The object schema
