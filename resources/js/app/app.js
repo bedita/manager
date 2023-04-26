@@ -12,6 +12,7 @@ import { confirm, error, info, prompt, warning } from 'app/components/dialog/dia
 
 import datepicker from 'app/directives/datepicker';
 import email from 'app/directives/email';
+import fieldinfo from 'app/directives/fieldinfo';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
 import uri from 'app/directives/uri';
@@ -117,6 +118,7 @@ const _vueInstance = new Vue({
         Vue.use(datepicker);
         Vue.use(richeditor);
         Vue.use(email);
+        Vue.use(fieldinfo);
         Vue.use(uri);
 
         // Register helpers

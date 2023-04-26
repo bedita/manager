@@ -23,6 +23,7 @@ use Cake\View\Helper;
  * Helper class to generate properties html
  *
  * @property \App\View\Helper\SchemaHelper $Schema The schema helper
+ * @property \App\View\Helper\PermsHelper $Perms The perms helper
  * @property \Cake\View\Helper\FormHelper $Form The form helper
  */
 class PropertyHelper extends Helper
@@ -32,7 +33,7 @@ class PropertyHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Form', 'Schema'];
+    public $helpers = ['Form', 'Perms', 'Schema'];
 
     /**
      * Special paths to retrieve properties from related resources
@@ -72,6 +73,9 @@ class PropertyHelper extends Helper
         $forceReadonly = !empty(Hash::get($options, 'readonly'));
         $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, $type));
         $controlOptions['label'] = $this->fieldLabel($name, $type);
+        if ($this->Perms->userIsAdmin()) {
+            $controlOptions['v-fieldinfo'] = true;
+        }
         $readonly = Hash::get($controlOptions, 'readonly') || $forceReadonly;
         if ($readonly === true && array_key_exists('html', $controlOptions)) {
             $controlOptions['html'] = str_replace('readonly="false"', 'readonly="true"', $controlOptions['html']);
