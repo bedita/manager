@@ -327,7 +327,7 @@ class ModulesController extends AppController
             if (in_array('Streams', (array)Hash::get($schema, 'associations'))) {
                 $attributes['id'] = $this->Clone->stream(
                     $this->objectType,
-                    (string)Hash::get($source, 'data.meta.media_url')
+                    (string)Hash::get($source, 'data.relationships.streams.data.0.id')
                 );
             }
             $save = $this->apiClient->save($this->objectType, $attributes);

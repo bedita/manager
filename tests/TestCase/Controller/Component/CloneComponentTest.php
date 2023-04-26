@@ -256,7 +256,7 @@ class CloneComponentTest extends BaseControllerTest
         return [
             'clone image' => [
                 'images',
-                sprintf('%s/tests/files/%s', getcwd(), 'test.png'),
+                'abcdefghi',
             ],
         ];
     }
@@ -265,12 +265,12 @@ class CloneComponentTest extends BaseControllerTest
      * Test `stream` method
      *
      * @param string $type The object type
-     * @param string $url The url
+     * @param string $uuid The stream uuid
      * @return void
      * @covers ::stream()
      * @dataProvider streamProvider()
      */
-    public function testStream(string $type, string $url): void
+    public function testStream(string $type, string $uuid): void
     {
         $this->prepareClone(true);
         $apiClient = $this->getMockBuilder(BEditaClient::class)->setConstructorArgs(['https://media.example.com'])->getMock();
@@ -279,7 +279,7 @@ class CloneComponentTest extends BaseControllerTest
         $property = new \ReflectionProperty(get_class($this->Clone), 'apiClient');
         $property->setAccessible(true);
         $property->setValue($this->Clone, $apiClient);
-        $actual = $this->Clone->stream($type, $url);
+        $actual = $this->Clone->stream($type, $uuid);
         static::assertNotEmpty($actual);
     }
 
