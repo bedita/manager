@@ -135,6 +135,7 @@ class CloneComponent extends Component
         $filename = basename($filepath);
         $response = $this->apiClient->post(sprintf('/streams/clone/%s', $filename), $filepath);
         $streamId = (string)Hash::get($response, 'data.id');
+        $data = compact('type');
         $response = $this->apiClient->createMediaFromStream($streamId, $type, compact('data'));
 
         return (string)Hash::get($response, 'data.id');
