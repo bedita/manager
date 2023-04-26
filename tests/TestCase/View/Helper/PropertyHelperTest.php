@@ -15,6 +15,7 @@ namespace App\Test\TestCase\View\Helper;
 
 use App\Form\Control;
 use App\View\Helper\PropertyHelper;
+use Authentication\Identity;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
@@ -200,6 +201,7 @@ class PropertyHelperTest extends TestCase
         }
         $view->set('schema', $schema);
         $view->set('objectType', 'dummies');
+        $view->set('user', new Identity([]));
         $property = new PropertyHelper($view);
         $actual = $property->control($key, $value, $options);
         static::assertEquals($expected, $actual);
@@ -315,6 +317,7 @@ class PropertyHelperTest extends TestCase
         $view->set('schema', $schema);
         $view->set('schemasByType', $schemasByType);
         $view->set('objectType', 'dummies');
+        $view->set('user', new Identity([]));
         $property = new PropertyHelper($view);
         $actual = $property->control($key, $value, $options, $type);
         static::assertEquals($expected, $actual);
@@ -451,6 +454,7 @@ class PropertyHelperTest extends TestCase
     public function testFastCreateFields(): void
     {
         $view = new View(null, null, null, []);
+        $view->set('user', new Identity([]));
         $helper = new PropertyHelper($view);
         Configure::write('Properties.documents.fastCreate', [
             'required' => ['status'],
@@ -493,6 +497,7 @@ class PropertyHelperTest extends TestCase
     public function testDateRange(): void
     {
         $view = new View(null, null, null, []);
+        $view->set('user', new Identity([]));
         $helper = new PropertyHelper($view);
         $actual = $helper->dateRange('dummy', []);
         $expected = '<div class="date-ranges-item mb-1"><div><div class="input text"><label for="start_date_0">From</label><input type="text" name="date_ranges[0][start_date]" id="start_date_0" v-datepicker="true" date="true" time="true" daterange="true" value=""/></div><div class="input text"><label for="end_date_0">To</label><input type="text" name="date_ranges[0][end_date]" id="end_date_0" v-datepicker="true" date="true" time="true" daterange="true" value=""/></div><div class="input checkbox"><input type="hidden" name="date_ranges[0][params][all_day]" value="0"/><label for="all_day_0"><input type="checkbox" name="date_ranges[0][params][all_day]" value="" id="all_day_0" checked="checked">All Day</label></div></div></div>';

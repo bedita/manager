@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\AdminHelper;
+use Authentication\Identity;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -105,6 +106,7 @@ class AdminHelperTest extends TestCase
     {
         $view = new View(null, null, null, []);
         $view->set('applications', ['' => __('No application'), 1 => 'Dummy app', 2 => 'Another dummy app']);
+        $view->set('user', new Identity([]));
         $helper = new AdminHelper($view);
         $actual = $helper->control($type, $property, $value);
         static::assertEquals($expected, $actual);

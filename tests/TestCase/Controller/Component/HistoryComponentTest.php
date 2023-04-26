@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\Component\HistoryComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Test\TestCase\Controller\AppControllerTest;
+use Authentication\Identity;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
@@ -82,6 +83,7 @@ class HistoryComponentTest extends TestCase
             'title' => 'test history controller',
         ]);
         $this->documentId = Hash::get($response, 'data.id');
+        $this->HistoryComponent->Schema->getView()->set('user', new Identity([]));
     }
 
     /**

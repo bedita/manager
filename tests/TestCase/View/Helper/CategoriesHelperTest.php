@@ -13,6 +13,7 @@
 namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\CategoriesHelper;
+use Authentication\Identity;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -109,6 +110,7 @@ class CategoriesHelperTest extends TestCase
     {
         $view = new View(null, null, null, []);
         $view->set('schema', $schema);
+        $view->set('user', new Identity([]));
         $this->Categories = new CategoriesHelper($view);
         $actual = $this->Categories->control($name, $value);
         static::assertEquals($expected, $actual);
