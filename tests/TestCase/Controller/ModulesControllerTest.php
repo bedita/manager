@@ -371,6 +371,30 @@ class ModulesControllerTest extends BaseControllerTest
      * @covers ::clone()
      * @return void
      */
+    public function testCloneMedia(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        // get object ID for test
+        $media = $this->createTestMedia();
+        $id = (string)Hash::get($media, 'id');
+
+        // do controller call
+        $result = $this->controller->clone($id);
+
+        // verify response status code and type
+        static::assertNotNull($result);
+        static::assertEquals(302, $this->controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $this->controller->getResponse()->getType());
+    }
+
+    /**
+     * Test `clone` method
+     *
+     * @covers ::clone()
+     * @return void
+     */
     public function testClone302(): void
     {
         // test 1 clone abstract type
