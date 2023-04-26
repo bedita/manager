@@ -249,8 +249,6 @@ class CloneComponentTest extends BaseControllerTest
     /**
      * Test `stream` method
      *
-     * @param string $type The object type
-     * @param string $uuid The stream uuid
      * @return void
      * @covers ::stream()
      */
