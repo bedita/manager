@@ -319,11 +319,17 @@ class ModulesController extends AppController
         }
         try {
             $source = $this->apiClient->getObject($id, $this->objectType);
-            $attributes = $source['data']['attributes'];
+            $attributes = (array)Hash::get($source, 'data.attributes');
             $attributes['uname'] = '';
             unset($attributes['relationships']);
             $attributes['title'] = $this->getRequest()->getQuery('title');
             $attributes['status'] = 'draft';
+            if (in_array('Streams', (array)Hash::get($schema, 'associations'))) {
+                $attributes['id'] = $this->Clone->stream(
+                    $this->objectType,
+                    (string)Hash::get($source, 'data.meta.media_url')
+                );
+            }
             $save = $this->apiClient->save($this->objectType, $attributes);
             $destination = (string)Hash::get($save, 'data.id');
             $this->Clone->relations($source, $destination);

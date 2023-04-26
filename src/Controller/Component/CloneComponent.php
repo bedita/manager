@@ -122,4 +122,21 @@ class CloneComponent extends Component
 
         return true;
     }
+
+    /**
+     * Clone stream for object type and filepath, return new media ID
+     *
+     * @param string $type The object type
+     * @param string $filepath The file path
+     * @return string The media ID
+     */
+    public function stream(string $type, string $filepath): string
+    {
+        $filename = basename($filepath);
+        $response = $this->apiClient->post(sprintf('/streams/clone/%s', $filename), $filepath);
+        $streamId = (string)Hash::get($response, 'data.id');
+        $response = $this->apiClient->createMediaFromStream($streamId, $type, compact('data'));
+
+        return (string)Hash::get($response, 'data.id');
+    }
 }
