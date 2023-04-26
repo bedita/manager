@@ -141,7 +141,7 @@ class CloneComponent extends Component
         $uuid = (string)Hash::get($source, 'data.relationships.streams.data.0.id');
         $response = $this->apiClient->post(sprintf('/streams/clone/%s', $uuid), '');
         $streamId = (string)Hash::get($response, 'data.id');
-        $type = $source['type'];
+        $type = (string)Hash::get($source, 'data.type');
         $data = compact('type');
         $response = $this->apiClient->createMediaFromStream($streamId, $type, compact('data'));
         $attributes['id'] = (string)Hash::get($response, 'data.id');
