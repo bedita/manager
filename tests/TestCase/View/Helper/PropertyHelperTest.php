@@ -211,6 +211,40 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
+     * Test `control` method when user is admin
+     *
+     * @return void
+     * @covers ::control()
+     */
+    public function testControlUserAdmin(): void
+    {
+        $key = 'status';
+        $value = 'draft';
+        $options = [];
+        $schema = [
+            'type' => 'string',
+            'enum' => [
+                'on',
+                'off',
+                'draft',
+            ],
+            '$id' => '/properties/status',
+            'title' => 'Status',
+            'description' => 'object status: on, draft, off',
+            'default' => 'draft',
+        ];
+        $expected = '<div class="input radio"><label>Status</label><input type="hidden" name="status" id="status" value=""/><label for="status-on"><input type="radio" name="status" value="on" id="status-on" v-fieldinfo="1">On</label><label for="status-draft"><input type="radio" name="status" value="draft" id="status-draft" checked="checked" v-fieldinfo="1">Draft</label><label for="status-off"><input type="radio" name="status" value="off" id="status-off" v-fieldinfo="1">Off</label></div>';
+        $view = new View(null, null, null, []);
+        $schema = ['properties' => [$key => $schema]];
+        $view->set('schema', $schema);
+        $view->set('objectType', 'dummies');
+        $view->set('user', new Identity(['roles' => ['admin']]));
+        $property = new PropertyHelper($view);
+        $actual = $property->control($key, $value, $options);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Data provider for `testSchema` test case.
      *
      * @return array
