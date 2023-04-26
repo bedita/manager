@@ -247,30 +247,14 @@ class CloneComponentTest extends BaseControllerTest
     }
 
     /**
-     * Data provider for `testStream` test case.
-     *
-     * @return array
-     */
-    public function streamProvider(): array
-    {
-        return [
-            'clone image' => [
-                'images',
-                'abcdefghi',
-            ],
-        ];
-    }
-
-    /**
      * Test `stream` method
      *
      * @param string $type The object type
      * @param string $uuid The stream uuid
      * @return void
      * @covers ::stream()
-     * @dataProvider streamProvider()
      */
-    public function testStream(string $type, string $uuid): void
+    public function testStream(): void
     {
         $this->prepareClone(true);
         $apiClient = $this->getMockBuilder(BEditaClient::class)->setConstructorArgs(['https://media.example.com'])->getMock();
@@ -279,8 +263,20 @@ class CloneComponentTest extends BaseControllerTest
         $property = new \ReflectionProperty(get_class($this->Clone), 'apiClient');
         $property->setAccessible(true);
         $property->setValue($this->Clone, $apiClient);
-        $actual = $this->Clone->stream($type, $uuid);
+        $schema = ['associations' => ['Streams']];
+        $source = ['type' => 'files'];
+        $attributes = [];
+        $actual = $this->Clone->stream($schema, $source, $attributes);
         static::assertNotEmpty($actual);
+        static::assertArrayHasKey('id', $attributes);
+
+        // test clone, not a stream
+        $schema = ['associations' => []];
+        $source = ['type' => 'documents'];
+        $attributes = [];
+        $actual = $this->Clone->stream($schema, $source, $attributes);
+        static::assertNull($actual);
+        static::assertArrayNotHasKey('id', $attributes);
     }
 
     private function prepareClone(bool $cloneRelations): void

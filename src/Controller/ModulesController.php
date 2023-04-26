@@ -324,12 +324,7 @@ class ModulesController extends AppController
             unset($attributes['relationships']);
             $attributes['title'] = $this->getRequest()->getQuery('title');
             $attributes['status'] = 'draft';
-            if (in_array('Streams', (array)Hash::get($schema, 'associations'))) {
-                $attributes['id'] = $this->Clone->stream(
-                    $this->objectType,
-                    (string)Hash::get($source, 'data.relationships.streams.data.0.id')
-                );
-            }
+            $this->Clone->stream($schema, $source, $attributes);
             $save = $this->apiClient->save($this->objectType, $attributes);
             $destination = (string)Hash::get($save, 'data.id');
             $this->Clone->relations($source, $destination);
