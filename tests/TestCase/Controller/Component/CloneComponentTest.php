@@ -262,13 +262,38 @@ class CloneComponentTest extends BaseControllerTest
         $property->setAccessible(true);
         $property->setValue($this->Clone, $apiClient);
         $schema = ['associations' => ['Streams']];
-        $source = ['type' => 'files'];
+        $source = [
+            'data' => [
+                'type' => 'files',
+                'relationships' => [
+                    'streams' => [
+                        'data' => [
+                            [
+                                'id' => 'abcdefg',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
         $attributes = [];
         $actual = $this->Clone->stream($schema, $source, $attributes);
         static::assertNotEmpty($actual);
         static::assertArrayHasKey('id', $attributes);
 
         // test clone, not a stream
+        $schema = ['associations' => []];
+        $source = [
+            'data' => [
+                'type' => 'documents',
+            ],
+        ];
+        $attributes = [];
+        $actual = $this->Clone->stream($schema, $source, $attributes);
+        static::assertNull($actual);
+        static::assertArrayNotHasKey('id', $attributes);
+
+        // test clone, uuid null
         $schema = ['associations' => []];
         $source = ['type' => 'documents'];
         $attributes = [];

@@ -137,8 +137,10 @@ class CloneComponent extends Component
         if (!in_array('Streams', (array)Hash::get($schema, 'associations'))) {
             return null;
         }
-
         $uuid = (string)Hash::get($source, 'data.relationships.streams.data.0.id');
+        if (empty($uuid)) {
+            return null;
+        }
         $response = $this->apiClient->post(sprintf('/streams/clone/%s', $uuid), '');
         $streamId = (string)Hash::get($response, 'data.id');
         $type = (string)Hash::get($source, 'data.type');
