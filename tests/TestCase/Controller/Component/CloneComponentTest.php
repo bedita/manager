@@ -246,6 +246,43 @@ class CloneComponentTest extends BaseControllerTest
         static::assertSame($expected, $actual);
     }
 
+    /**
+     * Data provider for `testStream` test case.
+     *
+     * @return array
+     */
+    public function streamProvider(): array
+    {
+        return [
+            'clone image' => [
+                'images',
+                sprintf('%s/tests/files/%s', getcwd(), 'test.png'),
+            ],
+        ];
+    }
+
+    /**
+     * Test `stream` method
+     *
+     * @param string $type The object type
+     * @param string $url The url
+     * @return void
+     * @covers ::stream()
+     * @dataProvider streamProvider()
+     */
+    public function testStream(string $type, string $url): void
+    {
+        $this->prepareClone(true);
+        $apiClient = $this->getMockBuilder(BEditaClient::class)->setConstructorArgs(['https://media.example.com'])->getMock();
+        $apiClient->method('post')->willReturn(['data' => ['id' => 999, 'type' => 'streams']]);
+        $apiClient->method('createMediaFromStream')->willReturn(['data' => ['id' => 99999, 'type' => 'images']]);
+        $property = new \ReflectionProperty(get_class($this->Clone), 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Clone, $apiClient);
+        $actual = $this->Clone->stream($type, $url);
+        static::assertNotEmpty($actual);
+    }
+
     private function prepareClone(bool $cloneRelations): void
     {
         $config = [
