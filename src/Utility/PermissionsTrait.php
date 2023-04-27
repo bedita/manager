@@ -44,7 +44,7 @@ trait PermissionsTrait
         $newPermissions = $this->setupPermissionsRoles($newPermissions);
         $toRemove = array_keys(array_diff($oldPermissions, $newPermissions));
         $toAdd = array_keys(array_diff($newPermissions, $oldPermissions));
-        $toRemove = $this->objectPermissionsIds($toRemove, $objectPermissions);
+        $toRemove = $this->objectPermissionsIds($objectPermissions, $toRemove);
         $this->removePermissions($toRemove);
         $this->addPermissions($objectId, $toAdd);
 
