@@ -34,6 +34,8 @@ export default {
      */
     data() {
         return {
+            changeListener: null,
+            submitListener: null,
             tabsOpen: true,
         };
     },
@@ -41,8 +43,8 @@ export default {
     mounted() {
         window.addEventListener('keydown', this.toggleTabs);
         if (this.$refs.formMain) {
-            this.$refs.formMain.addEventListener('submit', this.submitForm);
-            this.$refs.formMain.addEventListener('change', () => window._vueInstance.$emit('resource-changed'));
+            this.submitListener = this.$refs.formMain.addEventListener('submit', this.submitForm);
+            this.changeListener = this.$refs.formMain.addEventListener('change', () => window._vueInstance.$emit('resource-changed'));
         }
     },
 
@@ -62,6 +64,8 @@ export default {
             if (form.disabled) {
                 return;
             }
+            // avoid multiple submit
+            this.$refs.formMain.removeEventListener('submit', this.submitListener, {});
 
             const button = document.querySelector('button[form=form-main]');
             button.classList.add('is-loading-spinner');

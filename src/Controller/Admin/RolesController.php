@@ -12,6 +12,9 @@
  */
 namespace App\Controller\Admin;
 
+use Cake\Cache\Cache;
+use Cake\Http\Response;
+
 /**
  * Roles Controller
  *
@@ -19,6 +22,8 @@ namespace App\Controller\Admin;
  */
 class RolesController extends AdministrationBaseController
 {
+    public const CACHE_KEY_ROLES = 'roles';
+
     /**
      * @inheritDoc
      */
@@ -41,4 +46,24 @@ class RolesController extends AdministrationBaseController
         'name' => 'string',
         'description' => 'text',
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function save(): ?Response
+    {
+        Cache::delete(self::CACHE_KEY_ROLES);
+
+        return parent::save();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function remove(string $id): ?Response
+    {
+        Cache::delete(self::CACHE_KEY_ROLES);
+
+        return parent::remove($id);
+    }
 }
