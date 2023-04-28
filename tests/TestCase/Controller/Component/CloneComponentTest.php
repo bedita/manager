@@ -246,6 +246,62 @@ class CloneComponentTest extends BaseControllerTest
         static::assertSame($expected, $actual);
     }
 
+    /**
+     * Test `stream` method
+     *
+     * @return void
+     * @covers ::stream()
+     */
+    public function testStream(): void
+    {
+        $this->prepareClone(true);
+        $apiClient = $this->getMockBuilder(BEditaClient::class)->setConstructorArgs(['https://media.example.com'])->getMock();
+        $apiClient->method('post')->willReturn(['data' => ['id' => 999, 'type' => 'streams']]);
+        $apiClient->method('createMediaFromStream')->willReturn(['data' => ['id' => 99999, 'type' => 'images']]);
+        $property = new \ReflectionProperty(get_class($this->Clone), 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Clone, $apiClient);
+        $schema = ['associations' => ['Streams']];
+        $source = [
+            'data' => [
+                'type' => 'files',
+                'relationships' => [
+                    'streams' => [
+                        'data' => [
+                            [
+                                'id' => 'abcdefg',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $attributes = [];
+        $actual = $this->Clone->stream($schema, $source, $attributes);
+        static::assertNotEmpty($actual);
+        static::assertArrayHasKey('id', $attributes);
+
+        // test clone, not a stream
+        $schema = ['associations' => []];
+        $source = [
+            'data' => [
+                'type' => 'documents',
+            ],
+        ];
+        $attributes = [];
+        $actual = $this->Clone->stream($schema, $source, $attributes);
+        static::assertNull($actual);
+        static::assertArrayNotHasKey('id', $attributes);
+
+        // test clone stream with uuid null
+        $schema = ['associations' => ['Streams']];
+        $source = ['type' => 'images'];
+        $attributes = [];
+        $actual = $this->Clone->stream($schema, $source, $attributes);
+        static::assertNull($actual);
+        static::assertArrayNotHasKey('id', $attributes);
+    }
+
     private function prepareClone(bool $cloneRelations): void
     {
         $config = [
