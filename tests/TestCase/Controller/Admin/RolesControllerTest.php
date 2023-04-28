@@ -2,16 +2,17 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\RolesController;
+use App\Test\TestCase\Controller\BaseControllerTest;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
-use Cake\TestSuite\TestCase;
 
 /**
  * {@see \App\Controller\Admin\RolesController} Test Case
  *
  * @coversDefaultClass \App\Controller\Admin\RolesController
  */
-class RolesControllerTest extends TestCase
+class RolesControllerTest extends BaseControllerTest
 {
     public $RlsController;
 
@@ -34,7 +35,7 @@ class RolesControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    public $client;
 
     /**
      * @inheritDoc
@@ -43,7 +44,18 @@ class RolesControllerTest extends TestCase
     {
         parent::setUp();
 
+        $this->loadRoutes();
         $this->init([]);
+        Cache::enable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        Cache::disable();
     }
 
     /**
@@ -94,5 +106,58 @@ class RolesControllerTest extends TestCase
         }
         static::assertEquals('roles', $viewVars['resourceType']);
         static::assertEquals(['name'], $viewVars['properties']);
+    }
+
+    /**
+     * Test save role and check cached val
+     *
+     * @return void
+     */
+    public function testSave(): void
+    {
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'name' => 'dummy',
+            ],
+        ];
+        $this->init($config);
+        Cache::clearAll();
+        $this->RlsController->save();
+        static::assertEmpty(Cache::read(RolesController::CACHE_KEY_ROLES));
+    }
+
+    /**
+     * Test `remove` method
+     *
+     * @return void
+     */
+    public function testRemove(): void
+    {
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'name' => 'dummy',
+            ],
+        ];
+        $this->init($config);
+        $response = ApiClientProvider::getApiClient()->get('roles', ['filter' => ['name' => 'dummy']]);
+        $this->RlsController->remove($response['data'][0]['id']);
+        $roles = ApiClientProvider::getApiClient()->get('roles');
+        $expected = false;
+        $actual = false;
+        foreach ($roles['data'] as $role) {
+            if ($role['attributes']['name'] === 'dummy') {
+                $actual = true;
+            }
+        }
+        static::assertSame($expected, $actual);
+        static::assertEmpty(Cache::read(RolesController::CACHE_KEY_ROLES));
     }
 }

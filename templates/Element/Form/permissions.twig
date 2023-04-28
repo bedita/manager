@@ -7,9 +7,12 @@
             <h2>{{ __('Permissions') }}</h2>
         </header>
 
+        {% set objectPerms = object.meta.perms|default({})|json_encode %}
+        {% if objectPerms == '[]' %}{% set objectPerms = '{}' %}{% endif %}
+
         <div v-show="isOpen" class="tab-container">
             <permissions
-                :object-perms="{{ object.meta.perms|default({})|json_encode|escape('html_attr') }}"
+                :object-perms="{{ objectPerms }}"
                 :user-roles="{{ user.roles|default([])|json_encode }}">
             </permissions>
         </div>
