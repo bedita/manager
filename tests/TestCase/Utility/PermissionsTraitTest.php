@@ -102,6 +102,12 @@ class PermissionsTraitTest extends BaseControllerTest
      */
     public function testObjectPermissionsIds(): void
     {
+        $objectId = '114';
+        // check empty roles
+        $actual = $this->objectPermissionsIds($objectId, []);
+        static::assertEmpty($actual);
+
+        // check non empty roles
         $objectPermissions = [
             'data' => [
                 ['id' => 11, 'attributes' => ['object_id' => 111, 'role_id' => 1111]],
@@ -110,9 +116,14 @@ class PermissionsTraitTest extends BaseControllerTest
                 ['id' => 14, 'attributes' => ['object_id' => 114, 'role_id' => 1114]],
             ],
         ];
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('getObjects')->willReturn($objectPermissions);
+        ApiClientProvider::setApiClient($apiClient);
         $roles = [1111, 1112, 1113, 1114];
         $expected = [11, 12, 13, 14];
-        $actual = $this->objectPermissionsIds($objectPermissions, $roles);
+        $actual = $this->objectPermissionsIds($objectId, $roles);
         static::assertSame($expected, $actual);
     }
 
