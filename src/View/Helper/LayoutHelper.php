@@ -13,7 +13,6 @@
 namespace App\View\Helper;
 
 use App\Utility\Translate;
-use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 
@@ -166,27 +165,6 @@ class LayoutHelper extends Helper
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');
-    }
-
-    /**
-     * Return custom element via `Properties` configuration for
-     * a relation or property group in current module.
-     *
-     * @param string $item Relation or group name
-     * @param string $type Item type: `relation` or `group`
-     * @return string
-     */
-    public function customElement(string $item, string $type = 'relation'): string
-    {
-        $currentModule = (array)$this->getView()->get('currentModule');
-        $name = (string)Hash::get($currentModule, 'name');
-        if ($type === 'relation') {
-            $path = sprintf('Properties.%s.relations._element.%s', $name, $item);
-        } else {
-            $path = sprintf('Properties.%s.view.%s._element', $name, $item);
-        }
-
-        return (string)Configure::read($path);
     }
 
     /**

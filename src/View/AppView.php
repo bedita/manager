@@ -68,6 +68,7 @@ class AppView extends TwigView
         $this->loadHelper('Calendar');
         $this->loadHelper('Categories');
         $this->loadHelper('Editors');
+        $this->loadHelper('Element');
         $this->loadHelper('Layout');
         $this->loadHelper('Array');
         $this->loadHelper('Html');
