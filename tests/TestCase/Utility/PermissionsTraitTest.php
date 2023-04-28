@@ -37,10 +37,14 @@ class PermissionsTraitTest extends BaseControllerTest
     public function testSavePermissions(): void
     {
         // test with schema.associations empty
-        $folder = ['id' => '999'];
+        $response = [
+            'data' => [
+                'id' => '999',
+            ],
+        ];
         $schema = ['associations' => []];
         $permissions = [1];
-        $actual = $this->savePermissions($folder['id'], $schema, $permissions);
+        $actual = $this->savePermissions($response, $schema, $permissions);
         static::assertFalse($actual);
 
         // test with 'Permissions' in schema.associations
@@ -52,7 +56,7 @@ class PermissionsTraitTest extends BaseControllerTest
         $apiClient->method('save')->willReturn([]);
         $apiClient->method('deleteObject')->willReturn([]);
         ApiClientProvider::setApiClient($apiClient);
-        $actual = $this->savePermissions($folder['id'], $schema, $permissions);
+        $actual = $this->savePermissions($response, $schema, $permissions);
         static::assertTrue($actual);
     }
 

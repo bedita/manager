@@ -27,24 +27,23 @@ trait PermissionsTrait
     /**
      * Save permissions for single object.
      *
-     * @param string $objectId The object ID
+     * @param array $response The object response
      * @param array $schema The object type schema
      * @param array $newPermissions The permissions to save
      * @return bool
      */
-    public function savePermissions(string $objectId, array $schema, array $newPermissions): bool
+    public function savePermissions(array $response, array $schema, array $newPermissions): bool
     {
         if (!in_array('Permissions', (array)Hash::get($schema, 'associations'))) {
             return false;
         }
-        $query = ['filter' => ['object_id' => $objectId], 'page_size' => 100];
-        $objectPermissions = (array)ApiClientProvider::getApiClient()->getObjects('object_permissions', $query);
-        $oldPermissions = (array)Hash::extract($objectPermissions, 'data.{n}.attributes.role_id');
+        $objectId = (string)Hash::get($response, 'data.id');
+        $oldPermissions = (array)Hash::get($response, 'data.meta.perms.roles');
         $oldPermissions = $this->setupPermissionsRoles($oldPermissions);
         $newPermissions = $this->setupPermissionsRoles($newPermissions);
         $toRemove = array_keys(array_diff($oldPermissions, $newPermissions));
         $toAdd = array_keys(array_diff($newPermissions, $oldPermissions));
-        $toRemove = $this->objectPermissionsIds($objectPermissions, $toRemove);
+        $toRemove = $this->objectPermissionsIds($objectId, $toRemove);
         $this->removePermissions($toRemove);
         $this->addPermissions($objectId, $toAdd);
 
@@ -84,12 +83,17 @@ trait PermissionsTrait
     /**
      * Object permissions IDs per role IDs.
      *
-     * @param array $objectPermissions The object permissions
+     * @param string $objectId The object ID
      * @param array $roleIds The role IDs
      * @return array
      */
-    public function objectPermissionsIds(array $objectPermissions, array $roleIds): array
+    public function objectPermissionsIds(string $objectId, array $roleIds): array
     {
+        if (empty($roleIds)) {
+            return [];
+        }
+        $query = ['filter' => ['object_id' => $objectId], 'page_size' => 100];
+        $objectPermissions = (array)ApiClientProvider::getApiClient()->getObjects('object_permissions', $query);
         $objectPermissions = (array)Hash::combine($objectPermissions, 'data.{n}.attributes.role_id', 'data.{n}.id');
 
         return array_map(function ($roleId) use ($objectPermissions) {
