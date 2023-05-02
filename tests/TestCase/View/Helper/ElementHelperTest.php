@@ -24,7 +24,7 @@ class ElementHelperTest extends TestCase
      */
     public function testCategories(): void
     {
-        $expected = 'Modules/categories';
+        $expected = 'Form/categories';
         $viewVars = [
             'currentModule' => ['name' => 'documents'],
         ];

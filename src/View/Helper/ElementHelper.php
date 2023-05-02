@@ -23,7 +23,7 @@ class ElementHelper extends Helper
         $name = (string)Hash::get($currentModule, 'name');
         $path = sprintf('Modules.%s.categories._element', $name);
 
-        return (string)Configure::read($path, 'Modules/categories');
+        return (string)Configure::read($path, 'Form/categories');
     }
 
     /**
