@@ -122,4 +122,32 @@ class CloneComponent extends Component
 
         return true;
     }
+
+    /**
+     * Clone stream if schema has Streams in associations and source object has a related stream.
+     * Return media ID, or null.
+     *
+     * @param array $schema The object schema
+     * @param array $source The object source to clone
+     * @param array $attributes The destination attributes
+     * @return ?string The media ID
+     */
+    public function stream(array $schema, array $source, array &$attributes): ?string
+    {
+        if (!in_array('Streams', (array)Hash::get($schema, 'associations'))) {
+            return null;
+        }
+        $uuid = (string)Hash::get($source, 'data.relationships.streams.data.0.id');
+        if (empty($uuid)) {
+            return null;
+        }
+        $response = $this->apiClient->post(sprintf('/streams/clone/%s', $uuid), '');
+        $streamId = (string)Hash::get($response, 'data.id');
+        $type = (string)Hash::get($source, 'data.type');
+        $data = compact('type');
+        $response = $this->apiClient->createMediaFromStream($streamId, $type, compact('data'));
+        $attributes['id'] = (string)Hash::get($response, 'data.id');
+
+        return $attributes['id'];
+    }
 }

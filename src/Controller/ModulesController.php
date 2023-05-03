@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -34,6 +35,8 @@ use Psr\Log\LogLevel;
  */
 class ModulesController extends AppController
 {
+    use PermissionsTrait;
+
     /**
      * Object type currently used
      *
@@ -278,6 +281,11 @@ class ModulesController extends AppController
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
             $objectId = (string)Hash::get($response, 'data.id');
+            $this->savePermissions(
+                $objectId,
+                (array)$this->Schema->getSchema($this->objectType),
+                (array)Hash::get($requestData, 'permissions')
+            );
             $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
         } catch (BEditaClientException $error) {
             $this->log($error->getMessage(), LogLevel::ERROR);
@@ -319,11 +327,12 @@ class ModulesController extends AppController
         }
         try {
             $source = $this->apiClient->getObject($id, $this->objectType);
-            $attributes = $source['data']['attributes'];
+            $attributes = (array)Hash::get($source, 'data.attributes');
             $attributes['uname'] = '';
             unset($attributes['relationships']);
             $attributes['title'] = $this->getRequest()->getQuery('title');
             $attributes['status'] = 'draft';
+            $this->Clone->stream($schema, $source, $attributes);
             $save = $this->apiClient->save($this->objectType, $attributes);
             $destination = (string)Hash::get($save, 'data.id');
             $this->Clone->relations($source, $destination);
