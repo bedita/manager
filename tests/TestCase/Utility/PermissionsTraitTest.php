@@ -14,10 +14,12 @@ declare(strict_types=1);
  */
 namespace App\Test\TestCase\Utility;
 
+use App\Controller\Admin\RolesController;
 use App\Test\TestCase\Controller\BaseControllerTest;
 use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
 
 /**
  * {@see \App\Utility\PermissionsTrait} Test Case
@@ -29,6 +31,24 @@ class PermissionsTraitTest extends BaseControllerTest
     use PermissionsTrait;
 
     /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        Cache::enable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        Cache::disable();
+        parent::tearDown();
+    }
+
+    /**
      * Test `savePermission` method.
      *
      * @return void
@@ -37,10 +57,14 @@ class PermissionsTraitTest extends BaseControllerTest
     public function testSavePermissions(): void
     {
         // test with schema.associations empty
-        $folder = ['id' => '999'];
+        $response = [
+            'data' => [
+                'id' => '999',
+            ],
+        ];
         $schema = ['associations' => []];
         $permissions = [1];
-        $actual = $this->savePermissions($folder['id'], $schema, $permissions);
+        $actual = $this->savePermissions($response, $schema, $permissions);
         static::assertFalse($actual);
 
         // test with 'Permissions' in schema.associations
@@ -52,7 +76,7 @@ class PermissionsTraitTest extends BaseControllerTest
         $apiClient->method('save')->willReturn([]);
         $apiClient->method('deleteObject')->willReturn([]);
         ApiClientProvider::setApiClient($apiClient);
-        $actual = $this->savePermissions($folder['id'], $schema, $permissions);
+        $actual = $this->savePermissions($response, $schema, $permissions);
         static::assertTrue($actual);
     }
 
@@ -98,6 +122,12 @@ class PermissionsTraitTest extends BaseControllerTest
      */
     public function testObjectPermissionsIds(): void
     {
+        $objectId = '114';
+        // check empty roles
+        $actual = $this->objectPermissionsIds($objectId, []);
+        static::assertEmpty($actual);
+
+        // check non empty roles
         $objectPermissions = [
             'data' => [
                 ['id' => 11, 'attributes' => ['object_id' => 111, 'role_id' => 1111]],
@@ -106,22 +136,65 @@ class PermissionsTraitTest extends BaseControllerTest
                 ['id' => 14, 'attributes' => ['object_id' => 114, 'role_id' => 1114]],
             ],
         ];
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('getObjects')->willReturn($objectPermissions);
+        ApiClientProvider::setApiClient($apiClient);
         $roles = [1111, 1112, 1113, 1114];
         $expected = [11, 12, 13, 14];
-        $actual = $this->objectPermissionsIds($objectPermissions, $roles);
+        $actual = $this->objectPermissionsIds($objectId, $roles);
         static::assertSame($expected, $actual);
     }
 
     /**
-     * Test `setupPermissionsRoles` method
+     * Test `roles` method
      *
      * @return void
-     * @covers ::setupPermissionsRoles()
+     * @covers ::roles()
      */
-    public function testSetupPermissionsRoles(): void
+    public function testRoles(): void
     {
-        $actual = $this->setupPermissionsRoles([1,2,3]);
-        $expected = [1 => '', 2 => '', 3 => ''];
+        Cache::delete(RolesController::CACHE_KEY_ROLES);
+        $actual = $this->roles();
+        static::assertIsArray($actual);
+    }
+
+    /**
+     * Test `rolesByNames` method
+     *
+     * @return void
+     * @covers ::rolesByNames()
+     */
+    public function testRolesByNames(): void
+    {
+        Cache::write(RolesController::CACHE_KEY_ROLES, [
+            1 => 'developer',
+            2 => 'business',
+            3 => 'guest',
+            4 => 'other',
+        ]);
+        $actual = $this->rolesByNames(['developer','guest']);
+        $expected = [1 => 'developer', 3 => 'guest'];
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `rolesByIds` method
+     *
+     * @return void
+     * @covers ::rolesByIds()
+     */
+    public function testRolesByIds(): void
+    {
+        Cache::write(RolesController::CACHE_KEY_ROLES, [
+            1 => 'developer',
+            2 => 'business',
+            3 => 'guest',
+            4 => 'other',
+        ]);
+        $actual = $this->rolesByIds([1,3]);
+        $expected = [1 => 'developer', 3 => 'guest'];
         static::assertSame($expected, $actual);
     }
 }

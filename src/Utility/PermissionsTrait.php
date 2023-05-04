@@ -27,24 +27,23 @@ trait PermissionsTrait
     /**
      * Save permissions for single object.
      *
-     * @param string $objectId The object ID
+     * @param array $response The object response
      * @param array $schema The object type schema
      * @param array $newPermissions The permissions to save
      * @return bool
      */
-    public function savePermissions(string $objectId, array $schema, array $newPermissions): bool
+    public function savePermissions(array $response, array $schema, array $newPermissions): bool
     {
         if (!in_array('Permissions', (array)Hash::get($schema, 'associations'))) {
             return false;
         }
-        $query = ['filter' => ['object_id' => $objectId], 'page_size' => 100];
-        $objectPermissions = (array)ApiClientProvider::getApiClient()->getObjects('object_permissions', $query);
-        $oldPermissions = (array)Hash::extract($objectPermissions, 'data.{n}.attributes.role_id');
-        $oldPermissions = $this->setupPermissionsRoles($oldPermissions);
-        $newPermissions = $this->setupPermissionsRoles($newPermissions);
+        $objectId = (string)Hash::get($response, 'data.id');
+        $oldPermissions = (array)Hash::get($response, 'data.meta.perms.roles');
+        $oldPermissions = $this->rolesByNames($oldPermissions);
+        $newPermissions = $this->rolesByIds($newPermissions);
         $toRemove = array_keys(array_diff($oldPermissions, $newPermissions));
         $toAdd = array_keys(array_diff($newPermissions, $oldPermissions));
-        $toRemove = $this->objectPermissionsIds($objectPermissions, $toRemove);
+        $toRemove = $this->objectPermissionsIds($objectId, $toRemove);
         $this->removePermissions($toRemove);
         $this->addPermissions($objectId, $toAdd);
 
@@ -84,12 +83,17 @@ trait PermissionsTrait
     /**
      * Object permissions IDs per role IDs.
      *
-     * @param array $objectPermissions The object permissions
+     * @param string $objectId The object ID
      * @param array $roleIds The role IDs
      * @return array
      */
-    public function objectPermissionsIds(array $objectPermissions, array $roleIds): array
+    public function objectPermissionsIds(string $objectId, array $roleIds): array
     {
+        if (empty($roleIds)) {
+            return [];
+        }
+        $query = ['filter' => ['object_id' => $objectId], 'page_size' => 100];
+        $objectPermissions = (array)ApiClientProvider::getApiClient()->getObjects('object_permissions', $query);
         $objectPermissions = (array)Hash::combine($objectPermissions, 'data.{n}.attributes.role_id', 'data.{n}.id');
 
         return array_map(function ($roleId) use ($objectPermissions) {
@@ -98,23 +102,50 @@ trait PermissionsTrait
     }
 
     /**
-     * Setup permission roles
+     * Return roles data (<id>:<name), using cache.
      *
-     * @param array $permissions The permissions
      * @return array
      */
-    public function setupPermissionsRoles(array $permissions): array
+    public function roles(): array
     {
-        $roles = Cache::remember(RolesController::CACHE_KEY_ROLES, function () {
+        return Cache::remember(RolesController::CACHE_KEY_ROLES, function () {
             return Hash::combine(
                 (array)ApiClientProvider::getApiClient()->get('/roles'),
                 'data.{n}.id',
                 'data.{n}.attributes.name'
             );
         });
+    }
+
+    /**
+     * Return roles data (<id>:<name) from role names
+     *
+     * @param array $names Role names
+     * @return array Roles IDs and names
+     */
+    public function rolesByNames(array $names): array
+    {
         $result = [];
-        foreach ($permissions as $roleId) {
-            $result[$roleId] = (string)Hash::get($roles, $roleId);
+        $flipped = array_flip($this->roles());
+        foreach ($names as $name) {
+            $result[(string)Hash::get($flipped, $name)] = $name;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return roles data (<id>:<name) from role ids
+     *
+     * @param array $ids Roles IDs
+     * @return array Roles IDs and names
+     */
+    public function rolesByIds(array $ids): array
+    {
+        $roles = $this->roles();
+        $result = [];
+        foreach ($ids as $id) {
+            $result[$id] = (string)Hash::get($roles, $id);
         }
 
         return $result;

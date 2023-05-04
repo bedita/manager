@@ -280,13 +280,12 @@ class ModulesController extends AppController
 
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
-            $objectId = (string)Hash::get($response, 'data.id');
             $this->savePermissions(
-                $objectId,
+                (array)$response,
                 (array)$this->Schema->getSchema($this->objectType),
                 (array)Hash::get($requestData, 'permissions')
             );
-            $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
+            $this->Modules->saveRelated((string)Hash::get($response, 'data.id'), $this->objectType, $relatedData);
         } catch (BEditaClientException $error) {
             $this->log($error->getMessage(), LogLevel::ERROR);
             $this->Flash->error($error->getMessage(), ['params' => $error]);
