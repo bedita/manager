@@ -148,6 +148,19 @@ class PermissionsTraitTest extends BaseControllerTest
     }
 
     /**
+     * Test `roles` method
+     *
+     * @return void
+     * @covers ::roles()
+     */
+    public function testRoles(): void
+    {
+        Cache::delete(RolesController::CACHE_KEY_ROLES);
+        $actual = $this->roles();
+        static::assertIsArray($actual);
+    }
+
+    /**
      * Test `rolesByNames` method
      *
      * @return void

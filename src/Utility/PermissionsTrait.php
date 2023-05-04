@@ -102,6 +102,22 @@ trait PermissionsTrait
     }
 
     /**
+     * Return roles data (<id>:<name), using cache.
+     *
+     * @return array
+     */
+    public function roles(): array
+    {
+        return Cache::remember(RolesController::CACHE_KEY_ROLES, function () {
+            return Hash::combine(
+                (array)ApiClientProvider::getApiClient()->get('/roles'),
+                'data.{n}.id',
+                'data.{n}.attributes.name'
+            );
+        });
+    }
+
+    /**
      * Return roles data (<id>:<name) from role names
      *
      * @param array $names Role names
@@ -109,15 +125,8 @@ trait PermissionsTrait
      */
     public function rolesByNames(array $names): array
     {
-        $roles = Cache::remember(RolesController::CACHE_KEY_ROLES, function () {
-            return Hash::combine(
-                (array)ApiClientProvider::getApiClient()->get('/roles'),
-                'data.{n}.id',
-                'data.{n}.attributes.name'
-            );
-        });
         $result = [];
-        $flipped = array_flip($roles);
+        $flipped = array_flip($this->roles());
         foreach ($names as $name) {
             $result[(string)Hash::get($flipped, $name)] = $name;
         }
@@ -133,13 +142,7 @@ trait PermissionsTrait
      */
     public function rolesByIds(array $ids): array
     {
-        $roles = Cache::remember(RolesController::CACHE_KEY_ROLES, function () {
-            return Hash::combine(
-                (array)ApiClientProvider::getApiClient()->get('/roles'),
-                'data.{n}.id',
-                'data.{n}.attributes.name'
-            );
-        });
+        $roles = $this->roles();
         $result = [];
         foreach ($ids as $id) {
             $result[$id] = (string)Hash::get($roles, $id);
