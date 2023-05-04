@@ -39,8 +39,8 @@ trait PermissionsTrait
         }
         $objectId = (string)Hash::get($response, 'data.id');
         $oldPermissions = (array)Hash::get($response, 'data.meta.perms.roles');
-        $oldPermissions = $this->setupPermissionsRoles($oldPermissions);
-        $newPermissions = $this->setupPermissionsRoles($newPermissions);
+        $oldPermissions = $this->rolesByNames($oldPermissions);
+        $newPermissions = $this->rolesByIds($newPermissions);
         $toRemove = array_keys(array_diff($oldPermissions, $newPermissions));
         $toAdd = array_keys(array_diff($newPermissions, $oldPermissions));
         $toRemove = $this->objectPermissionsIds($objectId, $toRemove);
@@ -102,12 +102,12 @@ trait PermissionsTrait
     }
 
     /**
-     * Setup permission roles
+     * Return roles data (<id>:<name) from role names
      *
-     * @param array $permissions The permissions
-     * @return array
+     * @param array $names Role names
+     * @return array Roles IDs and names
      */
-    public function setupPermissionsRoles(array $permissions): array
+    public function rolesByNames(array $names): array
     {
         $roles = Cache::remember(RolesController::CACHE_KEY_ROLES, function () {
             return Hash::combine(
@@ -117,8 +117,32 @@ trait PermissionsTrait
             );
         });
         $result = [];
-        foreach ($permissions as $roleId) {
-            $result[$roleId] = (string)Hash::get($roles, $roleId);
+        $flipped = array_flip($roles);
+        foreach ($names as $name) {
+            $result[(string)Hash::get($flipped, $name)] = $name;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return roles data (<id>:<name) from role ids
+     *
+     * @param array $ids Roles IDs
+     * @return array Roles IDs and names
+     */
+    public function rolesByIds(array $ids): array
+    {
+        $roles = Cache::remember(RolesController::CACHE_KEY_ROLES, function () {
+            return Hash::combine(
+                (array)ApiClientProvider::getApiClient()->get('/roles'),
+                'data.{n}.id',
+                'data.{n}.attributes.name'
+            );
+        });
+        $result = [];
+        foreach ($ids as $id) {
+            $result[$id] = (string)Hash::get($roles, $id);
         }
 
         return $result;

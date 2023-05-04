@@ -14,10 +14,12 @@ declare(strict_types=1);
  */
 namespace App\Test\TestCase\Utility;
 
+use App\Controller\Admin\RolesController;
 use App\Test\TestCase\Controller\BaseControllerTest;
 use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
 
 /**
  * {@see \App\Utility\PermissionsTrait} Test Case
@@ -27,6 +29,24 @@ use BEdita\WebTools\ApiClientProvider;
 class PermissionsTraitTest extends BaseControllerTest
 {
     use PermissionsTrait;
+
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        Cache::enable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        Cache::disable();
+        parent::tearDown();
+    }
 
     /**
      * Test `savePermission` method.
@@ -128,15 +148,40 @@ class PermissionsTraitTest extends BaseControllerTest
     }
 
     /**
-     * Test `setupPermissionsRoles` method
+     * Test `rolesByNames` method
      *
      * @return void
-     * @covers ::setupPermissionsRoles()
+     * @covers ::rolesByNames()
      */
-    public function testSetupPermissionsRoles(): void
+    public function testRolesByNames(): void
     {
-        $actual = $this->setupPermissionsRoles([1,2,3]);
-        $expected = [1 => '', 2 => '', 3 => ''];
+        Cache::write(RolesController::CACHE_KEY_ROLES, [
+            1 => 'developer',
+            2 => 'business',
+            3 => 'guest',
+            4 => 'other',
+        ]);
+        $actual = $this->rolesByNames(['developer','guest']);
+        $expected = [1 => 'developer', 3 => 'guest'];
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `rolesByIds` method
+     *
+     * @return void
+     * @covers ::rolesByIds()
+     */
+    public function testRolesByIds(): void
+    {
+        Cache::write(RolesController::CACHE_KEY_ROLES, [
+            1 => 'developer',
+            2 => 'business',
+            3 => 'guest',
+            4 => 'other',
+        ]);
+        $actual = $this->rolesByIds([1,3]);
+        $expected = [1 => 'developer', 3 => 'guest'];
         static::assertSame($expected, $actual);
     }
 }
