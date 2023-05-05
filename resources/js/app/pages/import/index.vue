@@ -105,11 +105,8 @@ export default {
 
         accept() {
             const filter = this.filters?.filter((v) => v.text === this.activeFilter)[0];
-            if (filter?.accept) {
-                return filter.accept.join(',');
-            }
 
-            return 'text/xml,text/csv';
+            return filter.accept.join(',');
         },
 
         doImport() {
