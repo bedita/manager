@@ -5,7 +5,8 @@
                 <header class="tab open">
                     <h2>{{ msgJobs }}</h2>
                 </header>
-                <div class="tab-container" v-if="jobs.length > 0">
+                <div class="is-loading-spinner mt-05" v-if="loading"></div>
+                <div class="tab-container" v-if="!loading && jobs.length > 0">
                     <div id="list-jobs">
                         <div class="table-header">Job ID</div>
                         <div class="table-header">{{ msgFileName }}</div>
@@ -28,7 +29,7 @@
                         </template>
                     </div>
                 </div>
-                <div class="mt-05" v-else>{{ msgNoJobs }}</div>
+                <div class="mt-05" v-if="!loading && jobs.length === 0">{{ msgNoJobs }}</div>
             </section>
         </div>
     </div>
@@ -57,6 +58,7 @@ export default {
     data() {
         return {
             currentJobs: () => [],
+            loading: false,
             showPayloadId: null,
             msgCompletedOn: t`Completed on`,
             msgFileName: t`File name`,
@@ -100,6 +102,7 @@ export default {
                     'accept': 'application/json',
                 }
             };
+            this.loading = true;
 
             return fetch(requestUrl, options)
                 .then((response) => response.json())
@@ -112,6 +115,9 @@ export default {
                 })
                 .catch((error) => {
                     console.error(error);
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
         },
     },
