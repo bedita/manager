@@ -51,7 +51,7 @@ export default {
         },
         timeout: {
             type: Number,
-            default: 5000,
+            default: 30000,
         }
     },
 
