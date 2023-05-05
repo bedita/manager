@@ -21,44 +21,39 @@
         padding-left:  3 * $gutter;
         padding-right: 3 * $gutter;
     }
-
-    .list-jobs {
-        min-width: 100%;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 50px;
-
-        .table-header {
-            border-bottom: 1px solid $gray-700;
-        }
-
-        > div {
-            padding: $gutter * .5;
-            white-space: nowrap;
-
-            &.job-payload {
-                grid-column: span 7;
-                background: #999;
-                color: #000;
-                font-size: 12px;
-                font-family: monospace;
-            }
-
-            &.completed {
-            }
-
-            &.failed {
-                color: $danger;
-            }
-
-            &.locked, &.pending {
-                color: $pending;
-            }
-
-            &.planned {
-                color: $info;
-            }
-        }
-
-    }
 }
 
+#list-jobs {
+    min-width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 50px;
+
+    .table-header {
+        border-bottom: 1px solid $gray-700;
+    }
+
+    > div {
+        padding: $gutter * .5;
+        white-space: nowrap;
+
+        &.job-payload {
+            grid-column: span 7;
+            background: #999;
+            color: #000;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        &.failed {
+            color: $danger;
+        }
+
+        &.locked, &.pending {
+            color: $pending;
+        }
+
+        &.planned {
+            color: $info;
+        }
+    }
+}
