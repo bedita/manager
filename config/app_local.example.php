@@ -496,7 +496,7 @@ return [
     //             'accept' => ['application/zip'],
     //             'name' => 'import-objects-from-zip',
     //             'label' => 'Import data from zip file',
-    //             'class' => ZipImportFilter::class,
+    //             'class' => \Path\To\ZipImportFilter::class,
     //             'options' => [
     //                 'uuid' => [
     //                     'dataType' => 'text',
