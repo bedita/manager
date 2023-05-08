@@ -146,10 +146,11 @@ class ImportController extends AppController
         $importFilters = Configure::read('Filters.import', []);
         foreach ($importFilters as $filter) {
             $accept = (array)Hash::get($filter, 'accept', ['text/xml', 'text/csv']);
+            $name = (string)Hash::get($filter, 'name');
             $value = (string)Hash::get($filter, 'class');
             $text = (string)Hash::get($filter, 'label');
             $options = (array)Hash::get($filter, 'options');
-            $filters[] = compact('accept', 'value', 'text', 'options');
+            $filters[] = compact('accept', 'name', 'value', 'text', 'options');
             $this->updateServiceList($value);
         }
         $this->set('filters', $filters);

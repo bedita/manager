@@ -1,14 +1,14 @@
 <template>
     <div v-if="result">
         <div class="result">
-            <h2>{{ msgResult }}</h2>
+            <h2 v-if="!allZero">{{ msgResult }}</h2>
         </div>
         <fieldset id="import-result">
             <div class="import-message">
-                <h2>{{ result?.info }}</h2>
-                <p>{{ msgNumberCreated }}: {{ result?.created || '0' }}</p>
-                <p>{{ msgNumberUpdated }}: {{ result?.updated || '0' }}</p>
-                <p>{{ msgNumberErrors }}: {{ result?.errors || '0' }}</p>
+                <h2 v-html="result?.info"></h2>
+                <p v-if="!allZero">{{ msgNumberCreated }}: {{ result?.created || '0' }}</p>
+                <p v-if="!allZero">{{ msgNumberUpdated }}: {{ result?.updated || '0' }}</p>
+                <p v-if="!allZero">{{ msgNumberErrors }}: {{ result?.errors || '0' }}</p>
 
                 <div class="import-message import-warn" v-if="result.warn">
                     <h2>{{ msgImportWarn }}</h2>
@@ -46,6 +46,16 @@ export default {
             msgNumberErrors: t`Number of errors`,
             msgResult: t`Result`,
         };
+    },
+
+    computed: {
+        allZero() {
+            const created = this.result?.created || 0;
+            const updated = this.result?.updated || 0;
+            const errors = this.result?.errors || 0;
+
+            return created === updated && updated === errors && errors === 0;
+        },
     },
 }
 </script>

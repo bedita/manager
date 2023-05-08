@@ -1,16 +1,15 @@
 <template>
     <div id="data-import">
-        <h1>{{ msgDataImport }}</h1>
         <div class="columns">
             <div class="column">
                 <section class="fieldset">
-                    <header class="tab open">
+                    <header>
                         <h2>{{ msgFileType }}</h2>
                     </header>
                     <div class="tab-container mt-05">
                         <div class="input" v-for="filter in filters">
                             <label>
-                                <input type="radio" name="filter" :checked="activeFilter == filter.text" @click.prevent="activeFilter = filter.text" :value="filter.value" />
+                                <input type="radio" :id="filter.name" name="filter" v-model="activeFilter" :value="filter.name" />
                                 {{ filter.text }}
                             </label>
                         </div>
@@ -19,7 +18,7 @@
             </div>
             <div class="column">
                 <section class="fieldset">
-                    <header class="tab open">
+                    <header>
                         <h2>{{ msgOptions }}</h2>
                     </header>
                     <div class="tab-container mt-05">
@@ -28,7 +27,7 @@
                                 <span class="has-text-gray-600">{{ msgNoOptions }}</span>
                             </div>
                             <template v-else>
-                                <div class="mt-15" v-for="optionsData,optionsKey in filter.options" v-show="activeFilter = filter.text">
+                                <div class="mt-15" v-for="optionsData,optionsKey in filter.options" v-if="activeFilter == filter.name">
                                     <label>{{ optionsData.label }}
                                         <div v-if="optionsData.dataType === 'boolean'">
                                             <input type="checkbox" :name="`filter_options[${optionsKey}]`" :checked="optionsData.defaultValue === true"/>
@@ -88,9 +87,8 @@ export default {
             fileName: '',
             loading: false,
             msgChooseFile: t`Choose a file`,
-            msgDataImport: t`Data Import`,
             msgEmpty: t`Empty`,
-            msgFileType: t`File type`,
+            msgFileType: t`Import type`,
             msgImport: t`Import`,
             msgNoOptions: t`No options for this file type`,
             msgOptions: t`Options`,
@@ -98,15 +96,16 @@ export default {
     },
 
     mounted() {
-        this.activeFilter = this.filters?.[0].text || '';
+        this.activeFilter = this.filters?.[0].name || '';
     },
 
     methods: {
 
         accept() {
             const filter = this.filters?.filter((v) => v.text === this.activeFilter)[0];
+            const accept = filter?.accept || [];
 
-            return filter.accept.join(',');
+            return accept.join(',');
         },
 
         doImport() {

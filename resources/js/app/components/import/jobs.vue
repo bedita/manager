@@ -2,7 +2,7 @@
     <div class="columns">
         <div class="column">
             <section class="fieldset">
-                <header class="tab open">
+                <header>
                     <h2>{{ msgJobs }}</h2>
                 </header>
                 <div class="is-loading-spinner mt-05" v-if="loading"></div>
@@ -25,7 +25,9 @@
                             <div :class="job.meta.status">
                                 <a :class="showPayloadId != job.id ? 'icon-plus' : 'icon-minus'" v-on:click.prevent="togglePayload(job.id)"></a>
                             </div>
-                            <div class="job-payload" v-show="showPayloadId == job.id"><pre>{{ job.attributes.payload }}</pre></div>
+                            <div class="job-payload" v-show="showPayloadId == job.id">
+                                <pre>{{ job.attributes.payload }}</pre>
+                            </div>
                         </template>
                     </div>
                 </div>

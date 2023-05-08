@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-05-05 10:45:57 \n"
+"POT-Creation-Date: 2023-05-08 07:12:49 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1080,7 +1080,7 @@ msgstr ""
 msgid "Empty"
 msgstr ""
 
-msgid "File type"
+msgid "Import type"
 msgstr ""
 
 msgid "No options for this file type"
