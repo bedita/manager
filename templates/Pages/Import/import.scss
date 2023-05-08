@@ -44,6 +44,10 @@
             font-family: monospace;
         }
 
+        &.completed {
+            color: $success;
+        }
+
         &.failed {
             color: $danger;
         }

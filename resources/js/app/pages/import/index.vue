@@ -9,7 +9,7 @@
                     <div class="tab-container mt-05">
                         <div class="input" v-for="filter in filters">
                             <label>
-                                <input type="radio" :id="filter.name" name="filter" v-model="activeFilter" :value="filter.name" />
+                                <input type="radio" :id="filter.name" name="filter" v-model="activeFilter" :value="filter.value" />
                                 {{ filter.text }}
                             </label>
                         </div>
@@ -27,7 +27,7 @@
                                 <span class="has-text-gray-600">{{ msgNoOptions }}</span>
                             </div>
                             <template v-else>
-                                <div class="mt-15" v-for="optionsData,optionsKey in filter.options" v-if="activeFilter == filter.name">
+                                <div class="mt-15" v-for="optionsData,optionsKey in filter.options" v-if="activeFilter == filter.value">
                                     <label>{{ optionsData.label }}
                                         <div v-if="optionsData.dataType === 'boolean'">
                                             <input type="checkbox" :name="`filter_options[${optionsKey}]`" :checked="optionsData.defaultValue === true"/>
@@ -96,13 +96,13 @@ export default {
     },
 
     mounted() {
-        this.activeFilter = this.filters?.[0].name || '';
+        this.activeFilter = this.filters?.[0].value || '';
     },
 
     methods: {
 
         accept() {
-            const filter = this.filters?.filter((v) => v.text === this.activeFilter)[0];
+            const filter = this.filters?.filter((v) => v.value === this.activeFilter)[0];
             const accept = filter?.accept || [];
 
             return accept.join(',');
