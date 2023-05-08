@@ -14,6 +14,7 @@
                         <div class="table-header">{{ msgScheduledFrom }}</div>
                         <div class="table-header">{{ msgCompletedOn }}</div>
                         <div class="table-header">{{ msgStatus }}</div>
+                        <div class="table-header">{{ msgResults }}</div>
                         <div class="table-header"></div>
                         <template v-for="job in currentJobs">
                             <div :class="job.meta.status">{{ job.id }}</div>
@@ -22,6 +23,7 @@
                             <div :class="job.meta.status">{{ job.attributes.scheduled_from }}</div>
                             <div :class="job.meta.status">{{ job.meta.completed }}</div>
                             <div :class="job.meta.status">{{ job.meta.status }}</div>
+                            <div :class="job.meta.status">{{ message(job.attributes.results) }}</div>
                             <div :class="job.meta.status">
                                 <a :class="showPayloadId != job.id ? 'icon-plus' : 'icon-minus'" v-on:click.prevent="togglePayload(job.id)"></a>
                             </div>
@@ -66,6 +68,7 @@ export default {
             msgFileName: t`File name`,
             msgJobs: t`Jobs`,
             msgNoJobs: t`No Jobs`,
+            msgResults: t`Result`,
             msgScheduledFrom: t`Scheduled from`,
             msgServiceName: t`Service name`,
             msgStatus: t`Status`,
@@ -86,7 +89,21 @@ export default {
 
     methods: {
 
-         togglePayload(jobId) {
+        message(results) {
+            let m = '';
+            const rr = results.filter(r => r.data.message);
+            for (let r of rr) {
+                if (m.length > 0) {
+                    m = `${m}; ${r.data.message}`.trim();
+                } else {
+                    m = r.data.message;
+                }
+            }
+
+            return m;
+        },
+
+        togglePayload(jobId) {
             if (this.showPayloadId == jobId) {
                 this.showPayloadId = null;
 
