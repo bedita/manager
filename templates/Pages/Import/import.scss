@@ -26,7 +26,7 @@
 #list-jobs {
     min-width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 50px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 50px;
 
     .table-header {
         border-bottom: 1px solid $gray-700;

@@ -14,21 +14,22 @@
                         <div class="table-header">{{ msgScheduledFrom }}</div>
                         <div class="table-header">{{ msgCompletedOn }}</div>
                         <div class="table-header">{{ msgStatus }}</div>
-                        <div class="table-header">{{ msgResults }}</div>
                         <div class="table-header"></div>
                         <template v-for="job in currentJobs">
                             <div :class="job.meta.status">{{ job.id }}</div>
                             <div :class="job.meta.status">{{ job.attributes.payload && job.attributes.payload.filename }}</div>
                             <div :class="job.meta.status">{{ job.attributes.service }}</div>
-                            <div :class="job.meta.status">{{ job.attributes.scheduled_from }}</div>
-                            <div :class="job.meta.status">{{ job.meta.completed }}</div>
+                            <div :class="job.meta.status">{{ fmt(job.attributes.scheduled_from) }}</div>
+                            <div :class="job.meta.status">{{ fmt(job.meta.completed) }}</div>
                             <div :class="job.meta.status">{{ job.meta.status }}</div>
-                            <div :class="job.meta.status">{{ message(job.attributes.results) }}</div>
                             <div :class="job.meta.status">
                                 <a :class="showPayloadId != job.id ? 'icon-plus' : 'icon-minus'" v-on:click.prevent="togglePayload(job.id)"></a>
                             </div>
                             <div class="job-payload" v-show="showPayloadId == job.id">
+                                <h3>Payload</h3>
                                 <pre>{{ job.attributes.payload }}</pre>
+                                <h3 v-if="job.attributes.results">Results</h3>
+                                <pre v-if="job.attributes.results">{{ job.attributes.results }}</pre>
                             </div>
                         </template>
                     </div>
@@ -39,6 +40,7 @@
     </div>
 </template>
 <script>
+import moment from 'moment';
 import { t } from 'ttag';
 
 export default {
@@ -68,7 +70,6 @@ export default {
             msgFileName: t`File name`,
             msgJobs: t`Jobs`,
             msgNoJobs: t`No Jobs`,
-            msgResults: t`Result`,
             msgScheduledFrom: t`Scheduled from`,
             msgServiceName: t`Service name`,
             msgStatus: t`Status`,
@@ -89,21 +90,12 @@ export default {
 
     methods: {
 
-        message(results) {
-            if (!results) {
+        fmt(d) {
+            if (!d) {
                 return '';
             }
-            let m = '';
-            const rr = results.filter(r => r.data.message);
-            for (let r of rr) {
-                if (m.length > 0) {
-                    m = `${m}; ${r.data.message}`.trim();
-                } else {
-                    m = r.data.message;
-                }
-            }
 
-            return m;
+            return moment(d).locale(BEDITA.locale.slice(0, 2)).format('D MMM YYYY kk:mm');
         },
 
         togglePayload(jobId) {
