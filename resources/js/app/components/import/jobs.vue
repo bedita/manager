@@ -90,6 +90,9 @@ export default {
     methods: {
 
         message(results) {
+            if (!results) {
+                return '';
+            }
             let m = '';
             const rr = results.filter(r => r.data.message);
             for (let r of rr) {
