@@ -55,6 +55,7 @@ const _vueInstance = new Vue({
         ImportIndex: () => import(/* webpackChunkName: "import-index" */'app/pages/import/index'),
         ImportJobs: () => import(/* webpackChunkName: "import-jobs" */'app/components/import/jobs'),
         ImportResult: () => import(/* webpackChunkName: "import-result" */'app/components/import/result'),
+        JsonEditor: () => import(/* webpackChunkName: "json-editor" */'app/components/json-editor/json-editor'),
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
         AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
         AdminAppearance: () => import(/* webpackChunkName: "admin-appearance" */'app/pages/admin/appearance'),

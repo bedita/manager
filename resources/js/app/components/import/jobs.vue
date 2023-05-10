@@ -27,9 +27,20 @@
                             </div>
                             <div class="job-payload" v-show="showPayloadId == job.id">
                                 <h3>Payload</h3>
-                                <pre>{{ job.attributes.payload }}</pre>
+                                <div :id="`container-payload-${job.id}`"></div>
+                                <json-editor
+                                    :options="jsonEditorOptions"
+                                    :target="`container-payload-${job.id}`"
+                                    :text="JSON.stringify(job.attributes.payload)">
+                                </json-editor>
+
                                 <h3 v-if="job.attributes.results">Results</h3>
-                                <pre v-if="job.attributes.results">{{ job.attributes.results }}</pre>
+                                <div v-if="job.attributes.results" :id="`container-results-${job.id}`"></div>
+                                <json-editor v-if="job.attributes.results"
+                                    :options="jsonEditorOptions"
+                                    :target="`container-results-${job.id}`"
+                                    :text="JSON.stringify(job.attributes.results)">
+                                </json-editor>
                             </div>
                         </template>
                     </div>
@@ -45,6 +56,10 @@ import { t } from 'ttag';
 
 export default {
     name: 'jobs-index',
+
+    components: {
+        JsonEditor: () => import(/* webpackChunkName: "json-editor" */'app/components/json-editor/json-editor'),
+    },
 
     props: {
         jobs: {
@@ -64,6 +79,9 @@ export default {
     data() {
         return {
             currentJobs: () => [],
+            jsonEditorOptions: {
+                mainMenuBar: false,
+            },
             loading: false,
             showPayloadId: null,
             msgCompletedOn: t`Completed on`,
