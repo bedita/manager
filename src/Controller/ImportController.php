@@ -26,6 +26,16 @@ use Exception;
 class ImportController extends AppController
 {
     /**
+     * @inheritDoc
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->Security->setConfig('unlockedActions', ['file']);
+    }
+
+    /**
      * List of asyn service names to lookup
      *
      * @var array
@@ -135,10 +145,12 @@ class ImportController extends AppController
         $filters = [];
         $importFilters = Configure::read('Filters.import', []);
         foreach ($importFilters as $filter) {
-            $value = $filter['class'];
-            $text = $filter['label'];
-            $options = $filter['options'];
-            $filters[] = compact('value', 'text', 'options');
+            $accept = (array)Hash::get($filter, 'accept', ['text/xml', 'text/csv']);
+            $name = (string)Hash::get($filter, 'name');
+            $value = (string)Hash::get($filter, 'class');
+            $text = (string)Hash::get($filter, 'label');
+            $options = (array)Hash::get($filter, 'options');
+            $filters[] = compact('accept', 'name', 'value', 'text', 'options');
             $this->updateServiceList($value);
         }
         $this->set('filters', $filters);

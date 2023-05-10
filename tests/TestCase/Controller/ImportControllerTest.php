@@ -131,6 +131,7 @@ class ImportControllerTest extends TestCase
         $filters = [
             [
                 'class' => 'App\Test\Utils\ImportFilterSample',
+                'name' => 'my-dummy-filter',
                 'label' => 'Dummy Filter',
                 'options' => [],
             ],
@@ -144,6 +145,8 @@ class ImportControllerTest extends TestCase
         static::assertTrue(is_array($this->Import->viewBuilder()->getVar('filters')));
         $expected = [
             [
+                'accept' => ['text/xml', 'text/csv'],
+                'name' => 'my-dummy-filter',
                 'value' => 'App\Test\Utils\ImportFilterSample',
                 'text' => 'Dummy Filter',
                 'options' => [],

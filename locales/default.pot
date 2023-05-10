@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2023-04-18 12:29:42 \n"
+"POT-Creation-Date: 2023-05-08 07:12:49 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -314,9 +314,6 @@ msgstr ""
 msgid "File only partially uploaded"
 msgstr ""
 
-msgid "File type"
-msgstr ""
-
 msgid "Files"
 msgstr ""
 
@@ -365,13 +362,7 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-msgid "Import error"
-msgstr ""
-
 msgid "Import filter not selected"
-msgstr ""
-
-msgid "Import warn"
 msgstr ""
 
 msgid "Inherited properties"
@@ -387,9 +378,6 @@ msgid "Is Abstract"
 msgstr ""
 
 msgid "Job {0} to import file \"{1}\" scheduled."
-msgstr ""
-
-msgid "Jobs"
 msgstr ""
 
 msgid "Label"
@@ -509,22 +497,10 @@ msgstr ""
 msgid "No items found"
 msgstr ""
 
-msgid "No options for this file type"
-msgstr ""
-
 msgid "Number of created objects"
 msgstr ""
 
-msgid "Number of created resources"
-msgstr ""
-
-msgid "Number of errors"
-msgstr ""
-
 msgid "Number of updated objects"
-msgstr ""
-
-msgid "Number of updated resources"
 msgstr ""
 
 msgid "Object Types"
@@ -570,9 +546,6 @@ msgid "Open image"
 msgstr ""
 
 msgid "Open module"
-msgstr ""
-
-msgid "Options"
 msgstr ""
 
 msgid "Original"
@@ -705,9 +678,6 @@ msgid "Restore"
 msgstr ""
 
 msgid "Restored"
-msgstr ""
-
-msgid "Result"
 msgstr ""
 
 msgid "Return to Dashboard"
@@ -860,9 +830,6 @@ msgstr ""
 msgid "Updated"
 msgstr ""
 
-msgid "Upload"
-msgstr ""
-
 msgid "Upload local file"
 msgstr ""
 
@@ -935,9 +902,6 @@ msgstr ""
 msgid "completed"
 msgstr ""
 
-msgid "completed on"
-msgstr ""
-
 msgid "confirm password"
 msgstr ""
 
@@ -975,9 +939,6 @@ msgid "enabled"
 msgstr ""
 
 msgid "expires"
-msgstr ""
-
-msgid "file name"
 msgstr ""
 
 msgid "from"
@@ -1031,16 +992,10 @@ msgstr ""
 msgid "reset"
 msgstr ""
 
-msgid "scheduled from"
-msgstr ""
-
 msgid "scheduled_from"
 msgstr ""
 
 msgid "service"
-msgstr ""
-
-msgid "service name"
 msgstr ""
 
 msgid "status"
@@ -1111,18 +1066,24 @@ msgstr ""
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
-msgid "Show all folders"
-msgstr ""
-
-msgid "Hide forbidden folders"
-msgstr ""
-
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
 
 #, javascript-format
 msgid "Do you really want to remove these property types? ${ types }"
+msgstr ""
+
+msgid "Empty"
+msgstr ""
+
+msgid "Import type"
+msgstr ""
+
+msgid "No options for this file type"
+msgstr ""
+
+msgid "Options"
 msgstr ""
 
 msgid "Remove item. Are you sure?"
@@ -1255,6 +1216,12 @@ msgstr ""
 msgid "Your roles"
 msgstr ""
 
+msgid "Show all folders"
+msgstr ""
+
+msgid "Hide forbidden folders"
+msgstr ""
+
 msgid "Inherited"
 msgstr ""
 
@@ -1314,6 +1281,42 @@ msgstr ""
 #.  * Handle Locations and reverse geocoding from addresses
 #.
 msgid "add new"
+msgstr ""
+
+msgid "Completed on"
+msgstr ""
+
+msgid "File name"
+msgstr ""
+
+msgid "Jobs"
+msgstr ""
+
+msgid "No Jobs"
+msgstr ""
+
+msgid "Scheduled from"
+msgstr ""
+
+msgid "Service name"
+msgstr ""
+
+msgid "Import error"
+msgstr ""
+
+msgid "Import warn"
+msgstr ""
+
+msgid "Number of created resources"
+msgstr ""
+
+msgid "Number of updated resources"
+msgstr ""
+
+msgid "Number of errors"
+msgstr ""
+
+msgid "Result"
 msgstr ""
 
 msgid "version by"
