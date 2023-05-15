@@ -26,8 +26,8 @@
                             <div v-if="!filter.options">
                                 <span class="has-text-gray-600">{{ msgNoOptions }}</span>
                             </div>
-                            <template v-else>
-                                <div class="mt-15" v-for="optionsData,optionsKey in filter.options" :key="optionsKey" v-if="activeFilter == filter.value">
+                            <template v-if="filter.options && activeFilter == filter.value">
+                                <div class="mt-15" v-for="optionsData,optionsKey in filter.options" :key="optionsKey">
                                     <label>{{ optionsData.label }}
                                         <div v-if="optionsData.dataType === 'boolean'">
                                             <input type="checkbox" :name="`filter_options[${optionsKey}]`" :checked="filterOptions[filter.name][optionsKey] === true" v-model="filterOptions[filter.name][optionsKey]" />
