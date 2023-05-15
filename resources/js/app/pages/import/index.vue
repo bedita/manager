@@ -7,7 +7,7 @@
                         <h2>{{ msgFileType }}</h2>
                     </header>
                     <div class="tab-container mt-05">
-                        <div class="input" v-for="filter in filters">
+                        <div class="input" v-for="filter in filters" :key="filter.name">
                             <label>
                                 <input type="radio" :id="filter.name" name="filter" v-model="activeFilter" :value="filter.value" />
                                 {{ filter.text }}
@@ -22,19 +22,19 @@
                         <h2>{{ msgOptions }}</h2>
                     </header>
                     <div class="tab-container mt-05">
-                        <div v-for="filter in filters">
+                        <div v-for="filter in filters" :key="filter.name">
                             <div v-if="!filter.options">
                                 <span class="has-text-gray-600">{{ msgNoOptions }}</span>
                             </div>
                             <template v-else>
-                                <div class="mt-15" v-for="optionsData,optionsKey in filter.options" v-if="activeFilter == filter.value">
+                                <div class="mt-15" v-for="optionsData,optionsKey in filter.options" :key="optionsKey" v-if="activeFilter == filter.value">
                                     <label>{{ optionsData.label }}
                                         <div v-if="optionsData.dataType === 'boolean'">
                                             <input type="checkbox" :name="`filter_options[${optionsKey}]`" :checked="filterOptions[filter.name][optionsKey] === true" v-model="filterOptions[filter.name][optionsKey]" />
                                         </div>
                                         <div v-if="optionsData.dataType === 'options'">
                                             <select :name="`filter_options[${optionsKey}]`" v-model="filterOptions[filter.name][optionsKey]">
-                                                <option v-for="val,key in optionsData.values">{{ val }}</option>
+                                                <option v-for="val,key in optionsData.values" :key="key">{{ val }}</option>
                                             </select>
                                         </div>
                                         <div v-if="optionsData.dataType === 'text'">
