@@ -76,6 +76,16 @@ const _vueInstance = new Vue({
         Icon,
     },
 
+    /**
+    * properties or methods available for injection into its descendants
+    * (inject: ['property'])
+    */
+    provide() {
+        return {
+            getCSFRToken: () => BEDITA.csrfToken,
+        }
+    },
+
     data() {
         return {
             vueLoaded: false,
@@ -99,13 +109,14 @@ const _vueInstance = new Vue({
         }
     },
 
-    /**
-    * properties or methods available for injection into its descendants
-    * (inject: ['property'])
-    */
-    provide() {
-        return {
-            getCSFRToken: () => BEDITA.csrfToken,
+    watch: {
+        /**
+         * watch pageSize variable and update pagination.page_size accordingly
+         *
+         * @param {Number} value page size number
+         */
+        pageSize(value) {
+            this.pagination.page_size = value;
         }
     },
 
@@ -157,17 +168,6 @@ const _vueInstance = new Vue({
         this.$on('resource-changed', this.onResourceChanged);
 
         Vue.prototype.$eventBus = new Vue();
-    },
-
-    watch: {
-        /**
-         * watch pageSize variable and update pagination.page_size accordingly
-         *
-         * @param {Number} value page size number
-         */
-        pageSize(value) {
-            this.pagination.page_size = value;
-        }
     },
 
     mounted: function () {

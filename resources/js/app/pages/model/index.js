@@ -88,7 +88,7 @@ export default {
         editPropParams(id, value) {
             let params = null;
             try {
-                if (value !== "") {
+                if (value !== '') {
                     params = JSON.parse(value);
                     if (!Object.keys(params).length) {
                         params = null;
@@ -135,8 +135,8 @@ export default {
          */
         addRow() {
             this.newPropertyTypes.push({
-                name: "",
-                params: ""
+                name: '',
+                params: ''
             });
         },
 

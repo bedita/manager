@@ -40,9 +40,9 @@ export default {
         go() {
             let urlPath = '';
             if (this.popUpAction == 'search') {
-                urlPath += "/objects?q=";
+                urlPath += '/objects?q=';
             } else if (this.popUpAction == 'id') {
-                urlPath += "/view/";
+                urlPath += '/view/';
             }
 
             if (this.searchString && urlPath) {

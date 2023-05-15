@@ -40,7 +40,7 @@ export default {
             if (e.key === 'Enter' || e.keyCode === 13) {
                 e.preventDefault();
                 e.stopPropagation();
-                document.querySelector(`form[action="/login"]`).submit();
+                document.querySelector('form[action="/login"]').submit();
             }
         },
         toggleShow() {
