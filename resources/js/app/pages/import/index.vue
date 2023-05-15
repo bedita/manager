@@ -30,15 +30,15 @@
                                 <div class="mt-15" v-for="optionsData,optionsKey in filter.options" v-if="activeFilter == filter.value">
                                     <label>{{ optionsData.label }}
                                         <div v-if="optionsData.dataType === 'boolean'">
-                                            <input type="checkbox" :name="`filter_options[${optionsKey}]`" :checked="optionsData.defaultValue === true"/>
+                                            <input type="checkbox" :name="`filter_options[${optionsKey}]`" :checked="filterOptions[filter.name][optionsKey] === true" v-model="filterOptions[filter.name][optionsKey]" />
                                         </div>
                                         <div v-if="optionsData.dataType === 'options'">
-                                            <select :name="`filter_options[${optionsKey}]`">
-                                                <option v-for="val,key in optionsData.values" :value="key" :selected="optionsData.defaultValue == key ">{{ val }}</option>
+                                            <select :name="`filter_options[${optionsKey}]`" v-model="filterOptions[filter.name][optionsKey]">
+                                                <option v-for="val,key in optionsData.values">{{ val }}</option>
                                             </select>
                                         </div>
                                         <div v-if="optionsData.dataType === 'text'">
-                                            <input type="text" :name="`filter_options[${optionsKey}]`" :value="optionsData.defaultValue || ''" />
+                                            <input type="text" :name="`filter_options[${optionsKey}]`" v-model="filterOptions[filter.name][optionsKey]" />
                                         </div>
                                     </label>
                                 </div>
@@ -85,6 +85,7 @@ export default {
         return {
             activeFilter: '',
             fileName: '',
+            filterOptions: {},
             loading: false,
             msgChooseFile: t`Choose a file`,
             msgEmpty: t`Empty`,
@@ -97,6 +98,16 @@ export default {
 
     mounted() {
         this.activeFilter = this.filters?.[0].value || '';
+        for (const filter of this.filters) {
+            if (filter.options === undefined) {
+                continue;
+            }
+            this.filterOptions[filter.name] = {};
+            const keys = Object.keys(filter.options);
+            for (const optionsKey of keys) {
+                this.filterOptions[filter.name][optionsKey] = filter.options[optionsKey]?.defaultValue || '';
+            }
+        }
     },
 
     methods: {
