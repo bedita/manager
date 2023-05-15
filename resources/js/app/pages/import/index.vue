@@ -7,7 +7,7 @@
                         <h2>{{ msgFileType }}</h2>
                     </header>
                     <div class="tab-container mt-05">
-                        <div class="input" v-for="filter in filters">
+                        <div class="input" v-for="filter in filters" :key="filter.name">
                             <label>
                                 <input type="radio" :id="filter.name" name="filter" v-model="activeFilter" :value="filter.value" />
                                 {{ filter.text }}
@@ -22,23 +22,23 @@
                         <h2>{{ msgOptions }}</h2>
                     </header>
                     <div class="tab-container mt-05">
-                        <div v-for="filter in filters">
+                        <div v-for="filter in filters" :key="filter.name">
                             <div v-if="!filter.options">
                                 <span class="has-text-gray-600">{{ msgNoOptions }}</span>
                             </div>
-                            <template v-else>
-                                <div class="mt-15" v-for="optionsData,optionsKey in filter.options" v-if="activeFilter == filter.value">
+                            <template v-if="filter.options && activeFilter == filter.value">
+                                <div class="mt-15" v-for="optionsData,optionsKey in filter.options" :key="optionsKey">
                                     <label>{{ optionsData.label }}
                                         <div v-if="optionsData.dataType === 'boolean'">
-                                            <input type="checkbox" :name="`filter_options[${optionsKey}]`" :checked="optionsData.defaultValue === true"/>
+                                            <input type="checkbox" :name="`filter_options[${optionsKey}]`" :checked="filterOptions[filter.name][optionsKey] === true" v-model="filterOptions[filter.name][optionsKey]" />
                                         </div>
                                         <div v-if="optionsData.dataType === 'options'">
-                                            <select :name="`filter_options[${optionsKey}]`">
-                                                <option v-for="val,key in optionsData.values" :value="key" :selected="optionsData.defaultValue == key ">{{ val }}</option>
+                                            <select :name="`filter_options[${optionsKey}]`" v-model="filterOptions[filter.name][optionsKey]">
+                                                <option v-for="val,key in optionsData.values" :key="key">{{ val }}</option>
                                             </select>
                                         </div>
                                         <div v-if="optionsData.dataType === 'text'">
-                                            <input type="text" :name="`filter_options[${optionsKey}]`" :value="optionsData.defaultValue || ''" />
+                                            <input type="text" :name="`filter_options[${optionsKey}]`" v-model="filterOptions[filter.name][optionsKey]" />
                                         </div>
                                     </label>
                                 </div>
@@ -85,6 +85,7 @@ export default {
         return {
             activeFilter: '',
             fileName: '',
+            filterOptions: {},
             loading: false,
             msgChooseFile: t`Choose a file`,
             msgEmpty: t`Empty`,
@@ -97,6 +98,16 @@ export default {
 
     mounted() {
         this.activeFilter = this.filters?.[0].value || '';
+        for (const filter of this.filters) {
+            if (filter.options === undefined) {
+                continue;
+            }
+            this.filterOptions[filter.name] = {};
+            const keys = Object.keys(filter.options);
+            for (const optionsKey of keys) {
+                this.filterOptions[filter.name][optionsKey] = filter.options[optionsKey]?.defaultValue || '';
+            }
+        }
     },
 
     methods: {
