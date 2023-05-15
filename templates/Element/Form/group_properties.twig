@@ -4,10 +4,11 @@
         {{ element(customElement, {'properties' : properties}) }}
     {% else %}
 
+        {% set locked = object.meta.locked or Perms.isLockedByParents(object.id) %}
         {% for key, value in properties %}
-            {% if object.meta.locked and key == 'uname' %}
+            {% if locked and key == 'uname' %}
                 {{ Property.control(key, value, {'readonly': 'readonly'})|raw }}
-            {% elseif object.meta.locked and key == 'status' %}
+            {% elseif locked and key == 'status' %}
                 {{ Property.control(key, value, {'disabled': 'disabled'})|raw }}
                 <input type="hidden" name="status" id="status" value="{{ value }}" />
             {% else %}

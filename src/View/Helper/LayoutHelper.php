@@ -19,6 +19,7 @@ use Cake\View\Helper;
 /**
  * Helper for site layout
  *
+ * @property \App\View\Helper\EditorsHelper $Editors
  * @property \Cake\View\Helper\HtmlHelper $Html
  * @property \App\View\Helper\LinkHelper $Link
  * @property \App\View\Helper\PermsHelper $Perms
@@ -31,7 +32,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html', 'Link', 'Perms', 'System'];
+    public $helpers = ['Editors', 'Html', 'Link', 'Perms', 'System'];
 
     /**
      * Is Dashboard
@@ -107,6 +108,29 @@ class LayoutHelper extends Helper
         $title = (string)Hash::get($object, 'attributes.title');
 
         return empty($title) ? $name : sprintf('%s | %s', $title, $name);
+    }
+
+    /**
+     * Return module css class
+     *
+     * @return string
+     */
+    public function moduleClass(): string
+    {
+        $moduleClasses = ['app-module-box'];
+        $object = (array)$this->getView()->get('object');
+        if (!empty($object) && $this->Perms->isLockedByParents((string)Hash::get($object, 'id'))) {
+            $moduleClasses[] = 'locked';
+
+            return trim(implode(' ', $moduleClasses));
+        }
+        $editors = $this->Editors->list();
+        if (count($editors) > 1) {
+            $moduleClasses = ['app-module-box-concurrent-editors'];
+        }
+        $moduleClasses[] = $this->publishStatus($object);
+
+        return trim(implode(' ', $moduleClasses));
     }
 
     /**
