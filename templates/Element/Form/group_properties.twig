@@ -4,7 +4,7 @@
         {{ element(customElement, {'properties' : properties}) }}
     {% else %}
 
-        {% set locked = object.meta.locked or Perms.isLockedByParents(object.id) %}
+        {% set locked = object.meta.locked or (object.id and Perms.isLockedByParents(object.id)) %}
         {% for key, value in properties %}
             {% if locked and key == 'uname' %}
                 {{ Property.control(key, value, {'readonly': 'readonly'})|raw }}
