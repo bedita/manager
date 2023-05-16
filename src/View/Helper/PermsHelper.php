@@ -208,6 +208,9 @@ class PermsHelper extends Helper
 
     /**
      * Return true if object is locked by parents.
+     * When user is admin, return false.
+     * When user is not admin, return false if at least one parent is not locked for user.
+     * Return true if all parents are locked for user.
      *
      * @param string $id The object id
      * @return bool

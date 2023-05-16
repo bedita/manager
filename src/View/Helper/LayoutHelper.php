@@ -111,7 +111,11 @@ class LayoutHelper extends Helper
     }
 
     /**
-     * Return module css class
+     * Return module css class(es).
+     * If object is locked by parents, return base class plus 'locked' class.
+     * If object is locked by concurrent editors, return 'concurrent-editors' class plus publish status class.
+     * If object is not locked, return base class plus publish status class.
+     * Publish status class is 'expired', 'future', 'locked' or 'draft'.
      *
      * @return string
      */
