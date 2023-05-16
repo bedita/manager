@@ -226,9 +226,6 @@ class PermsHelper extends Helper
         $roles = $this->userRoles();
         $locked = true;
         foreach ($included as $data) {
-            if ($data['type'] !== 'folders') {
-                continue;
-            }
             if (count(array_intersect($roles, (array)Hash::get($data, 'meta.perms.roles'))) > 0) {
                 $locked = false;
             }
