@@ -32,12 +32,12 @@ export default {
                         <span class="name" :class="info.cancelled? 'has-text-gray-500' : ''"><: info.file.name :></span>
 
                         <button v-show="!info.error && !info.cancelled && !info.done && !info.pending" class="button-outlined" @click.stop.prevent="abortUpload(info.file)">
-                            <Icon icon="carbon:stop"></Icon>
+                            <app-icon icon="carbon:stop"></app-icon>
                             <span class="ml-05">${t`stop`}</span>
                         </button>
 
                         <button v-show="(info.error || info.cancelled) && !info.done" class="button-outlined" @click.stop.prevent="removeProgressItem(info.file)">
-                            <Icon icon="carbon:trash-can"></Icon>
+                            <app-icon icon="carbon:trash-can"></app-icon>
                             <span class="ml-05">${t`remove`}</span>
                         </button>
 

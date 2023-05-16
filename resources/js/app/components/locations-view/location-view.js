@@ -94,7 +94,7 @@ export default {
                         <div class="is-flex">
                             <input class="coordinates" type="text" v-model="coordinates" @change="onChange" :disabled="!!id" />
                             <button class="get-coordinates" @click.prevent="geocode" :disabled="!apiKey || !address">
-                                <Icon icon="carbon:wikis"></Icon>
+                                <app-icon icon="carbon:wikis"></app-icon>
                                 <span class="ml-05">${t`GET`}</span>
                             </button>
                         </div>
@@ -121,11 +121,11 @@ export default {
             </div>
             <div class="location-buttons">
                 <a v-if="id" class="button button-text-white" :href="$helpers.buildViewUrl(id)" target="_blank">
-                    <Icon icon="carbon:launch"></Icon>
+                    <app-icon icon="carbon:launch"></app-icon>
                     <span class="ml-05">${t`edit`}</span>
                 </a>
                 <button @click.prevent="onRemove" class="button button-text-white remove">
-                <Icon icon="carbon:unlink"></Icon>
+                <app-icon icon="carbon:unlink"></app-icon>
                     <span class="ml-05">${t`remove`}</span>
                 </button>
             </div>

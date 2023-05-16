@@ -6,7 +6,7 @@ export default {
     template: `
     <div :class="className()" untitled-label="${t`Untitled`}" @mouseover="onMouseover()" @mouseleave="onMouseleave()">
         <: !msg ? truncated : '' :>
-        <Icon icon="carbon:copy" v-if="showCopyIcon()" @click.stop.prevent="copy()"></Icon>
+        <app-icon icon="carbon:copy" v-if="showCopyIcon()" @click.stop.prevent="copy()"></app-icon>
         <div v-if="msg" v-text="msg" style="color: gray"></div>
     </div>
     `,

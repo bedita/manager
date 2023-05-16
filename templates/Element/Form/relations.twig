@@ -19,10 +19,10 @@
                         <h2>{{ Layout.tr(relationLabel) }}</h2>
                         <div class="buttons" v-show="isOpen">
                             <button @click.prevent @click.stop="switchBlockView()" :data-active="!dataList" class="switch-view">
-                                <Icon icon="carbon:grid"></Icon>
+                                <app-icon icon="carbon:grid"></app-icon>
                             </button>
                             <button @click.prevent @click.stop="switchListView()" :data-active="dataList" class="switch-view">
-                                <Icon icon="carbon:list-bulleted"></Icon>
+                                <app-icon icon="carbon:list-bulleted"></app-icon>
                             </button>
                         </div>
                         <span class="tag is-smallest is-black mx-05" v-show="!isLoading"

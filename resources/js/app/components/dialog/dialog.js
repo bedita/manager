@@ -14,13 +14,13 @@ export const Dialog = Vue.extend({
                 <header class="is-flex space-between align-center is-expanded">
                     <div class="is-flex align-center">
                         <span class="is-capitalized mr-05" v-if="headerText"><: t(headerText) :></span>
-                        <Icon icon="carbon:checkmark" color="green" v-if="dialogType === 'success'"></Icon>
-                        <Icon icon="carbon:information" color="blue" v-if="dialogType === 'info'"></Icon>
-                        <Icon icon="carbon:warning" color="orange" v-if="dialogType === 'warning'"></Icon>
-                        <Icon icon="carbon:misuse" color="red" v-if="dialogType === 'error'"></Icon>
+                        <app-icon icon="carbon:checkmark" color="green" v-if="dialogType === 'success'"></app-icon>
+                        <app-icon icon="carbon:information" color="blue" v-if="dialogType === 'info'"></app-icon>
+                        <app-icon icon="carbon:warning" color="orange" v-if="dialogType === 'warning'"></app-icon>
+                        <app-icon icon="carbon:misuse" color="red" v-if="dialogType === 'error'"></app-icon>
                     </div>
                     <i @click="hide()">
-                        <Icon icon="carbon:close"></Icon>
+                        <app-icon icon="carbon:close"></app-icon>
                     </i>
                 </header>
                 <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>

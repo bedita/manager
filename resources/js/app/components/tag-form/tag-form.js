@@ -19,18 +19,18 @@ export default {
             </div>
             <div v-if="canSave && !editMode">
                 <button @click.prevent="editMode = !editMode" class="button button-outlined">
-                    <Icon icon="carbon:edit"></Icon>
+                    <app-icon icon="carbon:edit"></app-icon>
                     <span class="ml-05">${t`Edit`}</span>
                 </button>
             </div>
 
             <div v-if="editMode">
                 <input type="text" size="50" maxlength="50" v-model="name" @change="onChangeName($event)" />
-                <span class="ml-05" v-title="this.$helpers.minLength(3)"><Icon icon="carbon:information"></Icon></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><app-icon icon="carbon:information"></app-icon></span>
             </div>
             <div v-if="editMode">
                 <input type="text" v-model="label" />
-                <span class="ml-05" v-title="this.$helpers.minLength(3)"><Icon icon="carbon:information"></Icon></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><app-icon icon="carbon:information"></app-icon></span>
             </div>
             <div v-if="editMode">
                 <input type="checkbox" v-model="enabled" />
@@ -41,15 +41,15 @@ export default {
             </div>
             <div v-if="editMode">
                 <button @click.prevent="cancel" class="button button-outlined" v-if="obj?.id">
-                    <Icon icon="carbon:undo"></Icon>
+                    <app-icon icon="carbon:undo"></app-icon>
                     <span class="ml-05">${t`Cancel`}</span>
                 </button>
                 <button @click.prevent="save" class="button button-primary" :disabled="name.length < 3 || label.length < 3">
-                    <Icon icon="carbon:save"></Icon>
+                    <app-icon icon="carbon:save"></app-icon>
                     <span class="ml-05">${t`Save`}</span>
                 </button>
                 <button @click.prevent="remove" class="button button-outlined" v-if="obj?.id">
-                    <Icon icon="carbon:trash-can"></Icon>
+                    <app-icon icon="carbon:trash-can"></app-icon>
                     <span class="ml-05">${t`Remove`}</span>
                 </button>
             </div>

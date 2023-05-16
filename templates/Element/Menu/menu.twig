@@ -32,13 +32,13 @@
             <button role="search" class="button icon icon-only-icon ml-05" title="{{ __('Search') }}"
                 v-on:click.prevent="togglePopup('search')">
                 <span class="is-sr-only">{{ __('Search') }}</span>
-                <Icon icon="carbon:search"></Icon>
+                <app-icon icon="carbon:search"></app-icon>
             </button>
 
             <button class="button icon icon-only-icon ml-05" title="{{ __('Direct access by id or unique name') }}"
                 v-on:click.prevent="togglePopup('id')">
                 <span class="is-sr-only">{{ __('Direct access by id or unique name') }}</span>
-                <Icon icon="carbon:cube"></Icon>
+                <app-icon icon="carbon:cube"></app-icon>
             </button>
 
             <div class="popup" v-show="this.popUpAction">

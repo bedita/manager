@@ -25,7 +25,7 @@ import { buildSearchParams } from '../libs/urlUtils.js';
 
 import vTitle from 'vuejs-title';
 
-import { Icon } from '@iconify/vue2';
+import { Icon as AppIcon } from '@iconify/vue2';
 
 const _vueInstance = new Vue({
     el: 'main',
@@ -73,7 +73,7 @@ const _vueInstance = new Vue({
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         Permission:() => import(/* webpackChunkName: "permission" */'app/components/permission/permission'),
         Permissions:() => import(/* webpackChunkName: "permissions" */'app/components/permissions/permissions'),
-        Icon,
+        AppIcon,
     },
 
     /**
@@ -576,4 +576,4 @@ const _vueInstance = new Vue({
 window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
-Vue.component('Icon', Icon);
+Vue.component('AppIcon', AppIcon);
