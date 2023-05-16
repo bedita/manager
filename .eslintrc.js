@@ -41,6 +41,7 @@ module.exports = {
       }],
       "vue/order-in-components": ["warn", {
         "order": [
+          ["template", "render"],
           "extends",
           "el",
           "name",
@@ -72,7 +73,6 @@ module.exports = {
           "watchQuery",
           "LIFECYCLE_HOOKS",
           "methods",
-          ["template", "render"],
           "renderError"
         ]
       }],

@@ -1,6 +1,28 @@
 import Vue from 'vue';
 
 export const AjaxLogin = Vue.extend({
+
+    template: `
+        <div class="ajax-login-modal" role="dialog">
+            <transition name="fade">
+                <div class="backdrop" @click="hide()" v-if="isOpen"></div>
+            </transition>
+            <transition name="slide">
+                <div class="ajax-login">
+                    <header>
+                        <span class="title" v-if="headerText"><: headerText :></span>
+                        <i class="icon-cancel-1 has-text-size-larger" @click="close()"></i>
+                    </header>
+                    <div class="content">
+                        <div class="message" v-if="message">
+                            <: message :>
+                        </div>
+                        <iframe title="Login form" :src="url" ref="iframe"></iframe>
+                    </div>
+                </div>
+            </transition>
+        </div>
+    `,
     name: 'AjaxLogin',
 
     props: {
@@ -47,26 +69,4 @@ export const AjaxLogin = Vue.extend({
             this.$destroy();
         }
     },
-
-    template: `
-        <div class="ajax-login-modal" role="dialog">
-            <transition name="fade">
-                <div class="backdrop" @click="hide()" v-if="isOpen"></div>
-            </transition>
-            <transition name="slide">
-                <div class="ajax-login">
-                    <header>
-                        <span class="title" v-if="headerText"><: headerText :></span>
-                        <i class="icon-cancel-1 has-text-size-larger" @click="close()"></i>
-                    </header>
-                    <div class="content">
-                        <div class="message" v-if="message">
-                            <: message :>
-                        </div>
-                        <iframe title="Login form" :src="url" ref="iframe"></iframe>
-                    </div>
-                </div>
-            </transition>
-        </div>
-    `,
 });
