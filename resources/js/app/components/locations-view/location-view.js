@@ -228,34 +228,51 @@ export default {
                     });
             })
         },
-        searchAddress(input) {
-            const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}&sort=address`;
+        async searchAddress(input) {
+            const results = [];
+            const collected = [];
 
-            return new Promise(resolve => {
-                if (input.length < 3) {
-                    // do not search with less than 3 chars
-                    return resolve([]);
-                }
+            // do not search with less than 3 chars
+            if (input.length >= 3) {
+                let page = 1;
+                while (results.length < 20) {
+                    const url = new URL('/api/locations', BEDITA.base);
+                    url.searchParams.set('filter[query]', input.trim());
+                    url.searchParams.set('sort', 'address');
+                    url.searchParams.set('page', page++);
 
-                fetch(requestUrl, options)
-                    .then(response => response.json())
-                    .then(data => {
-                        let results = data.data;
-                        if (!results) {
-                            return resolve([]);
+                    const response = await fetch(url, options);
+                    const json = await response.json();
+                    const addresses = json.data.reduce((acc, location) => {
+                        const address = (location && location.attributes && this.cleanAddress(location.attributes.address) || '')
+                            .toLowerCase();
+                        if (!address || acc[address]) {
+                            return acc;
                         }
+                        if (collected.includes(address)) {
+                            // avoid duplicates
+                            return acc;
+                        }
+                        if (address.indexOf(input.toLowerCase()) === -1) {
+                            // only pick locations that include input string in the address
+                            return acc;
+                        }
+                        acc[address] = location;
+                        return acc;
+                    }, {});
 
-                        // only pick locations that include input string in the address
-                        results = results.filter((location) => {
-                            const address = location && location.attributes && this.cleanAddress(location.attributes.address);
-                            return address && address.toLowerCase().indexOf(input.toLowerCase()) !== -1;
-                        });
-                        // store raw fetched data
-                        this.fetchedLocations = results.slice();
+                    collected.push(...Object.keys(addresses));
+                    results.push(...Object.values(addresses));
 
-                        resolve(results);
-                    });
-            });
+                    if (json.meta.pagination.page_count < page) {
+                        break;
+                    }
+                }
+            }
+
+            this.fetchedLocations = results.slice();
+
+            return results;
         },
         /**
          * Title to show in the autocomplete component.
