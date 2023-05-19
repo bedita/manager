@@ -189,7 +189,7 @@ class ImportController extends AppController
             'filter' => ['service' => implode(',', $this->services)],
         ];
         try {
-            $response = $this->apiClient->get('/admin/async_jobs', $query);
+            $response = $this->apiClient->get('/async_jobs', $query);
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);

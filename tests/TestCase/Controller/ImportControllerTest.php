@@ -204,7 +204,7 @@ class ImportControllerTest extends TestCase
             ->setConstructorArgs(['https://media.example.com'])
             ->getMock();
         $apiClient->method('get')
-            ->with('/admin/async_jobs')
+            ->with('/async_jobs')
             ->willThrowException(new BEditaClientException('My test exception'));
         $this->Import->apiClient = $apiClient;
         $method->invokeArgs($this->Import, []);
@@ -214,13 +214,13 @@ class ImportControllerTest extends TestCase
         $flash = $this->Import->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('My test exception', Hash::get($flash, '0.message'));
 
-        // mock api get /admin/async_jobs
+        // mock api get /async_jobs
         $expected = [['id' => 1], ['id' => 2], ['id' => 3]];
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.com'])
             ->getMock();
         $apiClient->method('get')
-            ->with('/admin/async_jobs')
+            ->with('/async_jobs')
             ->willReturn(['data' => $expected]);
         $this->Import->apiClient = $apiClient;
         $method->invokeArgs($this->Import, []);
