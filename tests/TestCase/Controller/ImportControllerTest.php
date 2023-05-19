@@ -15,9 +15,13 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\ImportController;
 use App\Core\Result\ImportResult;
+use Authentication\AuthenticationService;
+use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identity;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
+use BEdita\WebTools\Identifier\ApiIdentifier;
 use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
@@ -318,7 +322,7 @@ class ImportControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        $this->setupController();
+        $this->setupControllerAndLogin();
         $this->Import->index();
         static::assertEmpty($this->Import->viewBuilder()->getVar('jobs'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('services'));
@@ -343,5 +347,55 @@ class ImportControllerTest extends TestCase
         static::assertEmpty($this->Import->viewBuilder()->getVar('jobs'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('services'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('filters'));
+    }
+
+    /**
+     * Setup controller and manually login user
+     *
+     * @return array|null
+     */
+    protected function setupControllerAndLogin(): ?array
+    {
+        $filename = sprintf('%s/tests/files/%s', getcwd(), $this->filename);
+        $file = new UploadedFile($filename, filesize($filename), $this->fileError, $this->filename);
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'post' => [
+                'username' => env('BEDITA_ADMIN_USR'),
+                'password' => env('BEDITA_ADMIN_PWD'),
+                'file' => $file,
+                'filter' => 'App\Test\Utils\ImportFilterSample',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->Import = new class ($request) extends ImportController
+        {
+            public function render($view = null, $layout = null): Response
+            {
+                return $this->getResponse();
+            }
+        };
+
+        // Mock Authentication component
+        ApiClientProvider::getApiClient()->setupTokens([]); // reset client
+        $service = new AuthenticationService();
+        $service->loadIdentifier(ApiIdentifier::class);
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+            ],
+        ]);
+        $this->Import->setRequest($this->Import->getRequest()->withAttribute('authentication', $service));
+        $result = $this->Import->Authentication->getAuthenticationService()->authenticate($this->Import->getRequest());
+        $identity = new Identity($result->getData());
+        $request = $this->Import->getRequest()->withAttribute('identity', $identity);
+        $this->Import->setRequest($request);
+        $user = $this->Import->Authentication->getIdentity() ?: new Identity([]);
+        $this->Import->Authentication->setIdentity($user);
+
+        return $user->getOriginalData();
     }
 }
