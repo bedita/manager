@@ -14,11 +14,11 @@ declare(strict_types=1);
  */
 namespace App\Utility;
 
-use Cake\Cache\Cache;
-use Psr\Log\LogLevel;
-use Cake\Utility\Hash;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
+use Cake\Utility\Hash;
+use Psr\Log\LogLevel;
 
 trait SchemaTrait
 {
