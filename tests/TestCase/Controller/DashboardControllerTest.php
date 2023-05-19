@@ -152,6 +152,7 @@ class DashboardControllerTest extends TestCase
         // recent items
         static::assertArrayHasKey('recentItems', $this->Dashboard->viewBuilder()->getVars());
         static::assertEmpty($this->Dashboard->viewBuilder()->getVar('recentItems'));
+        static::assertArrayHasKey('jobsAllow', $this->Dashboard->viewBuilder()->getVars());
     }
 
     /**

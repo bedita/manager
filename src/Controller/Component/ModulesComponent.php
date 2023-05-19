@@ -14,7 +14,7 @@ namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
 use App\Utility\OEmbed;
-use BEdita\SDK\BEditaClientException;
+use App\Utility\SchemaTrait;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
@@ -22,7 +22,6 @@ use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Utility\Hash;
-use Psr\Log\LogLevel;
 
 /**
  * Component to load available modules.
@@ -33,6 +32,13 @@ use Psr\Log\LogLevel;
  */
 class ModulesComponent extends Component
 {
+    use SchemaTrait;
+
+    /**
+     * Fixed relationships to be loaded for each object
+     *
+     * @var array
+     */
     public const FIXED_RELATIONSHIPS = [
         'parent',
         'children',
@@ -106,33 +112,6 @@ class ModulesComponent extends Component
         if (!empty($currentModule)) {
             $this->getController()->set(compact('currentModule'));
         }
-    }
-
-    /**
-     * Getter for home endpoint metadata.
-     *
-     * @return array
-     */
-    protected function getMeta(): array
-    {
-        try {
-            /** @var \Authentication\Identity|null $user */
-            $user = $this->Authentication->getIdentity();
-            $home = Cache::remember(
-                sprintf('home_%d', $user->get('id')),
-                function () {
-                    return ApiClientProvider::getApiClient()->get('/home');
-                }
-            );
-        } catch (BEditaClientException $e) {
-            // Something bad happened. Returning an empty array instead.
-            // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
-            $this->log($e->getMessage(), LogLevel::ERROR);
-
-            return [];
-        }
-
-        return !empty($home['meta']) ? $home['meta'] : [];
     }
 
     /**

@@ -324,6 +324,7 @@ class ImportControllerTest extends TestCase
         static::assertEmpty($this->Import->viewBuilder()->getVar('services'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('filters'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('result'));
+        static::assertArrayHasKey('jobsAllow', $this->Import->viewBuilder()->getVars());
         $this->Import->dispatchEvent('Controller.beforeRender');
         static::assertEquals(['_name' => 'import:index'], $this->Import->viewBuilder()->getVar('moduleLink'));
     }

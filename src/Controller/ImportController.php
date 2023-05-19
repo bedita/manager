@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\SchemaTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -25,6 +26,8 @@ use Exception;
  */
 class ImportController extends AppController
 {
+    use SchemaTrait;
+
     /**
      * @inheritDoc
      */
@@ -62,6 +65,10 @@ class ImportController extends AppController
         $result = $this->getRequest()->getSession()->consume('Import.result');
         $this->set(compact('result'));
         $this->loadFilters();
+        $this->set(
+            'jobsAllow',
+            (array)Hash::extract($this->getMeta(), 'resources./async_jobs.hints.allow')
+        );
     }
 
     /**
