@@ -204,7 +204,9 @@ class ModulesComponent extends Component
      */
     protected function modulesFromMeta(): array
     {
-        $meta = $this->getMeta();
+        /** @var \Authentication\Identity $user */
+        $user = $this->Authentication->getIdentity();
+        $meta = $this->getMeta($user);
         $modules = collection(Hash::get($meta, 'resources', []))
             ->map(function (array $data, $endpoint) {
                 $name = substr($endpoint, 1);
@@ -226,7 +228,9 @@ class ModulesComponent extends Component
      */
     public function getProject(): array
     {
-        $meta = $this->getMeta();
+        /** @var \Authentication\Identity $user */
+        $user = $this->Authentication->getIdentity();
+        $meta = $this->getMeta($user);
         $project = (array)Configure::read('Project');
         $name = (string)Hash::get($project, 'name', Hash::get($meta, 'project.name'));
         $version = Hash::get($meta, 'version', '');

@@ -42,9 +42,12 @@ class DashboardController extends AppController
     {
         $this->getRequest()->allowMethod(['get']);
         $this->set('recentItems', $this->recentItems());
+
+        /** @var \Authentication\Identity $user */
+        $user = $this->Authentication->getIdentity();
         $this->set(
             'jobsAllow',
-            (array)Hash::extract($this->getMeta(), 'resources./async_jobs.hints.allow')
+            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow')
         );
     }
 

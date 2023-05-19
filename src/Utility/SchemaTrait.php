@@ -14,6 +14,7 @@ declare(strict_types=1);
  */
 namespace App\Utility;
 
+use Authentication\Identity;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
@@ -23,15 +24,14 @@ use Psr\Log\LogLevel;
 trait SchemaTrait
 {
     /**
-     * Getter for home endpoint metadata.
+     * Getter for home endpoint metadata from user identity.
      *
+     * @param \Authentication\Identity $user User identity.
      * @return array
      */
-    public function getMeta(): array
+    public function getMeta(Identity $user): array
     {
         try {
-            /** @var \Authentication\Identity|null $user */
-            $user = $this->Authentication->getIdentity();
             $home = Cache::remember(
                 sprintf('home_%d', $user->get('id')),
                 function () {

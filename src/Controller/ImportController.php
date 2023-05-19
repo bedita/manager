@@ -65,9 +65,11 @@ class ImportController extends AppController
         $result = $this->getRequest()->getSession()->consume('Import.result');
         $this->set(compact('result'));
         $this->loadFilters();
+        /** @var \Authentication\Identity $user */
+        $user = $this->Authentication->getIdentity();
         $this->set(
             'jobsAllow',
-            (array)Hash::extract($this->getMeta(), 'resources./async_jobs.hints.allow')
+            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow')
         );
     }
 

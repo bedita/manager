@@ -93,7 +93,9 @@ class SchemaTraitTest extends TestCase
                 ],
             ]);
         ApiClientProvider::setApiClient($apiClient);
-        $actual = $this->getMeta();
+        /** @var \Authentication\Identity $user */
+        $user = $this->Authentication->getIdentity();
+        $actual = $this->getMeta($user);
         $expected = [
             'cats' => [],
             'dogs' => [],
@@ -124,7 +126,9 @@ class SchemaTraitTest extends TestCase
             ->with('/home')
             ->willThrowException($expectedException);
         ApiClientProvider::setApiClient($apiClient);
-        $actual = $this->getMeta();
+        /** @var \Authentication\Identity $user */
+        $user = $this->Authentication->getIdentity();
+        $actual = $this->getMeta($user);
         $expected = [];
         static::assertEquals($expected, $actual);
         static::assertEquals($expectedLogger, $this->logger);
