@@ -115,7 +115,7 @@ abstract class ImportFilter
             ],
         ];
 
-        $asyncJob = $this->apiClient->post('/admin/async_jobs', json_encode($body));
+        $asyncJob = $this->apiClient->post('/async_jobs', json_encode($body));
 
         $this->result->addMessage('info', (string)__('Job {0} to import file "{1}" scheduled.', Hash::get($asyncJob, 'data.id'), $filename));
 

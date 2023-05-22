@@ -199,7 +199,6 @@ class ModulesComponentTest extends TestCase
      * @param array $config Project config to set.
      * @return void
      * @dataProvider getProjectProvider()
-     * @covers ::getMeta()
      * @covers ::getProject()
      */
     public function testGetProject($expected, $meta, $config = []): void
@@ -496,7 +495,6 @@ class ModulesComponentTest extends TestCase
      * @return void
      * @dataProvider getModulesProvider()
      * @covers ::modulesFromMeta()
-     * @covers ::getMeta()
      * @covers ::getModules()
      */
     public function testGetModules($expected, $meta, array $modules = []): void

@@ -1,13 +1,23 @@
 {% do _view.assign('title', __('Data Import')) %}
 
-{{ Form.create(null, { 'id': 'form-import', 'type': 'file', 'url': {'_name': 'import:file'} })|raw }}
-    <import-index :filters="{{ filters|json_encode() }}">
-    </import-index>
-    {{ Form.hidden('MAX_FILE_SIZE', { 'value': System.getMaxFileSize() })|raw }}
-{{ Form.end()|raw }}
+{% if 'POST' in jobsAllow %}
+    {% if filters %}
+    {{ Form.create(null, { 'id': 'form-import', 'type': 'file', 'url': {'_name': 'import:file'} })|raw }}
+        <import-index :filters="{{ filters|json_encode() }}">
+        </import-index>
+        {{ Form.hidden('MAX_FILE_SIZE', { 'value': System.getMaxFileSize() })|raw }}
+    {{ Form.end()|raw }}
+    {% else %}
+        <div>
+            {{ __('No import filters set') }}
+        </div>
+    {% endif %}
 
-<import-result :result="{{ result|json_encode() }}">
-</import-result>
+    <import-result :result="{{ result|json_encode() }}">
+    </import-result>
+{% endif %}
 
-<import-jobs :jobs="{{ jobs|json_encode() }}" :services="{{ services|json_encode() }}">
-</import-jobs>
+{% if 'GET' in jobsAllow %}
+    <import-jobs :jobs="{{ jobs|json_encode() }}" :services="{{ services|json_encode() }}">
+    </import-jobs>
+{% endif %}
