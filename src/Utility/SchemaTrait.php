@@ -18,11 +18,14 @@ use Authentication\Identity;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
+use Cake\Log\LogTrait;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
 trait SchemaTrait
 {
+    use LogTrait;
+
     /**
      * Getter for home endpoint metadata from user identity.
      *

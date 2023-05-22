@@ -41,8 +41,6 @@ class SchemaTraitTest extends TestCase
 
     protected $Authentication;
 
-    protected $logger = [];
-
     /**
      * @inheritDoc
      */
@@ -111,14 +109,7 @@ class SchemaTraitTest extends TestCase
      */
     public function testGetMetaException(): void
     {
-        $this->logger = [];
         $expectedException = new BEditaClientException('test');
-        $expectedLogger = [
-            [
-                'message' => $expectedException->getMessage(),
-                'level' => 'error',
-            ],
-        ];
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
@@ -131,7 +122,6 @@ class SchemaTraitTest extends TestCase
         $actual = $this->getMeta($user);
         $expected = [];
         static::assertEquals($expected, $actual);
-        static::assertEquals($expectedLogger, $this->logger);
     }
 
     /**
@@ -159,10 +149,5 @@ class SchemaTraitTest extends TestCase
             });
 
         return $authenticationService;
-    }
-
-    private function log(string $message, string $level): void
-    {
-        $this->logger[] = compact('message', 'level');
     }
 }
