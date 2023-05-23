@@ -227,13 +227,12 @@ class PermsHelper extends Helper
             return false;
         }
         $roles = $this->userRoles();
-        $locked = true;
         foreach ($included as $data) {
             if (count(array_intersect($roles, (array)Hash::get($data, 'meta.perms.roles'))) > 0) {
-                $locked = false;
+                return false;
             }
         }
 
-        return $locked;
+        return true;
     }
 }
