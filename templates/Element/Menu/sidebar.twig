@@ -11,8 +11,7 @@
         <div class="sidebar-module-commands">
 
         {% if not Layout.isDashboard() %}
-            {% set editors = Editors.list() %}
-            <div class="app-module-box{% if editors|length > 1 %}-concurrent-editors{% endif %} {{ Layout.publishStatus(object | default({})) }}">
+            <div class="{{ Layout.moduleClass()|raw }}">
                 {{ Layout.moduleLink()|raw }}
             </div>
 

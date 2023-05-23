@@ -12,6 +12,7 @@
  */
 namespace App\View\Helper;
 
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 
@@ -85,6 +86,9 @@ class PermsHelper extends Helper
     public function canDelete(array $object): bool
     {
         $locked = (bool)Hash::get($object, 'meta.locked', false);
+        if ($locked === false) {
+            $locked = $this->isLockedByParents((string)Hash::get($object, 'id'));
+        }
         $module = (string)Hash::get($object, 'type');
 
         return !$locked && $this->isAllowed('DELETE', $module) && $this->userIsAllowed($module);
@@ -200,5 +204,35 @@ class PermsHelper extends Helper
         $identity = $this->_View->get('user');
 
         return (array)$identity->get('roles');
+    }
+
+    /**
+     * Return true if object is locked by parents.
+     * When user is admin, return false.
+     * When user is not admin, return false if at least one parent is not locked for user.
+     * Return true if all parents are locked for user.
+     *
+     * @param string $id The object id
+     * @return bool
+     */
+    public function isLockedByParents(string $id): bool
+    {
+        if ($this->userIsAdmin()) {
+            return false;
+        }
+        $apiClient = ApiClientProvider::getApiClient();
+        $response = (array)$apiClient->get(sprintf('/objects/%s?include=parents', $id));
+        $included = (array)Hash::get($response, 'included', []);
+        if (empty($included)) {
+            return false;
+        }
+        $roles = $this->userRoles();
+        foreach ($included as $data) {
+            if (count(array_intersect($roles, (array)Hash::get($data, 'meta.perms.roles'))) > 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
