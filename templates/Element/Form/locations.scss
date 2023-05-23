@@ -62,6 +62,30 @@
             border-bottom: 1px solid $gray-500;
         }
     }
+
+    &[data-loading='true']:after {
+        content: '';
+        border: 3px solid rgba(0,0,0,.12);
+        border-right-color: rgba(0,0,0,.48);
+        border-radius: 100%;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        animation: autocompleteSpinner 1s linear infinite;
+    }
+}
+
+@keyframes autocompleteSpinner {
+    0% {
+        transform: translateY(-50%) rotate(0deg)
+    }
+
+    100% {
+        transform: translateY(-50%) rotate(359deg)
+    }
 }
 
 .autocomplete-title-result, .autocomplete-address-result {
