@@ -72,7 +72,7 @@ export default {
                         <autocomplete
                             autocomplete="none"
                             ref="address"
-                            class="autocomplete-address"
+                            class="autocomplete autocomplete-address"
                             :default-value="address"
                             :search="searchAddress"
                             base-class="autocomplete-address"
@@ -202,31 +202,51 @@ export default {
         onRemove() {
             this.$parent.$emit('removed', this.index);
         },
-        searchTitle(input) {
-            const requestUrl = `${BEDITA.base}/api/locations?filter[query]=${input}&sort=title`;
+        async searchTitle(input) {
+            const results = [];
+            const collected = [];
 
-            return new Promise(resolve => {
-                if (input.length < 3) {
-                    // do not search with less than 3 chars
-                    return resolve([]);
-                }
+            // do not search with less than 3 chars
+            if (input.length >= 3) {
+                let page = 1;
+                while (results.length < 20) {
+                    const url = new URL('/api/locations', BEDITA.base);
+                    url.searchParams.set('filter[query]', input.trim());
+                    url.searchParams.set('sort', 'title');
+                    url.searchParams.set('page_size', '100');
+                    url.searchParams.set('page', page++);
 
-                fetch(requestUrl, options)
-                    .then(response => response.json())
-                    .then(data => {
-                        let results = data.data;
-                        if (!results) {
-                            return resolve([]);
+                    const response = await fetch(url, options);
+                    const json = await response.json();
+                    const titles = json.data.reduce((acc, location) => {
+                        const title = location && location.attributes && location.attributes.title && location.attributes.title.trim().toLowerCase();
+                        if (!title || acc[title]) {
+                            return acc;
                         }
+                        if (collected.includes(title)) {
+                            // avoid duplicates
+                            return acc;
+                        }
+                        if (title.indexOf(input.toLowerCase()) === -1) {
+                            // only pick locations that include input string in the address
+                            return acc;
+                        }
+                        acc[title] = location;
+                        return acc;
+                    }, {});
 
-                        // only pick locations that include input string in the title
-                        results = results.filter((location) => location.attributes.title && location.attributes.title.toLowerCase().indexOf(input.toLowerCase()) !== -1);
-                        // store raw filtered data
-                        this.fetchedLocations = results.slice();
+                    collected.push(...Object.keys(titles));
+                    results.push(...Object.values(titles));
 
-                        resolve(results);
-                    });
-            })
+                    if (json.meta.pagination.page_count < page) {
+                        break;
+                    }
+                }
+            }
+
+            this.fetchedLocations = results.slice();
+
+            return results;
         },
         async searchAddress(input) {
             const results = [];
@@ -239,13 +259,13 @@ export default {
                     const url = new URL('/api/locations', BEDITA.base);
                     url.searchParams.set('filter[query]', input.trim());
                     url.searchParams.set('sort', 'address');
+                    url.searchParams.set('page_size', '100');
                     url.searchParams.set('page', page++);
 
                     const response = await fetch(url, options);
                     const json = await response.json();
                     const addresses = json.data.reduce((acc, location) => {
-                        const address = (location && location.attributes && this.cleanAddress(location.attributes.address) || '')
-                            .toLowerCase();
+                        const address = location && location.attributes && this.cleanAddress(location.attributes.address).toLowerCase();
                         if (!address || acc[address]) {
                             return acc;
                         }
@@ -295,7 +315,7 @@ export default {
                 return '';
             }
 
-            return stripHtml(`${address}`);
+            return stripHtml(`${address.trim()}`);
         },
         async geocode() {
             const retrieveGeocode = () => {
