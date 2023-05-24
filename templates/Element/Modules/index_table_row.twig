@@ -60,7 +60,7 @@
                 {{ Form.create(null, {'id': 'form-delete-' ~ object.id, 'url': {'_name': 'trash:delete'}})|raw }}
                     {{ Form.hidden('ids', {'value': object.id})|raw }}
                     {{ Form.hidden('query', {'value': q})|raw }}
-                    <button class="button button-text-white is-width-auto" form="form-restore-{{ object.id }}" title="{{ __('Permanently delete') ~ ' ' ~ object.attributes.title|escape }}" onclick="confirm">
+                    <button class="button button-text-white is-width-auto" form="form-delete-{{ object.id }}" title="{{ __('Permanently delete') ~ ' ' ~ object.attributes.title|escape }}" onclick="confirm">
                         <Icon icon="carbon:trash-can"></Icon>
                         <span class="ml-05">{{ __('Delete') }}</span>
                     </button>
