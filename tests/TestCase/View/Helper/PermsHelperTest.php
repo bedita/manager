@@ -15,6 +15,8 @@ namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\PermsHelper;
 use Authentication\Identity;
+use BEdita\SDK\BEditaClient;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -188,6 +190,17 @@ class PermsHelperTest extends TestCase
         ];
         $result = $this->Perms->canDelete($document);
         static::assertFalse($result);
+
+        // locked by parents
+        $mock = $this->createPartialMock(PermsHelper::class, ['isLockedByParents']);
+        $mock->method('isLockedByParents')->willReturn(true);
+        $this->Perms = $mock;
+        $document = [
+            'type' => 'documents',
+            'meta' => ['locked' => false],
+        ];
+        $result = $this->Perms->canDelete($document);
+        static::assertFalse($result);
     }
 
     /**
@@ -310,5 +323,116 @@ class PermsHelperTest extends TestCase
         $this->Perms->getView()->set('user', new Identity(['roles' => $expected]));
         $actual = $this->Perms->userRoles();
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `isLockedByParents` method.
+     *
+     * @return void
+     * @covers ::isLockedByParents()
+     */
+    public function testIsLockedByParents(): void
+    {
+        // user is admin => false
+        $this->Perms->getView()->set('user', new Identity(['roles' => ['admin']]));
+        $actual = $this->Perms->isLockedByParents('123');
+        static::assertFalse($actual);
+
+        // user is not admin, no parents => false
+        $safeApiClient = ApiClientProvider::getApiClient();
+        $this->Perms->getView()->set('user', new Identity(['roles' => ['guest']]));
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->withAnyParameters()
+            ->willReturn([]);
+        ApiClientProvider::setApiClient($apiClient);
+        $actual = $this->Perms->isLockedByParents('123');
+        static::assertFalse($actual);
+
+        // user is not admin, has one parent with perms => false
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->withAnyParameters()
+            ->willReturn([
+                'included' => [
+                    [
+                        'id' => '123451',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['a', 'b', 'c'],
+                            ],
+                        ],
+                    ],
+                    [
+                        'id' => '123452',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['d', 'e', 'f'],
+                            ],
+                        ],
+                    ],
+                    [
+                        'id' => '123452',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['g', 'guest', 'i'],
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        $actual = $this->Perms->isLockedByParents('123');
+        static::assertFalse($actual);
+
+        // user is not admin, has parents, none with perms => true
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->withAnyParameters()
+            ->willReturn([
+                'included' => [
+                    [
+                        'id' => '123451',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['a', 'b', 'c'],
+                            ],
+                        ],
+                    ],
+                    [
+                        'id' => '123452',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['d', 'e', 'f'],
+                            ],
+                        ],
+                    ],
+                    [
+                        'id' => '123452',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['g', 'h', 'i'],
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        $actual = $this->Perms->isLockedByParents('123');
+        static::assertTrue($actual);
+
+        ApiClientProvider::setApiClient($safeApiClient);
     }
 }

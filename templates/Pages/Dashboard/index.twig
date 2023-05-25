@@ -48,7 +48,7 @@
                     <app-icon icon="carbon:user-profile"></app-icon>
                 </a>
 
-                {% if config('Filters.import') %}
+                {% if config('Filters.import') and ('POST' in jobsAllow or 'GET' in jobsAllow) %}
                     <a href="{{ Url.build({'_name': 'import:index'}) }}" title="{{ __('Import') }}" class="dashboard-item has-background-black">
                         <span>{{ __('Import') }}</span>
                         <app-icon icon="carbon:download"></app-icon>

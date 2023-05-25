@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\SchemaTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -25,6 +26,8 @@ use Exception;
  */
 class ImportController extends AppController
 {
+    use SchemaTrait;
+
     /**
      * @inheritDoc
      */
@@ -62,6 +65,12 @@ class ImportController extends AppController
         $result = $this->getRequest()->getSession()->consume('Import.result');
         $this->set(compact('result'));
         $this->loadFilters();
+        /** @var \Authentication\Identity $user */
+        $user = $this->Authentication->getIdentity();
+        $this->set(
+            'jobsAllow',
+            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow')
+        );
     }
 
     /**
@@ -189,7 +198,7 @@ class ImportController extends AppController
             'filter' => ['service' => implode(',', $this->services)],
         ];
         try {
-            $response = $this->apiClient->get('/admin/async_jobs', $query);
+            $response = $this->apiClient->get('/async_jobs', $query);
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
