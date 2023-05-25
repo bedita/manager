@@ -1,4 +1,4 @@
-name: 'javascript'
+name: javascript
 
 on:
   pull_request:
@@ -18,28 +18,28 @@ on:
 
 jobs:
   javascript-build:
-    name: 'Check javascript build'
+    name: Check javascript build
     if: "!contains(github.event.commits[0].message, '[skip ci]') && !contains(github.event.commits[0].message, '[ci skip]')"
-    runs-on: 'ubuntu-latest'
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [14.x, 16.x, 18.x, 19.x]
 
     steps:
-      - name: 'Checkout current revision'
-        uses: 'actions/checkout@v2'
+      - name: Checkout current revision
+        uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: 'Yarn install'
-        run: 'yarn install'
+      - name: Yarn install
+        run: yarn install
 
-      - name: 'Yarn build'
-        run: 'yarn build'
+      - name: Yarn build
+        run: yarn build
 
-      - name: 'Run ESLint'
-        run: 'yarn eslint resources/js/**/*.js'
+      - name: Run ESLint
+        run: yarn eslint resources/js/**/*.js
