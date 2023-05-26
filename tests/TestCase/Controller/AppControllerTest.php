@@ -488,14 +488,6 @@ class AppControllerTest extends TestCase
                 'documents', // object_type
                 [
                     'id' => '1',
-                    '_api' => [ // expected new property in data
-                        [
-                            'method' => 'replaceRelated',
-                            'id' => '1',
-                            'relation' => 'parents',
-                            'relatedIds' => [],
-                        ],
-                    ],
                 ],
                 [ // data provided
                     'id' => '1', // fake document id
@@ -526,7 +518,7 @@ class AppControllerTest extends TestCase
                     'id' => '2',
                     '_api' => [ // expected new property in data
                         [
-                            'method' => 'replaceRelated',
+                            'method' => 'addRelated',
                             'id' => '2',
                             'relation' => 'parents',
                             'relatedIds' => [
@@ -1098,5 +1090,69 @@ class AppControllerTest extends TestCase
         $actual = $method->invokeArgs($this->AppController, [ '' ]);
 
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testRelatedIds` test case.
+     */
+    public function relatedIdsProvider(): array
+    {
+        return [
+            'empty items' => [
+                [],
+                [],
+            ],
+            'string items' => [
+                '["1", "2", "3"]',
+                ['1', '2', '3'],
+            ],
+            'array of string items' => [
+                ['1', '2', '3'],
+                ['1', '2', '3'],
+            ],
+            'array of array items' => [
+                [
+                    ['id' => '1', 'name' => 'Item 1'],
+                    ['id' => '2', 'name' => 'Item 2'],
+                    ['id' => '3', 'name' => 'Item 3'],
+                ],
+                [
+                    ['id' => '1', 'name' => 'Item 1'],
+                    ['id' => '2', 'name' => 'Item 2'],
+                    ['id' => '3', 'name' => 'Item 3'],
+                ],
+            ],
+            'array of JSON string items' => [
+                [
+                    '{"id": "1", "name": "Item 1"}',
+                    '{"id": "2", "name": "Item 2"}',
+                    '{"id": "3", "name": "Item 3"}',
+                ],
+                [
+                    ['id' => '1', 'name' => 'Item 1'],
+                    ['id' => '2', 'name' => 'Item 2'],
+                    ['id' => '3', 'name' => 'Item 3'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test relatedIds method with empty items.
+     *
+     * @param mixed $items The items to test
+     * @param array $expected The expected result
+     * @return void
+     * @covers ::relatedIds()
+     * @dataProvider relatedIdsProvider()
+     */
+    public function testRelatedIds($items, array $expected): void
+    {
+        $this->setupController();
+        $reflectionClass = new \ReflectionClass($this->AppController);
+        $method = $reflectionClass->getMethod('relatedIds');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->AppController, [$items]);
+        $this->assertEquals($expected, $actual);
     }
 }

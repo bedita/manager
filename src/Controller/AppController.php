@@ -298,16 +298,7 @@ class AppController extends Controller
             foreach ($data['relations'] as $relation => $relationData) {
                 $id = $data['id'];
                 foreach ($relationData as $method => $ids) {
-                    if (is_string($ids)) {
-                        $relatedIds = json_decode($ids, true);
-                    } else {
-                        $relatedIds = array_map(
-                            function ($id) {
-                                return json_decode($id, true);
-                            },
-                            $ids
-                        );
-                    }
+                    $relatedIds = $this->relatedIds($ids);
                     if ($method === 'replaceRelated' || !empty($relatedIds)) {
                         $api[] = compact('method', 'id', 'relation', 'relatedIds');
                     }
@@ -316,6 +307,32 @@ class AppController extends Controller
             $data['_api'] = $api;
         }
         unset($data['relations']);
+    }
+
+    /**
+     * Get related ids from items array.
+     * If items is string, it is json encoded array.
+     * If items is array, it can be json encoded array or array of id/type data.
+     */
+    protected function relatedIds($items): array
+    {
+        if (empty($items)) {
+            return [];
+        }
+        if (is_string($items)) {
+            return json_decode($items, true);
+        }
+        $first = Hash::get($items, '0');
+        if (is_string($first)) {
+            return array_map(
+                function ($item) {
+                    return json_decode($item, true);
+                },
+                $items
+            );
+        }
+
+        return $items;
     }
 
     /**
@@ -328,20 +345,37 @@ class AppController extends Controller
     protected function setupParentsRelation(string $type, array &$data): void
     {
         $changedParents = (bool)Hash::get($data, '_changedParents');
+        $originalParents = (string)Hash::get($data, '_originalParents');
+        $originalParents = empty($originalParents) ? [] : explode(',', $originalParents);
         unset($data['_changedParents']);
-        $relation = 'parents';
-        if ($type === 'folders') {
-            $relation = 'parent';
-        }
+        unset($data['_originalParents']);
+        $relation = $type === 'folders' ? 'parent' : 'parents';
         if (empty($changedParents)) {
             unset($data['relations'][$relation]);
 
             return;
         }
-        if (empty($data['relations'][$relation])) {
-            // all parents deselected => replace with empty set
-            $data['relations'][$relation] = ['replaceRelated' => []];
+        if (empty($data['relations'][$relation]['replaceRelated']) && empty($originalParents)) {
+            return;
         }
+        $replaceRelated = [];
+        foreach ($data['relations'][$relation]['replaceRelated'] as $obj) {
+            $jsonObj = (array)json_decode($obj, true);
+            $replaceRelated[(string)Hash::get($jsonObj, 'id')] = $jsonObj;
+        }
+        $add = array_diff(array_keys($replaceRelated), $originalParents);
+        foreach ($add as $id) {
+            $data['relations'][$relation]['addRelated'][] = $replaceRelated[$id];
+        }
+        // no need to remove when relation is "parent"
+        // ParentsComponent::addRelated already performs a replaceRelated
+        if ($relation !== 'parent') {
+            $rem = array_diff($originalParents, array_keys($replaceRelated));
+            foreach ($rem as $id) {
+                $data['relations'][$relation]['removeRelated'][] = ['id' => $id, 'type' => 'folders'];
+            }
+        }
+        unset($data['relations'][$relation]['replaceRelated']);
     }
 
     /**

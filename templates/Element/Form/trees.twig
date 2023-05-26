@@ -32,6 +32,7 @@
             {{ Form.hidden('_changedParents', {'value': '0', 'id': 'changedParents'})|raw }}
             {% do Form.unlockField('_changedParents') %}
             {% do Form.unlockField('_changedCanonical') %}
+            {% do Form.unlockField('_originalParents') %}
         </div>
     </section>
 </property-view>

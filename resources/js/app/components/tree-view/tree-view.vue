@@ -1,5 +1,8 @@
 <template>
     <div class="tree-view-node" :class="{'is-root': isRoot}" v-show="showNode">
+        <div v-if="originalParents.length > 0">
+            <input type="hidden" name="_originalParents" :value="originalParents" />
+        </div>
         <div v-if="isLoading && !parent" class="is-loading-spinner"></div>
         <div v-if="parent" class="node-element py-05" :data-status="node.attributes.status">
             <label class="node-label" :class="{'icon-folder': !relationName, 'has-text-gray-550 disabled': object && node.id == object.id}" v-on="{ click: relationName ? () => {} : toggle }">
@@ -8,7 +11,8 @@
                     :name="'relations[' + relationName + '][replaceRelated][]'"
                     :value="value"
                     :checked="isParent"
-                    :disabled="isLocked"
+                    :class="isLocked ? 'disabled' : ''"
+                    @click="isLocked ? $event.preventDefault() : ''"
                     @change="toggleFolderRelation" />
                 {{ node.attributes.title }}
             </label>
@@ -149,6 +153,7 @@ export default {
             msgEdit: t`Edit`,
             msgMenu: t`Menu`,
             msgView: t`View`,
+            originalParents: [],
             showForbidden: true,
         };
     },
@@ -158,6 +163,9 @@ export default {
             this.isLoading = true;
             await this.loadRoots();
             this.isLoading = false;
+            for (let p of this.parents) {
+                this.originalParents.push(p.id);
+            }
         }
         this.isOpen = !!this.node.children;
         PermissionEvents.$on('toggle-forbidden', (value) => this.showForbidden = value);
