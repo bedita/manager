@@ -14,8 +14,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Component;
 
-use BEdita\SDK\BEditaClient;
-use BEdita\WebTools\ApiClientProvider;
+use App\Utility\ApiClientTrait;
 use Cake\Controller\Component;
 use Cake\Utility\Hash;
 
@@ -27,26 +26,7 @@ use Cake\Utility\Hash;
  */
 class ChildrenComponent extends Component
 {
-    /**
-     * BEdita Api client
-     *
-     * @var \BEdita\SDK\BEditaClient
-     */
-    protected $apiClient = null;
-
-    /**
-     * Get API client.
-     *
-     * @return \BEdita\SDK\BEditaClient
-     */
-    public function getClient(): BEditaClient
-    {
-        if ($this->apiClient === null) {
-            $this->apiClient = ApiClientProvider::getApiClient();
-        }
-
-        return $this->apiClient;
-    }
+    use ApiClientTrait;
 
     /**
      * Add children to a folder.

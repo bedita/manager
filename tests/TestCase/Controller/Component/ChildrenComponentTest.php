@@ -36,7 +36,6 @@ class ChildrenComponentTest extends TestCase
      * @return void
      * @covers ::addRelated()
      * @covers ::addRelatedChild()
-     * @covers ::getClient()
      */
     public function testAddRelated(): void
     {
@@ -66,7 +65,6 @@ class ChildrenComponentTest extends TestCase
      * @return void
      * @covers ::removeRelated()
      * @covers ::removeRelatedChild()
-     * @covers ::getClient()
      */
     public function testRemoveRelated(): void
     {

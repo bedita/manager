@@ -35,7 +35,6 @@ class ParentsComponentTest extends TestCase
      *
      * @return void
      * @covers ::addRelated()
-     * @covers ::getClient()
      */
     public function testAddRelated(): void
     {
