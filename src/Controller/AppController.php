@@ -323,7 +323,12 @@ class AppController extends Controller
             return json_decode($items, true);
         }
         if (is_string(Hash::get($items, 0))) {
-            return array_map(function ($json) { return json_decode($json, true); }, $items);
+            return array_map(
+                function ($json) {
+                    return json_decode($json, true);
+                },
+                $items
+            );
         }
 
         return $items;
