@@ -347,8 +347,7 @@ class AppController extends Controller
         $changedParents = (bool)Hash::get($data, '_changedParents');
         $originalParents = (string)Hash::get($data, '_originalParents');
         $originalParents = empty($originalParents) ? [] : explode(',', $originalParents);
-        unset($data['_changedParents']);
-        unset($data['_originalParents']);
+        unset($data['_changedParents'], $data['_originalParents']);
         $relation = $type === 'folders' ? 'parent' : 'parents';
         if (empty($changedParents)) {
             unset($data['relations'][$relation]);
@@ -358,22 +357,33 @@ class AppController extends Controller
         if (empty($data['relations'][$relation]['replaceRelated']) && empty($originalParents)) {
             return;
         }
-        $replaceRelated = [];
-        foreach ($data['relations'][$relation]['replaceRelated'] as $obj) {
-            $jsonObj = (array)json_decode($obj, true);
-            $replaceRelated[(string)Hash::get($jsonObj, 'id')] = $jsonObj;
-        }
+        $replaceRelated = array_reduce(
+            $data['relations'][$relation]['replaceRelated'],
+            function ($acc, $obj) {
+                $jsonObj = (array)json_decode($obj, true);
+                $acc[(string)Hash::get($jsonObj, 'id')] = $jsonObj;
+
+                return $acc;
+            },
+            []
+        );
         $add = array_diff(array_keys($replaceRelated), $originalParents);
-        foreach ($add as $id) {
-            $data['relations'][$relation]['addRelated'][] = $replaceRelated[$id];
-        }
+        $data['relations'][$relation]['addRelated'] = array_map(
+            function ($id) use ($replaceRelated) {
+                return $replaceRelated[$id];
+            },
+            $add
+        );
         // no need to remove when relation is "parent"
         // ParentsComponent::addRelated already performs a replaceRelated
         if ($relation !== 'parent') {
             $rem = array_diff($originalParents, array_keys($replaceRelated));
-            foreach ($rem as $id) {
-                $data['relations'][$relation]['removeRelated'][] = ['id' => $id, 'type' => 'folders'];
-            }
+            $data['relations'][$relation]['removeRelated'] = array_map(
+                function ($id) {
+                    return ['id' => $id, 'type' => 'folders'];
+                },
+                $rem
+            );
         }
         unset($data['relations'][$relation]['replaceRelated']);
     }
