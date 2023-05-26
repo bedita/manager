@@ -163,9 +163,7 @@ export default {
             this.isLoading = true;
             await this.loadRoots();
             this.isLoading = false;
-            for (let p of this.parents) {
-                this.originalParents.push(p.id);
-            }
+            this.originalParents = this.parents.map(p => p.id);
         }
         this.isOpen = !!this.node.children;
         PermissionEvents.$on('toggle-forbidden', (value) => this.showForbidden = value);
