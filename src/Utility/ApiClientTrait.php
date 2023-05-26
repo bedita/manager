@@ -25,7 +25,7 @@ trait ApiClientTrait
     /**
      * BEdita Api client
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
     protected $apiClient = null;
 
