@@ -1649,6 +1649,18 @@ class ModulesComponentTest extends TestCase
                 ], // relatedData
                 'removeRelated', // expected
             ],
+            'folders parent' => [
+                333, // id
+                'documents', // type
+                [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => 'parent',
+                        'relatedIds' => [['id' => 123, 'type' => 'folders'], ['id' => 456, 'type' => 'folders']],
+                    ],
+                ], // relatedData
+                'addRelated', // expected
+            ],
         ];
     }
 

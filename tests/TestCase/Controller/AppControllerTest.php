@@ -495,7 +495,6 @@ class AppControllerTest extends TestCase
                     '_changedParents' => true,
                 ],
             ],
-
             'no parents action' => [
                 'folders', // object_type
                 [
@@ -589,6 +588,52 @@ class AppControllerTest extends TestCase
                     '_jsonKeys' => 'json_prop,json_prop2',
                     'json_prop' => '{ }',
                     'json_prop2' => '{"gin":"vodka"}',
+                ],
+            ],
+            'remove related, not parent' => [
+                'documents', // object_type
+                [
+                    'id' => '1',
+                    '_api' => [
+                        [
+                            'method' => 'addRelated',
+                            'id' => '1',
+                            'relation' => 'parents',
+                            'relatedIds' => [
+                                [
+                                    'id' => '44',
+                                    'type' => 'images',
+                                ],
+                            ],
+                        ],
+                        [
+                            'method' => 'removeRelated',
+                            'id' => '1',
+                            'relation' => 'parents',
+                            'relatedIds' => [
+                                [
+                                    'id' => '999',
+                                    'type' => 'folders',
+                                ],
+                                [
+                                    'id' => '888',
+                                    'type' => 'folders',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [ // data provided
+                    'id' => '1', // fake document id
+                    'relations' => [
+                        'parents' => [
+                            'replaceRelated' => [
+                                '{ "id": "44", "type": "images"}',
+                            ],
+                        ],
+                    ],
+                    '_changedParents' => true,
+                    '_originalParents' => '999,888',
                 ],
             ],
         ];
