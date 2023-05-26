@@ -1651,7 +1651,7 @@ class ModulesComponentTest extends TestCase
             ],
             'folders parent' => [
                 333, // id
-                'documents', // type
+                'folders', // type
                 [
                     [
                         'method' => 'addRelated',
@@ -1659,7 +1659,7 @@ class ModulesComponentTest extends TestCase
                         'relatedIds' => [['id' => 123, 'type' => 'folders'], ['id' => 456, 'type' => 'folders']],
                     ],
                 ], // relatedData
-                'addRelated', // expected
+                'replaceRelated', // expected
             ],
         ];
     }
