@@ -58,12 +58,8 @@ class ChildrenComponent extends Component
         if ($type !== 'folders') {
             return $this->getClient()->addRelated($parentId, 'folders', 'children', [$child]);
         }
-        $id = (string)Hash::get($child, 'id');
-        $meta = (array)Hash::get($child, 'meta');
-        $data = compact('id', 'type', 'meta');
 
-        // invert relation call => use 'parent' relation on children folder
-        return $this->getClient()->addRelated($parentId, 'folders', 'parent', $data);
+        return $this->getClient()->addRelated($parentId, 'folders', 'parent', $child);
     }
 
     /**
