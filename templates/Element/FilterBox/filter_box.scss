@@ -21,7 +21,6 @@
     .more-filters,
     .filter-buttons {
         display: flex;
-        align-items: center;
         flex-wrap: wrap;
 
         > * {
@@ -35,12 +34,21 @@
 
     .more-filters {
         margin-top: $gutter;
+
+        input[form='_filters'][type='text'] {
+            width: 100%;
+            min-width: $gutter * 30;
+        }
     }
 
     .filter-container {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+
+        &:not(:first-child) {
+            width: 100%;
+        }
 
         &.filter-search {
             display: flex;
@@ -59,6 +67,7 @@
             display: inline-flex;
             align-items: center;
             margin-right: $gutter * .5;
+            padding-bottom: $gutter * .5;
 
             &:first-letter {
                 text-transform: uppercase;
@@ -82,9 +91,12 @@
             }
         }
 
-        &.parent .filter-label,
         &.categories .filter-label {
             display: none;
+        }
+
+        .filter-label {
+            width: 100%;
         }
 
         .category-picker,

@@ -1,12 +1,4 @@
-/**
- * Component that creates an input element with dynamic attributes and directives
- *
- * <input-dynamic-attributes> component
- *
- * @prop {Object} value
- * @prop {Object} attrs list of attributes/directives
- */
-
+<script>
 export default {
     name: 'InputDynamicAttributes',
 
@@ -32,7 +24,7 @@ export default {
         const directivesName = Object.keys(attrs).filter(attr => attr.startsWith('v-'));
 
         // remove 'v-' text from vue directives
-        const directives = directivesName.map((name) => {
+        let directives = directivesName.map((name) => {
             const directiveName = name.split('v-').pop();
             return {
                 name: directiveName,
@@ -46,6 +38,14 @@ export default {
         if (attrs.type === 'checkbox') {
             domProps = { checked: this.value === 'true' };
             on = { input: e => { this.$emit('update:value', e.target.checked); } };
+        }
+        if (attrs.type === 'textarea') {
+            attrs.type = 'text';
+            directives = [];
+        }
+        if (this.form === '_filters') {
+            attrs.readonly = false;
+            attrs.disabled = false;
         }
 
         // create and return input element
@@ -61,3 +61,4 @@ export default {
         });
     },
 };
+</script>
