@@ -101,14 +101,31 @@ export default {
                 }
             }
             this.selectedTags.push({
-                'id': this.text.toLowerCase(),
+                'id': this.validatedName(this.text),
                 'label': this.text,
                 'originalLabel': this.text
             });
             this.text = '';
             this.parseBeforeSave();
         },
+        validatedName(name) {
+            // no spaces
+            name = name.trim();
+            name = name.replaceAll(' ', '-');
 
+            // starts with a lowercase letter or number
+            if (name.charAt(0).match(/[a-z]/i)) {
+                name = name.charAt(0).toLowerCase() + name.slice(1);
+            }
+            console.log(name);
+
+            // length between 2 and 50 characters
+            if (name.length > 50) {
+                return name.substring(0, 50);
+            }
+
+            return name;
+        },
         async fetchTags({ action, searchQuery, callback }) {
             if (action !== ASYNC_SEARCH || searchQuery?.length < QUERY_MIN_LENGTH) {
                 return callback(null, []);
