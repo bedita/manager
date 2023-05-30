@@ -43,9 +43,13 @@ export default {
             attrs.type = 'text';
             directives = [];
         }
+        const keys = Object.keys(attrs);
         if (this.form === '_filters') {
-            attrs.readonly = false;
-            attrs.disabled = false;
+            for (const key of ['readonly', 'disabled', 'templates', 'v-richeditor']) {
+                if (keys.includes(key)) {
+                    delete attrs[key];
+                }
+            }
         }
 
         // create and return input element
