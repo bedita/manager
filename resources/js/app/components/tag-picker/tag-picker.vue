@@ -114,7 +114,7 @@ export default {
             name = name.replaceAll(' ', '-');
 
             // starts with a lowercase letter or number
-            if (name.charAt(0).match(/[a-z]/i)) {
+            if (name.charAt(0).match(/[A-Z]/)) {
                 name = name.charAt(0).toLowerCase() + name.slice(1);
             }
 
