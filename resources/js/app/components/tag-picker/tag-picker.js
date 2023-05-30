@@ -112,7 +112,7 @@ export default {
                 return callback(null, []);
             }
 
-            const res = await fetch(`${BEDITA.base}/api/model/tags?filter[query]=${searchQuery}&filter[enabled]=1page_size=30`, API_OPTIONS);
+            const res = await fetch(`${BEDITA.base}/api/model/tags?filter[query]=${searchQuery}&filter[enabled]=1&page_size=30`, API_OPTIONS);
             const json = await res.json();
             const tags = [...(json.data || [])];
 
