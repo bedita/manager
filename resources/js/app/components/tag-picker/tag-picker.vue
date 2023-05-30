@@ -117,7 +117,6 @@ export default {
             if (name.charAt(0).match(/[a-z]/i)) {
                 name = name.charAt(0).toLowerCase() + name.slice(1);
             }
-            console.log(name);
 
             // length between 2 and 50 characters
             if (name.length > 50) {
