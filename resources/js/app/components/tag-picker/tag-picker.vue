@@ -2,7 +2,7 @@
     <div class="tag-picker">
         <label v-if="label">{{ label }}</label>
         <Treeselect
-            placeholder="${t`Search existing tags`}"
+            :placeholder="msgSearchExistingTags"
             :options="tagsOptions"
             :async="true"
             :clearable="false"
@@ -62,6 +62,7 @@ export default {
             text: '',
             msgAdd: t`Add`,
             msgAddNewTag: t`Add new tag`,
+            msgSearchExistingTags: t`Search existing tags`,
         };
     },
 
