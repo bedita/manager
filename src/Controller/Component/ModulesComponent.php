@@ -27,7 +27,9 @@ use Cake\Utility\Hash;
  * Component to load available modules.
  *
  * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
+ * @property \App\Controller\Component\ChildrenComponent $Children
  * @property \App\Controller\Component\ConfigComponent $Config
+ * @property \App\Controller\Component\ParentsComponent $Parents
  * @property \App\Controller\Component\SchemaComponent $Schema
  */
 class ModulesComponent extends Component
@@ -51,7 +53,7 @@ class ModulesComponent extends Component
     /**
      * @inheritDoc
      */
-    public $components = ['Authentication', 'Config', 'Schema'];
+    public $components = ['Authentication', 'Children', 'Config', 'Parents', 'Schema'];
 
     /**
      * @inheritDoc
@@ -599,46 +601,6 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Save objects and set 'id' inside each object in $objects
-     *
-     * @param array $objects The objects
-     * @return void
-     */
-    public function saveObjects(array &$objects): void
-    {
-        if (empty($objects)) {
-            return;
-        }
-        foreach ($objects as &$obj) {
-            $this->saveObject($obj);
-        }
-    }
-
-    /**
-     * Save single object and set 'id' inside param $object
-     *
-     * @param array $object The object
-     * @return void
-     */
-    public function saveObject(array &$object): void
-    {
-        // no attributes? then return
-        if (empty($object['attributes'])) {
-            return;
-        }
-        foreach ($object['attributes'] as $key => $val) {
-            if ($key === 'status' || empty($val)) {
-                continue;
-            }
-            $apiClient = ApiClientProvider::getApiClient();
-            $saved = $apiClient->save($object['type'], array_merge(['id' => $object['id'] ?? null], $object['attributes']));
-            $object['id'] = Hash::get($saved, 'data.id');
-
-            return; // not necessary cycling over all attributes
-        }
-    }
-
-    /**
      * Save related objects.
      *
      * @param string $id Object ID
@@ -649,87 +611,34 @@ class ModulesComponent extends Component
     public function saveRelated(string $id, string $type, array $relatedData): void
     {
         foreach ($relatedData as $data) {
-            $method = (string)Hash::get($data, 'method');
-            $relation = (string)Hash::get($data, 'relation');
-            $relatedIds = (array)Hash::get($data, 'relatedIds');
-            // Do we need to call `saveObjects`? (probably NOT)
-            $this->saveObjects($relatedIds);
-            if (!in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
-                throw new BadRequestException(__('Bad related data method'));
-            }
-            if ($relation === 'children' && $type === 'folders' && $method === 'removeRelated') {
-                $this->folderChildrenRemove($id, $relatedIds);
-
-                return;
-            }
-            if ($relation === 'children' && $type === 'folders' && in_array($method, ['addRelated', 'replaceRelated'])) {
-                $this->folderChildrenRelated($id, $relatedIds);
-
-                return;
-            }
-            ApiClientProvider::getApiClient()->{$method}($id, $type, $relation, $relatedIds);
+            $this->saveRelatedObjects($id, $type, $data);
         }
     }
 
     /**
-     * Remove folder children.
-     * When a child is a subfolder, this use `PATCH /folders/:id/relationships/parent` to set parent to null
-     * When a child is not a subfolder, it's removed as usual by `removeRelated`
+     * Save related objects per object by ID.
      *
-     * @param string $id The Object ID
-     * @param array $related Related objects
-     * @return void
+     * @param string $id Object ID
+     * @param string $type Object type
+     * @param array $data Related object data
+     * @return array
+     * @throws \Cake\Http\Exception\BadRequestException
      */
-    protected function folderChildrenRemove(string $id, array $related): void
+    public function saveRelatedObjects(string $id, string $type, array $data): array
     {
-        $children = [];
-        // seek for subfolders, remove them changing parent to null
-        foreach ($related as $obj) {
-            if ($obj['type'] === 'folders') {
-                $endpoint = sprintf('/folders/%s/relationships/parent', $obj['id']);
-                ApiClientProvider::getApiClient()->patch($endpoint, null);
-                continue;
-            }
-            $children[] = $obj;
+        $method = (string)Hash::get($data, 'method');
+        if (!in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
+            throw new BadRequestException(__('Bad related data method'));
         }
-        // children, not folders
-        if (!empty($children)) {
-            foreach ($children as $child) {
-                ApiClientProvider::getApiClient()->removeRelated($id, 'folders', 'children', [$child]);
-            }
+        $relation = (string)Hash::get($data, 'relation');
+        $related = (array)Hash::get($data, 'relatedIds');
+        if ($relation === 'parent' && $type === 'folders') {
+            return $this->Parents->{$method}($id, $related);
         }
-    }
-
-    /**
-     * Handle special case of `children` relation on `folders`
-     *
-     * @param string $id Object ID.
-     * @param array $relatedIds Related objects as id/type pairs.
-     * @return void
-     */
-    protected function folderChildrenRelated(string $id, array $relatedIds): void
-    {
-        $notFolders = [];
-        $apiClient = ApiClientProvider::getApiClient();
-        foreach ($relatedIds as $item) {
-            $relType = Hash::get($item, 'type');
-            $relId = Hash::get($item, 'id');
-            if ($relType !== 'folders') {
-                $notFolders[] = $item;
-                continue;
-            }
-            // invert relation call => use 'parent' relation on children folder
-            $data = compact('id') + ['type' => 'folders'];
-            if (Hash::check((array)$item, 'meta')) {
-                $data += ['meta' => Hash::get((array)$item, 'meta')];
-            }
-            $apiClient->replaceRelated($relId, 'folders', 'parent', $data);
+        if ($relation === 'children' && $type === 'folders') {
+            return $this->Children->{$method}($id, $related);
         }
 
-        if (!empty($notFolders)) {
-            foreach ($notFolders as $notFolder) {
-                $apiClient->addRelated($id, 'folders', 'children', [$notFolder]);
-            }
-        }
+        return ApiClientProvider::getApiClient()->{$method}($id, $type, $relation, $related);
     }
 }

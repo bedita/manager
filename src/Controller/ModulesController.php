@@ -24,9 +24,11 @@ use Psr\Log\LogLevel;
  * Modules controller: list, add, edit, remove objects
  *
  * @property \App\Controller\Component\CategoriesComponent $Categories
+ * @property \App\Controller\Component\ChildrenComponent $Children
  * @property \App\Controller\Component\CloneComponent $Clone
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
+ * @property \App\Controller\Component\ParentsComponent $Parents
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  * @property \App\Controller\Component\PropertiesComponent $Properties
  * @property \App\Controller\Component\QueryComponent $Query
@@ -52,9 +54,11 @@ class ModulesController extends AppController
         parent::initialize();
 
         $this->loadComponent('Categories');
+        $this->loadComponent('Children');
         $this->loadComponent('Clone');
         $this->loadComponent('History');
         $this->loadComponent('ObjectsEditors');
+        $this->loadComponent('Parents');
         $this->loadComponent('Properties');
         $this->loadComponent('ProjectConfiguration');
         $this->loadComponent('Query');
