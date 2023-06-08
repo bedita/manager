@@ -167,6 +167,25 @@ class ControlTest extends TestCase
                     'checked' => false,
                 ],
             ],
+            'checkbox nullable' => [
+                [
+                    'type' => 'boolean',
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'boolean',
+                        ],
+                    ],
+                ],
+                'checkbox',
+                'false',
+                [
+                    'type' => 'checkboxNullable',
+                    'checked' => false,
+                ],
+            ],
             'enum' => [
                 [
                     'type' => 'string',
@@ -297,6 +316,7 @@ class ControlTest extends TestCase
      * @covers ::datetime()
      * @covers ::date()
      * @covers ::checkbox()
+     * @covers ::checkboxNullable()
      * @covers ::enum()
      * @covers ::categories()
      * @covers ::oneOptions()

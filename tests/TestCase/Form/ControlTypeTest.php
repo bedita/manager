@@ -83,10 +83,24 @@ class ControlTypeTest extends TestCase
                     'type' => 'boolean',
                 ],
             ],
-            'one of' => [
-                'checkbox',
+            'checkbox nullable' => [
+                'checkboxNullable',
                 [
-                    'type' => 'string',
+                    'type' => 'array',
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'boolean',
+                        ],
+                    ],
+                ],
+            ],
+            'one of' => [
+                'checkboxNullable',
+                [
+                    'type' => 'boolean',
                     'oneOf' => [
                         [
                             'type' => 'null',
