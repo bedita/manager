@@ -197,7 +197,7 @@ class BaseControllerTest extends TestCase
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
-        $this->client->setupTokens($response['meta']);
+        $this->client->setupTokens((array)Hash::get($response, 'meta'));
     }
 
     public function testDummy(): void

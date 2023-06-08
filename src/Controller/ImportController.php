@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\SchemaTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -25,6 +26,18 @@ use Exception;
  */
 class ImportController extends AppController
 {
+    use SchemaTrait;
+
+    /**
+     * @inheritDoc
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->Security->setConfig('unlockedActions', ['file']);
+    }
+
     /**
      * List of asyn service names to lookup
      *
@@ -52,6 +65,12 @@ class ImportController extends AppController
         $result = $this->getRequest()->getSession()->consume('Import.result');
         $this->set(compact('result'));
         $this->loadFilters();
+        /** @var \Authentication\Identity $user */
+        $user = $this->Authentication->getIdentity();
+        $this->set(
+            'jobsAllow',
+            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow')
+        );
     }
 
     /**
@@ -135,10 +154,12 @@ class ImportController extends AppController
         $filters = [];
         $importFilters = Configure::read('Filters.import', []);
         foreach ($importFilters as $filter) {
-            $value = $filter['class'];
-            $text = $filter['label'];
-            $options = $filter['options'];
-            $filters[] = compact('value', 'text', 'options');
+            $accept = (array)Hash::get($filter, 'accept', ['text/xml', 'text/csv']);
+            $name = (string)Hash::get($filter, 'name');
+            $value = (string)Hash::get($filter, 'class');
+            $text = (string)Hash::get($filter, 'label');
+            $options = (array)Hash::get($filter, 'options');
+            $filters[] = compact('accept', 'name', 'value', 'text', 'options');
             $this->updateServiceList($value);
         }
         $this->set('filters', $filters);
@@ -177,7 +198,7 @@ class ImportController extends AppController
             'filter' => ['service' => implode(',', $this->services)],
         ];
         try {
-            $response = $this->apiClient->get('/admin/async_jobs', $query);
+            $response = $this->apiClient->get('/async_jobs', $query);
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);

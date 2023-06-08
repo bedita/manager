@@ -15,9 +15,13 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\ImportController;
 use App\Core\Result\ImportResult;
+use Authentication\AuthenticationService;
+use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identity;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
+use BEdita\WebTools\Identifier\ApiIdentifier;
 use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
@@ -131,6 +135,7 @@ class ImportControllerTest extends TestCase
         $filters = [
             [
                 'class' => 'App\Test\Utils\ImportFilterSample',
+                'name' => 'my-dummy-filter',
                 'label' => 'Dummy Filter',
                 'options' => [],
             ],
@@ -144,6 +149,8 @@ class ImportControllerTest extends TestCase
         static::assertTrue(is_array($this->Import->viewBuilder()->getVar('filters')));
         $expected = [
             [
+                'accept' => ['text/xml', 'text/csv'],
+                'name' => 'my-dummy-filter',
                 'value' => 'App\Test\Utils\ImportFilterSample',
                 'text' => 'Dummy Filter',
                 'options' => [],
@@ -201,7 +208,7 @@ class ImportControllerTest extends TestCase
             ->setConstructorArgs(['https://media.example.com'])
             ->getMock();
         $apiClient->method('get')
-            ->with('/admin/async_jobs')
+            ->with('/async_jobs')
             ->willThrowException(new BEditaClientException('My test exception'));
         $this->Import->apiClient = $apiClient;
         $method->invokeArgs($this->Import, []);
@@ -211,13 +218,13 @@ class ImportControllerTest extends TestCase
         $flash = $this->Import->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('My test exception', Hash::get($flash, '0.message'));
 
-        // mock api get /admin/async_jobs
+        // mock api get /async_jobs
         $expected = [['id' => 1], ['id' => 2], ['id' => 3]];
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.com'])
             ->getMock();
         $apiClient->method('get')
-            ->with('/admin/async_jobs')
+            ->with('/async_jobs')
             ->willReturn(['data' => $expected]);
         $this->Import->apiClient = $apiClient;
         $method->invokeArgs($this->Import, []);
@@ -315,12 +322,13 @@ class ImportControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        $this->setupController();
+        $this->setupControllerAndLogin();
         $this->Import->index();
         static::assertEmpty($this->Import->viewBuilder()->getVar('jobs'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('services'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('filters'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('result'));
+        static::assertArrayHasKey('jobsAllow', $this->Import->viewBuilder()->getVars());
         $this->Import->dispatchEvent('Controller.beforeRender');
         static::assertEquals(['_name' => 'import:index'], $this->Import->viewBuilder()->getVar('moduleLink'));
     }
@@ -339,5 +347,55 @@ class ImportControllerTest extends TestCase
         static::assertEmpty($this->Import->viewBuilder()->getVar('jobs'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('services'));
         static::assertEmpty($this->Import->viewBuilder()->getVar('filters'));
+    }
+
+    /**
+     * Setup controller and manually login user
+     *
+     * @return array|null
+     */
+    protected function setupControllerAndLogin(): ?array
+    {
+        $filename = sprintf('%s/tests/files/%s', getcwd(), $this->filename);
+        $file = new UploadedFile($filename, filesize($filename), $this->fileError, $this->filename);
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'post' => [
+                'username' => env('BEDITA_ADMIN_USR'),
+                'password' => env('BEDITA_ADMIN_PWD'),
+                'file' => $file,
+                'filter' => 'App\Test\Utils\ImportFilterSample',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->Import = new class ($request) extends ImportController
+        {
+            public function render($view = null, $layout = null): Response
+            {
+                return $this->getResponse();
+            }
+        };
+
+        // Mock Authentication component
+        ApiClientProvider::getApiClient()->setupTokens([]); // reset client
+        $service = new AuthenticationService();
+        $service->loadIdentifier(ApiIdentifier::class);
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+            ],
+        ]);
+        $this->Import->setRequest($this->Import->getRequest()->withAttribute('authentication', $service));
+        $result = $this->Import->Authentication->getAuthenticationService()->authenticate($this->Import->getRequest());
+        $identity = new Identity($result->getData());
+        $request = $this->Import->getRequest()->withAttribute('identity', $identity);
+        $this->Import->setRequest($request);
+        $user = $this->Import->Authentication->getIdentity() ?: new Identity([]);
+        $this->Import->Authentication->setIdentity($user);
+
+        return $user->getOriginalData();
     }
 }

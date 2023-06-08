@@ -1,6 +1,6 @@
 {% set relationName = 'roles' %}
 
-{% set customElement = Layout.customElement(relationName) %}
+{% set customElement = Element.custom(relationName) %}
 {% if customElement %}
    {{ element(customElement) }}
 {% else %}

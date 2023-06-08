@@ -199,7 +199,6 @@ class ModulesComponentTest extends TestCase
      * @param array $config Project config to set.
      * @return void
      * @dataProvider getProjectProvider()
-     * @covers ::getMeta()
      * @covers ::getProject()
      */
     public function testGetProject($expected, $meta, $config = []): void
@@ -496,7 +495,6 @@ class ModulesComponentTest extends TestCase
      * @return void
      * @dataProvider getModulesProvider()
      * @covers ::modulesFromMeta()
-     * @covers ::getMeta()
      * @covers ::getModules()
      */
     public function testGetModules($expected, $meta, array $modules = []): void
@@ -1535,150 +1533,6 @@ class ModulesComponentTest extends TestCase
     }
 
     /**
-     * Data provider for testSaveObjects
-     *
-     * @return array
-     */
-    public function saveObjectsProvider(): array
-    {
-        return [
-            'empty data' => [
-                [], // objects
-                [], // expected
-            ],
-            'empty attributes' => [
-                [['attributes' => []]], // objects
-                [['attributes' => []]], // expected
-            ],
-            'full example' => [
-                [
-                    [
-                        'type' => 'documents',
-                        'attributes' => [
-                            'title' => 'dummy one',
-                            'status' => 'on',
-                            'something-empty' => '',
-                            'something-not-empty' => 'not empty',
-                        ],
-                    ],
-                    [
-                        'type' => 'documents',
-                        'attributes' => [
-                            'title' => 'dummy two',
-                            'status' => 'on',
-                            'something-empty' => '',
-                            'something-not-empty' => 'not empty',
-                        ],
-                    ],
-                ], // objects
-                [
-                    [
-                        'type' => 'documents',
-                        'attributes' => [
-                            'title' => 'dummy one',
-                            'status' => 'on',
-                            'something-empty' => '',
-                            'something-not-empty' => 'not empty',
-                        ],
-                    ],
-                    [
-                        'type' => 'documents',
-                        'attributes' => [
-                            'title' => 'dummy two',
-                            'status' => 'on',
-                            'something-empty' => '',
-                            'something-not-empty' => 'not empty',
-                        ],
-                    ],
-                ], // expected
-            ],
-        ];
-    }
-
-    /**
-     * Test `saveObjects`
-     *
-     * @param array $objects The test objects
-     * @param array $expected The expected data
-     * @return void
-     * @dataProvider saveObjectsProvider
-     * @covers ::saveObjects()
-     * @covers ::saveObject()
-     */
-    public function testSaveObjects(array $objects, array $expected): void
-    {
-        $this->setupApi();
-        $this->Modules->saveObjects($objects);
-        foreach ($expected as $index => &$exp) {
-            if (!empty($exp['attributes'])) {
-                $object = $objects[$index];
-                static::assertArrayHasKey('id', $object);
-                static::assertNotNull($object['id']);
-                $exp['id'] = $object['id'];
-            }
-        }
-        static::assertEquals($expected, $objects);
-    }
-
-    /**
-     * Data provider for testSaveObject
-     *
-     * @return array
-     */
-    public function saveObjectProvider(): array
-    {
-        return [
-            'empty data' => [
-                [], // object
-                [], // expected
-            ],
-            'empty attributes' => [
-                ['attributes' => []], // object
-                ['attributes' => []], // expected
-            ],
-            'full example' => [
-                [
-                    'type' => 'documents',
-                    'attributes' => [
-                        'status' => 'on',
-                        'something-empty' => '',
-                        'something-not-empty' => 'not empty',
-                    ],
-                ], // object
-                [
-                    'type' => 'documents',
-                    'attributes' => [
-                        'status' => 'on',
-                        'something-empty' => '',
-                        'something-not-empty' => 'not empty',
-                    ],
-                ], // expected
-            ],
-        ];
-    }
-
-    /**
-     * Test `saveObject`
-     *
-     * @param array $object The test object
-     * @param array $expected The expected data
-     * @return void
-     * @dataProvider saveObjectProvider
-     * @covers ::saveObject()
-     */
-    public function testSaveObject(array $object, array $expected): void
-    {
-        $this->setupApi();
-        $this->Modules->saveObject($object);
-        if (!empty($expected['attributes'])) {
-            static::assertArrayHasKey('id', $object);
-            static::assertNotNull($object['id']);
-            $expected['id'] = $object['id'];
-        }
-        static::assertEquals($expected, $object);
-    }
-
-    /**
      * Data provider for `testSaveRelated`.
      *
      * @return array
@@ -1769,7 +1623,7 @@ class ModulesComponentTest extends TestCase
                         ],
                     ],
                 ], // relatedData
-                'replaceRelated', // expected
+                'addRelated', // expected
             ],
             'folders children folders' => [
                 222, // id
@@ -1781,7 +1635,7 @@ class ModulesComponentTest extends TestCase
                         'relatedIds' => [['id' => 123, 'type' => 'folders']],
                     ],
                 ], // relatedData
-                'replaceRelated', // expected
+                'addRelated', // expected
             ],
             'folders children mixed' => [
                 333, // id
@@ -1794,6 +1648,18 @@ class ModulesComponentTest extends TestCase
                     ],
                 ], // relatedData
                 'removeRelated', // expected
+            ],
+            'folders parent' => [
+                333, // id
+                'folders', // type
+                [
+                    [
+                        'method' => 'addRelated',
+                        'relation' => 'parent',
+                        'relatedIds' => [['id' => 123, 'type' => 'folders'], ['id' => 456, 'type' => 'folders']],
+                    ],
+                ], // relatedData
+                'replaceRelated', // expected
             ],
         ];
     }
@@ -1808,8 +1674,7 @@ class ModulesComponentTest extends TestCase
      * @return void
      * @dataProvider saveRelatedProvider
      * @covers ::saveRelated()
-     * @covers ::folderChildrenRelated()
-     * @covers ::folderChildrenRemove()
+     * @covers ::saveRelatedObjects()
      */
     public function testSaveRelated(int $id, string $type, array $relatedData, $expected): void
     {
@@ -1826,17 +1691,22 @@ class ModulesComponentTest extends TestCase
         $apiClient->method('addRelated')
             ->will($this->returnCallback(function () use (&$actual) {
                 $actual = 'addRelated';
+
+                return ['response addRelated'];
             }));
         $apiClient->method('removeRelated')
             ->will($this->returnCallback(function () use (&$actual) {
                 $actual = 'removeRelated';
+
+                return ['response removeRelated'];
             }));
         $apiClient->method('replaceRelated')
             ->will($this->returnCallback(function () use (&$actual) {
                 $actual = 'replaceRelated';
+
+                return ['response replaceRelated'];
             }));
         ApiClientProvider::setApiClient($apiClient);
-
         $this->Modules->saveRelated((string)$id, $type, $relatedData);
         static::assertEquals($expected, $actual);
     }

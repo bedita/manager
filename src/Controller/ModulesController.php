@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -23,9 +24,11 @@ use Psr\Log\LogLevel;
  * Modules controller: list, add, edit, remove objects
  *
  * @property \App\Controller\Component\CategoriesComponent $Categories
+ * @property \App\Controller\Component\ChildrenComponent $Children
  * @property \App\Controller\Component\CloneComponent $Clone
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
+ * @property \App\Controller\Component\ParentsComponent $Parents
  * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  * @property \App\Controller\Component\PropertiesComponent $Properties
  * @property \App\Controller\Component\QueryComponent $Query
@@ -34,6 +37,8 @@ use Psr\Log\LogLevel;
  */
 class ModulesController extends AppController
 {
+    use PermissionsTrait;
+
     /**
      * Object type currently used
      *
@@ -49,9 +54,11 @@ class ModulesController extends AppController
         parent::initialize();
 
         $this->loadComponent('Categories');
+        $this->loadComponent('Children');
         $this->loadComponent('Clone');
         $this->loadComponent('History');
         $this->loadComponent('ObjectsEditors');
+        $this->loadComponent('Parents');
         $this->loadComponent('Properties');
         $this->loadComponent('ProjectConfiguration');
         $this->loadComponent('Query');
@@ -166,6 +173,7 @@ class ModulesController extends AppController
         $this->History->load($id, $object);
         $this->set(compact('object', 'included', 'schema', 'streams'));
         $this->set('properties', $this->Properties->viewGroups($object, $this->objectType));
+        $this->set('foldersSchema', $this->Schema->getSchema('folders'));
 
         $computedRelations = array_reduce(
             array_keys($object['relationships']),
@@ -276,8 +284,12 @@ class ModulesController extends AppController
 
             // save data
             $response = $this->apiClient->save($this->objectType, $requestData);
-            $objectId = (string)Hash::get($response, 'data.id');
-            $this->Modules->saveRelated($objectId, $this->objectType, $relatedData);
+            $this->savePermissions(
+                (array)$response,
+                (array)$this->Schema->getSchema($this->objectType),
+                (array)Hash::get($requestData, 'permissions')
+            );
+            $this->Modules->saveRelated((string)Hash::get($response, 'data.id'), $this->objectType, $relatedData);
         } catch (BEditaClientException $error) {
             $this->log($error->getMessage(), LogLevel::ERROR);
             $this->Flash->error($error->getMessage(), ['params' => $error]);
@@ -318,11 +330,12 @@ class ModulesController extends AppController
         }
         try {
             $source = $this->apiClient->getObject($id, $this->objectType);
-            $attributes = $source['data']['attributes'];
+            $attributes = (array)Hash::get($source, 'data.attributes');
             $attributes['uname'] = '';
             unset($attributes['relationships']);
             $attributes['title'] = $this->getRequest()->getQuery('title');
             $attributes['status'] = 'draft';
+            $this->Clone->stream($schema, $source, $attributes);
             $save = $this->apiClient->save($this->objectType, $attributes);
             $destination = (string)Hash::get($save, 'data.id');
             $this->Clone->relations($source, $destination);

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-04-12 07:11:02 \n"
+"POT-Creation-Date: 2023-05-08 07:12:49 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -317,9 +317,6 @@ msgstr "File troppo grande, dimensione massima consentita {0}"
 msgid "File only partially uploaded"
 msgstr "File caricato solo parzialmente"
 
-msgid "File type"
-msgstr "Tipo di file"
-
 msgid "Files"
 msgstr "File"
 
@@ -368,14 +365,8 @@ msgstr "Immagini"
 msgid "Import"
 msgstr "Importa da file"
 
-msgid "Import error"
-msgstr "Errore in importazione"
-
 msgid "Import filter not selected"
 msgstr "Filtro di importazione non selezionato"
-
-msgid "Import warn"
-msgstr "Avviso in importazione"
 
 msgid "Inherited properties"
 msgstr "Proprietà ereditate"
@@ -391,9 +382,6 @@ msgstr "Astratto"
 
 msgid "Job {0} to import file \"{1}\" scheduled."
 msgstr "Il processo {0} per importare il file \"{1}\" è stato avviato"
-
-msgid "Jobs"
-msgstr "Processi"
 
 msgid "Label"
 msgstr "Etichetta"
@@ -512,23 +500,11 @@ msgstr "Nessuna applicazione"
 msgid "No items found"
 msgstr "Nessun elemento trovato"
 
-msgid "No options for this file type"
-msgstr "Nessuna opzione per questo tipo di file"
-
 msgid "Number of created objects"
 msgstr "Numero di oggetti creati"
 
-msgid "Number of created resources"
-msgstr "Numero di risorse create"
-
-msgid "Number of errors"
-msgstr "Numero di errori"
-
 msgid "Number of updated objects"
 msgstr "Numero di oggetti aggiornati"
-
-msgid "Number of updated resources"
-msgstr "Numero di risorse aggiornate"
 
 msgid "Object Types"
 msgstr "Tipi di Oggetto"
@@ -574,9 +550,6 @@ msgstr "Apri immagine"
 
 msgid "Open module"
 msgstr "Apri modulo"
-
-msgid "Options"
-msgstr "Opzioni"
 
 msgid "Original"
 msgstr "Originale"
@@ -711,9 +684,6 @@ msgstr "Ripristina"
 
 msgid "Restored"
 msgstr "Recuperato"
-
-msgid "Result"
-msgstr "Risultato"
 
 msgid "Return to Dashboard"
 msgstr "Torna alla Scrivania"
@@ -866,9 +836,6 @@ msgstr "Senza titolo"
 msgid "Updated"
 msgstr "Aggiornato"
 
-msgid "Upload"
-msgstr "Caricare"
-
 msgid "Upload local file"
 msgstr "Carica file locale"
 
@@ -941,9 +908,6 @@ msgstr "annulla"
 msgid "completed"
 msgstr "completato"
 
-msgid "completed on"
-msgstr "completato il"
-
 msgid "confirm password"
 msgstr "conferma password"
 
@@ -982,9 +946,6 @@ msgstr "abilitato"
 
 msgid "expires"
 msgstr "scade"
-
-msgid "file name"
-msgstr "nome del file"
 
 msgid "from"
 msgstr "da"
@@ -1037,17 +998,11 @@ msgstr "rimuovi"
 msgid "reset"
 msgstr ""
 
-msgid "scheduled from"
-msgstr "programmato da"
-
 msgid "scheduled_from"
 msgstr "programmato da"
 
 msgid "service"
 msgstr "servizio"
-
-msgid "service name"
-msgstr "nome del servizio"
 
 msgid "status"
 msgstr "stato"
@@ -1125,6 +1080,18 @@ msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
 #, javascript-format
 msgid "Do you really want to remove these property types? ${ types }"
 msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
+
+msgid "Empty"
+msgstr ""
+
+msgid "Import type"
+msgstr "Tipo di importazione"
+
+msgid "No options for this file type"
+msgstr "Nessuna opzione per questo tipo di file"
+
+msgid "Options"
+msgstr "Opzioni"
 
 msgid "Remove item. Are you sure?"
 msgstr "Stai per eliminare l'elemento. Vuoi procedere?"
@@ -1258,6 +1225,12 @@ msgstr "Non puoi modificare i permessi"
 msgid "Your roles"
 msgstr "I tuoi ruoli"
 
+msgid "Show all folders"
+msgstr "Mostra non disponibili"
+
+msgid "Hide forbidden folders"
+msgstr "Nascondi non disponibili"
+
 msgid "Inherited"
 msgstr "Ereditato"
 
@@ -1318,6 +1291,42 @@ msgstr "modifica"
 #.
 msgid "add new"
 msgstr "aggiungi nuovo"
+
+msgid "Completed on"
+msgstr "Completato il"
+
+msgid "File name"
+msgstr "Nome del file"
+
+msgid "Jobs"
+msgstr "Processi"
+
+msgid "No Jobs"
+msgstr "Nessun Processo"
+
+msgid "Scheduled from"
+msgstr "Programmato da"
+
+msgid "Service name"
+msgstr "Nome del servizio"
+
+msgid "Import error"
+msgstr "Errore in importazione"
+
+msgid "Import warn"
+msgstr "Avviso in importazione"
+
+msgid "Number of created resources"
+msgstr "Numero di risorse create"
+
+msgid "Number of updated resources"
+msgstr "Numero di risorse aggiornate"
+
+msgid "Number of errors"
+msgstr "Numero di errori"
+
+msgid "Result"
+msgstr "Risultato"
 
 msgid "version by"
 msgstr "versione di"

@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\SchemaTrait;
 use Cake\Utility\Hash;
 
 /**
@@ -19,6 +20,8 @@ use Cake\Utility\Hash;
  */
 class DashboardController extends AppController
 {
+    use SchemaTrait;
+
     /**
      * @inheritDoc
      */
@@ -39,6 +42,13 @@ class DashboardController extends AppController
     {
         $this->getRequest()->allowMethod(['get']);
         $this->set('recentItems', $this->recentItems());
+
+        /** @var \Authentication\Identity $user */
+        $user = $this->Authentication->getIdentity();
+        $this->set(
+            'jobsAllow',
+            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow')
+        );
     }
 
     /**

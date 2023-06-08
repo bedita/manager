@@ -13,13 +13,13 @@
 namespace App\View\Helper;
 
 use App\Utility\Translate;
-use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 
 /**
  * Helper for site layout
  *
+ * @property \App\View\Helper\EditorsHelper $Editors
  * @property \Cake\View\Helper\HtmlHelper $Html
  * @property \App\View\Helper\LinkHelper $Link
  * @property \App\View\Helper\PermsHelper $Perms
@@ -32,7 +32,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html', 'Link', 'Perms', 'System'];
+    public $helpers = ['Editors', 'Html', 'Link', 'Perms', 'System'];
 
     /**
      * Is Dashboard
@@ -111,6 +111,33 @@ class LayoutHelper extends Helper
     }
 
     /**
+     * Return module css class(es).
+     * If object is locked by parents, return base class plus 'locked' class.
+     * If object is locked by concurrent editors, return 'concurrent-editors' class plus publish status class.
+     * If object is not locked, return base class plus publish status class.
+     * Publish status class is 'expired', 'future', 'locked' or 'draft'.
+     *
+     * @return string
+     */
+    public function moduleClass(): string
+    {
+        $moduleClasses = ['app-module-box'];
+        $object = (array)$this->getView()->get('object');
+        if (!empty($object) && $this->Perms->isLockedByParents((string)Hash::get($object, 'id'))) {
+            $moduleClasses[] = 'locked';
+
+            return trim(implode(' ', $moduleClasses));
+        }
+        $editors = $this->Editors->list();
+        if (count($editors) > 1) {
+            $moduleClasses = ['app-module-box-concurrent-editors'];
+        }
+        $moduleClasses[] = $this->publishStatus($object);
+
+        return trim(implode(' ', $moduleClasses));
+    }
+
+    /**
      * Module main link
      *
      * @return string The link
@@ -166,27 +193,6 @@ class LayoutHelper extends Helper
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');
-    }
-
-    /**
-     * Return custom element via `Properties` configuration for
-     * a relation or property group in current module.
-     *
-     * @param string $item Relation or group name
-     * @param string $type Item type: `relation` or `group`
-     * @return string
-     */
-    public function customElement(string $item, string $type = 'relation'): string
-    {
-        $currentModule = (array)$this->getView()->get('currentModule');
-        $name = (string)Hash::get($currentModule, 'name');
-        if ($type === 'relation') {
-            $path = sprintf('Properties.%s.relations._element.%s', $name, $item);
-        } else {
-            $path = sprintf('Properties.%s.view.%s._element', $name, $item);
-        }
-
-        return (string)Configure::read($path);
     }
 
     /**

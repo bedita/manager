@@ -39,6 +39,7 @@ export default {
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         Permission:() => import(/* webpackChunkName: "permission" */'app/components/permission/permission'),
         Permissions:() => import(/* webpackChunkName: "permissions" */'app/components/permissions/permissions'),
+        PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
     },
 
     props: {

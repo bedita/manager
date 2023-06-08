@@ -13,7 +13,9 @@
 
 namespace App\Test\TestCase\View\Helper;
 
+use App\View\Helper\EditorsHelper;
 use App\View\Helper\LayoutHelper;
+use App\View\Helper\PermsHelper;
 use App\View\Helper\SystemHelper;
 use Cake\Core\Configure;
 use Cake\Http\Cookie\Cookie;
@@ -143,6 +145,80 @@ class LayoutHelperTest extends TestCase
     }
 
     /**
+     * Data provider for testModuleClass test case.
+     *
+     * @return array
+     */
+    public function moduleClassProvider(): array
+    {
+        return [
+            'app-module-box locked' => [
+                true,
+                false,
+                'app-module-box locked',
+            ],
+            'app-module-box-concurrent-editors' => [
+                false,
+                true,
+                'app-module-box-concurrent-editors',
+            ],
+            'publish status' => [
+                false,
+                false,
+                'app-module-box',
+            ],
+        ];
+    }
+
+    /**
+     * Test `moduleClass` method
+     *
+     * @param bool $locked The locked flag
+     * @param bool $concurrent The concurrent editors flag
+     * @param string $expected The expected class
+     * @return void
+     * @dataProvider moduleClassProvider()
+     * @covers ::moduleClass()
+     */
+    public function testModuleClass(bool $locked, bool $concurrent, string $expected): void
+    {
+        $request = $response = $events = null;
+        $view = new View($request, $response, $events, ['name' => 'Objects']);
+        $view->set('object', ['id' => 999]);
+        $layout = new LayoutHelper($view);
+        if ($locked) {
+            $mock = $this->createPartialMock(PermsHelper::class, ['isLockedByParents']);
+            $mock->method('isLockedByParents')->willReturn(true);
+            $layout->Perms = $mock;
+        } elseif ($concurrent) {
+            $mock = $this->createPartialMock(PermsHelper::class, ['isLockedByParents']);
+            $mock->method('isLockedByParents')->willReturn(false);
+            $layout->Perms = $mock;
+            $mock = $this->createPartialMock(EditorsHelper::class, ['list']);
+            $mock->method('list')->willReturn([
+                [
+                    'id' => 1,
+                    'username' => 'first',
+                ],
+                [
+                    'id' => 2,
+                    'username' => 'second',
+                ],
+            ]);
+            $layout->Editors = $mock;
+        } else {
+            $mock = $this->createPartialMock(PermsHelper::class, ['isLockedByParents']);
+            $mock->method('isLockedByParents')->willReturn(false);
+            $layout->Perms = $mock;
+            $mock = $this->createPartialMock(EditorsHelper::class, ['list']);
+            $mock->method('list')->willReturn([]);
+            $layout->Editors = $mock;
+        }
+        $actual = $layout->moduleClass();
+        static::assertSame($expected, $actual);
+    }
+
+    /**
      * Data provider for `testModuleLink` test case.
      *
      * @return array
@@ -263,65 +339,6 @@ class LayoutHelperTest extends TestCase
         }
         $layout = new LayoutHelper($view);
         $result = $layout->title();
-        static::assertSame($expected, $result);
-    }
-
-    /**
-     * Data provider for `testCustomElement` test case.
-     *
-     * @return array
-     */
-    public function customElementProvider(): array
-    {
-        return [
-            'empty' => [
-                '',
-                'test',
-            ],
-            'empty relation' => [
-                'empty',
-                'my_relation',
-                'relation',
-                [
-                    'relations' => [
-                        '_element' => [
-                            'my_relation' => 'empty',
-                        ],
-                    ],
-                ],
-            ],
-            'my_element' => [
-                'MyPlugin.my_element',
-                'my_group',
-                'group',
-                [
-                    'view' => [
-                        'my_group' => ['_element' => 'MyPlugin.my_element'],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Test `customElement` method
-     *
-     * @param string $expected The expected element
-     * @param string $item The item
-     * @param string $type The item type
-     * @param array $conf Configuration to use
-     * @return void
-     * @dataProvider customElementProvider()
-     * @covers ::customElement()
-     */
-    public function testCustomElement(string $expected, string $item, string $type = 'relation', array $conf = []): void
-    {
-        Configure::write('Properties.documents', $conf);
-        $view = new View();
-        $view->set('currentModule', ['name' => 'documents']);
-        $layout = new LayoutHelper($view);
-
-        $result = $layout->customElement($item, $type);
         static::assertSame($expected, $result);
     }
 

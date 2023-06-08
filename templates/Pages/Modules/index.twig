@@ -9,7 +9,9 @@
 <modules-index inline-template ids='{{ ids|json_encode }}'>
     <div class="module-index">
         {% if treeView %}
-            <tree-view :user-roles="{{ user.roles|json_encode}}"></tree-view>
+            {% set hasPermissions = 'Permissions' in schema.associations %}
+            <permission-toggle :user-roles="{{ user.roles|json_encode }}" :has-permissions="{{ hasPermissions|json_encode }}"></permission-toggle>
+            <tree-view :user-roles="{{ user.roles|json_encode }}" :has-permissions="{{ hasPermissions|json_encode }}"></tree-view>
         {% else %}
             <div class="table-container">
                 <div class="list-objects">
@@ -48,30 +50,7 @@
             </div>
         {% endif %}
 
-        {# commands to append in side bar (commands menu) #}
-        {% if Perms.canCreate() %}
-            {% do _view.append(
-                'app-module-buttons',
-                '<a href="' ~ Url.build({'_name': 'modules:create', 'object_type': objectType}) ~ '" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ '"><Icon icon="carbon:add"></Icon><span class="ml-05">' ~ __('Create') ~ '</span></a>'
-            ) %}
-        {% endif %}
-
-        {% if schema.properties.categories %}
-            {% do _view.append(
-                'app-module-buttons',
-                '<a href="' ~ Url.build({'_name': 'modules:categories:index', 'object_type': objectType}) ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><Icon icon="carbon:categories"></Icon><span class="ml-05">' ~ __('Categories') ~ '</span></a>'
-            ) %}
-        {% endif %}
-
-        {% if currentModule.sidebar.index %}
-        {% for item in currentModule.sidebar.index %}
-            {% set url = item.url is iterable ? Url.build(item.url) : item.url %}
-            {% do _view.append(
-                'app-module-buttons',
-                '<a href="' ~ url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __(item.label) ~ '</span></a>',
-            ) %}
-        {% endfor %}
-        {% endif %}
+        {{ element(Element.sidebar()) }}
 
     </div> {# end module-content #}
 </modules-index>

@@ -486,4 +486,40 @@ return [
     //     'BEdita Manager' => ['admin', 'manager', 'guest'],
     //     'Website' => ['frontend'],
     // ],
+
+    /**
+     * Configuration for import filters
+     */
+    // 'Filters' => [
+    //     'import' => [
+    //         [
+    //             'accept' => ['application/zip'],
+    //             'name' => 'import-objects-from-zip',
+    //             'label' => 'Import data from zip file',
+    //             'class' => \Path\To\ZipImportFilter::class,
+    //             'options' => [
+    //                 'uuid' => [
+    //                     'dataType' => 'text',
+    //                     'defaultValue' => '',
+    //                     'label' => 'Uuid',
+    //                 ],
+    //                 'flag' => [
+    //                     'dataType' => 'boolean',
+    //                     'defaultValue' => true,
+    //                     'label' => 'Flag',
+    //                 ],
+    //                 'opts' => [
+    //                     'dataType' => 'options',
+    //                     'defaultValue' => 1,
+    //                     'label' => 'Options',
+    //                     'values' => [
+    //                         1 => 'one',
+    //                         2 => 'two',
+    //                         3 => 'three',
+    //                     ],
+    //                 ],
+    //             ],
+    //         ],
+    //     ],
+    // ],
 ];

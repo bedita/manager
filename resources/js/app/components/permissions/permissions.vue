@@ -9,7 +9,7 @@
             <span class="ml-05 has-text-danger">{{ msgYouCannotModify }}. {{ msgYourRoles }}: {{ userRoles.join(',') }}</span>
         </div>
         <label v-for="role in roles" v-if="role.attributes.name != 'admin'">
-            <input type="checkbox" :checked="objectRoles.includes(role.attributes.name)" :disabled="!canModify" />
+            <input type="checkbox" name="permissions[]" :value="role.id" :checked="objectRoles.includes(role.attributes.name)" :disabled="!canModify" />
             {{ role.attributes.name }}
             <permission
                 :inherited="objectPerms?.inherited || false"
@@ -35,7 +35,7 @@ export default {
     props: {
         objectPerms: {
             type: Object,
-            default: () => ([]),
+            default: () => ({}),
         },
         userRoles: {
             type: Array,
@@ -69,7 +69,7 @@ export default {
         const response = await fetch(`${BEDITA.base}/api/roles`, options);
         const responseJson = await response.json();
         this.roles = responseJson.data || [];
-        this.canModify = this.userRoles.includes('admin') || this.roles.length === 0 || this.objectRoles.some(item => this.userRoles.includes(item));
+        this.canModify = this.userRoles.includes('admin') || this.roles?.length === 0 || this.objectRoles?.length === 0 || this.objectRoles.some(item => this.userRoles.includes(item));
     },
 }
 </script>

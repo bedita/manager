@@ -99,9 +99,9 @@ class ImportFilterTest extends TestCase
                 ],
             ]);
 
-        // mock post /admin/async_jobs
+        // mock post /async_jobs
         $apiClient->method('post')
-            ->with('/admin/async_jobs')
+            ->with('/async_jobs')
             ->willReturn([
                 'data' => [
                     'id' => $this->asyncJobId,
