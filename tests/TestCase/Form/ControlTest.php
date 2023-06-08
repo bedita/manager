@@ -58,7 +58,6 @@ class ControlTest extends TestCase
                 [
                     'type' => 'textarea',
                     'v-richeditor' => '""',
-                    'readonly' => 0,
                     'value' => $value,
                 ],
             ],
@@ -109,6 +108,7 @@ class ControlTest extends TestCase
                 [
                     'type' => 'checkbox',
                     'checked' => true,
+                    'value' => '1',
                 ],
             ],
             'checkbox' => [
@@ -151,6 +151,7 @@ class ControlTest extends TestCase
                         ],
                     ],
                     'multiple' => 'checkbox',
+                    'value' => null,
                 ],
             ],
             'checkbox no options' => [
@@ -165,6 +166,7 @@ class ControlTest extends TestCase
                 [
                     'type' => 'checkbox',
                     'checked' => false,
+                    'value' => '1',
                 ],
             ],
             'checkbox nullable' => [
@@ -179,11 +181,16 @@ class ControlTest extends TestCase
                         ],
                     ],
                 ],
-                'checkbox',
+                'checkboxNullable',
                 'false',
                 [
-                    'type' => 'checkboxNullable',
-                    'checked' => false,
+                    'type' => 'select',
+                    'options' => [
+                        'null' => '',
+                        '1' => 'Yes',
+                        '0' => 'No',
+                    ],
+                    'value' => 'false',
                 ],
             ],
             'enum' => [
@@ -333,8 +340,9 @@ class ControlTest extends TestCase
             'propertyType' => $type,
         ];
         $actual = Control::control($options);
-
-        static::assertSame(sort($expected), sort($actual));
+        ksort($expected);
+        ksort($actual);
+        static::assertSame($expected, $actual);
     }
 
     /**
