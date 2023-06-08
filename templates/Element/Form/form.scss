@@ -130,5 +130,19 @@
                 cursor: pointer;
             }
         }
+
+        .priority {
+
+            .input-narrow {
+                border-radius: 50%;
+                width: 2.125rem;
+                height: 2.125rem;
+                max-width: auto;
+                min-width: auto;
+                border: 1px solid $gray-900;
+                text-align: center;
+                padding:0;
+            }
+        }
     }
 }
