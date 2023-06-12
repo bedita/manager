@@ -357,7 +357,7 @@ class AppController extends Controller
             return;
         }
         $replaceRelated = array_reduce(
-            $data['relations'][$relation]['replaceRelated'],
+            (array)Hash::get($data, sprintf('relations.%s.replaceRelated', $relation)),
             function ($acc, $obj) {
                 $jsonObj = (array)json_decode($obj, true);
                 $acc[(string)Hash::get($jsonObj, 'id')] = $jsonObj;
