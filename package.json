@@ -15,12 +15,13 @@
     },
     "homepage": "https://github.com/bedita/manager#README",
     "scripts": {
-        "build": "webpack --mode production && webpack --config ./webpack.config.plugin.js --mode production",
+        "install:plugins": "for D in ./plugins/*; do echo \"Installing stuff on ${D}\" && yarn --cwd \"./plugins/${D}\"; done",
+        "build": "yarn install:plugins; webpack --mode production && webpack --config ./webpack.config.plugin.js --mode production",
         "bundle-report": "webpack --mode production --report",
         "develop": "webpack --mode development --hot",
         "dev": "webpack --mode development --hot",
         "dev-plugins": "webpack --config ./webpack.config.plugin.js --mode development",
-        "build-plugins": "webpack --config ./webpack.config.plugin.js --mode production"
+        "build-plugins": "yarn install:plugins; webpack --config ./webpack.config.plugin.js --mode production"
     },
     "dependencies": {
         "@chialab/typos": "^0.1.1",
