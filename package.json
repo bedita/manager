@@ -15,7 +15,7 @@
     },
     "homepage": "https://github.com/bedita/manager#README",
     "scripts": {
-        "install:plugins": "for D in ./plugins/*; do echo \"Installing stuff on ${D}\" && yarn --cwd \"./plugins/${D}\"; done",
+        "install:plugins": "for D in ./plugins/*; do echo \"Installing stuff on ${D}\" && yarn install --cwd \"${D}\"; done",
         "build": "yarn install:plugins; webpack --mode production && webpack --config ./webpack.config.plugin.js --mode production",
         "bundle-report": "webpack --mode production --report",
         "develop": "webpack --mode development --hot",
