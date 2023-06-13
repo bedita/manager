@@ -206,7 +206,7 @@ export default {
                 return positions;
             }, {});
             this.priorities = newObjects.reduce((priorities, object) => {
-                priorities[object.id] = object.meta.relation.priority;
+                priorities[object.id] = object?.meta?.relation?.priority || '';
                 return priorities;
             }, {});
         },
