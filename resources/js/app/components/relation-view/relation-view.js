@@ -80,6 +80,7 @@ export default {
             loading: false,
             objectsLoaded: false,       // objects loaded flag
             positions: {},              // used in children relations
+            priorities: {},              // used in children relations
 
             removedRelationsData: [],   // hidden field containing serialized json passed on form submit
             addedRelationsData: [],     // array of serialized new relations
@@ -198,6 +199,17 @@ export default {
         loading(value) {
             this.$emit('loading', value);
         },
+
+        objects(newObjects) {
+            this.positions = newObjects.reduce((positions, object, index) => {
+                positions[object.id] = index + 1;
+                return positions;
+            }, {});
+            this.priorities = newObjects.reduce((priorities, object) => {
+                priorities[object.id] = object?.meta?.relation?.priority || '';
+                return priorities;
+            }, {});
+        },
     },
 
     methods: {
@@ -285,6 +297,31 @@ export default {
                 }
 
                 priority = this.objects[i].meta.relation.priority;
+            }
+        },
+
+        /**
+         * update relation position and stage for saving - children
+         *
+         * @param {Object} related related object
+         *
+         * @returns {void}
+         */
+        onInputPriorities(related) {
+            const oldPriority = related.meta.relation.priority;
+            const newPriority = this.priorities[related.id] !== '' ? this.priorities[related.id] : undefined;
+            if (newPriority !== oldPriority) {
+                // try to deep copy the object
+                try {
+                    const copy = JSON.parse(JSON.stringify(related));
+                    copy.meta.relation.priority = newPriority;
+                    this.modifyRelation(copy);
+                } catch (exp) {
+                    // silent error
+                    console.error('[RelationView -> updatePriority] something\'s wrong with the data');
+                }
+            } else {
+                this.removeModifiedRelations(related.id);
             }
         },
 

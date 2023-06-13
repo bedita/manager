@@ -221,7 +221,6 @@
     }
 }
 
-
 // in panel
 %relation-panel-common {
     display: flex;
@@ -271,11 +270,6 @@
         &:not(.input-narrow) {
             min-width: 12rem;
         }
-    }
-
-    .input-narrow {
-        width: 3rem;
-        background-color: red;
     }
 }
 
