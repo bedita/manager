@@ -505,7 +505,6 @@ class SchemaHelperTest extends TestCase
      * @return void
      * @dataProvider translatableFieldsProvider()
      * @covers ::translatableFields()
-     * @covers ::translatableType()
      */
     public function testTranslatableFields(array $properties, array $expected): void
     {

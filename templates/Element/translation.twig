@@ -1,6 +1,6 @@
 {% do _view.assign('title', __('Translations')) %}
 {% do _view.assign('bodyViewClass', 'translation-module') %}
-{% set translatable = Schema.translatableFields(schema.properties|default([]), objectType) %}
+{% set translatable = Schema.translatableFields(schema|default([]), objectType) %}
 
 <modules-view inline-template ref="moduleView">
     <div class="modules-view">
