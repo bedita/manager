@@ -225,27 +225,20 @@ class SchemaHelper extends Helper
     {
         $translatable = (array)Configure::read(sprintf('Properties.%s.translatable', (string)$objectType));
         $fields = !empty($translatable) ? array_intersect($properties, $translatable) : $properties;
-        usort($fields, function ($a, $b) {
-            if ($a === 'title') {
-                return -1;
-            }
-            if ($b === 'title') {
-                return 1;
-            }
-            if ($a === 'description') {
-                return -1;
-            }
-            if ($b === 'description') {
-                return 1;
-            }
-            if ($a === 'body') {
-                return -1;
-            }
-            if ($b === 'body') {
-                return 1;
-            }
+        $priorityFields = ['title', 'description', 'body'];
+        usort($fields, function ($a, $b) use ($priorityFields) {
+            $aIndex = array_search($a, $priorityFields);
+            $bIndex = array_search($b, $priorityFields);
 
-            return strcmp($a, $b);
+            if ($aIndex !== false && $bIndex !== false) {
+                return $aIndex - $bIndex;
+            } elseif ($aIndex !== false) {
+                return -1;
+            } elseif ($bIndex !== false) {
+                return 1;
+            } else {
+                return strcmp($a, $b);
+            }
         });
 
         return $fields;
