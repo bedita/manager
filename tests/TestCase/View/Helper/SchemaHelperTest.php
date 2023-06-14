@@ -435,64 +435,19 @@ class SchemaHelperTest extends TestCase
     {
         return [
             'empty properties' => [
-                [],
-                [],
+                [], // properties
+                [], // conf
+                [], // expected
             ],
             'simple' => [
-                [
-                    'field' => [
-                        'oneOf' => [
-                            [
-                                'type' => 'string',
-                                'contentMediaType' => 'text/plain',
-                            ],
-                            [
-                                'type' => 'null',
-                            ],
-                        ],
-                    ],
-                ],
-                ['field'],
+                ['description', 'title', 'body'],
+                [],
+                ['title', 'description', 'body'],
             ],
             'not translatable' => [
-                [
-                    'field1' => [
-                        'type' => 'string',
-                    ],
-                    'field2' => [
-                        'type' => 'string',
-                        'contentMediaType' => 'text/css',
-                    ],
-                ],
-                [],
-            ],
-            'properties' => [
-                [
-                    'dummy' => [
-                        'oneOf' => [
-                            [
-                                'type' => 'null',
-                            ],
-                            [
-                                'type' => 'string',
-                                'contentMediaType' => 'text/plain',
-                            ],
-                        ],
-                    ],
-                    'description' => [
-                        'type' => 'string',
-                        'contentMediaType' => 'text/html',
-                    ],
-                    'title' => [
-                        'type' => 'string',
-                        'contentMediaType' => 'text/html',
-                    ],
-                ],
-                [
-                    'title',
-                    'description',
-                    'dummy',
-                ],
+                ['description', 'title', 'body'],
+                ['description', 'body'],
+                ['description', 'body'],
             ],
         ];
     }
@@ -501,35 +456,17 @@ class SchemaHelperTest extends TestCase
      * Test `translatableFields` method
      *
      * @param array $properties The properties
+     * @param array $conf The configuration
      * @param array $expected Expected result
      * @return void
      * @dataProvider translatableFieldsProvider()
      * @covers ::translatableFields()
      */
-    public function testTranslatableFields(array $properties, array $expected): void
+    public function testTranslatableFields(array $properties, array $conf, array $expected): void
     {
-        $actual = $this->Schema->translatableFields($properties);
-        static::assertSame($expected, $actual);
-    }
-
-    /**
-     * Test `translatableFields` method with `Properties` configuration
-     *
-     * @covers ::translatableFields()
-     */
-    public function testTranslatableFieldsConfiguration(): void
-    {
-        $properties = [
-            'field1' => [
-                'type' => 'object',
-            ],
-        ];
-        $actual = $this->Schema->translatableFields($properties);
-        static::assertEmpty($actual);
-
-        Configure::write('Properties.documents.translatable', ['field1']);
+        Configure::write('Properties.documents.translatable', $conf);
         $actual = $this->Schema->translatableFields($properties, 'documents');
-        static::assertEquals(['field1'], $actual);
+        static::assertSame($expected, $actual);
     }
 
     /**
