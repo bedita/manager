@@ -215,7 +215,8 @@ class SchemaHelper extends Helper
     }
 
     /**
-     * Provides list of translatable fields
+     * Provides list of translatable fields.
+     * If set Properties.<objectType>.translatable, it will be added to translatable fields.
      *
      * @param array $properties The properties
      * @param string $objectType The object type
@@ -224,9 +225,9 @@ class SchemaHelper extends Helper
     public function translatableFields(array $properties, ?string $objectType = null): array
     {
         $translatable = (array)Configure::read(sprintf('Properties.%s.translatable', (string)$objectType));
-        $fields = !empty($translatable) ? array_intersect($properties, $translatable) : $properties;
+        $fields = !empty($translatable) ? array_merge($properties, $translatable) : $properties;
         $fields = array_unique($fields);
-        $priorityFields = ['title', 'description', 'body'];
+        $priorityFields = array_merge(['title', 'description', 'body'], $translatable);
         usort($fields, function ($a, $b) use ($priorityFields) {
             return $this->compareFields($a, $b, $priorityFields);
         });

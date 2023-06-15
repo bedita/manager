@@ -444,15 +444,10 @@ class SchemaHelperTest extends TestCase
                 [],
                 ['title', 'description', 'body'],
             ],
-            'not translatable' => [
-                ['description', 'title', 'body'],
-                ['description', 'body'],
-                ['description', 'body'],
-            ],
             'more fields and reorder' => [
                 ['id', 'title', 'description', 'body', 'created', 'modified', 'dummy', 'status', 'extra'],
                 ['dummy3', 'dummy2', 'dummy1', 'description', 'body'],
-                ['description', 'body'],
+                ['title', 'description', 'body', 'dummy3', 'dummy2', 'dummy1', 'created', 'dummy', 'extra', 'id', 'modified', 'status'],
             ],
         ];
     }
