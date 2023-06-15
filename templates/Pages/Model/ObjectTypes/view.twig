@@ -26,12 +26,11 @@
                 value: resource.attributes.hidden|default([])|json_encode,
             })|raw }}
             {% do Form.unlockField('hidden') %}
-            {# TODO: handle translation rules in properties directly, like `hidden` #}
-            {# {{ Form.hidden('translation_rules', {
-                id: 'translation_rules',
-                value: resource.attributes.translation_rules|default({})|json_encode,
+            {{ Form.hidden('translation_rules', {
+                id: 'translationRules',
+                value: resource.attributes.translation_rules|json_encode,
             })|raw }}
-            {% do Form.unlockField('translation_rules') %} #}
+            {% do Form.unlockField('translation_rules') %}
 
             {# Handle newly created custom props via `addedProperties` hidden input for now #}
             {{ Form.hidden('addedProperties', {
@@ -80,7 +79,7 @@
                 </property-view>
 
         {# Set `_jsonKeys` hidden input from config #}
-        {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|merge(['hidden'])|join(',')})|raw }}
+        {{ Form.control('_jsonKeys', {'type': 'hidden', 'value': config('_jsonKeys', [])|merge(['hidden','translation_rules'])|join(',')})|raw }}
 
         {{ Form.end()|raw }}
 
@@ -132,6 +131,8 @@
                     :init-properties="{{ objectTypeProperties.core|default([])|json_encode }}"
                     type="core"
                     :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
+                    :translatable="{{ translatable|default({})|json_encode }}"
+                    :translation-rules="{{ resource.attributes.translation_rules|json_encode }}"
                 >
                 </object-properties>
             </div>
@@ -150,6 +151,8 @@
                     :init-properties="{{ objectTypeProperties.inherited|default([])|json_encode }}"
                     type="inherited"
                     :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
+                    :translatable="{{ translatable|default({})|json_encode }}"
+                    :translation-rules="{{ resource.attributes.translation_rules|json_encode }}"
                 >
                 </object-properties>
             </div>
@@ -168,6 +171,8 @@
                     :init-properties="{{ objectTypeProperties.custom|default([])|json_encode }}"
                     type="custom"
                     :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
+                    :translatable="{{ translatable|default({})|json_encode }}"
+                    :translation-rules="{{ resource.attributes.translation_rules|json_encode }}"
                 >
                 </object-properties>
                 <object-property-add

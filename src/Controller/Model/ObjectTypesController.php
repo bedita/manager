@@ -92,6 +92,11 @@ class ObjectTypesController extends ModelBaseController
         // setup `currentAttributes`
         $this->Modules->setupAttributes($resource);
 
+        // get translatable fields
+        $this->Schema->setConfig(['internalSchema' => false]);
+        $resourceSchema = $this->Schema->getSchema($name);
+        $this->set('translatable', (array)Hash::get($resourceSchema, 'translatable'));
+
         return null;
     }
 
