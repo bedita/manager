@@ -225,23 +225,39 @@ class SchemaHelper extends Helper
     {
         $translatable = (array)Configure::read(sprintf('Properties.%s.translatable', (string)$objectType));
         $fields = !empty($translatable) ? array_intersect($properties, $translatable) : $properties;
+        $fields = array_unique($fields);
         $priorityFields = ['title', 'description', 'body'];
         usort($fields, function ($a, $b) use ($priorityFields) {
-            $aIndex = array_search($a, $priorityFields);
-            $bIndex = array_search($b, $priorityFields);
-
-            if ($aIndex !== false && $bIndex !== false) {
-                return $aIndex - $bIndex;
-            } elseif ($aIndex !== false) {
-                return -1;
-            } elseif ($bIndex !== false) {
-                return 1;
-            } else {
-                return strcmp($a, $b);
-            }
+            return $this->compareFields($a, $b, $priorityFields);
         });
 
         return $fields;
+    }
+
+    /**
+     * Compare fields and return int, considering priority fields.
+     *
+     * @param string $a The first field
+     * @param string $b The second field
+     * @param array $priorityFields The priority fields
+     * @return int
+     */
+    public function compareFields(string $a, string $b, array $priorityFields): int
+    {
+        $aIndex = array_search($a, $priorityFields);
+        $bIndex = array_search($b, $priorityFields);
+
+        if ($aIndex !== false && $bIndex !== false) {
+            return $aIndex - $bIndex;
+        }
+        if ($aIndex !== false) {
+            return -1;
+        }
+        if ($bIndex !== false) {
+            return 1;
+        }
+
+        return strcmp($a, $b);
     }
 
     /**

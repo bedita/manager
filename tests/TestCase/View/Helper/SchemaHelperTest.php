@@ -449,6 +449,11 @@ class SchemaHelperTest extends TestCase
                 ['description', 'body'],
                 ['description', 'body'],
             ],
+            'more fields and reorder' => [
+                ['id', 'title', 'description', 'body', 'created', 'modified', 'dummy', 'status', 'extra'],
+                ['dummy3', 'dummy2', 'dummy1', 'description', 'body'],
+                ['description', 'body'],
+            ],
         ];
     }
 
@@ -466,6 +471,54 @@ class SchemaHelperTest extends TestCase
     {
         Configure::write('Properties.documents.translatable', $conf);
         $actual = $this->Schema->translatableFields($properties, 'documents');
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testCompareFields` test case.
+     *
+     * @return array
+     */
+    public function compareFieldsProvider(): array
+    {
+        return [
+            'priority fields have both, return strcmp($a, $b)' => [
+                'a',
+                'b',
+                ['a', 'b'],
+                -1,
+            ],
+            'priority fields has first field, return -1' => [
+                'a',
+                'b',
+                ['a'],
+                -1,
+            ],
+            'priority fields has second field, return 1' => [
+                'a',
+                'b',
+                ['b'],
+                1,
+            ],
+            'empty priority fields, return strcmp($a, $b)' => [
+                'a',
+                'b',
+                [],
+                -1,
+            ],
+        ];
+    }
+
+    /**
+     * Test `compareFields` method
+     *
+     * @return void
+     * @dataProvider compareFieldsProvider()
+     * @covers ::compareFields()
+     */
+    public function testCompareFields(string $a, string $b, array $priorityFields, int $expected): void
+    {
+        $actual = $this->Schema->compareFields($a, $b, $priorityFields);
         static::assertSame($expected, $actual);
     }
 
