@@ -227,7 +227,7 @@ class SchemaHelper extends Helper
         $translatable = (array)Configure::read(sprintf('Properties.%s.translatable', (string)$objectType));
         $fields = !empty($translatable) ? array_merge($properties, $translatable) : $properties;
         $fields = array_unique($fields);
-        $priorityFields = array_merge(['title', 'description', 'body'], $translatable);
+        $priorityFields = array_unique(array_merge(['title', 'description', 'body'], $translatable));
         usort($fields, function ($a, $b) use ($priorityFields) {
             return $this->compareFields($a, $b, $priorityFields);
         });
