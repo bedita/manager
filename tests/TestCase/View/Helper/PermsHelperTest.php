@@ -283,6 +283,15 @@ class PermsHelperTest extends TestCase
      */
     public function testUserIsAllowed(): void
     {
+        // folders do not have association Permissions
+        $this->Perms->getView()->set('foldersSchema', ['associations' => []]);
+        $this->Perms->initialize([]);
+        $this->Perms->getView()->set('object', ['meta' => ['perms' => ['roles' => ['a', 'b', 'c', 'd']]]]);
+        $actual = $this->Perms->userIsAllowed(null);
+        static::assertTrue($actual);
+        $this->Perms->getView()->set('foldersSchema', ['associations' => ['Permissions']]);
+        $this->Perms->initialize([]);
+
         // not folders
         $this->Perms->getView()->set('objectType', 'documents');
         $actual = $this->Perms->userIsAllowed(null);
@@ -333,6 +342,9 @@ class PermsHelperTest extends TestCase
      */
     public function testIsLockedByParents(): void
     {
+        $this->Perms->getView()->set('foldersSchema', ['associations' => ['Permissions']]);
+        $this->Perms->initialize([]);
+
         // user is admin => false
         $this->Perms->getView()->set('user', new Identity(['roles' => ['admin']]));
         $actual = $this->Perms->isLockedByParents('123');

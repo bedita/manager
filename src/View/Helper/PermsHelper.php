@@ -36,6 +36,13 @@ class PermsHelper extends Helper
     protected $allowed = [];
 
     /**
+     * Permissions on folders enabled flag
+     *
+     * @var bool
+     */
+    protected $permissionsOnFolders = false;
+
+    /**
      * {@inheritDoc}
      *
      * Init API and WebAPP base URL
@@ -54,6 +61,8 @@ class PermsHelper extends Helper
         }
         $currentModule = (array)$this->_View->get('currentModule');
         $this->current = (array)Hash::get($currentModule, 'hints.allow');
+        $schema = (array)$this->_View->get('foldersSchema');
+        $this->permissionsOnFolders = in_array('Permissions', (array)Hash::get($schema, 'associations'));
     }
 
     /**
@@ -180,7 +189,7 @@ class PermsHelper extends Helper
     public function userIsAllowed(?string $module): bool
     {
         $objectType = !empty($module) ? $module : $this->_View->get('objectType');
-        if ($objectType !== 'folders' || $this->userIsAdmin()) {
+        if ($this->permissionsOnFolders === false || $objectType !== 'folders' || $this->userIsAdmin()) {
             return true;
         }
 
@@ -217,7 +226,7 @@ class PermsHelper extends Helper
      */
     public function isLockedByParents(string $id): bool
     {
-        if ($this->userIsAdmin()) {
+        if ($this->permissionsOnFolders === false || $this->userIsAdmin()) {
             return false;
         }
         $apiClient = ApiClientProvider::getApiClient();
