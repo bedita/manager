@@ -28,6 +28,10 @@ class QueryComponent extends Component
     public function index(): array
     {
         $query = (array)$this->getController()->getRequest()->getQueryParams();
+        if (array_key_exists('sort', $query)) {
+            $sort = (string)Hash::get($query, 'sort');
+            $query['sort'] = !empty($sort) ? $sort : '-id';
+        }
 
         // set include, if set in config
         if ($this->getConfig('include') != null) {
@@ -40,14 +44,14 @@ class QueryComponent extends Component
         }
 
         // return URL query string if `filter`, `sort`, or `q` are set
-        $subQuery = array_intersect_key($query, array_flip(['filter', 'sort', 'q']));
-        if (!empty($subQuery)) {
+        if (!empty(array_intersect_key($query, array_flip(['filter', 'sort', 'q'])))) {
             return $query;
         }
 
         // set sort order: use `currentModule.sort` or default '-id'
         $module = (array)$this->getController()->viewBuilder()->getVar('currentModule');
-        $query['sort'] = (string)Hash::get($module, 'sort', '-id');
+        $sort = (string)Hash::get($module, 'sort');
+        $query['sort'] = !empty($sort) ? $sort : '-id';
 
         return $query;
     }
