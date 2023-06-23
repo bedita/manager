@@ -71,6 +71,11 @@ class QueryComponentTest extends TestCase
                 [],
                 ['filter' => ['history_editor' => '']],
             ],
+            'query sort default -id' => [
+                ['sort' => ''],
+                ['include' => 'object'],
+                ['sort' => '-id', 'include' => 'object'],
+            ],
         ];
     }
 
