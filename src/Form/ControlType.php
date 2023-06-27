@@ -42,6 +42,7 @@ class ControlType
      *
      *   'categories'
      *   'checkbox'
+     *   'checkboxNullable'
      *   'date-time'
      *   'date'
      *   'enum'
@@ -52,9 +53,10 @@ class ControlType
      *   'text'
      *
      * @param array|null $schema The property schema
+     * @param bool|null $canBeNull Whether the property can be null
      * @return string
      */
-    public static function fromSchema(?array $schema): string
+    public static function fromSchema(?array $schema, ?bool $canBeNull = false): string
     {
         if ($schema === null) {
             return 'text';
@@ -67,20 +69,23 @@ class ControlType
             return $schemaType;
         }
         if (!empty($schema['oneOf'])) {
+            $nullable = false;
             foreach ($schema['oneOf'] as $subSchema) {
                 if (!empty($subSchema['type']) && $subSchema['type'] === 'null') {
+                    $nullable = true;
                     continue;
                 }
 
-                return ControlType::fromSchema($subSchema);
+                return ControlType::fromSchema($subSchema, $nullable);
             }
         }
         if (!in_array($schemaType, ControlType::SCHEMA_PROPERTY_TYPES)) {
             return 'text';
         }
-        $method = Form::getMethod(ControlType::class, sprintf('from%s', ucfirst($schemaType)));
+        $callable = Form::getMethod(ControlType::class, sprintf('from%s', ucfirst($schemaType)));
+        $args = [$schema + compact('canBeNull')];
 
-        return call_user_func_array($method, [$schema]);
+        return call_user_func_array($callable, $args);
     }
 
     /**
@@ -145,6 +150,10 @@ class ControlType
      */
     public static function fromBoolean(array $schema): string
     {
+        if (Hash::get($schema, 'canBeNull') === true) {
+            return 'checkboxNullable';
+        }
+
         return 'checkbox';
     }
 
