@@ -1745,6 +1745,7 @@ class ModulesComponentTest extends TestCase
         $actual = $this->Modules->getRelated($data);
         static::assertIsArray($actual);
         static::assertCount(3, $actual);
+        $objs = [];
         foreach ($actual as $obj) {
             $objs[] = $apiClient->getObject($obj['id']);
         }
