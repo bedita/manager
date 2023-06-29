@@ -1,3 +1,97 @@
+<template>
+    <div class="location mb-2 is-flex">
+        <div class="order mr-1 p-1 has-background-white is-flex align-center has-text-black">
+            {{ index + 1 }}
+        </div>
+        <div class="location-form is-flex-column">
+            <div class="is-flex">
+                <div class="is-flex-column is-expanded">
+                    <label>
+                        {{ msgTitle }}
+                        <autocomplete
+                            autocomplete="none"
+                            ref="title"
+                            class="autocomplete-title"
+                            :default-value="title"
+                            :search="searchTitle"
+                            base-class="autocomplete-title"
+                            :get-result-value="getResultTitle"
+                            @submit="onAutocompleteSubmit"
+                            @input="onInputTitle"
+                            @change="onChange"
+                            :debounce-time="500"
+                            :disabled="!!id"
+                        >
+                        </autocomplete>
+                    </label>
+                </div>
+                <div class="is-flex-column is-expanded">
+                    <label>
+                        {{ msgAddress }}
+                        <autocomplete
+                            autocomplete="none"
+                            ref="address"
+                            class="autocomplete autocomplete-address"
+                            :default-value="address"
+                            :search="searchAddress"
+                            base-class="autocomplete-address"
+                            :get-result-value="getResultAddress"
+                            @submit="onAutocompleteSubmit"
+                            @input="onInputAddress"
+                            @change="onChange"
+                            :debounce-time="500"
+                            :disabled="!!id"
+                        >
+                        </autocomplete>
+                    </label>
+                </div>
+            </div>
+            <div class="is-flex mt-1">
+                <div class="is-flex-column is-expanded">
+                    <label>
+                        {{ msgCoordinates }}
+                        <div class="is-flex">
+                            <input class="coordinates" type="text" v-model="coordinates" @change="onChange" :disabled="!!id" />
+                            <button class="get-coordinates" @click.prevent="geocode" :disabled="!apiKey || !address">
+                                <Icon icon="carbon:wikis"></Icon>
+                                <span class="ml-05">{{ msgGet }}</span>
+                            </button>
+                        </div>
+                    </label>
+                </div>
+                <div class="is-flex-column">
+                    <label>
+                        {{ msgZoom }}
+                        <input @change="onChange" v-model.number="zoom" type="number" min="2" max="20" :disabled="!!id" />
+                    </label>
+                </div>
+                <div class="is-flex-column">
+                    <label>
+                        {{ msgPitch }}°
+                        <input @change="onChange" v-model.number="pitch" type="number" min="0" max="60" :disabled="!!id" />
+                    </label>
+                </div>
+                <div class="is-flex-column">
+                    <label>
+                        {{ msgBearing }}°
+                        <input @change="onChange" v-model.number="bearing" type="number" min="-180" max="180" :disabled="!!id" />
+                    </label>
+                </div>
+            </div>
+            <div class="location-buttons">
+                <a v-if="id" class="button button-text-white" :href="$helpers.buildViewUrl(id)" target="_blank">
+                    <Icon icon="carbon:launch"></Icon>
+                    <span class="ml-05">{{ msgEdit }}</span>
+                </a>
+                <button @click.prevent="onRemove" class="button button-text-white remove">
+                <Icon icon="carbon:unlink"></Icon>
+                    <span class="ml-05">{{ msgRemove }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
 import { t } from 'ttag';
 
 const options = {
@@ -34,104 +128,7 @@ function stripHtml(str) {
     return str.replace(/<\/?[^>]+(>|$)/g, '');
 }
 
-/**
- * <location-view> component used for ModulesPage -> View
- *
- * Handle Locations and reverse geocoding from addresses
- */
 export default {
-    template: `<div class="location mb-2 is-flex">
-        <div class="order mr-1 p-1 has-background-white is-flex align-center has-text-black">
-            <: index + 1 :>
-        </div>
-        <div class="location-form is-flex-column">
-            <div class="is-flex">
-                <div class="is-flex-column is-expanded">
-                    <label>
-                        ${t`Title`}
-                        <autocomplete
-                            autocomplete="none"
-                            ref="title"
-                            class="autocomplete-title"
-                            :default-value="title"
-                            :search="searchTitle"
-                            base-class="autocomplete-title"
-                            :get-result-value="getResultTitle"
-                            @submit="onAutocompleteSubmit"
-                            @input="onInputTitle"
-                            @change="onChange"
-                            :debounce-time="500"
-                            :disabled="!!id"
-                        >
-                        </autocomplete>
-                    </label>
-                </div>
-                <div class="is-flex-column is-expanded">
-                    <label>
-                        ${t`Address`}
-                        <autocomplete
-                            autocomplete="none"
-                            ref="address"
-                            class="autocomplete autocomplete-address"
-                            :default-value="address"
-                            :search="searchAddress"
-                            base-class="autocomplete-address"
-                            :get-result-value="getResultAddress"
-                            @submit="onAutocompleteSubmit"
-                            @input="onInputAddress"
-                            @change="onChange"
-                            :debounce-time="500"
-                            :disabled="!!id"
-                        >
-                        </autocomplete>
-                    </label>
-                </div>
-            </div>
-            <div class="is-flex mt-1">
-                <div class="is-flex-column is-expanded">
-                    <label>
-                        ${t`Long Lat Coordinates`}
-                        <div class="is-flex">
-                            <input class="coordinates" type="text" v-model="coordinates" @change="onChange" :disabled="!!id" />
-                            <button class="get-coordinates" @click.prevent="geocode" :disabled="!apiKey || !address">
-                                <Icon icon="carbon:wikis"></Icon>
-                                <span class="ml-05">${t`GET`}</span>
-                            </button>
-                        </div>
-                    </label>
-                </div>
-                <div class="is-flex-column">
-                    <label>
-                        Zoom
-                        <input @change="onChange" v-model.number="zoom" type="number" min="2" max="20" :disabled="!!id" />
-                    </label>
-                </div>
-                <div class="is-flex-column">
-                    <label>
-                        Pitch°
-                        <input @change="onChange" v-model.number="pitch" type="number" min="0" max="60" :disabled="!!id" />
-                    </label>
-                </div>
-                <div class="is-flex-column">
-                    <label>
-                        Bearing°
-                        <input @change="onChange" v-model.number="bearing" type="number" min="-180" max="180" :disabled="!!id" />
-                    </label>
-                </div>
-            </div>
-            <div class="location-buttons">
-                <a v-if="id" class="button button-text-white" :href="$helpers.buildViewUrl(id)" target="_blank">
-                    <Icon icon="carbon:launch"></Icon>
-                    <span class="ml-05">${t`edit`}</span>
-                </a>
-                <button @click.prevent="onRemove" class="button button-text-white remove">
-                <Icon icon="carbon:unlink"></Icon>
-                    <span class="ml-05">${t`remove`}</span>
-                </button>
-            </div>
-        </div>
-    </div>`,
-
     props: {
         index: Number,
         apiKey: String,
@@ -160,6 +157,15 @@ export default {
                 this.locationData.meta.relation &&
                 this.locationData.meta.relation.params &&
                 this.locationData.meta.relation.params.bearing) || 0,
+            msgAddress: t`Address`,
+            msgBearing: t`Bearing`,
+            msgCoordinates: t`Long Lat Coordinates`,
+            msgEdit: t`edit`,
+            msgGet: t`GET`,
+            msgPitch: t`Pitch`,
+            msgRemove: t`remove`,
+            msgTitle: t`Title`,
+            msgZoom: t`Zoom`,
         }
     },
 
@@ -355,3 +361,4 @@ export default {
         },
     }
 }
+</script>

@@ -1710,4 +1710,46 @@ class ModulesComponentTest extends TestCase
         $this->Modules->saveRelated((string)$id, $type, $relatedData);
         static::assertEquals($expected, $actual);
     }
+
+    /**
+     * Test `getRelated` method on empty relatedIds.
+     *
+     * @return void
+     * @covers ::getRelated()
+     */
+    public function testGetRelatedEmpty(): void
+    {
+        // empty relatedIds
+        $data = ['relatedIds' => []];
+        static::assertSame([], $this->Modules->getRelated($data));
+    }
+
+    /**
+     * Test `getRelated` method on non-empty relatedIds.
+     *
+     * @return void
+     * @covers ::getRelated()
+     */
+    public function testGetRelated(): void
+    {
+        $apiClient = ApiClientProvider::getApiClient();
+        $response = $apiClient->authenticate(getenv('BEDITA_ADMIN_USR'), getenv('BEDITA_ADMIN_PWD'));
+        $apiClient->setupTokens($response['meta']);
+        $response = $apiClient->save('documents', ['title' => 'a dummy doc one']);
+        $o = $response['data'];
+        $data = ['relatedIds' => [
+            $o,
+            ['type' => 'documents', 'attributes' => ['title' => 'a dummy doc two']],
+            ['type' => 'documents', 'attributes' => ['title' => 'a dummy doc three']],
+        ]];
+        $actual = $this->Modules->getRelated($data);
+        static::assertIsArray($actual);
+        static::assertCount(3, $actual);
+        foreach ($actual as $obj) {
+            $objs[] = $apiClient->getObject($obj['id']);
+        }
+        $titles = Hash::extract($objs, '{n}.data.attributes.title');
+        $expected = ['a dummy doc one', 'a dummy doc two', 'a dummy doc three'];
+        static::assertSame($expected, $titles);
+    }
 }

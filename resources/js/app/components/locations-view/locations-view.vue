@@ -1,3 +1,23 @@
+<template>
+    <div class="locations">
+        <input type="hidden" :name="'relations[' + relationName + '][replaceRelated]'" :value="locationsData" />
+        <div v-if="!locations" class="is-loading-spinner"></div>
+        <div v-else v-for="(location, index) in locations">
+            <location-view
+                :key="locationSymbol(location)"
+                :index="index"
+                :location-data="location"
+                :api-key="apiKey"
+                :api-url="apiUrl"
+                :relation-name="relationName"
+                :relation-label="relationLabel" />
+        </div>
+        <div v-if="locations" class="is-flex mt-1">
+            <button @click.prevent @click="onAddNew">{{ msgAddNew }}</button>
+        </div>
+    </div>
+</template>
+<script>
 import { t } from 'ttag';
 
 const options = {
@@ -7,29 +27,10 @@ const options = {
     }
 };
 
-/**
- * Templates that uses this component (directly or indirectly):
- *  ...
- *
- * <locations-view> component used for ModulesPage -> View
- *
- * Handle Locations and reverse geocoding from addresses
- */
 export default {
     components: {
         LocationView: () => import(/* webpackChunkName: "location-view" */'app/components/locations-view/location-view'),
     },
-
-    template: `<div class="locations">
-        <input type="hidden" :name="'relations[' + relationName + '][replaceRelated]'" :value="locationsData" />
-        <div v-if="!locations" class="is-loading-spinner"></div>
-        <div v-else v-for="(location, index) in locations">
-            <location-view :key="locationSymbol(location)" :index="index" :location-data="location" :api-key="apiKey" :api-url="apiUrl" :relation-name="relationName" :relation-label="relationLabel" />
-        </div>
-        <div v-if="locations" class="is-flex mt-1">
-            <button @click.prevent @click="onAddNew">${t`add new`}</button>
-        </div>
-    </div>`,
 
     props: {
         apiKey: String,
@@ -41,6 +42,7 @@ export default {
     data() {
         return {
             locations: null,
+            msgAddNew: t`add new`,
         }
     },
 
@@ -123,3 +125,4 @@ export default {
         }
     }
 }
+</script>
