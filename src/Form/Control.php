@@ -26,7 +26,17 @@ class Control
     /**
      * Control types
      */
-    public const CONTROL_TYPES = ['json', 'richtext', 'plaintext', 'date-time', 'date', 'checkbox', 'enum', 'categories'];
+    public const CONTROL_TYPES = [
+        'json',
+        'richtext',
+        'plaintext',
+        'date-time',
+        'date',
+        'checkbox',
+        'checkboxNullable',
+        'enum',
+        'categories',
+    ];
 
     /**
      * Get control by options
@@ -240,6 +250,25 @@ class Control
             'type' => 'checkbox',
             'checked' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
             'value' => '1',
+        ];
+    }
+
+    /**
+     * Control for checkbox nullable
+     *
+     * @param array $options The options
+     * @return array
+     */
+    public static function checkboxNullable(array $options): array
+    {
+        return [
+            'type' => 'select',
+            'options' => [
+                'null' => '',
+                '1' => __('Yes'),
+                '0' => __('No'),
+            ],
+            'value' => Hash::get($options, 'value'),
         ];
     }
 

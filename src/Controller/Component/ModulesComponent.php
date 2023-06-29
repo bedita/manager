@@ -621,10 +621,10 @@ class ModulesComponent extends Component
      * @param string $id Object ID
      * @param string $type Object type
      * @param array $data Related object data
-     * @return array
+     * @return array|null
      * @throws \Cake\Http\Exception\BadRequestException
      */
-    public function saveRelatedObjects(string $id, string $type, array $data): array
+    public function saveRelatedObjects(string $id, string $type, array $data): ?array
     {
         $method = (string)Hash::get($data, 'method');
         if (!in_array($method, ['addRelated', 'removeRelated', 'replaceRelated'])) {
