@@ -87,7 +87,7 @@ class ThumbsComponent extends Component
         $errors = (array)Hash::extract($thumbs, '{*}[acceptable=false].message');
 
         if (!empty($errors)) {
-            $message = __('There where errors creating the thumbnail(s)');
+            $message = __('There were errors creating the thumbnail(s)');
             if (count($errors) === 1) {
                 $message = array_shift($errors);
             }

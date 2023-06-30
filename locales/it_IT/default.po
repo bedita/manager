@@ -767,7 +767,7 @@ msgstr "La lingua principale è"
 msgid "The thumbnail is not available"
 msgstr "La miniatura non è disponibile"
 
-msgid "There where errors creating the thumbnail(s)"
+msgid "There were errors creating the thumbnail(s)"
 msgstr "È avvenuto un errore nella creazione delle miniature"
 
 msgid "Thumb not available"
