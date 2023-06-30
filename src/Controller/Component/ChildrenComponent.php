@@ -42,31 +42,15 @@ class ChildrenComponent extends Component
         $actualRelated = (array)Hash::extract($actualRelated, 'data.{n}.id');
         $index = 0;
         foreach ($children as $child) {
+            $found = array_search($child['id'], $actualRelated) > -1;
             // skip save when child is already related and in the same position
-            if (!empty($actualRelated) && $actualRelated[$index++] === $child['id']) {
+            if ($found && $actualRelated[$index++] === $child['id']) {
                 continue;
             }
-            $results[] = $this->addRelatedChild($parentId, $child);
+            $results[] = $this->getClient()->addRelated($parentId, 'folders', 'children', [$child]);
         }
 
         return $results;
-    }
-
-    /**
-     * Add single child by parent ID and child data.
-     *
-     * @param string $parentId The parent ID.
-     * @param array $child The child data (id, type, meta).
-     * @return array|null
-     */
-    public function addRelatedChild(string $parentId, array $child): ?array
-    {
-        $type = (string)Hash::get($child, 'type');
-        if ($type !== 'folders') {
-            return $this->getClient()->addRelated($parentId, 'folders', 'children', [$child]);
-        }
-
-        return $this->getClient()->addRelated($parentId, 'folders', 'parent', $child);
     }
 
     /**
