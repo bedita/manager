@@ -60,6 +60,42 @@ class ChildrenComponentTest extends TestCase
     }
 
     /**
+     * Test addRelated method with valid data and reorder.
+     *
+     * @return void
+     * @covers ::addRelated()
+     * @covers ::addRelatedChild()
+     */
+    public function testAddRelatedReorder(): void
+    {
+        $safeClient = ApiClientProvider::getApiClient();
+        $children = [
+            ['id' => '9991', 'type' => 'documents', 'meta' => ['title' => 'Document']],
+            ['id' => '9992', 'type' => 'images', 'meta' => ['title' => 'Image']],
+            ['id' => '9993', 'type' => 'folders', 'meta' => ['title' => 'Folder']],
+        ];
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')->willReturn([
+            'data' => [
+                ['id' => '9992', 'type' => 'images', 'meta' => ['title' => 'Image']],
+                ['id' => '9991', 'type' => 'documents', 'meta' => ['title' => 'Document']],
+                ['id' => '9993', 'type' => 'folders', 'meta' => ['title' => 'Folder']],
+            ],
+        ]);
+        $apiClient->expects($this->exactly(2))
+            ->method('addRelated')
+            ->willReturn(['add response']);
+        ApiClientProvider::setApiClient($apiClient);
+        $registry = new ComponentRegistry();
+        $this->component = new ChildrenComponent($registry);
+        $result = $this->component->addRelated('9990', $children);
+        $this->assertEquals([['add response'], ['add response']], $result);
+        ApiClientProvider::setApiClient($safeClient);
+    }
+
+    /**
      * Test removeRelated method with valid data.
      *
      * @return void
