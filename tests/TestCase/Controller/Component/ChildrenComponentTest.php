@@ -82,14 +82,14 @@ class ChildrenComponentTest extends TestCase
                 ['id' => '9993', 'type' => 'folders', 'meta' => ['title' => 'Folder']],
             ],
         ]);
-        $apiClient->expects($this->exactly(2))
+        $apiClient->expects($this->exactly(3))
             ->method('addRelated')
             ->willReturn(['add response']);
         ApiClientProvider::setApiClient($apiClient);
         $registry = new ComponentRegistry();
         $this->component = new ChildrenComponent($registry);
         $result = $this->component->addRelated('9990', $children);
-        $this->assertEquals([['add response'], ['add response']], $result);
+        $this->assertEquals([['add response'], ['add response'], ['add response']], $result);
         ApiClientProvider::setApiClient($safeClient);
     }
 
