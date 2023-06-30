@@ -76,7 +76,7 @@ class ChildrenComponent extends Component
         $type = (string)Hash::get($child, 'type');
         if ($type === 'folders') {
             // invert relation call => use 'parent' relation on children folder
-            return $this->getClient()->replaceRelated((string)Hash::get($child, 'id'), 'folders', 'parent', [null]);
+            return $this->getClient()->replaceRelated((string)Hash::get($child, 'id'), 'folders', 'parent', []);
         }
 
         return $this->getClient()->removeRelated($parentId, 'folders', 'children', [$child]);
