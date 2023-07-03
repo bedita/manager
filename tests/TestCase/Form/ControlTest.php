@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Form;
 
 use App\Form\Control;
+use App\Form\Form;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
@@ -186,7 +187,7 @@ class ControlTest extends TestCase
                 [
                     'type' => 'select',
                     'options' => [
-                        'null' => '',
+                        Form::NULL_VALUE => '',
                         '1' => 'Yes',
                         '0' => 'No',
                     ],
