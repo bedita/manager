@@ -9,7 +9,7 @@
                 @keydown.enter.prevent="applyFilter"
             />
 
-            <label v-if="showAdvanced">
+            <label class="mt-025" v-if="showAdvanced">
                 <input type="checkbox" form="_filters" v-model="queryFilter.filter['history_editor']" :initvalue="initHistoryEditor">{{ __('Only my contents') }}</input>
             </label>
         </div>
