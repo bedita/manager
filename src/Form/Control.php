@@ -264,7 +264,7 @@ class Control
         return [
             'type' => 'select',
             'options' => [
-                'null' => '',
+                Form::NULL_VALUE => '',
                 '1' => __('Yes'),
                 '0' => __('No'),
             ],

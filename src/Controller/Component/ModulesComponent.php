@@ -631,7 +631,7 @@ class ModulesComponent extends Component
             throw new BadRequestException(__('Bad related data method'));
         }
         $relation = (string)Hash::get($data, 'relation');
-        $related = (array)Hash::get($data, 'relatedIds');
+        $related = $this->getRelated($data);
         if ($relation === 'parent' && $type === 'folders') {
             return $this->Parents->{$method}($id, $related);
         }
@@ -640,5 +640,42 @@ class ModulesComponent extends Component
         }
 
         return ApiClientProvider::getApiClient()->{$method}($id, $type, $relation, $related);
+    }
+
+    /**
+     * Get related objects.
+     * If related object has no ID, it will be created.
+     *
+     * @param array $data Related object data
+     * @return array
+     */
+    public function getRelated(array $data): array
+    {
+        $related = (array)Hash::get($data, 'relatedIds');
+        if (empty($related)) {
+            return [];
+        }
+        $relatedObjects = [];
+        foreach ($related as $obj) {
+            if (!empty($obj['id'])) {
+                $relatedObjects[] = [
+                    'id' => $obj['id'],
+                    'type' => $obj['type'],
+                    'meta' => (array)Hash::get($obj, 'meta'),
+                ];
+                continue;
+            }
+            $response = ApiClientProvider::getApiClient()->save(
+                (string)Hash::get($obj, 'type'),
+                (array)Hash::get($obj, 'attributes')
+            );
+            $relatedObjects[] = [
+                'id' => Hash::get($response, 'data.id'),
+                'type' => Hash::get($response, 'data.type'),
+                'meta' => (array)Hash::get($response, 'data.meta'),
+            ];
+        }
+
+        return $relatedObjects;
     }
 }
