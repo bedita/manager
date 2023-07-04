@@ -661,6 +661,7 @@ class ModulesComponent extends Component
                 $relatedObjects[] = [
                     'id' => $obj['id'],
                     'type' => $obj['type'],
+                    'meta' => (array)Hash::get($obj, 'meta'),
                 ];
                 continue;
             }
@@ -671,6 +672,7 @@ class ModulesComponent extends Component
             $relatedObjects[] = [
                 'id' => Hash::get($response, 'data.id'),
                 'type' => Hash::get($response, 'data.type'),
+                'meta' => (array)Hash::get($response, 'data.meta'),
             ];
         }
 
