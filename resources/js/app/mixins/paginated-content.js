@@ -90,9 +90,9 @@ export const PaginatedContentMixin = {
                             if (order.indexOf('position') >= 0) {
                                 const ascending = order === 'position';
                                 const { count, page_size, page } = json.meta.pagination;
-                                let i = ascending ?
-                                    (page_size * (page - 1) + 1) :
-                                    (count - (page_size * (page - 1)));
+                                let i = ascending
+                                    ? (page_size * (page - 1) + 1)
+                                    : (count - (page_size * (page - 1)));
                                 for (let obj of objects) {
                                     obj.meta.relation.position = i;
                                     i = ascending ? i+1 : i-1;

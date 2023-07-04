@@ -341,8 +341,10 @@ export default {
             this.objects.splice(newIndex, 0, this.objects.splice(oldIndex, 1)[0]);
 
             this.objects = this.objects.map((object, index) => {
-                object.meta.relation.position = ascending ? index + 1 : this.pagination.count - index;
-                object.meta.relation.position += this.pagination.page_size * (this.pagination.page - 1);
+                const { count, page_size, page } = this.pagination;
+                object.meta.relation.position = ascending
+                    ? (page_size * (page - 1) + 1 + index)
+                    : (count - (page_size * (page - 1)) - index);
                 this.modifyRelation(object);
 
                 return object;
