@@ -39,27 +39,10 @@ class ChildrenComponent extends Component
     {
         $results = [];
         foreach ($children as $child) {
-            $results[] = $this->addRelatedChild($parentId, $child);
+            $results[] = $this->getClient()->addRelated($parentId, 'folders', 'children', [$child]);
         }
 
         return $results;
-    }
-
-    /**
-     * Add single child by parent ID and child data.
-     *
-     * @param string $parentId The parent ID.
-     * @param array $child The child data (id, type, meta).
-     * @return array|null
-     */
-    public function addRelatedChild(string $parentId, array $child): ?array
-    {
-        $type = (string)Hash::get($child, 'type');
-        if ($type !== 'folders') {
-            return $this->getClient()->addRelated($parentId, 'folders', 'children', [$child]);
-        }
-
-        return $this->getClient()->addRelated($parentId, 'folders', 'parent', $child);
     }
 
     /**
@@ -93,7 +76,7 @@ class ChildrenComponent extends Component
         $type = (string)Hash::get($child, 'type');
         if ($type === 'folders') {
             // invert relation call => use 'parent' relation on children folder
-            return $this->getClient()->replaceRelated((string)Hash::get($child, 'id'), 'folders', 'parent', [null]);
+            return $this->getClient()->replaceRelated((string)Hash::get($child, 'id'), 'folders', 'parent', []);
         }
 
         return $this->getClient()->removeRelated($parentId, 'folders', 'children', [$child]);

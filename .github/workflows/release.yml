@@ -3,7 +3,17 @@ name: Release
 on:
   pull_request_target:
     types: [closed]
-
+  workflow_dispatch:
+    inputs:
+      releaseType:
+        description: 'Release type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
 jobs:
 
   release_job:
@@ -11,6 +21,7 @@ jobs:
     with:
       main_branch: 'master'
       dist_branches: '["master", "3.x"]'
+      version_bump: ${{ inputs.releaseType }}
       version_ini_path: config/version.ini
       version_ini_prefix: "[Manager]\nversion="
 

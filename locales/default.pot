@@ -761,7 +761,7 @@ msgstr ""
 msgid "The thumbnail is not available"
 msgstr ""
 
-msgid "There where errors creating the thumbnail(s)"
+msgid "There were errors creating the thumbnail(s)"
 msgstr ""
 
 msgid "Thumb not available"

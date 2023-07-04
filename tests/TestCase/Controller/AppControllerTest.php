@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\AppController;
+use App\Form\Form;
 use App\Identifier\ApiIdentifier;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
@@ -366,6 +367,34 @@ class AppControllerTest extends TestCase
                     'title' => 'bibo',
                     'description' => 'dido',
                     '_actualAttributes' => '{"title":"bibo","description":""}',
+                ],
+            ],
+            'boolean with null value' => [
+                'documents', // object_type
+                [ // expected
+                    'id' => '1', // fake document id
+                    //'unchanged-a' => true,
+                    //'unchanged-b' => false,
+                    //'unchanged-c' => null,
+                    'changed-d' => false,
+                    'changed-e' => true,
+                    'changed-f' => true,
+                    'changed-g' => false,
+                    'changed-h' => null,
+                    'changed-i' => null,
+                ],
+                [ // data provided
+                    'id' => '1', // fake document id
+                    'unchanged-a' => true,
+                    'unchanged-b' => false,
+                    'unchanged-c' => Form::NULL_VALUE,
+                    'changed-d' => false,
+                    'changed-e' => true,
+                    'changed-f' => true,
+                    'changed-g' => false,
+                    'changed-h' => Form::NULL_VALUE,
+                    'changed-i' => Form::NULL_VALUE,
+                    '_actualAttributes' => '{"unchanged-a":true,"unchanged-b":false,"unchanged-c":null,"changed-d":true,"changed-e":false,"changed-f":null,"changed-g":null,"changed-h":false,"changed-i":true}',
                 ],
             ],
             'wrong json string actual attrs' => [ // test '_actualAttributes'

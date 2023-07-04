@@ -21,6 +21,11 @@ use Cake\Utility\Inflector;
 class Form
 {
     /**
+     * Form null value
+     */
+    public const NULL_VALUE = ':::null:::';
+
+    /**
      * Return method [$className, $methodName], if it's callable.
      * Otherwise, throw \InvalidArgumentException
      *

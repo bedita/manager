@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Form\Form;
 use Authentication\Identity;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
@@ -403,6 +404,9 @@ class AppController extends Controller
                 $attributes = [];
             }
             foreach ($attributes as $key => $value) {
+                if ($data[$key] === Form::NULL_VALUE) {
+                    $data[$key] = null;
+                }
                 // remove unchanged attributes from $data
                 if (array_key_exists($key, $data) && !$this->hasFieldChanged($value, $data[$key])) {
                     unset($data[$key]);
