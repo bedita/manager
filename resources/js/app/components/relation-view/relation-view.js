@@ -201,12 +201,12 @@ export default {
         },
 
         objects(newObjects) {
-            this.positions = newObjects.reduce((positions, object) => {
-                positions[object.id] = object.meta?.relation?.position || '';
+            this.positions = newObjects.reduce((positions, object, index) => {
+                positions[object.id] = index + 1;
                 return positions;
             }, {});
             this.priorities = newObjects.reduce((priorities, object) => {
-                priorities[object.id] = object.meta?.relation?.priority || '';
+                priorities[object.id] = object?.meta?.relation?.priority || '';
                 return priorities;
             }, {});
         },
