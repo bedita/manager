@@ -247,7 +247,7 @@ class ModulesController extends AppController
                     }
                 )
             ),
-            ''
+            null
         );
         $object = [
             'type' => $this->objectType,
