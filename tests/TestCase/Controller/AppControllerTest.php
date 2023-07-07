@@ -703,6 +703,70 @@ class AppControllerTest extends TestCase
     }
 
     /**
+     * Data provider for `testChangedAttributes` test case.
+     *
+     * @return array
+     */
+    public function changedAttributesProvider(): array
+    {
+        return [
+            'missing _actualAttributes' => [
+                ['what' => 'ever'],
+                ['what' => 'ever'],
+            ],
+            'invalid json _actualAttributes' => [
+                [
+                    '_actualAttributes' => '{"""]',
+                    'a' => 'whatever',
+                    'b' => Form::NULL_VALUE,
+                ],
+                [
+                    'a' => 'whatever',
+                    'b' => Form::NULL_VALUE,
+                ],
+            ],
+            'valid json _actualAttributes' => [
+                [
+                    '_actualAttributes' => '{"a":null,"b":"whatever","c":null}',
+                    'a' => Form::NULL_VALUE,
+                    'b' => 'whatever',
+                ],
+                [
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `changedAttributes` method.
+     *
+     * @param array $data The data
+     * @param array $expected The expected data
+     * @return void
+     * @covers ::changedAttributes()
+     * @dataProvider changedAttributesProvider()
+     */
+    public function testChangedAttributes(array $data, array $expected): void
+    {
+        $controller = new class extends AppController {
+            /**
+             * Wrapper for changedAttributes() method.
+             *
+             * @param array $data The data
+             * @return array
+             */
+            public function myChangedAttributes(array $data): array
+            {
+                $this->changedAttributes($data);
+
+                return $data;
+            }
+        };
+        $actual = $controller->myChangedAttributes($data);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Data provider for `hasFieldChanged` test case.
      *
      * @return array
