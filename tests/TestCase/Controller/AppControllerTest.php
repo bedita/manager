@@ -702,6 +702,11 @@ class AppControllerTest extends TestCase
         static::assertEquals($expected, $actual);
     }
 
+    /**
+     * Data provider for `testPrepareRequest` test case.
+     *
+     * @return array
+     */
     public function changedAttributesProvider(): array
     {
         return [
