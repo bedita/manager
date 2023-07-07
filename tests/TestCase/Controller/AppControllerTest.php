@@ -703,7 +703,7 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * Data provider for `testPrepareRequest` test case.
+     * Data provider for `testChangedAttributes` test case.
      *
      * @return array
      */
