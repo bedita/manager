@@ -1,7 +1,9 @@
 {# Remaining properties groups: 'other' and custom groups not in 'core', '_keep', 'publish', 'advanced' #}
 {% set otherProperties = Array.removeKeys(properties, ['core', '_keep', 'publish', 'advanced']) %}
 {% for group, props in otherProperties %}
-    {% if props %}
+
+    {% set customElement = Element.custom(group, 'group') %}
+    {% if props or customElement %}
 
     <property-view inline-template :tab-open="tabsOpen" tab-name="{{ group }}">
 
@@ -14,28 +16,10 @@
 
             <div v-show="isOpen" class="tab-container">
 
-                {{ element('Form/group_properties', {'properties' : props, 'group': group}) }}
-
-            </div>
-        </section>
-
-    </property-view>
-    {% else %}
-
-    <property-view inline-template :tab-open="tabsOpen" tab-name="{{ group }}">
-
-        <section class="fieldset">
-            <header @click.prevent="toggleVisibility()"
-                class="tab unselectable"
-                :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
-                <h2>{{ Layout.tr(group) }}</h2>
-            </header>
-
-            <div v-show="isOpen" class="tab-container">
-
-                {% set customElement = Element.custom(group, 'group') %}
                 {% if customElement %}
                     {{ element(customElement) }}
+                {% else %}
+                    {{ element('Form/group_properties', {'properties' : props, 'group': group}) }}
                 {% endif %}
 
             </div>
