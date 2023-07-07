@@ -10,6 +10,7 @@
                     :value="value"
                     :checked="isParent"
                     :class="isLocked ? 'disabled' : ''"
+                    :data-folder-id="node.id"
                     @click="isLocked ? $event.preventDefault() : ''"
                     @change="toggleFolderRelation" />
                 {{ node.attributes.title }}
@@ -27,23 +28,34 @@
             <a :href="url" v-else>{{ msgEdit }}</a>
             <div class="tree-params">
                 <div v-if="relationName && isParent" class="tree-param">
-                    <input :id="'tree-menu-' + node.id"
-                        type="checkbox"
-                        :checked="isMenu"
-                        @change="toggleFolderRelationMenu" />
-                    <label :for="'tree-menu-' + node.id">
-                        {{ msgMenu }}
-                    </label>
+                    <template v-if="hasPermissionRoles && isLocked">
+                        <label>{{ msgMenu }}</label>
+                    </template>
+                    <template v-else>
+                        <input :id="'tree-menu-' + node.id"
+                            type="checkbox"
+                            :data-folder-id="node.id"
+                            :checked="isMenu"
+                            @change="toggleFolderRelationMenu" />
+                        <label :for="'tree-menu-' + node.id">
+                            {{ msgMenu }}
+                        </label>
+                    </template>
                 </div>
                 <div v-if="relationName && isParent && multipleChoice" class="tree-param">
-                    <input :id="'tree-canonical-' + node.id"
-                        name="_changedCanonical"
-                        type="radio"
-                        :checked="isCanonical"
-                        @change="toggleFolderRelationCanonical" />
-                    <label :for="'tree-canonical-' + node.id">
-                        {{ msgCanonical }}
-                    </label>
+                    <template v-if="hasPermissionRoles && isLocked">
+                        <label>{{ msgCanonical }}</label>
+                    </template>
+                    <template v-else>
+                        <input :id="'tree-canonical-' + node.id"
+                            type="radio"
+                            :data-folder-id="node.id"
+                            :checked="isCanonical"
+                            @change="toggleFolderRelationCanonical" />
+                        <label :for="'tree-canonical-' + node.id">
+                            {{ msgCanonical }}
+                        </label>
+                    </template>
                 </div>
             </div>
         </div>
@@ -462,7 +474,7 @@ export default {
          * @return {void}
          */
         toggleFolderRelation(event) {
-            document.getElementById('changedParents').value = 1;
+            this.updateChangedParents(event);
             if (this.multipleChoice) {
                 let index = this.parents.findIndex(({ id }) => id == this.node.id);
                 if (event.target.checked) {
@@ -490,7 +502,7 @@ export default {
          */
         toggleFolderRelationMenu(event) {
             if (this.isParent) {
-                document.getElementById('changedParents').value = 1;
+                this.updateChangedParents(event);
             }
 
             let relation = this.node?.meta?.relation || {};
@@ -505,11 +517,22 @@ export default {
          */
         toggleFolderRelationCanonical(event) {
             if (this.isParent) {
-                document.getElementById('changedParents').value = 1;
+                this.updateChangedParents(event);
             }
 
             let relation = this.node?.meta?.relation || {};
             relation.canonical = event.target.checked;
+        },
+
+        updateChangedParents(event) {
+            const folderId = event.target.attributes['data-folder-id'].value;
+            const val = document.getElementById('changedParents').value.trim() || '';
+            let arr = val.split(',') || [];
+            arr = arr.filter((item) => item !== '');
+            if (!arr.includes(folderId)) {
+                arr.push(folderId);
+            }
+            document.getElementById('changedParents').value = arr.join(',');
         },
     },
 }

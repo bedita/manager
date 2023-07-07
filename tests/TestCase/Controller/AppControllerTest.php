@@ -521,7 +521,7 @@ class AppControllerTest extends TestCase
                 [ // data provided
                     'id' => '1', // fake document id
                     'relations' => [],
-                    '_changedParents' => true,
+                    '_changedParents' => [1],
                 ],
             ],
             'no parents action' => [
@@ -567,7 +567,7 @@ class AppControllerTest extends TestCase
                             ],
                         ],
                     ],
-                    '_changedParents' => true,
+                    '_changedParents' => [1],
                 ],
             ],
             'categories' => [
@@ -661,7 +661,7 @@ class AppControllerTest extends TestCase
                             ],
                         ],
                     ],
-                    '_changedParents' => true,
+                    '_changedParents' => [44],
                     '_originalParents' => '999,888',
                 ],
             ],
