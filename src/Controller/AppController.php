@@ -397,26 +397,29 @@ class AppController extends Controller
      */
     protected function changedAttributes(array &$data): void
     {
-        if (!empty($data['_actualAttributes'])) {
-            $attributes = json_decode($data['_actualAttributes'], true);
-            if ($attributes === null) {
-                $this->log(sprintf('Wrong _actualAttributes, not a json string: %s', $data['_actualAttributes']), 'error');
-                $attributes = [];
-            }
-            foreach ($attributes as $key => $value) {
-                if (!array_key_exists($key, $data)) {
-                    continue;
-                }
-                if ($data[$key] === Form::NULL_VALUE) {
-                    $data[$key] = null;
-                }
-                // remove unchanged attributes from $data
-                if (!$this->hasFieldChanged($value, $data[$key])) {
-                    unset($data[$key]);
-                }
-            }
-            unset($data['_actualAttributes']);
+        if (empty($data['_actualAttributes'])) {
+            return;
         }
+        $attributes = json_decode($data['_actualAttributes'], true);
+        if ($attributes === null) {
+            $this->log(sprintf('Wrong _actualAttributes, not a json string: %s', $data['_actualAttributes']), 'error');
+            unset($data['_actualAttributes']);
+
+            return;
+        }
+        foreach ($attributes as $key => $value) {
+            if (!array_key_exists($key, $data)) {
+                continue;
+            }
+            if ($data[$key] === Form::NULL_VALUE) {
+                $data[$key] = null;
+            }
+            // remove unchanged attributes from $data
+            if (!$this->hasFieldChanged($value, $data[$key])) {
+                unset($data[$key]);
+            }
+        }
+        unset($data['_actualAttributes']);
     }
 
     /**
