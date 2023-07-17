@@ -13,7 +13,6 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\SessionController;
-use Cake\Http\Exception\NotFoundException;
 use Cake\Http\ServerRequest;
 use Cake\Http\Session;
 
@@ -58,8 +57,11 @@ class SessionControllerTest extends \Cake\TestSuite\TestCase
                 'session' => $session,
             ])
         );
-        static::expectException(NotFoundException::class);
         $controller->view('tast');
+        static::assertEquals(200, $controller->getResponse()->getStatusCode());
+        static::assertEquals([
+            'value' => null,
+        ], $controller->viewBuilder()->getVars());
     }
 
     /**
@@ -146,7 +148,8 @@ class SessionControllerTest extends \Cake\TestSuite\TestCase
                 'session' => $session,
             ])
         );
-        static::expectException(NotFoundException::class);
         $controller->delete('tast');
+        static::assertNull($session->read('tast'));
+        static::assertEquals(204, $controller->getResponse()->getStatusCode());
     }
 }
