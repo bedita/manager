@@ -36,7 +36,8 @@
                             type="checkbox"
                             :data-folder-id="node.id"
                             :checked="isMenu"
-                            @change="toggleFolderRelationMenu" />
+                            @change="toggleFolderRelationMenu"
+                            v-model="menu" />
                         <label :for="'tree-menu-' + node.id">
                             {{ msgMenu }}
                         </label>
@@ -51,7 +52,8 @@
                             type="checkbox"
                             :data-folder-id="node.id"
                             :checked="isCanonical"
-                            @change="toggleFolderRelationCanonical" />
+                            @change="toggleFolderRelationCanonical"
+                            v-model="canonical" />
                         <label :for="'tree-canonical-' + node.id">
                             {{ msgCanonical }}
                         </label>
@@ -157,8 +159,10 @@ export default {
 
     data() {
         return {
+            canonical: false,
             isOpen: false,
             isLoading: false,
+            menu: false,
             msgCanonical: t`Canonical`,
             msgEdit: t`Edit`,
             msgMenu: t`Menu`,
@@ -177,6 +181,11 @@ export default {
         }
         this.isOpen = !!this.node.children;
         PermissionEvents.$on('toggle-forbidden', (value) => this.showForbidden = value);
+        if (this.node.meta && !this.node.meta?.relation) {
+            this.node.meta.relation = {menu: false, canonical: false};
+        }
+        this.canonical = this.node.meta?.relation?.canonical || false;
+        this.menu = this.node.meta?.relation?.menu || false;
     },
 
     computed: {
@@ -210,7 +219,7 @@ export default {
             if (!this.isParent) {
                 return false;
             }
-            return !!this.node.meta?.relation?.menu;
+            return !!this.menu;
         },
 
         /**
@@ -222,7 +231,7 @@ export default {
             if (!this.isParent) {
                 return false;
             }
-            return !!this.node.meta?.relation?.canonical;
+            return !!this.canonical;
         },
 
         hasPermissionRoles() {
@@ -263,21 +272,13 @@ export default {
          * @return {string}
          */
         value() {
-            let menu = false;
-            if (this.node?.meta?.relation && ('menu' in this.node?.meta?.relation)) {
-                menu = !!this.node.meta.relation.menu;
-            }
-            let canonical = false;
-            if (this.node?.meta?.relation && ('canonical' in this.node?.meta?.relation)) {
-                canonical = !!this.node?.meta?.relation?.canonical;
-            }
             return JSON.stringify({
                 id: this.node?.id,
                 type: this.node?.type,
                 meta: {
                     relation: {
-                        menu,
-                        canonical,
+                        menu: this.menu,
+                        canonical: this.canonical,
                     },
                 },
             });
@@ -504,9 +505,7 @@ export default {
             if (this.isParent) {
                 this.updateChangedParents(event);
             }
-
-            let relation = this.node?.meta?.relation || {};
-            relation.menu = event.target.checked;
+            this.node.meta.relation.menu = event.target.checked;
         },
 
         /**
@@ -519,9 +518,7 @@ export default {
             if (this.isParent) {
                 this.updateChangedParents(event);
             }
-
-            let relation = this.node?.meta?.relation || {};
-            relation.canonical = event.target.checked;
+            this.node.meta.relation.canonical = event.target.checked;
         },
 
         updateChangedParents(event) {
