@@ -73,6 +73,9 @@ const _vueInstance = new Vue({
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         Permission:() => import(/* webpackChunkName: "permission" */'app/components/permission/permission'),
         Permissions:() => import(/* webpackChunkName: "permissions" */'app/components/permissions/permissions'),
+        PaginationNavigation:() => import(/* webpackChunkName: "pagination-navigation" */'app/components/pagination-navigation/pagination-navigation'),
+        ObjectsHistory:() => import(/* webpackChunkName: "objects-history" */'app/components/objects-history/objects-history'),
+        UserAccesses:() => import(/* webpackChunkName: "user-accesses" */'app/components/user-accesses/user-accesses'),
         Icon,
     },
 

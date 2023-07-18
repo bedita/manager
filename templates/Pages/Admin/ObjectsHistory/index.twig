@@ -1,0 +1,6 @@
+{{ element('Admin/sidebar') }}
+
+{% do _view.assign('title', __('Administration') ~ ' ' ~ __('Objects History')) %}
+{% do _view.assign('bodyViewClass',  'view-module view-admin') %}
+
+<objects-history></objects-history>
