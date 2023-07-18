@@ -48,7 +48,7 @@
                     </template>
                     <template v-else>
                         <input :id="'tree-canonical-' + node.id"
-                            type="radio"
+                            type="checkbox"
                             :data-folder-id="node.id"
                             :checked="isCanonical"
                             @change="toggleFolderRelationCanonical" />
