@@ -367,12 +367,20 @@ class AppController extends Controller
             },
             []
         );
-        $data['relations'][$relation]['addRelated'] = array_map(
+        $addRelated = array_map(
             function ($id) use ($replaceRelated) {
-                return $replaceRelated[$id];
+                return Hash::get($replaceRelated, $id);
             },
             $changedParents
         );
+        $addRelated = array_filter(
+            $addRelated,
+            function ($elem) {
+                return !empty($elem);
+            }
+        );
+        $data['relations'][$relation]['addRelated'] = $addRelated;
+
         // no need to remove when relation is "parent"
         // ParentsComponent::addRelated already performs a replaceRelated
         if ($relation !== 'parent') {
