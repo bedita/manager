@@ -10,6 +10,7 @@
                     :value="value"
                     :checked="isParent"
                     :class="isLocked ? 'disabled' : ''"
+                    :data-folder-id="node.id"
                     @click="isLocked ? $event.preventDefault() : ''"
                     @change="toggleFolderRelation" />
                 {{ node.attributes.title }}
@@ -27,23 +28,36 @@
             <a :href="url" v-else>{{ msgEdit }}</a>
             <div class="tree-params">
                 <div v-if="relationName && isParent" class="tree-param">
-                    <input :id="'tree-menu-' + node.id"
-                        type="checkbox"
-                        :checked="isMenu"
-                        @change="toggleFolderRelationMenu" />
-                    <label :for="'tree-menu-' + node.id">
-                        {{ msgMenu }}
-                    </label>
+                    <template v-if="hasPermissionRoles && isLocked">
+                        <label>{{ msgMenu }}</label>
+                    </template>
+                    <template v-else>
+                        <input :id="'tree-menu-' + node.id"
+                            type="checkbox"
+                            :data-folder-id="node.id"
+                            :checked="isMenu"
+                            @change="toggleFolderRelationMenu"
+                            v-model="menu" />
+                        <label :for="'tree-menu-' + node.id">
+                            {{ msgMenu }}
+                        </label>
+                    </template>
                 </div>
                 <div v-if="relationName && isParent && multipleChoice" class="tree-param">
-                    <input :id="'tree-canonical-' + node.id"
-                        name="_changedCanonical"
-                        type="radio"
-                        :checked="isCanonical"
-                        @change="toggleFolderRelationCanonical" />
-                    <label :for="'tree-canonical-' + node.id">
-                        {{ msgCanonical }}
-                    </label>
+                    <template v-if="hasPermissionRoles && isLocked">
+                        <label>{{ msgCanonical }}</label>
+                    </template>
+                    <template v-else>
+                        <input :id="'tree-canonical-' + node.id"
+                            type="checkbox"
+                            :data-folder-id="node.id"
+                            :checked="isCanonical"
+                            @change="toggleFolderRelationCanonical"
+                            v-model="canonical" />
+                        <label :for="'tree-canonical-' + node.id">
+                            {{ msgCanonical }}
+                        </label>
+                    </template>
                 </div>
             </div>
         </div>
@@ -145,8 +159,10 @@ export default {
 
     data() {
         return {
+            canonical: false,
             isOpen: false,
             isLoading: false,
+            menu: false,
             msgCanonical: t`Canonical`,
             msgEdit: t`Edit`,
             msgMenu: t`Menu`,
@@ -165,6 +181,11 @@ export default {
         }
         this.isOpen = !!this.node.children;
         PermissionEvents.$on('toggle-forbidden', (value) => this.showForbidden = value);
+        if (this.node.meta && !this.node.meta?.relation) {
+            this.node.meta.relation = {menu: false, canonical: false};
+        }
+        this.canonical = this.node.meta?.relation?.canonical || false;
+        this.menu = this.node.meta?.relation?.menu || false;
     },
 
     computed: {
@@ -198,7 +219,7 @@ export default {
             if (!this.isParent) {
                 return false;
             }
-            return !!this.node.meta?.relation?.menu;
+            return !!this.menu;
         },
 
         /**
@@ -210,7 +231,7 @@ export default {
             if (!this.isParent) {
                 return false;
             }
-            return !!this.node.meta?.relation?.canonical;
+            return !!this.canonical;
         },
 
         hasPermissionRoles() {
@@ -251,21 +272,13 @@ export default {
          * @return {string}
          */
         value() {
-            let menu = false;
-            if (this.node?.meta?.relation && ('menu' in this.node?.meta?.relation)) {
-                menu = !!this.node.meta.relation.menu;
-            }
-            let canonical = false;
-            if (this.node?.meta?.relation && ('canonical' in this.node?.meta?.relation)) {
-                canonical = !!this.node?.meta?.relation?.canonical;
-            }
             return JSON.stringify({
                 id: this.node?.id,
                 type: this.node?.type,
                 meta: {
                     relation: {
-                        menu,
-                        canonical,
+                        menu: this.menu,
+                        canonical: this.canonical,
                     },
                 },
             });
@@ -462,7 +475,7 @@ export default {
          * @return {void}
          */
         toggleFolderRelation(event) {
-            document.getElementById('changedParents').value = 1;
+            this.updateChangedParents(event);
             if (this.multipleChoice) {
                 let index = this.parents.findIndex(({ id }) => id == this.node.id);
                 if (event.target.checked) {
@@ -490,11 +503,9 @@ export default {
          */
         toggleFolderRelationMenu(event) {
             if (this.isParent) {
-                document.getElementById('changedParents').value = 1;
+                this.updateChangedParents(event);
             }
-
-            let relation = this.node?.meta?.relation || {};
-            relation.menu = event.target.checked;
+            this.node.meta.relation.menu = event.target.checked;
         },
 
         /**
@@ -505,11 +516,20 @@ export default {
          */
         toggleFolderRelationCanonical(event) {
             if (this.isParent) {
-                document.getElementById('changedParents').value = 1;
+                this.updateChangedParents(event);
             }
+            this.node.meta.relation.canonical = event.target.checked;
+        },
 
-            let relation = this.node?.meta?.relation || {};
-            relation.canonical = event.target.checked;
+        updateChangedParents(event) {
+            const folderId = event.target.attributes['data-folder-id'].value;
+            const val = document.getElementById('changedParents').value.trim() || '';
+            let arr = val.split(',') || [];
+            arr = arr.filter((item) => item !== '');
+            if (!arr.includes(folderId)) {
+                arr.push(folderId);
+            }
+            document.getElementById('changedParents').value = arr.join(',');
         },
     },
 }

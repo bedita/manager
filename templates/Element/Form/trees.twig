@@ -29,9 +29,8 @@
                 :has-permissions="{{ hasPermissions|json_encode }}">
             </tree-view>
             {% do Form.unlockField('relations.' ~ relationName ~ '.replaceRelated') %}
-            {{ Form.hidden('_changedParents', {'value': '0', 'id': 'changedParents'})|raw }}
+            {{ Form.hidden('_changedParents', {'value': '', 'id': 'changedParents'})|raw }}
             {% do Form.unlockField('_changedParents') %}
-            {% do Form.unlockField('_changedCanonical') %}
             {% do Form.unlockField('_originalParents') %}
         </div>
     </section>
