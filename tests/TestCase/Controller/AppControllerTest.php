@@ -517,6 +517,7 @@ class AppControllerTest extends TestCase
                 'documents', // object_type
                 [
                     'id' => '1',
+                    '_api' => [],
                 ],
                 [ // data provided
                     'id' => '1', // fake document id
