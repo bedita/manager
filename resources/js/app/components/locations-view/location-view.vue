@@ -80,11 +80,11 @@
             </div>
             <div class="location-buttons">
                 <a v-if="id" class="button button-text-white" :href="$helpers.buildViewUrl(id)" target="_blank">
-                    <AppIcon icon="carbon:launch"></AppIcon>
+                    <app-icon icon="carbon:launch"></app-icon>
                     <span class="ml-05">{{ msgEdit }}</span>
                 </a>
                 <button @click.prevent="onRemove" class="button button-text-white remove">
-                <AppIcon icon="carbon:unlink"></AppIcon>
+                    <app-icon icon="carbon:unlink"></app-icon>
                     <span class="ml-05">{{ msgRemove }}</span>
                 </button>
             </div>
