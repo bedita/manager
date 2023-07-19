@@ -12,8 +12,6 @@
  */
 namespace App\Controller;
 
-use Cake\Http\Exception\NotFoundException;
-
 class SessionController extends AppController
 {
     /**
@@ -39,10 +37,6 @@ class SessionController extends AppController
     {
         $this->request->allowMethod(['GET']);
         $value = $this->request->getSession()->read($name);
-        if ($value === null) {
-            throw new NotFoundException('Session variable not defined');
-        }
-
         $this->set(compact('value'));
         $this->viewBuilder()->setOption('serialize', ['value']);
     }
@@ -74,13 +68,9 @@ class SessionController extends AppController
     public function delete(string $name): void
     {
         $this->request->allowMethod(['DELETE']);
-        $exists = $this->request->getSession()->check($name);
-        if (!$exists) {
-            throw new NotFoundException('Session variable not defined');
+        if ($this->request->getSession()->check($name)) {
+            $this->request->getSession()->delete($name);
         }
-
-        $this->request->getSession()->delete($name);
-
         $this->setResponse($this->response->withStatus(204));
     }
 }

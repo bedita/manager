@@ -50,12 +50,8 @@ export default {
         async getShowForbidden() {
             try {
                 const response = await fetch(`${new URL(BEDITA.base).pathname}session/showForbidden`);
-                // Default to true
-                if (!response.ok) {
-                    return true;
-                }
 
-                return (await response.json())?.value;
+                return (await response.json())?.value || true;
             } catch (e) {
                 console.error('Error retrieving session variable', e);
 
