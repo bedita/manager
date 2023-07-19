@@ -354,7 +354,7 @@ class AppController extends Controller
         $changedParents = array_unique(explode(',', $changedParents));
         $originalParents = array_filter(explode(',', (string)Hash::get($data, '_originalParents')));
         unset($data['_changedParents'], $data['_originalParents']);
-        if (empty($data['relations'][$relation]['replaceRelated'])) {
+        if (empty($data['relations'][$relation]['replaceRelated']) && empty($changedParents)) {
             return;
         }
         $replaceRelated = array_reduce(
