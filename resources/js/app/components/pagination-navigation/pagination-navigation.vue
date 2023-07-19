@@ -103,3 +103,9 @@ export default {
     }
 }
 </script>
+<style>
+div.count-items {
+    margin: auto;
+    padding: 6px;
+}
+</style>

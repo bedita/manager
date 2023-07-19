@@ -18,17 +18,21 @@
         </div>
         <span v-if="loading" class="is-loading-spinner"></span>
         <div v-if="!loading && accesses.length > 0" class="grid">
-            <span>#</span>
-            <span class="column-header">{{ msgLastLogin }}</span>
-            <span class="column-header">{{ msgUsername }}</span>
+            <span class="column-header">
+                <Icon icon="carbon:user"></Icon>
+                <i class="ml-05">{{ msgUser }}</i>
+            </span>
+            <span class="column-header">
+                <Icon icon="carbon:calendar"></Icon>
+                <i class="ml-05">{{ msgDate }}</i>
+            </span>
             <template v-for="user,key in accesses">
-                <span>{{ (pagination.page_size * (pagination.page - 1)) + key + 1 }}</span>
-                <span>{{ formatDate(user?.meta?.last_login) }}</span>
                 <span>
-                    <a :href="`/users/view/${user.id}`" target="_new">
+                    <a class="user" :href="`/users/view/${user.id}`" target="_new">
                         {{ user?.attributes?.title || user?.attributes?.username }}
                     </a>
                 </span>
+                <span>{{ formatDate(user?.meta?.last_login) }}</span>
             </template>
         </div>
     </div>
@@ -47,12 +51,9 @@ export default {
             filterDate: '2023-01-01',
             loading: false,
             msgAccesses: t`Accesses`,
-            msgLastLogin: t`Last login`,
-            msgNext: t`Next`,
-            msgPage: t`Page`,
-            msgPrev: t`Prev`,
+            msgDate: t`Date`,
             msgStartingDate: t`Starting date`,
-            msgUsername: t`Username`,
+            msgUser: t`User`,
             pagination: {},
         }
     },
@@ -78,7 +79,7 @@ export default {
         async getAccesses(pageSize = 20, page = 1) {
             const filterDate = this.filterDate ? new Date(this.filterDate).toISOString() : '';
 
-            return fetch(`/api/users?page_size=${pageSize}&page=${page}&filter[last_login][gt]=${filterDate}&sort=-last_login`).then((r) => r.json());
+            return fetch(`/api/users?page_size=${pageSize}&page=${page}&filter[last_login][gt]=${filterDate}&sort=last_login`).then((r) => r.json());
         },
         loadAccesses(pageSize = 20, page = 1) {
             this.loading = true;
@@ -108,7 +109,7 @@ export default {
 }
 .userAccesses > .grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     border-top: 1px dotted black;
     border-right: 1px dotted black;
 }
@@ -123,5 +124,8 @@ export default {
 span.column-header {
     color: yellow;
     text-align: center;
+}
+a.user {
+    color: cyan;
 }
 </style>

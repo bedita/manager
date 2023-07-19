@@ -18,16 +18,30 @@
         </div>
         <span v-if="loading" class="is-loading-spinner"></span>
         <div v-if="!loading && items.length > 0"  class="grid">
-            <span>#</span>
-            <span class="column-header">{{ msgAction }}</span>
-            <span class="column-header">{{ msgChanged }}</span>
-            <span class="column-header">{{ msgWhen }}</span>
-            <span class="column-header">{{ msgResource }}</span>
-            <span class="column-header">{{ msgUser }}</span>
-            <span class="column-header">{{ msgApplication }}</span>
+            <span class="column-header">
+                <Icon icon="carbon:calendar"></Icon>
+                <i class="ml-05">{{ msgDate }}</i>
+            </span>
+            <span class="column-header">
+                <Icon icon="carbon:information"></Icon>
+                <i class="ml-05">{{ msgInfo }}</i>
+            </span>
+            <span class="column-header">
+                <Icon icon="carbon:content-view"></Icon>
+                <i class="ml-05">{{ msgChange }}</i>
+            </span>
             <template v-for="item,key in items">
-                <span>{{ (pagination.page_size * (pagination.page - 1)) + key + 1 }}</span>
-                <span>{{ item?.meta?.user_action }}</span>
+                <span>{{ formatDate(item?.meta?.created) }}</span>
+                <span>
+                    {{ msgAction }}
+                    <b class="action">{{ item?.meta?.user_action || '' }}</b>
+                    {{ msgByUser }}
+                    <a class="author" :href="`/users/view/${item?.meta?.user_id}`">{{ truncate(item?.meta?.user || '', 50) }}</a>
+                    {{ msgWithApplication }}
+                    <b class="application">{{ truncate(item?.meta?.application || '', 50) }}</b>
+                    {{ msgOnResource }}
+                    <a class="resource" :href="`/view/${item.meta.resource_id}`">{{ truncate(item?.meta?.resource || '', 50) }}</a>
+                </span>
                 <span>
                     <json-editor
                         :options="jsonEditorOptions"
@@ -36,10 +50,6 @@
                     </json-editor>
                     <div :id="`item-container-${item.id}`"></div>
                 </span>
-                <span>{{ formatDate(item?.meta?.created) }}</span>
-                <span><a :href="`/view/${item.meta.resource_id}`">{{ truncate(item?.meta?.resource || '', 50) }}</a></span>
-                <span><a :href="`/users/view/${item?.meta?.user_id}`">{{ truncate(item?.meta?.user || '', 50) }}</a></span>
-                <span>{{ truncate(item?.meta?.application || '', 50) }}</span>
             </template>
         </div>
     </div>
@@ -71,13 +81,15 @@ export default {
             items: [],
             loading: false,
             msgAction: t`Action`,
-            msgApplication: t`With application`,
-            msgChanged: t`Changed`,
+            msgByUser: t`by user`,
+            msgChange: t`Change`,
+            msgDate: t`Date`,
             msgHistory: t`History items`,
+            msgInfo: t`Info`,
+            msgOnResource: t`on resource`,
             msgResource: t`Resource`,
             msgStartingDate: t`Starting date`,
-            msgUser: t`By user`,
-            msgWhen: t`When`,
+            msgWithApplication: t`with application`,
             pagination: {},
             resourcesMap: {},
         }
@@ -147,6 +159,11 @@ export default {
                 }
             );
         },
+        msgActionBy(item) {
+            const action = item?.meta?.user_action || '';
+
+            return t`Action ${action} performed by`;
+        },
         truncate(str, len) {
             return this.$helpers.truncate(str, len);
         },
@@ -167,7 +184,7 @@ export default {
 }
 .objectsHistory > .grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     border-top: 1px dotted black;
     border-right: 1px dotted black;
 }
@@ -182,5 +199,14 @@ export default {
 span.column-header {
     color: yellow;
     text-align: center;
+}
+a.author {
+    color: cyan;
+}
+a.resource {
+    color: cyan;
+}
+b.application, b.action {
+    color: white;
 }
 </style>
