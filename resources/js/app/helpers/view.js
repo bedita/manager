@@ -223,6 +223,9 @@ export default {
             },
 
             truncate(str, len) {
+                if (typeof str !== 'string') {
+                    return str;
+                }
                 if (str.length <= len) {
                     return str;
                 }

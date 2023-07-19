@@ -10,7 +10,7 @@
                 v-model="pageSize"
                 form="_pagination"
                 class="page-size-selector has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest"
-                @change="changePage">
+                @change="changePageSize">
                 <option v-for="size in pageSizes" :key="size" :value="size">{{ size }}</option>
             </select>
         </div>
@@ -63,15 +63,13 @@ export default {
     },
     methods: {
         changePage(e, page) {
-            if (page) {
-                this.$emit('change-page', page);
+            if (!page) {
                 return;
             }
-            const val = e.target.value;
-            if (!val || val < 1 || val > this.pagination.page_count) {
-                return;
-            }
-            this.$emit('change-page-size', val);
+            this.$emit('change-page', page);
+        },
+        changePageSize() {
+            this.$emit('change-page-size', this.pageSize);
         },
         changePageNumber(e) {
             let val = e.target.value;

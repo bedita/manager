@@ -2,12 +2,12 @@
     <div class="userAccesses">
         <div v-if="pagination" class="filterContainer">
             <div class="filterDate">
-                <label>
+                <label class="mr-05">
                     {{ msgStartingDate }}
-                    <input type="date" v-model="filterDate" @change="changeDate" />
                 </label>
+                <input type="date" v-model="filterDate" @change="changeDate" />
             </div>
-            <div class="paginationContainer">
+            <div class="paginationContainer ml-2">
                 <PaginationNavigation
                     :pagination="pagination"
                     :resource="msgAccesses"
@@ -19,20 +19,20 @@
         <span v-if="loading" class="is-loading-spinner"></span>
         <div v-if="!loading && accesses.length > 0" class="grid">
             <span class="column-header">
-                <Icon icon="carbon:user"></Icon>
-                <i class="ml-05">{{ msgUser }}</i>
-            </span>
-            <span class="column-header">
                 <Icon icon="carbon:calendar"></Icon>
                 <i class="ml-05">{{ msgDate }}</i>
             </span>
+            <span class="column-header">
+                <Icon icon="carbon:user"></Icon>
+                <i class="ml-05">{{ msgUser }}</i>
+            </span>
             <template v-for="user,key in accesses">
+                <span>{{ formatDate(user?.meta?.last_login) }}</span>
                 <span>
-                    <a class="user" :href="`/users/view/${user.id}`" target="_new">
+                    <a class="tag has-background-module-users" :href="`/users/view/${user.id}`" target="_new">
                         {{ user?.attributes?.title || user?.attributes?.username }}
                     </a>
                 </span>
-                <span>{{ formatDate(user?.meta?.last_login) }}</span>
             </template>
         </div>
     </div>
@@ -109,7 +109,7 @@ export default {
 }
 .userAccesses > .grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 200px repeat(1, 1fr);
     border-top: 1px dotted black;
     border-right: 1px dotted black;
 }
@@ -117,6 +117,10 @@ export default {
     padding: 4px 8px;
     border-left: 1px dotted black;
     border-bottom: 1px dotted black;
+    white-space: normal;
+}
+.userAccesses > .grid > span.column-header {
+    text-align: left;
 }
 .userAccesses > .grid > span > a:hover {
     text-decoration: underline;
@@ -124,8 +128,5 @@ export default {
 span.column-header {
     color: yellow;
     text-align: center;
-}
-a.user {
-    color: cyan;
 }
 </style>

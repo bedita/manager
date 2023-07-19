@@ -2,12 +2,12 @@
     <div class="objectsHistory">
         <div v-if="pagination" class="filterContainer">
             <div class="filterDate">
-                <label>
+                <label class="mr-05">
                     {{ msgStartingDate }}
-                    <input type="date" v-model="filterDate" @change="changeDate" />
                 </label>
+                <input type="date" v-model="filterDate" @change="changeDate" />
             </div>
-            <div class="paginationContainer">
+            <div class="paginationContainer ml-2">
                 <PaginationNavigation
                     :pagination="pagination"
                     :resource="msgHistory"
@@ -36,11 +36,11 @@
                     {{ msgAction }}
                     <b class="action">{{ item?.meta?.user_action || '' }}</b>
                     {{ msgByUser }}
-                    <a class="author" :href="`/users/view/${item?.meta?.user_id}`">{{ truncate(item?.meta?.user || '', 50) }}</a>
+                    <a class="tag has-background-module-users" :href="`/users/view/${item?.meta?.user_id}`">{{ truncate(item?.meta?.user || '', 50) }}</a>
                     {{ msgWithApplication }}
                     <b class="application">{{ truncate(item?.meta?.application || '', 50) }}</b>
                     {{ msgOnResource }}
-                    <a class="resource" :href="`/view/${item.meta.resource_id}`">{{ truncate(item?.meta?.resource || '', 50) }}</a>
+                    <a :class="`tag has-background-module-${item?.meta?.resource_type || ''}`" :href="`/view/${item.meta.resource_id}`">{{ truncate(item?.meta?.resource || '', 50) }}</a>
                 </span>
                 <span>
                     <json-editor
@@ -92,6 +92,7 @@ export default {
             msgWithApplication: t`with application`,
             pagination: {},
             resourcesMap: {},
+            resourcesTypesMap: {},
         }
     },
     mounted() {
@@ -149,10 +150,16 @@ export default {
                                 return map;
                             }, {});
                             this.resourcesMap = {...this.resourcesMap, ...resourcesMap};
+                            const resourcesTypesMap = items.reduce((map, obj) => {
+                                map[obj?.id] = obj?.type;
+                                return map;
+                            }, {});
+                            this.resourcesTypesMap = {...this.resourcesTypesMap, ...resourcesTypesMap};
                             for (const item of this.items) {
                                 item.meta.user = this.resourcesMap[item.meta.user_id] || item.meta.user_id;
                                 item.meta.resource = this.resourcesMap[item.meta.resource_id] || item.meta.resource_id;
                                 item.meta.application = this.applicationsMap[item.meta.application_id] || item.meta.application_id;
+                                item.meta.resource_type = this.resourcesTypesMap[item.meta.resource_id] || item.meta.resource_type;
                             }
                             this.$forceUpdate();
                         });
@@ -184,7 +191,7 @@ export default {
 }
 .objectsHistory > .grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 200px repeat(2, 1fr);
     border-top: 1px dotted black;
     border-right: 1px dotted black;
 }
@@ -192,6 +199,10 @@ export default {
     padding: 4px 8px;
     border-left: 1px dotted black;
     border-bottom: 1px dotted black;
+    white-space: normal;
+}
+.objectsHistory > .grid > span.column-header {
+    text-align: left;
 }
 .objectsHistory > .grid > span > a:hover {
     text-decoration: underline;
@@ -199,12 +210,6 @@ export default {
 span.column-header {
     color: yellow;
     text-align: center;
-}
-a.author {
-    color: cyan;
-}
-a.resource {
-    color: cyan;
 }
 b.application, b.action {
     color: white;
