@@ -3,4 +3,4 @@
 {% do _view.assign('title', __('Administration') ~ ' ' ~ __('Objects History')) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
 
-<objects-history></objects-history>
+<objects-history :applications="{{ resources|json_encode }}"></objects-history>

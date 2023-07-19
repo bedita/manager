@@ -37,9 +37,9 @@
                     <div :id="`item-container-${item.id}`"></div>
                 </span>
                 <span>{{ formatDate(item?.meta?.created) }}</span>
-                <span><a :href="`/view/${item.meta.resource_id}`">{{ item?.meta?.resource_id }}</a></span>
-                <span><a :href="`/users/view/${item?.meta?.user_id}`">{{ item?.meta?.user_id }}</a></span>
-                <span>{{ item?.meta?.application_id }}</span>
+                <span><a :href="`/view/${item.meta.resource_id}`">{{ truncate(item?.meta?.resource || '', 50) }}</a></span>
+                <span><a :href="`/users/view/${item?.meta?.user_id}`">{{ truncate(item?.meta?.user || '', 50) }}</a></span>
+                <span>{{ truncate(item?.meta?.application || '', 50) }}</span>
             </template>
         </div>
     </div>
@@ -53,9 +53,16 @@ export default {
         JsonEditor: () => import(/* webpackChunkName: "json-editor" */'app/components/json-editor/json-editor'),
         PaginationNavigation:() => import(/* webpackChunkName: "pagination-navigation" */'app/components/pagination-navigation/pagination-navigation'),
     },
+    props: {
+        applications: {
+            type: Array,
+            default: () => [],
+        },
+    },
     data() {
         return {
-            filterDate: '2023-01-01',
+            applicationsMap: {},
+            filterDate: '',
             jsonEditorOptions: {
                 mainMenuBar: false,
                 navigationBar: false,
@@ -64,19 +71,25 @@ export default {
             items: [],
             loading: false,
             msgAction: t`Action`,
-            msgApplication: t`Application`,
+            msgApplication: t`With application`,
             msgChanged: t`Changed`,
             msgHistory: t`History items`,
             msgResource: t`Resource`,
             msgStartingDate: t`Starting date`,
-            msgUser: t`User`,
+            msgUser: t`By user`,
             msgWhen: t`When`,
             pagination: {},
+            resourcesMap: {},
         }
     },
     mounted() {
         this.$nextTick(() => {
+            this.filterDate = this.$helpers.getLastWeeksDate().toISOString().split('T')[0];
             this.loadHistory();
+            this.applicationsMap = this.applications.reduce((map, obj) => {
+                map[obj?.id] = obj.attributes.name;
+                return map;
+            }, {});
         });
     },
     methods: {
@@ -97,6 +110,9 @@ export default {
 
             return fetch(`/api/history?page_size=${pageSize}&page=${page}&filter[created][gt]=${filterDate}`).then((r) => r.json());
         },
+        async getObjects(ids) {
+            return fetch(`/api/objects?filter[id]=${ids.join(',')}`).then((r) => r.json());
+        },
         loadHistory(pageSize = 20, page = 1) {
             this.loading = true;
             this.getHistory(pageSize, page)
@@ -105,8 +121,34 @@ export default {
                     this.loading = false;
                     this.items = response.data || [];
                     this.pagination = response.meta?.pagination || {};
+                    const userIds = this.items.map(item => item.meta.user_id).filter((v, i, a) => a.indexOf(v) === i).map(i=>Number(i));
+                    const objectIds = this.items.map(item => item.meta.resource_id).filter((v, i, a) => a.indexOf(v) === i).map(i=>Number(i));
+                    const ids = [...userIds, ...objectIds];
+                    this.getObjects(ids)
+                        .catch(_error => { return false;})
+                        .then(response => {
+                            const items = response.data || [];
+                            const resourcesMap = items.reduce((map, obj) => {
+                                if (obj.type === 'users') {
+                                    map[obj?.id] = obj?.attributes?.title || obj?.attributes?.username || obj?.id;
+                                } else {
+                                    map[obj?.id] = obj?.attributes?.title || obj?.id;
+                                }
+                                return map;
+                            }, {});
+                            this.resourcesMap = {...this.resourcesMap, ...resourcesMap};
+                            for (const item of this.items) {
+                                item.meta.user = this.resourcesMap[item.meta.user_id] || item.meta.user_id;
+                                item.meta.resource = this.resourcesMap[item.meta.resource_id] || item.meta.resource_id;
+                                item.meta.application = this.applicationsMap[item.meta.application_id] || item.meta.application_id;
+                            }
+                            this.$forceUpdate();
+                        });
                 }
             );
+        },
+        truncate(str, len) {
+            return this.$helpers.truncate(str, len);
         },
     }
 }

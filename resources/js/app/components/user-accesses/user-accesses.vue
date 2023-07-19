@@ -58,6 +58,7 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
+            this.filterDate = this.$helpers.getLastWeeksDate().toISOString().split('T')[0];
             this.loadAccesses();
         });
     },

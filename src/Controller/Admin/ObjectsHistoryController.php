@@ -22,8 +22,17 @@ class ObjectsHistoryController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    public function index(): ?Response
-    {
-        return null;
-    }
+    protected $resourceType = 'applications';
+
+    /**
+     * @inheritDoc
+     */
+    protected $readonly = true;
+
+    /**
+     * @inheritDoc
+     */
+    protected $properties = [
+        'name' => 'string',
+    ];
 }

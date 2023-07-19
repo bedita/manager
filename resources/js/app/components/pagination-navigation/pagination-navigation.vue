@@ -4,7 +4,7 @@
             <span class="has-font-weight-bold">{{ pagination?.count }}</span>
             <span>{{ resource }}</span>
         </div>
-        <div class="page-size">
+        <div v-if="show()" class="page-size">
             <span>{{ msgSize }}</span>
             <select
                 v-model="pageSize"
@@ -14,7 +14,7 @@
                 <option v-for="size in pageSizes" :key="size" :value="size">{{ size }}</option>
             </select>
         </div>
-        <div class="pagination-buttons">
+        <div v-if="show()" class="pagination-buttons">
             <div>
                 <!-- first page -->
                 <button v-if="pagination.page > 1" :class="pageButton" @click.prevent="changePage($event, 1)">1</button>
@@ -96,6 +96,9 @@ export default {
             this.changePageNumber(e);
 
             return false;
+        },
+        show() {
+            return this.pagination.count > this.pagination.page_size;
         },
     }
 }
