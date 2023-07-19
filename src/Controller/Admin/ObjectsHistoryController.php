@@ -12,8 +12,6 @@
  */
 namespace App\Controller\Admin;
 
-use Cake\Http\Response;
-
 /**
  * Objects History Controller
  */
