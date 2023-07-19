@@ -336,7 +336,7 @@ class AppController extends Controller
     }
 
     /**
-     * Handle `parents` or `parent` relationship looking at `_changedParents` input flag
+     * Handle `parents` or `parent` relationship looking at `_changedParents` input
      *
      * @param string $type Object type
      * @param array $data Form data
@@ -344,19 +344,16 @@ class AppController extends Controller
      */
     protected function setupParentsRelation(string $type, array &$data): void
     {
-        $changedParents = (bool)Hash::get($data, '_changedParents');
-        $originalParents = (string)Hash::get($data, '_originalParents');
-        $originalParents = empty($originalParents) ? [] : explode(',', $originalParents);
-        unset($data['_changedParents'], $data['_originalParents']);
+        $changedParents = (string)Hash::get($data, '_changedParents');
         $relation = $type === 'folders' ? 'parent' : 'parents';
         if (empty($changedParents)) {
-            unset($data['relations'][$relation]);
+            unset($data['relations'][$relation], $data['_changedParents'], $data['_originalParents']);
 
             return;
         }
-        if (empty($data['relations'][$relation]['replaceRelated']) && empty($originalParents)) {
-            return;
-        }
+        $changedParents = array_unique(explode(',', $changedParents));
+        $originalParents = array_filter(explode(',', (string)Hash::get($data, '_originalParents')));
+        unset($data['_changedParents'], $data['_originalParents']);
         $replaceRelated = array_reduce(
             (array)Hash::get($data, sprintf('relations.%s.replaceRelated', $relation)),
             function ($acc, $obj) {
@@ -367,13 +364,20 @@ class AppController extends Controller
             },
             []
         );
-        $add = array_diff(array_keys($replaceRelated), $originalParents);
-        $data['relations'][$relation]['addRelated'] = array_map(
+        $addRelated = array_map(
             function ($id) use ($replaceRelated) {
-                return $replaceRelated[$id];
+                return Hash::get($replaceRelated, $id);
             },
-            $add
+            $changedParents
         );
+        $addRelated = array_filter(
+            $addRelated,
+            function ($elem) {
+                return !empty($elem);
+            }
+        );
+        $data['relations'][$relation]['addRelated'] = $addRelated;
+
         // no need to remove when relation is "parent"
         // ParentsComponent::addRelated already performs a replaceRelated
         if ($relation !== 'parent') {
