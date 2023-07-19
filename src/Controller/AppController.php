@@ -354,6 +354,7 @@ class AppController extends Controller
         $changedParents = array_unique(explode(',', $changedParents));
         $originalParents = array_filter(explode(',', (string)Hash::get($data, '_originalParents')));
         unset($data['_changedParents'], $data['_originalParents']);
+        // @phpstan-ignore-next-line
         if (empty($data['relations'][$relation]['replaceRelated']) && empty($changedParents)) {
             return;
         }
