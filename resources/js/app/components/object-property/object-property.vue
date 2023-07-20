@@ -1,29 +1,47 @@
 <template>
-    <div :class="boxClass()" v-show="display">
+    <div :class="boxClass" v-show="display">
         <div class="columns">
             <div class="column">
-                <span :class="tagClass()">{{ prop.attributes.name }}</span>
-                <span v-if="prop.attributes.description">
-                    {{ prop.attributes.description }}
+                <span :class="tagClass">
+                    {{ prop.attributes.name }}
+                    <i v-if="prop.attributes.description" v-title="prop.attributes.description" class="ml-05">
+                        <Icon icon="carbon:information"></Icon>
+                    </i>
                 </span>
-                <p>{{ msgLabel }}: {{ prop.attributes.label || '-' }}</p>
-                <p>{{ msgType }}: <b>{{ prop.attributes.property_type_name }}</b></p>
-                <p>{{ msgHidden }}:
-                    <select v-model="hidden" @change="updateHidden()">
-                        <option value="true">{{ msgYes }}</option>
-                        <option value="false">{{ msgNo }}</option>
-                    </select>
-                </p>
-                <p>{{ msgTranslatable }}:
-                    <select v-model="translatable" @change="updateTranslationRules()">
-                        <option value="true">{{ msgYes }}</option>
-                        <option value="false">{{ msgNo }}</option>
-                    </select>
-                </p>
-                <p v-if="type === 'inherited'">
-                    {{ msgInheritedFrom }}:
-                    {{ prop.attributes.object_type_name }}
-                </p>
+                <div class="grid">
+                    <span class="column-header">{{ msgLabel }}</span>
+                    <span>{{ prop.attributes.label || '-' }}</span>
+
+                    <span class="column-header">{{ msgType }}</span>
+                    <span>{{ prop.attributes.property_type_name }}</span>
+
+                    <span class="column-header">{{ msgReadonly }}</span>
+                    <span>
+                        <select v-model="readonly">
+                            <option value="true">{{ msgYes }}</option>
+                            <option value="false">{{ msgNo }}</option>
+                        </select>
+                    </span>
+
+                    <span class="column-header">{{ msgHidden }}</span>
+                    <span>
+                        <select v-model="hidden" @change="updateHidden()">
+                            <option value="true">{{ msgYes }}</option>
+                            <option value="false">{{ msgNo }}</option>
+                        </select>
+                    </span>
+
+                    <span class="column-header">{{ msgTranslatable }}</span>
+                    <span>
+                        <select v-model="translatable" @change="updateTranslationRules()">
+                            <option value="true">{{ msgYes }}</option>
+                            <option value="false">{{ msgNo }}</option>
+                        </select>
+                    </span>
+
+                    <span v-if="type === 'inherited'" class="column-header">{{ msgInheritedFrom }}</span>
+                    <span v-if="type === 'inherited'">{{ prop.attributes.object_type_name }}</span>
+                </div>
             </div>
             <div v-if="!nobuttonsfor.includes(prop.attributes.name)" class="column is-narrow">
                 <div class="buttons-container">
@@ -53,12 +71,14 @@ export default {
             hidden: false,
             translatable: false,
             display: true,
+            readonly: false,
             msgDelete: t`Delete`,
             msgHidden: t`Hidden`,
             msgHide: t`Hide`,
             msgInheritedFrom: t`Inherited from`,
             msgLabel: t`Label`,
             msgNo: t`No`,
+            msgReadonly: t`Readonly`,
             msgShow: t`Show`,
             msgTranslatable: t`Translatable`,
             msgType: t`Type`,
@@ -69,13 +89,13 @@ export default {
     mounted() {
         this.$nextTick(() => {
             this.hidden = this.isHidden || false;
+            this.readonly = this.prop.attributes.read_only || false;
             this.translatable = this.isTranslatable || false;
         });
     },
-
-    methods: {
+    computed: {
         boxClass() {
-            if (this.hidden === 'true') {
+            if (this.hidden === true) {
                 return 'box pb-05 has-background-gray-600 has-text-white';
             }
             if (this.type === 'custom') {
@@ -97,6 +117,9 @@ export default {
 
             return 'tag';
         },
+    },
+
+    methods: {
         updateHidden() {
             let hiddenProperties = JSON.parse(document.getElementById('hidden').value || '[]') || [];
             const index = hiddenProperties.indexOf(this.prop.attributes.name);
@@ -164,6 +187,7 @@ export default {
 </script>
 <style>
 div.box {
+    min-width: 350px;
     padding: 0.5rem;
     margin: 0.5rem 0;
     border-radius: 25px;
@@ -174,4 +198,28 @@ div.column > p {
     margin: 0.5rem 0;
     border-bottom: dashed 1px gray;
 }
+div.column > div.grid {
+    display: grid;
+    grid-template-columns: 100px 240px;
+    border-top: 1px dotted black;
+    border-right: 1px dotted black;
+}
+div.column > div > span {
+    padding: 4px 8px;
+    border-left: 1px dotted black;
+    border-bottom: 1px dotted black;
+    white-space: normal;
+}
+div.column > div > span.column-header {
+    text-align: left;
+}
+div.column > div > span > a:hover {
+    text-decoration: underline;
+}
+div.column > div > span.column-header {
+    color: yellow;
+    text-align: left;
+}
 </style>
+ 109 changes: 109 additions & 0 deletions109
+resources/js/app/components/pagination-navigation/pagination-navigation.vue
