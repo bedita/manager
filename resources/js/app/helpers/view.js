@@ -223,6 +223,9 @@ export default {
             },
 
             truncate(str, len) {
+                if (typeof str !== 'string') {
+                    return str;
+                }
                 if (str.length <= len) {
                     return str;
                 }
@@ -244,6 +247,12 @@ export default {
                         fn.apply(this, args);
                     }, timeout);
                 };
+            },
+
+            getLastWeeksDate() {
+                const now = new Date();
+
+                return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
             },
         }
     }
