@@ -19,15 +19,15 @@
         <span v-if="loading" class="is-loading-spinner"></span>
         <div v-if="!loading && items.length > 0"  class="grid">
             <span class="column-header">
-                <Icon icon="carbon:calendar"></Icon>
+                <app-icon icon="carbon:calendar"></app-icon>
                 <i class="ml-05">{{ msgDate }}</i>
             </span>
             <span class="column-header">
-                <Icon icon="carbon:information"></Icon>
+                <app-icon icon="carbon:information"></app-icon>
                 <i class="ml-05">{{ msgInfo }}</i>
             </span>
             <span class="column-header">
-                <Icon icon="carbon:content-view"></Icon>
+                <app-icon icon="carbon:content-view"></app-icon>
                 <i class="ml-05">{{ msgChange }}</i>
             </span>
             <template v-for="item,key in items">
