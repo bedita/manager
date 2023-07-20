@@ -13,7 +13,7 @@
                     <span>{{ prop.attributes.label || '-' }}</span>
 
                     <span class="column-header">{{ msgType }}</span>
-                    <span>{{ prop.attributes.property_type_name }}</span>
+                    <span class="property-type-name">{{ prop.attributes.property_type_name }}</span>
 
                     <span class="column-header">{{ msgReadonly }}</span>
                     <span>
@@ -200,7 +200,7 @@ div.column > p {
 }
 div.column > div.grid {
     display: grid;
-    grid-template-columns: 100px 240px;
+    grid-template-columns: 100px 1fr;
     border-top: 1px dotted black;
     border-right: 1px dotted black;
 }
@@ -209,17 +209,16 @@ div.column > div > span {
     border-left: 1px dotted black;
     border-bottom: 1px dotted black;
     white-space: normal;
-}
-div.column > div > span.column-header {
-    text-align: left;
-}
-div.column > div > span > a:hover {
-    text-decoration: underline;
+    vertical-align: middle;
 }
 div.column > div > span.column-header {
     color: yellow;
     text-align: left;
 }
+div.column > div > span > a:hover {
+    text-decoration: underline;
+}
+div.column > div > span.property-type-name {
+    font-family: monospace;
+}
 </style>
- 109 changes: 109 additions & 0 deletions109
-resources/js/app/components/pagination-navigation/pagination-navigation.vue
