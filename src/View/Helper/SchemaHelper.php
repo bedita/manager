@@ -37,6 +37,13 @@ class SchemaHelper extends Helper
     public $helpers = ['Time'];
 
     /**
+     * Default translatable fields to be prepended in translations
+     *
+     * @var array
+     */
+    public const DEFAULT_TRANSLATABLE = ['title', 'description', 'body'];
+
+    /**
      * Translatable media types
      *
      * @var array
@@ -218,47 +225,52 @@ class SchemaHelper extends Helper
      * Provides list of translatable fields.
      * If set Properties.<objectType>.translatable, it will be added to translatable fields.
      *
-     * @param array $properties The properties
-     * @param string $objectType The object type
+     * @param array $schema The object type schema
      * @return array
      */
-    public function translatableFields(array $properties, ?string $objectType = null): array
+    public function translatableFields(array $schema): array
     {
-        $translatable = (array)Configure::read(sprintf('Properties.%s.translatable', (string)$objectType));
-        $fields = !empty($translatable) ? array_merge($properties, $translatable) : $properties;
-        $fields = array_unique($fields);
-        $priorityFields = array_unique(array_merge(['title', 'description', 'body'], $translatable));
-        usort($fields, function ($a, $b) use ($priorityFields) {
-            return $this->compareFields($a, $b, $priorityFields);
-        });
+        if (isset($schema['translatable'])) {
+            $priorityFields = array_intersect(static::DEFAULT_TRANSLATABLE, (array)$schema['translatable']);
+            $otherFields = array_diff((array)$schema['translatable'], $priorityFields);
+        } else {
+            $properties = (array)Hash::get($schema, 'properties');
+            $priorityFields = array_intersect(static::DEFAULT_TRANSLATABLE, array_keys($properties));
+            $otherFields = array_keys(array_filter(
+                array_diff_key($properties, array_flip($priorityFields)),
+                [$this, 'translatableType']
+            ));
+        }
 
-        return $fields;
+        return array_values(array_merge($priorityFields, $otherFields));
     }
 
     /**
-     * Compare fields and return int, considering priority fields.
+     * Helper recursive method to check if a property is translatable checking its JSON SCHEMA
      *
-     * @param string $a The first field
-     * @param string $b The second field
-     * @param array $priorityFields The priority fields
-     * @return int
+     * @param array $schema Property schema
+     * @return bool
      */
-    public function compareFields(string $a, string $b, array $priorityFields): int
+    protected function translatableType(array $schema): bool
     {
-        $aIndex = array_search($a, $priorityFields);
-        $bIndex = array_search($b, $priorityFields);
+        if (!empty($schema['oneOf'])) {
+            return array_reduce(
+                (array)$schema['oneOf'],
+                function ($carry, $item) {
+                    if ($carry) {
+                        return true;
+                    }
 
-        if ($aIndex !== false && $bIndex !== false) {
-            return $aIndex - $bIndex;
+                    return $this->translatableType((array)$item);
+                }
+            );
         }
-        if ($aIndex !== false) {
-            return -1;
-        }
-        if ($bIndex !== false) {
-            return 1;
-        }
+        // accept as translatable 'string' type having text/html or tex/plain 'contentMediaType'
+        $type = (string)Hash::get($schema, 'type');
+        $contentMediaType = Hash::get($schema, 'contentMediaType');
 
-        return strcmp($a, $b);
+        return $type === 'string' &&
+            in_array($contentMediaType, static::TRANSLATABLE_MEDIATYPES);
     }
 
     /**
