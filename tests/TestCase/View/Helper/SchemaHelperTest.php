@@ -434,20 +434,75 @@ class SchemaHelperTest extends TestCase
     public function translatableFieldsProvider(): array
     {
         return [
-            'empty properties' => [
-                [], // properties
-                [], // conf
-                [], // expected
+            'empty translatable' => [
+                ['translatable' => []],
+                [],
+            ],
+            'translatable list' => [
+                ['translatable' => ['subtitle', 'other_field', 'title']],
+                ['title', 'subtitle', 'other_field'],
             ],
             'simple' => [
-                ['description', 'title', 'body'],
-                [],
-                ['title', 'description', 'body'],
+                [
+                    'properties' => [
+                        'field' => [
+                            'oneOf' => [
+                                [
+                                    'type' => 'string',
+                                    'contentMediaType' => 'text/plain',
+                                ],
+                                [
+                                    'type' => 'null',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                ['field'],
             ],
-            'more fields and reorder' => [
-                ['id', 'title', 'description', 'body', 'created', 'modified', 'dummy', 'status', 'extra'],
-                ['dummy3', 'dummy2', 'dummy1', 'description', 'body'],
-                ['title', 'description', 'body', 'dummy3', 'dummy2', 'dummy1', 'created', 'dummy', 'extra', 'id', 'modified', 'status'],
+            'not translatable' => [
+                [
+                    'properties' => [
+                        'field1' => [
+                            'type' => 'integer',
+                        ],
+                        'field2' => [
+                            'type' => 'string',
+                            'contentMediaType' => 'text/css',
+                        ],
+                    ],
+                ],
+                [],
+            ],
+            'properties' => [
+                [
+                    'properties' => [
+                        'dummy' => [
+                            'oneOf' => [
+                                [
+                                    'type' => 'null',
+                                ],
+                                [
+                                    'type' => 'string',
+                                    'contentMediaType' => 'text/plain',
+                                ],
+                            ],
+                        ],
+                        'description' => [
+                            'type' => 'string',
+                            'contentMediaType' => 'text/html',
+                        ],
+                        'title' => [
+                            'type' => 'string',
+                            'contentMediaType' => 'text/html',
+                        ],
+                    ],
+                ],
+                [
+                    'title',
+                    'description',
+                    'dummy',
+                ],
             ],
         ];
     }
@@ -455,65 +510,16 @@ class SchemaHelperTest extends TestCase
     /**
      * Test `translatableFields` method
      *
-     * @param array $properties The properties
-     * @param array $conf The configuration
+     * @param array $schema The object schema
      * @param array $expected Expected result
      * @return void
      * @dataProvider translatableFieldsProvider()
      * @covers ::translatableFields()
+     * @covers ::translatableType()
      */
-    public function testTranslatableFields(array $properties, array $conf, array $expected): void
+    public function testTranslatableFields(array $schema, array $expected): void
     {
-        Configure::write('Properties.documents.translatable', $conf);
-        $actual = $this->Schema->translatableFields($properties, 'documents');
-        static::assertSame($expected, $actual);
-    }
-
-    /**
-     * Data provider for `testCompareFields` test case.
-     *
-     * @return array
-     */
-    public function compareFieldsProvider(): array
-    {
-        return [
-            'priority fields have both, return strcmp($a, $b)' => [
-                'a',
-                'b',
-                ['a', 'b'],
-                -1,
-            ],
-            'priority fields has first field, return -1' => [
-                'a',
-                'b',
-                ['a'],
-                -1,
-            ],
-            'priority fields has second field, return 1' => [
-                'a',
-                'b',
-                ['b'],
-                1,
-            ],
-            'empty priority fields, return strcmp($a, $b)' => [
-                'a',
-                'b',
-                [],
-                -1,
-            ],
-        ];
-    }
-
-    /**
-     * Test `compareFields` method
-     *
-     * @return void
-     * @dataProvider compareFieldsProvider()
-     * @covers ::compareFields()
-     */
-    public function testCompareFields(string $a, string $b, array $priorityFields, int $expected): void
-    {
-        $actual = $this->Schema->compareFields($a, $b, $priorityFields);
+        $actual = $this->Schema->translatableFields($schema);
         static::assertSame($expected, $actual);
     }
 
