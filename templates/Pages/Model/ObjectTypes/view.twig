@@ -1,5 +1,6 @@
 {% do _view.assign('title', 'Model ' ~ resourceType|humanize) %}
 {% do _view.assign('bodyViewClass', 'view-module view-model') %}
+{% set translatable = Schema.translatableFields(objectTypeSchema|default([])) %}
 
 <modules-view inline-template ref="moduleView">
 <div class="modules-view">
@@ -131,7 +132,7 @@
                     :init-properties="{{ objectTypeProperties.core|default([])|json_encode }}"
                     type="core"
                     :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
-                    :translatable="{{ translatable|default({})|json_encode }}"
+                    :translatable="{{ translatable|json_encode }}"
                     :translation-rules="{{ resource.attributes.translation_rules|json_encode }}"
                 >
                 </object-properties>
@@ -151,7 +152,7 @@
                     :init-properties="{{ objectTypeProperties.inherited|default([])|json_encode }}"
                     type="inherited"
                     :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
-                    :translatable="{{ translatable|default({})|json_encode }}"
+                    :translatable="{{ translatable|json_encode }}"
                     :translation-rules="{{ resource.attributes.translation_rules|json_encode }}"
                 >
                 </object-properties>
@@ -171,7 +172,7 @@
                     :init-properties="{{ objectTypeProperties.custom|default([])|json_encode }}"
                     type="custom"
                     :hidden="{{ resource.attributes.hidden|default([])|json_encode }}"
-                    :translatable="{{ translatable|default({})|json_encode }}"
+                    :translatable="{{ translatable|json_encode }}"
                     :translation-rules="{{ resource.attributes.translation_rules|json_encode }}"
                 >
                 </object-properties>

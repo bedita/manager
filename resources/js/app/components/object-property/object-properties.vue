@@ -8,7 +8,7 @@
             :type="type"
             :is-hidden="hidden.includes(prop.attributes?.name)"
             :is-new="prop.id == 0"
-            :is-translatable="translatableProperties.includes(prop.attributes?.name)"
+            :is-translatable="translatable.includes(prop.attributes?.name)"
             :nobuttonsfor="immutable">
         </object-property>
 
@@ -37,23 +37,12 @@ export default {
     data() {
         return {
             properties: [],
-            translatableProperties: [],
             immutable: ['created', 'id', 'lang', 'locked', 'modified', 'status', 'uname'],
         };
     },
 
     mounted() {
         this.properties = this.initProperties;
-        this.translatableProperties = this.translatable;
-        if (this.translationRules) {
-            this.translatableProperties = this.translatable.filter((prop) => {
-                return !(prop in this.translationRules);
-            });
-            const forceTranslatable = Object.keys(this.translationRules).filter((prop) => {
-                return this.translationRules[prop] === true;
-            });
-            this.translatableProperties = [...this.translatableProperties, ...forceTranslatable];
-        }
         if (this.type !== 'custom') {
             return;
         }

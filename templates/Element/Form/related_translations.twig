@@ -1,3 +1,9 @@
+{% set translatable = true %}
+{% if schema.translatable is iterable %}
+    {% set translatable = schema.translatable is not empty %}
+{% else %}
+    {% set translatable = object.relationships.translations is not empty %}
+{% endif %}
 {% if schema.properties.lang %}
     <property-view inline-template :tab-open="tabsOpen" tab-name="translations" ref={{ resourceName }}>
         <section class="fieldset order-{{ cssOrder }}" :class="isOpen? '' : 'closed'">
@@ -20,7 +26,7 @@
                     {% set lang = object.id ? object.attributes.lang : config('Project.config.I18n.default') %}
                     {{ Property.control('lang', lang, { 'label': __('The main language is') })|raw }}
 
-                    {% if object.relationships.translations %}
+                    {% if translatable %}
                         {{ Html.link(__('Add translation'), {
                             '_name': 'translations:add',
                             'object_type': object.type,
