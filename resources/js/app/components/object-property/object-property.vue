@@ -13,15 +13,10 @@
                     <span>{{ prop.attributes.label || '-' }}</span>
 
                     <span class="column-header">{{ msgType }}</span>
-                    <span class="property-type-name">{{ prop.attributes.property_type_name }}</span>
+                    <span class="property-val">{{ prop.attributes.property_type_name }}</span>
 
                     <span class="column-header">{{ msgReadonly }}</span>
-                    <span>
-                        <select v-model="readonly">
-                            <option value="true">{{ msgYes }}</option>
-                            <option value="false">{{ msgNo }}</option>
-                        </select>
-                    </span>
+                    <span class="property-val">{{ readonly }}</span>
 
                     <span class="column-header">{{ msgHidden }}</span>
                     <span>
@@ -218,7 +213,7 @@ div.column > div > span.column-header {
 div.column > div > span > a:hover {
     text-decoration: underline;
 }
-div.column > div > span.property-type-name {
+div.column > div > span.property-val {
     font-family: monospace;
 }
 </style>
