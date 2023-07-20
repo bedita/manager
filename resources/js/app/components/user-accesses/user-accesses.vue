@@ -48,7 +48,7 @@ export default {
     data() {
         return {
             accesses: [],
-            filterDate: '2023-01-01',
+            filterDate: '',
             loading: false,
             msgAccesses: t`Accesses`,
             msgDate: t`Date`,
@@ -79,7 +79,7 @@ export default {
         async getAccesses(pageSize = 20, page = 1) {
             const filterDate = this.filterDate ? new Date(this.filterDate).toISOString() : '';
 
-            return fetch(`/api/users?page_size=${pageSize}&page=${page}&filter[last_login][gt]=${filterDate}&sort=last_login`).then((r) => r.json());
+            return fetch(`/api/users?page_size=${pageSize}&page=${page}&filter[last_login][gt]=${filterDate}&sort=-last_login`).then((r) => r.json());
         },
         loadAccesses(pageSize = 20, page = 1) {
             this.loading = true;
