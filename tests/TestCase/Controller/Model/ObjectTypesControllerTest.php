@@ -147,14 +147,15 @@ class ObjectTypesControllerTest extends TestCase
      * Test `view` method
      *
      * @covers ::view()
-     * @covers ::prepareProperties
+     * @covers ::prepareProperties()
+     * @covers ::propertiesData()
      * @return void
      */
     public function testView(): void
     {
         $this->setupController();
         $this->ModelController->view(2);
-        $vars = ['resource', 'schema', 'properties', 'propertyTypesOptions', 'associationsOptions'];
+        $vars = ['resource', 'schema', 'properties', 'propertyTypesOptions', 'associationsOptions', 'objectTypeSchema'];
         foreach ($vars as $var) {
             static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
         }

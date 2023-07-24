@@ -434,20 +434,26 @@ class SchemaHelperTest extends TestCase
     public function translatableFieldsProvider(): array
     {
         return [
-            'empty properties' => [
+            'empty translatable' => [
+                ['translatable' => []],
                 [],
-                [],
+            ],
+            'translatable list' => [
+                ['translatable' => ['subtitle', 'other_field', 'title']],
+                ['title', 'subtitle', 'other_field'],
             ],
             'simple' => [
                 [
-                    'field' => [
-                        'oneOf' => [
-                            [
-                                'type' => 'string',
-                                'contentMediaType' => 'text/plain',
-                            ],
-                            [
-                                'type' => 'null',
+                    'properties' => [
+                        'field' => [
+                            'oneOf' => [
+                                [
+                                    'type' => 'string',
+                                    'contentMediaType' => 'text/plain',
+                                ],
+                                [
+                                    'type' => 'null',
+                                ],
                             ],
                         ],
                     ],
@@ -456,36 +462,40 @@ class SchemaHelperTest extends TestCase
             ],
             'not translatable' => [
                 [
-                    'field1' => [
-                        'type' => 'string',
-                    ],
-                    'field2' => [
-                        'type' => 'string',
-                        'contentMediaType' => 'text/css',
+                    'properties' => [
+                        'field1' => [
+                            'type' => 'integer',
+                        ],
+                        'field2' => [
+                            'type' => 'string',
+                            'contentMediaType' => 'text/css',
+                        ],
                     ],
                 ],
                 [],
             ],
             'properties' => [
                 [
-                    'dummy' => [
-                        'oneOf' => [
-                            [
-                                'type' => 'null',
-                            ],
-                            [
-                                'type' => 'string',
-                                'contentMediaType' => 'text/plain',
+                    'properties' => [
+                        'dummy' => [
+                            'oneOf' => [
+                                [
+                                    'type' => 'null',
+                                ],
+                                [
+                                    'type' => 'string',
+                                    'contentMediaType' => 'text/plain',
+                                ],
                             ],
                         ],
-                    ],
-                    'description' => [
-                        'type' => 'string',
-                        'contentMediaType' => 'text/html',
-                    ],
-                    'title' => [
-                        'type' => 'string',
-                        'contentMediaType' => 'text/html',
+                        'description' => [
+                            'type' => 'string',
+                            'contentMediaType' => 'text/html',
+                        ],
+                        'title' => [
+                            'type' => 'string',
+                            'contentMediaType' => 'text/html',
+                        ],
                     ],
                 ],
                 [
@@ -500,37 +510,17 @@ class SchemaHelperTest extends TestCase
     /**
      * Test `translatableFields` method
      *
-     * @param array $properties The properties
+     * @param array $schema The object schema
      * @param array $expected Expected result
      * @return void
      * @dataProvider translatableFieldsProvider()
      * @covers ::translatableFields()
      * @covers ::translatableType()
      */
-    public function testTranslatableFields(array $properties, array $expected): void
+    public function testTranslatableFields(array $schema, array $expected): void
     {
-        $actual = $this->Schema->translatableFields($properties);
+        $actual = $this->Schema->translatableFields($schema);
         static::assertSame($expected, $actual);
-    }
-
-    /**
-     * Test `translatableFields` method with `Properties` configuration
-     *
-     * @covers ::translatableFields()
-     */
-    public function testTranslatableFieldsConfiguration(): void
-    {
-        $properties = [
-            'field1' => [
-                'type' => 'object',
-            ],
-        ];
-        $actual = $this->Schema->translatableFields($properties);
-        static::assertEmpty($actual);
-
-        Configure::write('Properties.documents.translatable', ['field1']);
-        $actual = $this->Schema->translatableFields($properties, 'documents');
-        static::assertEquals(['field1'], $actual);
     }
 
     /**

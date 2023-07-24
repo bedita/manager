@@ -222,29 +222,27 @@ class SchemaHelper extends Helper
     }
 
     /**
-     * Provides list of translatable fields per schema properties
+     * Provides list of translatable fields.
+     * If set Properties.<objectType>.translatable, it will be added to translatable fields.
      *
-     * @param array $properties The array of schema properties
-     * @param string $objectType The object type
+     * @param array $schema The object type schema
      * @return array
      */
-    public function translatableFields(array $properties, ?string $objectType = null): array
+    public function translatableFields(array $schema): array
     {
-        if (empty($properties)) {
-            return [];
+        if (isset($schema['translatable'])) {
+            $priorityFields = array_intersect(static::DEFAULT_TRANSLATABLE, (array)$schema['translatable']);
+            $otherFields = array_diff((array)$schema['translatable'], $priorityFields);
+        } else {
+            $properties = (array)Hash::get($schema, 'properties');
+            $priorityFields = array_intersect(static::DEFAULT_TRANSLATABLE, array_keys($properties));
+            $otherFields = array_keys(array_filter(
+                array_diff_key($properties, array_flip($priorityFields)),
+                [$this, 'translatableType']
+            ));
         }
 
-        $fields = array_intersect(static::DEFAULT_TRANSLATABLE, array_keys($properties));
-        $properties = array_diff_key($properties, array_flip($fields));
-        $translatable = (array)Configure::read(sprintf('Properties.%s.translatable', (string)$objectType));
-
-        foreach ($properties as $name => $property) {
-            if (in_array($name, $translatable) || $this->translatableType($property)) {
-                $fields[] = $name;
-            }
-        }
-
-        return array_values($fields);
+        return array_values(array_merge($priorityFields, $otherFields));
     }
 
     /**
