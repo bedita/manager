@@ -71,10 +71,7 @@ class ObjectTypesController extends ModelBaseController
         $name = Hash::get($resource, 'attributes.name', 'undefined');
         $filter = ['object_type' => $name];
         try {
-            $response = $this->apiClient->get(
-                '/model/properties',
-                compact('filter') + ['page_size' => 100]
-            );
+            $data = $this->propertiesData($filter);
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -82,7 +79,7 @@ class ObjectTypesController extends ModelBaseController
             return $this->redirect(['_name' => 'model:list:' . $this->resourceType]);
         }
 
-        $objectTypeProperties = $this->prepareProperties((array)$response['data'], $name);
+        $objectTypeProperties = $this->prepareProperties($data, $name);
         $this->set(compact('objectTypeProperties'));
         $schema = $this->Schema->getSchema();
         $this->set('schema', $this->updateSchema($schema, $resource));
@@ -92,7 +89,37 @@ class ObjectTypesController extends ModelBaseController
         // setup `currentAttributes`
         $this->Modules->setupAttributes($resource);
 
+        // get object schema
+        $this->Schema->setConfig(['internalSchema' => false]);
+        $this->set('objectTypeSchema', $this->Schema->getSchema($name));
+        $this->Schema->setConfig(['internalSchema' => true]);
+
         return null;
+    }
+
+    /**
+     * Read all properties via API, performing multiple calls if necessary.
+     *
+     * @param array $filter Properties filter
+     * @return array
+     */
+    protected function propertiesData(array $filter): array
+    {
+        $data = [];
+        $done = false;
+        $page = 1;
+        while (!$done) {
+            $response = $this->apiClient->get(
+                '/model/properties',
+                compact('filter', 'page') + ['page_size' => 100]
+            );
+            $data = array_merge($data, (array)Hash::get($response, 'data'));
+            $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
+            $done = $pageCount === $page;
+            $page++;
+        }
+
+        return $data;
     }
 
     /**

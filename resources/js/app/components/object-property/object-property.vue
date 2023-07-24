@@ -1,26 +1,53 @@
 <template>
-    <div :class="boxClass()" v-show="display">
+    <div :class="boxClass" v-show="display">
         <div class="columns">
             <div class="column">
-                <span :class="tagClass()">{{ prop.attributes.name }}</span>
-                <p>{{ msgLabel }}: {{ prop.attributes.label || '-' }}</p>
-                <p>{{ msgType }}: {{ prop.attributes.property_type_name }}</p>
-                <p>{{ msgHidden }}:
-                    <span v-if="hidden">{{ msgYes }}</span>
-                    <span v-if="!hidden">{{ msgNo }}</span>
-                </p>
-                <p v-if="type === 'inherited'">
-                    {{ msgInheritedFrom }}:
-                    {{ prop.attributes.object_type_name }}
-                </p>
-                <p v-if="prop.attributes.description">&nbsp;</p>
-                <p v-if="prop.attributes.description">{{ prop.attributes.description }}</p>
+                <span :class="tagClass">
+                    {{ prop.attributes.name }}
+                    <i v-if="prop.attributes.description" v-title="prop.attributes.description" class="ml-05">
+                        <Icon icon="carbon:information"></Icon>
+                    </i>
+                </span>
+                <table>
+                    <tr>
+                        <td class="column-header">{{ msgLabel }}</td>
+                        <td>{{ prop.attributes.label }}</td>
+                    </tr>
+                    <tr>
+                        <td class="column-header">{{ msgType }}</td>
+                        <td class="property-val">{{ prop.attributes.property_type_name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="column-header">{{ msgReadonly }}</td>
+                        <td class="property-val">{{ readonly }}</td>
+                    </tr>
+                    <tr>
+                        <td class="column-header">{{ msgHidden }}</td>
+                        <td>
+                            <select v-model="hidden" @change="updateHidden()">
+                                <option :value="true">{{ msgYes }}</option>
+                                <option :value="false">{{ msgNo }}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="column-header">{{ msgTranslatable }}</td>
+                        <td>
+                            <select v-model="translatable" @change="updateTranslationRules()">
+                                <option value="true">{{ msgYes }}</option>
+                                <option value="false">{{ msgNo }}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr v-if="type === 'inherited'">
+                        <td v-if="type === 'inherited'" class="column-header">{{ msgInheritedFrom }}</td>
+                        <td v-if="type === 'inherited'">{{ prop.attributes.object_type_name }}</td>
+                    </tr>
+                </table>
             </div>
             <div v-if="!nobuttonsfor.includes(prop.attributes.name)" class="column is-narrow">
                 <div class="buttons-container">
                     <button v-if="type === 'custom'" @click.prevent="remove()" class="icon-cancel button button-outlined button-text-white is-expanded">{{ msgDelete }}</button>
-                    <button v-if="hidden" @click.prevent="toggle(false)" class="icon-eye button button-outlined button-text-white is-expanded">{{ msgShow }}</button>
-                    <button v-if="!hidden" @click.prevent="toggle(true)" class="icon-eye-off button button-outlined button-text-white is-expanded">{{ msgHide }}</button>
                 </div>
             </div>
         </div>
@@ -37,20 +64,25 @@ export default {
         type: '',
         isHidden: false,
         isNew: false,
+        isTranslatable: false,
     },
 
     data() {
         return {
             confirm: null,
             hidden: false,
+            translatable: false,
             display: true,
+            readonly: false,
             msgDelete: t`Delete`,
             msgHidden: t`Hidden`,
             msgHide: t`Hide`,
             msgInheritedFrom: t`Inherited from`,
             msgLabel: t`Label`,
             msgNo: t`No`,
+            msgReadonly: t`Readonly`,
             msgShow: t`Show`,
+            msgTranslatable: t`Translatable`,
             msgType: t`Type`,
             msgYes: t`Yes`,
         };
@@ -59,22 +91,23 @@ export default {
     mounted() {
         this.$nextTick(() => {
             this.hidden = this.isHidden || false;
+            this.readonly = this.prop.attributes.read_only || false;
+            this.translatable = this.isTranslatable || false;
         });
     },
-
-    methods: {
+    computed: {
         boxClass() {
-            if (this.hidden) {
-                return 'box pb-05 has-background-gray-600 has-text-white';
+            if (this.hidden === true) {
+                return 'container box pb-05 has-background-gray-600 has-text-white';
             }
             if (this.type === 'custom') {
-                return 'box pb-05 has-background-info has-text-white';
+                return 'container box pb-05 has-background-info has-text-white';
             }
             if (this.type === 'inherited') {
-                return 'box pb-05 has-background-gray-800 has-text-white';
+                return 'container box pb-05 has-background-gray-800 has-text-white';
             }
 
-            return 'box pb-05 has-background-black has-text-white';
+            return 'container box pb-05 has-background-black has-text-white';
         },
         tagClass() {
             if (this.type === 'custom') {
@@ -86,11 +119,13 @@ export default {
 
             return 'tag';
         },
-        toggle(val) {
-            this.hidden = val;
+    },
+
+    methods: {
+        updateHidden() {
             let hiddenProperties = JSON.parse(document.getElementById('hidden').value || '[]') || [];
             const index = hiddenProperties.indexOf(this.prop.attributes.name);
-            if (index >= 0 && !this.hidden) {
+            if (index >= 0 && this.hidden === false) {
                 // remove property from hidden properties
                 hiddenProperties.splice(index, 1);
                 const newVal = JSON.stringify(hiddenProperties);
@@ -98,13 +133,18 @@ export default {
 
                 return;
             }
-            if (index < 0 && this.hidden) {
+            if (index < 0 && this.hidden === true) {
                 // add property to hidden properties
                 hiddenProperties.push(this.prop.attributes.name);
                 hiddenProperties.sort();
                 const newVal = JSON.stringify(hiddenProperties);
                 document.getElementById('hidden').value = newVal;
             }
+        },
+        updateTranslationRules() {
+            let translationRules = JSON.parse(document.getElementById('translationRules').value || '{}') || {};
+            translationRules[this.prop.attributes.name] = this.translatable === 'true';
+            document.getElementById('translationRules').value = JSON.stringify(translationRules);
         },
         remove() {
             this.confirm = BEDITA.confirm(
@@ -147,3 +187,37 @@ export default {
     },
 }
 </script>
+<style>
+div.container {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border-radius: 25px;
+    border: 2px solid cyan;
+}
+div.column > p {
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    margin: 0.5rem 0;
+    border-bottom: dashed 1px gray;
+}
+div.column > div > span {
+    padding: 4px 8px;
+    border-left: 1px dotted black;
+    border-bottom: 1px dotted black;
+    white-space: normal;
+    vertical-align: middle;
+}
+div.column > div > span > a:hover {
+    text-decoration: underline;
+}
+div.column > div.rows > div {
+    border-bottom: solid 1px gray;
+    padding: 0.5rem 0;
+}
+td.column-header {
+    color: yellow;
+    text-align: left;
+}
+td.property-val {
+    font-family: monospace;
+}
+</style>

@@ -8,6 +8,7 @@
             :type="type"
             :is-hidden="hidden.includes(prop.attributes?.name)"
             :is-new="prop.id == 0"
+            :is-translatable="translatable.includes(prop.attributes?.name)"
             :nobuttonsfor="immutable">
         </object-property>
 
@@ -25,6 +26,8 @@ export default {
         initProperties: [],
         type: '',
         hidden: [],
+        translatable: [],
+        translationRules: [],
     },
 
     components: {
