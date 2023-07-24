@@ -13,6 +13,7 @@
 namespace App\View\Helper;
 
 use App\Utility\Translate;
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 
@@ -24,6 +25,7 @@ use Cake\View\Helper;
  * @property \App\View\Helper\LinkHelper $Link
  * @property \App\View\Helper\PermsHelper $Perms
  * @property \App\View\Helper\SystemHelper $System
+ * @property \Cake\View\Helper\UrlHelper $Url
  */
 class LayoutHelper extends Helper
 {
@@ -32,7 +34,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Editors', 'Html', 'Link', 'Perms', 'System'];
+    public $helpers = ['Editors', 'Html', 'Link', 'Perms', 'System', 'Url'];
 
     /**
      * Is Dashboard
@@ -111,6 +113,71 @@ class LayoutHelper extends Helper
     }
 
     /**
+     * Return dashboard module link
+     *
+     * @param string $name The module name
+     * @param array $module The module data
+     * @return string
+     */
+    public function dashboardModuleLink(string $name, array $module): string
+    {
+        if (in_array($name, ['trash', 'users'])) {
+            return '';
+        }
+        $label = $name === 'objects' ? __('All objects') : Hash::get($module, 'label', $name);
+        $route = (array)Hash::get($module, 'route');
+        $param = empty($route) ? ['_name' => 'modules:list', 'object_type' => $name, 'plugin' => null] : $route;
+
+        return sprintf(
+            '<a href="%s" class="%s"><span>%s</span>%s</a>',
+            $this->Url->build($param),
+            sprintf('dashboard-item has-background-module-%s %s', $name, Hash::get($module, 'class', '')),
+            $this->tr($label),
+            $this->moduleIcon($name, $module)
+        );
+    }
+
+    /**
+     * Return module icon.
+     *
+     * @param string $name The module name
+     * @param array $module The module data
+     * @return string
+     */
+    public function moduleIcon(string $name, array $module): string
+    {
+        if (Hash::get($module, 'hints.multiple_types') && !Hash::get($module, 'class')) {
+            return '<Icon icon="carbon:grid"></Icon>';
+        }
+        $icon = (string)Configure::read(sprintf('Modules.%s.icon', $name));
+        if (!empty($icon)) {
+            return sprintf('<Icon icon="%s"></Icon>', $icon);
+        }
+        $map = [
+            'audio' => 'carbon:document-audio',
+            'categories' => 'carbon:collapse-categories',
+            'documents' => 'carbon:document',
+            'events' => 'carbon:event',
+            'files' => 'carbon:document-blank',
+            'folders' => 'carbon:tree-view',
+            'images' => 'carbon:image',
+            'links' => 'carbon:link',
+            'locations' => 'carbon:location',
+            'news' => 'carbon:calendar',
+            'profiles' => 'carbon:person',
+            'publications' => 'carbon:wikis',
+            'tags' => 'carbon:tag',
+            'users' => 'carbon:user',
+            'videos' => 'carbon:video',
+        ];
+        if (!in_array($name, array_keys($map))) {
+            return '';
+        }
+
+        return sprintf('<Icon icon="%s"></Icon>', $map[$name]);
+    }
+
+    /**
      * Return module css class(es).
      * If object is locked by parents, return base class plus 'locked' class.
      * If object is locked by concurrent editors, return 'concurrent-editors' class plus publish status class.
@@ -149,13 +216,12 @@ class LayoutHelper extends Helper
             $name = $currentModule['name'];
             $label = Hash::get($currentModule, 'label', $name);
 
-            return $this->Html->link(
+            return sprintf(
+                '<a href="%s" class="%s"><span class="mr-05">%s</span>%s</a>',
+                $this->Url->build(['_name' => 'modules:list', 'object_type' => $name]),
+                sprintf('is-flex align-center justify-center space-between wrap has-background-module-%s', $name),
                 $this->tr($label),
-                ['_name' => 'modules:list', 'object_type' => $name],
-                [
-                    'id' => 'module-icon',
-                    'class' => sprintf('has-background-module-%s', $name),
-                ]
+                $this->moduleIcon($name, $currentModule)
             );
         }
 
