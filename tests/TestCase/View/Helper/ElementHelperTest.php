@@ -76,7 +76,7 @@ class ElementHelperTest extends TestCase
     }
 
     /**
-     * Test `element` method
+     * Test `custom` method
      *
      * @param string $expected The expected element
      * @param string $item The item
@@ -84,7 +84,7 @@ class ElementHelperTest extends TestCase
      * @param array $conf Configuration to use
      * @return void
      * @dataProvider customProvider()
-     * @covers ::element()
+     * @covers ::custom()
      */
     public function testCustom(string $expected, string $item, string $type = 'relation', array $conf = []): void
     {

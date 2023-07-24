@@ -241,7 +241,7 @@ class LayoutHelperTest extends TestCase
                 ],
             ],
             'objects' => [
-                '<a href="/objects" id="module-icon" class="has-background-module-objects">Objects</a>',
+                '<a href="/objects" class="is-flex align-center justify-center space-between wrap has-background-module-objects"><span class="mr-05">Objects</span></a>',
                 'Module',
                 [
                     'currentModule' => ['name' => 'objects'],
