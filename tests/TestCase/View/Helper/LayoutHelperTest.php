@@ -537,4 +537,115 @@ class LayoutHelperTest extends TestCase
         $actual = $layout->trashLink('dummies');
         static::assertSame($expected, $actual);
     }
+
+    /**
+     * Data provider for `testDashboardModuleLink` test case.
+     *
+     * @return array
+     */
+    public function dashboardModuleLinkProvider(): array
+    {
+        return [
+            'trash' => [
+                'trash',
+                [],
+                '',
+            ],
+            'users' => [
+                'users',
+                [],
+                '',
+            ],
+            'documents' => [
+                'documents',
+                [],
+                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><Icon icon="carbon:document"></Icon></a>',
+            ],
+        ];
+    }
+
+    /**
+     * Test `dashboardModuleLink`.
+     *
+     * @return void
+     * @dataProvider dashboardModuleLinkProvider()
+     * @covers ::dashboardModuleLink()
+     * @covers ::moduleIcon()
+     */
+    public function testDashboardModuleLink(string $name, array $module, string $expected): void
+    {
+        $modules = (array)Configure::read('Modules', []);
+        $modules['test_items'] = ['icon' => 'test:items'];
+        Configure::write('Modules', $modules);
+        $viewVars = [];
+        $request = new ServerRequest();
+        $view = new View($request, null, null, compact('viewVars'));
+        $layout = new LayoutHelper($view);
+        $actual = $layout->dashboardModuleLink($name, $module);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testModuleIcon` test case.
+     *
+     * @return array
+     */
+    public function moduleIconProvider(): array
+    {
+        return [
+            'hints multiple types' => [
+                'animals',
+                [
+                    'hints' => [
+                        'multiple_types' => true,
+                    ],
+                ],
+                '<Icon icon="carbon:grid"></Icon>',
+
+            ],
+            'documents' => [
+                'documents',
+                [],
+                '<Icon icon="carbon:document"></Icon>',
+            ],
+            'from conf' => [
+                'test_items',
+                [],
+                '<Icon icon="test:items"></Icon>',
+            ],
+            'from map (core modules)' => [
+                'locations',
+                [],
+                '<Icon icon="carbon:location"></Icon>',
+            ],
+            'other module (non core, non conf)' => [
+                'cats',
+                [],
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * Test `moduleIcon`.
+     *
+     * @param string $name The module name
+     * @param array $module The module configuration
+     * @param string $expected The expected result
+     * @return void
+     * @dataProvider moduleIconProvider()
+     * @covers ::moduleIcon()
+     */
+    public function testModuleIcon(string $name, array $module, string $expected): void
+    {
+        $modules = (array)Configure::read('Modules', []);
+        $modules['test_items'] = ['icon' => 'test:items'];
+        Configure::write('Modules', $modules);
+        $viewVars = [];
+        $request = new ServerRequest();
+        $view = new View($request, null, null, compact('viewVars'));
+        $layout = new LayoutHelper($view);
+        $actual = $layout->moduleIcon($name, $module);
+        static::assertEquals($expected, $actual);
+    }
 }
