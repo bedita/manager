@@ -363,7 +363,7 @@ class PermsHelperTest extends TestCase
         $actual = $this->Perms->isLockedByParents('123');
         static::assertFalse($actual);
 
-        // user is not admin, has one parent with perms => false
+        // user is not admin, has one parent with perms roles different than user's roles => true
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://example.com'])
             ->getMock();
@@ -402,7 +402,7 @@ class PermsHelperTest extends TestCase
             ]);
         ApiClientProvider::setApiClient($apiClient);
         $actual = $this->Perms->isLockedByParents('123');
-        static::assertFalse($actual);
+        static::assertTrue($actual);
 
         // user is not admin, has parents, none with perms => true
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -419,6 +419,45 @@ class PermsHelperTest extends TestCase
                             'perms' => [
                                 'roles' => ['a', 'b', 'c'],
                             ],
+                        ],
+                    ],
+                    [
+                        'id' => '123452',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['d', 'e', 'f'],
+                            ],
+                        ],
+                    ],
+                    [
+                        'id' => '123452',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['g', 'h', 'i'],
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        $actual = $this->Perms->isLockedByParents('123');
+        static::assertTrue($actual);
+
+        // user is not admin, has parents, one with no perms => true
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->withAnyParameters()
+            ->willReturn([
+                'included' => [
+                    [
+                        'id' => '123451',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [],
                         ],
                     ],
                     [
