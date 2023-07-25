@@ -218,8 +218,8 @@ class PermsHelper extends Helper
     /**
      * Return true if object is locked by parents.
      * When user is admin, return false.
-     * When user is not admin, return false if at least one parent is not locked for user.
-     * Return true if all parents are locked for user.
+     * When user is not admin, return true if at least one parent is locked for user.
+     * Return false otherwise
      *
      * @param string $id The object id
      * @return bool
@@ -238,11 +238,14 @@ class PermsHelper extends Helper
         $roles = $this->userRoles();
         foreach ($included as $data) {
             $metaPermsRoles = (array)Hash::get($data, 'meta.perms.roles');
-            if (empty($metaPermsRoles) || count(array_intersect($roles, $metaPermsRoles)) > 0) {
-                return false;
+            if (empty($metaPermsRoles)) {
+                continue;
+            }
+            if (count(array_intersect($roles, $metaPermsRoles)) === 0) {
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }
