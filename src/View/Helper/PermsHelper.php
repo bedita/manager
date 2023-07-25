@@ -237,7 +237,8 @@ class PermsHelper extends Helper
         }
         $roles = $this->userRoles();
         foreach ($included as $data) {
-            if (count(array_intersect($roles, (array)Hash::get($data, 'meta.perms.roles'))) > 0) {
+            $metaPermsRoles = (array)Hash::get($data, 'meta.perms.roles');
+            if (empty($metaPermsRoles) || count(array_intersect($roles, $metaPermsRoles)) > 0) {
                 return false;
             }
         }

@@ -445,6 +445,45 @@ class PermsHelperTest extends TestCase
         $actual = $this->Perms->isLockedByParents('123');
         static::assertTrue($actual);
 
+        // user is not admin, has parents, one with no perms => false
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->withAnyParameters()
+            ->willReturn([
+                'included' => [
+                    [
+                        'id' => '123451',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [],
+                        ],
+                    ],
+                    [
+                        'id' => '123452',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['d', 'e', 'f'],
+                            ],
+                        ],
+                    ],
+                    [
+                        'id' => '123452',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['g', 'h', 'i'],
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        $actual = $this->Perms->isLockedByParents('123');
+        static::assertFalse($actual);
+
         ApiClientProvider::setApiClient($safeApiClient);
     }
 }
