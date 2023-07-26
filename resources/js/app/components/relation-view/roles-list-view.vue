@@ -1,18 +1,11 @@
 <template>
     <div class="roles-list-view">
-        <div v-if="Object.keys(this.groups).length === 0">
-            <div v-for="role in objects">
-                <input type="checkbox" :value="role" :disabled="userRolePriority > role.meta.priority" v-model="checkedRelations"/>
-                <span class="mx-05">{{ role.attributes.name }}</span>
-            </div>
-        </div>
-
-        <div v-else>
+        <div>
             <div v-for="groupName in Object.keys(objectsByGroups)">
                 <h4 class="is-small has-font-weight-bold has-text-transform-upper">{{ groupName }}</h4>
                 <div v-for="role in objectsByGroups[groupName]">
                     <input type="checkbox" :value="role" :disabled="userRolePriority > role.meta.priority" v-model="checkedRelations"/>
-                    <span class="mx-05">{{ role.attributes.name }}</span>
+                    <span class="mx-05">{{ getRoleLabel(role.attributes.name) }}</span>
                 </div>
             </div>
         </div>
@@ -61,9 +54,18 @@ export default {
     async mounted() {
         await this.loadObjects();
         this.$nextTick(() => {
-            for (let groupName of Object.keys(this.groups)) {
+            let groups = this.groups;
+            if (Object.keys(groups).length === 0) {
+                for (let role of this.objects) {
+                    if (!groups[this.getGroup(role.attributes.name)]) {
+                        groups[this.getGroup(role.attributes.name)] = new Array();
+                    }
+                    groups[this.getGroup(role.attributes.name)].push(role.attributes.name);
+                }
+            }
+            for (let groupName of Object.keys(groups)) {
                 this.objectsByGroups[groupName] = new Array();
-                for (let roleName of this.groups[groupName]) {
+                for (let roleName of groups[groupName]) {
                     const role = this.objects.filter((v) => v.attributes.name === roleName)[0];
                     this.objectsByGroups[groupName].push(role);
                 }
@@ -91,6 +93,25 @@ export default {
                 // emit event to pass data to parent
                 this.$emit('remove-relations', relationsToRemove);
             }
+        },
+    },
+
+    methods: {
+        getGroup(roleName) {
+            const index = roleName.indexOf('__');
+            if (index < 0) {
+                return 'BEdita Manager';
+            }
+
+            return roleName.substr(0, index);
+        },
+        getRoleLabel(roleName) {
+            const index = roleName.indexOf('__');
+            if (index < 0) {
+                return roleName;
+            }
+
+            return roleName.substr(index + 2);
         },
     },
 }
