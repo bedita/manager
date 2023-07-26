@@ -5,7 +5,7 @@
                 <h4 class="is-small has-font-weight-bold has-text-transform-upper">{{ groupName }}</h4>
                 <div v-for="role in objectsByGroups[groupName]">
                     <input type="checkbox" :value="role" :disabled="userRolePriority > role.meta.priority" v-model="checkedRelations"/>
-                    <span class="mx-05">{{ getRoleLabel(role.attributes.name) }}</span>
+                    <span class="mx-05">{{ getRoleLabel(role.attributes.name, role.attributes.description) }}</span>
                 </div>
             </div>
         </div>
@@ -103,15 +103,18 @@ export default {
                 return 'BEdita Manager';
             }
 
-            return roleName.substr(0, index);
+            return this.$helpers.humanize(roleName.substr(0, index));
         },
-        getRoleLabel(roleName) {
+        getRoleLabel(roleName, roleDescription) {
             const index = roleName.indexOf('__');
             if (index < 0) {
                 return roleName;
             }
+            if (roleDescription) {
+                return roleDescription;
+            }
 
-            return roleName.substr(index + 2);
+            return this.$helpers.humanize(roleName.substr(index + 2));
         },
     },
 }

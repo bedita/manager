@@ -1,5 +1,6 @@
 import { t } from 'ttag';
 import { warning } from 'app/components/dialog/dialog';
+import { humanizeString } from 'app/helpers/text-helper.js';
 
 export default {
     install (Vue) {
@@ -253,6 +254,10 @@ export default {
                 const now = new Date();
 
                 return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+            },
+
+            humanize(str) {
+                return humanizeString(str);
             },
         }
     }
