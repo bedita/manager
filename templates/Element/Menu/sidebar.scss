@@ -85,6 +85,10 @@
     }
 }
 
+.app-module-box-concurrent-editors a.module-item > svg {
+    display:none;
+}
+
 ul.concurrent-editors {
     margin:0; padding:0;
     li {
@@ -167,6 +171,13 @@ ul.concurrent-editors {
             top: 40%;
             height: 24px;
             width: 24px;
+        }
+
+        .app-module-box:is(.locked) > a.module-item > svg,
+        .app-module-box:is(.expired) > a.module-item > svg,
+        .app-module-box:is(.future) > a.module-item > svg,
+        .app-module-box:is(.draft) > a.module-item > svg {
+            display: none;
         }
 
         .listobjnav  {
