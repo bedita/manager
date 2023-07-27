@@ -219,7 +219,7 @@ class LayoutHelper extends Helper
             return sprintf(
                 '<a href="%s" class="%s"><span class="mr-05">%s</span>%s</a>',
                 $this->Url->build(['_name' => 'modules:list', 'object_type' => $name]),
-                sprintf('is-flex align-center justify-center space-between wrap has-background-module-%s', $name),
+                sprintf('module-item has-background-module-%s', $name),
                 $this->tr($label),
                 $this->moduleIcon($name, $currentModule)
             );
