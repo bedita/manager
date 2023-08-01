@@ -191,6 +191,7 @@ class LayoutHelper extends Helper
             'EndpointPermissions' => 'has-background-black',
             'Tags' => 'has-background-module-tags',
             'ObjectsHistory' => 'has-background-black',
+            'Sysinfo' => 'has-background-black',
             'UserAccesses' => 'has-background-black',
         ];
 
