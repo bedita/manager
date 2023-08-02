@@ -63,8 +63,8 @@ class SystemInfoControllerTest extends TestCase
     {
         $this->SystemInfoController->index();
         $keys = [
-            'sysinfo',
-            'apiinfo',
+            'system_info',
+            'api_info',
         ];
         $viewVars = (array)$this->SystemInfoController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
