@@ -73,10 +73,10 @@ class SysinfoControllerTest extends TestCase
     }
 
     /**
-     * Test `getApiInfo` method
+     * Test `getSysInfo` method
      *
      * @return void
-     * @covers ::getApiInfo()
+     * @covers ::getSysInfo()
      */
     public function testGetSysInfo(): void
     {

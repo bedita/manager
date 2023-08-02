@@ -56,6 +56,7 @@ class SysinfoController extends AdministrationBaseController
             'Upload max size' => sprintf('%dM', intVal(substr(ini_get('upload_max_filesize'), 0, -1))),
         ];
     }
+
     /**
      * Get api info from API server.
      *
