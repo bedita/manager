@@ -65,8 +65,8 @@ class SysinfoController extends AdministrationBaseController
     public function getApiInfo(): array
     {
         $info = [
-            'url' => Configure::read('API.apiBaseUrl'),
-            'version' => Hash::get((array)$this->viewBuilder()->getVar('project'), 'version'),
+            'Url' => Configure::read('API.apiBaseUrl'),
+            'Version' => Hash::get((array)$this->viewBuilder()->getVar('project'), 'version'),
         ];
         try {
             $info = (array)Hash::get(

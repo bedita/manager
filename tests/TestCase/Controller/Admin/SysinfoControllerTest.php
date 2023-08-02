@@ -109,8 +109,8 @@ class SysinfoControllerTest extends TestCase
     public function testGetApiInfo(): void
     {
         $expectedKeys = [
-            'url',
-            'version',
+            'Url',
+            'Version',
         ];
         $actual = $this->SysinfoController->getApiInfo();
         foreach ($expectedKeys as $expectedKey) {
