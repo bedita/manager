@@ -71,4 +71,50 @@ class SysinfoControllerTest extends TestCase
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
     }
+
+    /**
+     * Test `getApiInfo` method
+     *
+     * @return void
+     * @covers ::getApiInfo()
+     */
+    public function testGetSysInfo(): void
+    {
+        $expectedKeys = [
+            'Version',
+            'CakePHP',
+            'PHP',
+            'Twig',
+            'Vuejs',
+            'Operating System',
+            'PHP Server API',
+            'Extensions',
+            'Extensions info',
+            'Memory limit',
+            'Post max size',
+            'Upload max size',
+        ];
+        $actual = $this->SysinfoController->getSysInfo();
+        foreach ($expectedKeys as $expectedKey) {
+            static::assertArrayHasKey($expectedKey, $actual);
+        }
+    }
+
+    /**
+     * Test `getApiInfo` method
+     *
+     * @return void
+     * @covers ::getApiInfo()
+     */
+    public function testGetApiInfo(): void
+    {
+        $expectedKeys = [
+            'url',
+            'version',
+        ];
+        $actual = $this->SysinfoController->getApiInfo();
+        foreach ($expectedKeys as $expectedKey) {
+            static::assertArrayHasKey($expectedKey, $actual);
+        }
+    }
 }

@@ -12,6 +12,7 @@
  */
 namespace App\Controller\Admin;
 
+use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -27,7 +28,20 @@ class SysinfoController extends AdministrationBaseController
      */
     public function index(): ?Response
     {
-        $this->set('sysinfo', [
+        $this->set('sysinfo', $this->getSysInfo());
+        $this->set('apiinfo', $this->getApiInfo());
+
+        return null;
+    }
+
+    /**
+     * Get system info.
+     *
+     * @return array
+     */
+    public function getSysInfo(): array
+    {
+        return [
             'Version' => Configure::read('Manager.version'),
             'CakePHP' => Configure::version(),
             'PHP' => phpversion(),
@@ -40,12 +54,27 @@ class SysinfoController extends AdministrationBaseController
             'Memory limit' => ini_get('memory_limit'),
             'Post max size' => sprintf('%dM', intVal(substr(ini_get('post_max_size'), 0, -1))),
             'Upload max size' => sprintf('%dM', intVal(substr(ini_get('upload_max_filesize'), 0, -1))),
-        ]);
-        $this->set('apiinfo', [
-            'version' => Hash::get((array)$this->viewBuilder()->getVar('project'), 'version'),
+        ];
+    }
+    /**
+     * Get api info from API server.
+     *
+     * @return array
+     */
+    public function getApiInfo(): array
+    {
+        $info = [
             'url' => Configure::read('API.apiBaseUrl'),
-        ]);
+            'version' => Hash::get((array)$this->viewBuilder()->getVar('project'), 'version'),
+        ];
+        try {
+            $response = $this->apiClient->get('sysinfo');
 
-        return null;
+            $info = (array)Hash::get($response, 'meta.info');
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), 'error');
+        }
+
+        return $info;
     }
 }
