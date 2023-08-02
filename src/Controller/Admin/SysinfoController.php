@@ -69,9 +69,10 @@ class SysinfoController extends AdministrationBaseController
             'version' => Hash::get((array)$this->viewBuilder()->getVar('project'), 'version'),
         ];
         try {
-            $response = $this->apiClient->get('sysinfo');
-
-            $info = (array)Hash::get($response, 'meta.info');
+            $info = (array)Hash::get(
+                $this->apiClient->get('sysinfo'),
+                'meta.info'
+            );
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
         }
