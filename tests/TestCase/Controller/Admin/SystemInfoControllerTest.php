@@ -7,13 +7,13 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
- * {@see \App\Controller\Admin\SysinfoController} Test Case
+ * {@see \App\Controller\Admin\SystemInfoController} Test Case
  *
- * @coversDefaultClass \App\Controller\Admin\SysinfoController
+ * @coversDefaultClass \App\Controller\Admin\SystemInfoController
  */
-class SysinfoControllerTest extends TestCase
+class SystemInfoControllerTest extends TestCase
 {
-    public $SysinfoController;
+    public $SystemInfoController;
 
     /**
      * Test request config
@@ -45,7 +45,7 @@ class SysinfoControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->SysinfoController = new SysinfoController($request);
+        $this->SystemInfoController = new SystemInfoController($request);
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
@@ -61,24 +61,24 @@ class SysinfoControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        $this->SysinfoController->index();
+        $this->SystemInfoController->index();
         $keys = [
             'sysinfo',
             'apiinfo',
         ];
-        $viewVars = (array)$this->SysinfoController->viewBuilder()->getVars();
+        $viewVars = (array)$this->SystemInfoController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
     }
 
     /**
-     * Test `getSysInfo` method
+     * Test `getSystemInfo` method
      *
      * @return void
-     * @covers ::getSysInfo()
+     * @covers ::getSystemInfo()
      */
-    public function testGetSysInfo(): void
+    public function testGetSystemInfo(): void
     {
         $expectedKeys = [
             'Version',
@@ -94,7 +94,7 @@ class SysinfoControllerTest extends TestCase
             'Post max size',
             'Upload max size',
         ];
-        $actual = $this->SysinfoController->getSysInfo();
+        $actual = $this->SystemInfoController->getSystemInfo();
         foreach ($expectedKeys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $actual);
         }
@@ -112,7 +112,7 @@ class SysinfoControllerTest extends TestCase
             'Url',
             'Version',
         ];
-        $actual = $this->SysinfoController->getApiInfo();
+        $actual = $this->SystemInfoController->getApiInfo();
         foreach ($expectedKeys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $actual);
         }

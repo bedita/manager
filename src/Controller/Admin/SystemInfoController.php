@@ -21,15 +21,15 @@ use Twig\Environment;
 /**
  * System info Controller
  */
-class SysinfoController extends AdministrationBaseController
+class SystemInfoController extends AdministrationBaseController
 {
     /**
      * @inheritDoc
      */
     public function index(): ?Response
     {
-        $this->set('sysinfo', $this->getSysInfo());
-        $this->set('apiinfo', $this->getApiInfo());
+        $this->set('system_info', $this->getSystemInfo());
+        $this->set('api_info', $this->getApiInfo());
 
         return null;
     }
@@ -39,7 +39,7 @@ class SysinfoController extends AdministrationBaseController
      *
      * @return array
      */
-    public function getSysInfo(): array
+    public function getSystemInfo(): array
     {
         return [
             'Version' => Configure::read('Manager.version'),

@@ -110,7 +110,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
             'endpoint_permissions',
             'objects_history',
             'user_accesses',
-            'sysinfo',
+            'system_info',
         ];
 
         foreach ($adminRoutes as $controller) {
