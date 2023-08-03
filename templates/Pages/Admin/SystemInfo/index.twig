@@ -1,0 +1,19 @@
+{{ element('Admin/sidebar') }}
+
+{% do _view.assign('title', __('Administration') ~ ' ' ~ __('System information')) %}
+{% do _view.assign('bodyViewClass',  'view-module view-admin') %}
+
+<h2>BEdita Manager</h2>
+
+<system-info data="{{system_info|json_encode}}">
+</system-info>
+
+<h2 class="mt-15">API</h2>
+
+<p class="mb-1">
+    <Icon icon="carbon:information"></Icon>
+    {{ __('API could be distributed in multiple nodes. The following data refers to a single node') }}
+</p>
+
+<system-info data="{{api_info|json_encode}}">
+</system-info>
