@@ -43,7 +43,7 @@
                                     }) %}
                                 {% endfor %}
                                 <a class="button has-background-module-translations" @click.prevent="translateAll({{ data|json_encode }}, $event)">
-                                    <Icon icon="carbon:translate"></Icon>
+                                    <app-icon icon="carbon:translate"></app-icon>
                                     <span class="ml-05 has-text-size-smallest">{{ __('Auto-translate all fields') }}</span>
                                 </a>
                             {% endif %}
@@ -59,7 +59,7 @@
                             }) %}
                             {{ Form.control('lang', options)|raw }}
                             <a class="button has-background-module-{{ object.type }}" href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id }) }}">
-                                <Icon icon="carbon:launch"></Icon>
+                                <app-icon icon="carbon:launch"></app-icon>
                                 <span class="ml-05">{{ __('Edit') }}</span>
                             </a>
                         </div>
@@ -88,7 +88,7 @@
                                 'to': translation.attributes.lang
                             } %}
                             <button class="mt-05" :disabled="!isTranslatable({{ object.attributes[key]|json_encode }})" @click.prevent="translate({{ translationParams|json_encode }}, $event)">
-                                <Icon icon="carbon:translate"></Icon>
+                                <app-icon icon="carbon:translate"></app-icon>
                                 <span class="ml-05 has-text-size-smallest">{{ __('Auto-translate') }} {{ key }}</span>
                             </button>
                         {% endif %}
@@ -123,7 +123,7 @@
 
             {# Append "Save" to sidebar #}
             {% do _view.append('app-module-buttons',
-                '<button form="form-translate" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" onclick="this.classList.add(\'is-loading-spinner\')"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __('Save') ~ '</span></button>'
+                '<button form="form-translate" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" onclick="this.classList.add(\'is-loading-spinner\')"><app-icon icon="carbon:save"></app-icon><span class="ml-05">' ~ __('Save') ~ '</span></button>'
             ) %}
 
         {{ Form.end()|raw }}
@@ -137,7 +137,7 @@
             {# Append "Remove" to sidebar #}
             {% do _view.append(
                 'app-module-buttons',
-                '<button form="form-delete-translation" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:trash-can"></Icon><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
+                '<button form="form-delete-translation" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><app-icon icon="carbon:trash-can"></app-icon><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
             ) %}
         {% endif %}
 

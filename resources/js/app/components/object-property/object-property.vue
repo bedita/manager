@@ -5,7 +5,7 @@
                 <span :class="tagClass">
                     {{ prop.attributes.name }}
                     <i v-if="prop.attributes.description" v-title="prop.attributes.description" class="ml-05">
-                        <Icon icon="carbon:information"></Icon>
+                        <app-icon icon="carbon:information"></app-icon>
                     </i>
                 </span>
                 <table>

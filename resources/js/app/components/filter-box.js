@@ -33,7 +33,7 @@ export default {
     props: {
         configPaginateSizes: {
             type: String,
-            default: "[10]"
+            default: '[10]'
         },
         filterActive: Boolean,
         filterList: {
@@ -227,7 +227,7 @@ export default {
          * @returns {void}
          */
         pageSize() {
-            this.$emit("filter-update-page-size", this.pageSize);
+            this.$emit('filter-update-page-size', this.pageSize);
         },
 
         /**
@@ -351,7 +351,7 @@ export default {
             }
 
             const filter = this.prepareFilters();
-            this.$emit("filter-objects", { ...this.queryFilter, filter });
+            this.$emit('filter-objects', { ...this.queryFilter, filter });
         },
 
         /**
@@ -363,7 +363,7 @@ export default {
             this.selectedStatuses = [];
             this.selectedType = '';
             this.queryFilter = this.getCleanQuery();
-            this.$emit("filter-reset");
+            this.$emit('filter-reset');
         },
 
         /**
@@ -374,7 +374,7 @@ export default {
          * @emits Event#filter-update-current-page
          */
         onChangePage(index) {
-            this.$emit("filter-update-current-page", index);
+            this.$emit('filter-update-current-page', index);
         },
         onChangePageNumber(e) {
             let val = e.target.value;

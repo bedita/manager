@@ -5,17 +5,17 @@ export default {
         <div v-if="visible && val">
             <div><: val :></div>
             <button class="button button-text-white is-width-auto" @click.prevent="reset(0)">
-                <Icon icon="carbon:view-off-filled"></Icon>
+                <app-icon icon="carbon:view-off-filled"></app-icon>
             </button>
             <button v-if="!msg" class="button button-text-white is-width-auto" @click.prevent="copy()">
-                <Icon icon="carbon:copy"></Icon>
+                <app-icon icon="carbon:copy"></app-icon>
             </button>
             <div v-if="msg" v-text="msg"></div>
         </div>
         <div v-if="!visible && val">
             <div>****************</div>
             <button class="button button-text-white is-width-auto" @click.prevent="reset(1)">
-                <Icon icon="carbon:view-filled"></Icon>
+                <app-icon icon="carbon:view-filled"></app-icon>
             </button>
         </div>
         <div v-if="!val">---</div>

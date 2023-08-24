@@ -2,9 +2,9 @@
     <div v-if="hasPermissions && !userRoles.includes('admin')">
         <span class="ml-05 mr-05">{{ msgForbidden }}</span>
         <button class="button button-outlined" @click.prevent="toggleShowForbidden">
-            <Icon icon="carbon:view" v-if="showForbidden"></Icon>
-            <Icon icon="carbon:view-off" v-else></Icon>
-            <Icon icon="carbon:locked" class="ml-05"></Icon>
+            <app-icon icon="carbon:view" v-if="showForbidden"></app-icon>
+            <app-icon icon="carbon:view-off" v-else></app-icon>
+            <app-icon icon="carbon:locked" class="ml-05"></app-icon>
         </button>
     </div>
 </template>

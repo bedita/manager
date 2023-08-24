@@ -241,7 +241,7 @@ class LayoutHelperTest extends TestCase
                 ],
             ],
             'objects' => [
-                '<a href="/objects" id="module-icon" class="has-background-module-objects">Objects</a>',
+                '<a href="/objects" class="module-item has-background-module-objects"><span class="mr-05">Objects</span></a>',
                 'Module',
                 [
                     'currentModule' => ['name' => 'objects'],
@@ -533,8 +533,119 @@ class LayoutHelperTest extends TestCase
             static::assertSame('', $actual);
         }
 
-        $expected = '<a href="/trash?filter%5Btype%5D%5B0%5D=dummies" class="button icon icon-only-icon has-text-module-dummies" title="Dummies in Trashcan"><span class="is-sr-only">Trash</span><Icon icon="carbon:trash-can"></Icon></a>';
+        $expected = '<a href="/trash?filter%5Btype%5D%5B0%5D=dummies" class="button icon icon-only-icon has-text-module-dummies" title="Dummies in Trashcan"><span class="is-sr-only">Trash</span><app-icon icon="carbon:trash-can"></app-icon></a>';
         $actual = $layout->trashLink('dummies');
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testDashboardModuleLink` test case.
+     *
+     * @return array
+     */
+    public function dashboardModuleLinkProvider(): array
+    {
+        return [
+            'trash' => [
+                'trash',
+                [],
+                '',
+            ],
+            'users' => [
+                'users',
+                [],
+                '',
+            ],
+            'documents' => [
+                'documents',
+                [],
+                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><app-icon icon="carbon:document"></app-icon></a>',
+            ],
+        ];
+    }
+
+    /**
+     * Test `dashboardModuleLink`.
+     *
+     * @return void
+     * @dataProvider dashboardModuleLinkProvider()
+     * @covers ::dashboardModuleLink()
+     * @covers ::moduleIcon()
+     */
+    public function testDashboardModuleLink(string $name, array $module, string $expected): void
+    {
+        $modules = (array)Configure::read('Modules', []);
+        $modules['test_items'] = ['icon' => 'test:items'];
+        Configure::write('Modules', $modules);
+        $viewVars = [];
+        $request = new ServerRequest();
+        $view = new View($request, null, null, compact('viewVars'));
+        $layout = new LayoutHelper($view);
+        $actual = $layout->dashboardModuleLink($name, $module);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testModuleIcon` test case.
+     *
+     * @return array
+     */
+    public function moduleIconProvider(): array
+    {
+        return [
+            'hints multiple types' => [
+                'animals',
+                [
+                    'hints' => [
+                        'multiple_types' => true,
+                    ],
+                ],
+                '<app-icon icon="carbon:grid"></app-icon>',
+
+            ],
+            'documents' => [
+                'documents',
+                [],
+                '<app-icon icon="carbon:document"></app-icon>',
+            ],
+            'from conf' => [
+                'test_items',
+                [],
+                '<app-icon icon="test:items"></app-icon>',
+            ],
+            'from map (core modules)' => [
+                'locations',
+                [],
+                '<app-icon icon="carbon:location"></app-icon>',
+            ],
+            'other module (non core, non conf)' => [
+                'cats',
+                [],
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * Test `moduleIcon`.
+     *
+     * @param string $name The module name
+     * @param array $module The module configuration
+     * @param string $expected The expected result
+     * @return void
+     * @dataProvider moduleIconProvider()
+     * @covers ::moduleIcon()
+     */
+    public function testModuleIcon(string $name, array $module, string $expected): void
+    {
+        $modules = (array)Configure::read('Modules', []);
+        $modules['test_items'] = ['icon' => 'test:items'];
+        Configure::write('Modules', $modules);
+        $viewVars = [];
+        $request = new ServerRequest();
+        $view = new View($request, null, null, compact('viewVars'));
+        $layout = new LayoutHelper($view);
+        $actual = $layout->moduleIcon($name, $module);
+        static::assertEquals($expected, $actual);
     }
 }

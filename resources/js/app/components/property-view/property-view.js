@@ -190,11 +190,11 @@ export default {
 
                     // using == because user.id String and creatorById Number
                     if(user.id == creatorId && userInfo!= undefined) {
-                        document.querySelector(`td[name='created_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        document.querySelector('td[name=\'created_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
                     }
 
                     if (user.id == modifierId && userInfo!= undefined) {
-                        document.querySelector(`td[name='modified_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        document.querySelector('td[name=\'modified_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
                     }
                 });
             }

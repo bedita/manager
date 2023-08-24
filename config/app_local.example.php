@@ -108,8 +108,8 @@ return [
      *  'sort' - sort order to be used in index; use a field name prepending optionl `-` sign
      *          to indicate a descendant order, f.i. '-title' will sort by title in reverse alphabetical order
      *          (default is '-id'),
-     *  'icon' - icon code, f.i. `icon-article`, have a look in
-     *      `webroot/css/be-icons-codes.css` for a complete list of codes
+     *  'icon' - icon, f.i. `carbon:document`, have a look at https://icon-sets.iconify.design/
+     *          for a complete list of icons
      *  'sidebar' - additional custom sidebar links added in modules index and single item view,
      *     defined as associative array with 'index' and 'view' keys
      */
@@ -119,7 +119,7 @@ return [
     //         'color' => '#230637',
     //         // 'secondaryColor' => '#d95700',
     //         'sort' => '-modified',
-    //         // 'icon' => 'icon-cube',
+    //         // 'icon' => 'carbon:document',
     //     ],
     //     'folders' => [
     //         'color' => '#072440',

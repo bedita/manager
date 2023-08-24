@@ -19,11 +19,11 @@
         <span v-if="loading" class="is-loading-spinner"></span>
         <div v-if="!loading && accesses.length > 0" class="grid">
             <span class="column-header">
-                <Icon icon="carbon:calendar"></Icon>
+                <app-icon icon="carbon:calendar"></app-icon>
                 <i class="ml-05">{{ msgDate }}</i>
             </span>
             <span class="column-header">
-                <Icon icon="carbon:user"></Icon>
+                <app-icon icon="carbon:user"></app-icon>
                 <i class="ml-05">{{ msgUser }}</i>
             </span>
             <template v-for="user,key in accesses">

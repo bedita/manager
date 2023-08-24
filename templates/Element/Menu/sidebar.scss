@@ -85,6 +85,10 @@
     }
 }
 
+.app-module-box-concurrent-editors a.module-item > svg {
+    display:none;
+}
+
 ul.concurrent-editors {
     margin:0; padding:0;
     li {
@@ -148,6 +152,32 @@ ul.concurrent-editors {
             display: flex;
             flex-direction: column;
             > *:not(:last-child) { margin-bottom: $gutter; }
+        }
+
+        .app-module-box > a.module-item {
+            justify-content: center;
+        }
+
+        .app-module-box > a.module-item > span {
+            flex: 1;
+            display: inline-block;
+            transform: translateY(0);
+            transition: transform 0.3s;
+        }
+
+        .app-module-box > a.module-item > svg {
+            position: absolute;
+            display: block;
+            top: 40%;
+            height: 24px;
+            width: 24px;
+        }
+
+        .app-module-box:is(.locked) > a.module-item > svg,
+        .app-module-box:is(.expired) > a.module-item > svg,
+        .app-module-box:is(.future) > a.module-item > svg,
+        .app-module-box:is(.draft) > a.module-item > svg {
+            display: none;
         }
 
         .listobjnav  {

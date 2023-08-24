@@ -61,19 +61,19 @@
                     {% if not readonly and not resource.meta.unchangeable %}
                         <div class="buttons-cell narrow">
                             <button form="form-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Save') ~ ' ' ~ resource.attributes.name }}">
-                                <Icon icon="carbon:save"></Icon>
+                                <app-icon icon="carbon:save"></app-icon>
                                 <span class="ml-05">{{ __('Save') }}</span>
                             </button>
 
                             <button form="form-remove-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
-                                <Icon icon="carbon:trash-can"></Icon>
+                                <app-icon icon="carbon:trash-can"></app-icon>
                                 <span class="ml-05">{{ __('Remove') }}</span>
                             </button>
                         </div>
                     {% elseif deleteonly %}
                         <div class="buttons-cell narrow">
                             <button form="form-remove-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
-                                <Icon icon="carbon:trash-can"></Icon>
+                                <app-icon icon="carbon:trash-can"></app-icon>
                                 <span class="ml-05">{{ __('Remove') }}</span>
                             </button>
                         </div>
@@ -113,7 +113,7 @@
                     {% endfor %}
                     <div class="buttons-cell narrow">
                         <button form="form-create" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Create') ~ ' ' ~ resourceType }}">
-                            <Icon icon="carbon:save"></Icon>
+                            <app-icon icon="carbon:save"></app-icon>
                             <span class="ml-05">{{ __('Create') }}</span>
                         </button>
                     </div>

@@ -6,12 +6,12 @@ export default {
         <form class="table-row">
             <div class="name-cell">
                 <input type="text" name="name" autocomplete="off" autocorrect="off" autocapitalize="off" size="50" maxlength="50" @change="onChangeName($event)" v-model="name" />
-                <span class="ml-05" v-title="this.$helpers.minLength(3)"><Icon icon="carbon:information"></Icon></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><app-icon icon="carbon:information"></app-icon></span>
                 <div v-if="nameInUse()" v-text="errorAlreadyInUse"></div>
             </div>
             <div class="label-cell">
                 <input type="text" name="label" autocomplete="off" autocorrect="off" autocapitalize="off" v-model="label" />
-                <span class="ml-05" v-title="this.$helpers.minLength(3)"><Icon icon="carbon:information"></Icon></span>
+                <span class="ml-05" v-title="this.$helpers.minLength(3)"><app-icon icon="carbon:information"></app-icon></span>
             </div>
             <div class="parent_id-cell">
                 <select v-model="parent">
@@ -32,7 +32,7 @@ export default {
             </div>
             <div v-show="!id" class="buttons-cell narrow">
                 <button :disabled="name.length < 3 || label.length < 3 || nameInUse() || type === ''" class="button button-text-white is-width-auto" @click.stop.prevent="onCreate()">
-                    <Icon icon="carbon:save"></Icon>
+                    <app-icon icon="carbon:save"></app-icon>
                     <span class="ml-05">${t`Create`}</span>
                 </button>
             </div>
@@ -41,13 +41,13 @@ export default {
             </div>
             <div v-show="id" class="buttons-cell narrow">
                 <button :disabled="name.length < 3 || label.length < 3 || unchanged() || nameInUse()" class="button button-text-white is-width-auto" @click.stop.prevent="onModify()">
-                    <Icon icon="carbon:save"></Icon>
+                    <app-icon icon="carbon:save"></app-icon>
                     <span class="ml-05">${t`Modify`}</span>
                 </button>
             </div>
             <div v-show="id" class="buttons-cell narrow">
                 <button class="button button-text-white is-width-auto" @click.stop.prevent="onDelete()">
-                    <Icon icon="carbon:trash-can"></Icon>
+                    <app-icon icon="carbon:trash-can"></app-icon>
                     <span class="ml-05">${t`Delete`}</span>
                 </button>
             </div>

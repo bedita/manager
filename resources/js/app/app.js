@@ -25,7 +25,7 @@ import { buildSearchParams } from '../libs/urlUtils.js';
 
 import vTitle from 'vuejs-title';
 
-import { Icon } from '@iconify/vue2';
+import { Icon as AppIcon } from '@iconify/vue2';
 
 const _vueInstance = new Vue({
     el: 'main',
@@ -77,7 +77,17 @@ const _vueInstance = new Vue({
         ObjectsHistory:() => import(/* webpackChunkName: "objects-history" */'app/components/objects-history/objects-history'),
         SystemInfo:() => import(/* webpackChunkName: "system-info" */'app/components/system-info/system-info'),
         UserAccesses:() => import(/* webpackChunkName: "user-accesses" */'app/components/user-accesses/user-accesses'),
-        Icon,
+        AppIcon,
+    },
+
+    /**
+    * properties or methods available for injection into its descendants
+    * (inject: ['property'])
+    */
+    provide() {
+        return {
+            getCSFRToken: () => BEDITA.csrfToken,
+        };
     },
 
     data() {
@@ -103,13 +113,14 @@ const _vueInstance = new Vue({
         }
     },
 
-    /**
-    * properties or methods available for injection into its descendants
-    * (inject: ['property'])
-    */
-    provide() {
-        return {
-            getCSFRToken: () => BEDITA.csrfToken,
+    watch: {
+        /**
+         * watch pageSize variable and update pagination.page_size accordingly
+         *
+         * @param {Number} value page size number
+         */
+        pageSize(value) {
+            this.pagination.page_size = value;
         }
     },
 
@@ -161,17 +172,6 @@ const _vueInstance = new Vue({
         this.$on('resource-changed', this.onResourceChanged);
 
         Vue.prototype.$eventBus = new Vue();
-    },
-
-    watch: {
-        /**
-         * watch pageSize variable and update pagination.page_size accordingly
-         *
-         * @param {Number} value page size number
-         */
-        pageSize(value) {
-            this.pagination.page_size = value;
-        }
     },
 
     mounted: function () {
@@ -580,4 +580,4 @@ const _vueInstance = new Vue({
 window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
-Vue.component('Icon', Icon);
+Vue.component('AppIcon', AppIcon);

@@ -66,12 +66,12 @@
                         </div>
                         <div class="buttons-cell narrow">
                             <button @click.prevent="goto('{{ url }}')" title="{{ __('Edit') }} {{ object.attributes.title }}" class="button button-text-white is-width-auto">
-                                <Icon icon="carbon:launch"></Icon>
+                                <app-icon icon="carbon:launch"></app-icon>
                                 <span class="ml-05">{{ __('Edit') }}</span>
                             </button>
                             {% if Perms.canRead(object.type) %}
                                 <button @click.prevent="goto('{{ objectUrl }}')" title="{{ __('Edit') }} {{ object.attributes.title }}" class="button button-text-white is-width-auto">
-                                    <Icon icon="carbon:launch"></Icon>
+                                    <app-icon icon="carbon:launch"></app-icon>
                                     <span class="ml-05">{{ __('Original') }}</span>
                                 </button>
                             {% endif %}
