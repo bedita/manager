@@ -6,17 +6,7 @@
         <section class="dashboard-section">
             <div class="dashboard-items">
             {% for name, module in modules %}
-                {% if not in_array(name, ['trash', 'users']) %}
-                    {% set module = name == 'objects' ? {'label': __('All objects')}|merge(module) : module %}
-                    {% set class = 'dashboard-item has-background-module-%s %s'|format(name, module.class|default('')) %}
-                    {% set url = module.route ? Url.build(module.route) : Url.build({ '_name': 'modules:list', 'object_type': name, 'plugin': null }) %}
-                    <a href="{{ url }}" class="{{ class }}">
-                        <span>{{ Layout.tr(module.label|default(name)) }}</span>
-                        {% if module.hints.multiple_types and not module.class %}<app-icon icon="carbon:grid"></app-icon>{% endif %}
-                        {% if name == 'publications' %}<app-icon icon="carbon:wikis"></app-icon>{% endif %}
-                        {% if name == 'folders' %}<app-icon icon="carbon:tree-view"></app-icon>{% endif %}
-                    </a>
-                {% endif %}
+                {{ Layout.dashboardModuleLink(name, module)|raw }}
             {% endfor %}
             </div>
         </section>
