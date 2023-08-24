@@ -17,7 +17,7 @@ import Compare from 'mapbox-gl-compare';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default {
-    template: `<div class="map-container"></div>`,
+    template: '<div class="map-container"></div>',
 
     props: {
         lng: {
@@ -51,14 +51,14 @@ export default {
     methods: {
 
         renderMapboxCompareMap() {
-            Object.getOwnPropertyDescriptor(mapbox, "accessToken").set(this.mapToken);
+            Object.getOwnPropertyDescriptor(mapbox, 'accessToken').set(this.mapToken);
 
             const center = [this.lng, this.lat]; // [lng, lat]
             const point = [this.lng, this.lat];
             const popup = new mapbox.Popup()
                 .setHTML(this.popupHtml);
 
-            const before = document.createElement("div");
+            const before = document.createElement('div');
             before.classList.add('compare-map');
             const after = before.cloneNode(false);
             const over = before.cloneNode(false);

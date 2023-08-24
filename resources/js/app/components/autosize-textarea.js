@@ -1,9 +1,9 @@
-import autosize from "autosize";
+import autosize from 'autosize';
 
 export default {
-    props: ["value", "reset-value"],
+    props: ['value', 'reset-value'],
 
-    template: `<textarea @input="handleChange" :value="text"></textarea>`,
+    template: '<textarea @input="handleChange" :value="text"></textarea>',
 
     data() {
         return {

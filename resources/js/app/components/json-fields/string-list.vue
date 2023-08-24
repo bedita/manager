@@ -8,14 +8,14 @@
                 </div>
                 <div v-if="!readonly">
                     <button @click.prevent="remove(index)" class="button button-primary" style="min-width: 32px; border-top-left-radius: 0; border-bottom-left-radius: 0;">
-                        <Icon icon="carbon:trash-can"></Icon>
+                        <app-icon icon="carbon:trash-can"></app-icon>
                         <span class="ml-05">{{ t('Remove') }}</span>
                     </button>
                 </div>
             </div>
         </div>
         <button @click.prevent="add" v-if="!readonly">
-            <Icon icon="carbon:add"></Icon>
+            <app-icon icon="carbon:add"></app-icon>
             <span class="ml-05">{{ t('Add') }}</span>
         </button>
 

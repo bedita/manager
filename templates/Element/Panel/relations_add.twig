@@ -134,14 +134,14 @@
                     objects: selectedObjects,
                 })"
             >
-                <Icon icon="carbon:add"></Icon>
+                <app-icon icon="carbon:add"></app-icon>
                 <span class="ml-05">{{ __('Add') }}</span>
                 <span v-if="selectedObjects.length" class="mx-025 has-font-weight-bold"><: selectedObjects.length :></span>
                 {{ __('objects to') }} <: relationName | humanize :>
             </button>
 
             <button class="mx-1" href="#" :disabled="saving" @click.prevent="closePanel()">
-                <Icon icon="carbon:close"></Icon>
+                <app-icon icon="carbon:close"></app-icon>
                 <span class="ml-05">{{ __('Close') }}</span>
             </button>
         </footer>

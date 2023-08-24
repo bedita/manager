@@ -1,7 +1,6 @@
 import Vue from 'vue';
 
 export const AjaxLogin = Vue.extend({
-    name: 'AjaxLogin',
 
     template: `
         <div class="ajax-login-modal" role="dialog">
@@ -24,6 +23,7 @@ export const AjaxLogin = Vue.extend({
             </transition>
         </div>
     `,
+    name: 'AjaxLogin',
 
     props: {
         headerText: {

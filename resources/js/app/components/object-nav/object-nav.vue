@@ -2,16 +2,16 @@
     <div class="listobjnav">
         <div>
             <a :href="urlPrev()" v-if="prev">
-                <Icon icon="carbon:chevron-left" class="hw-30"></Icon>
+                <app-icon icon="carbon:chevron-left" class="hw-30"></app-icon>
             </a>
             <span v-else>
-                <Icon icon="carbon:chevron-left" class="hw-30"></Icon>
+                <app-icon icon="carbon:chevron-left" class="hw-30"></app-icon>
             </span>
             <a :href="urlNext()" v-if="next">
-                <Icon icon="carbon:chevron-right" class="hw-30"></Icon>
+                <app-icon icon="carbon:chevron-right" class="hw-30"></app-icon>
             </a>
             <span v-else>
-                <Icon icon="carbon:chevron-right" class="hw-30"></Icon>
+                <app-icon icon="carbon:chevron-right" class="hw-30"></app-icon>
             </span>
         </div>
         <div>{{ index }} / {{ total }}</div>

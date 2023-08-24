@@ -147,11 +147,11 @@ class LayoutHelper extends Helper
     public function moduleIcon(string $name, array $module): string
     {
         if (Hash::get($module, 'hints.multiple_types') && !Hash::get($module, 'class')) {
-            return '<Icon icon="carbon:grid"></Icon>';
+            return '<app-icon icon="carbon:grid"></app-icon>';
         }
         $icon = (string)Configure::read(sprintf('Modules.%s.icon', $name));
         if (!empty($icon)) {
-            return sprintf('<Icon icon="%s"></Icon>', $icon);
+            return sprintf('<app-icon icon="%s"></app-icon>', $icon);
         }
         $map = [
             'audio' => 'carbon:document-audio',
@@ -174,7 +174,7 @@ class LayoutHelper extends Helper
             return '';
         }
 
-        return sprintf('<Icon icon="%s"></Icon>', $map[$name]);
+        return sprintf('<app-icon icon="%s"></app-icon>', $map[$name]);
     }
 
     /**
@@ -343,7 +343,7 @@ class LayoutHelper extends Helper
         $filter = ['type' => [$type]];
 
         return $this->Html->link(
-            sprintf('<span class="is-sr-only">%s</span><Icon icon="carbon:trash-can"></Icon>', __('Trash')),
+            sprintf('<span class="is-sr-only">%s</span><app-icon icon="carbon:trash-can"></app-icon>', __('Trash')),
             ['_name' => 'trash:list', '?' => compact('filter')],
             ['class' => $classes, 'title' => $title, 'escape' => false]
         );

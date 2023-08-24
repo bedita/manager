@@ -53,7 +53,7 @@
                 <label class="file-label">
                     <input type="file" class="file-input" name="file" :accept="accept()" @change="onFileChange" />
                     <span class="file-cta">
-                        <Icon icon="carbon:upload"></Icon>
+                        <app-icon icon="carbon:upload"></app-icon>
                         <span class="ml-05">{{ msgChooseFile }}</span>
                     </span>
                     <span class="file-name">

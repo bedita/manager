@@ -1,11 +1,11 @@
 <template>
     <div>
         <div v-if="canModify" class="mb-05">
-            <Icon icon="carbon:information" class="has-text-info"></Icon>
+            <app-icon icon="carbon:information" class="has-text-info"></app-icon>
             <span class="ml-05 has-text-info">{{ msgYouCanModify }}. {{ msgYourRoles }}: {{ userRoles.join(',') }}</span>
         </div>
         <div v-else class="mb-05">
-            <Icon icon="carbon:warning" class="has-text-danger"></Icon>
+            <app-icon icon="carbon:warning" class="has-text-danger"></app-icon>
             <span class="ml-05 has-text-danger">{{ msgYouCannotModify }}. {{ msgYourRoles }}: {{ userRoles.join(',') }}</span>
         </div>
         <label v-for="role in roles" v-if="role.attributes.name != 'admin'">

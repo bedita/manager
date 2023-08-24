@@ -52,7 +52,7 @@
         })|raw }}
 
         <button type="submit" class="button button-primary mt-2">
-            <Icon icon="carbon:login"></Icon>
+            <app-icon icon="carbon:login"></app-icon>
             <span class="ml-05">{{ __('Sign in') }}</span>
         </button>
 
@@ -70,7 +70,7 @@
             <br><br>
             <a class="button button-primary" href="{{ Url.build({'_name': 'login:oauth2', 'provider': provider}) }}">
                 {{ __('Sign in with {0}', provider) }}
-                <Icon icon="carbon:login"></Icon>
+                <app-icon icon="carbon:login"></app-icon>
             </a>
         {% endif %}
         {% endfor %}

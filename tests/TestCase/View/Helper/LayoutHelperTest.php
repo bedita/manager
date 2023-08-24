@@ -533,7 +533,7 @@ class LayoutHelperTest extends TestCase
             static::assertSame('', $actual);
         }
 
-        $expected = '<a href="/trash?filter%5Btype%5D%5B0%5D=dummies" class="button icon icon-only-icon has-text-module-dummies" title="Dummies in Trashcan"><span class="is-sr-only">Trash</span><Icon icon="carbon:trash-can"></Icon></a>';
+        $expected = '<a href="/trash?filter%5Btype%5D%5B0%5D=dummies" class="button icon icon-only-icon has-text-module-dummies" title="Dummies in Trashcan"><span class="is-sr-only">Trash</span><app-icon icon="carbon:trash-can"></app-icon></a>';
         $actual = $layout->trashLink('dummies');
         static::assertSame($expected, $actual);
     }
@@ -559,7 +559,7 @@ class LayoutHelperTest extends TestCase
             'documents' => [
                 'documents',
                 [],
-                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><Icon icon="carbon:document"></Icon></a>',
+                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><app-icon icon="carbon:document"></app-icon></a>',
             ],
         ];
     }
@@ -600,23 +600,23 @@ class LayoutHelperTest extends TestCase
                         'multiple_types' => true,
                     ],
                 ],
-                '<Icon icon="carbon:grid"></Icon>',
+                '<app-icon icon="carbon:grid"></app-icon>',
 
             ],
             'documents' => [
                 'documents',
                 [],
-                '<Icon icon="carbon:document"></Icon>',
+                '<app-icon icon="carbon:document"></app-icon>',
             ],
             'from conf' => [
                 'test_items',
                 [],
-                '<Icon icon="test:items"></Icon>',
+                '<app-icon icon="test:items"></app-icon>',
             ],
             'from map (core modules)' => [
                 'locations',
                 [],
-                '<Icon icon="carbon:location"></Icon>',
+                '<app-icon icon="carbon:location"></app-icon>',
             ],
             'other module (non core, non conf)' => [
                 'cats',

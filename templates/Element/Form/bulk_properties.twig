@@ -45,7 +45,7 @@
             {% endif %}
 
             <button class="button button-outlined" @click.prevent="bulkActions($event, 'bulk-{{ key }}')" :disabled="!selectedRows.length">
-                <Icon icon="carbon:checkmark"></Icon>
+                <app-icon icon="carbon:checkmark"></app-icon>
                 <span class="ml-05">{{ __('Ok') }}</span>
             </button>
         </div>

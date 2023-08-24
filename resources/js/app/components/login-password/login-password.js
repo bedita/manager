@@ -19,8 +19,8 @@ export default {
             </div>
             <div>
                 <button @click.prevent.stop="toggleShow" class="button button-primary" style="min-width: 32px; border-top-left-radius: 0; border-bottom-left-radius: 0;" :disabled="!this.password || this.password.length == 0">
-                    <Icon icon="carbon:view-filled" v-if="show"></Icon>
-                    <Icon icon="carbon:view-off-filled" v-if="!show"></Icon>
+                    <app-icon icon="carbon:view-filled" v-if="show"></app-icon>
+                    <app-icon icon="carbon:view-off-filled" v-if="!show"></app-icon>
                 </button>
             </div>
         </div>
@@ -40,7 +40,7 @@ export default {
             if (e.key === 'Enter' || e.keyCode === 13) {
                 e.preventDefault();
                 e.stopPropagation();
-                document.querySelector(`form[action="/login"]`).submit();
+                document.querySelector('form[action="/login"]').submit();
             }
         },
         toggleShow() {

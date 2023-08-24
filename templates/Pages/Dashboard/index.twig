@@ -22,37 +22,37 @@
                 {% if modules.trash %}
                     <a href="{{ Url.build({ '_name': 'trash:list' }) }}" title="{{ __('Trash') }}" class="dashboard-item has-background-black">
                         <span>{{ __('Trash can') }}</span>
-                        <Icon icon="carbon:trash-can"></Icon>
+                        <app-icon icon="carbon:trash-can"></app-icon>
                     </a>
                 {% endif %}
 
                 {% if modules.users %}
                     <a href="{{ Url.build({'_name': 'modules:list', 'object_type': 'users'}) }}" title="{{ __('System users') }}" class="dashboard-item has-background-black">
                         <span>{{ __('System users') }}</span>
-                        <Icon icon="carbon:user-admin"></Icon>
+                        <app-icon icon="carbon:user-admin"></app-icon>
                     </a>
                 {% endif %}
 
                 <a href="{{ Url.build({'_name': 'user_profile:view'}) }}" title="{{ __('User Profile') }}" class="dashboard-item has-background-black">
                     <span>{{ __('User Profile') }}</span>
-                    <Icon icon="carbon:user-profile"></Icon>
+                    <app-icon icon="carbon:user-profile"></app-icon>
                 </a>
 
                 {% if config('Filters.import') and ('POST' in jobsAllow or 'GET' in jobsAllow) %}
                     <a href="{{ Url.build({'_name': 'import:index'}) }}" title="{{ __('Import') }}" class="dashboard-item has-background-black">
                         <span>{{ __('Import') }}</span>
-                        <Icon icon="carbon:download"></Icon>
+                        <app-icon icon="carbon:download"></app-icon>
                     </a>
                 {% endif %}
 
                 {% if in_array('admin', user.roles) %}
                     <a href="{{ Url.build({'_name': 'admin:list:appearance'}) }}" title="{{ __('Administration') }}" class="dashboard-item has-background-black">
                         <span>{{ __('Administration') }}</span>
-                        <Icon icon="carbon:settings"></Icon>
+                        <app-icon icon="carbon:settings"></app-icon>
                     </a>
                     <a href="{{ Url.build({'_name': 'model:list:object_types'}) }}" title="{{ __('Data modeling') }}" class="dashboard-item has-background-black">
                         <span>{{ __('Data modeling') }}</span>
-                        <Icon icon="carbon:concept"></Icon>
+                        <app-icon icon="carbon:concept"></app-icon>
                     </a>
                 {% endif %}
             </div>
@@ -66,7 +66,7 @@
             <nav role="search">
                 <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
                 <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">
-                    <Icon icon="carbon:search"></Icon>
+                    <app-icon icon="carbon:search"></app-icon>
                     {{ __('Search') }}
                 </button>
             </nav>
