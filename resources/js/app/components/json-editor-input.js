@@ -1,7 +1,7 @@
 import { JSONEditor } from 'vanilla-jsoneditor';
 
 const options = {
-    mode: 'code',
+    mode: 'text',
     modes: ['tree', 'code'],
     history: true,
     search: true,
