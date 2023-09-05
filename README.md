@@ -10,13 +10,13 @@
 
 <!-- [![Code Coverage](https://codecov.io/gh/bedita/manager/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/bedita/branch/master) -->
 
-Official Backend Admin WebApp for [BEdita4 and BEdita5 API](https://gihub.com/bedita/bedita).
+Backend Manager for [BEdita API](https://gihub.com/bedita/bedita).
 
 ## Prerequisites
 
 * [PHP](https://www.php.net/) 7.4, 8.0, 8.1 and 8.2 supported
 * [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
-* [Node](https://nodejs.org) 14 or 16
+* [Node](https://nodejs.org) >= 16
 * [Yarn](https://yarnpkg.com) >= 1.15
 
 ## Install
@@ -33,9 +33,7 @@ If you are using a **.zip** or **.tar.gz** release file you just need to unpack 
 * Build JS/CSS bundles with `yarn` from `manager` folder
 
 ```bash
-yarn
-yarn build-plugins
-yarn build
+yarn && yarn build
 ```
 
 * Configure BEdita API base URL and API KEY in `config/.env` like:
@@ -70,7 +68,7 @@ Have look at the main [Manager configuration wiki page](https://github.com/bedit
 Get latest offical image build from Docker Hub
 
 ```bash
-docker pull bedita/manager
+docker pull bedita/manager:4
 ```
 
 ### Build image
