@@ -681,6 +681,7 @@ class AppControllerTest extends TestCase
      * @covers ::prepareRelations()
      * @covers ::setupParentsRelation()
      * @covers ::changedAttributes()
+     * @covers ::filterEmpty()
      * @dataProvider prepareRequestProvider()
      * @return void
      */
