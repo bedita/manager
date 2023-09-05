@@ -203,11 +203,7 @@ class AppController extends Controller
         $this->setupParentsRelation($type, $data);
         $this->prepareRelations($data);
         $this->changedAttributes($data);
-
-        // cleanup attributes on new objects/resources
-        if (empty($data['id'])) {
-            $data = array_filter($data);
-        }
+        $this->filterEmpty($data);
 
         return $data;
     }
@@ -597,5 +593,21 @@ class AppController extends Controller
     protected function setSerialize(array $items): void
     {
         $this->viewBuilder()->setOption('serialize', $items);
+    }
+
+    /**
+     * Remove empty fields when saving new resource.
+     *
+     * @param array $data The form data
+     * @return void
+     */
+    protected function filterEmpty(array &$data): void
+    {
+        if (!empty($data['id'])) {
+            return;
+        }
+        $data = array_filter($data, function ($item) {
+            return $item === '0' ? true : !empty($item);
+        });
     }
 }
