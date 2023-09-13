@@ -246,6 +246,7 @@ class AppController extends Controller
                 },
                 $data['date_ranges']
             );
+            $data['date_ranges'] = array_values($data['date_ranges']);
         }
 
         // prepare categories
