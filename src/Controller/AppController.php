@@ -235,6 +235,17 @@ class AppController extends Controller
                     return !empty($item['start_date']) || !empty($item['end_date']);
                 }
             );
+            $data['date_ranges'] = array_map(
+                function ($item) {
+                    if (empty($item['params']['all_day']) || empty($item['end_date'])) {
+                        return $item;
+                    }
+                    $item['end_date'] = str_replace(':59:00.000', ':59:59.000', $item['end_date']);
+
+                    return $item;
+                },
+                $data['date_ranges']
+            );
         }
 
         // prepare categories
