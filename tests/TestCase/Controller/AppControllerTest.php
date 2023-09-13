@@ -701,6 +701,7 @@ class AppControllerTest extends TestCase
      * @covers ::prepareRequest()
      * @covers ::specialAttributes()
      * @covers ::decodeJsonAttributes()
+     * @covers ::prepareDateRanges()
      * @covers ::prepareRelations()
      * @covers ::setupParentsRelation()
      * @covers ::changedAttributes()
