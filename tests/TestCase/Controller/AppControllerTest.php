@@ -462,9 +462,6 @@ class AppControllerTest extends TestCase
                         [
                             'start_date' => '2020-01-01T00:00:00.000Z',
                             'end_date' => '2020-01-01T23:59:59.000Z',
-                            'params' => [
-                                'all_day' => true,
-                            ],
                         ],
                         [
                             'start_date' => '2020-01-01T00:00:00.000Z',
@@ -482,9 +479,6 @@ class AppControllerTest extends TestCase
                         [
                             'start_date' => '2020-01-01T00:00:00.000Z',
                             'end_date' => '2020-01-01T23:59:00.000Z',
-                            'params' => [
-                                'all_day' => true,
-                            ],
                         ],
                         [
                             'start_date' => '2020-01-01T00:00:00.000Z',
