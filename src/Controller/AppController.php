@@ -276,7 +276,7 @@ class AppController extends Controller
     /**
      * Prepare date ranges.
      * Remove empty date ranges.
-     * Fix end date time to 23:59:59.000 if all_day is true.
+     * Fix end date time to 23:59:59.000 if end_date contains '23:59:00.000'.
      *
      * @param array $data The data to prepare
      * @return void
@@ -294,10 +294,10 @@ class AppController extends Controller
         );
         $data['date_ranges'] = array_map(
             function ($item) {
-                if (empty($item['params']['all_day']) || empty($item['end_date'])) {
+                if (empty($item['end_date'])) {
                     return $item;
                 }
-                $item['end_date'] = str_replace(':59:00.000', ':59:59.000', $item['end_date']);
+                $item['end_date'] = str_replace('23:59:00.000', '23:59:59.000', $item['end_date']);
 
                 return $item;
             },
