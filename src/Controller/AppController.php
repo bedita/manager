@@ -297,7 +297,7 @@ class AppController extends Controller
                 if (empty($item['end_date'])) {
                     return $item;
                 }
-                $item['end_date'] = str_replace('23:59:00.000', '23:59:59.000', $item['end_date']);
+                $item['end_date'] = str_replace(':59:00.000', ':59:59.000', $item['end_date']);
 
                 return $item;
             },
