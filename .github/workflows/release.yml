@@ -24,6 +24,7 @@ jobs:
       version_bump: ${{ inputs.releaseType }}
       version_ini_path: config/version.ini
       version_ini_prefix: "[Manager]\nversion="
+      package_json_version: "true"
 
   docker_push:
     runs-on: 'ubuntu-latest'
