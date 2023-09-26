@@ -23,9 +23,9 @@ module.exports = {
         'no-extra-semi': 'off',
         'no-console': 'off',
         'semi': 'off',
-        'vue/html-indent': ['error', 4],
 
         // override/add rules settings here
+        'no-unused-vars': ['warn'],
         'vue/attributes-order': ['warn', {
             'order': [
                 'GLOBAL',
@@ -40,6 +40,17 @@ module.exports = {
             ],
             'alphabetical': false
         }],
+        'vue/first-attribute-linebreak': ['warn', {
+            'singleline': 'beside',
+            'multiline': 'ignore'
+        }],
+        'vue/html-indent': ['warn', 4],
+        'vue/multi-word-component-names': ['warn'],
+        'vue/no-mutating-props': ['warn'],
+        'vue/no-unused-components': ['warn'],
+        'vue/no-unused-vars': ['warn'],
+        'vue/no-use-v-if-with-v-for': ['warn'],
+        'vue/no-v-html': ['off'],
         'vue/order-in-components': ['warn', {
             'order': [
                 ['template', 'render'],
@@ -77,12 +88,9 @@ module.exports = {
                 'renderError'
             ]
         }],
-        'vue/first-attribute-linebreak': ['warn', {
-            'singleline': 'beside',
-            'multiline': 'ignore'
-        }],
-        'vue/multi-word-component-names': ['warn'],
-        'vue/no-v-html': ['off'],
+        'vue/require-prop-type-constructor': ['warn'],
+        'vue/require-v-for-key': ['warn'],
+        'vue/valid-template-root': ['warn'],
     },
     parserOptions: {
         ecmaVersion: 2021,

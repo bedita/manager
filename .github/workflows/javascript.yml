@@ -44,4 +44,4 @@ jobs:
         run: yarn build
 
       - name: Run ESLint
-        run: yarn eslint resources/js/**/*.js
+        run: yarn eslint resources/js/**/*.js resources/js/**/*.vue

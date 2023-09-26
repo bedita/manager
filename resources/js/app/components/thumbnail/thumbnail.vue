@@ -13,7 +13,7 @@ export default {
     props: {
         related: {
             type: Object,
-            default: {}
+            default: () => {},
         },
     },
 
