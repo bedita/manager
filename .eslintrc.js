@@ -25,7 +25,6 @@ module.exports = {
         'semi': 'off',
 
         // override/add rules settings here
-        'no-unused-vars': ['warn'],
         'vue/attributes-order': ['warn', {
             'order': [
                 'GLOBAL',

@@ -84,7 +84,7 @@ export default {
         loadAccesses(pageSize = 20, page = 1) {
             this.loading = true;
             this.getAccesses(pageSize, page)
-                .catch(_error => { this.loading = false; return false;})
+                .catch(_error => { console.error(_error); this.loading = false; return false; })
                 .then(response => {
                     this.loading = false;
                     this.accesses = response.data || [];

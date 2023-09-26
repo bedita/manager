@@ -129,7 +129,7 @@ export default {
         loadHistory(pageSize = 20, page = 1) {
             this.loading = true;
             this.getHistory(pageSize, page)
-                .catch(_error => { this.loading = false; return false;})
+                .catch(_error => { console.error(_error); this.loading = false; return false; })
                 .then(response => {
                     this.loading = false;
                     this.items = response.data || [];
@@ -138,7 +138,7 @@ export default {
                     const objectIds = this.items.map(item => item.meta.resource_id).filter((v, i, a) => a.indexOf(v) === i).map(i=>Number(i));
                     const ids = [...userIds, ...objectIds];
                     this.getObjects(ids)
-                        .catch(_error => { return false;})
+                        .catch(_error => { console.error(_error); return false; })
                         .then(response => {
                             const items = response.data || [];
                             const resourcesMap = items.reduce((map, obj) => {
