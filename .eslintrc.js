@@ -88,7 +88,6 @@ module.exports = {
                 'renderError'
             ]
         }],
-        'vue/require-prop-type-constructor': ['warn'],
         'vue/require-v-for-key': ['warn'],
     },
     parserOptions: {

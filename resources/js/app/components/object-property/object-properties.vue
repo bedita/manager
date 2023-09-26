@@ -23,11 +23,26 @@
 
 export default {
     props: {
-        initProperties: [],
-        type: '',
-        hidden: [],
-        translatable: [],
-        translationRules: [],
+        initProperties: {
+            type: Array,
+            default: () => ([]),
+        },
+        type: {
+            type: String,
+            default: '',
+        },
+        hidden: {
+            type: Array,
+            default: () => ([]),
+        },
+        translatable: {
+            type: Array,
+            default: () => ([]),
+        },
+        translationRules: {
+            type: Array,
+            default: () => ([]),
+        },
     },
 
     components: {
