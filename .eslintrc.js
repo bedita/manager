@@ -90,7 +90,6 @@ module.exports = {
         }],
         'vue/require-prop-type-constructor': ['warn'],
         'vue/require-v-for-key': ['warn'],
-        'vue/valid-template-root': ['warn'],
     },
     parserOptions: {
         ecmaVersion: 2021,
