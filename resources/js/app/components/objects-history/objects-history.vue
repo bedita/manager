@@ -30,7 +30,7 @@
                 <app-icon icon="carbon:content-view"></app-icon>
                 <i class="ml-05">{{ msgChange }}</i>
             </span>
-            <template v-for="item,key in items">
+            <template v-for="item in items">
                 <span>{{ formatDate(item?.meta?.created) }}</span>
                 <span>
                     {{ msgAction }}

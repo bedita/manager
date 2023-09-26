@@ -26,7 +26,7 @@
                 <app-icon icon="carbon:user"></app-icon>
                 <i class="ml-05">{{ msgUser }}</i>
             </span>
-            <template v-for="user,key in accesses">
+            <template v-for="user in accesses">
                 <span>{{ formatDate(user?.meta?.last_login) }}</span>
                 <span>
                     <a class="tag has-background-module-users" :href="`/users/view/${user.id}`" target="_new">

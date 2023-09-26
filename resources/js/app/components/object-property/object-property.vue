@@ -60,8 +60,8 @@ import { t } from 'ttag';
 export default {
     props: {
         prop: {
-            type: Array,
-            default: () => ([]),
+            type: Object,
+            default: () => ({}),
         },
         nobuttonsfor: {
             type: Array,

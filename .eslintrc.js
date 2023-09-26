@@ -47,7 +47,6 @@ module.exports = {
         'vue/multi-word-component-names': ['warn'],
         'vue/no-mutating-props': ['warn'],
         'vue/no-unused-components': ['warn'],
-        'vue/no-unused-vars': ['warn'],
         'vue/no-use-v-if-with-v-for': ['warn'],
         'vue/no-v-html': ['off'],
         'vue/order-in-components': ['warn', {

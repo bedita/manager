@@ -1,8 +1,6 @@
 <template>
-
     <div class="properties-container">
-
-        <object-property v-for="(prop, index) in properties"
+        <object-property v-for="prop in properties"
             :key="prop.id"
             :prop="prop"
             :type="type"
@@ -15,9 +13,7 @@
         <p v-if="properties.length == 0">
             {{ t('No properties') }}
         </p>
-
     </div>
-
 </template>
 <script>
 
