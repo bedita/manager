@@ -83,7 +83,7 @@ class OEmbedTest extends TestCase
         $oembed = new class () extends OEmbed
         {
             public $json = [];
-            protected function fetchJson(string $oembedUrl): array
+            protected function fetchJson(string $oembedUrl, array $options = []): array
             {
                 return $this->json;
             }
