@@ -113,11 +113,8 @@ abstract class AdministrationBaseController extends AppController
     public function index(): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
-        $query = $this->getRequest()->getQueryParams();
-
         try {
-            $endpoint = $this->resourceType === 'roles' ? $this->endpoint : sprintf('%s/%s', $this->endpoint, $this->resourceType);
-            $response = $this->apiClient->get($endpoint, $query);
+            $response = $this->loadData();
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -206,5 +203,31 @@ abstract class AdministrationBaseController extends AppController
         }
 
         return sprintf('%s/%s', $this->endpoint, $this->resourceType);
+    }
+
+    /**
+     * Get all results iterating over pagination.
+     *
+     * @return array
+     */
+    protected function loadData(): array
+    {
+        $query = $this->getRequest()->getQueryParams();
+        $resourceEndpoint = sprintf('%s/%s', $this->endpoint, $this->resourceType);
+        $endpoint = $this->resourceType === 'roles' ? 'roles' : $resourceEndpoint;
+        $resultResponse = [];
+        $pagination = ['page' => 0];
+        while ($pagination['page'] === 0 || $pagination['page'] < $pagination['page_count']) {
+            $query['page'] = $pagination['page'] + 1;
+            $response = $this->apiClient->get($endpoint, $query);
+            $pagination = (array)Hash::get($response, 'meta.pagination');
+            foreach ((array)Hash::get($response, 'data') as $data) {
+                $resultResponse['data'][] = $data;
+            }
+            $resultResponse['meta'] = $response['meta'];
+            $resultResponse['links'] = $response['links'];
+        }
+
+        return $resultResponse;
     }
 }
