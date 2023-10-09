@@ -122,6 +122,6 @@ export default {
 <style>
     .roles-list-view {
         height: 50vh;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 </style>
