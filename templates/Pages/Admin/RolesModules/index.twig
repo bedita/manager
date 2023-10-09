@@ -7,11 +7,6 @@
 <admin-index inline-template>
 
     <div class="module-index">
-        {{ Form.create(null, {
-            'id': 'form-roles-modules',
-            'url': {'_name': 'admin:save:roles_modules'},
-            'class': 'table-row',
-        })|raw }}
 
         <div class="list-objects">
 
@@ -20,6 +15,11 @@
             {% endif %}
 
             {% for resource in resources %}
+                {{ Form.create(null, {
+                    'id': 'form-roles-' ~ resource.attributes.name,
+                    'url': {'_name': 'admin:save:roles_modules'},
+                    'class': 'table-row',
+                })|raw }}
                 {% set roleName = resource.attributes.name %}
 
                 <property-view inline-template :tab-open="tabsOpen" tab-name="roles-modules-{{ resource.attributes.name }}">
@@ -56,23 +56,20 @@
                                     {{ Form.control(key, radio)|raw }}
                                     </div>
                                 {% endfor %}
+                                <button class="button button-primary button-primary-hover-module-admin is-width-auto mt-2" title="{{ __('Save') }}">
+                                    <app-icon icon="carbon:save"></app-icon>
+                                    <span class="ml-05">{{ __('Save') }}</span>
+                                </button>
                             </div>
                         </div>
                     </section>
 
                 </property-view>
 
+                {{ Form.end()|raw }}
+
             {% endfor %}
         </div>
-
-        <div class="buttons-cell narrow mt-1">
-            <button class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Save') }}">
-                <app-icon icon="carbon:save"></app-icon>
-                <span class="ml-05">{{ __('Save') }}</span>
-            </button>
-        </div>
-
-        {{ Form.end()|raw }}
     </div>
 
 </admin-index>

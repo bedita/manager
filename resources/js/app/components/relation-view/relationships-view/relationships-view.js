@@ -127,15 +127,10 @@ export default {
     },
 
     methods: {
-        /**
-         * load objects using PaginatedContentMixin.getPaginatedObjects()
-         *
-         * @return {Promise} resp
-         */
-        async loadObjects() {
+        async loadObjects(autoload = true, query = {}) {
             this.loading = true;
 
-            let response = this.getPaginatedObjects();
+            let response = this.getPaginatedObjects(autoload, query);
 
             response
                 .then((objs) => {
