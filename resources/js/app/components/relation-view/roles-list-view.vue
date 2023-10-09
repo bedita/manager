@@ -52,7 +52,7 @@ export default {
     },
 
     async mounted() {
-        await this.loadObjects(true, {page_size:100});
+        await this.loadObjects(true, { page_size:100 });
         this.$nextTick(() => {
             let groups = this.groups;
             if (Object.keys(groups).length === 0) {
@@ -120,8 +120,8 @@ export default {
 }
 </script>
 <style>
-.roles-list-view {
-    height: 50vh;
-    overflow-y: scroll;
-}
+    .roles-list-view {
+        height: 50vh;
+        overflow-y: scroll;
+    }
 </style>
