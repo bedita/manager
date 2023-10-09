@@ -126,9 +126,9 @@ class RolesModulesController extends AdministrationBaseController
                 }
             }
         }
-        $response = $this->apiClient->get('/config', ['filter' => ['name' => 'AccessControl']]);
+        $response = (array)$this->apiClient->get('/config', ['filter' => ['name' => 'AccessControl']]);
         $content = json_decode((string)Hash::get($response, 'data.0.attributes.content'), true);
-        $payload = array_merge($content, $payload);
+        $payload = is_array($content) ? array_merge($content, $payload) : $payload;
         $this->saveApiConfig(Inflector::camelize('access_control'), $payload);
 
         return $this->redirect(['_name' => 'admin:list:roles_modules']);

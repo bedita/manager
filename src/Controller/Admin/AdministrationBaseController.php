@@ -219,7 +219,7 @@ abstract class AdministrationBaseController extends AppController
         $pagination = ['page' => 0];
         while ($pagination['page'] === 0 || $pagination['page'] < $pagination['page_count']) {
             $query['page'] = $pagination['page'] + 1;
-            $response = $this->apiClient->get($endpoint, $query);
+            $response = (array)$this->apiClient->get($endpoint, $query);
             $pagination = (array)Hash::get($response, 'meta.pagination');
             foreach ((array)Hash::get($response, 'data') as $data) {
                 $resultResponse['data'][] = $data;
