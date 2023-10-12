@@ -346,4 +346,33 @@ class AdministrationBaseControllerTest extends TestCase
         $actual = $method->invokeArgs($this->AdministrationBaseController, []);
         static::assertEquals('/admin/applications', $actual);
     }
+
+    /**
+     * Test `loadData` method
+     *
+     * @return void
+     * @covers ::loadData()
+     */
+    public function testLoadData(): void
+    {
+        $this->initRolesController(
+            [
+                'environment' => [
+                    'REQUEST_METHOD' => 'GET',
+                ],
+                'params' => [
+                    'resource_type' => 'roles',
+                ],
+                'query' => [
+                    'page' => 1,
+                    'page_size' => 1,
+                ],
+            ]
+        );
+        $reflectionClass = new \ReflectionClass($this->RlsController);
+        $method = $reflectionClass->getMethod('loadData');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->RlsController, []);
+        static::assertNotEmpty($actual);
+    }
 }
