@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Core\I18n;
 
-use App\Core\I18n\TranslatorInterface;
 use BabyMarkt\DeepL\DeepL;
 use Cake\Utility\Hash;
 
