@@ -22,6 +22,7 @@
     ],
     "require": {
         "php": ">=7.4",
+        "babymarkt/deepl-php-lib": "^1.0",
         "bedita/i18n": "^4.4.1",
         "bedita/web-tools": "^3.10.1",
         "cakephp/authentication": "^2.9",
