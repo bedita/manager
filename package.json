@@ -40,7 +40,7 @@
         "mapbox-gl-compare": "^0.4.0",
         "moment": "^2.29.4",
         "sleep-promise": "^9.1.0",
-        "tinymce": "^5.10.7",
+        "tinymce": "^5.10.8",
         "ttag": "^1.7.24",
         "vanilla-jsoneditor": "^0.14.4",
         "vue": "^2.5.16",
