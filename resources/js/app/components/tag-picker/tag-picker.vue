@@ -46,12 +46,27 @@ export default {
     },
 
     props: {
-        id: String,
+        id: {
+            type: String,
+            default: '',
+        },
         disabled: Boolean,
-        label: String,
-        form: String,
-        initialTags: Array,
-        searchonly: false,
+        label: {
+            type: String,
+            default: '',
+        },
+        form: {
+            type: String,
+            default: '',
+        },
+        initialTags: {
+            type: Array,
+            default: () => ([]),
+        },
+        searchonly: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {

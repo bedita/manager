@@ -59,12 +59,30 @@ import { t } from 'ttag';
 
 export default {
     props: {
-        prop: [],
-        nobuttonsfor: [],
-        type: '',
-        isHidden: false,
-        isNew: false,
-        isTranslatable: false,
+        prop: {
+            type: Object,
+            default: () => ({}),
+        },
+        nobuttonsfor: {
+            type: Array,
+            default: () => ([]),
+        },
+        type: {
+            type: String,
+            default: '',
+        },
+        isHidden: {
+            type: Boolean,
+            default: false,
+        },
+        isNew: {
+            type: Boolean,
+            default: false,
+        },
+        isTranslatable: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {

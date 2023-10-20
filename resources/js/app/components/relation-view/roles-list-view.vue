@@ -27,7 +27,7 @@ export default {
     props: {
         groups: {
             type: Object,
-            default: {},
+            default: () => {},
         },
         relatedObjects: {
             type: Array,

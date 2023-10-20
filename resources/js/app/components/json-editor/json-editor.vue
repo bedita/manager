@@ -1,14 +1,11 @@
 <template>
+    <div class="json-editor" />
 </template>
 <script>
 import { JSONEditor } from 'vanilla-jsoneditor';
 
 export default {
-    name: 'json-editor',
-
-    components: {
-        JSONEditor,
-    },
+    name: 'JsonEditor',
 
     props: {
         target: {
@@ -33,10 +30,7 @@ export default {
 
     mounted() {
         const element = document.getElementById(this.target);
-        const options = Object.assign({
-            content: { text: this.text },
-            readOnly: true
-        }, this.options);
+        const options = {content: { text: this.text }, readOnly: true, ...this.options};
         this.editor = new JSONEditor({
             target: element,
             props: options
