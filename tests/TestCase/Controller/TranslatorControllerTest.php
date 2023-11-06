@@ -87,11 +87,14 @@ class TranslatorControllerTest extends TestCase
      */
     public function testTranslate(): void
     {
-        Configure::write('Translator', [
-            'class' => '\App\Test\TestCase\Core\I18n\DummyTranslator',
-            'options' => [
-                'url' => 'www.my-dummy-translator.com',
-                'apiKey' => 'abcde',
+        Configure::write('Translators', [
+            'dummy' => [
+                'name' => 'Dummy',
+                'class' => '\App\Test\TestCase\Core\I18n\DummyTranslator',
+                'options' => [
+                    'url' => 'www.my-dummy-translator.com',
+                    'apiKey' => 'abcde',
+                ],
             ],
         ]);
         $texts = ['gustavo is a friend', 'gustavo is the best'];

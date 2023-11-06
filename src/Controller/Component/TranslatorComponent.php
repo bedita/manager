@@ -24,9 +24,7 @@ use Cake\Utility\Hash;
 class TranslatorComponent extends Component
 {
     /**
-     * Default configuration.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $_defaultConfig = [
         'Translators' => [],
