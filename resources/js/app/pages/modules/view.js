@@ -190,8 +190,8 @@ export default {
         },
 
         fetchTranslation(object) {
-            if (!object || !this.isTranslatable(object?.content)) {
-                // skip translation, content empty
+            if (!object || !this.isTranslatable(object?.content) || !document.getElementById('translatorEngine')) {
+                // skip translation if no content or no translator engine
 
                 return Promise.resolve();
             }
@@ -200,7 +200,9 @@ export default {
                 object.to = this.$refs.translateTo.value;
             }
 
-            return this.$helpers.autoTranslate(object.content, object.from, object.to)
+            const translator = document.getElementById('translatorEngine').value;
+
+            return this.$helpers.autoTranslate(object.content, object.from, object.to, translator)
                 .catch(error => {
                     console.error(error);
 

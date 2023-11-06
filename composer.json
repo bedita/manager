@@ -79,7 +79,8 @@
             "cakephp/plugin-installer": true,
             "wikimedia/composer-merge-plugin": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "php-http/discovery": true
         }
     },
     "extra": {
@@ -90,7 +91,7 @@
                 "plugins/*/composer.json"
             ],
             "recurse": true,
-            "replace": true,
+            "replace": false,
             "merge-dev": false,
             "merge-extra": false,
             "merge-extra-deep": false,

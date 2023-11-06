@@ -5,6 +5,7 @@ const methods = {
     * @param {Array|String} text The text(s) to translate
     * @param {String} from The source language
     * @param {String} to The target language
+    * @param {String} translator The translation engine
     * @returns {JSON} The translation data, i.e.
     * {
     *     "translation": [
@@ -15,13 +16,20 @@ const methods = {
     *     ]
     * }
     */
-    autoTranslate(text, from, to) {
+    autoTranslate(text, from, to, translator) {
         if (!text) {
             return;
+        }
+        if (from === 'en') {
+            from = 'en-US';
+        }
+        if (to === 'en') {
+            to = 'en-US';
         }
         const formData = new FormData();
         formData.append('from', from);
         formData.append('to', to);
+        formData.append('translator', translator);
         if (Array.isArray(text)) {
             for (let t of text) {
                 formData.append('text[]', t);

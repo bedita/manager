@@ -16,6 +16,7 @@ namespace App\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Http\Exception\InternalErrorException;
+use Cake\Utility\Hash;
 
 /**
  * Translator component. Provide utilities to translate texts.
@@ -23,26 +24,20 @@ use Cake\Http\Exception\InternalErrorException;
 class TranslatorComponent extends Component
 {
     /**
-     * Translator engine
+     * Default configuration.
      *
-     * @var \App\Core\I18n\TranslatorInterface
+     * @var array
      */
-    protected $Translator = null;
+    protected $_defaultConfig = [
+        'Translators' => [],
+    ];
 
     /**
-     * @inheritDoc
+     * Translators engines registry
+     *
+     * @var array
      */
-    public function initialize(array $config): void
-    {
-        $translator = (array)Configure::read('Translator');
-        if (!empty($translator) && !empty($translator['class']) && !empty($translator['options'])) {
-            $class = $translator['class'];
-            $options = $translator['options'];
-            $this->Translator = new $class();
-            $this->Translator->setup($options);
-        }
-        parent::initialize($config);
-    }
+    protected $registry = [];
 
     /**
      * Translate a text $text from language source $from to language target $to
@@ -50,15 +45,25 @@ class TranslatorComponent extends Component
      * @param array $texts Array of texts to translate
      * @param string $from The source language
      * @param string $to The target language
+     * @param string $translatorName The translator engine name
      * @return string The translation
-     * @throws \Cake\Http\Exception\InternalErrorException when no translator engine is set in configuration
+     * @throws \Cake\Http\Exception\InternalErrorException when translator engine is not configured
      */
-    public function translate(array $texts, string $from, string $to): string
+    public function translate(array $texts, string $from, string $to, string $translatorName): string
     {
-        if ($this->Translator === null) {
-            throw new InternalErrorException('No translator engine is set in configuration');
+        if (empty($this->registry[$translatorName])) {
+            $translators = (array)Configure::read('Translators');
+            $translator = (array)Hash::get($translators, $translatorName);
+            if (empty($translator['class']) && empty($translator['options'])) {
+                throw new InternalErrorException(sprintf('Translator engine "%s" not configured', $translatorName));
+            }
+            $class = $translator['class'];
+            $options = $translator['options'];
+            $translator = new $class();
+            $translator->setup($options);
+            $this->registry[$translatorName] = $translator;
         }
 
-        return $this->Translator->translate($texts, $from, $to);
+        return $this->registry[$translatorName]->translate($texts, $from, $to);
     }
 }

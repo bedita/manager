@@ -30,7 +30,13 @@
                                 {% set options = options|merge({'readonly': true}) %}
                             {% endif %}
                             {{ Form.control('lang', options)|raw }}
-                            {% if config('Translator.class') %}
+                            {% if config('Translators') %}
+                                <label>{{ __('Translator Engine') }}</label>
+                                <select id="translatorEngine">
+                                    {% for key,translator in config('Translators') %}
+                                        <option value="{{ key }}">{{ translator.name }}</option>
+                                    {% endfor %}
+                                </select>
                                 {% set data = [] %}
                                 {% for key in translatable %}
                                     {% set data = data|merge({
@@ -80,7 +86,7 @@
                         {{ Property.translationControl(key, translation.attributes.translated_fields[key], {'ref': key})|raw }}
 
                         {# automatic translate button #}
-                        {% if config('Translator.class') %}
+                        {% if config('Translators') %}
                             {% set translationParams = {
                                 'field': key,
                                 'content': object.attributes[key],
