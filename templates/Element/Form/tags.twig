@@ -8,18 +8,11 @@
             </header>
             <div v-show="isOpen" class="tab-container">
                 <div class="tags-container">
-                {% if Perms.canSave('tags') %}
                     <tag-picker
                         :id="`tagPick`"
-                        :initial-tags="{{ object.attributes.tags|default([])|json_encode }}">
+                        :initial-tags="{{ object.attributes.tags|default([])|json_encode }}"
+                        :can-save="{{ Perms.canSave('tags')|json_encode }}">
                     </tag-picker>
-                {% else %}
-                    <div class="tags">
-                    {% for tag in object.attributes.tags %}
-                        <span class="tag has-background-module-tags">{{ tag.label|default(tag.name) }}</span>
-                    {% endfor %}
-                    </div>
-                {% endif %}
                 </div>
             </div>
         </section>

@@ -16,7 +16,7 @@
             @deselect="onRemove"
             @input="onChange"
         />
-        <div class="new-tag" v-show="!searchonly">
+        <div class="new-tag" v-show="!searchonly" v-if="canSave">
             <label for="new-tag">{{ msgAddNewTag }}</label>
             <div class="input-container">
                 <input type="text" :form="form" :value="text" id="new-tag" @input="update($event.target.value)" />
@@ -49,6 +49,10 @@ export default {
         id: {
             type: String,
             default: undefined,
+        },
+        canSave: {
+            type: Boolean,
+            default: false,
         },
         disabled: {
             type: Boolean,
