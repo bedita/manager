@@ -1,74 +1,116 @@
 <template>
     <div>
         <div class="date-ranges-list">
-            <div class="date-ranges-item mb-1" v-for="(dateRange, index) in dateRanges">
+            <div class="date-ranges-item mb-1"
+                 v-for="(dateRange, index) in dateRanges"
+                 :key="index"
+            >
                 <div>
                     <span>{{ msgFrom }}</span>
                     <div :class="dateRangeClass(dateRange)">
                         <input type="text"
-                            :name="getName(index, 'start_date')"
-                            v-model="dateRange.start_date"
-                            @change="onDateChanged(dateRange, $event)"
-                            v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
-                        />
+                               :name="getName(index, 'start_date')"
+                               date="true"
+                               :time="!dateRange.params.all_day"
+                               daterange="true"
+                               v-model="dateRange.start_date"
+                               v-datepicker="true"
+                               @change="onDateChanged(dateRange, $event)"
+                        >
                     </div>
                 </div>
                 <div :class="dateRangeClass(dateRange)">
                     <span>{{ msgTo }}</span>
                     <div>
-                        <input v-if="dateRange.start_date"
-                            type="text"
-                            :name="getName(index, 'end_date')"
-                            v-model="dateRange.end_date"
-                            @change="onDateChanged(dateRange, $event)"
-                            v-datepicker="true" date="true" :time="!dateRange.params.all_day" daterange="true"
-                        />
-                        <input v-else type="text" disabled="disabled" />
+                        <input type="text"
+                               :name="getName(index, 'end_date')"
+                               date="true"
+                               v-model="dateRange.end_date"
+                               :time="!dateRange.params.all_day"
+                               v-datepicker="true"
+                               daterange="true"
+                               @change="onDateChanged(dateRange, $event)"
+                               v-if="dateRange.start_date"
+                        >
+                        <input type="text"
+                               disabled="disabled"
+                               v-else
+                        >
                     </div>
                 </div>
                 <div>
                     <label class="m-0 nowrap has-text-size-smaller">
                         <input type="checkbox"
-                            :disabled="!dateRange.start_date"
-                            :name="getNameAllDay(index)"
-                            v-model="dateRange.params.all_day"
-                            @change="onAllDayChanged(dateRange, $event)" />
+                               :disabled="!dateRange.start_date"
+                               :name="getNameAllDay(index)"
+                               v-model="dateRange.params.all_day"
+                               @change="onAllDayChanged(dateRange, $event)"
+                        >
                         {{ msgAllDay }}
                     </label>
                 </div>
                 <div>
                     <label class="m-0 nowrap has-text-size-smaller">
                         <input type="checkbox"
-                            :disabled="!isDaysInterval(dateRange)"
-                            :name="getNameEveryDay(index)"
-                            v-model="dateRange.params.every_day"
-                            @change="onEveryDayChanged(dateRange, $event)"
-                            checked="dateRange.params.every_day" />
+                               :disabled="!isDaysInterval(dateRange)"
+                               :name="getNameEveryDay(index)"
+                               checked="dateRange.params.every_day"
+                               v-model="dateRange.params.every_day"
+                               @change="onEveryDayChanged(dateRange, $event)"
+                        >
                         {{ msgEveryDay }}
                     </label>
                 </div>
                 <div>
-                    <button @click.prevent="remove(index, $event)" :disabled="dateRanges.length < 2" class="button button-primary">
-                        <app-icon icon="carbon:trash-can"></app-icon>
+                    <button :disabled="dateRanges.length < 2"
+                            class="button button-primary"
+                            @click.prevent="remove(index, $event)"
+                    >
+                        <app-icon icon="carbon:trash-can" />
                         <span class="ml-05">{{ msgRemove }}</span>
                     </button>
                 </div>
-                <div v-if="dateRange.params.every_day === false" class="m-0 nowrap has-text-size-smaller weekdays">
-                    <label><input type="checkbox" v-model="dateRange.params.weekdays.sunday" />{{ msgSunday }}</label>
-                    <label><input type="checkbox" v-model="dateRange.params.weekdays.monday" />{{ msgMonday }}</label>
-                    <label><input type="checkbox" v-model="dateRange.params.weekdays.tuesday" />{{ msgTuesday }}</label>
-                    <label><input type="checkbox" v-model="dateRange.params.weekdays.wednesday" />{{ msgWednesday }}</label>
-                    <label><input type="checkbox" v-model="dateRange.params.weekdays.thursday" />{{ msgThursday }}</label>
-                    <label><input type="checkbox" v-model="dateRange.params.weekdays.friday" />{{ msgFriday }}</label>
-                    <label><input type="checkbox" v-model="dateRange.params.weekdays.saturday" />{{ msgSaturday }}</label>
-                    <input type="hidden" :name="getName(index, 'params')" :value="JSON.stringify(dateRange.params)" />
+                <div class="m-0 nowrap has-text-size-smaller weekdays"
+                     v-if="dateRange.params.every_day === false"
+                >
+                    <label><input type="checkbox"
+                                  v-model="dateRange.params.weekdays.sunday"
+                    >{{ msgSunday }}</label>
+                    <label><input type="checkbox"
+                                  v-model="dateRange.params.weekdays.monday"
+                    >{{ msgMonday }}</label>
+                    <label><input type="checkbox"
+                                  v-model="dateRange.params.weekdays.tuesday"
+                    >{{ msgTuesday }}</label>
+                    <label><input type="checkbox"
+                                  v-model="dateRange.params.weekdays.wednesday"
+                    >{{ msgWednesday }}</label>
+                    <label><input type="checkbox"
+                                  v-model="dateRange.params.weekdays.thursday"
+                    >{{ msgThursday }}</label>
+                    <label><input type="checkbox"
+                                  v-model="dateRange.params.weekdays.friday"
+                    >{{ msgFriday }}</label>
+                    <label><input type="checkbox"
+                                  v-model="dateRange.params.weekdays.saturday"
+                    >{{ msgSaturday }}</label>
+                    <input type="hidden"
+                           :name="getName(index, 'params')"
+                           :value="JSON.stringify(dateRange.params)"
+                    >
                 </div>
-                <div v-if="msdiff(dateRange) < 0" class="icon-error">{{ msgInvalidDateRange }}</div>
+                <div class="icon-error"
+                     v-if="msdiff(dateRange) < 0"
+                >
+                    {{ msgInvalidDateRange }}
+                </div>
             </div>
         </div>
 
-        <button @click.prevent="add" class="button button-primary">
-            <app-icon icon="carbon:add"></app-icon>
+        <button class="button button-primary"
+                @click.prevent="add"
+        >
+            <app-icon icon="carbon:add" />
             <span class="ml-05">{{ msgAdd }}</span>
         </button>
     </div>
@@ -103,6 +145,12 @@ export default {
         }
     },
 
+    computed: {
+        emptyStartDate() {
+            return this.dateRanges.length === 1 && !this.dateRanges[0].start_date;
+        },
+    },
+
     created() {
         const ranges = JSON.parse(this.ranges);
         if (ranges) {
@@ -121,12 +169,6 @@ export default {
         if (!this.dateRanges.length) {
             this.add();
         }
-    },
-
-    computed: {
-        emptyStartDate() {
-            return this.dateRanges.length === 1 && !this.dateRanges[0].start_date;
-        },
     },
 
     methods: {
