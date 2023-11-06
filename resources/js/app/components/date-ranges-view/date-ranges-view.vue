@@ -25,10 +25,10 @@
                         <input type="text"
                                :name="getName(index, 'end_date')"
                                date="true"
-                               v-model="dateRange.end_date"
                                :time="!dateRange.params.all_day"
-                               v-datepicker="true"
                                daterange="true"
+                               v-model="dateRange.end_date"
+                               v-datepicker="true"
                                @change="onDateChanged(dateRange, $event)"
                                v-if="dateRange.start_date"
                         >
@@ -122,7 +122,10 @@ import { t } from 'ttag';
 export default {
 
     props: {
-        ranges: String,
+        ranges: {
+            type: String,
+            default: undefined,
+        },
     },
 
     data() {
