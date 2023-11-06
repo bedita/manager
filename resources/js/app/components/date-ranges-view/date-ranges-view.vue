@@ -49,7 +49,7 @@
                 </div>
                 <div>
                     <button @click.prevent="remove(index, $event)" :disabled="dateRanges.length < 2" class="button button-primary">
-                        <Icon icon="carbon:trash-can"></Icon>
+                        <app-icon icon="carbon:trash-can"></app-icon>
                         <span class="ml-05">{{ msgRemove }}</span>
                     </button>
                 </div>
@@ -68,7 +68,7 @@
         </div>
 
         <button @click.prevent="add" class="button button-primary">
-            <Icon icon="carbon:add"></Icon>
+            <app-icon icon="carbon:add"></app-icon>
             <span class="ml-05">{{ msgAdd }}</span>
         </button>
     </div>
