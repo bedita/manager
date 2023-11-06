@@ -48,20 +48,23 @@ export default {
     props: {
         id: {
             type: String,
-            default: '',
+            default: undefined,
         },
-        disabled: Boolean,
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
         label: {
             type: String,
             default: '',
         },
         form: {
             type: String,
-            default: '',
+            default: undefined,
         },
         initialTags: {
             type: Array,
-            default: () => ([]),
+            default: () => [],
         },
         searchonly: {
             type: Boolean,
