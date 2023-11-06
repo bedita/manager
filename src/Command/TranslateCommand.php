@@ -61,16 +61,16 @@ class TranslateCommand extends Command
      */
     public function execute(Arguments $args, ConsoleIo $io): int
     {
-        $i = $args->getOption('input') ?? $args->getOption('i');
+        $i = (string)($args->getOption('input') ?? (string)$args->getOption('i'));
         if (!file_exists($i)) {
             $io->err(sprintf('Input file "%s" does not exist', $i));
 
             return self::CODE_ERROR;
         }
-        $o = $args->getOption('output') ?? $args->getOption('o');
-        $f = $args->getOption('from') ?? $args->getOption('f');
-        $t = $args->getOption('to') ?? $args->getOption('t');
-        $e = $args->getOption('translator') ?? $args->getOption('e');
+        $o = (string)($args->getOption('output') ?? $args->getOption('o'));
+        $f = (string)($args->getOption('from') ?? $args->getOption('f'));
+        $t = (string)($args->getOption('to') ?? $args->getOption('t'));
+        $e = (string)($args->getOption('translator') ?? $args->getOption('e'));
         $io->out(sprintf('"%s" [%s] -> "%s" [%s] using "%s" engine.', $i, $f, $o, $t, $e));
         $cfg = (array)Configure::read(sprintf('Translators.%s', $e));
         if (empty($cfg)) {
