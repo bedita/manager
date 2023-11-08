@@ -91,8 +91,8 @@
 
             <span v-else-if="filter.name === 'tags'">
                 <tag-picker
-                    :id="tag-filter"
-                    :form="_filters"
+                    id="tag-filter"
+                    form="_filters"
                     :initial-tags="initTags"
                     :searchonly="true"
                     @change="onTagChange"></tag-picker>
