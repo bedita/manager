@@ -1,7 +1,9 @@
 <?php
 namespace App\Test\TestCase\Core\I18n;
 
-class DummyTranslator
+use BEdita\I18n\Core\TranslatorInterface;
+
+class DummyTranslator implements TranslatorInterface
 {
     /**
      * The engine options.
