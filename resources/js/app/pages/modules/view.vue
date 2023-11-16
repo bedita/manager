@@ -210,7 +210,6 @@ export default {
                 }
             }
             const message = t`OOOPS! Something went wrong` + '. ' + this.errors[0].message;
-            console.log(this.userRoles);
             if (this.userRoles.includes('admin')) {
                 BEDITA.error(message, document.body, details);
             } else {
