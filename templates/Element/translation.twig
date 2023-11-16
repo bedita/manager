@@ -2,7 +2,7 @@
 {% do _view.assign('bodyViewClass', 'translation-module') %}
 {% set translatable = Schema.translatableFields(schema|default([])) %}
 
-<modules-view inline-template ref="moduleView">
+<modules-view inline-template ref="moduleView" :user-roles="{{ user.roles|json_encode }}">
     <div class="modules-view">
         {{ Form.create(null, {
             'url': {'_name': 'translations:save', 'object_type': objectType},
@@ -62,6 +62,7 @@
                                 'label': languageLabel,
                                 'value': object.attributes.lang,
                                 'disabled' : true,
+                                'ref': 'translateFrom',
                             }) %}
                             {{ Form.control('lang', options)|raw }}
                             <a class="button has-background-module-{{ object.type }}" href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id }) }}">

@@ -22,6 +22,10 @@ export default {
             type: Object,
             default: () => {},
         },
+        userRoles: {
+            type: Array,
+            default: () => ([]),
+        },
     },
 
     data() {
@@ -159,8 +163,6 @@ export default {
                         this.fetchTranslation(data[key])
                     )
                 );
-            } catch (error) {
-                console.log(error);
             } finally {
                 el.classList.remove('is-loading-spinner');
                 this.processErrors();
@@ -186,8 +188,9 @@ export default {
             if (error) {
                 console.error(error);
             }
-            const message = t`Error translating field "${field}" from "${from}" to "${to}" with translation engine "${engine}"`;
-            this.errors = [...this.errors, { message }]
+            const message = t`Error translating from "${from}" to "${to}"`;
+            const details = t`Could not translate field "${field}" with translation engine "${engine}"`;
+            this.errors = [...this.errors, { message, details }]
 
             return true;
         },
@@ -198,16 +201,21 @@ export default {
             }
             let details = '';
             for (let e of this.errors) {
-                if (e?.message) {
+                if (e?.details) {
                     if (details.length === 0) {
-                        details = e.message;
+                        details = e.details;
                         continue;
                     }
-                    details = details + '\n' + e.message;
+                    details = details + '\n' + e.details;
                 }
             }
-            const msg = t`OOOPS! Something went wrong`;
-            BEDITA.error(msg, document.body, details);
+            const message = t`OOOPS! Something went wrong` + '. ' + this.errors[0].message;
+            console.log(this.userRoles);
+            if (this.userRoles.includes('admin')) {
+                BEDITA.error(message, document.body, details);
+            } else {
+                BEDITA.error(message);
+            }
             this.errors = [];
         },
 
@@ -221,16 +229,18 @@ export default {
                 // use `value` from select on new translations
                 object.to = this.$refs.translateTo.value;
             }
+            object.fromLabel = this.$refs.translateFrom.options[this.$refs.translateFrom.selectedIndex].text || '???';
+            object.toLabel = this.$refs.translateTo.options[this.$refs.translateTo.selectedIndex].text || '???';
 
             const translator = document.getElementById('translatorEngine').value;
 
             return this.$helpers.autoTranslate(object.content, object.from, object.to, translator)
                 .catch(error => {
-                    return this.enqueueError(error, object.field, object.from, object.to, translator);
+                    return this.enqueueError(error, object.field, object.fromLabel, object.toLabel, translator);
                 })
                 .then(r => {
                     if (!r?.translation) {
-                        return this.enqueueError(null, object.field, object.from, object.to, translator);
+                        return this.enqueueError(null, object.field, object.fromLabel, object.toLabel, translator);
                     }
                     if (Array.isArray(r.translation)) {
                         // this to avoid "," could be problematic as separator for contents
@@ -240,7 +250,7 @@ export default {
                             allEmpty = allEmpty && tr.length === 0;
                         }
                         if (allEmpty) {
-                            return this.enqueueError(null, object.field, object.from, object.to, translator);
+                            return this.enqueueError(null, object.field, object.fromLabel, object.toLabel, translator);
                         }
                     }
                     let input = this.$refs[object.field];

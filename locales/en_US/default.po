@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-11-16 15:13:37 \n"
+"POT-Creation-Date: 2023-11-16 16:11:10 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1091,9 +1091,13 @@ msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
 
 #, javascript-format
+msgid "Error translating from \"${ from }\" to \"${ to }\""
+msgstr ""
+
+#, javascript-format
 msgid ""
-"Error translating field \"${ field }\" from \"${ from }\" to \"${ to }\" "
-"with translation engine \"${ engine }\""
+"Could not translate field \"${ field }\" with translation engine "
+"\"${ engine }\""
 msgstr ""
 
 msgid "OOOPS! Something went wrong"
