@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-05-08 07:12:49 \n"
+"POT-Creation-Date: 2023-11-16 15:13:37 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -16,6 +16,11 @@ msgstr " nel Cestino"
 
 msgid "&"
 msgstr ""
+
+msgid ""
+"API could be distributed in multiple nodes. The following data refers to a "
+"single node"
+msgstr "Le API potrebbero trovarsi su nodi multipli. I dati seguenti si riferiscono a un singolo nodo"
 
 msgid "API version required: {0}"
 msgstr "Versione API richiesta: {0}"
@@ -464,9 +469,6 @@ msgstr "Più filtri"
 msgid "Move to"
 msgstr "Sposta in"
 
-msgid "Move to position"
-msgstr "Sposta alla posizione"
-
 msgid "Move to trash"
 msgstr "Sposta nel cestino"
 
@@ -497,6 +499,9 @@ msgstr "No"
 msgid "No application"
 msgstr "Nessuna applicazione"
 
+msgid "No import filters set"
+msgstr "Nessun filtro di importazione impostato"
+
 msgid "No items found"
 msgstr "Nessun elemento trovato"
 
@@ -526,6 +531,9 @@ msgstr "Tipi di Oggetto"
 
 msgid "Objects"
 msgstr "Oggetti"
+
+msgid "Objects History"
+msgstr "Cronologia degli oggetti"
 
 msgid "Off"
 msgstr ""
@@ -752,6 +760,9 @@ msgstr "Sottotitolo"
 msgid "Surname"
 msgstr "Cognome"
 
+msgid "System information"
+msgstr "Info di sistema"
+
 msgid "System users"
 msgstr "Utenti di sistema"
 
@@ -800,6 +811,9 @@ msgstr "Traduzione(i) rimossa(e)"
 msgid "Translations"
 msgstr "Traduzioni"
 
+msgid "Translator Engine"
+msgstr "Motore di traduzione"
+
 msgid "Trash"
 msgstr "Cestino"
 
@@ -841,6 +855,9 @@ msgstr "Carica file locale"
 
 msgid "Url"
 msgstr ""
+
+msgid "User Accesses"
+msgstr "Accessi utente"
 
 msgid "User Profile"
 msgstr "Profilo Utente"
@@ -1078,6 +1095,17 @@ msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
 
 #, javascript-format
+msgid ""
+"Error translating field \"${ field }\" from \"${ from }\" to \"${ to }\" "
+"with translation engine \"${ engine }\""
+msgstr ""
+"Errore nella traduzione del campo \"${ field }\" da \"${ from }\" a \"${ to }\" "
+"con il motore di traduzione \"${ engine }\""
+
+msgid "OOOPS! Something went wrong"
+msgstr "OOOPS! Qualcosa è andato storto"
+
+#, javascript-format
 msgid "Do you really want to remove these property types? ${ types }"
 msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
 
@@ -1171,6 +1199,18 @@ msgstr "Indirizzo valido"
 msgid "Uri is not valid"
 msgstr "Indirizzo non valido"
 
+msgid "Accesses"
+msgstr "Accessi"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Starting date"
+msgstr "Data di inizio"
+
+msgid "User"
+msgstr "Utente"
+
 msgid "Canonical"
 msgstr "Canonica"
 
@@ -1180,11 +1220,11 @@ msgstr "Menù"
 msgid "View"
 msgstr "Vedi"
 
-msgid "Search existing tags"
-msgstr "Cerca tag esistenti"
-
 msgid "Add new tag"
 msgstr "Aggiungi un nuovo tag"
+
+msgid "Search existing tags"
+msgstr "Cerca tag esistenti"
 
 #, javascript-format
 msgid "Tag ${ tagName } already exists"
@@ -1234,14 +1274,48 @@ msgstr "Nascondi non disponibili"
 msgid "Inherited"
 msgstr "Ereditato"
 
+msgid "Action"
+msgstr "Azione"
+
+msgid "by user"
+msgstr "da utente"
+
+msgid "Change"
+msgstr "Cambia"
+
+msgid "History items"
+msgstr "Cronologia"
+
+msgid "Info"
+msgstr ""
+
+msgid "on resource"
+msgstr "sulla risorsa"
+
+msgid "Resource"
+msgstr "Risorsa"
+
+msgid "with application"
+msgstr "con applicazione"
+
+#, javascript-format
+msgid "Action ${ action } performed by"
+msgstr "Azione ${ action } eseguita da"
+
 msgid "Hide"
 msgstr "Nascondi"
 
 msgid "Inherited from"
 msgstr "Ereditato da"
 
+msgid "Readonly"
+msgstr "Sola lettura"
+
 msgid "Show"
 msgstr "Mostra"
+
+msgid "Translatable"
+msgstr "Traducibile"
 
 msgid "Error on deleting property"
 msgstr "Errore nella cancellazione della proprietà"
@@ -1249,46 +1323,27 @@ msgstr "Errore nella cancellazione della proprietà"
 msgid "Password"
 msgstr "Password"
 
-#. *
-#.  * <location-view> component used for ModulesPage -> View
-#.  *
-#.  * Handle Locations and reverse geocoding from addresses
-#.
-msgid "Title"
-msgstr "Titolo"
-
-#. *
-#.  * <location-view> component used for ModulesPage -> View
-#.  *
-#.  * Handle Locations and reverse geocoding from addresses
-#.
 msgid "Address"
 msgstr "Indirizzo"
 
-#. *
-#.  * <location-view> component used for ModulesPage -> View
-#.  *
-#.  * Handle Locations and reverse geocoding from addresses
-#.
-msgid "GET"
+msgid "Bearing"
 msgstr ""
 
-#. *
-#.  * <location-view> component used for ModulesPage -> View
-#.  *
-#.  * Handle Locations and reverse geocoding from addresses
-#.
 msgid "edit"
 msgstr "modifica"
 
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  ...
-#.  *
-#.  * <locations-view> component used for ModulesPage -> View
-#.  *
-#.  * Handle Locations and reverse geocoding from addresses
-#.
+msgid "GET"
+msgstr ""
+
+msgid "Pitch"
+msgstr ""
+
+msgid "Title"
+msgstr "Titolo"
+
+msgid "Zoom"
+msgstr ""
+
 msgid "add new"
 msgstr "aggiungi nuovo"
 
@@ -1357,86 +1412,32 @@ msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
 
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
 msgid "Every day"
 msgstr "Tutti i giorni"
 
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Sunday"
-msgstr "Domenica"
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Monday"
-msgstr "Lunedì"
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Tuesday"
-msgstr "Martedì"
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Wednesday"
-msgstr "Mercoledì"
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Thursday"
-msgstr "Giovedì"
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
 msgid "Friday"
 msgstr "Venerdì"
 
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+msgid "Invalid date range"
+msgstr "Intervallo date non valido"
+
+msgid "Monday"
+msgstr "Lunedì"
+
 msgid "Saturday"
 msgstr "Sabato"
 
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Invalid date range"
-msgstr "Intervallo date non valido"
+msgid "Sunday"
+msgstr "Domenica"
+
+msgid "Thursday"
+msgstr "Giovedì"
+
+msgid "Tuesday"
+msgstr "Martedì"
+
+msgid "Wednesday"
+msgstr "Mercoledì"
 
 msgid "Modify"
 msgstr "Modifica"
