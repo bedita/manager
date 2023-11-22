@@ -76,6 +76,7 @@ class AppearanceControllerTest extends TestCase
      * Test save
      *
      * @return void
+     * @covers ::initialize()
      * @covers ::save()
      */
     public function testSave(): void
