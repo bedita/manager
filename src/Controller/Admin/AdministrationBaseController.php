@@ -122,9 +122,9 @@ abstract class AdministrationBaseController extends AppController
             return $this->redirect(['_name' => 'dashboard']);
         }
 
-        $this->set('resources', (array)$response['data']);
-        $this->set('meta', (array)$response['meta']);
-        $this->set('links', (array)$response['links']);
+        $this->set('resources', (array)Hash::get($response, 'data'));
+        $this->set('meta', (array)Hash::get($response, 'meta'));
+        $this->set('links', (array)Hash::get($response, 'links'));
         $this->set('resourceType', $this->resourceType);
         $this->set('properties', $this->properties);
         $this->set('propertiesSecrets', $this->propertiesSecrets);
