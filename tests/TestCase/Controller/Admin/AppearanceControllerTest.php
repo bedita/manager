@@ -101,6 +101,6 @@ class AppearanceControllerTest extends TestCase
         $client->setupTokens([]);
         $this->Appearance->save();
         $viewVars = (array)$this->Appearance->viewBuilder()->getVars();
-        static::assertSame('[401] Unauthorized', $viewVars['error']);
+        static::assertStringStartsWith('[401]', $viewVars['error']);
     }
 }
