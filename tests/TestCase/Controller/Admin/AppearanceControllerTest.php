@@ -2,7 +2,6 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AppearanceController;
-use BEdita\SDK\BEditaClient;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -83,33 +82,15 @@ class AppearanceControllerTest extends TestCase
                         'REQUEST_METHOD' => 'POST',
                     ],
                     'post' => [
-                        'Properties' => '[]',
                         'property_name' => 'properties',
+                        'property_value' => '[]',
                     ],
                 ]
             )
         );
-        // mock GET /config and /admin/applications.
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('get')
-            ->will(
-                $this->returnCallback(
-                    function ($param) {
-                        if ($param === '/config') {
-                            return [];
-                        }
-                        if ($param === '/admin/applications') {
-                            return [
-                                'data' => [['id' => 123456789, 'attributes' => ['name' => 'manager']]],
-                            ];
-                        }
-                    }
-                )
-            );
-        // expect exception on redirect to admin uri, because test does not access admin routes as unauthenticated
-        $this->expectException('Cake\Routing\Exception\MissingRouteException');
         $this->Appearance->save();
+        $viewVars = (array)$this->Appearance->viewBuilder()->getVars();
+        static::assertArrayHasKey('error', $viewVars);
+        static::assertSame('[401] Unauthorized', $viewVars['error']);
     }
 }
