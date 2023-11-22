@@ -75,7 +75,6 @@ class AppearanceController extends AdministrationBaseController
     {
         $this->getRequest()->allowMethod(['post']);
         $this->viewBuilder()->setClassName('Json');
-        $response = $error = null;
         try {
             $data = (array)$this->getRequest()->getData();
             $propertyName = (string)Hash::get($data, 'property_name');
