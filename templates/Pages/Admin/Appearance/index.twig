@@ -15,6 +15,5 @@ __('Properties')
 
 <admin-appearance
     :configs="{{ configs|json_encode }}"
-    :configkey={{ _view.getRequest().getQuery('configKey')|default('alert_message')|json_encode }}
     :wikis="{{ wikis|json_encode }}">
 </admin-appearance>

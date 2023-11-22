@@ -31,10 +31,6 @@ export default {
     },
 
     props: {
-        configkey: {
-            type: String,
-            default: '',
-        },
         configs: {
             type: Object,
             default: () => ({}),
@@ -43,9 +39,6 @@ export default {
 
     data() {
         return {
-            config: {
-                type: String,
-            },
             jsonEditorOptions: {
                 mainMenuBar: true,
                 mode: 'text',
@@ -68,10 +61,6 @@ export default {
                 properties: 'https://github.com/bedita/manager/wiki/Setup:-Properties-display',
             },
         };
-    },
-
-    mounted() {
-        this.config = this.configkey || 'alert_message';
     },
 
     methods: {
