@@ -2,6 +2,7 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AppearanceController;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -27,6 +28,10 @@ class AppearanceControllerTest extends TestCase
     {
         parent::setUp();
         Cache::enable();
+
+        $client = ApiClientProvider::getApiClient();
+        $response = $client->authenticate(getenv('BEDITA_ADMIN_USR'), getenv('BEDITA_ADMIN_PWD'));
+        $client->setupTokens($response['meta']);
     }
 
     /**
@@ -90,7 +95,12 @@ class AppearanceControllerTest extends TestCase
         );
         $this->Appearance->save();
         $viewVars = (array)$this->Appearance->viewBuilder()->getVars();
-        static::assertArrayHasKey('error', $viewVars);
+        static::assertSame('Configuration saved', $viewVars['response']);
+
+        $client = ApiClientProvider::getApiClient();
+        $client->setupTokens([]);
+        $this->Appearance->save();
+        $viewVars = (array)$this->Appearance->viewBuilder()->getVars();
         static::assertSame('[401] Unauthorized', $viewVars['error']);
     }
 }
