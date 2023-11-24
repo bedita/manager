@@ -78,7 +78,10 @@ class CloneComponent extends Component
         $data = (array)Hash::get($source, 'data.attributes');
         $data['title'] = $this->getController()->getRequest()->getQuery('title');
         $data['status'] = 'draft';
-        $unique = (array)Hash::get($this->unique, sprintf('%s', $objectType));
+        $unique = array_merge(
+            (array)Hash::get($this->unique, sprintf('%s', $objectType)),
+            (array)Configure::read(sprintf('Clone.%s.unique', $objectType))
+        );
         $ts = date('YmdHis');
         foreach ($unique as $field) {
             $data[$field] = sprintf('%s-%s', $data[$field], $ts);
@@ -86,7 +89,7 @@ class CloneComponent extends Component
         $reset = array_merge(
             (array)Hash::get($this->reset, 'objects'),
             (array)Hash::get($this->reset, sprintf('%s', $objectType)),
-            (array)Configure::read(sprintf('Clone.reset.%s', $objectType))
+            (array)Configure::read(sprintf('Clone.%s.reset', $objectType))
         );
 
         return array_filter(
