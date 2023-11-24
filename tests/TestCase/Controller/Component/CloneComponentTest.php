@@ -7,6 +7,7 @@ use App\Controller\Component\CloneComponent;
 use App\Test\TestCase\Controller\BaseControllerTest;
 use BEdita\SDK\BEditaClient;
 use Cake\Controller\Controller;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
 
@@ -38,6 +39,77 @@ class CloneComponentTest extends BaseControllerTest
     {
         unset($this->Clone);
         parent::tearDown();
+    }
+
+    /**
+     * Data provider for `testPrepareData`
+     *
+     * @return array
+     */
+    public function prepareDataProvider(): array
+    {
+        return [
+            'users' => [
+                'users',
+                [
+                    'reset' => ['password'],
+                    'unique' => ['username', 'email'],
+                ],
+                [
+                    'username' => 'pippo',
+                    'password' => 'p1pp0',
+                    'email' => 'pippo@pluto.net',
+                    'name' => 'Pippo',
+                    'surname' => 'De pippis',
+                    'relationships' => [
+                        'something' => [
+                            'data' => [
+                                [
+                                    'id' => '123',
+                                    'type' => 'documents',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => null,
+                    'status' => 'draft',
+                    'username' => 'unique',
+                    'password' => 'reset',
+                    'relationships' => 'reset',
+                    'email' => 'unique',
+                    'name' => 'Pippo',
+                    'surname' => 'De pippis',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `prepareData` method
+     *
+     * @return void
+     * @covers ::prepareData()
+     * @dataProvider prepareDataProvider()
+     */
+    public function testPrepareData(string $objectType, array $config, array $source, array $expected): void
+    {
+        $this->prepareClone(true);
+        $this->setupApi();
+        Configure::write(sprintf('Clone.%s', $objectType), $config);
+        $actual = $this->Clone->prepareData($objectType, ['data' => ['attributes' => $source]]);
+        foreach ($expected as $key => $value) {
+            if ($value === 'unique') {
+                static::assertStringContainsString(sprintf('%s-', $source[$key]), $actual[$key]);
+                continue;
+            }
+            if ($value === 'reset') {
+                static::assertArrayNotHasKey($key, $actual);
+                continue;
+            }
+            static::assertSame($value, $actual[$key]);
+        }
     }
 
     /**
