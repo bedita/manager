@@ -16,6 +16,7 @@ namespace App\Controller\Component;
 
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Component;
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 
 /**
@@ -31,12 +32,70 @@ class CloneComponent extends Component
     protected $apiClient = null;
 
     /**
+     * Reset configuration.
+     * This is used to remove some fields from source object before cloning.
+     * This is useful to avoid to clone some fields, like username, that must be unique.
+     *
+     * @var array
+     */
+    protected $reset = [
+        'objects' => [
+            'relationships',
+            'uname',
+        ],
+    ];
+
+    /**
+     * Unique fields configuration.
+     * This is used to set new data for unique fields, by appending -<timestamp>.
+     *
+     * @var array
+     */
+    protected $unique = [
+        'users' => [
+            'username',
+        ],
+    ];
+
+    /**
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
     public function startup(): void
     {
         $this->apiClient = ApiClientProvider::getApiClient();
+    }
+
+    /**
+     * Prepare data to clone.
+     *
+     * @param string $objectType The object type
+     * @param array $source The source object
+     * @return array
+     */
+    public function prepareData(string $objectType, array $source): array
+    {
+        $data = (array)Hash::get($source, 'data.attributes');
+        $data['title'] = $this->getController()->getRequest()->getQuery('title');
+        $data['status'] = 'draft';
+        $unique = (array)Hash::get($this->unique, sprintf('%s', $objectType));
+        $ts = date('YmdHis');
+        foreach ($unique as $field) {
+            $data[$field] = sprintf('%s-%s', $data[$field], $ts);
+        }
+        $reset = array_merge(
+            (array)Hash::get($this->reset, 'objects'),
+            (array)Hash::get($this->reset, sprintf('%s', $objectType)),
+            (array)Configure::read(sprintf('Clone.reset.%s', $objectType))
+        );
+
+        return array_filter(
+            $data,
+            function ($key) use ($reset) {
+                return !in_array($key, $reset);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
     /**

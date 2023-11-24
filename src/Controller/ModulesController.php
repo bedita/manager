@@ -330,11 +330,7 @@ class ModulesController extends AppController
         }
         try {
             $source = $this->apiClient->getObject($id, $this->objectType);
-            $attributes = (array)Hash::get($source, 'data.attributes');
-            $attributes['uname'] = '';
-            unset($attributes['relationships']);
-            $attributes['title'] = $this->getRequest()->getQuery('title');
-            $attributes['status'] = 'draft';
+            $attributes = $this->Clone->prepareData($this->objectType, $source);
             $this->Clone->stream($schema, $source, $attributes);
             $save = $this->apiClient->save($this->objectType, $attributes);
             $destination = (string)Hash::get($save, 'data.id');
