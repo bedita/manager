@@ -30,11 +30,16 @@ export default {
 
     mounted() {
         const element = document.getElementById(this.target);
-        const options = {content: { text: this.text }, readOnly: true, ...this.options};
+        const options = {
+            content: { text: this.text },
+            readOnly: true,
+            ...this.options
+        };
         this.editor = new JSONEditor({
             target: element,
             props: options
         });
+        element.jsonEditor = this.editor;
     },
 }
 </script>

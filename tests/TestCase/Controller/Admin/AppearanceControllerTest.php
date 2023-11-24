@@ -2,7 +2,7 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AppearanceController;
-use BEdita\SDK\BEditaClient;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -28,6 +28,10 @@ class AppearanceControllerTest extends TestCase
     {
         parent::setUp();
         Cache::enable();
+
+        $client = ApiClientProvider::getApiClient();
+        $response = $client->authenticate(getenv('BEDITA_ADMIN_USR'), getenv('BEDITA_ADMIN_PWD'));
+        $client->setupTokens($response['meta']);
     }
 
     /**
@@ -72,6 +76,7 @@ class AppearanceControllerTest extends TestCase
      * Test save
      *
      * @return void
+     * @covers ::initialize()
      * @covers ::save()
      */
     public function testSave(): void
@@ -83,33 +88,20 @@ class AppearanceControllerTest extends TestCase
                         'REQUEST_METHOD' => 'POST',
                     ],
                     'post' => [
-                        'Properties' => '[]',
                         'property_name' => 'properties',
+                        'property_value' => '[]',
                     ],
                 ]
             )
         );
-        // mock GET /config and /admin/applications.
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('get')
-            ->will(
-                $this->returnCallback(
-                    function ($param) {
-                        if ($param === '/config') {
-                            return [];
-                        }
-                        if ($param === '/admin/applications') {
-                            return [
-                                'data' => [['id' => 123456789, 'attributes' => ['name' => 'manager']]],
-                            ];
-                        }
-                    }
-                )
-            );
-        // expect exception on redirect to admin uri, because test does not access admin routes as unauthenticated
-        $this->expectException('Cake\Routing\Exception\MissingRouteException');
         $this->Appearance->save();
+        $viewVars = (array)$this->Appearance->viewBuilder()->getVars();
+        static::assertSame('Configuration saved', $viewVars['response']);
+
+        $client = ApiClientProvider::getApiClient();
+        $client->setupTokens([]);
+        $this->Appearance->save();
+        $viewVars = (array)$this->Appearance->viewBuilder()->getVars();
+        static::assertStringStartsWith('[401]', $viewVars['error']);
     }
 }
