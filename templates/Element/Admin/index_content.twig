@@ -44,7 +44,14 @@
                     {% for property,type in properties %}
                         {% set val = resource.attributes[property] %}
                         <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            {{ Admin.control(type, property, val)|raw }}
+                            {% if type == 'json' %}
+                                <show-hide field="field-{{ resource.id }}"></show-hide>
+                                <div id="field-{{ resource.id }}" class="mt-05">
+                                    {{ Admin.control(type, property, val)|raw }}
+                                </div>
+                            {% else %}
+                                {{ Admin.control(type, property, val)|raw }}
+                            {% endif %}
                         </div>
                     {% endfor %}
                     {% for property in propertiesSecrets %}
