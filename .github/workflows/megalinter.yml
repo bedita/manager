@@ -42,8 +42,8 @@
 
           # You can override MegaLinter flavor used to have faster performances
           # More info at https://megalinter.io/flavors/
-          #uses: oxsecurity/megalinter@v7
-          uses: oxsecurity/megalinter-php:v7.6.0
+          uses: oxsecurity/megalinter@v7
+          #uses: oxsecurity/megalinter-php:v7.6.0
 
           id: ml
 
