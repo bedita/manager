@@ -1,7 +1,7 @@
 <?php
 namespace App\Test\TestCase\Core\I18n;
 
-use App\Core\I18n\TranslatorInterface;
+use BEdita\I18n\Core\TranslatorInterface;
 
 class DummyTranslator implements TranslatorInterface
 {
@@ -29,7 +29,7 @@ class DummyTranslator implements TranslatorInterface
      * @param array $texts The texts to translate
      * @param string $from The source language
      * @param string $to The target language
-     * @return string The translation in json format, i.e.
+     * @return string The translation in json format as string, i.e.
      * {
      *     "translation": [
      *         "<translation of first text>",

@@ -68,7 +68,7 @@ class TranslatorComponentTest extends TestCase
     {
         $this->expectException(get_class(new InternalErrorException()));
         $this->createComponent();
-        $this->Translator->translate(['gustavo is a friend'], 'en', 'it');
+        $this->Translator->translate(['gustavo is a friend'], 'en', 'it', 'dummy');
     }
 
     /**
@@ -80,16 +80,19 @@ class TranslatorComponentTest extends TestCase
      */
     public function testTranslate(): void
     {
-        Configure::write('Translator', [
-            'class' => '\App\Test\TestCase\Core\I18n\DummyTranslator',
-            'options' => [
-                'url' => 'www.my-dummy-translator.com',
-                'apiKey' => 'abcde',
+        Configure::write('Translators', [
+            'dummy' => [
+                'name' => 'Dummy',
+                'class' => '\App\Test\TestCase\Core\I18n\DummyTranslator',
+                'options' => [
+                    'url' => 'www.my-dummy-translator.com',
+                    'apiKey' => 'abcde',
+                ],
             ],
         ]);
         $this->createComponent();
         $texts = ['gustavo is a friend'];
-        $actual = $this->Translator->translate($texts, 'en', 'it');
+        $actual = $this->Translator->translate($texts, 'en', 'it', 'dummy');
         $translator = new DummyTranslator();
         $expected = $translator->translate($texts, 'en', 'it');
         static::assertEquals($actual, $expected);
