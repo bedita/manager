@@ -1,9 +1,7 @@
 checks:
-  javascript: true
   php: true
 filter:
   paths:
-    - 'resources/js/*'
     - 'src/*'
   dependency_paths:
     - 'vendor/*'
@@ -15,12 +13,10 @@ build:
   nodes:
     analysis:
       environment:
-        node: v18
         php:
           version: 8.2
           pecl_extensions:
             - zip
       tests:
         override:
-          - js-scrutinizer-run
           - php-scrutinizer-run
