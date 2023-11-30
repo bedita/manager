@@ -84,9 +84,10 @@ class CloneComponent extends Component
                 (array)Configure::read(sprintf('Clone.%s.unique', $objectType))
             )
         );
-        $ts = date('YmdHis');
         foreach ($unique as $field) {
-            $data[$field] = sprintf('%s-%s', $data[$field], $ts);
+            $value = $this->getController()->getRequest()->getQuery($field);
+            $value = $value ?? sprintf('%s-clone-%s', $data[$field], date('YmdHis'));
+            $data[$field] = $value;
         }
         $reset = array_unique(
             array_merge(

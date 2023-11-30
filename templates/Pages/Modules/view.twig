@@ -117,7 +117,7 @@
             {% if object.id and Perms.canCreate() %}
                 {% do _view.append(
                     'app-module-buttons',
-                    '<a @click.prevent="clone" href="' ~ Url.build({'_name': 'modules:clone', 'object_type': objectType, 'id': object.id}) ~ '" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><app-icon icon="carbon:replicate"></app-icon><span class="ml-05">' ~ __('Clone') ~ '</span></a>',
+                    '<a @click.prevent="clone(\'' ~ objectType ~ '\')" href="' ~ Url.build({'_name': 'modules:clone', 'object_type': objectType, 'id': object.id}) ~ '" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><app-icon icon="carbon:replicate"></app-icon><span class="ml-05">' ~ __('Clone') ~ '</span></a>',
                 ) %}
             {% endif %}
 
