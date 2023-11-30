@@ -221,7 +221,7 @@ const _vueInstance = new Vue({
                 uniqueOptions.push({
                     field: field,
                     label: this.$helpers.humanize(field),
-                    value: document.getElementById(field).value || `${field} clone`,
+                    value: document.getElementById(field).value + '-' + t`copy`,
                 });
             }
             const options = { checkLabel: t`Clone relations`, checkValue: false, unique: uniqueOptions };

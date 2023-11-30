@@ -86,7 +86,7 @@ class CloneComponent extends Component
         );
         foreach ($unique as $field) {
             $value = $this->getController()->getRequest()->getQuery($field);
-            $value = $value ?? sprintf('%s-clone-%s', $data[$field], date('YmdHis'));
+            $value = $value ?? sprintf('%s-copy-%s', $data[$field], date('YmdHis'));
             $data[$field] = $value;
         }
         $reset = array_unique(
