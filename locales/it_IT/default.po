@@ -1064,7 +1064,7 @@ msgid "copy"
 msgstr "copia"
 
 msgid "Clone relations"
-msgstr ""
+msgstr "Clona le relazioni"
 
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr "Questo dato verrà eliminato definitivamente. Vuoi proseguire?"

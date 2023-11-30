@@ -438,6 +438,7 @@ class LayoutHelperTest extends TestCase
             'maxFileSize' => $system->getMaxFileSize(),
             'canReadUsers' => false,
             'canSave' => true,
+            'cloneConfig' => (array)Configure::read('Clone'),
             'uploadConfig' => $system->uploadConfig(),
         ];
         static::assertSame($expected, $conf);

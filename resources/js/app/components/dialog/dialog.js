@@ -29,6 +29,10 @@ export const Dialog = Vue.extend({
                     <pre class="dump"><: dumpMessage :></pre>
                 </details>
                 <input class="mt-1" type="text" v-if="dialogType === 'prompt'" v-model.lazy="inputValue" />
+                <div class="mt-1" v-for="uitem in unique">
+                    <label><: uitem.label :></label>
+                    <input type="text" :id="uitem.field" v-model.lazy="uitem.value" />
+                </div>
                 <div class="mt-1" v-if="dialogType === 'prompt'" v-show="checkLabel">
                     <input type="checkbox" id="_check" v-model.lazy="checkValue"  />
                     <label for="_check"><: checkLabel :></label>
@@ -38,7 +42,7 @@ export const Dialog = Vue.extend({
                         class="button-outlined-white confirm mr-1"
                         :class="{'is-loading-spinner': loading }"
                         :disabled="loading === true"
-                        @click="prepareCallback() && confirmCallback(inputValue, checkValue, $root)"
+                        @click="prepareCallback() && confirmCallback(inputValue, checkValue, $root, unique)"
                         v-if="confirmMessage">
                         <: confirmMessage :>
                     </button>
@@ -68,7 +72,8 @@ export const Dialog = Vue.extend({
             inputValue: '',
             checkValue: '',
             checkLabel: '',
-            loading: false
+            loading: false,
+            unique: [],
         };
     },
     methods: {
@@ -123,6 +128,7 @@ export const Dialog = Vue.extend({
             this.inputValue = defaultValue || '';
             this.checkValue = options?.checkValue || '';
             this.checkLabel = options?.checkLabel || '';
+            this.unique = options?.unique || [];
             this.confirmCallback = confirmCallback;
             this.cancelMessage = t`cancel`;
             this.show(message, '', root);

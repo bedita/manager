@@ -294,6 +294,7 @@ class LayoutHelper extends Helper
             'maxFileSize' => $this->System->getMaxFileSize(),
             'canReadUsers' => $this->Perms->canRead('users'),
             'canSave' => $this->Perms->canSave(),
+            'cloneConfig' => (array)Configure::read('Clone'),
             'uploadConfig' => $this->System->uploadConfig(),
         ];
     }
