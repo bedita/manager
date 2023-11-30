@@ -259,6 +259,33 @@ export default {
             humanize(str) {
                 return humanizeString(str);
             },
+
+            stripHtml(str) {
+                return str.replace(/<\/?[^>]+(>|$)/g, '');
+            },
+
+            convertFromPoint(input) {
+                if (!input) {
+                    return;
+                }
+                let match = input.match(/point\(([^)]*)\)/i);
+                if (!match) {
+                    return;
+                }
+                return match[1].split(' ').join(', ');
+            },
+
+            convertToPoint(input) {
+                if (!input) {
+                    return;
+                }
+                if (input.match(/point\(([^)]*)\)/i)) {
+                    return input;
+                }
+
+                let [lon, lat] = input.split(/\s*,\s*/);
+                return `POINT(${lon} ${lat})`;
+            },
         }
     }
 };

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-11-16 16:11:10 \n"
+"POT-Creation-Date: 2023-11-30 09:02:53 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -167,9 +167,6 @@ msgstr "Redattori concorrenti"
 
 msgid "Config"
 msgstr "Configurazioni"
-
-msgid "Configuration key"
-msgstr "Chiave configurazione"
 
 msgid "Confirm new password"
 msgstr "Conferma nuova password"
@@ -725,9 +722,6 @@ msgstr "Partenza"
 msgid "Search"
 msgstr "Cerca"
 
-msgid "See Wiki for help"
-msgstr "Vedi pagina Wiki per informazioni"
-
 msgid "Select a project"
 msgstr "Seleziona un progetto"
 
@@ -1104,7 +1098,9 @@ msgstr "Errore nella traduzione da \"${ from }\" a \"${ to }\""
 msgid ""
 "Could not translate field \"${ field }\" with translation engine "
 "\"${ engine }\""
-msgstr "Non è stato possibile tradurre il campo \"${ field }\" con il motore \"${ engine }\""
+msgstr ""
+"Non è stato possibile tradurre il campo \"${ field }\" con il motore "
+"\"${ engine }\""
 
 msgid "OOOPS! Something went wrong"
 msgstr "OOOPS! Qualcosa è andato storto"
@@ -1124,6 +1120,12 @@ msgstr "Nessuna opzione per questo tipo di file"
 
 msgid "Options"
 msgstr "Opzioni"
+
+msgid "Configuration key"
+msgstr "Chiave configurazione"
+
+msgid "See wiki for help"
+msgstr "Vedi pagina Wiki per informazioni"
 
 msgid "Remove item. Are you sure?"
 msgstr "Stai per eliminare l'elemento. Vuoi procedere?"
@@ -1157,6 +1159,16 @@ msgstr "Tipi consentiti"
 #, javascript-format
 msgid "At least ${ len } characters"
 msgstr "Almeno ${ len } caratteri"
+
+msgid "GET"
+msgstr ""
+
+msgid ""
+"Missing data to search coordinates: insert at least \"Address\" and "
+"\"Locality\" (optional: \"Zipcode\", \"Country\", \"Region\")"
+msgstr ""
+"Dati mancanti per la ricerca delle coordinate: inserire almeno \"Indirizzo\" "
+"e \"Località\" (opzionali: \"CAP\", \"Paese\", \"Regione\")"
 
 msgid "stop"
 msgstr "interrompi"
@@ -1240,6 +1252,12 @@ msgstr "Errore nel salvataggio del tag"
 msgid "Error on deleting tag"
 msgstr "Errore nell'eliminazione del tag"
 
+msgid "Hide"
+msgstr "Nascondi"
+
+msgid "Show"
+msgstr "Mostra"
+
 msgid "copied in the clipboard"
 msgstr "copiato negli appunti"
 
@@ -1306,17 +1324,11 @@ msgstr "con applicazione"
 msgid "Action ${ action } performed by"
 msgstr "Azione ${ action } eseguita da"
 
-msgid "Hide"
-msgstr "Nascondi"
-
 msgid "Inherited from"
 msgstr "Ereditato da"
 
 msgid "Readonly"
 msgstr "Sola lettura"
-
-msgid "Show"
-msgstr "Mostra"
 
 msgid "Translatable"
 msgstr "Traducibile"
@@ -1335,9 +1347,6 @@ msgstr ""
 
 msgid "edit"
 msgstr "modifica"
-
-msgid "GET"
-msgstr ""
 
 msgid "Pitch"
 msgstr ""
