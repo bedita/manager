@@ -16,13 +16,12 @@
                             :search="searchTitle"
                             base-class="autocomplete-title"
                             :get-result-value="getResultTitle"
+                            :debounce-time="500"
+                            :disabled="!!id"
                             @submit="onAutocompleteSubmit"
                             @input="onInputTitle"
                             @change="onChange"
-                            :debounce-time="500"
-                            :disabled="!!id"
-                        >
-                        </autocomplete>
+                        />
                     </label>
                 </div>
                 <div class="is-flex-column is-expanded">
@@ -36,13 +35,12 @@
                             :search="searchAddress"
                             base-class="autocomplete-address"
                             :get-result-value="getResultAddress"
+                            :debounce-time="500"
+                            :disabled="!!id"
                             @submit="onAutocompleteSubmit"
                             @input="onInputAddress"
                             @change="onChange"
-                            :debounce-time="500"
-                            :disabled="!!id"
-                        >
-                        </autocomplete>
+                        />
                     </label>
                 </div>
             </div>
@@ -51,9 +49,20 @@
                     <label>
                         {{ msgCoordinates }}
                         <div class="is-flex">
-                            <input class="coordinates" type="text" v-model="coordinates" @change="onChange" :disabled="!!id" />
-                            <button class="get-coordinates" @click.prevent="geocode" :disabled="!apiKey || !address">
-                                <app-icon icon="carbon:wikis"></app-icon>
+                            <input
+                                class="coordinates"
+                                type="text"
+                                :disabled="!!id"
+                                v-model="coordinates"
+                                @change="onChange"
+                            >
+                            <button
+                                class="get-coordinates"
+                                :disabled="!!location.id || !address"
+                                @click.prevent="geocode"
+                                v-if="apiKey"
+                            >
+                                <app-icon icon="carbon:wikis" />
                                 <span class="ml-05">{{ msgGet }}</span>
                             </button>
                         </div>
@@ -62,29 +71,56 @@
                 <div class="is-flex-column">
                     <label>
                         {{ msgZoom }}
-                        <input @change="onChange" v-model.number="zoom" type="number" min="2" max="20" :disabled="!!id" />
+                        <input
+                            type="number"
+                            min="2"
+                            max="20"
+                            :disabled="!!id"
+                            v-model.number="zoom"
+                            @change="onChange"
+                        >
                     </label>
                 </div>
                 <div class="is-flex-column">
                     <label>
                         {{ msgPitch }}°
-                        <input @change="onChange" v-model.number="pitch" type="number" min="0" max="60" :disabled="!!id" />
+                        <input
+                            type="number"
+                            min="0"
+                            max="60"
+                            :disabled="!!id"
+                            v-model.number="pitch"
+                            @change="onChange"
+                        >
                     </label>
                 </div>
                 <div class="is-flex-column">
                     <label>
                         {{ msgBearing }}°
-                        <input @change="onChange" v-model.number="bearing" type="number" min="-180" max="180" :disabled="!!id" />
+                        <input
+                            type="number"
+                            min="-180"
+                            max="180"
+                            :disabled="!!id"
+                            v-model.number="bearing"
+                            @change="onChange"
+                        >
                     </label>
                 </div>
             </div>
             <div class="location-buttons">
-                <a v-if="id" class="button button-text-white" :href="$helpers.buildViewUrl(id)" target="_blank">
-                    <app-icon icon="carbon:launch"></app-icon>
+                <a class="button button-text-white"
+                   :href="$helpers.buildViewUrl(id)"
+                   target="_blank"
+                   v-if="id"
+                >
+                    <app-icon icon="carbon:launch" />
                     <span class="ml-05">{{ msgEdit }}</span>
                 </a>
-                <button @click.prevent="onRemove" class="button button-text-white remove">
-                    <app-icon icon="carbon:unlink"></app-icon>
+                <button class="button button-text-white remove"
+                        @click.prevent="onRemove"
+                >
+                    <app-icon icon="carbon:unlink" />
                     <span class="ml-05">{{ msgRemove }}</span>
                 </button>
             </div>
@@ -101,50 +137,41 @@ const options = {
     }
 };
 
-function convertFromPoint(input) {
-    if (!input) {
-        return;
-    }
-    let match = input.match(/point\(([^)]*)\)/i);
-    if (!match) {
-        return;
-    }
-    return match[1].split(' ').join(', ');
-}
-
-function convertToPoint(input) {
-    if (!input) {
-        return;
-    }
-    if (input.match(/point\(([^)]*)\)/i)) {
-        return input;
-    }
-
-    let [lon, lat] = input.split(/\s*,\s*/);
-    return `POINT(${lon} ${lat})`;
-}
-
-function stripHtml(str) {
-    return str.replace(/<\/?[^>]+(>|$)/g, '');
-}
-
 export default {
     props: {
-        index: Number,
-        apiKey: String,
-        apiUrl: String,
-        locationData: Object,
-        relationName: String,
-        relationLabel: String,
+        index: {
+            type: Number,
+            default: null,
+        },
+        apiKey: {
+            type: String,
+            default: '',
+        },
+        apiUrl: {
+            type: String,
+            default: '',
+        },
+        locationData: {
+            type: Object,
+            default: () => ({}),
+        },
+        relationName: {
+            type: String,
+            default: '',
+        },
+        relationLabel: {
+            type: String,
+            default: '',
+        },
     },
 
     data() {
         return {
             location: this.locationData,
-            id: this.locationData.id,
+            id: this.locationData.id || null,
             title: this.locationData.attributes.title,
             address: this.locationData.attributes.address,
-            coordinates: convertFromPoint(this.locationData.attributes.coords),
+            coordinates: this.$helpers.convertFromPoint(this.locationData.attributes.coords),
             zoom: parseInt(this.locationData.meta &&
                 this.locationData.meta.relation &&
                 this.locationData.meta.relation.params &&
@@ -174,7 +201,7 @@ export default {
             this.location.attributes.title = this.title;
             this.location.attributes.address = this.address;
             this.location.attributes.status = 'on';
-            this.location.attributes.coords = convertToPoint(this.coordinates);
+            this.location.attributes.coords = this.$helpers.convertToPoint(this.coordinates);
             this.location.meta.relation = this.location.meta.relation || { params: {} }; // ensure relation object
             this.location.meta.relation.params.zoom = `${this.zoom}`;
             this.location.meta.relation.params.pitch = `${this.pitch}`;
@@ -196,7 +223,7 @@ export default {
             this.location = location;
             this.title = this.location.attributes.title;
             this.address = this.location.attributes.address;
-            this.coordinates = convertFromPoint(this.location.attributes.coords);
+            this.coordinates = this.$helpers.convertFromPoint(this.location.attributes.coords);
             this.onChange();
         },
         onInputTitle(event) {
@@ -321,7 +348,7 @@ export default {
                 return '';
             }
 
-            return stripHtml(`${address.trim()}`);
+            return this.$helpers.stripHtml(`${address.trim()}`);
         },
         async geocode() {
             const retrieveGeocode = () => {
