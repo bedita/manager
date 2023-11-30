@@ -218,9 +218,11 @@ const _vueInstance = new Vue({
             };
             const uniqueOptions = [];
             for (const field of unique) {
+                let label = document.querySelector(`label[for=${field}]`)?.innerText;
+                label = label || this.$helpers.humanize(field);
                 uniqueOptions.push({
                     field: field,
-                    label: this.$helpers.humanize(field),
+                    label: label,
                     value: document.getElementById(field).value + '-' + t`copy`,
                 });
             }
