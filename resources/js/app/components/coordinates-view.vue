@@ -53,6 +53,7 @@ export default {
                 default: '',
             },
             msgGet: t`GET`,
+            msgMissingSearchAddress: t`Missing data to search coordinates: insert at least "Address" and "Locality" (optional: "Zipcode", "Country", "Region")`,
             value: this.$helpers.convertFromPoint(this.coordinates)
         };
     },
@@ -107,10 +108,13 @@ export default {
         async getCoordinates() {
             const address = this.getSearchAddress();
             if (!address) {
+                BEDITA.warning(this.msgMissingSearchAddress);
+
                 return;
             }
             const coords = document.getElementById(this.id);
             if (!coords) {
+
                 return;
             }
             await this.geocode(
