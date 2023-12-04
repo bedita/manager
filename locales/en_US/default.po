@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-11-30 09:02:53 \n"
+"POT-Creation-Date: 2023-12-04 17:06:38 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -44,6 +44,9 @@ msgid "Advanced Data"
 msgstr ""
 
 msgid "Alert Message"
+msgstr ""
+
+msgid "Alert Message By Prefix"
 msgstr ""
 
 msgid "Alert!"
