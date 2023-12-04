@@ -15,12 +15,7 @@
     {%- endfor -%}
 
     {# override alert message color if in config #}
-    {% set alertBgColor = '' %}
-    {% if config('Recovery') %}
-        {% set alertBgColor = '#FE2F03' %}
-    {% elseif config('AlertMessage.color') %}
-        {% set alertBgColor = config('AlertMessage.color') %}
-    {% endif %}
+    {% set alertBgColor = System.alertBgColor() %}
     {%- if alertBgColor -%}
         body[alert-message]:after { background-color: {{ alertBgColor }}; }
     {%- endif -%}

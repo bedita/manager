@@ -111,4 +111,47 @@ class SystemHelper extends Helper
 
         return compact('accepted', 'forbidden');
     }
+
+    /**
+     * Get alert background color
+     *
+     * @return string
+     */
+    public function alertBgColor(): string
+    {
+        if (Configure::read('Recovery')) {
+            return '#FE2F03';
+        }
+        $request = $this->getView()->getRequest();
+        $prefix = $request->getParam('prefix');
+        if (Configure::read(sprintf('AlertMessageByPrefix.%s.color', $prefix))) {
+            return Configure::read(sprintf('AlertMessageByPrefix.%s.color', $prefix));
+        }
+
+        return Configure::read('AlertMessage.color') ?? '';
+    }
+
+    /**
+     * Get alert message
+     *
+     * @return string
+     */
+    public function alertMsg(): string
+    {
+        if (Configure::read('Recovery')) {
+            return __('Recovery Mode - Access restricted to admin users');
+        }
+        $request = $this->getView()->getRequest();
+        $prefix = $request->getParam('prefix');
+        if (Configure::read(sprintf('AlertMessageByPrefix.%s.text', $prefix))) {
+            return Configure::read(sprintf('AlertMessageByPrefix.%s.text', $prefix));
+        }
+        $message = Configure::read('AlertMessage.text') ?? '';
+        $user = $this->getView()->get('user');
+        if ($user && in_array('admin', $user->get('roles')) && !$this->checkBeditaApiVersion()) {
+            $message .= ' ' . __('API version required: {0}', Configure::read('BEditaAPI.versions'));
+        }
+
+        return $message;
+    }
 }

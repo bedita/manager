@@ -41,16 +41,7 @@ BEdita Manager
     {% set bodyClass = bodyClass ~ ' view-module module-' ~ currentModule.name %}
 {% endif %}
 
-{% set alertMsg = '' %}
-{% if config('Recovery') %}
-    {% set alertMsg = __('Recovery Mode - Access restricted to admin users') %}
-{% elseif config('AlertMessage.text') %}
-    {% set alertMsg = config('AlertMessage.text') %}
-{% endif %}
-
-{% if user and in_array('admin', user.roles) and System.checkBeditaApiVersion() != 1 %}
-    {% set alertMsg = alertMsg ~ ' ' ~ __('API version required: {0}', config('BEditaAPI.versions')|join(' | '))|json_encode %}
-{% endif %}
+{% set alertMsg = System.alertMsg() %}
 
 <body class="{{ bodyClass }}"
     {% if alertMsg %}alert-message="{{ alertMsg }}"{% endif %}>
