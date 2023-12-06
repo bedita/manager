@@ -4,8 +4,12 @@
     {% for name, module in modules %}
         {% if module.color %}
             {% set color = module.color %}
+            {% set textcolor = module.color %}
             :root { --color-{{ name }}: {{ color }}; {% if currentModule is not empty and currentModule.name == name %}--color-module: {{ color }};{% endif %} }
-            .has-background-module-{{ name }} { background-color: {{ color }} !important; }
+            .has-background-module-{{ name }} {
+                background-color: {{ color }} !important;
+                color: {{ module.secondaryColor|default('#FFF') }} !important;
+            }
             .has-border-module-{{ name }} { border-color: {{ color }} !important; }
             .has-text-module-{{ name }} { color: {{ color }} !important; }
             .button-primary-hover-module-{{ name }}:hover { background-color: {{ color }}; border-color: {{ color }}; color: #fff; }
