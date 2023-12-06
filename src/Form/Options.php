@@ -216,7 +216,8 @@ class Options
     public static function coords($value): array
     {
         $label = sprintf('<label>%s</label>', __('Long Lat Coordinates'));
-        $coordinatesView = sprintf('<coordinates-view coordinates="%s" />', $value);
+        $options = json_encode((array)Configure::read('Location.google'));
+        $coordinatesView = sprintf('<coordinates-view coordinates="%s" options=%s />', $value, $options);
 
         return [
             'type' => 'readonly',

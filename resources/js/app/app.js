@@ -198,18 +198,17 @@ const _vueInstance = new Vue({
             PanelEvents.closePanel();
         },
 
-        /**
-         * Clone object
-         * Prompt for title change
-         *
-         * @return {void}
-         */
-        clone() {
+        clone(objectType) {
+            const unique = BEDITA.cloneConfig[objectType]?.unique || [];
             const title = document.getElementById('title').value || t('Untitled');
             const msg = t`Please insert a new title on "${title}" clone`;
             const defaultTitle = title + '-' + t`copy`;
-            const confirmCallback = (cloneTitle, cloneRelations, dialog) => {
-                const query = `?title=${cloneTitle || defaultTitle}&cloneRelations=${cloneRelations || false}`;
+            const confirmCallback = (cloneTitle, cloneRelations, dialog, unique) => {
+                let query = `?title=${cloneTitle || defaultTitle}`;
+                for (const uitem of unique) {
+                    query += `&${uitem.field}=${uitem.value}`;
+                }
+                query += `&cloneRelations=${cloneRelations || false}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
                 const url = `${origin}${path}${query}`;
@@ -217,7 +216,17 @@ const _vueInstance = new Vue({
                 newTab.focus();
                 dialog.hide(true);
             };
-            const options = { checkLabel: t`Clone relations`, checkValue: false };
+            const uniqueOptions = [];
+            for (const field of unique) {
+                let label = document.querySelector(`label[for=${field}]`)?.innerText;
+                label = label || this.$helpers.humanize(field);
+                uniqueOptions.push({
+                    field: field,
+                    label: label,
+                    value: document.getElementById(field).value + '-' + t`copy`,
+                });
+            }
+            const options = { checkLabel: t`Clone relations`, checkValue: false, unique: uniqueOptions };
 
             prompt(msg, defaultTitle, confirmCallback, document.body, options);
         },
