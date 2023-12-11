@@ -48,8 +48,8 @@ msgstr "Dati Avanzati"
 msgid "Alert Message"
 msgstr "Messaggio di Attenzione"
 
-msgid "Alert Message By Prefix"
-msgstr "Messaggio di Attenzione per Prefisso"
+msgid "Alert Message By Area"
+msgstr "Messaggio di Attenzione per Area"
 
 msgid "Alert!"
 msgstr "Attenzione!"

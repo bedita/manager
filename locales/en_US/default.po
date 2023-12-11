@@ -46,7 +46,7 @@ msgstr ""
 msgid "Alert Message"
 msgstr ""
 
-msgid "Alert Message By Prefix"
+msgid "Alert Message By Area"
 msgstr ""
 
 msgid "Alert!"
@@ -1398,7 +1398,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 msgid "No History data found"
 msgstr ""
 
