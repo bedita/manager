@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * BEdita, API-first content management framework
@@ -134,7 +135,7 @@ class SystemHelperTest extends TestCase
         static::assertSame('', $this->System->alertBgColor());
         Configure::write('AlertMessage.color', '#FFF000');
         static::assertSame('#FFF000', $this->System->alertBgColor());
-        Configure::write('AlertMessageByPrefix..color', '#000FFF');
+        Configure::write('AlertMessageByArea..color', '#000FFF');
         static::assertSame('#000FFF', $this->System->alertBgColor());
     }
 
@@ -155,12 +156,13 @@ class SystemHelperTest extends TestCase
         // test AlertMessage.text
         Configure::write('AlertMessage.text', 'Alert Message');
         static::assertSame('Alert Message', $this->System->alertMsg());
-        // test AlertMessageByPrefix..text
-        Configure::write('AlertMessageByPrefix..text', 'Alert Message by prefix');
+        // test AlertMessageByArea..text
+        Configure::write('AlertMessageByArea..text', 'Alert Message by prefix');
         static::assertSame('Alert Message by prefix', $this->System->alertMsg());
         // test with api version
-        Configure::delete('AlertMessageByPrefix..text');
-        $user = new class {
+        Configure::delete('AlertMessageByArea..text');
+        $user = new class
+        {
             public function get($key)
             {
                 return $key === 'roles' ? ['admin'] : null;

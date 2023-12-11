@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\View\Helper;
@@ -124,8 +125,8 @@ class SystemHelper extends Helper
         }
         $request = $this->getView()->getRequest();
         $prefix = $request->getParam('prefix');
-        if (Configure::read(sprintf('AlertMessageByPrefix.%s.color', $prefix))) {
-            return Configure::read(sprintf('AlertMessageByPrefix.%s.color', $prefix));
+        if (Configure::read(sprintf('AlertMessageByArea.%s.color', $prefix))) {
+            return Configure::read(sprintf('AlertMessageByArea.%s.color', $prefix));
         }
 
         return Configure::read('AlertMessage.color') ?? '';
@@ -143,8 +144,8 @@ class SystemHelper extends Helper
         }
         $request = $this->getView()->getRequest();
         $prefix = $request->getParam('prefix');
-        if (Configure::read(sprintf('AlertMessageByPrefix.%s.text', $prefix))) {
-            return Configure::read(sprintf('AlertMessageByPrefix.%s.text', $prefix));
+        if (Configure::read(sprintf('AlertMessageByArea.%s.text', $prefix))) {
+            return Configure::read(sprintf('AlertMessageByArea.%s.text', $prefix));
         }
         $message = Configure::read('AlertMessage.text') ?? '';
         $user = $this->getView()->get('user');

@@ -43,7 +43,7 @@ trait ApiConfigTrait
     protected static $configKeys = [
         'AccessControl',
         'AlertMessage',
-        'AlertMessageByPrefix',
+        'AlertMessageByArea',
         'Export',
         'Modules',
         'Pagination',
