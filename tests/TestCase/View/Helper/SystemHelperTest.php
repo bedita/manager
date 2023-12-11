@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * BEdita, API-first content management framework
@@ -15,6 +16,7 @@ declare(strict_types=1);
 namespace App\Test\TestCase\View\Helper;
 
 use App\View\Helper\SystemHelper;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -117,5 +119,57 @@ class SystemHelperTest extends TestCase
         $expected = compact('accepted', 'forbidden');
         $actual = $this->System->uploadConfig();
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `alertBgColor`
+     *
+     * @return void
+     * @covers ::alertBgColor()
+     */
+    public function testAlertBgColor(): void
+    {
+        Configure::write('Recovery', true);
+        static::assertSame('#FE2F03', $this->System->alertBgColor());
+        Configure::delete('Recovery');
+        static::assertSame('', $this->System->alertBgColor());
+        Configure::write('AlertMessage.color', '#FFF000');
+        static::assertSame('#FFF000', $this->System->alertBgColor());
+        Configure::write('AlertMessageByArea..color', '#000FFF');
+        static::assertSame('#000FFF', $this->System->alertBgColor());
+    }
+
+    /**
+     * Test `alertMsg`
+     *
+     * @return void
+     * @covers ::alertMsg()
+     */
+    public function testAlertMsg(): void
+    {
+        // test with no alert
+        static::assertSame('', $this->System->alertMsg());
+        // test with recovery mode
+        Configure::write('Recovery', true);
+        static::assertSame('Recovery Mode - Access restricted to admin users', $this->System->alertMsg());
+        Configure::delete('Recovery');
+        // test AlertMessage.text
+        Configure::write('AlertMessage.text', 'Alert Message');
+        static::assertSame('Alert Message', $this->System->alertMsg());
+        // test AlertMessageByArea..text
+        Configure::write('AlertMessageByArea..text', 'Alert Message by prefix');
+        static::assertSame('Alert Message by prefix', $this->System->alertMsg());
+        // test with api version
+        Configure::delete('AlertMessageByArea..text');
+        $user = new class
+        {
+            public function get($key)
+            {
+                return $key === 'roles' ? ['admin'] : null;
+            }
+        };
+        $this->System->getView()->set('user', $user);
+        $this->System->getView()->set('project', ['version' => '4.0.0']);
+        static::assertStringContainsString('API version required', $this->System->alertMsg());
     }
 }
