@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2023-12-04 17:06:38 \n"
+"POT-Creation-Date: 2023-12-14 14:45:43 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -889,9 +889,6 @@ msgstr ""
 msgid "You have requested a password change, please provide a new password"
 msgstr ""
 
-msgid "Your recent items"
-msgstr ""
-
 msgid "Zipcode"
 msgstr ""
 
@@ -1034,9 +1031,6 @@ msgid "undo"
 msgstr ""
 
 msgid "undo remove"
-msgstr ""
-
-msgid "untitled"
 msgstr ""
 
 msgid "username"
@@ -1253,6 +1247,7 @@ msgstr ""
 msgid "Created on ${ created }."
 msgstr ""
 
+#, javascript-format
 msgid "Modified on ${ modified }."
 msgstr ""
 
@@ -1260,10 +1255,32 @@ msgstr ""
 msgid "Publish start on ${ published }."
 msgstr ""
 
+#, javascript-format
 msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
 msgid "Error while creating new object."
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "Activity"
+msgstr ""
+
+msgid "Changed"
+msgstr ""
+
+msgid "items"
+msgstr ""
+
+msgid "Your recent activity"
+msgstr ""
+
+msgid "Title or #id uname"
+msgstr ""
+
+msgid "(deleted)"
 msgstr ""
 
 msgid "You can modify the permissions"
@@ -1282,9 +1299,6 @@ msgid "Hide forbidden folders"
 msgstr ""
 
 msgid "Inherited"
-msgstr ""
-
-msgid "Action"
 msgstr ""
 
 msgid "by user"
@@ -1395,7 +1409,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.
+#.  
 msgid "No History data found"
 msgstr ""
 
@@ -1403,6 +1417,7 @@ msgstr ""
 msgid "by ${ name } via ${ application }"
 msgstr ""
 
+#, javascript-format
 msgid "by ${ name }"
 msgstr ""
 
