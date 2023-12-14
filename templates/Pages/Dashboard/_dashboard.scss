@@ -173,8 +173,12 @@ body.view-dashboard {
 
             // table rows
             .table-row {
-                &.object-status-off, &.object-status-draft {
+                &.object-status-off, &.object-status-draft, &.object-status-deleted {
                     color: $gray-550;
+                }
+
+                &.object-status-deleted {
+                    text-decoration: line-through;
                 }
 
                 &:hover {

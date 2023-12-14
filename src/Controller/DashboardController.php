@@ -41,7 +41,6 @@ class DashboardController extends AppController
     public function index(): void
     {
         $this->getRequest()->allowMethod(['get']);
-        $this->set('recentItems', $this->recentItems());
 
         /** @var \Authentication\Identity $user */
         $user = $this->Authentication->getIdentity();
@@ -61,24 +60,5 @@ class DashboardController extends AppController
         $this->getRequest()->allowMethod(['get']);
         $this->viewBuilder()->disableAutoLayout();
         $this->render('/Element/Dashboard/messages');
-    }
-
-    /**
-     * Load 20 most recent items modified by authenticated user.
-     *
-     * @return array
-     */
-    protected function recentItems(): array
-    {
-        $user = $this->Authentication->getIdentity();
-        if (empty($user)) {
-            return [];
-        }
-        $filter = ['modified_by' => $user['id']];
-        $limit = 20;
-        $sort = '-modified';
-        $response = $this->apiClient->getObjects('objects', compact('filter', 'limit', 'sort'));
-
-        return (array)Hash::extract((array)$response, 'data.{n}');
     }
 }
