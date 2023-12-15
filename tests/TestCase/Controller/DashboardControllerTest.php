@@ -167,7 +167,6 @@ class DashboardControllerTest extends TestCase
      * @param MethodNotAllowedException|null $expected The expected exception or null
      * @param string $method The request method, can be 'GET', 'PATCH', 'POST', 'DELETE'
      * @covers ::index()
-     * @covers ::recentItems()
      * @dataProvider indexProvider()
      * @return void
      */
@@ -189,8 +188,6 @@ class DashboardControllerTest extends TestCase
         $response = $this->Dashboard->getResponse();
 
         static::assertEquals(200, $response->getStatusCode());
-        // recent items
-        static::assertArrayHasKey('recentItems', $this->Dashboard->viewBuilder()->getVars());
         static::assertArrayHasKey('jobsAllow', $this->Dashboard->viewBuilder()->getVars());
     }
 
@@ -230,37 +227,5 @@ class DashboardControllerTest extends TestCase
             ]);
             $this->Dashboard->messages();
         }
-    }
-
-    /**
-     * Test `recentItems` method
-     *
-     * @covers ::recentItems()
-     * @return void
-     */
-    public function testRecentItems(): void
-    {
-        $this->setupController([
-            'environment' => [
-                'REQUEST_METHOD' => 'GET',
-            ],
-        ]);
-
-        // Mock Authentication component
-        $this->Dashboard->setRequest($this->Dashboard->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-
-        // setup api
-        $client = ApiClientProvider::getApiClient();
-        $adminUser = getenv('BEDITA_ADMIN_USR');
-        $adminPassword = getenv('BEDITA_ADMIN_PWD');
-        $response = $client->authenticate($adminUser, $adminPassword);
-        $client->setupTokens($response['meta']);
-        // set auth user admin
-        $this->Dashboard->Authentication->setIdentity(new Identity(['id' => 1]));
-        // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
-        $recentItems = $test->invokeMethod($this->Dashboard, 'recentItems', []);
-        // at least 1 element (the admin user itself)
-        static::assertGreaterThanOrEqual(1, count($recentItems));
     }
 }

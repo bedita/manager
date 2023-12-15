@@ -30,7 +30,7 @@ function loadPreview(editor, node, id) {
     node.empty();
 
     let text = tinymce.html.Node.create('#text');
-    text.value = `${t('loading')}…`;
+    text.value = 'loading…';
     node.append(text);
 
     fetchData(id)

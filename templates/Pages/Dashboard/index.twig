@@ -75,26 +75,7 @@
 
         <div class="dashboard-area">
 
-            <section class="dashboard-section">
-                <header>
-                    <h2>{{ __('Your recent items') }}</h2>
-                </header>
-
-                <div class="list-objects">
-
-                    {% for object in recentItems %}
-                        <a href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id}) }}" class="table-row object-status-{{ object.attributes.status }}">
-                            <div class="narrow">{{ object.attributes.title|truncate(100)|default(__('untitled')) }}</div>
-                            <div class="type-cell"><span class="tag has-background-module-{{ object.type }}">{{ __(object.type) }}</span></div>
-                            <div class="narrow">{{ object.attributes.status }}</div>
-                            {# <div class="narrow">{{ object.attributes.lang }}</div> #}
-                            <div class="narrow">{{ Time.format(object.meta.modified, 'd MMM YYYY') }} &nbsp; {{ Time.format(object.meta.modified, 'HH:mm') }}</div>
-                        </a>
-                    {% else %}
-                        {{ __('No items found') }}
-                    {% endfor %}
-                </div>
-            </section>
+            <recent-activity :page-sizes={{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }} :user-id={{ user.id }}></recent-activity>
 
         </div>
 

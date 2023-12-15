@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-12-04 17:06:38 \n"
+"POT-Creation-Date: 2023-12-15 11:11:26 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -897,9 +897,6 @@ msgstr "Non sei autorizzato ad accedere a quest'area."
 msgid "You have requested a password change, please provide a new password"
 msgstr "Hai richiesto una modifica della password, fornisci una nuova password"
 
-msgid "Your recent items"
-msgstr "I tuoi elementi più recenti"
-
 msgid "Zipcode"
 msgstr "Cap"
 
@@ -1043,9 +1040,6 @@ msgstr "annulla"
 
 msgid "undo remove"
 msgstr "annulla rimozione"
-
-msgid "untitled"
-msgstr "senza titolo"
 
 msgid "username"
 msgstr "nome utente"
@@ -1268,6 +1262,7 @@ msgstr "copiato negli appunti"
 msgid "Created on ${ created }."
 msgstr "Creato il ${ created }."
 
+#, javascript-format
 msgid "Modified on ${ modified }."
 msgstr "Modificato il ${ modified }."
 
@@ -1275,11 +1270,36 @@ msgstr "Modificato il ${ modified }."
 msgid "Publish start on ${ published }."
 msgstr "Pubblicato il ${ published }."
 
+#, javascript-format
 msgid "Missing required data \"${ required }\". Retry"
 msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
+
+msgid "Action"
+msgstr "Azione"
+
+msgid "activities"
+msgstr "attività"
+
+msgid "Activity"
+msgstr "Attività"
+
+msgid "Changed"
+msgstr "Cambiamento"
+
+msgid "No activity found"
+msgstr "Nessuna attività"
+
+msgid "Your recent activity"
+msgstr "La tua attività recente"
+
+msgid "Title or #id uname"
+msgstr "Titolo o #id nome univoco"
+
+msgid "(deleted)"
+msgstr "(eliminato)"
 
 msgid "You can modify the permissions"
 msgstr "Puoi modificare i permessi"
@@ -1298,9 +1318,6 @@ msgstr "Nascondi non disponibili"
 
 msgid "Inherited"
 msgstr "Ereditato"
-
-msgid "Action"
-msgstr "Azione"
 
 msgid "by user"
 msgstr "da utente"
@@ -1418,6 +1435,7 @@ msgstr "Nessun dato di Cronologia"
 msgid "by ${ name } via ${ application }"
 msgstr "modificato da ${ name } con applicazione ${ application }"
 
+#, javascript-format
 msgid "by ${ name }"
 msgstr "modificato da ${ name }"
 

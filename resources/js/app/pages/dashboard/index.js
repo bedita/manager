@@ -1,11 +1,9 @@
-/**
- * Templates that uses this component (directly or indirectly)
- *  Template/Pages/Dashboard/index.twig
- *
- * <dashboard> component used for Dashboard -> Index
- *
- */
 export default {
+    name: 'DashboardIndex',
+
+    components: {
+        RecentActivity:() => import(/* webpackChunkName: "recent-activity" */'app/components/recent-activity/recent-activity'),
+    },
 
     props: {
         q: {
@@ -13,11 +11,13 @@ export default {
             default: '',
         },
     },
+
     data() {
         return {
             searchString: '',
         };
     },
+
     created() {
         if (document.referrer.endsWith('/login') && window.top !== window) {
             window.top.postMessage('login', BEDITA.base);
@@ -25,6 +25,7 @@ export default {
 
         this.searchString = this.q;
     },
+
     methods: {
         captureKeys(e) {
             let key = e.which || e.keyCode || 0;
