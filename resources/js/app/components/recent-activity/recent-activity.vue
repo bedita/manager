@@ -6,9 +6,9 @@
 
         <div v-if="pagination">
             <nav class="pagination has-text-size-smallest">
-                <div class="count-items">
+                <div class="count-activities">
                     <span class="has-font-weight-bold">{{ pagination.count }}</span>
-                    <span>{{ msgItems }}</span>
+                    <span>{{ msgActivities }}</span>
                 </div>
                 <div class="page-size">
                     <span>{{ msgSize }}</span>
@@ -46,7 +46,7 @@
             </nav>
         </div>
         <div class="is-loading-spinner mt-05" v-if="loading" />
-        <div class="list-objects" v-if="items.length > 0 && !loading">
+        <div class="list-objects" v-if="activities.length > 0 && !loading">
             <div class="table-row">
                 <div class="narrow">{{ msgTitle }}</div>
                 <div class="narrow">{{ msgType }}</div>
@@ -54,7 +54,7 @@
                 <div class="narrow">{{ msgChanged }}</div>
                 <div class="narrow">{{ msgDate }}</div>
             </div>
-            <template v-for="item in items">
+            <template v-for="item in activities">
                 <a :key="item.id" v-if="item.object_type" :href="url(item)" class="table-row" :class="`object-status-${item.object_status}`">
                     <div class="narrow">{{ title(item) }}</div>
                     <div class="type-cell"><span :class="`tag has-background-module-${item.object_type}`">{{ t(item.object_type || '?') }}</span></div>
@@ -71,8 +71,8 @@
                 </div>
             </template>
         </div>
-        <div v-if="!items.length">
-            {{ msgNoItemsFound }}
+        <div v-if="!activities.length">
+            {{ msgNoActivityFound }}
         </div>
     </section>
 </template>
@@ -103,17 +103,17 @@ export default {
 
     data() {
         return {
+            activities: [],
             currentPage: 1,
-            items: [],
             loading: false,
             pageSize: null,
             pagination: {},
             msgAction: t`Action`,
+            msgActivities: t`activities`,
             msgActivity: t`Activity`,
             msgChanged: t`Changed`,
             msgDate: t`Date`,
-            msgItems: t`items`,
-            msgNoItemsFound: t`No items found`,
+            msgNoActivityFound: t`No activity found`,
             msgRecentActivity: t`Your recent activity`,
             msgSize: t`Size`,
             msgTitle: t`Title or #id uname`,
@@ -145,12 +145,12 @@ export default {
             const json = await response.json();
             this.pagination = json.meta.pagination;
             this.currentPage = json.meta.pagination.page;
-            this.items = [...(json.data || [])];
-            const ids = this.items.filter(item => item.meta.resource_id).map(item => item.meta.resource_id).filter((v, i, a) => a.indexOf(v) === i).map(i=>Number(i));
+            this.activities = [...(json.data || [])];
+            const ids = this.activities.filter(item => item.meta.resource_id).map(item => item.meta.resource_id).filter((v, i, a) => a.indexOf(v) === i).map(i=>Number(i));
             console.log(ids);
             const objectResponse = await fetch(`${API_URL}api/objects?filter[id]=${ids.join(',')}&page_size=${pageSize}`, API_OPTIONS);
             const objectJson = await objectResponse.json();
-            for (const item of this.items) {
+            for (const item of this.activities) {
                 const object = objectJson.data.find(obj => obj.id === item.meta.resource_id);
                 if (!object) {
                     continue;

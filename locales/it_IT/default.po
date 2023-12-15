@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-12-14 14:45:43 \n"
+"POT-Creation-Date: 2023-12-15 11:11:26 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1280,14 +1280,17 @@ msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 msgid "Action"
 msgstr "Azione"
 
+msgid "activities"
+msgstr "attività"
+
 msgid "Activity"
 msgstr "Attività"
 
 msgid "Changed"
 msgstr "Cambiamento"
 
-msgid "items"
-msgstr "oggetti"
+msgid "No activity found"
+msgstr "Nessuna attività"
 
 msgid "Your recent activity"
 msgstr "La tua attività recente"
@@ -1484,9 +1487,3 @@ msgstr "Errore durante il salvataggio della categoria"
 
 msgid "Error on deleting category"
 msgstr "Errore durante l'eliminazione della categoria"
-
-#~ msgid "Your recent items"
-#~ msgstr "I tuoi elementi più recenti"
-
-#~ msgid "untitled"
-#~ msgstr "senza titolo"

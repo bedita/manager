@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2023-12-14 14:45:43 \n"
+"POT-Creation-Date: 2023-12-15 11:11:26 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1265,13 +1265,16 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
+msgid "activities"
+msgstr ""
+
 msgid "Activity"
 msgstr ""
 
 msgid "Changed"
 msgstr ""
 
-msgid "items"
+msgid "No activity found"
 msgstr ""
 
 msgid "Your recent activity"
