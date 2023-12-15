@@ -71,7 +71,7 @@
                 </div>
             </template>
         </div>
-        <div v-if="!activities.length">
+        <div v-if="!loading && !activities.length">
             {{ msgNoActivityFound }}
         </div>
     </section>
@@ -140,27 +140,31 @@ export default {
             return Object.keys(item.meta.changed).join(', ');
         },
         async fetchObjects(userId, page, pageSize) {
-            this.loading = true;
-            const response = await fetch(`${API_URL}api/history?filter[user_id]=${userId}&page=${page}&page_size=${pageSize}&sort=-created`, API_OPTIONS);
-            const json = await response.json();
-            this.pagination = json.meta.pagination;
-            this.currentPage = json.meta.pagination.page;
-            this.activities = [...(json.data || [])];
-            const ids = this.activities.filter(item => item.meta.resource_id).map(item => item.meta.resource_id).filter((v, i, a) => a.indexOf(v) === i).map(i=>Number(i));
-            console.log(ids);
-            const objectResponse = await fetch(`${API_URL}api/objects?filter[id]=${ids.join(',')}&page_size=${pageSize}`, API_OPTIONS);
-            const objectJson = await objectResponse.json();
-            for (const item of this.activities) {
-                const object = objectJson.data.find(obj => obj.id === item.meta.resource_id);
-                if (!object) {
-                    continue;
+            try {
+                this.loading = true;
+                const response = await fetch(`${API_URL}api/history?filter[user_id]=${userId}&page=${page}&page_size=${pageSize}&sort=-created`, API_OPTIONS);
+                const json = await response.json();
+                this.pagination = json.meta.pagination;
+                this.currentPage = json.meta.pagination.page;
+                this.activities = [...(json.data || [])];
+                const ids = this.activities.filter(item => item.meta.resource_id).map(item => item.meta.resource_id).filter((v, i, a) => a.indexOf(v) === i).map(i=>Number(i));
+                const objectResponse = await fetch(`${API_URL}api/objects?filter[id]=${ids.join(',')}&page_size=${pageSize}`, API_OPTIONS);
+                const objectJson = await objectResponse.json();
+                for (const item of this.activities) {
+                    const object = objectJson.data.find(obj => obj.id === item.meta.resource_id);
+                    if (!object) {
+                        continue;
+                    }
+                    item.object_title = object.attributes.title;
+                    item.object_uname = object.attributes.uname;
+                    item.object_status = object.attributes.status;
+                    item.object_type = object.type;
                 }
-                item.object_title = object.attributes.title;
-                item.object_uname = object.attributes.uname;
-                item.object_status = object.attributes.status;
-                item.object_type = object.type;
+            } catch (e) {
+                BEDITA.error(e);
+            } finally {
+                this.loading = false;
             }
-            this.loading = false;
         },
         formatDate(d) {
             return d ?  new Date(d).toLocaleDateString() + ' ' + new Date(d).toLocaleTimeString() : '';
