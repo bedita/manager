@@ -71,8 +71,11 @@
                 </div>
             </template>
         </div>
-        <div v-if="!loading && !activities.length">
+        <div v-if="!loading && !error && !activities.length">
             {{ msgNoActivityFound }}
+        </div>
+        <div v-if="!loading && error && !activities.length">
+            {{ error }}
         </div>
     </section>
 </template>
@@ -105,6 +108,7 @@ export default {
         return {
             activities: [],
             currentPage: 1,
+            error: '',
             loading: false,
             pageSize: null,
             pagination: {},
@@ -142,6 +146,7 @@ export default {
         async fetchObjects(userId, page, pageSize) {
             try {
                 this.loading = true;
+                this.error = '';
                 const response = await fetch(`${API_URL}api/history?filter[user_id]=${userId}&page=${page}&page_size=${pageSize}&sort=-created`, API_OPTIONS);
                 const json = await response.json();
                 this.pagination = json.meta.pagination;
@@ -161,7 +166,7 @@ export default {
                     item.object_type = object.type;
                 }
             } catch (e) {
-                BEDITA.error(e);
+                this.error = e?.message || e;
             } finally {
                 this.loading = false;
             }
