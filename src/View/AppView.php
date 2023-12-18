@@ -99,6 +99,6 @@ class AppView extends TwigView
             $name = $custom[$name];
         }
 
-        return parent::_getElementFileName($name, $pluginCheck);
+        return (string)parent::_getElementFileName($name, $pluginCheck);
     }
 }
