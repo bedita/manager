@@ -6,11 +6,13 @@ on:
       - '**/*.php'
       - '.github/workflows/php.yml'
       - 'composer.json'
+      - 'psalm.xml'
   push:
     paths:
       - '**/*.php'
       - '.github/workflows/php.yml'
       - 'composer.json'
+      - 'psalm.xml'
 
 jobs:
   cs:
