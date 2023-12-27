@@ -18,7 +18,6 @@
             <directory name="bin" />
             <directory name="locales" />
             <directory name="logs" />
-            <directory name="node_modules" />
             <directory name="resources" />
             <directory name="templates" />
             <directory name="tmp" />
