@@ -27,7 +27,7 @@ class QueryComponent extends Component
      */
     public function index(): array
     {
-        $query = (array)$this->getController()->getRequest()->getQueryParams();
+        $query = $this->getController()->getRequest()->getQueryParams();
         if (array_key_exists('sort', $query)) {
             $sort = (string)Hash::get($query, 'sort');
             $query['sort'] = !empty($sort) ? $sort : '-id';

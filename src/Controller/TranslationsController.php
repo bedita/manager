@@ -193,7 +193,7 @@ class TranslationsController extends ModulesController
      */
     protected function setupJsonKeys(): void
     {
-        $jsonKeys = (array)array_map(
+        $jsonKeys = array_map(
             function ($v) {
                 return sprintf('translated_fields.%s', $v);
             },
@@ -212,9 +212,9 @@ class TranslationsController extends ModulesController
      *             lang: <lang>
      *         }
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function delete(): Response
+    public function delete(): ?Response
     {
         $this->getRequest()->allowMethod(['post']);
         $this->objectType = $this->typeFromUrl();

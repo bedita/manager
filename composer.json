@@ -40,12 +40,13 @@
         "cakephp/cakephp-codesniffer": "~4.5.1",
         "cakephp/console": "^4.4",
         "cakephp/debug_kit": "^4.7.1",
+        "cakephp/repl": "^0.1",
         "dereuromark/cakephp-ide-helper": "~1.17.0",
-        "phpstan/phpstan": "^1.8.2",
         "phpstan/extension-installer": "^1.2",
+        "phpstan/phpstan": "^1.8.2",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpunit/phpunit": "^9.5",
-        "cakephp/repl": "^0.1"
+        "vimeo/psalm": "^5.18"
     },
     "autoload": {
         "psr-4": {

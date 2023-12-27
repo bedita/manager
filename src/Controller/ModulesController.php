@@ -168,7 +168,7 @@ class ModulesController extends AppController
         $this->Modules->setupAttributes($object);
 
         $included = !empty($response['included']) ? $response['included'] : [];
-        $typeIncluded = (array)Hash::combine($included, '{n}.id', '{n}', '{n}.type');
+        $typeIncluded = Hash::combine($included, '{n}.id', '{n}', '{n}.type');
         $streams = Hash::get($typeIncluded, 'streams');
         $this->History->load($id, $object);
         $this->set(compact('object', 'included', 'schema', 'streams'));

@@ -42,7 +42,7 @@ class CategoriesComponent extends Component
             $options['filter']['type'] = $objectType;
         }
 
-        return $apiClient->get('/model/categories', $options);
+        return (array)$apiClient->get('/model/categories', $options);
     }
 
     /**
@@ -74,7 +74,7 @@ class CategoriesComponent extends Component
      */
     public function map(?array $response): array
     {
-        return (array)Hash::combine((array)Hash::get($response, 'data'), '{n}.id', '{n}');
+        return Hash::combine((array)Hash::get($response, 'data'), '{n}.id', '{n}');
     }
 
     /**

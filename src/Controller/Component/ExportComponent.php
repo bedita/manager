@@ -117,7 +117,7 @@ class ExportComponent extends Component
             return self::LETTERS[$num];
         }
         $div = intdiv($num, 26);
-        $mod = $num % 26;
+        $mod = abs($num) % 26;
         if ($mod === 0) {
             $firstLetter = self::LETTERS[$div - 1];
             $secondLetter = 'Z';

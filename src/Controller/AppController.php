@@ -570,6 +570,7 @@ class AppController extends Controller
         $moduleName = $this->Modules->getConfig('currentModuleName');
         $total = count(array_keys($objects));
         $objectNav = [];
+        /** @var int $i */
         foreach ($objects as $i => $object) {
             $objectNav[$moduleName][$object['id']] = [
                 'prev' => $i > 0 ? Hash::get($objects, sprintf('%d.id', $i - 1)) : null,

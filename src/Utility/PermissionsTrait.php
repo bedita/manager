@@ -94,7 +94,7 @@ trait PermissionsTrait
         }
         $query = ['filter' => ['object_id' => $objectId], 'page_size' => 100];
         $objectPermissions = (array)ApiClientProvider::getApiClient()->getObjects('object_permissions', $query);
-        $objectPermissions = (array)Hash::combine($objectPermissions, 'data.{n}.attributes.role_id', 'data.{n}.id');
+        $objectPermissions = Hash::combine($objectPermissions, 'data.{n}.attributes.role_id', 'data.{n}.id');
 
         return array_map(function ($roleId) use ($objectPermissions) {
             return $objectPermissions[$roleId];

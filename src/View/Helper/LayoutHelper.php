@@ -307,16 +307,16 @@ class LayoutHelper extends Helper
     public function getCsrfToken(): ?string
     {
         if (!empty($this->getView()->getRequest()->getParam('_csrfToken'))) {
-            return $this->getView()->getRequest()->getParam('_csrfToken');
+            return (string)$this->getView()->getRequest()->getParam('_csrfToken');
         }
         if (!empty($this->getView()->getRequest()->getData('_csrfToken'))) {
-            return $this->getView()->getRequest()->getData('_csrfToken');
+            return (string)$this->getView()->getRequest()->getData('_csrfToken');
         }
         if (!empty($this->getView()->getRequest()->getAttribute('csrfToken'))) {
-            return $this->getView()->getRequest()->getAttribute('csrfToken');
+            return (string)$this->getView()->getRequest()->getAttribute('csrfToken');
         }
         if (!empty($this->getView()->getRequest()->getCookie('csrfToken'))) {
-            return $this->getView()->getRequest()->getCookie('csrfToken');
+            return (string)$this->getView()->getRequest()->getCookie('csrfToken');
         }
 
         return null;

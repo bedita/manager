@@ -379,11 +379,11 @@ class ModulesComponent extends Component
             // `title` and `status` saved here, remove from next save
             unset($requestData['title'], $requestData['status']);
 
-            return $response['data']['id'];
+            return (string)Hash::get($response, 'data.id');
         }
 
         // assoc existing media to stream
-        $id = $requestData['id'];
+        $id = (string)Hash::get($requestData, 'id');
         $data = compact('id', 'type');
         $apiClient->replaceRelated($streamId, 'streams', 'object', $data);
 

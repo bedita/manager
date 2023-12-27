@@ -91,7 +91,7 @@ trait ApiConfigTrait
         $response = (array)ApiClientProvider::getApiClient()->get('/config', $query);
         $collection = new Collection((array)Hash::get($response, 'data'));
 
-        return (array)$collection->reject(function ($item) use ($key) {
+        return $collection->reject(function ($item) use ($key) {
             return !$this->isAppConfig((array)$item, $key);
         })->toArray();
     }

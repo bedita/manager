@@ -23,13 +23,30 @@ use Cake\Utility\Inflector;
 
 /**
  * History component
- *
- * @property \App\View\Helper\CalendarHelper $Calendar
- * @property \App\View\Helper\CategoriesHelper $Categories
- * @property \App\View\Helper\SchemaHelper $Schema
  */
 class HistoryComponent extends Component
 {
+    /**
+     * Calendar helper
+     *
+     * @var \App\View\Helper\CalendarHelper
+     */
+    protected $Calendar;
+
+    /**
+     * Categories helper
+     *
+     * @var \App\View\Helper\CategoriesHelper
+     */
+    protected $Categories;
+
+    /**
+     * Schema helper
+     *
+     * @var \App\View\Helper\SchemaHelper
+     */
+    protected $Schema;
+
     /**
      * Key for history data to store.
      *
@@ -91,7 +108,7 @@ class HistoryComponent extends Component
         $historyId = (string)$options['historyId'];
         /** @var bool $keepUname */
         $keepUname = (bool)$options['keepUname'];
-        /** @var \BEdita\SDK\BEditaClient; $ApiClient */
+        /** @var \BEdita\SDK\BEditaClient $ApiClient */
         $ApiClient = $options['ApiClient'];
 
         // get history by $objectType, $id and $historyId
@@ -201,10 +218,10 @@ class HistoryComponent extends Component
     public function label(string $field): string
     {
         if ($field === 'date_ranges') {
-            return (string)__('Calendar');
+            return __('Calendar');
         }
 
-        return (string)__(Inflector::humanize($field));
+        return __(Inflector::humanize($field));
     }
 
     /**
