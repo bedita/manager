@@ -16,7 +16,6 @@
         <directory name="src" />
         <ignoreFiles>
             <directory name="bin" />
-            <directory name="coverage" />
             <directory name="locales" />
             <directory name="logs" />
             <directory name="node_modules" />
