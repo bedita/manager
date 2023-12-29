@@ -91,7 +91,7 @@ class HistoryComponent extends Component
         $historyId = (string)$options['historyId'];
         /** @var bool $keepUname */
         $keepUname = (bool)$options['keepUname'];
-        /** @var \BEdita\SDK\BEditaClient; $ApiClient */
+        /** @var \BEdita\SDK\BEditaClient $ApiClient */
         $ApiClient = $options['ApiClient'];
 
         // get history by $objectType, $id and $historyId
