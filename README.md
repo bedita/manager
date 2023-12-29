@@ -4,6 +4,7 @@
 [![Github Actions Javascript](https://github.com/bedita/manager/workflows/javascript/badge.svg)](https://github.com/bedita/manager/actions?query=workflow%3Ajavascript)
 [![codecov](https://codecov.io/gh/bedita/manager/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/manager)
 [![phpstan](https://img.shields.io/badge/PHPStan-level%205-brightgreen.svg)](https://phpstan.org)
+[![psalm](https://img.shields.io/badge/psalm-level%208-brightgreen.svg)](https://psalm.dev)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bedita/manager/badges/quality-score.png)](https://scrutinizer-ci.com/g/bedita/manager/)
 [![Version](https://img.shields.io/packagist/v/bedita/manager.svg?label=stable)](https://packagist.org/packages/bedita/manager)
 [![License](https://img.shields.io/badge/License-LGPL_v3-orange.svg)](https://github.com/bedita/manager/blob/master/LICENSE.LGPL)

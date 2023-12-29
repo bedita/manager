@@ -199,7 +199,7 @@ class PermsHelper extends Helper
             return true;
         }
 
-        return !empty(array_intersect($permsRoles, (array)$this->userRoles()));
+        return !empty(array_intersect($permsRoles, $this->userRoles()));
     }
 
     /**

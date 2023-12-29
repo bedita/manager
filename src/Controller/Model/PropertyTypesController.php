@@ -84,7 +84,7 @@ class PropertyTypesController extends ModelBaseController
             return null;
         }
 
-        $this->set((array)$response);
+        $this->set($response);
         $this->setSerialize(array_keys($response));
 
         return null;

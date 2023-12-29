@@ -113,7 +113,7 @@ class ThumbsComponent extends Component
             $apiClient = ApiClientProvider::getApiClient();
             $res = (array)$apiClient->get($url, $query);
 
-            return (array)Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}');
+            return Hash::combine($res, 'meta.thumbnails.{*}.id', 'meta.thumbnails.{*}');
         } catch (BEditaClientException $e) {
             $this->getController()->log($e, 'error');
 

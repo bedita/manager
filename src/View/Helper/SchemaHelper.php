@@ -143,7 +143,7 @@ class SchemaHelper extends Helper
      */
     protected function formatByte($value): string
     {
-        return (string)Number::toReadableSize((int)$value);
+        return Number::toReadableSize((int)$value);
     }
 
     /**
@@ -156,7 +156,7 @@ class SchemaHelper extends Helper
     {
         $res = filter_var($value, FILTER_VALIDATE_BOOLEAN);
 
-        return (string)($res ? __('Yes') : __('No'));
+        return $res ? __('Yes') : __('No');
     }
 
     /**

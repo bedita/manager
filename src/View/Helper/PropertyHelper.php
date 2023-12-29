@@ -133,14 +133,14 @@ class PropertyHelper extends Helper
      */
     public function fieldLabel(string $name, ?string $type = null): string
     {
-        $defaultLabel = Translate::get($name);
+        $defaultLabel = (string)Translate::get($name);
         $t = empty($type) ? $this->getView()->get('objectType') : $type;
         if (empty($t)) {
             return $defaultLabel;
         }
         $key = sprintf('Properties.%s.options.%s.label', $t, $name);
 
-        return Configure::read($key, $defaultLabel);
+        return (string)Configure::read($key, $defaultLabel);
     }
 
     /**
@@ -252,7 +252,7 @@ class PropertyHelper extends Helper
     {
         $method = '';
         if (!empty($fieldType) && in_array($fieldType, Control::CONTROL_TYPES)) {
-            $methodInfo = (array)Form::getMethod(Control::class, $fieldType);
+            $methodInfo = Form::getMethod(Control::class, $fieldType);
             $className = (string)Hash::get($methodInfo, 0);
             $method = (string)Hash::get($methodInfo, 1);
             $preserveClass = Hash::get($fieldOptions, 'class', '');

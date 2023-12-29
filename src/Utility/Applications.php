@@ -58,7 +58,7 @@ class Applications
                 function () {
                     $response = (array)ApiClientProvider::getApiClient()->get('applications');
 
-                    return (array)Hash::combine($response, 'data.{n}.id', 'data.{n}.attributes.name');
+                    return Hash::combine($response, 'data.{n}.id', 'data.{n}.attributes.name');
                 }
             );
         } catch (BEditaClientException $e) {

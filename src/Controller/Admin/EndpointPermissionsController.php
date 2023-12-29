@@ -54,11 +54,11 @@ class EndpointPermissionsController extends AdministrationBaseController
     {
         parent::index();
         $applications = $this->apiClient->get('/admin/applications', []);
-        $this->set('applications', (array)Hash::combine((array)$applications, 'data.{n}.id', 'data.{n}.attributes.name'));
+        $this->set('applications', Hash::combine((array)$applications, 'data.{n}.id', 'data.{n}.attributes.name'));
         $endpoints = $this->apiClient->get('/admin/endpoints', []);
-        $this->set('endpoints', (array)Hash::combine((array)$endpoints, 'data.{n}.id', 'data.{n}.attributes.name'));
+        $this->set('endpoints', Hash::combine((array)$endpoints, 'data.{n}.id', 'data.{n}.attributes.name'));
         $roles = $this->apiClient->get('/roles', []);
-        $this->set('roles', (array)Hash::combine((array)$roles, 'data.{n}.id', 'data.{n}.attributes.name'));
+        $this->set('roles', Hash::combine((array)$roles, 'data.{n}.id', 'data.{n}.attributes.name'));
 
         return null;
     }

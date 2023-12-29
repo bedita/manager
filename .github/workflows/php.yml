@@ -6,15 +6,22 @@ on:
       - '**/*.php'
       - '.github/workflows/php.yml'
       - 'composer.json'
+      - 'psalm.xml'
   push:
     paths:
       - '**/*.php'
       - '.github/workflows/php.yml'
       - 'composer.json'
+      - 'psalm.xml'
 
 jobs:
   cs:
     uses: bedita/github-workflows/.github/workflows/php-cs.yml@v1
+    with:
+      php_versions: '["7.4", "8.1", "8.2"]'
+
+  psalm:
+    uses: bedita/github-workflows/.github/workflows/php-psalm.yml@v1
     with:
       php_versions: '["7.4", "8.1", "8.2"]'
 
