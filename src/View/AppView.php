@@ -56,32 +56,32 @@ class AppView extends TwigView
     {
         parent::initialize();
 
-        $this->loadHelper('Flash');
-        $this->loadHelper('Form', [
+        $this->addHelper('Flash');
+        $this->addHelper('Form', [
             'templates' => [
                 'hiddenBlock' => '{{content}}',
                 'submitContainer' => '{{content}}',
                 'inputContainer' => '<div class="input {{type}}{{required}} {{containerClass}}">{{content}}</div>',
             ],
         ]);
-        $this->loadHelper('Admin');
-        $this->loadHelper('Calendar');
-        $this->loadHelper('Categories');
-        $this->loadHelper('Editors');
-        $this->loadHelper('Element');
-        $this->loadHelper('Layout');
-        $this->loadHelper('Array');
-        $this->loadHelper('Html');
-        $this->loadHelper('Link');
-        $this->loadHelper('Property');
-        $this->loadHelper('Time', ['outputTimezone' => Configure::read('I18n.timezone', 'UTC')]);
-        $this->loadHelper('Perms');
-        $this->loadHelper('Schema');
-        $this->loadHelper('System');
-        $this->loadHelper('Text');
-        $this->loadHelper('BEdita/WebTools.Thumb');
-        $this->loadHelper('Url');
-        $this->loadHelper('BEdita/I18n.I18n');
+        $this->addHelper('Admin');
+        $this->addHelper('Calendar');
+        $this->addHelper('Categories');
+        $this->addHelper('Editors');
+        $this->addHelper('Element');
+        $this->addHelper('Layout');
+        $this->addHelper('Array');
+        $this->addHelper('Html');
+        $this->addHelper('Link');
+        $this->addHelper('Property');
+        $this->addHelper('Time', ['outputTimezone' => Configure::read('I18n.timezone', 'UTC')]);
+        $this->addHelper('Perms');
+        $this->addHelper('Schema');
+        $this->addHelper('System');
+        $this->addHelper('Text');
+        $this->addHelper('BEdita/WebTools.Thumb');
+        $this->addHelper('Url');
+        $this->addHelper('BEdita/I18n.I18n');
     }
 
     /**
