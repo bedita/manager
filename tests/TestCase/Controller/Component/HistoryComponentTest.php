@@ -395,7 +395,7 @@ class HistoryComponentTest extends TestCase
                 [
                   ['name' => 'green'],
                 ],
-                '<div class="categories"><h3>Global</h3><div class="input select"><input type="hidden" name="categories" id="categories" value=""/><div class="checkbox"><label for="categories-red"><input type="checkbox" name="categories[]" value="red" id="categories-red">Red</label></div><div class="checkbox"><label for="categories-green" class="selected"><input type="checkbox" name="categories[]" value="green" checked="checked" id="categories-green">Green</label></div><div class="checkbox"><label for="categories-blue"><input type="checkbox" name="categories[]" value="blue" id="categories-blue">Blue</label></div></div></div>',
+                '<div class="categories"><h3>Global</h3><div class="input select"><input type="hidden" name="categories" id="categories" value=""><div class="checkbox"><label for="categories-red"><input type="checkbox" name="categories[]" value="red" id="categories-red">Red</label></div><div class="checkbox"><label for="categories-green" class="selected"><input type="checkbox" name="categories[]" value="green" checked="checked" id="categories-green">Green</label></div><div class="checkbox"><label for="categories-blue"><input type="checkbox" name="categories[]" value="blue" id="categories-blue">Blue</label></div></div></div>',
             ],
         ];
     }

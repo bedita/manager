@@ -36,25 +36,25 @@ class AdminHelperTest extends TestCase
                 'text',
                 'title',
                 null,
-                '<div class="input text"><input type="text" name="title" size="25" id="title"/></div>',
+                '<div class="input text"><input type="text" name="title" size="25" id="title"></div>',
             ],
             'text value not null' => [
                 'text',
                 'title',
                 'something',
-                '<div class="input text"><input type="text" name="title" size="25" id="title" value="something"/></div>',
+                '<div class="input text"><input type="text" name="title" size="25" id="title" value="something"></div>',
             ],
             'bool value null' => [
                 'bool',
                 'flag',
                 null,
-                '<div class="input radio"><input type="hidden" name="flag" id="flag" value=""/><label for="flag-1"><input type="radio" name="flag" value="1" id="flag-1">Yes</label><label for="flag-0"><input type="radio" name="flag" value="0" id="flag-0">No</label></div>',
+                '<div class="input radio"><input type="hidden" name="flag" id="flag" value=""><label for="flag-1"><input type="radio" name="flag" value="1" id="flag-1">Yes</label><label for="flag-0"><input type="radio" name="flag" value="0" id="flag-0">No</label></div>',
             ],
             'bool value not null' => [
                 'bool',
                 'flag',
                 'something',
-                '<div class="input radio"><input type="hidden" name="flag" id="flag" value=""/><label for="flag-1"><input type="radio" name="flag" value="1" id="flag-1">Yes</label><label for="flag-0"><input type="radio" name="flag" value="0" id="flag-0">No</label></div>',
+                '<div class="input radio"><input type="hidden" name="flag" id="flag" value=""><label for="flag-1"><input type="radio" name="flag" value="1" id="flag-1">Yes</label><label for="flag-0"><input type="radio" name="flag" value="0" id="flag-0">No</label></div>',
             ],
             'json value null' => [
                 'json',
@@ -84,7 +84,7 @@ class AdminHelperTest extends TestCase
                 'default',
                 'dummy',
                 'something',
-                '<div class="input text"><input type="text" name="dummy" size="25" id="dummy" value="something"/></div>',
+                '<div class="input text"><input type="text" name="dummy" size="25" id="dummy" value="something"></div>',
             ],
         ];
     }
