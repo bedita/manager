@@ -8,7 +8,7 @@ import '../../style.scss';
 import { BELoader } from 'libs/bedita';
 
 import { PanelView, PanelEvents } from 'app/components/panel-view';
-import { confirm, error, info, prompt, warning } from 'app/components/dialog/dialog';
+import { confirm, error, info, success, prompt, warning } from 'app/components/dialog/dialog';
 
 import datepicker from 'app/directives/datepicker';
 import email from 'app/directives/email';
@@ -183,6 +183,7 @@ const _vueInstance = new Vue({
             BEDITA.confirm = confirm;
             BEDITA.error = error;
             BEDITA.info = info;
+            BEDITA.success = success;
             BEDITA.prompt = prompt;
             BEDITA.warning = warning;
         });
