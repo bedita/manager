@@ -209,10 +209,21 @@ export default {
         availableFilters() {
             this.normalizeQueryFilter();
             this.dynamicFilters = this.availableFilters.filter(f => {
-                if (f.name == 'status') {
+                if (f.name === 'status') {
                     this.statusFilter = f;
 
                     return false;
+                }
+                if (f.type === 'select' && f.options) {
+                    const items = [];
+                    Object.keys(f.options).forEach((k) => {
+                        items.push({
+                            name: f.name,
+                            text: k === ':::null:::' ? t`NULL` : f.options[k],
+                            value: k,
+                        });
+                    });
+                    f.options = items;
                 }
 
                 return true;
