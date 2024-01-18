@@ -299,4 +299,17 @@ class SchemaHelper extends Helper
 
         return !in_array($type, ['array', 'object']);
     }
+
+    /**
+     * Return unique right types from schema "relationsSchema".
+     *
+     * @return array
+     * @deprecated It will be removed in version 5.x.
+     */
+    public function rightTypes(): array
+    {
+        $relationsSchema = (array)$this->_View->get('relationsSchema');
+
+        return \App\Utility\Schema::rightTypes($relationsSchema);
+    }
 }

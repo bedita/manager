@@ -23,6 +23,45 @@ use Cake\TestSuite\TestCase;
 class SchemaTest extends TestCase
 {
     /**
+     * Test `rightTypes` method
+     *
+     * @return void
+     * @covers ::rightTypes()
+     */
+    public function testRightTypes(): void
+    {
+        $schema = [
+            'dummy_relation_1' => [
+                'right' => [
+                    'dummy_type_1',
+                ],
+            ],
+            'dummy_relation_2' => [
+                'right' => [
+                    'dummy_type_2',
+                    'dummy_type_3',
+                ],
+            ],
+            'dummy_relation_3' => [
+                'right' => [
+                    'dummy_type_1',
+                    'dummy_type_4',
+                    'dummy_type_5',
+                ],
+            ],
+        ];
+        $expected = [
+            'dummy_type_1',
+            'dummy_type_2',
+            'dummy_type_3',
+            'dummy_type_4',
+            'dummy_type_5',
+        ];
+        $actual = Schema::rightTypes($schema);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `objectTypesFromRelations` method.
      *
      * @return void

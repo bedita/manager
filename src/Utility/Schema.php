@@ -21,6 +21,25 @@ use Cake\Utility\Hash;
 class Schema
 {
     /**
+     * Return unique alphabetically ordered right types from schema $schema
+     *
+     * @param array $schema Schema data.
+     * @return array
+     * @deprecated It will be removed in version 5.x. Use `objectTypesFromRelations` instead.
+     */
+    public static function rightTypes(array $schema): array
+    {
+        $relationsRightTypes = (array)Hash::extract($schema, '{s}.right');
+        $types = [];
+        foreach ($relationsRightTypes as $rightTypes) {
+            $types = array_unique(array_merge($types, $rightTypes));
+        }
+        sort($types);
+
+        return $types;
+    }
+
+    /**
      * Return unique alphabetically ordered object types from map
      *
      * @param array $relationsSchema The relations schema
