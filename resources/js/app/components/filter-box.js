@@ -214,7 +214,7 @@ export default {
 
                     return false;
                 }
-                if (f.type === 'select' && f.options) {
+                if (f.type === 'select' && f.options && typeof f.options[0].text === 'undefined') {
                     const items = [];
                     Object.keys(f.options).forEach((k) => {
                         items.push({
