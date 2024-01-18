@@ -57,46 +57,7 @@ class SchemaTest extends TestCase
             'dummy_type_4',
             'dummy_type_5',
         ];
-        /** @phpstan-ignore-next-line */
         $actual = Schema::rightTypes($schema);
         static::assertEquals($expected, $actual);
-    }
-
-    /**
-     * Test `objectTypesFromRelations` method.
-     *
-     * @return void
-     * @covers ::objectTypesFromRelations()
-     */
-    public function testObjectTypesFromRelations(): void
-    {
-        $relationsSchema = [
-            'dummy_1' => [
-                'left' => ['lions', 'dogs'],
-                'right' => ['cats', 'ants'],
-            ],
-            'dummy_2' => [
-                'left' => ['lions', 'horses'],
-                'right' => ['cats', 'dogs'],
-            ],
-            'dummy_3' => [
-                'left' => ['lions', 'horses'],
-                'right' => ['cats', 'dogs'],
-            ],
-            'dummy_4' => [
-                'left' => ['lions', 'horses'],
-                'right' => ['cats', 'dogs'],
-            ],
-            'dummy_5' => [
-                'left' => ['lions', 'horses'],
-                'right' => ['cats', 'dogs'],
-            ],
-        ];
-        $actual = Schema::objectTypesFromRelations($relationsSchema, 'left');
-        $expected = ['dogs', 'horses', 'lions'];
-        $this->assertEquals($expected, $actual);
-        $actual = Schema::objectTypesFromRelations($relationsSchema, 'right');
-        $expected = ['ants', 'cats', 'dogs'];
-        $this->assertEquals($expected, $actual);
     }
 }

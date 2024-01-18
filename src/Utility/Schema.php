@@ -25,7 +25,6 @@ class Schema
      *
      * @param array $schema Schema data.
      * @return array
-     * @deprecated It will be removed in version 5.x. Use `objectTypesFromRelations` instead.
      */
     public static function rightTypes(array $schema): array
     {
@@ -34,24 +33,6 @@ class Schema
         foreach ($relationsRightTypes as $rightTypes) {
             $types = array_unique(array_merge($types, $rightTypes));
         }
-        sort($types);
-
-        return $types;
-    }
-
-    /**
-     * Return unique alphabetically ordered object types from map
-     *
-     * @param array $relationsSchema The relations schema
-     * @return array
-     */
-    public static function objectTypesFromRelations(array $relationsSchema, string $side): array
-    {
-        $types = [];
-        foreach ($relationsSchema as $values) {
-            $types = array_merge($types, (array)Hash::get($values, $side));
-        }
-        $types = array_unique($types);
         sort($types);
 
         return $types;
