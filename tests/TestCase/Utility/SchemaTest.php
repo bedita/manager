@@ -23,41 +23,40 @@ use Cake\TestSuite\TestCase;
 class SchemaTest extends TestCase
 {
     /**
-     * Test `rightTypes` method
+     * Test `objectTypesFromRelations` method.
      *
      * @return void
-     * @covers ::rightTypes()
+     * @covers ::objectTypesFromRelations()
      */
-    public function testRightTypes(): void
+    public function testObjectTypesFromRelations(): void
     {
-        $schema = [
-            'dummy_relation_1' => [
-                'right' => [
-                    'dummy_type_1',
-                ],
+        $relationsSchema = [
+            'dummy_1' => [
+                'left' => ['lions', 'dogs'],
+                'right' => ['cats', 'ants'],
             ],
-            'dummy_relation_2' => [
-                'right' => [
-                    'dummy_type_2',
-                    'dummy_type_3',
-                ],
+            'dummy_2' => [
+                'left' => ['lions', 'horses'],
+                'right' => ['cats', 'dogs'],
             ],
-            'dummy_relation_3' => [
-                'right' => [
-                    'dummy_type_1',
-                    'dummy_type_4',
-                    'dummy_type_5',
-                ],
+            'dummy_3' => [
+                'left' => ['lions', 'horses'],
+                'right' => ['cats', 'dogs'],
+            ],
+            'dummy_4' => [
+                'left' => ['lions', 'horses'],
+                'right' => ['cats', 'dogs'],
+            ],
+            'dummy_5' => [
+                'left' => ['lions', 'horses'],
+                'right' => ['cats', 'dogs'],
             ],
         ];
-        $expected = [
-            'dummy_type_1',
-            'dummy_type_2',
-            'dummy_type_3',
-            'dummy_type_4',
-            'dummy_type_5',
-        ];
-        $actual = Schema::rightTypes($schema);
-        static::assertEquals($expected, $actual);
+        $actual = Schema::objectTypesFromRelations($relationsSchema, 'left');
+        $expected = ['dogs', 'horses', 'lions'];
+        $this->assertEquals($expected, $actual);
+        $actual = Schema::objectTypesFromRelations($relationsSchema, 'right');
+        $expected = ['ants', 'cats', 'dogs'];
+        $this->assertEquals($expected, $actual);
     }
 }

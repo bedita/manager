@@ -23,7 +23,7 @@
                 </select>
             </div>
 
-            {% for type in Schema.rightTypes() %}
+            {% for type in rightTypes %}
                 {% set prefix = '_fast_create_' ~ type ~ '_' %}
                 {{ Form.create(null, {
                     'name': 'create-object',

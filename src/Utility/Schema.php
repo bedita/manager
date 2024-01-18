@@ -21,18 +21,18 @@ use Cake\Utility\Hash;
 class Schema
 {
     /**
-     * Return unique alphabetically ordered right types from schema $schema
+     * Return unique alphabetically ordered object types from map
      *
-     * @param array $schema Schema data.
+     * @param array $relationsSchema The relations schema
      * @return array
      */
-    public static function rightTypes(array $schema): array
+    public static function objectTypesFromRelations(array $relationsSchema, string $side): array
     {
-        $relationsRightTypes = (array)Hash::extract($schema, '{s}.right');
         $types = [];
-        foreach ($relationsRightTypes as $rightTypes) {
-            $types = array_unique(array_merge($types, $rightTypes));
+        foreach ($relationsSchema as $values) {
+            $types = array_merge($types, (array)Hash::get($values, $side));
         }
+        $types = array_unique($types);
         sort($types);
 
         return $types;

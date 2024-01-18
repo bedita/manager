@@ -421,6 +421,7 @@ class LayoutHelperTest extends TestCase
         $viewVars = [
             'modules' => ['documents' => [], 'images' => []],
             'uploadable' => ['images'],
+            'relationsSchema' => ['whatever'],
         ];
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
@@ -440,6 +441,7 @@ class LayoutHelperTest extends TestCase
             'canSave' => true,
             'cloneConfig' => (array)Configure::read('Clone'),
             'uploadConfig' => $system->uploadConfig(),
+            'relationsSchema' => ['whatever'],
         ];
         static::assertSame($expected, $conf);
     }

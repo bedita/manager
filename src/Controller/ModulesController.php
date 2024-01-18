@@ -553,16 +553,21 @@ class ModulesController extends AppController
      */
     private function setupViewRelations(array $relations): void
     {
+        $relationsSchema = $this->Schema->getRelationsSchema();
+        $this->set('relationsSchema', $relationsSchema);
+
         // setup relations metadata
         $this->Modules->setupRelationsMeta(
-            $this->Schema->getRelationsSchema(),
+            $relationsSchema,
             $relations,
             $this->Properties->relationsList($this->objectType),
             $this->Properties->hiddenRelationsList($this->objectType),
             $this->Properties->readonlyRelationsList($this->objectType)
         );
-        $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
-        $rightTypes = \App\Utility\Schema::rightTypes($rel);
+
+        // set right types, considering the object type relations
+        $rightTypes = \App\Utility\Schema::objectTypesFromRelations($relationsSchema, 'right');
+        $this->set('rightTypes', $rightTypes);
 
         // set schemas for relations right types
         $schemasByType = $this->Schema->getSchemasByType($rightTypes);

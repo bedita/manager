@@ -296,6 +296,7 @@ class LayoutHelper extends Helper
             'canSave' => $this->Perms->canSave(),
             'cloneConfig' => (array)Configure::read('Clone'),
             'uploadConfig' => $this->System->uploadConfig(),
+            'relationsSchema' => $this->getView()->get('relationsSchema', []),
         ];
     }
 

@@ -370,7 +370,7 @@ export default {
 
                 return;
             }
-            if (this.relationTypes.right.length === 1) {
+            if (this.relationTypes?.right?.length === 1) {
                 this.object.type = this.relationTypes.right[0];
             } else {
                 this.object.type = '_choose';
