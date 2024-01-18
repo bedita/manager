@@ -57,6 +57,7 @@ class SchemaTest extends TestCase
             'dummy_type_4',
             'dummy_type_5',
         ];
+        /** @phpstan-ignore-next-line */
         $actual = Schema::rightTypes($schema);
         static::assertEquals($expected, $actual);
     }
