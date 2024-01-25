@@ -813,6 +813,7 @@ class SchemaHelperTest extends TestCase
     {
         $view = $this->Schema->getView();
         $view->set('relationsSchema', $relationsSchema);
+        /** @phpstan-ignore-next-line */
         $actual = $this->Schema->rightTypes();
         static::assertSame($expected, $actual);
     }

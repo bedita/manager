@@ -304,6 +304,7 @@ class SchemaHelper extends Helper
      * Return unique right types from schema "relationsSchema".
      *
      * @return array
+     * @deprecated It will be removed in version 5.x.
      */
     public function rightTypes(): array
     {

@@ -96,7 +96,7 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
 
     editor.ui.registry.addButton('placeholders', {
         icon: 'image',
-        tooltip: 'Add placeholder',
+        tooltip: t`Add placeholder`,
         onAction() {
             PanelEvents.requestPanel({
                 action: 'relations-add',
@@ -104,6 +104,7 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
                 data: {
                     relationName: 'placeholder',
                     relationLabel: 'Placeholder',
+                    relationTypes: {right: BEDITA?.relationsSchema?.placeholder?.right || null},
                 },
             });
 

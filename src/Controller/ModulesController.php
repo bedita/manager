@@ -561,8 +561,11 @@ class ModulesController extends AppController
             $this->Properties->hiddenRelationsList($this->objectType),
             $this->Properties->readonlyRelationsList($this->objectType)
         );
+
+        // set right types, considering the object type relations
         $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
         $rightTypes = \App\Utility\Schema::rightTypes($rel);
+        $this->set('rightTypes', $rightTypes);
 
         // set schemas for relations right types
         $schemasByType = $this->Schema->getSchemasByType($rightTypes);
