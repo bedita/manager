@@ -495,9 +495,6 @@ class ModulesController extends AppController
 
         $relationsSchema = $this->Schema->getRelationsSchema();
         $types = $this->Modules->relatedTypes($relationsSchema, $relation);
-        if (count($types) === 1) {
-            return sprintf('/%s', $types[0]);
-        }
 
         return '/objects?filter[type][]=' . implode('&filter[type][]=', $types);
     }
