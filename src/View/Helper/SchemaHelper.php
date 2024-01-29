@@ -73,15 +73,19 @@ class SchemaHelper extends Helper
             ]);
         }
         if (empty($ctrlOptions['type'])) {
-            $ctrlOptions['type'] = ControlType::fromSchema($schema);
+            $ctrlOptionsType = ControlType::fromSchema($schema);
+            $ctrlOptions['type'] = $ctrlOptionsType;
+            if (in_array($ctrlOptionsType, ['integer', 'number'])) {
+                $ctrlOptions['step'] = $ctrlOptionsType === 'number' ? 'any' : '1';
+                $ctrlOptions['type'] = 'number';
+            }
         }
         // verify if there's a custom control handler for $type and $name
         $custom = $this->customControl($name, $value, $ctrlOptions);
         if (!empty($custom)) {
             return $custom;
         }
-
-        return Control::control([
+        $opts = [
             'objectType' => $objectType,
             'property' => $name,
             'value' => $value,
@@ -90,7 +94,12 @@ class SchemaHelper extends Helper
             'label' => Hash::get($ctrlOptions, 'label'),
             'readonly' => Hash::get($ctrlOptions, 'readonly', false),
             'disabled' => Hash::get($ctrlOptions, 'readonly', false),
-        ]);
+        ];
+        if (!empty($ctrlOptions['step'])) {
+            $opts['step'] = $ctrlOptions['step'];
+        }
+
+        return Control::control($opts);
     }
 
     /**

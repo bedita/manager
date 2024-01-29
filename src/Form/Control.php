@@ -48,7 +48,7 @@ class Control
     {
         $type = $options['propertyType'];
         $format = self::format((array)$options['schema']);
-        $controlOptions = array_intersect_key($options, array_flip(['label', 'disabled', 'readonly', 'value']));
+        $controlOptions = array_intersect_key($options, array_flip(['label', 'disabled', 'readonly', 'step', 'value']));
         if ($type === 'text' && in_array($format, ['email', 'uri'])) {
             $result = call_user_func_array(Form::getMethod(self::class, $type, $format), [$options]);
 
