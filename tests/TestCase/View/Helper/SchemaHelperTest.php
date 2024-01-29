@@ -401,7 +401,7 @@ class SchemaHelperTest extends TestCase
      * @covers ::controlOptions()
      * @covers ::customControl()
      */
-    public function testControlOptions(array $expected, array $schema, string $name, mixed $value): void
+    public function testControlOptions(array $expected, array $schema, string $name, $value): void
     {
         $actual = $this->Schema->controlOptions($name, $value, $schema);
 
