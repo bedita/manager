@@ -132,14 +132,14 @@ class ControlType
     }
 
     /**
-     * Return the type for integer: 'number'
+     * Return the type for integer: 'integer'
      *
      * @param array $schema Object schema array.
      * @return string
      */
     public static function fromInteger(array $schema): string
     {
-        return 'number';
+        return 'integer';
     }
 
     /**
