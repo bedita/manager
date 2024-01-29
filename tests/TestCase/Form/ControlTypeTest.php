@@ -66,7 +66,7 @@ class ControlTypeTest extends TestCase
                 ],
             ],
             'integer' => [
-                'number',
+                'integer',
                 [
                     'type' => 'integer',
                 ],
