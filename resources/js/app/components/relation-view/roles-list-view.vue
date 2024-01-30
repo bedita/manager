@@ -3,10 +3,10 @@
         <div>
             <div v-for="groupName in Object.keys(objectsByGroups)">
                 <h4 class="is-small has-font-weight-bold has-text-transform-upper">{{ groupName }}</h4>
-                <div v-for="role in objectsByGroups[groupName]">
+                <label v-for="role in objectsByGroups[groupName]" class="cursor-pointer">
                     <input type="checkbox" :value="role" :disabled="userRolePriority > role.meta.priority" v-model="checkedRelations"/>
-                    <span class="mx-05">{{ getRoleLabel(role.attributes.name, role.attributes.description) }}</span>
-                </div>
+                    <span>{{ getRoleLabel(role.attributes.name, role.attributes.description) }}</span>
+                </label>
             </div>
         </div>
 
