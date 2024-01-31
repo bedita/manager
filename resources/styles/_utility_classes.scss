@@ -6,6 +6,8 @@
 
 .pointer-events-none { pointer-events: none; }
 
+.cursor-pointer { cursor: pointer; }
+
 .is-text-hidden { @include hide-text(); }
 
 .is-clipped { overflow: hidden!important; }

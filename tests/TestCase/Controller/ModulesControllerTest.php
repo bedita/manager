@@ -937,7 +937,7 @@ class ModulesControllerTest extends BaseControllerTest
             ->willReturn(['documents']);
 
         $url = $this->controller->availableRelationshipsUrl('test_relation');
-        static::assertEquals('/documents', $url);
+        static::assertEquals('/objects?filter[type][]=documents', $url);
 
         $this->controller->Modules = $this->createMock(ModulesComponent::class);
         $this->controller->Modules->method('relatedTypes')
