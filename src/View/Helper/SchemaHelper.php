@@ -251,7 +251,7 @@ class SchemaHelper extends Helper
             ));
         }
 
-        return array_values(array_merge($priorityFields, $otherFields));
+        return array_unique(array_values(array_merge($priorityFields, $otherFields)));
     }
 
     /**
