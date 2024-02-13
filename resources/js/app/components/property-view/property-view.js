@@ -40,6 +40,7 @@ export default {
         Permission:() => import(/* webpackChunkName: "permission" */'app/components/permission/permission'),
         Permissions:() => import(/* webpackChunkName: "permissions" */'app/components/permissions/permissions'),
         PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
+        LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
     },
 
     props: {

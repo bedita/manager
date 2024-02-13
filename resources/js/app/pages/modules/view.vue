@@ -15,6 +15,7 @@ export default {
         ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
         StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
+        LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
     },
 
     props: {
@@ -226,10 +227,10 @@ export default {
             }
             if (!object.to) {
                 // use `value` from select on new translations
-                object.to = this.$refs.translateTo.value;
+                object.to = document.getElementById('translateTo').value;
             }
-            object.fromLabel = this.$refs.translateFrom.options[this.$refs.translateFrom.selectedIndex].text || '???';
-            object.toLabel = this.$refs.translateTo.options[this.$refs.translateTo.selectedIndex].text || '???';
+            object.fromLabel = document.getElementById('translateFromLabel').value;
+            object.toLabel = document.getElementById('translateToLabel').value;
 
             const translator = document.getElementById('translatorEngine').value;
 

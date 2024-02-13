@@ -23,8 +23,10 @@
             <div v-show="isOpen" class="tab-container">
 
                 <div>
-                    {% set lang = object.id ? object.attributes.lang : config('Project.config.I18n.default') %}
-                    {{ Property.control('lang', lang, { 'label': __('The main language is') })|raw }}
+                    <language-selector
+                        language="{{ object.id ? object.attributes.lang : config('Project.config.I18n.default')|json_encode }}"
+                        :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}">
+                    </language-selector>
 
                     {% if translatable %}
                         {{ Html.link(__('Add translation'), {
