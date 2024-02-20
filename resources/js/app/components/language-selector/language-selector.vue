@@ -15,7 +15,7 @@
             <select v-else><option>{{ languages[lang] }}</option></select>
             <input v-if="reference" type="hidden" :id="reference" :value="lang" />
             <input v-if="reference" type="hidden" :id="`${reference}Label`" :value="languages[lang]" />
-            <input type="hidden" name="lang" v-model="lang" />
+            <input v-if="reference != 'translateFrom'" type="hidden" name="lang" v-model="lang" />
         </div>
     </div>
 </template>
@@ -71,7 +71,6 @@ export default {
             this.languages['null'] = '';
             if (this.excludeLang) {
                 delete this.languages[this.excludeLang];
-                console.log(this.languages);
             }
             this.languagesOptions = Object.keys(this.languages).map((key) => {
                 return {
