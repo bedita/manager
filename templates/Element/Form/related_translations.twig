@@ -24,11 +24,11 @@
 
                 <div>
                     <language-selector
-                        language="{{ object.id ? object.attributes.lang : config('Project.config.I18n.default')|json_encode }}"
+                        language="{{ object.id ? object.attributes.lang : config('Project.config.I18n.default') }}"
                         :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}">
                     </language-selector>
 
-                    {% if translatable %}
+                    {% if translatable and object.attributes.lang %}
                         {{ Html.link(__('Add translation'), {
                             '_name': 'translations:add',
                             'object_type': object.type,

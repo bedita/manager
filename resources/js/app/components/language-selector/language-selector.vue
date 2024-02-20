@@ -12,7 +12,7 @@
                 v-model="lang"
                 @input="onChange"
             />
-            <span v-else class="main">{{ languages[lang] }}</span>
+            <select v-else><option>{{ languages[lang] }}</option></select>
             <input v-if="reference" type="hidden" :id="reference" :value="lang" />
             <input v-if="reference" type="hidden" :id="`${reference}Label`" :value="languages[lang]" />
             <input type="hidden" name="lang" v-model="lang" />
@@ -30,6 +30,10 @@ export default {
         Treeselect,
     },
     props: {
+        excludeLang: {
+            type: String,
+            default: '',
+        },
         language: {
             type: String,
             default: '',
@@ -62,8 +66,13 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
-            this.lang = this.language;
+            this.lang = this.language == '' ? null : this.language;
             this.title = this.languageLabel || this.msgMainLanguage;
+            this.languages['null'] = '';
+            if (this.excludeLang) {
+                delete this.languages[this.excludeLang];
+                console.log(this.languages);
+            }
             this.languagesOptions = Object.keys(this.languages).map((key) => {
                 return {
                     id: key,
@@ -80,6 +89,9 @@ export default {
 };
 </script>
 <style>
+.languageSelector {
+    max-width: 150px;
+}
 .languageSelector span.main {
     font-weight: bold;
 }
