@@ -1,5 +1,5 @@
 {% do _view.assign('title', __('Translations')) %}
-{% set languages = config('I18n.languages') %}
+{% set languages = config('Project.config.I18n.languages') %}
 
 {{ element('Modules/index_header', { 'meta': meta, 'filter': filter, 'Schema': Schema }) }}
 
