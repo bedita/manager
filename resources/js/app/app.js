@@ -79,6 +79,7 @@ const _vueInstance = new Vue({
         ShowHide:() => import(/* webpackChunkName: "show-hide" */'app/components/show-hide/show-hide'),
         SystemInfo:() => import(/* webpackChunkName: "system-info" */'app/components/system-info/system-info'),
         UserAccesses:() => import(/* webpackChunkName: "user-accesses" */'app/components/user-accesses/user-accesses'),
+        LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
         AppIcon,
     },
 

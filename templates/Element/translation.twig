@@ -14,29 +14,25 @@
                 <div class="row">
                     <div class="column">
                         <div class="lang-header is-flex align-center">
-                            {% set languageLabel = "#{__('Language')}" %}
-                            {% set options = Schema.controlOptions('lang', null, [])|default({})|merge({
-                                'label': languageLabel,
-                                'value': translation.attributes.lang|default(newLang),
-                            }) %}
-                            {% if options.options %}
-                                {% set langOptions = options.options|filter((v, k) => v.value != object.attributes.lang) %}
-                                {% set options = options|merge({
-                                    'options': langOptions,
-                                    'ref': 'translateTo',
-                                }) %}
-                            {% endif %}
-                            {% if translation.attributes.lang %}
-                                {% set options = options|merge({'readonly': true}) %}
-                            {% endif %}
-                            {{ Form.control('lang', options)|raw }}
+                            <language-selector
+                                exclude-lang="{{ object.attributes.lang }}"
+                                language="{{ translation.attributes.lang ? translation.attributes.lang : newLang }}"
+                                :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}"
+                                language-label="{{ __('Language') }}"
+                                :readonly={{ translation.attributes.lang ? 1 : 0 }}
+                                reference="translateTo">
+                            </language-selector>
                             {% if config('Translators') %}
-                                <label>{{ __('Translator Engine') }}</label>
-                                <select id="translatorEngine">
-                                    {% for key,translator in config('Translators') %}
-                                        <option value="{{ key }}">{{ translator.name }}</option>
-                                    {% endfor %}
-                                </select>
+                            <div>
+                                <div class="input select">
+                                    <label>{{ __('Translator Engine') }}</label>
+                                    <select id="translatorEngine">
+                                        {% for key,translator in config('Translators') %}
+                                            <option value="{{ key }}">{{ translator.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
                                 {% set data = [] %}
                                 {% for key in translatable %}
                                     {% set data = data|merge({
@@ -48,23 +44,27 @@
                                         }
                                     }) %}
                                 {% endfor %}
-                                <a class="button has-background-module-translations" @click.prevent="translateAll({{ data|json_encode }}, $event)">
-                                    <app-icon icon="carbon:translate"></app-icon>
-                                    <span class="ml-05 has-text-size-smallest">{{ __('Auto-translate all fields') }}</span>
-                                </a>
+                            <div>
+                                <div class="input">
+                                    <label>{{ __('Auto-translate all fields') }}</label>
+                                    <a class="button has-background-module-translations" @click.prevent="translateAll({{ data|json_encode }}, $event)">
+                                        <app-icon icon="carbon:translate"></app-icon>
+                                        <span class="ml-05 has-text-size-smallest">{{ __('Auto-translate') }}</span>
+                                    </a>
+                                </div>
+                            </div>
                             {% endif %}
                         </div>
                     </div>
                     <div class="column">
                         <div class="lang-header is-flex align-bottom">
-                            {% set languageLabel = "#{__('Original language')}" %}
-                            {% set options = Schema.controlOptions('lang', null, [])|merge({
-                                'label': languageLabel,
-                                'value': object.attributes.lang,
-                                'disabled' : true,
-                                'ref': 'translateFrom',
-                            }) %}
-                            {{ Form.control('lang', options)|raw }}
+                            <language-selector
+                                language="{{ object.attributes.lang ? object.attributes.lang : config('Project.config.I18n.default')|json_encode }}"
+                                :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}"
+                                language-label="{{ __('Original language') }}"
+                                :readonly={{ object.attributes.lang ? 1 : 0 }}
+                                reference="translateFrom">
+                            </language-selector>
                             <a class="button has-background-module-{{ object.type }}" href="{{ Url.build({'_name': 'modules:view', 'object_type': object.type, 'id': object.id }) }}">
                                 <app-icon icon="carbon:launch"></app-icon>
                                 <span class="ml-05">{{ __('Edit') }}</span>
