@@ -448,5 +448,25 @@ return [
                 'provider_username' => 'login',
             ],
         ],
+        'microsoft' => [
+            // OAuth2 class name
+            'class' => '\TheNetworg\OAuth2\Client\Provider\Azure',
+            // Provider class setup parameters - should be set in `app_local.php` to activate this provider
+            // 'setup' => [
+            //     'clientId' => '####',
+            //     'clientSecret' => '####',
+            //      'tenant' => '####',
+            //      'redirectUrl' => '####',
+            // ],
+            // Provider authorization options
+            'options' => [
+                'scope' => ['https://graph.microsoft.com/.default', 'openid'],
+            ],
+            // Map BEdita user fields with auth provider data path, using dot notation like 'user.id'
+            'map' => [
+                'provider_username' => 'oid',
+            ],
+        ],
+
     ],
 ];
