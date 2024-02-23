@@ -14,7 +14,7 @@
                     {% endif %}
                 {% endfor %}</h1>
             {% else %}
-                <h1 class="has-text-gray-600">{{ __('New object in') }} {{ object.type }}</h1>
+                <h1 class="has-text-gray-600">{{ __('New object in') }} {{ Layout.tr(object.type) }}</h1>
             {% endif %}
         </header>
 
