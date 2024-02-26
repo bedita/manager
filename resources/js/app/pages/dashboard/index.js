@@ -14,6 +14,7 @@ export default {
 
     data() {
         return {
+            searchId: '',
             searchString: '',
         };
     },
@@ -38,7 +39,12 @@ export default {
                     break;
             }
         },
-
+        goToID() {
+            if (!this.searchId) {
+                return;
+            }
+            window.location.href = `${BEDITA.base}/view/${this.searchId}`;
+        },
         searchObjects() {
             if (this.searchString) {
                 this.$refs.searchSubmit.classList.add('is-loading-spinner');
