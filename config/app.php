@@ -460,7 +460,7 @@ return [
             // ],
             // Provider authorization options
             'options' => [
-                'scope' => ['https://graph.microsoft.com/.default', 'openid'],
+                'scope' => ['profile', 'https://graph.microsoft.com/.default', 'openid'],
             ],
             // Map BEdita user fields with auth provider data path, using dot notation like 'user.id'
             'map' => [
