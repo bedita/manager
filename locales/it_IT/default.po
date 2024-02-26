@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2023-12-15 11:11:26 \n"
+"POT-Creation-Date: 2024-02-26 14:54:49 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -359,6 +359,12 @@ msgstr "Nascosto"
 
 msgid "History"
 msgstr "Cronologia modifiche"
+
+msgid "ID"
+msgstr ""
+
+msgid "ID or uname"
+msgstr "ID o nome univoco"
 
 msgid "Id"
 msgstr ""
@@ -771,9 +777,6 @@ msgstr "Tag"
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
 
-msgid "The main language is"
-msgstr "La lingua principale è"
-
 msgid "The thumbnail is not available"
 msgstr "La miniatura non è disponibile"
 
@@ -1079,6 +1082,9 @@ msgstr "sì, prosegui"
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
+msgid "Add placeholder"
+msgstr "Aggiungi placeholder"
+
 #, javascript-format
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr "Confermi la cancellazione di ${ number } elementi dal cestino?"
@@ -1193,6 +1199,9 @@ msgstr "Invia mail a"
 
 msgid "Items"
 msgstr "Elementi"
+
+msgid "NULL"
+msgstr ""
 
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr "Testo troppo breve. Lunghezza minima 3 caratteri. Riprova"
@@ -1379,6 +1388,9 @@ msgstr ""
 
 msgid "add new"
 msgstr "aggiungi nuovo"
+
+msgid "The main language is"
+msgstr "La lingua principale è"
 
 msgid "Completed on"
 msgstr "Completato il"

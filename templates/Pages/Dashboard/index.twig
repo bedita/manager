@@ -70,7 +70,15 @@
                     {{ __('Search') }}
                 </button>
             </nav>
+        </section>
 
+        <section class="dashboard-section">
+            <div>
+                <input type="text" placeholder="{{ __('ID or uname') }}" v-model="searchId">
+                <button @click.prevent="goToID()" :disabled="!searchId">
+                    {{ __('ID') }}
+                </button>
+            </div>
         </section>
 
         <div class="dashboard-area">
