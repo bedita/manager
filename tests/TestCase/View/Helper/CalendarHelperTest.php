@@ -64,6 +64,10 @@ class CalendarHelperTest extends TestCase
                 [],
                 '',
             ],
+            'null date ranges' => [
+                null,
+                '',
+            ],
             'multiple date ranges' => [
                 [
                     ['start_date' => '2020-10-14 12:45:00'], // start date only
