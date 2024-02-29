@@ -82,13 +82,13 @@ class CalendarHelperTest extends TestCase
     /**
      * Test `list()` method.
      *
-     * @param array $dateRanges The array.
+     * @param array|null $dateRanges The array.
      * @param string $expected The expected string.
      * @return void
      * @dataProvider listProvider()
      * @covers ::list()
      */
-    public function testList(array $dateRanges, string $expected): void
+    public function testList(?array $dateRanges, string $expected): void
     {
         $actual = $this->Calendar->list($dateRanges);
         static::assertSame($expected, $actual);
