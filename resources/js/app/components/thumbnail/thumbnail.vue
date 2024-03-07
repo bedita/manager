@@ -2,7 +2,7 @@
     <div class="thumbnail" :class="'has-text-module-' + related?.type">
         <figure class="center-icon icon-opaque" :class="figureClass()">
             <img :src="related?.meta?.thumb_url" v-if="showImage()" />
-            <Icon icon="carbon:cube" v-if="showIcon()"></Icon>
+            <app-icon icon="carbon:cube" v-if="showIcon()"></app-icon>
         </figure>
     </div>
 </template>
@@ -13,7 +13,7 @@ export default {
     props: {
         related: {
             type: Object,
-            default: {}
+            default: () => {},
         },
     },
 

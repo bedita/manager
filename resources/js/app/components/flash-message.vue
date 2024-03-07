@@ -6,10 +6,10 @@
         <div :class="['message', level, (params?.class || '').trim()]">
             <h2>
                 <i v-if="viewName.toLowerCase() !== 'login'">
-                    <Icon icon="carbon:checkmark" color="green" v-if="level === 'success'"></Icon>
-                    <Icon icon="carbon:information" color="blue" v-if="level === 'info'"></Icon>
-                    <Icon icon="carbon:warning" color="orange" v-if="level === 'warning'"></Icon>
-                    <Icon icon="carbon:misuse" color="red" v-if="level === 'error'"></Icon>
+                    <app-icon icon="carbon:checkmark" color="green" v-if="level === 'success'"></app-icon>
+                    <app-icon icon="carbon:information" color="blue" v-if="level === 'info'"></app-icon>
+                    <app-icon icon="carbon:warning" color="orange" v-if="level === 'warning'"></app-icon>
+                    <app-icon icon="carbon:misuse" color="red" v-if="level === 'error'"></app-icon>
                 </i>
                 {{ message }}
             </h2>
@@ -22,7 +22,7 @@
             <p v-if="shouldShowDump && !isAdmin">{{ dumpLabel }}</p>
 
             <label v-if="viewName.toLowerCase() !== 'login'" @click="hide">
-                <Icon icon="carbon:close-outline"></Icon>
+                <app-icon icon="carbon:close-outline"></app-icon>
                 {{ t('Close') }}
             </label>
         </div>

@@ -12,6 +12,8 @@
  */
 namespace App\Controller;
 
+use Cake\Core\Configure;
+
 /**
  * Translator controller.
  *
@@ -25,7 +27,7 @@ class TranslatorController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('Translator');
+        $this->loadComponent('Translator', (array)Configure::read('Translators'));
         $this->Security->setConfig('unlockedActions', ['translate']);
     }
 
@@ -44,7 +46,8 @@ class TranslatorController extends AppController
             $json = $this->Translator->translate(
                 $texts,
                 (string)$this->getRequest()->getData('from'),
-                (string)$this->getRequest()->getData('to')
+                (string)$this->getRequest()->getData('to'),
+                (string)$this->getRequest()->getData('translator')
             );
             $decoded = json_decode($json);
             $this->set('translation', $decoded->translation);

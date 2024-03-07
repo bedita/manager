@@ -16,7 +16,7 @@
             @deselect="onRemove"
             @input="onChange"
         />
-        <div class="new-tag" v-show="!searchonly">
+        <div class="new-tag" v-show="!searchonly" v-if="canSave">
             <label for="new-tag">{{ msgAddNewTag }}</label>
             <div class="input-container">
                 <input type="text" :form="form" :value="text" id="new-tag" @input="update($event.target.value)" />
@@ -46,12 +46,34 @@ export default {
     },
 
     props: {
-        id: String,
-        disabled: Boolean,
-        label: String,
-        form: String,
-        initialTags: Array,
-        searchonly: false,
+        id: {
+            type: String,
+            default: undefined,
+        },
+        canSave: {
+            type: Boolean,
+            default: false,
+        },
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
+        label: {
+            type: String,
+            default: '',
+        },
+        form: {
+            type: String,
+            default: undefined,
+        },
+        initialTags: {
+            type: Array,
+            default: () => [],
+        },
+        searchonly: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {

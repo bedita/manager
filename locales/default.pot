@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2023-05-08 07:12:49 \n"
+"POT-Creation-Date: 2024-02-26 14:54:49 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -12,6 +12,11 @@ msgid " in Trashcan"
 msgstr ""
 
 msgid "&"
+msgstr ""
+
+msgid ""
+"API could be distributed in multiple nodes. The following data refers to a "
+"single node"
 msgstr ""
 
 msgid "API version required: {0}"
@@ -36,6 +41,9 @@ msgid "Advanced Data"
 msgstr ""
 
 msgid "Alert Message"
+msgstr ""
+
+msgid "Alert Message By Area"
 msgstr ""
 
 msgid "Alert!"
@@ -156,9 +164,6 @@ msgid "Concurrent users"
 msgstr ""
 
 msgid "Config"
-msgstr ""
-
-msgid "Configuration key"
 msgstr ""
 
 msgid "Confirm new password"
@@ -350,6 +355,12 @@ msgstr ""
 msgid "History"
 msgstr ""
 
+msgid "ID"
+msgstr ""
+
+msgid "ID or uname"
+msgstr ""
+
 msgid "Id"
 msgstr ""
 
@@ -461,9 +472,6 @@ msgstr ""
 msgid "Move to"
 msgstr ""
 
-msgid "Move to position"
-msgstr ""
-
 msgid "Move to trash"
 msgstr ""
 
@@ -494,6 +502,9 @@ msgstr ""
 msgid "No application"
 msgstr ""
 
+msgid "No import filters set"
+msgstr ""
+
 msgid "No items found"
 msgstr ""
 
@@ -522,6 +533,9 @@ msgid "ObjectTypes"
 msgstr ""
 
 msgid "Objects"
+msgstr ""
+
+msgid "Objects History"
 msgstr ""
 
 msgid "Off"
@@ -710,9 +724,6 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-msgid "See Wiki for help"
-msgstr ""
-
 msgid "Select a project"
 msgstr ""
 
@@ -746,6 +757,9 @@ msgstr ""
 msgid "Surname"
 msgstr ""
 
+msgid "System information"
+msgstr ""
+
 msgid "System users"
 msgstr ""
 
@@ -753,9 +767,6 @@ msgid "Tags"
 msgstr ""
 
 msgid "Temporary folder missing"
-msgstr ""
-
-msgid "The main language is"
 msgstr ""
 
 msgid "The thumbnail is not available"
@@ -792,6 +803,9 @@ msgid "Translation(s) deleted"
 msgstr ""
 
 msgid "Translations"
+msgstr ""
+
+msgid "Translator Engine"
 msgstr ""
 
 msgid "Trash"
@@ -836,6 +850,9 @@ msgstr ""
 msgid "Url"
 msgstr ""
 
+msgid "User Accesses"
+msgstr ""
+
 msgid "User Profile"
 msgstr ""
 
@@ -873,9 +890,6 @@ msgid "You are not authorized to access that location."
 msgstr ""
 
 msgid "You have requested a password change, please provide a new password"
-msgstr ""
-
-msgid "Your recent items"
 msgstr ""
 
 msgid "Zipcode"
@@ -1022,9 +1036,6 @@ msgstr ""
 msgid "undo remove"
 msgstr ""
 
-msgid "untitled"
-msgstr ""
-
 msgid "username"
 msgstr ""
 
@@ -1062,12 +1073,28 @@ msgstr ""
 msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
+msgid "Add placeholder"
+msgstr ""
+
 #, javascript-format
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
 
 #, javascript-format
 msgid "Moving ${ number } item(s) to trash. Are you sure?"
+msgstr ""
+
+#, javascript-format
+msgid "Error translating from \"${ from }\" to \"${ to }\""
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Could not translate field \"${ field }\" with translation engine "
+"\"${ engine }\""
+msgstr ""
+
+msgid "OOOPS! Something went wrong"
 msgstr ""
 
 #, javascript-format
@@ -1084,6 +1111,12 @@ msgid "No options for this file type"
 msgstr ""
 
 msgid "Options"
+msgstr ""
+
+msgid "Configuration key"
+msgstr ""
+
+msgid "See wiki for help"
 msgstr ""
 
 msgid "Remove item. Are you sure?"
@@ -1117,6 +1150,14 @@ msgstr ""
 msgid "At least ${ len } characters"
 msgstr ""
 
+msgid "GET"
+msgstr ""
+
+msgid ""
+"Missing data to search coordinates: insert at least \"Address\" and "
+"\"Locality\" (optional: \"Zipcode\", \"Country\", \"Region\")"
+msgstr ""
+
 msgid "stop"
 msgstr ""
 
@@ -1144,6 +1185,9 @@ msgstr ""
 msgid "Items"
 msgstr ""
 
+msgid "NULL"
+msgstr ""
+
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 
@@ -1162,6 +1206,18 @@ msgstr ""
 msgid "Uri is not valid"
 msgstr ""
 
+msgid "Accesses"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Starting date"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
 msgid "Canonical"
 msgstr ""
 
@@ -1171,10 +1227,10 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-msgid "Search existing tags"
+msgid "Add new tag"
 msgstr ""
 
-msgid "Add new tag"
+msgid "Search existing tags"
 msgstr ""
 
 #, javascript-format
@@ -1187,6 +1243,12 @@ msgstr ""
 msgid "Error on deleting tag"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
 msgid "copied in the clipboard"
 msgstr ""
 
@@ -1194,6 +1256,7 @@ msgstr ""
 msgid "Created on ${ created }."
 msgstr ""
 
+#, javascript-format
 msgid "Modified on ${ modified }."
 msgstr ""
 
@@ -1201,10 +1264,35 @@ msgstr ""
 msgid "Publish start on ${ published }."
 msgstr ""
 
+#, javascript-format
 msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
 msgid "Error while creating new object."
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "activities"
+msgstr ""
+
+msgid "Activity"
+msgstr ""
+
+msgid "Changed"
+msgstr ""
+
+msgid "No activity found"
+msgstr ""
+
+msgid "Your recent activity"
+msgstr ""
+
+msgid "Title or #id uname"
+msgstr ""
+
+msgid "(deleted)"
 msgstr ""
 
 msgid "You can modify the permissions"
@@ -1225,13 +1313,38 @@ msgstr ""
 msgid "Inherited"
 msgstr ""
 
-msgid "Hide"
+msgid "by user"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "History items"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "on resource"
+msgstr ""
+
+msgid "Resource"
+msgstr ""
+
+msgid "with application"
+msgstr ""
+
+#, javascript-format
+msgid "Action ${ action } performed by"
 msgstr ""
 
 msgid "Inherited from"
 msgstr ""
 
-msgid "Show"
+msgid "Readonly"
+msgstr ""
+
+msgid "Translatable"
 msgstr ""
 
 msgid "Error on deleting property"
@@ -1240,47 +1353,28 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#. *
-#.  * <location-view> component used for ModulesPage -> View
-#.  *
-#.  * Handle Locations and reverse geocoding from addresses
-#.
-msgid "Title"
-msgstr ""
-
-#. *
-#.  * <location-view> component used for ModulesPage -> View
-#.  *
-#.  * Handle Locations and reverse geocoding from addresses
-#.
 msgid "Address"
 msgstr ""
 
-#. *
-#.  * <location-view> component used for ModulesPage -> View
-#.  *
-#.  * Handle Locations and reverse geocoding from addresses
-#.
-msgid "GET"
+msgid "Bearing"
 msgstr ""
 
-#. *
-#.  * <location-view> component used for ModulesPage -> View
-#.  *
-#.  * Handle Locations and reverse geocoding from addresses
-#.
 msgid "edit"
 msgstr ""
 
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  ...
-#.  *
-#.  * <locations-view> component used for ModulesPage -> View
-#.  *
-#.  * Handle Locations and reverse geocoding from addresses
-#.
+msgid "Pitch"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
+
 msgid "add new"
+msgstr ""
+
+msgid "The main language is"
 msgstr ""
 
 msgid "Completed on"
@@ -1330,7 +1424,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.
+#.  
 msgid "No History data found"
 msgstr ""
 
@@ -1338,6 +1432,7 @@ msgstr ""
 msgid "by ${ name } via ${ application }"
 msgstr ""
 
+#, javascript-format
 msgid "by ${ name }"
 msgstr ""
 
@@ -1346,85 +1441,31 @@ msgid ""
 "saving). Are you sure?"
 msgstr ""
 
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
 msgid "Every day"
 msgstr ""
 
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Sunday"
-msgstr ""
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Monday"
-msgstr ""
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Tuesday"
-msgstr ""
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Wednesday"
-msgstr ""
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Thursday"
-msgstr ""
-
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
 msgid "Friday"
 msgstr ""
 
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
+msgid "Invalid date range"
+msgstr ""
+
+msgid "Monday"
+msgstr ""
+
 msgid "Saturday"
 msgstr ""
 
-#. *
-#.  * Templates that uses this component (directly or indirectly):
-#.  *  Template/Elements/calendar.twig
-#.  *
-#.  * <date-ranges-view> component used for ModulesPage -> View
-#.
-msgid "Invalid date range"
+msgid "Sunday"
+msgstr ""
+
+msgid "Thursday"
+msgstr ""
+
+msgid "Tuesday"
+msgstr ""
+
+msgid "Wednesday"
 msgstr ""
 
 msgid "Modify"

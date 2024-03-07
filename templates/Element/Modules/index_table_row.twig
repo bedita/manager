@@ -50,7 +50,7 @@
                     {{ Form.hidden('ids', {'value': object.id})|raw }}
                     {{ Form.hidden('query', {'value': q})|raw }}
                     <button class="button button-text-white is-width-auto" form="form-restore-{{ object.id }}" title="{{ __('Restore') ~ ' ' ~ object.attributes.title|escape }}">
-                        <Icon icon="carbon:redo"></Icon>
+                        <app-icon icon="carbon:redo"></app-icon>
                         <span class="ml-05">{{ __('Restore') }}</span>
                     </button>
                 {{ Form.end()|raw }}
@@ -61,7 +61,7 @@
                     {{ Form.hidden('ids', {'value': object.id})|raw }}
                     {{ Form.hidden('query', {'value': q})|raw }}
                     <button class="button button-text-white is-width-auto" form="form-delete-{{ object.id }}" title="{{ __('Permanently delete') ~ ' ' ~ object.attributes.title|escape }}" onclick="confirm">
-                        <Icon icon="carbon:trash-can"></Icon>
+                        <app-icon icon="carbon:trash-can"></app-icon>
                         <span class="ml-05">{{ __('Delete') }}</span>
                     </button>
                 {{ Form.end()|raw }}
@@ -71,7 +71,7 @@
 
             {% if Perms.canRead(object.type) %}
                 <button title="{{ __('Edit') }} {{ object.attributes.title }}" class="button button-text-white is-width-auto">
-                    <Icon icon="carbon:launch"></Icon>
+                    <app-icon icon="carbon:launch"></app-icon>
                     <span class="ml-05">{{ __('Edit') }}</span>
                 </button>
             {% endif %}
@@ -80,7 +80,7 @@
                 {{ Form.create(null, {'url': {'_name': 'modules:delete', 'object_type': object.type}})|raw }}
                     {{ Form.hidden('id', {'value': object.id})|raw }}
                     <button title="{{ __('Move to trash') ~ ' ' ~ object.attributes.title|escape }}" class="button button-text-white is-width-auto">
-                        <Icon icon="carbon:trash-can"></Icon>
+                        <app-icon icon="carbon:trash-can"></app-icon>
                         <span class="ml-05">{{ __('Trash-verb') }}</span>
                     </button>
                 {{ Form.end()|raw }}

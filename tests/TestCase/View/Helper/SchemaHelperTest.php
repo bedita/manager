@@ -218,6 +218,34 @@ class SchemaHelperTest extends TestCase
                 'body',
                 'test',
             ],
+            'integer' => [
+                // expected result
+                [
+                    'step' => 1,
+                    'type' => 'integer',
+                    'value' => 123,
+                ],
+                // schema type
+                [
+                    'type' => 'integer',
+                ],
+                'integer',
+                123,
+            ],
+            'number' => [
+                // expected result
+                [
+                    'step' => 'any',
+                    'type' => 'number',
+                    'value' => 123.45,
+                ],
+                // schema type
+                [
+                    'type' => 'number',
+                ],
+                'number',
+                123.45,
+            ],
             'publish_start' => [
                 // expected result
                 [
@@ -367,13 +395,13 @@ class SchemaHelperTest extends TestCase
      * @param array $expected Expected result.
      * @param array $schema The JSON schema
      * @param string $name The field name.
-     * @param string|null $value The field value.
+     * @param mixed $value The field value.
      * @return void
      * @dataProvider controlOptionsSchemaProvider()
      * @covers ::controlOptions()
      * @covers ::customControl()
      */
-    public function testControlOptions(array $expected, array $schema, string $name, ?string $value): void
+    public function testControlOptions(array $expected, array $schema, string $name, $value): void
     {
         $actual = $this->Schema->controlOptions($name, $value, $schema);
 
@@ -813,6 +841,7 @@ class SchemaHelperTest extends TestCase
     {
         $view = $this->Schema->getView();
         $view->set('relationsSchema', $relationsSchema);
+        /** @phpstan-ignore-next-line */
         $actual = $this->Schema->rightTypes();
         static::assertSame($expected, $actual);
     }

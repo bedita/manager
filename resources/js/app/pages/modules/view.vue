@@ -1,13 +1,7 @@
+<script>
 import { AjaxLogin } from '../../components/ajax-login/ajax-login.js';
 import Vue from 'vue';
-
-/**
- * Templates that uses this component (directly or indirectly):
- *  Template/Modules/view.twig
- *
- * <modules-view> component used for ModulesPage -> View
- *
- */
+import { t } from 'ttag';
 
 export default {
     components: {
@@ -21,22 +15,26 @@ export default {
         ObjectTypesList: () => import(/* webpackChunkName: "object-types-list" */'app/components/object-types-list/object-types-list'),
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
         StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
+        LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
     },
 
     props: {
-        object: Object,
+        object: {
+            type: Object,
+            default: () => {},
+        },
+        userRoles: {
+            type: Array,
+            default: () => ([]),
+        },
     },
 
-    /**
-     * component properties
-     *
-     * @returns {Object}
-     */
     data() {
         return {
             changeListener: null,
             submitListener: null,
             tabsOpen: true,
+            errors: [],
         };
     },
 
@@ -166,10 +164,10 @@ export default {
                         this.fetchTranslation(data[key])
                     )
                 );
-            } catch (error) {
-                BEDITA.error(error);
+            } finally {
+                el.classList.remove('is-loading-spinner');
+                this.processErrors();
             }
-            el.classList.remove('is-loading-spinner');
         },
 
         isTranslatable(content) {
@@ -181,43 +179,83 @@ export default {
             el.classList.add('is-loading-spinner');
 
             this.fetchTranslation(object)
-                .catch((error) => {
-                    BEDITA.error(error);
-                })
                 .finally(() => {
                     el.classList.remove('is-loading-spinner');
+                    this.processErrors();
                 });
         },
 
+        enqueueError(error, field, from, to, engine) {
+            if (error) {
+                console.error(error);
+            }
+            const message = t`Error translating from "${from}" to "${to}"`;
+            const details = t`Could not translate field "${field}" with translation engine "${engine}"`;
+            this.errors = [...this.errors, { message, details }]
+
+            return true;
+        },
+
+        processErrors() {
+            if (this.errors.length === 0) {
+                return;
+            }
+            let details = '';
+            for (let e of this.errors) {
+                if (e?.details) {
+                    if (details.length === 0) {
+                        details = e.details;
+                        continue;
+                    }
+                    details = details + '\n' + e.details;
+                }
+            }
+            const message = t`OOOPS! Something went wrong` + '. ' + this.errors[0].message;
+            if (this.userRoles.includes('admin')) {
+                BEDITA.error(message, document.body, details);
+            } else {
+                BEDITA.error(message);
+            }
+            this.errors = [];
+        },
+
         fetchTranslation(object) {
-            if (!object || !this.isTranslatable(object?.content)) {
-                // skip translation, content empty
+            if (!object || !this.isTranslatable(object?.content) || !document.getElementById('translatorEngine')) {
+                // skip translation if no content or no translator engine
 
                 return Promise.resolve();
             }
             if (!object.to) {
                 // use `value` from select on new translations
-                object.to = this.$refs.translateTo.value;
+                object.to = document.getElementById('translateTo').value;
             }
+            object.fromLabel = document.getElementById('translateFromLabel').value;
+            object.toLabel = document.getElementById('translateToLabel').value;
 
-            return this.$helpers.autoTranslate(object.content, object.from, object.to)
+            const translator = document.getElementById('translatorEngine').value;
+
+            return this.$helpers.autoTranslate(object.content, object.from, object.to, translator)
                 .catch(error => {
-                    console.error(error);
-
-                    throw new Error(`Unable to translate field ${object.field}`);
+                    return this.enqueueError(error, object.field, object.fromLabel, object.toLabel, translator);
                 })
                 .then(r => {
-                    if (!r.translation) {
-                        throw new Error(`Unable to translate field ${object.field}`);
-                    }
-
-                    let input = this.$refs[object.field];
-                    if (!input) {
-                        input = document.getElementById('translated-fields-' + object.field.replaceAll('_', '-'));
+                    if (!r?.translation) {
+                        return this.enqueueError(null, object.field, object.fromLabel, object.toLabel, translator);
                     }
                     if (Array.isArray(r.translation)) {
                         // this to avoid "," could be problematic as separator for contents
                         r.translation = r.translation.join('|||');
+                        let allEmpty = true;
+                        for (let tr of r.translation) {
+                            allEmpty = allEmpty && tr.length === 0;
+                        }
+                        if (allEmpty) {
+                            return this.enqueueError(null, object.field, object.fromLabel, object.toLabel, translator);
+                        }
+                    }
+                    let input = this.$refs[object.field];
+                    if (!input) {
+                        input = document.getElementById('translated-fields-' + object.field.replaceAll('_', '-'));
                     }
                     input.value = r.translation;
                     input.dispatchEvent(new CustomEvent('change'));
@@ -225,3 +263,4 @@ export default {
         },
     }
 }
+</script>

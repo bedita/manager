@@ -16,9 +16,9 @@
                 {{ node.attributes.title }}
             </label>
             <span v-if="hasPermissionRoles" v-title="node.meta.perms.roles.join(', ')">
-                <Icon icon="carbon:locked" v-if="isLocked"></Icon>
-                <Icon icon="carbon:unlocked" v-if="!isLocked"></Icon>
-                <Icon icon="carbon:tree-view" v-if="node.meta.perms.inherited"></Icon>
+                <app-icon icon="carbon:locked" v-if="isLocked"></app-icon>
+                <app-icon icon="carbon:unlocked" v-if="!isLocked"></app-icon>
+                <app-icon icon="carbon:tree-view" v-if="node.meta.perms.inherited"></app-icon>
             </span>
             <button v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id) && showNode"
                 :class="{'is-loading-spinner': isLoading, 'icon-down-open': !isLoading && isOpen, 'icon-right-open': !isLoading && !isOpen}"

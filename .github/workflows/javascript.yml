@@ -26,14 +26,14 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x, 19.x]
+        node-version: [14.x, 16.x, 18.x, 20.x]
 
     steps:
       - name: Checkout current revision
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -44,4 +44,4 @@ jobs:
         run: yarn build
 
       - name: Run ESLint
-        run: yarn eslint resources/js/**/*.js
+        run: yarn eslint resources/js/**/*.js resources/js/**/*.vue

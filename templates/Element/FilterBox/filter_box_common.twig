@@ -8,26 +8,22 @@
                 v-model.trim="queryFilter.q"
                 @keydown.enter.prevent="applyFilter"
             />
-
-            <label class="mt-025" v-if="showAdvanced">
-                <input type="checkbox" form="_filters" v-model="queryFilter.filter['history_editor']" :initvalue="initHistoryEditor">{{ __('Only my contents') }}</input>
-            </label>
         </div>
 
         <div class="filter-buttons">
             <button class="button button-secondary button-primary-hover-module-{{ currentModule.name }}" type="button" @click.prevent="applyFilter">
-                <Icon icon="carbon:search"></Icon>
+                <app-icon icon="carbon:search"></app-icon>
                 <span class="ml-05">{{ __('Search') }}</span>
             </button>
 
             <button class="button button-outlined" type="button" @click="resetFilter">
-                <Icon icon="carbon:filter-reset"></Icon>
+                <app-icon icon="carbon:filter-reset"></app-icon>
                 <span class="ml-05">{{ __('Reset filters') }}</span>
             </button>
 
             <button class="toggle-filters button button-outlined is-width-auto" type="button" @click="moreFilters = !moreFilters" v-if="canShowAdvanced">
-                <Icon icon="carbon:filter-edit" v-if="!moreFilters"></Icon><span class="ml-05" v-show="!moreFilters">{{ __('More filters') }}</span>
-                <Icon icon="carbon:filter" v-if="moreFilters"></Icon><span class="ml-05" v-show="moreFilters">{{ __('Less filters') }}</span>
+                <app-icon icon="carbon:filter-edit" v-if="!moreFilters"></app-icon><span class="ml-05" v-show="!moreFilters">{{ __('More filters') }}</span>
+                <app-icon icon="carbon:filter" v-if="moreFilters"></app-icon><span class="ml-05" v-show="moreFilters">{{ __('Less filters') }}</span>
             </button>
         </div>
     </div>
@@ -43,6 +39,13 @@
                 <option selected value="" label="{{ __('All Types') }}"></option>
                 <option v-for="type in rightTypes" :value="type"><: t(capitalize(type)) :></option>
             </select>
+        </div>
+
+        {# only my contents filter #}
+        <div class="filter-container" v-if="showAdvanced">
+            <label>
+                <input type="checkbox" form="_filters" v-model="queryFilter.filter['history_editor']" :initvalue="initHistoryEditor">{{ __('Only my contents') }}</input>
+            </label>
         </div>
 
         {# status filter #}
@@ -165,7 +168,7 @@
 
 <div v-if="filterActive">
     <p class="is-expanded tag mt-1">
-        <Icon icon="carbon:filter"></Icon>
+        <app-icon icon="carbon:filter"></app-icon>
         <span class="ml-05">{{ __('Data is filtered') }}</span>
     </p>
 </div>

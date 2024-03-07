@@ -168,7 +168,7 @@ class ModulesController extends AppController
         $this->Modules->setupAttributes($object);
 
         $included = !empty($response['included']) ? $response['included'] : [];
-        $typeIncluded = (array)Hash::combine($included, '{n}.id', '{n}', '{n}.type');
+        $typeIncluded = Hash::combine($included, '{n}.id', '{n}', '{n}.type');
         $streams = Hash::get($typeIncluded, 'streams');
         $this->History->load($id, $object);
         $this->set(compact('object', 'included', 'schema', 'streams'));
@@ -330,11 +330,7 @@ class ModulesController extends AppController
         }
         try {
             $source = $this->apiClient->getObject($id, $this->objectType);
-            $attributes = (array)Hash::get($source, 'data.attributes');
-            $attributes['uname'] = '';
-            unset($attributes['relationships']);
-            $attributes['title'] = $this->getRequest()->getQuery('title');
-            $attributes['status'] = 'draft';
+            $attributes = $this->Clone->prepareData($this->objectType, $source);
             $this->Clone->stream($schema, $source, $attributes);
             $save = $this->apiClient->save($this->objectType, $attributes);
             $destination = (string)Hash::get($save, 'data.id');
@@ -499,9 +495,6 @@ class ModulesController extends AppController
 
         $relationsSchema = $this->Schema->getRelationsSchema();
         $types = $this->Modules->relatedTypes($relationsSchema, $relation);
-        if (count($types) === 1) {
-            return sprintf('/%s', $types[0]);
-        }
 
         return '/objects?filter[type][]=' . implode('&filter[type][]=', $types);
     }
@@ -565,8 +558,11 @@ class ModulesController extends AppController
             $this->Properties->hiddenRelationsList($this->objectType),
             $this->Properties->readonlyRelationsList($this->objectType)
         );
+
+        // set right types, considering the object type relations
         $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
         $rightTypes = \App\Utility\Schema::rightTypes($rel);
+        $this->set('rightTypes', $rightTypes);
 
         // set schemas for relations right types
         $schemasByType = $this->Schema->getSchemasByType($rightTypes);

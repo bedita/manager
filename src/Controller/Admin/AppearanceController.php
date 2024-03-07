@@ -13,6 +13,7 @@
 namespace App\Controller\Admin;
 
 use App\Utility\ApiConfigTrait;
+use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -40,6 +41,16 @@ class AppearanceController extends AdministrationBaseController
     protected $readonly = false;
 
     /**
+     * @inheritDoc
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->Security->setConfig('unlockedActions', ['save']);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null
@@ -63,11 +74,21 @@ class AppearanceController extends AdministrationBaseController
     public function save(): ?Response
     {
         $this->getRequest()->allowMethod(['post']);
-        $data = (array)$this->getRequest()->getData();
-        $propertyName = (string)Hash::get($data, 'property_name');
-        $content = (string)Hash::get($data, Inflector::camelize($propertyName));
-        $this->saveApiConfig(Inflector::camelize($propertyName), (array)json_decode($content, true));
+        $this->viewBuilder()->setClassName('Json');
+        try {
+            $data = (array)$this->getRequest()->getData();
+            $propertyName = (string)Hash::get($data, 'property_name');
+            $propertyValue = (array)Hash::get($data, 'property_value');
+            $this->saveApiConfig(Inflector::camelize($propertyName), $propertyValue);
+            $response = 'Configuration saved';
+            $this->set('response', $response);
+            $this->setSerialize(['response']);
+        } catch (BEditaClientException $e) {
+            $error = $e->getMessage();
+            $this->set('error', $error);
+            $this->setSerialize(['error']);
+        }
 
-        return $this->redirect(['_name' => 'admin:list:appearance', '?' => ['configKey' => $propertyName]]);
+        return null;
     }
 }

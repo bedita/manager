@@ -19,14 +19,14 @@
         <span v-if="loading" class="is-loading-spinner"></span>
         <div v-if="!loading && accesses.length > 0" class="grid">
             <span class="column-header">
-                <Icon icon="carbon:calendar"></Icon>
+                <app-icon icon="carbon:calendar"></app-icon>
                 <i class="ml-05">{{ msgDate }}</i>
             </span>
             <span class="column-header">
-                <Icon icon="carbon:user"></Icon>
+                <app-icon icon="carbon:user"></app-icon>
                 <i class="ml-05">{{ msgUser }}</i>
             </span>
-            <template v-for="user,key in accesses">
+            <template v-for="user in accesses">
                 <span>{{ formatDate(user?.meta?.last_login) }}</span>
                 <span>
                     <a class="tag has-background-module-users" :href="`/users/view/${user.id}`" target="_new">
@@ -84,7 +84,7 @@ export default {
         loadAccesses(pageSize = 20, page = 1) {
             this.loading = true;
             this.getAccesses(pageSize, page)
-                .catch(_error => { this.loading = false; return false;})
+                .catch(_error => { console.error(_error); this.loading = false; return false; })
                 .then(response => {
                     this.loading = false;
                     this.accesses = response.data || [];

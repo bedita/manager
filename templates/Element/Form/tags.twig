@@ -8,7 +8,11 @@
             </header>
             <div v-show="isOpen" class="tab-container">
                 <div class="tags-container">
-                    <tag-picker id="tagPick" :initial-tags="{{ object.attributes.tags|default([])|json_encode }}"></tag-picker>
+                    <tag-picker
+                        :id="`tagPick`"
+                        :initial-tags="{{ object.attributes.tags|default([])|json_encode }}"
+                        :can-save="{{ Perms.canSave('tags')|json_encode }}">
+                    </tag-picker>
                 </div>
             </div>
         </section>

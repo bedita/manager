@@ -84,9 +84,9 @@ abstract class AdministrationBaseController extends AppController
     }
 
     /**
-     * Restrict `model` module access to `admin`
-     *
      * {@inheritDoc}
+     *
+     * Restrict `model` module access to `admin`
      */
     public function beforeFilter(EventInterface $event): ?Response
     {
@@ -113,11 +113,8 @@ abstract class AdministrationBaseController extends AppController
     public function index(): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
-        $query = $this->getRequest()->getQueryParams();
-
         try {
-            $endpoint = $this->resourceType === 'roles' ? $this->endpoint : sprintf('%s/%s', $this->endpoint, $this->resourceType);
-            $response = $this->apiClient->get($endpoint, $query);
+            $response = $this->loadData();
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -125,9 +122,9 @@ abstract class AdministrationBaseController extends AppController
             return $this->redirect(['_name' => 'dashboard']);
         }
 
-        $this->set('resources', (array)$response['data']);
-        $this->set('meta', (array)$response['meta']);
-        $this->set('links', (array)$response['links']);
+        $this->set('resources', (array)Hash::get($response, 'data'));
+        $this->set('meta', (array)Hash::get($response, 'meta'));
+        $this->set('links', (array)Hash::get($response, 'links'));
         $this->set('resourceType', $this->resourceType);
         $this->set('properties', $this->properties);
         $this->set('propertiesSecrets', $this->propertiesSecrets);
@@ -206,5 +203,31 @@ abstract class AdministrationBaseController extends AppController
         }
 
         return sprintf('%s/%s', $this->endpoint, $this->resourceType);
+    }
+
+    /**
+     * Get all results iterating over pagination.
+     *
+     * @return array
+     */
+    protected function loadData(): array
+    {
+        $query = $this->getRequest()->getQueryParams();
+        $resourceEndpoint = sprintf('%s/%s', $this->endpoint, $this->resourceType);
+        $endpoint = $this->resourceType === 'roles' ? 'roles' : $resourceEndpoint;
+        $resultResponse = [];
+        $pagination = ['page' => 0];
+        while (Hash::get($pagination, 'page') === 0 || Hash::get($pagination, 'page', -1) < Hash::get($pagination, 'page_count', -1)) {
+            $query['page'] = $pagination['page'] + 1;
+            $response = (array)$this->apiClient->get($endpoint, $query);
+            $pagination = (array)Hash::get($response, 'meta.pagination');
+            foreach ((array)Hash::get($response, 'data') as $data) {
+                $resultResponse['data'][] = $data;
+            }
+            $resultResponse['meta'] = Hash::get($response, 'meta');
+            $resultResponse['links'] = Hash::get($response, 'links');
+        }
+
+        return $resultResponse;
     }
 }

@@ -32,11 +32,14 @@ class CalendarHelper extends Helper
     /**
      * Get calendar date ranges list html
      *
-     * @param array $dateRanges The date ranges intervals
+     * @param array|null $dateRanges The date ranges intervals
      * @return string
      */
-    public function list(array $dateRanges): string
+    public function list(?array $dateRanges): string
     {
+        if (empty($dateRanges)) {
+            return '';
+        }
         $list = '';
         foreach ($dateRanges as $dateRange) {
             $list .= $this->dateRange($dateRange);

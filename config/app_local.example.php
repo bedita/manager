@@ -17,16 +17,31 @@ return [
      */
     // 'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
 
-    /*
-     * Security and encryption configuration
-     *
-     * - salt - A random string used in security hashing methods.
-     *   The salt value is also used as the encryption key.
-     *   You should treat it as extremely sensitive data.
+    /**
+     * Modules accesses per role(s)
      */
-    'Security' => [
-        'salt' => env('SECURITY_SALT', '__SALT__'),
-    ],
+    // 'AccessControl' => [
+    //     'manager' => [
+    //         'hidden' => ['objects'],
+    //         'readonly' => ['documents'],
+    //     ],
+    //     'guest' => [
+    //         'hidden' => ['objects', 'users'],
+    //         'readonly' => ['documents'],
+    //     ],
+    // ],
+
+    /**
+     * Display an alert message in a top bar.
+     * Useful to announce mainteinance or to specify a non-production environment
+     *
+     * - text => text message to display
+     * - color => background color to use
+     */
+    // 'AlertMessage' => [
+    //     'text' => 'Test Message',
+    //     'color' => '#498fde',
+    // ],
 
     /**
      * API configuration.
@@ -52,38 +67,187 @@ return [
     // ],
 
     /**
-     * Additional plugins to load with this format: 'PluginName' => load options array
-     * Where options array may contain
-     *
-     * - `debugOnly` - boolean - (default: false) Whether or not you want to load the plugin when in 'debug' mode only
-     * - `bootstrap` - boolean - (default: true) Whether or not you want the $plugin/config/bootstrap.php file loaded.
-     * - `routes` - boolean - (default: true) Whether or not you want to load the $plugin/config/routes.php file.
-     * - `ignoreMissing` - boolean - (default: true) Set to true to ignore missing bootstrap/routes files.
-     * - `autoload` - boolean - (default: false) Whether or not you want an autoloader registered
+     * Clone configuration.
+     * This adds custom rules to clone objects.
+     * Rules are defined as `object type name` => ['reset' => [], 'unique' => []]
+     * where:
+     * - `reset` is an array of fields to reset => unset
+     * - `unique` is an array of fields that must be unique => add `-<timestamp>` to val
+     * Example:
+     * 'users' => [
+     *     'reset' => [
+     *         'name', 'surname', 'address',
+     *     ],
+     *     'unique' => [
+     *         'email',
+     *     ],
+     * ],
+     * will reset `name`, `surname` and `address` fields and add `-<timestamp>` to `email` field
+     * when cloning a user object.
+     * Note: `reset` and `unique` are optional.
      */
-    //'Plugins' => [
-        // 'MyPlugin' => ['autoload' => true], // a simple plugin
-    //],
-
-    /**
-     * Project data that can override data from `/home` API call
-     * Currently only `name` is used
-     */
-    // 'Project' => [
-    //     'name' => 'My Project',
+    // 'Clone' => [
+    //     // ...
+    //     'users' => [
+    //         'reset' => [
+    //             'name', 'surname', 'address',
+    //         ],
+    //         'unique' => [
+    //             'email',
+    //         ],
+    //     ],
+    //     // ...
     // ],
 
     /**
-     * Modules accesses per role(s)
+     * Control handler configuration.
+     * This adds custom handlers to render object fields controls.
+     *
+     * In the following example: cats.moustaches control is rendered through Path\To\SomeClass::countMoustaches
      */
-    // 'AccessControl' => [
-    //     'manager' => [
-    //         'hidden' => ['objects'],
-    //         'readonly' => ['documents'],
+    // 'Control' => [
+    //     'handlers' => [
+    //         'cats' => [
+    //             'moustaches' => [
+    //                 'class' => 'Path\To\SomeClass',
+    //                 'method' => 'countMoustaches',
+    //             ],
+    //         ],
     //     ],
-    //     'guest' => [
-    //         'hidden' => ['objects', 'users'],
-    //         'readonly' => ['documents'],
+    // ],
+
+    /**
+     * Editors configuration.
+     * concurrentCheckTime: the time in milliseconds that a concurrent access is considered still active
+     */
+    // 'Editors' => [
+    //     'concurrentCheckTime' => 30000, // 30 seconds
+    // ],
+
+    /**
+     * Export default settings
+     *
+     * - limit => max number of exported elements on export all
+     */
+    // 'Export' => [
+    //     'limit' => 10000,
+    // ],
+
+    /**
+     * Configuration for import filters
+     */
+    // 'Filters' => [
+    //     'import' => [
+    //         [
+    //             'accept' => ['application/zip'],
+    //             'name' => 'import-objects-from-zip',
+    //             'label' => 'Import data from zip file',
+    //             'class' => \Path\To\ZipImportFilter::class,
+    //             'options' => [
+    //                 'uuid' => [
+    //                     'dataType' => 'text',
+    //                     'defaultValue' => '',
+    //                     'label' => 'Uuid',
+    //                 ],
+    //                 'flag' => [
+    //                     'dataType' => 'boolean',
+    //                     'defaultValue' => true,
+    //                     'label' => 'Flag',
+    //                 ],
+    //                 'opts' => [
+    //                     'dataType' => 'options',
+    //                     'defaultValue' => 1,
+    //                     'label' => 'Options',
+    //                     'values' => [
+    //                         1 => 'one',
+    //                         2 => 'two',
+    //                         3 => 'three',
+    //                     ],
+    //                 ],
+    //             ],
+    //         ],
+    //     ],
+    // ],
+
+    /**
+     * Configuration for flash messages.
+     *  - 'modal': whether to show flash messages as modal or not (default: false)
+     */
+    // 'Flash' => [
+    //     'modal' => false,
+    // ],
+
+    /**
+     * I18n setup.
+     *
+     *  - 'I18n.locales': array of supported locales and language code used as `prefix` like `/en`
+     *  - 'I18n.default': default language code
+     *  - 'I18n.languages': array of supported language codes with their names
+     *  - 'I18n.lang': language code in use (written by the application)
+     *  - 'I18n.timezone': timezone code to use (i.e. 'UTC')
+     *  - 'I18n.cookie': array representing cookie config used by middleware
+     *  - 'I18n.switchLangUrl': url used by middleware to switch lang
+     *
+     * Uncomment the following 'I18n' array to activate multilanguage support
+     */
+    // 'I18n' => [
+    //     'locales' => [
+    //         'en_US' => 'en',
+    //         'it_IT' => 'it',
+    //         // etc.
+    //     ],
+    //     'default' => 'en',
+    //     'languages' => [
+    //         'en' => 'English',
+    //         'it' => 'Italiano',
+    //         // etc.
+    //     ],
+    //     'timezone' => 'UTC',
+    //     'cookie' => [
+    //         'name' => 'BEditaWebI18n',
+    //         'create' => true,
+    //     ],
+    //     'switchLangUrl' => '/lang',
+    // ],
+
+    /**
+     * Location providers and access tokens
+     */
+    // 'Location' => [
+    //     'google' => [
+    //         'url' => '###',
+    //         'key' => '###',
+    //     ],
+    // ],
+
+    /**
+     * The under work config. When set, a courtesy page is shown with `Maintenance.message` on it.
+     */
+    // 'Maintenance' => [
+    //     'message' => 'This page won\'t be available for some time. Try later',
+    // ],
+
+    /**
+     * The manager application name in the API (default is `manager`).
+     * This is used in reading/writing manager configuration data.
+     */
+    // 'ManagerAppName' => 'my-manager-app',
+
+    /**
+     * Maps providers and access tokens
+     */
+    // 'Maps' => [
+    //     'mapbox' => [
+    //         'token' => '###',
+    //     ],
+    // ],
+
+    /**
+     * Object types to add to core tables, used in Data Modeling -> Object types.
+     */
+    // 'Model' => [
+    //     'objectTypesTables' => [
+    //         'MyPlugin.MyTable',
     //     ],
     // ],
 
@@ -108,8 +272,8 @@ return [
      *  'sort' - sort order to be used in index; use a field name prepending optionl `-` sign
      *          to indicate a descendant order, f.i. '-title' will sort by title in reverse alphabetical order
      *          (default is '-id'),
-     *  'icon' - icon code, f.i. `icon-article`, have a look in
-     *      `webroot/css/be-icons-codes.css` for a complete list of codes
+     *  'icon' - icon, f.i. `carbon:document`, have a look at https://icon-sets.iconify.design/
+     *          for a complete list of icons
      *  'sidebar' - additional custom sidebar links added in modules index and single item view,
      *     defined as associative array with 'index' and 'view' keys
      */
@@ -119,7 +283,7 @@ return [
     //         'color' => '#230637',
     //         // 'secondaryColor' => '#d95700',
     //         'sort' => '-modified',
-    //         // 'icon' => 'icon-cube',
+    //         // 'icon' => 'carbon:document',
     //     ],
     //     'folders' => [
     //         'color' => '#072440',
@@ -160,6 +324,49 @@ return [
     // ],
 
     /**
+     * External OAuth2 Providers setup
+     */
+    // 'OAuth2Providers.google.setup' => [
+    //     'clientId' => '####',
+    //     'clientSecret' => '####',
+    // ],
+    // 'OAuth2Providers.github.setup' => [
+    //     'clientId' => '####',
+    //     'clientSecret' => '####',
+    // ],
+
+    /**
+     * Pagination default settings
+     *
+     * - sizeAvailable => available page size on modules view index
+     */
+    // 'Pagination' => [
+    //     'sizeAvailable' => [10, 20, 50, 100],
+    // ],
+
+    /**
+     * Additional plugins to load with this format: 'PluginName' => load options array
+     * Where options array may contain
+     *
+     * - `debugOnly` - boolean - (default: false) Whether or not you want to load the plugin when in 'debug' mode only
+     * - `bootstrap` - boolean - (default: true) Whether or not you want the $plugin/config/bootstrap.php file loaded.
+     * - `routes` - boolean - (default: true) Whether or not you want to load the $plugin/config/routes.php file.
+     * - `ignoreMissing` - boolean - (default: true) Set to true to ignore missing bootstrap/routes files.
+     * - `autoload` - boolean - (default: false) Whether or not you want an autoloader registered
+     */
+    //'Plugins' => [
+    //    'MyPlugin' => ['autoload' => true], // a simple plugin
+    //],
+
+    /**
+     * Project data that can override data from `/home` API call
+     * Currently only `name` is used
+     */
+    // 'Project' => [
+    //     'name' => 'My Project',
+    // ],
+
+    /**
      * Properties display configuration settings.
      *
      * Every key in this array is a module name, for each one we may have:
@@ -192,159 +399,71 @@ return [
      * A special custom element 'Form/empty' can be used to hide a property group or relation via `_element`
      */
     // 'Properties' => [
-        // 'foos' => [
-        //     'view' => [
-        //         '_keep' => [
-        //             'some_field',
-        //         ],
-        //         '_hide' => [
-        //             'some_other_field',
-        //         ],
-        //         'core' => [
-        //              'some_field',
-        //              'title',
-        //         ],
-        //         'publish' => [
-        //              'publish_field',
-        //         ],
-        //         'advanced' => [
-        //              // Use custom element in `MyPlugin` to display this group
-        //              '_element' => 'MyPlugin/advanced',
-        //              'extra_field',
-        //         ],
-        //     ],
-        //     'index' => [
-        //         'name',
-        //         'surname',
-        //         'username',
-        //     ],
-        //     'relations' => [
-        //         'main' => [
-        //             'foo_with',
-        //             'fooed_by',
-        //         ],
-        //         'aside' => [
-        //             'fooing',
-        //         ],
-        //         '_element' => [
-        //             // use custom element in `MyPlugin` for `fooed_by`
-        //             'fooed_by' => 'MyPlugin.fooed_by',
-        //         ],
-        //         '_hide' => [
-        //             'download',
-        //             'downloadable_by',
-        //         ],
-        //         '_readonly' => [
-        //             'seealso',
-        //         ],
-        //     ],
-        //     'filter' => [
-        //         'select_field',
-        //         'another_one',
-        //     ],
-        //     'bulk' => [
-        //         'status',
-        //         'other_field',
-        //     ],
-        //     'fastCreate' => [
-        //         'required' => ['status', 'title'],
-        //         'all' => ['status', 'title', 'description'],
-        //     ],
-        // ],
-    // ],
-
-    /**
-     * I18n setup.
-     *
-     *  - 'I18n.locales': array of supported locales and language code used as `prefix` like `/en`
-     *  - 'I18n.default': default language code
-     *  - 'I18n.languages': array of supported language codes with their names
-     *  - 'I18n.lang': language code in use (written by the application)
-     *  - 'I18n.timezone': timezone code to use (i.e. 'UTC')
-     *  - 'I18n.cookie': array representing cookie config used by middleware
-     *  - 'I18n.switchLangUrl': url used by middleware to switch lang
-     *
-     * Uncomment the following 'I18n' array to activate multilanguage support
-     */
-    // 'I18n' => [
-    //     'locales' => [
-    //         'en_US' => 'en',
-    //         'it_IT' => 'it',
-    //         // etc.
-    //     ],
-    //     'default' => 'en',
-    //     'languages' => [
-    //         'en' => 'English',
-    //         'it' => 'Italiano',
-    //         // etc.
-    //     ],
-    //     'timezone' => 'UTC',
-    //     'cookie' => [
-    //         'name' => 'BEditaWebI18n',
-    //         'create' => true,
-    //     ],
-    //     'switchLangUrl' => '/lang',
-    // ],
-    /**
-     * Display an alert message in a top bar.
-     * Useful to announce mainteinance or to specify a non-production environment
-     *
-     * - text => text message to display
-     * - color => background color to use
-     */
-    // 'AlertMessage' => [
-    //     'text' => 'Test Message',
-    //     'color' => '#498fde',
-    // ],
-
-    /**
-     * Maps providers and access tokens
-     */
-    // 'Maps' => [
-    //     'mapbox' => [
-    //         'token' => '###',
-    //     ],
-    // ],
-
-
-    /**
-     * Location providers and access tokens
-     */
-    // 'Location' => [
-    //     'google' => [
-    //         'url' => '###',
-    //         'key' => '###',
+    //     'foos' => [
+    //         'view' => [
+    //             '_keep' => [
+    //                 'some_field',
+    //             ],
+    //             '_hide' => [
+    //                 'some_other_field',
+    //             ],
+    //             'core' => [
+    //                  'some_field',
+    //                  'title',
+    //             ],
+    //             'publish' => [
+    //                  'publish_field',
+    //             ],
+    //             'advanced' => [
+    //                  // Use custom element in `MyPlugin` to display this group
+    //                  '_element' => 'MyPlugin/advanced',
+    //                  'extra_field',
+    //             ],
+    //         ],
+    //         'index' => [
+    //             'name',
+    //             'surname',
+    //             'username',
+    //         ],
+    //         'relations' => [
+    //             'main' => [
+    //                 'foo_with',
+    //                 'fooed_by',
+    //             ],
+    //             'aside' => [
+    //                 'fooing',
+    //             ],
+    //             '_element' => [
+    //                 // use custom element in `MyPlugin` for `fooed_by`
+    //                 'fooed_by' => 'MyPlugin.fooed_by',
+    //             ],
+    //             '_hide' => [
+    //                 'download',
+    //                 'downloadable_by',
+    //             ],
+    //             '_readonly' => [
+    //                 'seealso',
+    //             ],
+    //         ],
+    //         'filter' => [
+    //             'select_field',
+    //             'another_one',
+    //         ],
+    //         'bulk' => [
+    //             'status',
+    //             'other_field',
+    //         ],
+    //         'fastCreate' => [
+    //             'required' => ['status', 'title'],
+    //             'all' => ['status', 'title', 'description'],
+    //         ],
     //     ],
     // ],
 
     /**
-     * Translator engine configuration
+     * Recovery mode. Only admin can access manager when Recovery is true.
      */
-    // 'Translator' => [
-    //     'class' => '\App\Core\I18n\DummyTranslator',
-    //     'options' => [
-    //         'url' => 'www.my-dummy-translator.com',
-    //         'apiKey' => 'abcde',
-    //     ],
-    // ],
-
-    /**
-     * Pagination default settings
-     *
-     * - sizeAvailable => available page size on modules view index
-     */
-    // 'Pagination' => [
-    //     'sizeAvailable' => [10, 20, 50, 100],
-    // ],
-
-    /**
-     * Export default settings
-     *
-     * - limit => max number of exported elements on export all
-     */
-    // 'Export' => [
-    //     'limit' => 10000,
-    // ],
+    // 'Recovery' => true,
 
     /**
      * Default RichTextEditor configuration.
@@ -383,78 +502,23 @@ return [
     // ],
 
     /**
-     * Control handler configuration.
-     * This adds custom handlers to render object fields controls.
+     * Configuration to organize roles in groups.
+     */
+    // 'RolesGroups' => [
+    //     'BEdita Manager' => ['admin', 'manager', 'guest'],
+    //     'Website' => ['frontend'],
+    // ],
+
+    /*
+     * Security and encryption configuration
      *
-     * In the following example: cats.moustaches control is rendered through Path\To\SomeClass::countMoustaches
+     * - salt - A random string used in security hashing methods.
+     *   The salt value is also used as the encryption key.
+     *   You should treat it as extremely sensitive data.
      */
-    // 'Control' => [
-    //     'handlers' => [
-    //         'cats' => [
-    //             'moustaches' => [
-    //                 'class' => 'Path\To\SomeClass',
-    //                 'method' => 'countMoustaches',
-    //             ],
-    //         ],
-    //     ],
-    // ],
-
-    /**
-     * Editors configuration.
-     * concurrentCheckTime: the time in milliseconds that a concurrent access is considered still active
-     */
-    // 'Editors' => [
-    //     'concurrentCheckTime' => 30000, // 30 seconds
-    // ],
-
-    /**
-     * The under work config. When set, a courtesy page is shown with `Maintenance.message` on it.
-     */
-    // 'Maintenance' => [
-    //     'message' => 'This page won\'t be available for some time. Try later',
-    // ],
-
-    /**
-     * Recovery mode. Only admin can access manager when Recovery is true.
-     */
-    // 'Recovery' => true,
-
-    /**
-     * The manager application name in the API (default is `manager`).
-     * This is used in reading/writing manager configuration data.
-     */
-    // 'ManagerAppName' => 'my-manager-app',
-
-    /**
-     * Object types to add to core tables, used in Data Modeling -> Object types.
-     */
-    // 'Model' => [
-    //     'objectTypesTables' => [
-    //         'MyPlugin.MyTable',
-    //     ],
-    // ],
-
-    /**
-     * UI settings.
-     * index.copy2clipboard => enable "onmouseover" of index general cells showing copy to clipboard button
-     */
-    // 'UI' => [
-    //     'index' => [
-    //         'copy2clipboard' => true,
-    //     ],
-    // ],
-
-    /**
-     * External OAuth2 Providers setup
-     */
-    // 'OAuth2Providers.google.setup' => [
-    //     'clientId' => '####',
-    //     'clientSecret' => '####',
-    // ],
-    // 'OAuth2Providers.github.setup' => [
-    //     'clientId' => '####',
-    //     'clientSecret' => '####',
-    // ],
+    'Security' => [
+        'salt' => env('SECURITY_SALT', '__SALT__'),
+    ],
 
     /**
      * Configuration for thumbnails component.
@@ -467,54 +531,46 @@ return [
     // ],
 
     /**
-     * Configuration for flash messages.
-     *  - 'modal': whether to show flash messages as modal or not (default: false)
+     * Translators engine configuration
      */
-    // 'Flash' => [
-    //     'modal' => false,
-    // ],
-
-    /**
-     * Configuration to organize roles in groups.
-     */
-    // 'RolesGroups' => [
-    //     'BEdita Manager' => ['admin', 'manager', 'guest'],
-    //     'Website' => ['frontend'],
-    // ],
-
-    /**
-     * Configuration for import filters
-     */
-    // 'Filters' => [
-    //     'import' => [
-    //         [
-    //             'accept' => ['application/zip'],
-    //             'name' => 'import-objects-from-zip',
-    //             'label' => 'Import data from zip file',
-    //             'class' => \Path\To\ZipImportFilter::class,
-    //             'options' => [
-    //                 'uuid' => [
-    //                     'dataType' => 'text',
-    //                     'defaultValue' => '',
-    //                     'label' => 'Uuid',
-    //                 ],
-    //                 'flag' => [
-    //                     'dataType' => 'boolean',
-    //                     'defaultValue' => true,
-    //                     'label' => 'Flag',
-    //                 ],
-    //                 'opts' => [
-    //                     'dataType' => 'options',
-    //                     'defaultValue' => 1,
-    //                     'label' => 'Options',
-    //                     'values' => [
-    //                         1 => 'one',
-    //                         2 => 'two',
-    //                         3 => 'three',
-    //                     ],
-    //                 ],
-    //             ],
+    // 'Translators' => [
+    //     [
+    //         'name' => 'AWS',
+    //         'class' => '\BEdita\I18n\AWS\Core\Translator',
+    //         'options' => [
+    //             'auth_key' => 'abcde',
     //         ],
+    //     ],
+    //     [
+    //         'name' => 'DeepL',
+    //         'class' => '\BEdita\I18n\Deepl\Core\Translator',
+    //         'options' => [
+    //             'auth_key' => 'abcde',
+    //         ],
+    //     ],
+    //     [
+    //         'name' => 'Google',
+    //         'class' => '\BEdita\I18n\Google\Core\Translator',
+    //         'options' => [
+    //             'auth_key' => 'abcde',
+    //         ],
+    //     ],
+    //     [
+    //         'name' => 'Microsoft',
+    //         'class' => '\BEdita\I18n\Microsoft\Core\Translator',
+    //         'options' => [
+    //             'auth_key' => 'abcde',
+    //         ],
+    //     ],
+    // ],
+
+    /**
+     * UI settings.
+     * index.copy2clipboard => enable "onmouseover" of index general cells showing copy to clipboard button
+     */
+    // 'UI' => [
+    //     'index' => [
+    //         'copy2clipboard' => true,
     //     ],
     // ],
 ];

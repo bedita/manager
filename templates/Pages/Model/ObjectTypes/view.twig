@@ -86,7 +86,7 @@
 
         {% do _view.append(
             'app-module-buttons',
-            '<button form="form-main" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto"><Icon icon="carbon:save"></Icon><span class="ml-05">' ~ __('Save') ~ '</span></button>',
+            '<button form="form-main" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto"><app-icon icon="carbon:save"></app-icon><span class="ml-05">' ~ __('Save') ~ '</span></button>',
         ) %}
         {% if not resource.meta.core_type %}
             {{ Form.create(null, {'id': 'form-delete-object-type', 'url': Url.build({'_name': 'model:remove:object_types', 'id': resource.id,})})|raw }}
@@ -94,7 +94,7 @@
             {# Append "Remove" to sidebar #}
             {% do _view.append(
                 'app-module-buttons',
-                '<button form="form-delete-object-type" class="button button-outlined button-outlined-hover-module-model is-width-auto"><Icon icon="carbon:trash-can"></Icon><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
+                '<button form="form-delete-object-type" class="button button-outlined button-outlined-hover-module-model is-width-auto"><app-icon icon="carbon:trash-can"></app-icon><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
             ) %}
         {% endif %}
     </div>

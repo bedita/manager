@@ -458,13 +458,30 @@ class AppControllerTest extends TestCase
                 'events', // object_type
                 [ // expected
                     'id' => '7',
-                    'date_ranges' => [],
+                    'date_ranges' => [
+                        [
+                            'start_date' => '2020-01-01T00:00:00.000Z',
+                            'end_date' => '2020-01-01T23:59:59.000Z',
+                        ],
+                        [
+                            'start_date' => '2020-01-01T00:00:00.000Z',
+                            'end_date' => '',
+                        ],
+                    ],
                 ],
                 [ // data provided
                     'id' => '7',
                     'date_ranges' => [
                         [
                             'start_date' => '',
+                            'end_date' => '',
+                        ],
+                        [
+                            'start_date' => '2020-01-01T00:00:00.000Z',
+                            'end_date' => '2020-01-01T23:59:00.000Z',
+                        ],
+                        [
+                            'start_date' => '2020-01-01T00:00:00.000Z',
                             'end_date' => '',
                         ],
                     ],
@@ -678,9 +695,11 @@ class AppControllerTest extends TestCase
      * @covers ::prepareRequest()
      * @covers ::specialAttributes()
      * @covers ::decodeJsonAttributes()
+     * @covers ::prepareDateRanges()
      * @covers ::prepareRelations()
      * @covers ::setupParentsRelation()
      * @covers ::changedAttributes()
+     * @covers ::filterEmpty()
      * @dataProvider prepareRequestProvider()
      * @return void
      */

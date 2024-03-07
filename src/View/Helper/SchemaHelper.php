@@ -73,15 +73,19 @@ class SchemaHelper extends Helper
             ]);
         }
         if (empty($ctrlOptions['type'])) {
-            $ctrlOptions['type'] = ControlType::fromSchema($schema);
+            $ctrlOptionsType = ControlType::fromSchema($schema);
+            $ctrlOptions['type'] = $ctrlOptionsType;
+            if (in_array($ctrlOptionsType, ['integer', 'number'])) {
+                $ctrlOptions['step'] = $ctrlOptionsType === 'number' ? 'any' : '1';
+                $ctrlOptions['type'] = 'number';
+            }
         }
         // verify if there's a custom control handler for $type and $name
         $custom = $this->customControl($name, $value, $ctrlOptions);
         if (!empty($custom)) {
             return $custom;
         }
-
-        return Control::control([
+        $opts = [
             'objectType' => $objectType,
             'property' => $name,
             'value' => $value,
@@ -90,7 +94,12 @@ class SchemaHelper extends Helper
             'label' => Hash::get($ctrlOptions, 'label'),
             'readonly' => Hash::get($ctrlOptions, 'readonly', false),
             'disabled' => Hash::get($ctrlOptions, 'readonly', false),
-        ]);
+        ];
+        if (!empty($ctrlOptions['step'])) {
+            $opts['step'] = $ctrlOptions['step'];
+        }
+
+        return Control::control($opts);
     }
 
     /**
@@ -143,7 +152,7 @@ class SchemaHelper extends Helper
      */
     protected function formatByte($value): string
     {
-        return (string)Number::toReadableSize((int)$value);
+        return Number::toReadableSize((int)$value);
     }
 
     /**
@@ -156,7 +165,7 @@ class SchemaHelper extends Helper
     {
         $res = filter_var($value, FILTER_VALIDATE_BOOLEAN);
 
-        return (string)($res ? __('Yes') : __('No'));
+        return $res ? __('Yes') : __('No');
     }
 
     /**
@@ -242,7 +251,7 @@ class SchemaHelper extends Helper
             ));
         }
 
-        return array_values(array_merge($priorityFields, $otherFields));
+        return array_unique(array_values(array_merge($priorityFields, $otherFields)));
     }
 
     /**
@@ -304,6 +313,7 @@ class SchemaHelper extends Helper
      * Return unique right types from schema "relationsSchema".
      *
      * @return array
+     * @deprecated It will be removed in version 5.x.
      */
     public function rightTypes(): array
     {

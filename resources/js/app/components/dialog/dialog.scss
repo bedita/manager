@@ -25,6 +25,8 @@
     }
 
     .dialog {
+        resize: both;
+        overflow: auto;
         position: fixed;
         width: 600px;
         z-index: 1002;

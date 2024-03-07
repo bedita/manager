@@ -8,7 +8,7 @@ import '../../style.scss';
 import { BELoader } from 'libs/bedita';
 
 import { PanelView, PanelEvents } from 'app/components/panel-view';
-import { confirm, error, info, prompt, warning } from 'app/components/dialog/dialog';
+import { confirm, error, info, success, prompt, warning } from 'app/components/dialog/dialog';
 
 import datepicker from 'app/directives/datepicker';
 import email from 'app/directives/email';
@@ -25,7 +25,7 @@ import { buildSearchParams } from '../libs/urlUtils.js';
 
 import vTitle from 'vuejs-title';
 
-import { Icon } from '@iconify/vue2';
+import { Icon as AppIcon } from '@iconify/vue2';
 
 const _vueInstance = new Vue({
     el: 'main',
@@ -75,9 +75,22 @@ const _vueInstance = new Vue({
         Permissions:() => import(/* webpackChunkName: "permissions" */'app/components/permissions/permissions'),
         PaginationNavigation:() => import(/* webpackChunkName: "pagination-navigation" */'app/components/pagination-navigation/pagination-navigation'),
         ObjectsHistory:() => import(/* webpackChunkName: "objects-history" */'app/components/objects-history/objects-history'),
+        RecentActivity:() => import(/* webpackChunkName: "recent-activity" */'app/components/recent-activity/recent-activity'),
+        ShowHide:() => import(/* webpackChunkName: "show-hide" */'app/components/show-hide/show-hide'),
         SystemInfo:() => import(/* webpackChunkName: "system-info" */'app/components/system-info/system-info'),
         UserAccesses:() => import(/* webpackChunkName: "user-accesses" */'app/components/user-accesses/user-accesses'),
-        Icon,
+        LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
+        AppIcon,
+    },
+
+    /**
+    * properties or methods available for injection into its descendants
+    * (inject: ['property'])
+    */
+    provide() {
+        return {
+            getCSFRToken: () => BEDITA.csrfToken,
+        };
     },
 
     data() {
@@ -103,13 +116,14 @@ const _vueInstance = new Vue({
         }
     },
 
-    /**
-    * properties or methods available for injection into its descendants
-    * (inject: ['property'])
-    */
-    provide() {
-        return {
-            getCSFRToken: () => BEDITA.csrfToken,
+    watch: {
+        /**
+         * watch pageSize variable and update pagination.page_size accordingly
+         *
+         * @param {Number} value page size number
+         */
+        pageSize(value) {
+            this.pagination.page_size = value;
         }
     },
 
@@ -163,17 +177,6 @@ const _vueInstance = new Vue({
         Vue.prototype.$eventBus = new Vue();
     },
 
-    watch: {
-        /**
-         * watch pageSize variable and update pagination.page_size accordingly
-         *
-         * @param {Number} value page size number
-         */
-        pageSize(value) {
-            this.pagination.page_size = value;
-        }
-    },
-
     mounted: function () {
         this.$nextTick(function () {
             this.alertBeforePageUnload(BEDITA.template);
@@ -181,6 +184,7 @@ const _vueInstance = new Vue({
             BEDITA.confirm = confirm;
             BEDITA.error = error;
             BEDITA.info = info;
+            BEDITA.success = success;
             BEDITA.prompt = prompt;
             BEDITA.warning = warning;
         });
@@ -197,18 +201,17 @@ const _vueInstance = new Vue({
             PanelEvents.closePanel();
         },
 
-        /**
-         * Clone object
-         * Prompt for title change
-         *
-         * @return {void}
-         */
-        clone() {
+        clone(objectType) {
+            const unique = BEDITA.cloneConfig[objectType]?.unique || [];
             const title = document.getElementById('title').value || t('Untitled');
             const msg = t`Please insert a new title on "${title}" clone`;
             const defaultTitle = title + '-' + t`copy`;
-            const confirmCallback = (cloneTitle, cloneRelations, dialog) => {
-                const query = `?title=${cloneTitle || defaultTitle}&cloneRelations=${cloneRelations || false}`;
+            const confirmCallback = (cloneTitle, cloneRelations, dialog, unique) => {
+                let query = `?title=${cloneTitle || defaultTitle}`;
+                for (const uitem of unique) {
+                    query += `&${uitem.field}=${uitem.value}`;
+                }
+                query += `&cloneRelations=${cloneRelations || false}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
                 const url = `${origin}${path}${query}`;
@@ -216,7 +219,17 @@ const _vueInstance = new Vue({
                 newTab.focus();
                 dialog.hide(true);
             };
-            const options = { checkLabel: t`Clone relations`, checkValue: false };
+            const uniqueOptions = [];
+            for (const field of unique) {
+                let label = document.querySelector(`label[for=${field}]`)?.innerText;
+                label = label || this.$helpers.humanize(field);
+                uniqueOptions.push({
+                    field: field,
+                    label: label,
+                    value: document.getElementById(field).value + '-' + t`copy`,
+                });
+            }
+            const options = { checkLabel: t`Clone relations`, checkValue: false, unique: uniqueOptions };
 
             prompt(msg, defaultTitle, confirmCallback, document.body, options);
         },
@@ -580,4 +593,4 @@ const _vueInstance = new Vue({
 window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
-Vue.component('Icon', Icon);
+Vue.component('AppIcon', AppIcon);

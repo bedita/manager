@@ -203,11 +203,7 @@ class AppController extends Controller
         $this->setupParentsRelation($type, $data);
         $this->prepareRelations($data);
         $this->changedAttributes($data);
-
-        // cleanup attributes on new objects/resources
-        if (empty($data['id'])) {
-            $data = array_filter($data);
-        }
+        $this->filterEmpty($data);
 
         return $data;
     }
@@ -231,15 +227,7 @@ class AppController extends Controller
 
         $this->decodeJsonAttributes($data);
 
-        // remove date_ranges items having empty both start & end dates
-        if (!empty($data['date_ranges'])) {
-            $data['date_ranges'] = array_filter(
-                (array)$data['date_ranges'],
-                function ($item) {
-                    return !empty($item['start_date']) || !empty($item['end_date']);
-                }
-            );
-        }
+        $this->prepareDateRanges($data);
 
         // prepare categories
         if (!empty($data['categories'])) {
@@ -283,6 +271,39 @@ class AppController extends Controller
             $data = Hash::insert($data, $key, $decoded);
         }
         unset($data['_jsonKeys']);
+    }
+
+    /**
+     * Prepare date ranges.
+     * Remove empty date ranges.
+     * Fix end date time to 23:59:59.000 if end_date contains '23:59:00.000'.
+     *
+     * @param array $data The data to prepare
+     * @return void
+     */
+    protected function prepareDateRanges(array &$data): void
+    {
+        if (empty($data['date_ranges'])) {
+            return;
+        }
+        $data['date_ranges'] = array_filter(
+            (array)$data['date_ranges'],
+            function ($item) {
+                return !empty($item['start_date']) || !empty($item['end_date']);
+            }
+        );
+        $data['date_ranges'] = array_map(
+            function ($item) {
+                if (empty($item['end_date'])) {
+                    return $item;
+                }
+                $item['end_date'] = str_replace(':59:00.000', ':59:59.000', $item['end_date']);
+
+                return $item;
+            },
+            $data['date_ranges']
+        );
+        $data['date_ranges'] = array_values($data['date_ranges']);
     }
 
     /**
@@ -549,6 +570,7 @@ class AppController extends Controller
         $moduleName = $this->Modules->getConfig('currentModuleName');
         $total = count(array_keys($objects));
         $objectNav = [];
+        /** @var int $i */
         foreach ($objects as $i => $object) {
             $objectNav[$moduleName][$object['id']] = [
                 'prev' => $i > 0 ? Hash::get($objects, sprintf('%d.id', $i - 1)) : null,
@@ -597,5 +619,21 @@ class AppController extends Controller
     protected function setSerialize(array $items): void
     {
         $this->viewBuilder()->setOption('serialize', $items);
+    }
+
+    /**
+     * Remove empty fields when saving new resource.
+     *
+     * @param array $data The form data
+     * @return void
+     */
+    protected function filterEmpty(array &$data): void
+    {
+        if (!empty($data['id'])) {
+            return;
+        }
+        $data = array_filter($data, function ($item) {
+            return $item === '0' ? true : !empty($item);
+        });
     }
 }

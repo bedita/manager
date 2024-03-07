@@ -19,18 +19,18 @@
         <span v-if="loading" class="is-loading-spinner"></span>
         <div v-if="!loading && items.length > 0"  class="grid">
             <span class="column-header">
-                <Icon icon="carbon:calendar"></Icon>
+                <app-icon icon="carbon:calendar"></app-icon>
                 <i class="ml-05">{{ msgDate }}</i>
             </span>
             <span class="column-header">
-                <Icon icon="carbon:information"></Icon>
+                <app-icon icon="carbon:information"></app-icon>
                 <i class="ml-05">{{ msgInfo }}</i>
             </span>
             <span class="column-header">
-                <Icon icon="carbon:content-view"></Icon>
+                <app-icon icon="carbon:content-view"></app-icon>
                 <i class="ml-05">{{ msgChange }}</i>
             </span>
-            <template v-for="item,key in items">
+            <template v-for="item in items">
                 <span>{{ formatDate(item?.meta?.created) }}</span>
                 <span>
                     {{ msgAction }}
@@ -129,7 +129,7 @@ export default {
         loadHistory(pageSize = 20, page = 1) {
             this.loading = true;
             this.getHistory(pageSize, page)
-                .catch(_error => { this.loading = false; return false;})
+                .catch(_error => { console.error(_error); this.loading = false; return false; })
                 .then(response => {
                     this.loading = false;
                     this.items = response.data || [];
@@ -138,7 +138,7 @@ export default {
                     const objectIds = this.items.map(item => item.meta.resource_id).filter((v, i, a) => a.indexOf(v) === i).map(i=>Number(i));
                     const ids = [...userIds, ...objectIds];
                     this.getObjects(ids)
-                        .catch(_error => { return false;})
+                        .catch(_error => { console.error(_error); return false; })
                         .then(response => {
                             const items = response.data || [];
                             const resourcesMap = items.reduce((map, obj) => {

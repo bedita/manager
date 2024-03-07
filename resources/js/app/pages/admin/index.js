@@ -12,6 +12,7 @@ export default {
     components: {
         PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
         Secret: () => import(/* webpackChunkName: "secret" */'app/components/secret/secret'),
+        ShowHide:() => import(/* webpackChunkName: "show-hide" */'app/components/show-hide/show-hide'),
     },
     data() {
         return {

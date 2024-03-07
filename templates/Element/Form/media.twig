@@ -9,8 +9,12 @@
         <div v-show="isOpen" class="tab-container">
             {# Display embedded video if available #}
             {% if object.attributes.provider_extra.html %}
+                {% set height = object.attributes.provider_extra.height|default(1) %}
+                {% set width = object.attributes.provider_extra.width|default(1) %}
                 <div class="embedded-container"
-                    style="padding-bottom: {{ 100 * object.attributes.provider_extra.height / object.attributes.provider_extra.width }}%;">
+                    {% if height matches '/^\\d+$/' and width matches '/^\\d+$/' %}
+                        style="padding-bottom: {{ 100 * height / width|default(1) }}%;"
+                    {% endif %}>
                     {{ object.attributes.provider_extra.html|raw }}
                 </div>
             {% else %}
@@ -70,21 +74,21 @@
                     {% if attributes.url %}
                     <a href="{{ attributes.url }}" target="_blank"
                         class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
-                        <Icon icon="carbon:view"></Icon>
+                        <app-icon icon="carbon:view"></app-icon>
                         <span class="ml-05">{{ __('View file') }}</span>
                     </a>
                     {% endif %}
 
                     <a href="{{ Url.build({'_name': 'stream:download', 'id': stream.id}) }}"
                         class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}">
-                        <Icon icon="carbon:download"></Icon>
+                        <app-icon icon="carbon:download"></app-icon>
                         <span class="ml-05">{{ __('Download file') }}</span>
                     </a>
 
                     <a class="mr-1 button button-outlined button-outlined-hover-module-{{ currentModule.name }}"
                         @click.prevent.stop=resetFile("{{ thumb }}")
                         v-if="fileChanged">
-                        <Icon icon="carbon:undo"></Icon>
+                        <app-icon icon="carbon:undo"></app-icon>
                         <span class="ml-05">{{ __('Undo Change File') }}</span>
                     </a>
 

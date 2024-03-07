@@ -543,7 +543,7 @@ class LinkHelperTest extends TestCase
         $mock->method('findFiles')->willReturn(['app.css']);
         $mock->cssBundle(['timezone']);
         $actual = $this->getActualOutput();
-        static::assertEquals('<script src="/js/app.bundle.js"></script><link rel="stylesheet" href="/css/app.bundle.js.css"/>', $actual);
+        static::assertEquals('<script src="/js/app.bundle.js"></script><link rel="stylesheet" href="/css/app.bundle.js.css">', $actual);
     }
 
     /**

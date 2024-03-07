@@ -40,6 +40,7 @@ export default {
         Permission:() => import(/* webpackChunkName: "permission" */'app/components/permission/permission'),
         Permissions:() => import(/* webpackChunkName: "permissions" */'app/components/permissions/permissions'),
         PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
+        LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
     },
 
     props: {
@@ -190,11 +191,11 @@ export default {
 
                     // using == because user.id String and creatorById Number
                     if(user.id == creatorId && userInfo!= undefined) {
-                        document.querySelector(`td[name='created_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        document.querySelector('td[name=\'created_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
                     }
 
                     if (user.id == modifierId && userInfo!= undefined) {
-                        document.querySelector(`td[name='modified_by']`).innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        document.querySelector('td[name=\'modified_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
                     }
                 });
             }
