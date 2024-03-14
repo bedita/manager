@@ -96,13 +96,17 @@ body.view-dashboard {
         }
 
 
-        nav[role="search"] {
+        div[role="search"] {
             display: flex;
-            @media (min-width: 568px) { width: 22 * $gutter + $gutter; }
+            gap: $gutter * 2;
+            // @media (min-width: 568px) { width: 22 * $gutter + $gutter; }
             input {
                 margin-right: $gutter * .5;
                 flex-grow: 1;
             }
+        }
+        div[role="search"] > * {
+            white-space: nowrap;
         }
 
         .dashboard-section > .list-objects {

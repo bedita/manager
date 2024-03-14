@@ -63,21 +63,20 @@
                 <h2>{{ __('Search') }}</h2>
             </header>
 
-            <nav role="search">
-                <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
-                <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">
-                    <app-icon icon="carbon:search"></app-icon>
-                    {{ __('Search') }}
-                </button>
-            </nav>
-        </section>
-
-        <section class="dashboard-section">
-            <div>
-                <input type="text" placeholder="{{ __('ID or uname') }}" v-model="searchId">
-                <button @click.prevent="goToID()" :disabled="!searchId">
-                    {{ __('ID') }}
-                </button>
+            <div role="search">
+                <div role="textsearch">
+                    <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
+                    <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">
+                        <app-icon icon="carbon:search"></app-icon>
+                        {{ __('Search') }}
+                    </button>
+                </div>
+                <div role="idsearch">
+                    <input type="text" placeholder="{{ __('ID or uname') }}" v-model="searchId">
+                    <button @click.prevent="goToID()" :disabled="!searchId">
+                        {{ __('ID') }}
+                    </button>
+                </div>
             </div>
         </section>
 
