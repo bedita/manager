@@ -79,8 +79,9 @@ class TreeCacheEventHandler implements EventListenerInterface
         if ($type !== 'folders') {
             return;
         }
+        $children = (string)Hash::get($data, 'data.relation') === 'children';
         $intersection = array_intersect(array_keys((array)Hash::get($data, 'data')), ['title', 'status']);
-        if (empty($intersection)) {
+        if (empty($intersection) && !$children) {
             return;
         }
         Cache::clearGroup(self::CACHE_CONFIG);
