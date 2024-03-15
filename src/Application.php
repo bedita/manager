@@ -12,6 +12,7 @@
  */
 namespace App;
 
+use App\Event\TreeCacheEventHandler;
 use App\Identifier\ApiIdentifier;
 use App\Middleware\ConfigurationMiddleware;
 use App\Middleware\ProjectMiddleware;
@@ -27,6 +28,7 @@ use BEdita\WebTools\Middleware\OAuth2Middleware;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Cake\Event\EventManager;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
@@ -75,6 +77,8 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $this->addPlugin('BEdita/WebTools');
         $this->addPlugin('BEdita/I18n');
         $this->addPlugin('Authentication');
+
+        EventManager::instance()->on(new TreeCacheEventHandler());
     }
 
     /**

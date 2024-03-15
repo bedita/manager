@@ -316,8 +316,9 @@ export default {
             let roots = [];
             let done = false;
             do {
-                let response = await fetch(`${API_URL}api/folders?filter[roots]&page=${page}&page_size=100`, API_OPTIONS);
+                let response = await fetch(`${API_URL}tree?filter[roots]&page=${page}&page_size=100`, API_OPTIONS);
                 let json = await response.json();
+                json = json?.tree || {};
                 if (json.data) {
                     roots.push(
                         ...json.data.map((object) =>
@@ -401,8 +402,9 @@ export default {
             let children = [];
             let done = false;
             do {
-                let childrenRes = await fetch(`${API_URL}api/folders?filter[parent]=${folder.id}&page=${page}`, API_OPTIONS);
+                let childrenRes = await fetch(`${API_URL}tree?filter[parent]=${folder.id}&page=${page}&page_size=100`, API_OPTIONS);
                 let childrenJson = await childrenRes.json();
+                childrenJson = childrenJson?.tree || {};
                 children.push(
                     ...childrenJson.data.map((object) =>
                         this.store[object.id] || (this.store[object.id] = object)
@@ -455,8 +457,9 @@ export default {
             let done = false;
             this.isLoading = true;
             do {
-                let response = await fetch(`${API_URL}api/folders?filter[parent]=${this.node.id}&page=${page}`, API_OPTIONS);
+                let response = await fetch(`${API_URL}tree?filter[parent]=${this.node.id}&page=${page}&page_size=100`, API_OPTIONS);
                 let json = await response.json();
+                json = json?.tree || {};
                 children.push(...json.data);
                 if (json.meta.pagination.page_count == page) {
                     done = true;

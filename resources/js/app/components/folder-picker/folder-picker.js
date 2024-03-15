@@ -74,14 +74,14 @@ export default {
         async fetchFolders(parent) {
             const pageSize = 100;
             const filter = !parent ? 'filter[roots]' : `filter[parent]=${parent.id}`;
-            const firstResponse = await fetch(`${API_URL}api/folders?${filter}&page=1&page_size=${pageSize}`, API_OPTIONS);
+            const firstResponse = await fetch(`${API_URL}tree?${filter}&page=1&page_size=${pageSize}`, API_OPTIONS);
             const json = await firstResponse.json();
             const folders = [...(json.data || [])];
             const pageCount = json.meta.pagination.page_count;
 
             const deferred = [];
             for (let page = 2; page <= pageCount; page++) {
-                deferred.push(fetch(`${API_URL}api/folders?${filter}&page=${page}&page_size=${pageSize}`, API_OPTIONS));
+                deferred.push(fetch(`${API_URL}tree?${filter}&page=${page}&page_size=${pageSize}`, API_OPTIONS));
             }
             const responses = await Promise.all(deferred);
             responses.forEach(async (response) => {
