@@ -189,6 +189,7 @@ return [
         '_tree_data_' => [
             'className' => FileEngine::class,
             'prefix' => 'tree_data_',
+            'groups' => ['tree'],
             'path' => CACHE,
             'serialize' => true,
             'duration' => '+1 years',

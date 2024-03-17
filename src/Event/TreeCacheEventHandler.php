@@ -48,7 +48,9 @@ class TreeCacheEventHandler implements EventListenerInterface
      */
     public function afterDelete(Event $event)
     {
-        $this->updateCache($event->getData());
+        if ((string)Hash::get((array)$event->getData(), 'type') === 'folders') {
+            Cache::clearGroup('tree', self::CACHE_CONFIG);
+        }
     }
 
     /**
@@ -56,7 +58,7 @@ class TreeCacheEventHandler implements EventListenerInterface
      */
     public function afterSave(Event $event)
     {
-        $this->updateCache($event->getData());
+        $this->updateCache((array)$event->getData());
     }
 
     /**
@@ -64,7 +66,7 @@ class TreeCacheEventHandler implements EventListenerInterface
      */
     public function afterSaveRelated(Event $event): void
     {
-        $this->updateCache($event->getData());
+        $this->updateCache((array)$event->getData());
     }
 
     /**
@@ -84,6 +86,6 @@ class TreeCacheEventHandler implements EventListenerInterface
         if (empty($intersection) && !$children) {
             return;
         }
-        Cache::clearGroup(self::CACHE_CONFIG);
+        Cache::clearGroup('tree', self::CACHE_CONFIG);
     }
 }
