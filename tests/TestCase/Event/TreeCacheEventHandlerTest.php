@@ -19,6 +19,7 @@ use Cake\Cache\Cache;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Text;
 
 /**
  * {@see \App\Event\TreeCacheEventHandler} Test Case
@@ -161,6 +162,9 @@ class TreeCacheEventHandlerTest extends TestCase
      */
     public function testAll(string $method, array $data, bool $cacheClear): void
     {
+        $randomString = Text::uuid();
+        $randomNumber = rand(0, 100);
+        Cache::write($randomString, $randomNumber, 'default');
         Cache::write('tree-parent-1', ['test' => 'data'], TreeCacheEventHandler::CACHE_CONFIG);
         $handler = new TreeCacheEventHandler();
         $event = new Event(sprintf('Controller.%s', $method), $this, $data);
@@ -168,5 +172,6 @@ class TreeCacheEventHandlerTest extends TestCase
         $actual = Cache::read('tree-parent-1', TreeCacheEventHandler::CACHE_CONFIG);
         $expected = $cacheClear ? null : ['test' => 'data'];
         static::assertEquals($expected, $actual);
+        static::assertEquals(Cache::read($randomString), $randomNumber);
     }
 }
