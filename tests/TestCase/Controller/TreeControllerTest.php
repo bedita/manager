@@ -73,9 +73,8 @@ class TreeControllerTest extends TestCase
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
             ],
-            'get' => [
-                'query' => ['filter' => ['roots' => true]],
-            ],
+            'get' => [],
+            'query' => ['filter' => ['roots' => true], 'pageSize' => 10],
         ];
         $request = new ServerRequest($config);
         $tree = new TreeController($request);
@@ -102,9 +101,8 @@ class TreeControllerTest extends TestCase
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
             ],
-            'get' => [
-                'query' => ['filter' => ['roots' => true]],
-            ],
+            'get' => [],
+            'query' => ['filter' => ['parent' => 999], 'pageSize' => 10],
         ];
         $request = new ServerRequest($config);
         $tree = new class ($request) extends TreeController {
