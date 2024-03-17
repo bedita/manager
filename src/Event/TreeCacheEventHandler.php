@@ -82,8 +82,10 @@ class TreeCacheEventHandler implements EventListenerInterface
             return;
         }
         $children = (string)Hash::get($data, 'data.relation') === 'children';
+        $parent = (string)Hash::get($data, 'data.relation') === 'parent';
+        $position = (string)Hash::get($data, 'data.children_order') === 'position';
         $intersection = array_intersect(array_keys((array)Hash::get($data, 'data')), ['title', 'status']);
-        if (empty($intersection) && !$children) {
+        if (empty($intersection) && !$children && !$parent && !$position) {
             return;
         }
         Cache::clearGroup('tree', self::CACHE_CONFIG);

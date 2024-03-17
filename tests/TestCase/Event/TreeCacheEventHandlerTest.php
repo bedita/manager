@@ -107,6 +107,11 @@ class TreeCacheEventHandlerTest extends TestCase
                 ['type' => 'folders', 'id' => 999, 'data' => ['relation' => 'children']],
                 true,
             ],
+            'afterSave parent' => [
+                'afterSave',
+                ['type' => 'folders', 'id' => 999, 'data' => ['relation' => 'parent']],
+                true,
+            ],
             'afterSave title' => [
                 'afterSave',
                 ['type' => 'folders', 'id' => 999, 'data' => ['title' => 'test']],
@@ -135,6 +140,16 @@ class TreeCacheEventHandlerTest extends TestCase
             'afterSaveRelated children' => [
                 'afterSaveRelated',
                 ['type' => 'folders', 'id' => 999, 'data' => ['relation' => 'children']],
+                true,
+            ],
+            'afterSaveRelated parent' => [
+                'afterSaveRelated',
+                ['type' => 'folders', 'id' => 999, 'data' => ['relation' => 'parent']],
+                true,
+            ],
+            'afterSaveRelated children_order' => [
+                'afterSaveRelated',
+                ['type' => 'folders', 'id' => 999, 'data' => ['children_order' => 'position']],
                 true,
             ],
             'afterSaveRelated title' => [
