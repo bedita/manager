@@ -158,6 +158,8 @@ class TreeCacheEventHandlerTest extends TestCase
      * @return void
      * @dataProvider dataProvider
      * @covers ::afterDelete()
+     * @covers ::afterSave()
+     * @covers ::afterSaveRelated()
      * @covers ::updateCache()
      */
     public function testAll(string $method, array $data, bool $cacheClear): void
