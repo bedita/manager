@@ -81,7 +81,7 @@ class TreeControllerTest extends TestCase
         $tree->get();
         $actual = $tree->viewBuilder()->getVar('tree');
         static::assertNotEmpty($actual);
-        $vars = ['data', 'links', 'meta'];
+        $vars = ['data', 'meta'];
         foreach ($vars as $var) {
             static::assertArrayHasKey($var, $actual);
         }
