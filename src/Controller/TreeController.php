@@ -81,12 +81,26 @@ class TreeController extends AppController
 
     /**
      * Fetch tree data from API.
+     * Retrieve minimal data for folders: id, status, title.
+     * Return data and meta (no links, no included).
      *
      * @param array $query Query params.
      * @return array
      */
     protected function fetchData(array $query): array
     {
-        return ApiClientProvider::getApiClient()->get('/folders', $query);
+        $fields = 'id,status,title';
+        $response = ApiClientProvider::getApiClient()->get('/folders', compact('fields') + $query);
+        $data = (array)Hash::get($response, 'data');
+        $meta = (array)Hash::get($response, 'meta');
+        foreach ($data as &$item) {
+            $item = [
+                'id' => $item['id'],
+                'type' => 'folders',
+                'attributes' => $item['attributes'],
+            ];
+        }
+
+        return compact('data', 'meta');
     }
 }
