@@ -96,6 +96,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Dashboard', 'action' => 'messages'],
         ['_name' => 'dashboard:messages']
     );
+    $routes->connect(
+        '/tree',
+        ['controller' => 'Tree', 'action' => 'get'],
+        ['_name' => 'tree:get']
+    );
 
     // Admin.
     $routes->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {

@@ -19,6 +19,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Utility\Hash;
@@ -612,6 +613,8 @@ class ModulesComponent extends Component
     {
         foreach ($relatedData as $data) {
             $this->saveRelatedObjects($id, $type, $data);
+            $event = new Event('Controller.afterSaveRelated', $this, compact('id', 'type', 'data'));
+            $this->getController()->getEventManager()->dispatch($event);
         }
     }
 

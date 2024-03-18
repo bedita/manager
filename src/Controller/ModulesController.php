@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -290,6 +291,13 @@ class ModulesController extends AppController
                 (array)Hash::get($requestData, 'permissions')
             );
             $this->Modules->saveRelated((string)Hash::get($response, 'data.id'), $this->objectType, $relatedData);
+            $options = [
+                'id' => Hash::get($response, 'data.id'),
+                'type' => $this->objectType,
+                'data' => $requestData,
+            ];
+            $event = new Event('Controller.afterSave', $this, $options);
+            $this->getEventManager()->dispatch($event);
         } catch (BEditaClientException $error) {
             $this->log($error->getMessage(), LogLevel::ERROR);
             $this->Flash->error($error->getMessage(), ['params' => $error]);
@@ -363,6 +371,8 @@ class ModulesController extends AppController
         foreach ($ids as $id) {
             try {
                 $this->apiClient->deleteObject($id, $this->objectType);
+                $event = new Event('Controller.afterDelete', $this, ['id' => $id, 'type' => $this->objectType]);
+                $this->getEventManager()->dispatch($event);
             } catch (BEditaClientException $e) {
                 $this->log($e->getMessage(), LogLevel::ERROR);
                 $this->Flash->error($e->getMessage(), ['params' => $e]);
