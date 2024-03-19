@@ -75,7 +75,8 @@ export default {
             const pageSize = 100;
             const filter = !parent ? 'filter[roots]' : `filter[parent]=${parent.id}`;
             const firstResponse = await fetch(`${API_URL}tree?${filter}&page=1&page_size=${pageSize}`, API_OPTIONS);
-            const json = await firstResponse.json();
+            let json = await firstResponse.json();
+            json = json.tree || {};
             const folders = [...(json.data || [])];
             const pageCount = json.meta.pagination.page_count;
 
