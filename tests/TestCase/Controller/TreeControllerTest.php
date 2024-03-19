@@ -80,11 +80,11 @@ class TreeControllerTest extends BaseControllerTest
                 'REQUEST_METHOD' => 'GET',
             ],
             'get' => [],
-            'query' => ['filter' => ['parent' => 999], 'pageSize' => 10],
+            'query' => [],
         ];
         $request = new ServerRequest($config);
         $tree = new class ($request) extends TreeController {
-            public function fetchData(array $query): array
+            public function fetchTreeData(array $query): array
             {
                 throw new BEditaClientException('test exception');
             }
