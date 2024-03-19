@@ -101,6 +101,21 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Tree', 'action' => 'get'],
         ['_name' => 'tree:get']
     );
+    $routes->connect(
+        '/tree/node/{id}',
+        ['controller' => 'Tree', 'action' => 'node'],
+        ['_name' => 'tree:node', 'pass' => ['id']]
+    );
+    $routes->connect(
+        '/tree/parent/{id}',
+        ['controller' => 'Tree', 'action' => 'parent'],
+        ['_name' => 'tree:parent', 'pass' => ['id']]
+    );
+    $routes->connect(
+        '/tree/parents/{type}/{id}',
+        ['controller' => 'Tree', 'action' => 'parents'],
+        ['_name' => 'tree:parents', 'pass' => ['type', 'id']]
+    );
 
     // Admin.
     $routes->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
