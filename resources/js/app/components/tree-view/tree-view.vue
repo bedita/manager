@@ -370,7 +370,8 @@ export default {
             if (type === 'folders') {
                 this.loadingMainMessage = this.msgLoadingFolder + ` ${id}`;
                 const resp = await fetch(`${API_URL}tree/node/${id}`, API_OPTIONS);
-                let { data: folder } = await resp.json();
+                let json = await resp.json();
+                let { node: folder } = json;
                 this.store[folder.id] = folder;
                 let parent = await this.loadParent(folder);
                 if (!parent) {
