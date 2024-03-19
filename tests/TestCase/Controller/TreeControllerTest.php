@@ -15,7 +15,10 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\TreeController;
+use App\Event\TreeCacheEventHandler;
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClientException;
+use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
 
@@ -313,5 +316,38 @@ class TreeControllerTest extends BaseControllerTest
         $tree->parents($type, $id);
         $actual = $tree->viewBuilder()->getVar('parents');
         static::assertEmpty($actual);
+    }
+
+    /**
+     * Test `minimalData` method
+     *
+     * @return void
+     * @covers ::minimalData()
+     */
+    public function testMinimalDataEmpty(): void
+    {
+        $this->setupApi();
+        $id = 'mytestid';
+        $key = CacheTools::cacheKey(sprintf('tree-node-%s', $id));
+        Cache::write($key, [], TreeCacheEventHandler::CACHE_CONFIG);
+
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+            'params' => compact('id'),
+        ];
+        $request = new ServerRequest($config);
+        $tree = new class ($request) extends TreeController
+        {
+            public function minData(array $data): array
+            {
+                return $this->minimalData($data);
+            }
+        };
+        $actual = $tree->minData([]);
+        static::assertEmpty($actual);
+
     }
 }
