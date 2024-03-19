@@ -348,6 +348,5 @@ class TreeControllerTest extends BaseControllerTest
         };
         $actual = $tree->minData([]);
         static::assertEmpty($actual);
-
     }
 }
