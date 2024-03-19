@@ -389,13 +389,13 @@ export default {
             this.totalCounter = included.length;
             this.loadingCounter = 0;
 
-            // store parents with meta
-            for (let item of included) {
+            // first, store parent references with meta
+            included.forEach((item) => {
                 this.store[item.id] = item;
                 this.parents.push(item);
-            }
+            });
 
-            // load parent for each included
+            // then load parent for each included
             for (let item of included) {
                 item = await this.loadFolderParentRecursive(item);
                 this.loadingCounter++;
@@ -437,7 +437,6 @@ export default {
          * @return {Promise}
          */
         async loadChildren(folder) {
-            console.log(folder.attributes.title, Object.keys(this.store));
             let page = 1;
             let children = [];
             let done = false;
