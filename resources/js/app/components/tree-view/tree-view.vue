@@ -388,9 +388,15 @@ export default {
             let included = json.parents || [];
             this.totalCounter = included.length;
             this.loadingCounter = 0;
-            for (let item of included) {
+
+            // first, store parent references with meta
+            included.forEach((item) => {
                 this.store[item.id] = item;
                 this.parents.push(item);
+            });
+
+            // then load parent for each included
+            for (let item of included) {
                 item = await this.loadFolderParentRecursive(item);
                 this.loadingCounter++;
                 this.loadingMainMessage = this.msgLoadingBranchesForPosition + `: ${this.loadingCounter} / ${this.totalCounter}`;

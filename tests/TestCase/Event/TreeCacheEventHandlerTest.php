@@ -92,7 +92,7 @@ class TreeCacheEventHandlerTest extends TestCase
                 [],
                 false,
             ],
-            'afterSave type is not folders' => [
+            'afterSave type is not folders, and no relation' => [
                 'afterSave',
                 ['type' => 'documents'],
                 false,
@@ -110,6 +110,11 @@ class TreeCacheEventHandlerTest extends TestCase
             'afterSave parent' => [
                 'afterSave',
                 ['type' => 'folders', 'id' => 999, 'data' => ['relation' => 'parent']],
+                true,
+            ],
+            'afterSave parents' => [
+                'afterSave',
+                ['type' => 'documents', 'id' => 999, 'data' => ['relation' => 'parents']],
                 true,
             ],
             'afterSave title' => [
@@ -145,6 +150,11 @@ class TreeCacheEventHandlerTest extends TestCase
             'afterSaveRelated parent' => [
                 'afterSaveRelated',
                 ['type' => 'folders', 'id' => 999, 'data' => ['relation' => 'parent']],
+                true,
+            ],
+            'afterSaveRelated parents' => [
+                'afterSaveRelated',
+                ['type' => 'documents', 'id' => 999, 'data' => ['relation' => 'parents']],
                 true,
             ],
             'afterSaveRelated children_order' => [

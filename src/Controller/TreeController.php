@@ -212,7 +212,7 @@ class TreeController extends AppController
                     $response = ApiClientProvider::getApiClient()->get(sprintf('/%s/%s?include=parents', $type, $id));
                     $included = (array)Hash::get($response, 'included');
                     foreach ($included as &$item) {
-                        $item = $this->minimalData((array)$item);
+                        $item = $this->minimalDataWithMeta((array)$item);
                     }
 
                     return $included;

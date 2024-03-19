@@ -77,17 +77,18 @@ class TreeCacheEventHandler implements EventListenerInterface
      */
     protected function updateCache(array $data): void
     {
-        $type = (string)Hash::get($data, 'type');
-        if ($type !== 'folders') {
+        $relation = (string)Hash::get($data, 'data.relation');
+        if (in_array($relation, ['children', 'parent', 'parents'])) {
+            Cache::clearGroup('tree', self::CACHE_CONFIG);
+
             return;
         }
-        $children = (string)Hash::get($data, 'data.relation') === 'children';
-        $parent = (string)Hash::get($data, 'data.relation') === 'parent';
-        $position = (string)Hash::get($data, 'data.children_order') === 'position';
-        $intersection = array_intersect(array_keys((array)Hash::get($data, 'data')), ['title', 'status']);
-        if (empty($intersection) && !$children && !$parent && !$position) {
-            return;
+        if ((string)Hash::get($data, 'type') === 'folders') {
+            $position = (string)Hash::get($data, 'data.children_order') === 'position';
+            $intersection = array_intersect(array_keys((array)Hash::get($data, 'data')), ['title', 'status']);
+            if (!empty($intersection) || $position) {
+                Cache::clearGroup('tree', self::CACHE_CONFIG);
+            }
         }
-        Cache::clearGroup('tree', self::CACHE_CONFIG);
     }
 }
