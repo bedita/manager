@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-02-26 14:54:49 \n"
+"POT-Creation-Date: 2024-03-19 07:51:20 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1236,8 +1236,29 @@ msgstr "Utente"
 msgid "Canonical"
 msgstr "Canonica"
 
+msgid "Loading branches for position"
+msgstr "Caricamento rami per posizione"
+
+msgid "Loading children for folder"
+msgstr "Caricamento contenuti per cartella"
+
+msgid "Loading folder"
+msgstr "Caricamento cartella"
+
+msgid "Loading parent for folder"
+msgstr "Caricamento genitore per cartella"
+
+msgid "Loading positions for object"
+msgstr "Caricamento posizioni per oggetto"
+
+msgid "Loading root folders"
+msgstr "Caricamento cartelle principali"
+
 msgid "Menu"
 msgstr "Menù"
+
+msgid "page"
+msgstr "pagina"
 
 msgid "View"
 msgstr "Vedi"

@@ -1,7 +1,10 @@
 <template>
     <div class="tree-view-node" :class="{'is-root': isRoot}" v-show="showNode">
         <input v-if="originalParents.length > 0" type="hidden" name="_originalParents" :value="originalParents" />
-        <div v-if="isLoading && !parent" class="is-loading-spinner"></div>
+        <div v-if="isLoading && !parent" class="is-loading-spinner">
+            <div v-if="loadingMainMessage">{{ loadingMainMessage }}</div>
+            <div v-if="loadingSubMessage">{{ loadingSubMessage }}</div>
+        </div>
         <div v-if="parent" class="node-element py-05" :data-status="node.attributes.status">
             <label class="node-label" :class="{'icon-folder': !relationName, 'has-text-gray-550 disabled': object && node.id == object.id}" v-on="{ click: relationName ? () => {} : toggle }">
                 <input v-if="relationName"
@@ -20,10 +23,14 @@
                 <app-icon icon="carbon:unlocked" v-if="!isLocked"></app-icon>
                 <app-icon icon="carbon:tree-view" v-if="node.meta.perms.inherited"></app-icon>
             </span>
-            <button v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id) && showNode"
-                :class="{'is-loading-spinner': isLoading, 'icon-down-open': !isLoading && isOpen, 'icon-right-open': !isLoading && !isOpen}"
-                @click="toggle">
-            </button>
+            <template v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id) && showNode">
+                <button
+                    :class="{'is-loading-spinner': isLoading, 'icon-down-open': !isLoading && isOpen, 'icon-right-open': !isLoading && !isOpen}"
+                    @click="toggle">
+                </button>
+                <div v-if="isLoading && loadingMainMessage">{{ loadingMainMessage }}</div>
+                <div v-if="isLoading && loadingSubMessage">{{ loadingSubMessage }}</div>
+            </template>
             <a :href="url" v-if="hasPermissionRoles && isLocked">{{ msgView }}</a>
             <a :href="url" v-else>{{ msgEdit }}</a>
             <div class="tree-params">
@@ -107,10 +114,14 @@ const API_OPTIONS = {
 };
 
 export default {
-    name: 'tree-view',
+    name: 'TreeView',
 
     props: {
         store: {
+            type: Object,
+            default: () => ({}),
+        },
+        parentsStore: {
             type: Object,
             default: () => ({}),
         },
@@ -162,10 +173,21 @@ export default {
             canonical: false,
             isOpen: false,
             isLoading: false,
+            loadingCounter: 0,
+            loadingMainMessage: '',
+            loadingSubMessage: '',
+            totalCounter: 0,
             menu: false,
             msgCanonical: t`Canonical`,
             msgEdit: t`Edit`,
+            msgLoadingBranchesForPosition: t`Loading branches for position`,
+            msgLoadingChildrenForFolder: t`Loading children for folder`,
+            msgLoadingFolder: t`Loading folder`,
+            msgLoadingParentForFolder: t`Loading parent for folder`,
+            msgLoadingPositionsForObject: t`Loading positions for object`,
+            msgLoadingRoots: t`Loading root folders`,
             msgMenu: t`Menu`,
+            msgPage: t`page`,
             msgView: t`View`,
             originalParents: [],
             showForbidden: true,
@@ -308,7 +330,7 @@ export default {
          * @return {Promise}
          */
         async loadRoots() {
-            if (this.object && this.object.id) {
+            if (this.object && this.object.id && this.object.type) {
                 await this.preload(this.object);
             }
 
@@ -316,6 +338,7 @@ export default {
             let roots = [];
             let done = false;
             do {
+                this.loadingMainMessage = this.msgLoadingRoots;
                 let response = await fetch(`${API_URL}tree?filter[roots]&page=${page}&page_size=100`, API_OPTIONS);
                 let json = await response.json();
                 json = json?.tree || {};
@@ -344,15 +367,10 @@ export default {
          * @return {Promise}
          */
         async preload({ id, type }) {
-            if (!type) {
-                let response = await fetch(`${API_URL}api/objects/${id}`, API_OPTIONS);
-                let json = await response.json();
-                type = json.data.type;
-            }
-
             if (type === 'folders') {
-                let response = await fetch(`${API_URL}api/folders/${id}`, API_OPTIONS)
-                let { data: folder } = await response.json();
+                this.loadingMainMessage = this.msgLoadingFolder + ` ${id}`;
+                const resp = await fetch(`${API_URL}tree/node/${id}`, API_OPTIONS);
+                let { data: folder } = await resp.json();
                 this.store[folder.id] = folder;
                 let parent = await this.loadParent(folder);
                 if (!parent) {
@@ -363,16 +381,21 @@ export default {
                 return [await this.loadFolderParentRecursive(parent)];
             }
 
-            let response = await fetch(`${API_URL}api/${type}/${id}?include=parents`);
+            this.loadingMainMessage = this.msgLoadingPositionsForObject + ` ${id}`;
+            const response = await fetch(`${API_URL}tree/parents/${type}/${id}`);
             let json = await response.json();
-            let included = json.included || [];
-            return await Promise.all(
-                included.map(async (folder) => {
-                    this.store[folder.id] = folder;
-                    this.parents.push(folder);
-                    return this.loadFolderParentRecursive(folder);
-                })
-            );
+            let included = json.parents || [];
+            this.totalCounter = included.length;
+            this.loadingCounter = 0;
+            for (let item of included) {
+                this.store[item.id] = item;
+                this.parents.push(item);
+                item = await this.loadFolderParentRecursive(item);
+                this.loadingCounter++;
+                this.loadingMainMessage = this.msgLoadingBranchesForPosition + `: ${this.loadingCounter} / ${this.totalCounter}`;
+            }
+
+            return Promise.all(included);
         },
 
         /**
@@ -382,12 +405,21 @@ export default {
          * @return {Promise}
          */
         async loadParent(folder) {
-            let response = await fetch(`${API_URL}api/folders/${folder.id}/parent`, API_OPTIONS);
+            if (this.parentsStore[folder.id]) {
+                return this.parentsStore[folder.id];
+            }
+            const id = folder.id;
+            this.loadingSubMessage = this.msgLoadingParentForFolder + ` ${id}`;
+            const response = await fetch(`${API_URL}tree/parent/${id}`, API_OPTIONS);
             let json = await response.json();
-            let { data: object } = json;
-            if (!object) {
+            let object = json?.parent;
+            if (!object?.id) {
+                this.parentsStore[id] = null;
+
                 return null;
             }
+            this.parentsStore[id] = object;
+
             return this.store[object.id] || (this.store[object.id] = object);
         },
 
@@ -402,7 +434,9 @@ export default {
             let children = [];
             let done = false;
             do {
-                let childrenRes = await fetch(`${API_URL}tree?filter[parent]=${folder.id}&page=${page}&page_size=100`, API_OPTIONS);
+                const id = folder.id;
+                this.loadingSubMessage = this.msgLoadingChildrenForFolder + ` ${id} (` + this.msgPage + ` ${page})`;
+                let childrenRes = await fetch(`${API_URL}tree?filter[parent]=${id}&page=${page}&page_size=100`, API_OPTIONS);
                 let childrenJson = await childrenRes.json();
                 childrenJson = childrenJson?.tree || {};
                 children.push(
@@ -425,15 +459,19 @@ export default {
          * @return {Promise}
          */
         async loadFolderParentRecursive(folder) {
-            let parent = await this.loadParent(folder);
-            if (parent) {
-                if (!parent.children) {
-                    await this.loadChildren(parent);
-                }
-                return await this.loadFolderParentRecursive(parent);
+            let parent;
+            if (Object.keys(this.parentsStore).indexOf(folder.id) >= 0) {
+                parent = this.parentsStore[folder.id];
+            } else {
+                parent = await this.loadParent(folder);
             }
-
-            return folder;
+            if (!parent) {
+                return folder;
+            }
+            if (!this.store[parent.id].children) {
+                await this.loadChildren(parent);
+            }
+            return await this.loadFolderParentRecursive(parent);
         },
 
         /**
@@ -457,7 +495,9 @@ export default {
             let done = false;
             this.isLoading = true;
             do {
-                let response = await fetch(`${API_URL}tree?filter[parent]=${this.node.id}&page=${page}&page_size=100`, API_OPTIONS);
+                const id = this.node.id;
+                this.loadingSubMessage = this.msgLoadingChildrenForFolder + ` ${id} (` + this.msgPage + ` ${page})`;
+                let response = await fetch(`${API_URL}tree?filter[parent]=${id}&page=${page}&page_size=100`, API_OPTIONS);
                 let json = await response.json();
                 json = json?.tree || {};
                 children.push(...json.data);

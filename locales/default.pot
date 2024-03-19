@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2024-02-26 14:54:49 \n"
+"POT-Creation-Date: 2024-03-19 07:51:20 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1221,7 +1221,28 @@ msgstr ""
 msgid "Canonical"
 msgstr ""
 
+msgid "Loading branches for position"
+msgstr ""
+
+msgid "Loading children for folder"
+msgstr ""
+
+msgid "Loading folder"
+msgstr ""
+
+msgid "Loading parent for folder"
+msgstr ""
+
+msgid "Loading positions for object"
+msgstr ""
+
+msgid "Loading root folders"
+msgstr ""
+
 msgid "Menu"
+msgstr ""
+
+msgid "page"
 msgstr ""
 
 msgid "View"
