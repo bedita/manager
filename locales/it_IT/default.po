@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-03-19 07:51:20 \n"
+"POT-Creation-Date: 2024-03-21 08:19:20 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1478,6 +1478,9 @@ msgid ""
 msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
+
+msgid "untitled"
+msgstr "senza titolo"
 
 msgid "Every day"
 msgstr "Tutti i giorni"
