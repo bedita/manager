@@ -18,7 +18,7 @@
     {% set url = item.url is iterable ? Url.build(item.url) : item.url %}
     {% do _view.append(
         'app-module-buttons',
-        '<a href="' ~ url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><app-icon icon="carbon:save"></app-icon><span class="ml-05">' ~ __(item.label) ~ '</span></a>',
+        '<a href="' ~ url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><app-icon icon="' ~ item.icon|default('carbon:save') ~ '"></app-icon><span class="ml-05">' ~ __(item.label) ~ '</span></a>',
     ) %}
 {% endfor %}
 {% endif %}
