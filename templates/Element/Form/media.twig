@@ -52,7 +52,7 @@
                         {% else %}
                             <figure class="thumb">
                                 <a href={{ stream.meta.url }} title="{{ __('Open image') }}" target="_blank">
-                                    <img :src=previewImage("{{ thumb }}") alt="" id="imageThumb" />
+                                    <img :src=previewImage("{{ thumb }}") alt="" id="imageThumb" style="min-width:500px;" />
                                 </a>
                             </figure>
                         {% endif %}
