@@ -4,6 +4,12 @@
         'app-module-buttons',
         '<a href="' ~ Url.build({'_name': 'modules:create', 'object_type': objectType}) ~ '" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ '"><app-icon icon="carbon:add"></app-icon><span class="ml-05">' ~ __('Create') ~ '</span></a>'
     ) %}
+    {% if objectType in ['audio', 'images', 'files', 'videos'] %}
+        {% do _view.append(
+            'app-module-buttons',
+            '<a href="' ~ Url.build({'_name': 'modules:multiupload', 'object_type': objectType}) ~ '" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ '"><app-icon icon="carbon:upload"></app-icon><span class="ml-05">' ~ __('Upload multiple') ~ '</span></a>'
+        ) %}
+    {% endif %}
 {% endif %}
 
 {% if schema.properties.categories %}

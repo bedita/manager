@@ -302,6 +302,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:create']
     );
     $routes->connect(
+        '/{object_type}/multiupload',
+        ['controller' => 'Multiupload', 'action' => 'index'],
+        ['_name' => 'modules:multiupload']
+    );
+    $routes->connect(
         '/{object_type}/categories',
         ['controller' => 'Categories', 'action' => 'index'],
         ['_name' => 'modules:categories:index']

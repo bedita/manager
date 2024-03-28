@@ -18,6 +18,7 @@ export default {
         FilterBoxView: () => import(/* webpackChunkName: "tree-view" */'app/components/filter-box'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
         PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
+        DropUpload: () => import(/* webpackChunkName: "drop-upload" */'app/components/drop-upload'),
     },
 
     /**
@@ -50,6 +51,7 @@ export default {
              * Used to enable/disable confirmation button.
              */
             bulkFolder: null,
+            uploaded: [],
         };
     },
 
@@ -210,6 +212,18 @@ export default {
 
         goto(url) {
             window.location.href = url;
+        },
+
+        appendUploaded(data) {
+            for (let item of data) {
+                console.log(item);
+                this.uploaded.push(item);
+            }
+            this.$forceUpdate();
+        },
+
+        extension(filename) {
+            return filename.split('.').pop();
         },
     }
 }
