@@ -20,6 +20,13 @@ namespace App\Controller;
 class MultiuploadController extends AppController
 {
     /**
+     * Object type currently used
+     *
+     * @var string
+     */
+    protected $objectType = null;
+
+    /**
      * @inheritDoc
      */
     public function initialize(): void
