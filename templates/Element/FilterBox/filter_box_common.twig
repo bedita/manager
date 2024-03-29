@@ -1,5 +1,16 @@
 <div class="filters-container" :class="{ 'filters-container-active': filterActive }">
-    <div class="basic-filters">
+<div class="basic-filters">
+
+        {% if currentModule.hints.multiple_types and types.right is iterable %}
+        <div class="filter-container filter-search input">
+            <object-types-picker
+                :initial-types="{{ types.right|json_encode }}"
+                :initial-selected="{{ _view.request.getQuery('filter.type')|json_encode}}"
+                @updatequerytypes="updateSelectedTypes($event)"
+            >
+            </objects-type-picker>
+        </div>
+        {% endif %}
 
         <div class="filter-container filter-search input">
             <input type="text"

@@ -27,6 +27,7 @@ export default {
         InputDynamicAttributes: () => import(/* webpackChunkName: "input-dynamic-attributes" */'app/components/input-dynamic-attributes'),
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
+        ObjectTypesPicker: () => import(/* webpackChunkName: "object-types-picker" */'app/components/object-types-picker/object-types-picker'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
     },
 
@@ -93,6 +94,7 @@ export default {
             this.getCleanQuery(this.filterList),
             this.initFilter,
         ]);
+        console.log(this.queryFilter.filter.type);
 
         if (this.filterList.length) {
             this.availableFilters = this.filterList;
@@ -363,6 +365,13 @@ export default {
 
             const filter = this.prepareFilters();
             this.$emit('filter-objects', { ...this.queryFilter, filter });
+        },
+
+        /**
+         * change selected types
+         */
+        updateSelectedTypes(types) {
+            this.queryFilter.filter.type = types;
         },
 
         /**

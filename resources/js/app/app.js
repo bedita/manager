@@ -36,6 +36,7 @@ const _vueInstance = new Vue({
         LoginPassword: () => import(/* webpackChunkName: "login-password" */'app/components/login-password/login-password'),
         Category: () => import(/* webpackChunkName: "category" */'app/components/category/category'),
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
+        ObjectTypesPicker: () => import(/* webpackChunkName: "object-types-picker" */'app/components/object-types-picker/object-types-picker'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         TagForm: () => import(/* webpackChunkName: "tag-form" */'app/components/tag-form/tag-form'),
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
@@ -63,7 +64,6 @@ const _vueInstance = new Vue({
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
         HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
-        FilterTypeView: () => import(/* webpackChunkName: "filter-type-view" */'app/components/filter-type'),
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
@@ -112,7 +112,7 @@ const _vueInstance = new Vue({
                 page: '',
                 page_size: '',
             },
-            selectedTypes: []
+            selectedTypes: [],
         }
     },
 
@@ -187,6 +187,7 @@ const _vueInstance = new Vue({
             BEDITA.success = success;
             BEDITA.prompt = prompt;
             BEDITA.warning = warning;
+            this.selectedTypes = this.queryFilter?.filter?.type || [];
         });
     },
 
@@ -276,13 +277,6 @@ const _vueInstance = new Vue({
         onUpdateCurrentPage(page) {
             this.page = page;
             this.applyFilters(this.urlFilterQuery);
-        },
-
-        /**
-         * listen to FilterTypeView event filter-type-page
-         */
-        onUpdateQueryTypes(types) {
-            this.selectedTypes = types;
         },
 
         /**
@@ -393,13 +387,6 @@ const _vueInstance = new Vue({
          * @returns {void}
          */
         applyFilters(filters) {
-            if (filters?.filter?.type) {
-                delete filters.filter.type;
-            }
-            if (this.selectedTypes.length > 0) {
-                const typesFilter = {type: this.selectedTypes};
-                filters.filter = {...filters.filter, ...typesFilter};
-            }
             const url = this.buildUrlWithParams({
                 q: filters.q,
                 filter: filters.filter,
