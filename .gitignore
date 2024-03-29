@@ -71,10 +71,14 @@ bundle-report.*.html
 /webroot/css/category*
 /webroot/css/date-input*
 /webroot/css/email-input*
+/webroot/css/flash-message*
+/webroot/css/import-result*
 /webroot/css/index-cell*
 /webroot/css/menu*
 /webroot/css/object-nav*
 /webroot/css/object-property*
+/webroot/css/objects-history*
+/webroot/css/property-view*
 /webroot/css/roles-list-view*
 /webroot/css/secret*
 /webroot/css/show-hide*
