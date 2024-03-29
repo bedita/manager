@@ -5,7 +5,7 @@
 <modules-index inline-template ids='{{ []|json_encode }}'>
     <div class="module-index">
 
-        <drop-upload placeholder="{{ __('Click or drop new files here') }}" @new-relations="appendUploaded"></drop-upload>
+        <drop-upload double=1 placeholder="{{ __('Click or drop new files here') }}" @new-relations="appendUploaded"></drop-upload>
 
         <div v-for="item in uploaded" :key="item.id">
             <a :href="`/view/${item.id}`">

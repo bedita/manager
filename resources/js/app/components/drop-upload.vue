@@ -1,5 +1,5 @@
 <template>
-    <div class="drop-area mb-1 p-1 is-flex is-flex-column" @drop.prevent="dropFiles" @dragover.prevent="onDragOver"
+    <div class="drop-area mb-1 p-1 is-flex is-flex-column" :class="double ? 'drop-area-double' : ''" @drop.prevent="dropFiles" @dragover.prevent="onDragOver"
         @dragleave.prevent="onDragLeave">
         <div class="upload-placeholder" v-if="!Array.from(uploadProgressInfo.values()).length">
             <input class="file-input" type="file" multiple @change="inputFiles">
@@ -70,6 +70,10 @@ export default {
         knownTypes: {
             type: Array,
             default: () => ['audio', 'video', 'image'],
+        },
+        double: {
+            type: String,
+            default: '',
         },
     },
 
