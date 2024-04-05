@@ -22,6 +22,8 @@ export default {
         const anchor = document.createElement('a');
         anchor.innerHTML = t`Open Uri`;
         anchor.classList.add('icon-link-ext');
+        anchor.classList.add('mt-075');
+        anchor.classList.add('is-block');
         anchor.style = 'cursor: pointer;';
         anchor.addEventListener('click', (ev) => {
             ev.preventDefault()
