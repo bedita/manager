@@ -1,11 +1,14 @@
-.tags {
-    .list-objects {
-        .disabled {
-            color: gray;
-        }
+.tags-container {
+    max-width: 1200px;
+    .tags {
+        .list-objects {
+            .disabled {
+                color: gray;
+            }
 
-        input[type=checkbox]:disabled {
-            filter: invert(1) brightness(3);
+            input[type=checkbox]:disabled {
+                filter: invert(1) brightness(3);
+            }
         }
     }
 }

@@ -1,3 +1,6 @@
+{% set language = config('Project.config.I18n.default')|json_encode %}
+{% set languages = config('Project.config.I18n.languages')|default([])|json_encode %}
+
 <div class="categories-container">
 
     {# list resources : rows #}
@@ -21,11 +24,14 @@
                 {% set resource = resources[category_id] %}
                 {% set type = resource.attributes.object_type_name %}
 
-                <category
+                <category-form
+                    :language="{{ language }}"
+	                :languages="{{ languages }}"
                     :source="{{ resource.attributes|merge({'id': resource.id, 'type': type})|json_encode }}"
                     :parents="{{ roots|json_encode }}"
-                    :names="{{ names[type]|json_encode }}">
-                </category>
+                    :names="{{ names[type]|json_encode }}"
+                >
+                </category-form>
 
             {% endfor %}
         </div>
@@ -46,18 +52,22 @@
             </nav>
             {% if object_types.0 %}
                 {% set source = {'type': object_types.0} %}
-                <category
+                <category-form
+                    :language="{{ language }}"
+	                :languages="{{ languages }}"
                     :source="{{ source|json_encode }}"
                     :parents="{{ roots|json_encode }}"
                     :names="{{ names[object_types.0]|json_encode }}">
-                </category>
+                </category-form>
             {% else %}
                 {% set source = {'types': object_types|keys} %}
-                <category
+                <category-form
+                    :language="{{ language }}"
+	                :languages="{{ languages }}"
                     :source="{{ source|json_encode }}"
                     :parents="{{ roots|json_encode }}"
                     :allnames="{{ names|json_encode }}">
-                </category>
+                </category-form>
             {% endif %}
         </div>
     </div>

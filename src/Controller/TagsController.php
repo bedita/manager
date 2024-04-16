@@ -9,9 +9,21 @@ use Cake\Http\Response;
 
 /**
  * Tags Controller
+ *
+ * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  */
 class TagsController extends ModelTagsController
 {
+    /**
+     * @inheritDoc
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('ProjectConfiguration');
+    }
+
     /**
      * @inheritDoc
      */
@@ -21,6 +33,7 @@ class TagsController extends ModelTagsController
         $this->viewBuilder()->setTemplate('/Pages/Model/Tags/index');
         $this->set('hideSidebar', true);
         $this->set('redirTo', ['_name' => 'tags:index']);
+        $this->ProjectConfiguration->read();
 
         return null;
     }

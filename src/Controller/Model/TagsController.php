@@ -52,7 +52,9 @@ class TagsController extends ModelBaseController
     public function index(): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
-        $options = array_merge(['page_size' => 20], $this->getRequest()->getQueryParams());
+        $options = $this->getRequest()->getQueryParams();
+        $options['page_size'] = empty($options['page_size']) ? 20 : $options['page_size'];
+        $options['sort'] = empty($options['sort']) ? 'name' : $options['sort'];
         $response = ApiClientProvider::getApiClient()->get('/model/tags', $options);
         $resources = Hash::combine((array)Hash::get($response, 'data'), '{n}.id', '{n}');
         $roots = $this->Categories->getAvailableRoots($resources);
