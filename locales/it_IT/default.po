@@ -1489,6 +1489,9 @@ msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
 
+msgid "untitled"
+msgstr "senza titolo"
+
 msgid "Every day"
 msgstr "Tutti i giorni"
 

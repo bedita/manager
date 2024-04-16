@@ -1455,7 +1455,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 msgid "No History data found"
 msgstr ""
 
@@ -1470,6 +1470,9 @@ msgstr ""
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
+msgstr ""
+
+msgid "untitled"
 msgstr ""
 
 msgid "Every day"
