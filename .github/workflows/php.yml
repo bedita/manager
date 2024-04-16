@@ -16,29 +16,29 @@ on:
 
 jobs:
   cs:
-    uses: bedita/github-workflows/.github/workflows/php-cs.yml@v1
+    uses: bedita/github-workflows/.github/workflows/php-cs.yml@v2
     with:
       php_versions: '["7.4", "8.1", "8.2"]'
 
   psalm:
-    uses: bedita/github-workflows/.github/workflows/php-psalm.yml@v1
+    uses: bedita/github-workflows/.github/workflows/php-psalm.yml@v2
     with:
       php_versions: '["7.4", "8.1", "8.2"]'
 
   stan:
-    uses: bedita/github-workflows/.github/workflows/php-stan.yml@v1
+    uses: bedita/github-workflows/.github/workflows/php-stan.yml@v2
     with:
       php_versions: '["7.4", "8.1", "8.2"]'
 
   unit-4:
-    uses: bedita/github-workflows/.github/workflows/php-unit.yml@v1
+    uses: bedita/github-workflows/.github/workflows/php-unit.yml@v2
     with:
       php_versions: '["7.4", "8.1", "8.2"]'
       bedita_version: '4'
       coverage_min_percentage: 98
 
   unit-5:
-    uses: bedita/github-workflows/.github/workflows/php-unit.yml@v1
+    uses: bedita/github-workflows/.github/workflows/php-unit.yml@v2
     with:
       php_versions: '["7.4", "8.1", "8.2"]'
       bedita_version: '5'
