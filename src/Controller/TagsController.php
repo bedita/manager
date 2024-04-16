@@ -20,7 +20,6 @@ class TagsController extends ModelTagsController
     public function initialize(): void
     {
         parent::initialize();
-
         $this->loadComponent('ProjectConfiguration');
     }
 
