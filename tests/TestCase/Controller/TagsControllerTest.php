@@ -80,7 +80,7 @@ class TagsControllerTest extends TestCase
     public function testInitialize(): void
     {
         $this->setupController();
-        $this->controller->initialize();
+        $this->controller->index();
         static::assertInstanceOf('App\Controller\Component\ProjectConfigurationComponent', $this->controller->ProjectConfiguration);
     }
 
