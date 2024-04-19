@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2024-03-21 08:19:20 \n"
+"POT-Creation-Date: 2024-04-16 10:48:09 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1490,9 +1490,6 @@ msgid "Tuesday"
 msgstr ""
 
 msgid "Wednesday"
-msgstr ""
-
-msgid "Modify"
 msgstr ""
 
 msgid "Name already in use"
