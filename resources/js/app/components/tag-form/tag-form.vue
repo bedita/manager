@@ -196,7 +196,7 @@ export default {
                         type: 'tags',
                         attributes: {
                             name: this.name,
-                            labe: this.label,
+                            label: this.label,
                             labels: this.labels,
                             enabled: this.enabled || false
                         }
