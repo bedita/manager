@@ -20,6 +20,7 @@ use Cake\Utility\Hash;
  * Tags Model Controller: list, add, edit, remove tags
  *
  * @property \App\Controller\Component\CategoriesComponent $Categories
+ * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  */
 class TagsController extends ModelBaseController
 {
@@ -44,6 +45,7 @@ class TagsController extends ModelBaseController
     {
         parent::initialize();
         $this->loadComponent('Categories');
+        $this->loadComponent('ProjectConfiguration');
     }
 
     /**
@@ -52,7 +54,9 @@ class TagsController extends ModelBaseController
     public function index(): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
-        $options = array_merge(['page_size' => 20], $this->getRequest()->getQueryParams());
+        $options = $this->getRequest()->getQueryParams();
+        $options['page_size'] = empty($options['page_size']) ? 20 : $options['page_size'];
+        $options['sort'] = empty($options['sort']) ? 'name' : $options['sort'];
         $response = ApiClientProvider::getApiClient()->get('/model/tags', $options);
         $resources = Hash::combine((array)Hash::get($response, 'data'), '{n}.id', '{n}');
         $roots = $this->Categories->getAvailableRoots($resources);
@@ -63,6 +67,7 @@ class TagsController extends ModelBaseController
         $this->set('schema', $this->Schema->getSchema());
         $this->set('properties', $this->Properties->indexList('tags'));
         $this->set('filter', $this->Properties->filterList('tags'));
+        $this->ProjectConfiguration->read();
 
         return null;
     }

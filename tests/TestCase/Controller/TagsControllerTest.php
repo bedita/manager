@@ -72,6 +72,19 @@ class TagsControllerTest extends TestCase
     }
 
     /**
+     * Test `initialize` method
+     *
+     * @return void
+     * @covers ::initialize()
+     */
+    public function testInitialize(): void
+    {
+        $this->setupController();
+        $this->controller->index();
+        static::assertInstanceOf('App\Controller\Component\ProjectConfigurationComponent', $this->controller->ProjectConfiguration);
+    }
+
+    /**
      * Test `index` method
      *
      * @return void
