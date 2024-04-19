@@ -20,6 +20,7 @@ use Cake\Utility\Hash;
  * Tags Model Controller: list, add, edit, remove tags
  *
  * @property \App\Controller\Component\CategoriesComponent $Categories
+ * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  */
 class TagsController extends ModelBaseController
 {
@@ -44,6 +45,7 @@ class TagsController extends ModelBaseController
     {
         parent::initialize();
         $this->loadComponent('Categories');
+        $this->loadComponent('ProjectConfiguration');
     }
 
     /**
@@ -65,6 +67,7 @@ class TagsController extends ModelBaseController
         $this->set('schema', $this->Schema->getSchema());
         $this->set('properties', $this->Properties->indexList('tags'));
         $this->set('filter', $this->Properties->filterList('tags'));
+        $this->ProjectConfiguration->read();
 
         return null;
     }
