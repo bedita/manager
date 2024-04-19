@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Test\TestCase\Core\I18n;
 
 use BEdita\I18n\Core\TranslatorInterface;
