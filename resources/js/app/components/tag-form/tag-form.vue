@@ -23,7 +23,7 @@
         </div>
         <div v-if="editMode">
             <labels-form
-                :labels-source="labels || {'default':''}"
+                :labels-source="labels"
                 :language="language"
                 :languages="languagesOptions"
                 @change="changeLabels"
@@ -133,6 +133,7 @@ export default {
 
         changeLabels(labels) {
             this.labels = labels;
+            this.label = labels?.['default'];
             this.saveDisabled = this.unchanged() || this.name.length < 3 || labels?.['default']?.length < 3;
         },
 
@@ -147,13 +148,10 @@ export default {
         resetData() {
             this.id = this.originalObj?.id || '';
             this.name = this.originalObj?.attributes?.name || '';
-            this.label = this.originalObj?.attributes?.label || '';
-            this.labels = { ...this.originalObj?.attributes?.labels || {} };
+            this.label = this.originalObj?.attributes?.label || this.originalObj?.attributes?.labels?.default || '';
+            this.labels = { ...this.originalObj?.attributes?.labels || {'default': this.label} || {'default': ''} };
             this.enabled = this.originalObj?.attributes?.enabled || '';
             this.editMode = this.editmode || false;
-            if (this.name === 'ligotti') {
-                console.log(this.originalObj);
-            }
         },
 
         async nameInUse() {
@@ -196,8 +194,8 @@ export default {
                         type: 'tags',
                         attributes: {
                             name: this.name,
-                            label: this.label,
-                            labels: this.labels,
+                            label: this.label || this.labels?.['default'] || '',
+                            labels: this.labels || {'default': this.label || ''},
                             enabled: this.enabled || false
                         }
                     }

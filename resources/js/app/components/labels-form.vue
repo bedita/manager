@@ -17,6 +17,7 @@
                 autocorrect="off"
                 autocapitalize="off"
                 v-model="labels['default']"
+                @change="changeLabel"
             >
             <button disabled="true">
                 <app-icon icon="carbon:trash-can"></app-icon>

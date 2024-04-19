@@ -7,7 +7,7 @@
         </div>
         <div class="label-cell">
             <labels-form
-                :labels-source="labels || {'default':''}"
+                :labels-source="labels"
                 :language="language"
                 :languages="languagesOptions"
                 @change="changeLabels"
@@ -126,8 +126,8 @@ export default {
             this.original = { ...this.source };
             this.id = this.original?.id || '';
             this.name = this.original?.name || '';
-            this.label = this.original?.label || '';
-            this.labels = { ...this.original?.labels || {} };
+            this.label = this.original?.label || this.original?.labels?.default || '';
+            this.labels = { ...this.original?.labels || {'default': this.label} || {'default': ''} };
             this.type = this.original?.type || '';
             if (!this.type && this.original?.types) {
                 this.selectTypes = true;
@@ -178,6 +178,7 @@ export default {
 
         changeLabels(labels) {
             this.labels = labels;
+            this.label = labels?.['default'] || '';
             this.saveDisabled = this.unchanged() || !this.valid();
         },
 
@@ -189,8 +190,8 @@ export default {
                     formData.set('id', this.id);
                 }
                 formData.set('name', this.name);
-                formData.set('label', this.label);
-                formData.set('labels', JSON.stringify(this.labels));
+                formData.set('label', this.label || this.labels?.['default'] || '');
+                formData.set('labels', JSON.stringify(this.labels || {'default': this.label || ''}));
                 formData.set('enabled', this.enabled);
                 formData.set('object_type_name', this.type);
                 formData.set('parent_id', this.parent);
