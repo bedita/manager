@@ -49,17 +49,12 @@ export default {
             this.types = this.initialTypes?.map((t) => ({ id: t, label: t }));
             this.types = this.types.sort((a, b) => a.label.localeCompare(b.label));
             this.selectedTypes = this.initialSelected.sort().map((t) => ({ id: t, label: t }));
-            console.log(this.selectedTypes);
         });
     },
 
     methods: {
         changeTypes() {
-            const types = [];
-            for (const item of this.selectedTypes) {
-                types.push(item.id);
-            }
-            this.$emit('updatequerytypes', types);
+            this.$emit('updatequerytypes', this.selectedTypes.map((item) => item.id));
         },
     },
 }
