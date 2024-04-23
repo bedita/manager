@@ -48,7 +48,7 @@ export default {
         this.$nextTick(() => {
             this.types = this.initialTypes?.map((t) => ({ id: t, label: t }));
             this.types = this.types.sort((a, b) => a.label.localeCompare(b.label));
-            this.selectedTypes = this.initialSelected ? this.initialSelected.sort().map((t) => ({ id: t, label: t })) : [];
+            this.selectedTypes = (this.initialSelected ?? []).sort().map((t) => ({ id: t, label: t }))
         });
     },
 
