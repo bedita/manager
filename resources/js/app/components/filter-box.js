@@ -94,7 +94,6 @@ export default {
             this.getCleanQuery(this.filterList),
             this.initFilter,
         ]);
-        console.log(this.queryFilter.filter.type);
 
         if (this.filterList.length) {
             this.availableFilters = this.filterList;
