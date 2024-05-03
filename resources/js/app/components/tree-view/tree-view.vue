@@ -81,7 +81,8 @@
                 :multiple-choice="multipleChoice"
                 :user-roles="userRoles"
                 :has-permissions="hasPermissions"
-                :show-forbidden="showForbidden">
+                :show-forbidden="showForbidden"
+                :search="search">
             </tree-view>
         </div>
     </div>
@@ -165,6 +166,10 @@ export default {
         hasPermissions: {
             type: Boolean,
             default: false,
+        },
+        search: {
+            type: String,
+            default: '',
         },
     },
 
@@ -307,6 +312,10 @@ export default {
         },
 
         showNode() {
+            if (this.search && !this.foundIn(this.node)) {
+                return false;
+            }
+
             if (!this.hasPermissions) {
                 return true;
             }
@@ -581,6 +590,24 @@ export default {
             }
             document.getElementById('changedParents').value = arr.join(',');
         },
+
+        foundIn(item) {
+            if (item?.attributes?.title && item?.attributes?.title?.toLowerCase().indexOf(this.search.toLowerCase()) !== -1) {
+                return true;
+            }
+
+            if (!item?.children || item?.children.length === 0) {
+                return false;
+            }
+
+            return item.children.some((child) => {
+                if (child.attributes?.title?.toLowerCase().indexOf(this.search.toLowerCase()) !== -1) {
+                    return true;
+                }
+
+                return this.foundIn(child);
+            });
+        }
     },
 }
 </script>

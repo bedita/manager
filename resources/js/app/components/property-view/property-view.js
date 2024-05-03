@@ -21,6 +21,7 @@ const API_OPTIONS = {
 };
 
 const STORAGE_TABS_KEY = 'tabs_open_' + BEDITA.currentModule.name;
+let debouncedSearchPosition = null;
 
 export default {
     components: {
@@ -85,6 +86,7 @@ export default {
             dataList: parseInt(this.uploadableNum) == 0,
             userInfoLoaded: false,
             fileChanged: false,
+            searchInPosition: '',
         }
     },
 
@@ -117,6 +119,7 @@ export default {
     methods: {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
+            this.searchInPosition = '';
             this.checkLoadRelated();
             this.updateStorage();
         },
@@ -227,6 +230,16 @@ export default {
             if (thumb && document.getElementById('imageThumb')) {
                 document.getElementById('imageThumb').src = thumb;
             }
+        },
+
+        onSearchPosition(e) {
+            if (!debouncedSearchPosition) {
+                debouncedSearchPosition = this.$helpers.debounce((val) => {
+                    this.searchInPosition = val.length < 3 ? '' : val;
+                });
+            }
+
+            return debouncedSearchPosition(e.target.value);
         },
     }
 }
