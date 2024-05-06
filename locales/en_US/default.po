@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-04-16 10:31:11 \n"
+"POT-Creation-Date: 2024-05-06 08:07:20 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1010,6 +1010,9 @@ msgid "reset"
 msgstr ""
 
 msgid "scheduled_from"
+msgstr ""
+
+msgid "search on visible positions"
 msgstr ""
 
 msgid "service"
