@@ -21,6 +21,7 @@ const API_OPTIONS = {
 };
 
 const STORAGE_TABS_KEY = 'tabs_open_' + BEDITA.currentModule.name;
+let debouncedSearchPosition = null;
 
 export default {
     components: {
@@ -41,6 +42,7 @@ export default {
         Permissions:() => import(/* webpackChunkName: "permissions" */'app/components/permissions/permissions'),
         PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
+        ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
     },
 
     props: {
@@ -85,6 +87,7 @@ export default {
             dataList: parseInt(this.uploadableNum) == 0,
             userInfoLoaded: false,
             fileChanged: false,
+            searchInPosition: '',
         }
     },
 
@@ -117,6 +120,7 @@ export default {
     methods: {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
+            this.searchInPosition = '';
             this.checkLoadRelated();
             this.updateStorage();
         },
@@ -227,6 +231,16 @@ export default {
             if (thumb && document.getElementById('imageThumb')) {
                 document.getElementById('imageThumb').src = thumb;
             }
+        },
+
+        onSearchPosition(e) {
+            if (!debouncedSearchPosition) {
+                debouncedSearchPosition = this.$helpers.debounce((val) => {
+                    this.searchInPosition = val.length < 3 ? '' : val;
+                }, 300);
+            }
+
+            return debouncedSearchPosition(e.target.value);
         },
     }
 }

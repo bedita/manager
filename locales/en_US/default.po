@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-05-06 10:50:24 \n"
+"POT-Creation-Date: 2024-05-06 14:24:10 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1015,6 +1015,9 @@ msgstr ""
 msgid "scheduled_from"
 msgstr ""
 
+msgid "search on visible positions"
+msgstr ""
+
 msgid "service"
 msgstr ""
 
@@ -1451,7 +1454,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 msgid "No History data found"
 msgstr ""
 
@@ -1496,6 +1499,9 @@ msgid "Tuesday"
 msgstr ""
 
 msgid "Wednesday"
+msgstr ""
+
+msgid "Copied!"
 msgstr ""
 
 msgid "Name already in use"

@@ -74,10 +74,12 @@ bundle-report.*.html
 /webroot/css/flash-message*
 /webroot/css/import-result*
 /webroot/css/index-cell*
+/webroot/css/map-view*
 /webroot/css/menu*
 /webroot/css/object-nav*
 /webroot/css/object-property*
 /webroot/css/objects-history*
+/webroot/css/permission*
 /webroot/css/property-view*
 /webroot/css/roles-list-view*
 /webroot/css/secret*
