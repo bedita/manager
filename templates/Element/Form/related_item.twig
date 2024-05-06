@@ -68,8 +68,12 @@
 
                 <span class="icon-calendar-check-o" v-title="datesInfo(related)"></span>
             {% endif %}
-
             <span class="status is-uppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
+        </div>
+
+        <div class="is-flex space-between align-center">
+            <clipboard-item v-title="related.id" label="ID" :text="related.id"></clipboard-item>
+            <clipboard-item v-title="related.attributes.uname" label="uname" :text="related.attributes.uname"></clipboard-item>
         </div>
 
         <header class="is-flex space-between mt-05">

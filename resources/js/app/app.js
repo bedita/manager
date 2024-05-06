@@ -81,6 +81,7 @@ const _vueInstance = new Vue({
         SystemInfo:() => import(/* webpackChunkName: "system-info" */'app/components/system-info/system-info'),
         UserAccesses:() => import(/* webpackChunkName: "user-accesses" */'app/components/user-accesses/user-accesses'),
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
+        ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
         AppIcon,
     },
 
