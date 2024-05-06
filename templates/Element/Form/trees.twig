@@ -20,7 +20,7 @@
 
             {% set hasPermissions = 'Permissions' in foldersSchema.associations %}
             <permission-toggle :user-roles="{{ user.roles|json_encode }}" :has-permissions="{{ hasPermissions|json_encode }}"></permission-toggle>
-            <div><input type="text" @input="onSearchPosition" placeholder="filter on visible branches"/></div>
+            <div><input type="text" @input="onSearchPosition" placeholder="{{ __('search on visible positions') }}"/></div>
             <tree-view
                 relation-name={{ relationName }}
                 relation-label="{{ Layout.tr(relationName) }}"

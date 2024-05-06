@@ -16,7 +16,7 @@
                     :data-folder-id="node.id"
                     @click="isLocked ? $event.preventDefault() : ''"
                     @change="toggleFolderRelation" />
-                {{ node.attributes.title }}
+                <span v-html=nodeTitle></span>
             </label>
             <span v-if="hasPermissionRoles" v-title="node.meta.perms.roles.join(', ')">
                 <app-icon icon="carbon:locked" v-if="isLocked"></app-icon>
@@ -216,6 +216,19 @@ export default {
     },
 
     computed: {
+        nodeTitle() {
+            // ensure to escape html entities except for the search term
+            let title = this.node.attributes.title;
+            const div = document.createElement('div');
+            div.innerHTML = title;
+            title = div.innerText;
+            if (!this.search) {
+                return title;
+            }
+
+            return title.replace(new RegExp(`(${this.search})`, 'i'), '<span class="has-text-decoration-underline">$1</span>');
+        },
+
         /**
          * Check if the item a root.
          *
