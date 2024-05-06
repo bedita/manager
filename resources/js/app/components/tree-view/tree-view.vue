@@ -16,7 +16,7 @@
                     :data-folder-id="node.id"
                     @click="isLocked ? $event.preventDefault() : ''"
                     @change="toggleFolderRelation" />
-                {{ node.attributes.title }}
+                <span v-html=nodeTitle></span>
             </label>
             <span v-if="hasPermissionRoles" v-title="node.meta.perms.roles.join(', ')">
                 <app-icon icon="carbon:locked" v-if="isLocked"></app-icon>
@@ -81,7 +81,8 @@
                 :multiple-choice="multipleChoice"
                 :user-roles="userRoles"
                 :has-permissions="hasPermissions"
-                :show-forbidden="showForbidden">
+                :show-forbidden="showForbidden"
+                :search="search">
             </tree-view>
         </div>
     </div>
@@ -166,6 +167,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        search: {
+            type: String,
+            default: '',
+        },
     },
 
     data() {
@@ -211,6 +216,19 @@ export default {
     },
 
     computed: {
+        nodeTitle() {
+            // ensure to escape html entities except for the search term
+            let title = this.node.attributes.title;
+            const div = document.createElement('div');
+            div.innerHTML = title;
+            title = div.innerText;
+            if (!this.search) {
+                return title;
+            }
+
+            return title.replace(new RegExp(`(${this.search})`, 'i'), '<span class="has-text-decoration-underline">$1</span>');
+        },
+
         /**
          * Check if the item a root.
          *
@@ -307,6 +325,10 @@ export default {
         },
 
         showNode() {
+            if (this.search && !this.foundIn(this.node)) {
+                return false;
+            }
+
             if (!this.hasPermissions) {
                 return true;
             }
@@ -581,6 +603,24 @@ export default {
             }
             document.getElementById('changedParents').value = arr.join(',');
         },
+
+        foundIn(item) {
+            if (item?.attributes?.title && item?.attributes?.title?.toLowerCase().indexOf(this.search.toLowerCase()) !== -1) {
+                return true;
+            }
+
+            if (!item?.children || item?.children.length === 0) {
+                return false;
+            }
+
+            return item.children.some((child) => {
+                if (child.attributes?.title?.toLowerCase().indexOf(this.search.toLowerCase()) !== -1) {
+                    return true;
+                }
+
+                return this.foundIn(child);
+            });
+        }
     },
 }
 </script>
