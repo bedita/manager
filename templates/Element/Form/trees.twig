@@ -20,16 +20,35 @@
 
             {% set hasPermissions = 'Permissions' in foldersSchema.associations %}
             <permission-toggle :user-roles="{{ user.roles|json_encode }}" :has-permissions="{{ hasPermissions|json_encode }}"></permission-toggle>
-            <div><input type="text" @input="onSearchPosition" placeholder="{{ __('search on visible positions') }}"/></div>
-            <tree-view
-                relation-name={{ relationName }}
-                relation-label="{{ Layout.tr(relationName) }}"
-                :object='{{ { id: object.id, type: object.type }|json_encode }}'
-                :multiple-choice={{ options.multiple }}
-                :user-roles="{{ user.roles|json_encode }}"
-                :has-permissions="{{ hasPermissions|json_encode }}"
-                :search="searchInPosition">
-            </tree-view>
+            <div class="is-flex is-flex-column">
+                <div class="is-flex">
+                    <input type="text" @input="onSearchPosition" placeholder="{{ __('search on visible positions') }}" ref="searchPos"/>
+                    <button
+                        type="button"
+                        class="button button-outlined ml-1"
+                        :disabled="searchInPosition.length === 0"
+                        @click.stop="$refs.searchPos.value = ''; searchInPosition = ''">
+                        <app-icon icon="carbon:filter-reset"></app-icon>
+                        <span class="ml-05">{{ __('Empty-verb') }}</span>
+                    </button>
+                </div>
+
+                <p v-if="searchInPosition.length" class="is-expanded tag mt-1">
+                    <app-icon icon="carbon:filter"></app-icon>
+                    <span class="ml-05">{{ __('Data is filtered') }}</span>
+                </p>
+
+                <tree-view
+                    class="mt-1"
+                    relation-name={{ relationName }}
+                    relation-label="{{ Layout.tr(relationName) }}"
+                    :object='{{ { id: object.id, type: object.type }|json_encode }}'
+                    :multiple-choice={{ options.multiple }}
+                    :user-roles="{{ user.roles|json_encode }}"
+                    :has-permissions="{{ hasPermissions|json_encode }}"
+                    :search="searchInPosition">
+                </tree-view>
+            </div>
             {% do Form.unlockField('relations.' ~ relationName ~ '.replaceRelated') %}
             {{ Form.hidden('_changedParents', {'value': '', 'id': 'changedParents'})|raw }}
             {% do Form.unlockField('_changedParents') %}

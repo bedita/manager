@@ -236,7 +236,7 @@ export default {
             if (!debouncedSearchPosition) {
                 debouncedSearchPosition = this.$helpers.debounce((val) => {
                     this.searchInPosition = val.length < 3 ? '' : val;
-                });
+                }, 300);
             }
 
             return debouncedSearchPosition(e.target.value);
