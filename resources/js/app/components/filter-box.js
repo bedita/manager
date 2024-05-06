@@ -84,6 +84,12 @@ export default {
             queryFilter: {},
             selectedStatuses: [],
             selectedType: '',
+            searchByTypes: [
+                {name: 'q', label: t`Txt`},
+                {name: 'id', label: t`ID`},
+                {name: 'uname', label: t`Uname`},
+            ],
+            selectedSearchType: 'q',
             statusFilter: {},
             timer: null,
         };
@@ -129,7 +135,12 @@ export default {
          * @returns {boolean}
          */
         isSearchFieldValid() {
-            const length = this.queryFilter?.q?.length;
+            let length = this.queryFilter?.q?.length;
+
+            if (this.selectedSearchType != 'q') {
+                length = this.queryFilter?.filter[this.selectedSearchType]?.length;
+            }
+
             return length === 0 || length > 2;
         },
 
@@ -196,6 +207,21 @@ export default {
             }
 
             return this.objectsLabel.charAt(0) + this.objectsLabel.slice(1);
+        },
+
+        /**
+         * Get the placeholder for the search input.
+         * If a search type is selected, it will be used to build the placeholder.
+         * Otherwise, the default placeholder will be used.
+         * @returns {String}
+        */
+        getSearchPlaceholder() {
+            const selectedType = this.selectedSearchType;
+            if (selectedType != 'q') {
+                return t`Search by ${selectedType}`;
+            }
+
+            return this.placeholder;
         },
 
         positionFilterName() {
@@ -333,7 +359,7 @@ export default {
 
             Object.entries(filter).forEach(([key, filterValue]) => {
                 // do nothing allowed filters, if value is set
-                if (['status', 'type', 'ancestor', 'history_editor'].includes(key) && filterValue) {
+                if (['id', 'uname', 'status', 'type', 'ancestor', 'history_editor'].includes(key) && filterValue) {
                     return;
                 }
 
@@ -381,6 +407,7 @@ export default {
         resetFilter() {
             this.selectedStatuses = [];
             this.selectedType = '';
+            this.selectedSearchType = 'q';
             this.queryFilter = this.getCleanQuery();
             this.$emit('filter-reset');
         },
@@ -408,6 +435,17 @@ export default {
                 return;
             }
             this.onChangePage(val);
+        },
+        onChangeSearchType() {
+            for (const searchType of this.searchByTypes) {
+                if (searchType.name != this.selectedSearchType) {
+                    if (searchType.name != 'q') {
+                        delete this.queryFilter.filter[searchType.name];
+                    } else {
+                        delete this.queryFilter.q;
+                    }
+                }
+            }
         },
         onPageKeydown(e) {
             if (e.key === 'Enter' || e.keyCode === 13) {

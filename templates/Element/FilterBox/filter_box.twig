@@ -1,7 +1,7 @@
 <div class="filter-box">
     {% if not hideFilter %}
     <div>
-        {{ element('FilterBox/filter_box_common') }}
+        {{ element('FilterBox/filter_box_common', { showFilterSearchByType }) }}
     </div>
     {% endif %}
 
