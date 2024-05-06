@@ -81,6 +81,7 @@ const _vueInstance = new Vue({
         SystemInfo:() => import(/* webpackChunkName: "system-info" */'app/components/system-info/system-info'),
         UserAccesses:() => import(/* webpackChunkName: "user-accesses" */'app/components/user-accesses/user-accesses'),
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
+        ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
         AppIcon,
     },
 
@@ -146,7 +147,9 @@ const _vueInstance = new Vue({
         Vue.use(autoTranslation);
         Vue.use(Autocomplete);
 
-        Vue.use(vTitle);
+        Vue.use(vTitle, {
+            bgColor: '#000000'
+        });
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();

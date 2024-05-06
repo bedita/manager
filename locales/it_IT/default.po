@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-05-06 08:14:25 \n"
+"POT-Creation-Date: 2024-05-06 14:24:10 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1463,7 +1463,7 @@ msgstr "Rimosso"
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.
+#.  
 msgid "No History data found"
 msgstr "Nessun dato di Cronologia"
 
@@ -1511,6 +1511,9 @@ msgstr "Martedì"
 
 msgid "Wednesday"
 msgstr "Mercoledì"
+
+msgid "Copied!"
+msgstr "Copiato!"
 
 msgid "Name already in use"
 msgstr "Nome già in uso"
