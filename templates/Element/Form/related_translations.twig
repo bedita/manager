@@ -25,9 +25,6 @@
                 {% if not config('Project.config.I18n') %}
                 <div class="alert alert-warning">
                     {{ __('No language configuration found') }}
-                    {% if Perms.userIsAdmin() %}
-                        <code>Project.config.I18n</code>
-                    {% endif %}
                 </div>
                 {% endif %}
 
