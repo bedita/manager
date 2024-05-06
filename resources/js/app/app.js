@@ -147,7 +147,9 @@ const _vueInstance = new Vue({
         Vue.use(autoTranslation);
         Vue.use(Autocomplete);
 
-        Vue.use(vTitle);
+        Vue.use(vTitle, {
+            bgColor: '#000000'
+        });
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();
