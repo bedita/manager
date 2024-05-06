@@ -1,12 +1,16 @@
 <template>
     <div class="clipboard-item">
-        <label v-if="!msg">
+        <label v-title="text" v-if="!msg">
             <button class="button is-small" @click.stop.prevent="copy()">
                 <span class="mr-05">{{ label }}</span>
                 <app-icon icon="carbon:copy"></app-icon>
             </button>
         </label>
-        <span v-else>{{ msg }}</span>
+        <label v-else>
+            <button readonly="readonly" class="button is-small">
+                <app-icon icon="carbon:checkmark"></app-icon>
+            </button>
+        </label>
     </div>
 </template>
 <script>
@@ -35,7 +39,8 @@ export default {
     methods: {
         copy() {
             navigator.clipboard.writeText(this.text);
-            this.msg = t`copied in the clipboard`;
+            this.msg = t`Copied!`;
+            console.log(this.msg);
             setTimeout(() => this.reset(), 2000)
         },
 
