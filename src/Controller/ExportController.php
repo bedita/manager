@@ -121,6 +121,34 @@ class ExportController extends AppController
         return $response->withDownload($filename);
     }
 
+    public function relatedFiltered(string $id, string $relation, string $format): ?Response
+    {
+        // check request (allowed methods and required parameters)
+        $this->checkRequest([
+            'allowedMethods' => ['get'],
+        ]);
+
+        if (!$this->Export->checkFormat($format)) {
+            $this->Flash->error(__('Format choosen is not available'));
+
+            return $this->redirect($this->referer());
+        }
+
+        // load related
+        $objectType = $this->getRequest()->getParam('object_type');
+        $rows = $this->rowsAllRelated($objectType, $id, $relation);
+
+        // create spreadsheet and return as download
+        $filename = sprintf('%s_%s_%s.%s', $objectType, $relation, date('Ymd-His'), $format);
+        $data = $this->Export->format($format, $rows, $filename);
+
+        // output
+        $response = $this->getResponse()->withStringBody(Hash::get($data, 'content'));
+        $response = $response->withType(Hash::get($data, 'contentType'));
+
+        return $response->withDownload($filename);
+    }
+
     /**
      * Obtain csv rows using api get per object type.
      * When using parameter ids, get only specified ids,

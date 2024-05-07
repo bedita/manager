@@ -910,6 +910,19 @@ export default {
         truncate(str, len) {
             return this.$helpers.truncate(str, len);
         },
+
+        exportFiltered(url) {
+            if (this.activeFilter.q) {
+                url += `&q=${this.activeFilter.q}`;
+            }
+            for (const key in this.activeFilter.filter) {
+                if (this.activeFilter.filter[key] !== null && this.activeFilter.filter[key].length > 0) {
+                    url += `&filter[${key}]=${this.activeFilter.filter[key]}`;
+                    console.log(this.activeFilter.filter[key]);
+                }
+            }
+            console.log(url);
+        },
     }
 
 }

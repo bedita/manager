@@ -151,6 +151,7 @@
 
         <div class="mt-2" v-show="objects.length">
             {% set urlOptions = {'_name': 'export:related', 'object_type': object.type, 'id': object.id, 'relation': relationName} %}
+            {% set filteredOptions = {'_name': 'export:related:filtered', 'object_type': object.type, 'id': object.id, 'relation': relationName} %}
             {% set formats = config('Export.formats', {
                 'CSV': 'csv',
                 'Open Document': 'ods',
@@ -164,10 +165,25 @@
             </select>
 
             {% for label, format in formats %}
-                <a v-if="exportFormat === '{{ format }}'" class="button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">
-                    <app-icon icon="carbon:export"></app-icon>
-                    <span class="ml-05">{{ __('Export') }}</span>
-                </a>
+                <template v-if="exportFormat === '{{ format }}'">
+                    <a
+                        class="button button-outlined"
+                        target="_blank"
+                        href="{{ Url.build(urlOptions|merge({'format': format})) }}"
+                    >
+                        <app-icon icon="carbon:export"></app-icon>
+                        <span class="ml-05">{{ __('Export') }}</span>
+                    </a>
+                    <a
+                        class="button button-outlined"
+                        target="_blank"
+                        href="{{ Url.build(filteredOptions|merge({'format': format})) }}"
+                        @click.prevent="exportFiltered('{{ Url.build(filteredOptions|merge({'format': format})) }}')"
+                    >
+                        <app-icon icon="carbon:export"></app-icon>
+                        <span class="ml-05">{{ __('Export Filtered') }}</span>
+                    </a>
+                </template>
             {% endfor %}
         </div>
 

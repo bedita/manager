@@ -411,6 +411,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Export', 'action' => 'related'],
         ['pass' => ['id', 'relation', 'format'], '_name' => 'export:related']
     );
+    $routes->connect(
+        '/{object_type}/export/{id}/{relation}/{format}',
+        ['controller' => 'Export', 'action' => 'relatedFiltered'],
+        ['pass' => ['id', 'relation', 'format'], '_name' => 'export:related:filtered']
+    );
 
     // Download stream
     $routes->get(

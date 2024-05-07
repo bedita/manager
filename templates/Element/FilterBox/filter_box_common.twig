@@ -101,20 +101,22 @@
 
             <span v-if="filter.name === 'categories'">
                 <label>{{ __('Categories') }}</label>
-
                 {% if schemasByType %}
                     {% for type, typeSchema in schemasByType %}
-                        <category-picker
-                            v-if="queryFilter.filter.type == '{{ type }}'"
-                            :categories="{{ typeSchema.categories|json_encode }}"
-                            :initial-categories="initCategories"
-                            id="category-filter"
-                            form="_filters"
-                            label=""
-                            @change="onCategoryChange"
-                        ></category-picker>
+                        {% if typeSchema.categories %}
+                        <template v-if="queryFilter.filter.type == '{{ type }}'">
+                            <category-picker
+                                :categories="{{ typeSchema.categories|json_encode }}"
+                                :initial-categories="initCategories"
+                                id="category-filter"
+                                form="_filters"
+                                label=""
+                                @change="onCategoryChange"
+                            ></category-picker>
+                        </template>
+                        {% endif %}
                     {% endfor %}
-                {% elseif schema %}
+                {% elseif schema and schema.categories %}
                     <category-picker
                         :categories="{{ schema.categories|json_encode }}"
                         :initial-categories="initCategories"
@@ -123,6 +125,8 @@
                         label=""
                         @change="onCategoryChange"
                     ></category-picker>
+                {% else %}
+                    -
                 {% endif %}
             </span>
 
