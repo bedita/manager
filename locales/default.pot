@@ -508,6 +508,9 @@ msgstr ""
 msgid "No items found"
 msgstr ""
 
+msgid "No language configuration found"
+msgstr ""
+
 msgid "Number of created objects"
 msgstr ""
 
@@ -1448,7 +1451,7 @@ msgstr ""
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 msgid "No History data found"
 msgstr ""
 

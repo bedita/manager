@@ -513,6 +513,9 @@ msgstr "Nessun filtro di importazione impostato"
 msgid "No items found"
 msgstr "Nessun elemento trovato"
 
+msgid "No language configuration found"
+msgstr "Lingue non configurate a sistema"
+
 msgid "Number of created objects"
 msgstr "Numero di oggetti creati"
 
@@ -1463,7 +1466,7 @@ msgstr "Rimosso"
 
 #. *
 #.  * Component to fetch and display changes' history.
-#.  
+#.
 msgid "No History data found"
 msgstr "Nessun dato di Cronologia"
 
