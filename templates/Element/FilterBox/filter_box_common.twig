@@ -17,8 +17,25 @@
                 form="_filters"
                 :placeholder="placeholder"
                 v-model.trim="queryFilter.q"
+                v-if="selectedSearchType === 'q'"
                 @keydown.enter.prevent="applyFilter"
             />
+            {% if showFilterSearchByType %}
+            <input type="text"
+                form="_filters"
+                :placeholder="getSearchPlaceholder"
+                v-model.trim="queryFilter.filter.id"
+                v-if="selectedSearchType === 'id'"
+                @keydown.enter.prevent="applyFilter"
+            />
+            <input type="text"
+                form="_filters"
+                :placeholder="getSearchPlaceholder"
+                v-model.trim="queryFilter.filter.uname"
+                v-if="selectedSearchType === 'uname'"
+                @keydown.enter.prevent="applyFilter"
+            />
+            {% endif %}
         </div>
 
         <div class="filter-buttons">
@@ -26,15 +43,24 @@
                 <app-icon icon="carbon:search"></app-icon>
                 <span class="ml-05">{{ __('Search') }}</span>
             </button>
+            {% if showFilterSearchByType %}
+            <select v-model="selectedSearchType"
+                form="_filters"
+                class="has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest"
+                @change="onChangeSearchType"
+            >
+                <option v-for="type in searchByTypes" :value="type.name"><: t(capitalize(type.label)) :></option>
+            </select>
+            {% endif %}
 
             <button class="button button-outlined" type="button" @click="resetFilter">
                 <app-icon icon="carbon:filter-reset"></app-icon>
-                <span class="ml-05">{{ __('Reset filters') }}</span>
+                <span class="ml-05">{{ __('Reset') }}</span>
             </button>
 
             <button class="toggle-filters button button-outlined is-width-auto" type="button" @click="moreFilters = !moreFilters" v-if="canShowAdvanced">
-                <app-icon icon="carbon:filter-edit" v-if="!moreFilters"></app-icon><span class="ml-05" v-show="!moreFilters">{{ __('More filters') }}</span>
-                <app-icon icon="carbon:filter" v-if="moreFilters"></app-icon><span class="ml-05" v-show="moreFilters">{{ __('Less filters') }}</span>
+                <app-icon icon="carbon:filter-edit" v-if="!moreFilters"></app-icon><span class="ml-05" v-show="!moreFilters">{{ __('More') }}</span>
+                <app-icon icon="carbon:filter" v-if="moreFilters"></app-icon><span class="ml-05" v-show="moreFilters">{{ __('Less') }}</span>
             </button>
         </div>
     </div>
