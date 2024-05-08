@@ -42,7 +42,7 @@ class ExportController extends AppController
      *
      * @var array
      */
-    protected $filter = [];
+    public $filter = [];
 
     /**
      * {@inheritDoc}

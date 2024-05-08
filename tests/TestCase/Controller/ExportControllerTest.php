@@ -635,6 +635,46 @@ class ExportControllerTest extends TestCase
     }
 
     /**
+     * Test `relatedFiltered` method.
+     *
+     * @return void
+     * @covers ::relatedFiltered()
+     */
+    public function testRelatedFiltered(): void
+    {
+        $this->Export = new ExportController(
+            new ServerRequest([
+                'environment' => ['REQUEST_METHOD' => 'GET'],
+                'params' => ['object_type' => 'users'],
+                'get' => ['id' => '888', 'object_type' => 'users', 'format' => 'csv'],
+            ])
+        );
+        // mock api getObjects.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn([
+                'data' => [
+                    0 => $this->testdata['input']['gustavo'],
+                ],
+                'meta' => [
+                    'pagination' => [
+                        'page_items' => 1,
+                        'page_count' => 1,
+                    ],
+                ],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        // set $this->Export->apiClient
+        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Export, $apiClient);
+        $this->Export->relatedFiltered('888', 'seealso', 'csv&q=test&filter[type]=documents');
+        static::assertEquals(['q' => 'test', 'filter' => ['type' => 'documents']], $this->Export->filter);
+    }
+
+    /**
      * Set export limit in cache.
      *
      * @param int $limit The limit
