@@ -20,6 +20,7 @@ use Cake\View\Helper;
  *
  * @property \Cake\View\Helper\FormHelper $Form
  * @property \App\View\Helper\PropertyHelper $Property
+ * @deprecated version 4.21.1 This is not used anymore, it will be removed in next major version.
  */
 class CategoriesHelper extends Helper
 {

@@ -10,7 +10,12 @@
 
             <div v-show="isOpen" class="tab-container">
                 <div class="categories-container">
-                    {{ Categories.control('categories', object.attributes.categories)|raw }}
+                    <object-categories
+                        :model-categories="{{ schema.categories|json_encode }}"
+                        :value="{{ object.attributes.categories|json_encode }}"
+                    >
+                    </object-categories>
+                    {% do Form.unlockField('categories') %}
                 </div>
             </div>
         </section>
