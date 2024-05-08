@@ -204,7 +204,7 @@ class ExportController extends AppController
     protected function getRelatedFileName(string $id, string $type, string $relation, string $format): string
     {
         if (empty($this->filter)) {
-            return sprintf('%s_%s_%s.%s', $type, $relation, date('Ymd-His'), $format);
+            return sprintf('%s_%s_%s_%s.%s', $type, $id, $relation, date('Ymd-His'), $format);
         }
         $filter = [];
         if (!empty($this->filter['q'])) {
