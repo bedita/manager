@@ -177,8 +177,7 @@
                     <a
                         class="button button-outlined"
                         target="_blank"
-                        href="{{ Url.build(filteredOptions|merge({'format': format})) }}"
-                        @click.prevent="exportFiltered('{{ Url.build(filteredOptions|merge({'format': format})) }}')"
+                        :href="exportFilteredUrl('{{ Url.build(filteredOptions|merge({'format': format})) }}')"
                     >
                         <app-icon icon="carbon:export"></app-icon>
                         <span class="ml-05">{{ __('Export Filtered') }}</span>

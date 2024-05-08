@@ -38,6 +38,13 @@ class ExportController extends AppController
     public const DEFAULT_PAGE_SIZE = 500;
 
     /**
+     * Export filter
+     *
+     * @var array
+     */
+    protected $filter = [];
+
+    /**
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
@@ -111,7 +118,7 @@ class ExportController extends AppController
         $rows = $this->rowsAllRelated($objectType, $id, $relation);
 
         // create spreadsheet and return as download
-        $filename = sprintf('%s_%s_%s.%s', $objectType, $relation, date('Ymd-His'), $format);
+        $filename = $this->getRelatedFileName($id, $objectType, $relation, $format);
         $data = $this->Export->format($format, $rows, $filename);
 
         // output
@@ -121,32 +128,22 @@ class ExportController extends AppController
         return $response->withDownload($filename);
     }
 
+    /**
+     * Export data to format specified by user with filters
+     *
+     * @param string $id The object ID
+     * @param string $relation The relation name
+     * @param string $format The file format, plus query params for filter
+     * @return \Cake\Http\Response|null
+     */
     public function relatedFiltered(string $id, string $relation, string $format): ?Response
     {
-        // check request (allowed methods and required parameters)
-        $this->checkRequest([
-            'allowedMethods' => ['get'],
-        ]);
+        $pos = strpos($format, '&');
+        $filter = substr($format, $pos + 1);
+        $format = substr($format, 0, $pos);
+        parse_str($filter, $this->filter);
 
-        if (!$this->Export->checkFormat($format)) {
-            $this->Flash->error(__('Format choosen is not available'));
-
-            return $this->redirect($this->referer());
-        }
-
-        // load related
-        $objectType = $this->getRequest()->getParam('object_type');
-        $rows = $this->rowsAllRelated($objectType, $id, $relation);
-
-        // create spreadsheet and return as download
-        $filename = sprintf('%s_%s_%s.%s', $objectType, $relation, date('Ymd-His'), $format);
-        $data = $this->Export->format($format, $rows, $filename);
-
-        // output
-        $response = $this->getResponse()->withStringBody(Hash::get($data, 'content'));
-        $response = $response->withType(Hash::get($data, 'contentType'));
-
-        return $response->withDownload($filename);
+        return $this->related($id, $relation, $format);
     }
 
     /**
@@ -193,6 +190,33 @@ class ExportController extends AppController
     protected function getFileName(string $type, string $format): string
     {
         return sprintf('%s_%s.%s', $type, date('Ymd-His'), $format);
+    }
+
+    /**
+     * Get related exported file name.
+     *
+     * @param string $id The object ID
+     * @param string $type Object or resource type.
+     * @param string $relation The relation name.
+     * @param string $format The format.
+     * @return string
+     */
+    protected function getRelatedFileName(string $id, string $type, string $relation, string $format): string
+    {
+        if (empty($this->filter)) {
+            return sprintf('%s_%s_%s.%s', $type, $relation, date('Ymd-His'), $format);
+        }
+        $filter = [];
+        if (!empty($this->filter['q'])) {
+            $filter[] = $this->filter['q'];
+        }
+        if (!empty($this->filter['filter'])) {
+            foreach ($this->filter['filter'] as $value) {
+                $filter[] = $value;
+            }
+        }
+
+        return sprintf('%s_%s_%s_%s_%s.%s', $type, $id, $relation, implode('_', $filter), date('Ymd-His'), $format);
     }
 
     /**
@@ -288,6 +312,9 @@ class ExportController extends AppController
         $q = (string)$this->getRequest()->getData('q');
         if (!empty($q)) {
             $res += compact('q');
+        }
+        if (!empty($this->filter)) {
+            $res = array_merge($res, $this->filter);
         }
 
         return $res;
