@@ -743,4 +743,52 @@ class ExportControllerTest extends TestCase
         $tmp = explode('_', $actual);
         static::assertEquals($expectedDash, count($tmp) - 1);
     }
+
+    /**
+     * Test `prepareQuery` method.
+     *
+     * @return void
+     * @covers ::prepareQuery()
+     */
+    public function testPrepareQuery(): void
+    {
+        $this->Export = new ExportController(
+            new ServerRequest([
+                'environment' => ['REQUEST_METHOD' => 'GET'],
+                'params' => [
+                    'objectType' => 'users',
+                ],
+                'post' => [
+                    'filter' => ['{"status":"on"}'],
+                    'q' => 'gustavo',
+                ],
+                'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
+            ])
+        );
+        $reflectionClass = new \ReflectionClass($this->Export);
+        $method = $reflectionClass->getMethod('prepareQuery');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Export, []);
+        static::assertEquals(['filter' => ['status' => 'on'], 'q' => 'gustavo'], $actual);
+
+        // use $this->filter
+        $this->Export = new ExportController(
+            new ServerRequest([
+                'environment' => ['REQUEST_METHOD' => 'GET'],
+                'params' => [
+                    'objectType' => 'users',
+                ],
+                'post' => [
+                    'q' => 'gustavo',
+                ],
+                'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
+            ])
+        );
+        $this->Export->filter = ['filter' => ['type' => 'documents'], 'q' => 'needle'];
+        $reflectionClass = new \ReflectionClass($this->Export);
+        $method = $reflectionClass->getMethod('prepareQuery');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Export, []);
+        static::assertEquals(['filter' => ['type' => 'documents'], 'q' => 'needle'], $actual);
+    }
 }
