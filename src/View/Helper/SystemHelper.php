@@ -29,6 +29,12 @@ class SystemHelper extends Helper
             'application/x-mpegURL',
             'video/*',
         ],
+        'media' => [
+            'application/x-mpegURL',
+            'audio/*',
+            'image/*',
+            'video/*',
+        ],
     ];
 
     /**
