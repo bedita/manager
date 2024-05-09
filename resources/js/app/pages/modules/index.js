@@ -216,7 +216,6 @@ export default {
 
         appendUploaded(data) {
             for (let item of data) {
-                console.log(item);
                 this.uploaded.push(item);
             }
             this.$forceUpdate();
