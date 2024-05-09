@@ -151,7 +151,7 @@
 
         <div class="mt-2" v-show="objects.length">
             {% set urlOptions = {'_name': 'export:related', 'object_type': object.type, 'id': object.id, 'relation': relationName} %}
-            {% set filteredOptions = {'_name': 'export:related:filtered', 'object_type': object.type, 'id': object.id, 'relation': relationName} %}
+            {% set filteredOptions = {'_name': 'export:related:filtered', 'object_type': object.type, 'id': object.id, 'relation': relationName, 'query': ''} %}
             {% set formats = config('Export.formats', {
                 'CSV': 'csv',
                 'Open Document': 'ods',

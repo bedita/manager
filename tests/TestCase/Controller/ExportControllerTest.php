@@ -670,7 +670,7 @@ class ExportControllerTest extends TestCase
         $property = new \ReflectionProperty(ExportController::class, 'apiClient');
         $property->setAccessible(true);
         $property->setValue($this->Export, $apiClient);
-        $this->Export->relatedFiltered('888', 'seealso', 'csv&q=test&filter[type]=documents');
+        $this->Export->relatedFiltered('888', 'seealso', 'csv', 'q=test&filter[type]=documents');
         static::assertEquals(['q' => 'test', 'filter' => ['type' => 'documents']], $this->Export->filter);
     }
 

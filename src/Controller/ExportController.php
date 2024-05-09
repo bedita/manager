@@ -133,15 +133,13 @@ class ExportController extends AppController
      *
      * @param string $id The object ID
      * @param string $relation The relation name
-     * @param string $format The file format, plus query params for filter
+     * @param string $format The file format
+     * @param string $query The query string
      * @return \Cake\Http\Response|null
      */
-    public function relatedFiltered(string $id, string $relation, string $format): ?Response
+    public function relatedFiltered(string $id, string $relation, string $format, string $query): ?Response
     {
-        $pos = strpos($format, '&');
-        $filter = substr($format, $pos + 1);
-        $format = substr($format, 0, $pos);
-        parse_str($filter, $this->filter);
+        parse_str($query, $this->filter);
 
         return $this->related($id, $relation, $format);
     }
