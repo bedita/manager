@@ -2,7 +2,7 @@
     <div class="drop-area mb-1 p-1 is-flex is-flex-column" :class="double ? 'drop-area-double' : ''" @drop.prevent="dropFiles" @dragover.prevent="onDragOver"
         @dragleave.prevent="onDragLeave">
         <div class="upload-placeholder" v-if="!Array.from(uploadProgressInfo.values()).length">
-            <input class="file-input" type="file" multiple @change="inputFiles">
+            <input class="file-input" type="file" multiple @change="inputFiles" :accept="fileAcceptMimeTypes(objectType)">
             {{ placeholder }}
         </div>
 
@@ -75,6 +75,10 @@ export default {
             type: String,
             default: '',
         },
+        objectType: {
+            type: String,
+            default: 'media',
+        },
     },
 
     data() {
@@ -89,7 +93,18 @@ export default {
     },
 
     methods: {
+        fileAcceptMimeTypes(type) {
+            return this.$helpers.acceptMimeTypes(type);
+        },
+
         inputFiles(e) {
+            if (this.$helpers.checkMimeForUpload(event.target.files[0], this.objectType) === false) {
+                return;
+            }
+            if (this.$helpers.checkMaxFileSize(event.target.files[0]) === false) {
+                return false;
+            }
+
             const files = e?.target?.files || null;
             if (!files) {
                 return;
@@ -102,7 +117,17 @@ export default {
             if (!files) {
                 return;
             }
-            this.uploadFiles(files);
+            const toProcess = [];
+            for (const file of files) {
+                if (this.$helpers.checkMimeForUpload(file, this.objectType) === false) {
+                    continue;
+                }
+                if (this.$helpers.checkMaxFileSize(file) === false) {
+                    continue;
+                }
+                toProcess.push(file);
+            }
+            this.uploadFiles(toProcess);
         },
 
         async uploadFiles(files) {
