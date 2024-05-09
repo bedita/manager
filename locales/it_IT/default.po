@@ -477,6 +477,9 @@ msgstr "Sposta in"
 msgid "Move to trash"
 msgstr "Sposta nel cestino"
 
+msgid "Multi upload"
+msgstr "Upload multiplo"
+
 msgid "NEW"
 msgstr "NUOVO"
 
@@ -855,6 +858,9 @@ msgstr "Aggiornato"
 msgid "Upload local file"
 msgstr "Carica file locale"
 
+msgid "Upload multiple"
+msgstr "Upload multiplo"
+
 msgid "Url"
 msgstr ""
 
@@ -896,6 +902,9 @@ msgstr "Sì"
 
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
+
+msgid "You do not have the required permissions to view this page."
+msgstr "Non hai i permessi necessari per visualizzare questa pagina."
 
 msgid "You have requested a password change, please provide a new password"
 msgstr "Hai richiesto una modifica della password, fornisci una nuova password"
@@ -1176,14 +1185,15 @@ msgstr ""
 "Dati mancanti per la ricerca delle coordinate: inserire almeno \"Indirizzo\" "
 "e \"Località\" (opzionali: \"CAP\", \"Paese\", \"Regione\")"
 
-msgid "stop"
-msgstr "interrompi"
-
-msgid "done"
-msgstr "fatto"
-
+#.  Map of all axios cancel token
 msgid "Cancelled"
 msgstr "Annullato"
+
+msgid "Done"
+msgstr "Fatto"
+
+msgid "Stop"
+msgstr "Interrompi"
 
 msgid "Relation parameters"
 msgstr "Parametri della relazione"
