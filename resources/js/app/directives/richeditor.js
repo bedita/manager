@@ -10,6 +10,7 @@ import 'tinymce/plugins/link';
 import 'tinymce/plugins/lists';
 import 'tinymce/plugins/table';
 import 'tinymce/plugins/hr';
+import 'tinymce/plugins/visualblocks';
 import '../plugins/tinymce/placeholders.js';
 import { tinymcePlugin } from '@chialab/typos';
 
@@ -40,6 +41,7 @@ const DEFAULT_TOOLBAR = [
     'redo',
     '|',
     'fixQuotes',
+    'visualblocks',
     'code',
 ].join(' ');
 
@@ -108,6 +110,7 @@ export default {
                         'code',
                         'placeholders',
                         'typos',
+                        'visualblocks',
                     ].join(' '),
                     autoresize_bottom_margin: 50,
                     relative_urls: false,
