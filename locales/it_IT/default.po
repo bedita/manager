@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-05-06 14:24:10 \n"
+"POT-Creation-Date: 2024-05-14 13:15:48 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -408,8 +408,8 @@ msgstr "Lingua e traduzioni"
 msgid "Left types"
 msgstr "Tipi di sinistra"
 
-msgid "Less filters"
-msgstr "Meno filtri"
+msgid "Less"
+msgstr ""
 
 msgid "List"
 msgstr "Lista"
@@ -470,9 +470,6 @@ msgstr "Moduli"
 
 msgid "More"
 msgstr "Altro"
-
-msgid "More filters"
-msgstr "Più filtri"
 
 msgid "Move to"
 msgstr "Sposta in"
@@ -686,8 +683,8 @@ msgstr "Rimuovi"
 msgid "Request password"
 msgstr "Reimposta password"
 
-msgid "Reset filters"
-msgstr "Reset filtri"
+msgid "Reset"
+msgstr ""
 
 msgid "Resource \"%s\" not available. Error: %s"
 msgstr "Risorsa \"%s\" non disponibile. Error: %s"
@@ -1203,8 +1200,15 @@ msgstr "Annulla"
 msgid "Mail to"
 msgstr "Invia mail a"
 
+msgid "Txt"
+msgstr ""
+
 msgid "Items"
 msgstr "Elementi"
+
+#, javascript-format
+msgid "Search by ${ selectedType }"
+msgstr ""
 
 msgid "NULL"
 msgstr ""
@@ -1392,6 +1396,9 @@ msgstr "Traducibile"
 msgid "Error on deleting property"
 msgstr "Errore nella cancellazione della proprietà"
 
+msgid "Search on categories"
+msgstr "Cerca tra le categorie"
+
 msgid "Password"
 msgstr "Password"
 
@@ -1529,3 +1536,12 @@ msgstr "Errore durante il salvataggio della categoria"
 
 msgid "Error on deleting category"
 msgstr "Errore durante l'eliminazione della categoria"
+
+#~ msgid "Less filters"
+#~ msgstr "Meno filtri"
+
+#~ msgid "More filters"
+#~ msgstr "Più filtri"
+
+#~ msgid "Reset filters"
+#~ msgstr "Reset filtri"

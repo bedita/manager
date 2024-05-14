@@ -1,6 +1,22 @@
 <template>
     <div class="object-categories">
-        <details :open="forceOpen || countSelectedCommon() > 0" v-if="common?.length > 0">
+        <div class="is-flex">
+            <input
+                type="text"
+                :placeholder="msgSearch"
+                @input="onSearchCategory"
+                ref="searchCat"
+            >
+            <button
+                type="button"
+                class="button button-outlined ml-1"
+                :disabled="searchInCategories.length === 0"
+                @click.stop="$refs.searchCat.value = ''; searchInCategories = ''">
+                <app-icon icon="carbon:filter-reset"></app-icon>
+                <span class="ml-05">{{ msgEmpty }}</span>
+            </button>
+        </div>
+        <details :open="forceOpen || countSelectedCommon() > 0 || foundInCommon()" v-if="common?.length > 0">
             <summary>
                 GLOBAL
                 <span
@@ -16,7 +32,7 @@
                     v-for="child in common"
                     :key="child.name"
                 >
-                    <label>
+                    <label v-show="searchInCategories === '' || foundIn(child)">
                         <input
                             :id="`categories-${child.name}`"
                             type="checkbox"
@@ -25,12 +41,12 @@
                             :checked="child.name in selected"
                             v-model="selected"
                         >
-                        {{ child.label || child.name }}
+                        <span v-html="title(child)"></span>
                     </label>
                 </div>
             </div>
         </details>
-        <details :open="forceOpen || countSelectedByParent(parent.id) > 0" v-for="parent in root" :key="parent.name">
+        <details :open="forceOpen || countSelectedByParent(parent.id) > 0 || foundInParent(parent)" v-for="parent in root" :key="parent.name">
             <summary>
                 {{ parent.label || parent.name }}
                 <span
@@ -46,7 +62,7 @@
                     v-for="child in children[parent.id]"
                     :key="child.name"
                 >
-                    <label>
+                    <label v-show="searchInCategories === '' || foundIn(child)">
                         <input
                             :id="`categories-${child.name}`"
                             type="checkbox"
@@ -55,7 +71,7 @@
                             :checked="child.name in selected"
                             v-model="selected"
                         >
-                        {{ child.label || child.name }}
+                        <span v-html="title(child)"></span>
                     </label>
                 </div>
             </div>
@@ -63,6 +79,10 @@
     </div>
 </template>
 <script>
+import { t } from 'ttag';
+
+let debouncedSearchCategory = null;
+
 export default {
     name: 'ObjectCategories',
     props: {
@@ -81,7 +101,10 @@ export default {
             common: [],
             forceOpen: false,
             root: [],
+            searchInCategories: '',
             selected: [],
+            msgEmpty: t`Empty`,
+            msgSearch: t`Search on categories`,
         }
     },
     mounted() {
@@ -138,6 +161,41 @@ export default {
 
                 return arr.find(child => child.name === category);
             }).length;
+        },
+        foundIn(cat) {
+            return (cat?.label && cat?.label?.toLowerCase().indexOf(this.searchInCategories.toLowerCase()) !== -1);
+        },
+        foundInCommon() {
+            if (!this.searchInCategories) {
+                return false;
+            }
+            return this.common.find(cat => this.foundIn(cat));
+        },
+        foundInParent(parent) {
+            if (!this.searchInCategories) {
+                return false;
+            }
+            return this.children[parent.id].find(cat => this.foundIn(cat));
+        },
+        onSearchCategory(e) {
+            if (!debouncedSearchCategory) {
+                debouncedSearchCategory = this.$helpers.debounce((val) => {
+                    this.searchInCategories = val.length < 3 ? '' : val;
+                }, 300);
+            }
+
+            return debouncedSearchCategory(e.target.value);
+        },
+        title(cat) {
+            let title = cat.label || cat.name;
+            const div = document.createElement('div');
+            div.innerHTML = title;
+            title = div.innerText;
+            if (!this.searchInCategories) {
+                return title;
+            }
+
+            return title.replace(new RegExp(`(${this.searchInCategories})`, 'i'), '<span class="has-text-decoration-underline">$1</span>');
         },
     },
 }
