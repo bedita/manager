@@ -201,12 +201,18 @@ export default {
 }
 </script>
 <style>
+.object-categories details {
+    padding: .5rem 0;
+}
+
+.object-categories details:not(:first-child) {
+    border-top: 1px dashed #555;
+}
+
 .object-categories details>summary {
   list-style-type: none;
   outline: none;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
-  padding: 10px;
   font-size: 1rem;
   text-transform: uppercase;
 }
@@ -225,8 +231,8 @@ export default {
   font-size: 1.2rem;
 }
 
-.object-categories details[open]>summary {
-  margin-bottom: 0.5rem;
+.object-categories details:not([open]) > summary {
+    opacity: 0.7;
 }
 
 .object-categories .categories-children {
