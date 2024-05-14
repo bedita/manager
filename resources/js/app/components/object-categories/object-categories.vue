@@ -16,9 +16,13 @@
                 <span class="ml-05">{{ msgEmpty }}</span>
             </button>
         </div>
+        <div v-if="searchInCategories.length" class="is-expanded tag mt-1">
+            <app-icon icon="carbon:filter"></app-icon>
+            <span class="ml-05">{{ msgDataIsFiltered }}</span>
+        </div>
         <details :open="forceOpen || countSelectedCommon() > 0 || foundInCommon()" v-if="common?.length > 0">
             <summary>
-                GLOBAL
+                {{ msgGlobal }}
                 <span
                     class="tag is-smallest is-black mx-05"
                     :class="countSelectedCommon() === 0 ? 'empty' : ''"
@@ -103,7 +107,9 @@ export default {
             root: [],
             searchInCategories: '',
             selected: [],
+            msgDataIsFiltered: t`Data is filtered`,
             msgEmpty: t`Empty`,
+            msgGlobal: t`Global`,
             msgSearch: t`Search on categories`,
         }
     },
