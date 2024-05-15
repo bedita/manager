@@ -475,6 +475,9 @@ msgstr ""
 msgid "Move to trash"
 msgstr ""
 
+msgid "Multi upload"
+msgstr ""
+
 msgid "NEW"
 msgstr ""
 
@@ -850,6 +853,9 @@ msgstr ""
 msgid "Upload local file"
 msgstr ""
 
+msgid "Upload multiple"
+msgstr ""
+
 msgid "Url"
 msgstr ""
 
@@ -890,6 +896,9 @@ msgid "Yes"
 msgstr ""
 
 msgid "You are not authorized to access that location."
+msgstr ""
+
+msgid "You do not have the required permissions to view this page."
 msgstr ""
 
 msgid "You have requested a password change, please provide a new password"
@@ -1164,13 +1173,14 @@ msgid ""
 "\"Locality\" (optional: \"Zipcode\", \"Country\", \"Region\")"
 msgstr ""
 
-msgid "stop"
-msgstr ""
-
-msgid "done"
-msgstr ""
-
+#.  Map of all axios cancel token
 msgid "Cancelled"
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+msgid "Stop"
 msgstr ""
 
 msgid "Relation parameters"

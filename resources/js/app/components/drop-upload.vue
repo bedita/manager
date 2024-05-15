@@ -1,64 +1,67 @@
-/**
- * View component used for uploading files and create media media object
- *
- * @property {FileList} files
- *
- */
+<template>
+    <div class="drop-area mb-1 p-1 is-flex is-flex-column" :class="double ? 'drop-area-double' : ''" @drop.prevent="dropFiles" @dragover.prevent="onDragOver"
+        @dragleave.prevent="onDragLeave">
+        <div class="upload-placeholder" v-if="!Array.from(uploadProgressInfo.values()).length">
+            <input class="file-input" type="file" multiple @change="inputFiles" :accept="fileAcceptMimeTypes(objectType)">
+            {{ placeholder }}
+        </div>
 
+        <div class="upload-items is-flex is-flex-column" v-else>
+            <div class="upload-item" v-for="(info, index) in Array.from(uploadProgressInfo.values())" :key="index">
+                <div class="upload-item-header" :class="{ 'is-loading-spinner': info.pending }">
+                    <span class="name" :class="info.cancelled ? 'has-text-gray-500' : ''">
+                        {{ info?.file?.name }}
+                    </span>
+                    <button
+                        v-show="!info.error && !info.cancelled && !info.done && !info.pending"
+                        class="button-outlined"
+                        @click.stop.prevent="abortUpload(info.file)"
+                    >
+                        <app-icon icon="carbon:stop"></app-icon>
+                        <span class="ml-05">{{ msgStop }}</span>
+                    </button>
+                    <button
+                        v-show="(info.error || info.cancelled) && !info.done"
+                        class="button-outlined"
+                        @click.stop.prevent="removeProgressItem(info.file)"
+                    >
+                        <app-icon icon="carbon:trash-can"></app-icon>
+                        <span class="ml-05">{{ msgRemove }}</span>
+                    </button>
+                    <span
+                        v-show="!info.error && !info.cancelled && info.done"
+                        class="icon-ok"
+                    >
+                    </span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-bar-status" :class="progressBarClass(info)" :style="progressBarStyle(info)"></div>
+                </div>
+
+                <div class="message">
+                    <span v-show="!info.error && !info.cancelled && info.done">{{ msgDone }}</span>
+                    <span v-show="!info.error && !info.cancelled && !info.done">
+                        {{ info?.progress }}%
+                    </span>
+                    <span v-show="info.error && !info.cancelled && !info.done">
+                        {{ info?.errorMsg }}
+                    </span>
+                    <span v-show="(info.error || info.cancelled) && !info.done" class="has-text-gray-500">
+                        {{ msgCancelled }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
 import { FetchMixin } from 'app/mixins/fetch';
 import { t } from 'ttag';
 
 export default {
     mixins: [ FetchMixin ],
     inject: ['getCSFRToken'],
-
-    template: `
-        <div class="drop-area mb-1 p-1 is-flex is-flex-column"
-            @drop.prevent="dropFiles"
-            @dragover.prevent="onDragOver"
-            @dragleave.prevent="onDragLeave">
-
-            <div class="upload-placeholder" v-if="!Array.from(uploadProgressInfo.values()).length">
-                <input class="file-input" type="file" multiple @change="inputFiles">
-                <: placeholder :>
-            </div>
-
-            <div class="upload-items is-flex is-flex-column" v-else>
-                <div class="upload-item"
-                    :key="index"
-                    v-for="(info, index) in Array.from(uploadProgressInfo.values())">
-
-                    <div class="upload-item-header" :class="{'is-loading-spinner': info.pending }">
-                        <span class="name" :class="info.cancelled? 'has-text-gray-500' : ''"><: info.file.name :></span>
-
-                        <button v-show="!info.error && !info.cancelled && !info.done && !info.pending" class="button-outlined" @click.stop.prevent="abortUpload(info.file)">
-                            <app-icon icon="carbon:stop"></app-icon>
-                            <span class="ml-05">${t`stop`}</span>
-                        </button>
-
-                        <button v-show="(info.error || info.cancelled) && !info.done" class="button-outlined" @click.stop.prevent="removeProgressItem(info.file)">
-                            <app-icon icon="carbon:trash-can"></app-icon>
-                            <span class="ml-05">${t`remove`}</span>
-                        </button>
-
-                        <span v-show="!info.error && !info.cancelled && info.done" class="icon-ok"></span>
-                    </div>
-
-                    <div class="progress-bar">
-                        <div class="progress-bar-status" :class="progressBarClass(info)" :style="progressBarStyle(info)"></div>
-                    </div>
-
-                    <div class="message">
-                        <span v-show="!info.error && !info.cancelled && info.done">${t`done`}</span>
-                        <span v-show="!info.error && !info.cancelled && !info.done"><: info.progress :>%</span>
-                        <span v-show="info.error && !info.cancelled && !info.done"><: info.errorMsg :></span>
-                        <span v-show="(info.error || info.cancelled) && !info.done" class="has-text-gray-500">${t`Cancelled`}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `,
-
     props: {
         placeholder: {
             type: String,
@@ -68,32 +71,63 @@ export default {
             type: Array,
             default: () => ['audio', 'video', 'image'],
         },
+        double: {
+            type: String,
+            default: '',
+        },
+        objectType: {
+            type: String,
+            default: 'media',
+        },
     },
 
     data() {
         return {
             uploadProgressInfo: new Map(), // real-time upload status
             axiosCancelTokens: new Map(), // Map of all axios cancel token
+            msgCancelled: t`Cancelled`,
+            msgDone: t`Done`,
+            msgRemove: t`Remove`,
+            msgStop: t`Stop`,
         }
     },
 
     methods: {
+        fileAcceptMimeTypes(type) {
+            return this.$helpers.acceptMimeTypes(type);
+        },
+
         inputFiles(e) {
-            const files = e.target.files || null;
+            if (this.$helpers.checkMimeForUpload(event.target.files[0], this.objectType) === false) {
+                return;
+            }
+            if (this.$helpers.checkMaxFileSize(event.target.files[0]) === false) {
+                return false;
+            }
+
+            const files = e?.target?.files || null;
             if (!files) {
                 return;
             }
-
             this.uploadFiles(files);
         },
 
         dropFiles(e) {
-            const files = e.dataTransfer.files || null;
+            const files = e?.dataTransfer?.files || null;
             if (!files) {
                 return;
             }
-
-            this.uploadFiles(files);
+            const toProcess = [];
+            for (const file of files) {
+                if (this.$helpers.checkMimeForUpload(file, this.objectType) === false) {
+                    continue;
+                }
+                if (this.$helpers.checkMaxFileSize(file) === false) {
+                    continue;
+                }
+                toProcess.push(file);
+            }
+            this.uploadFiles(toProcess);
         },
 
         async uploadFiles(files) {
@@ -107,7 +141,6 @@ export default {
                     this.removeProgressItem(file);
                     return;
                 }
-
                 this.upload(file).then((object) => this.uploadSuccessful(file, object));
             });
 
@@ -118,7 +151,6 @@ export default {
                     this.removeProgressItem(file);
                     continue;
                 }
-
                 const object = await this.upload(file);
                 this.uploadSuccessful(file, object);
             }
@@ -223,27 +255,27 @@ export default {
         },
 
         getObjectType(file) {
-            let type = file.type && file.type.split('/')[0];
+            let type = file?.type && file?.type.split('/')[0];
             const hasPlural = /audio/g.test(type) ? '' : 's';
-
             if (this.knownTypes.indexOf(type) === -1) {
                 type = 'file';
             }
+
             return `${type}${hasPlural}`;
         },
 
         progressBarClass(info) {
             return {
-                'done': info.done,
-                'error': info.error,
-                'pending': info.pending,
-                'in-progress': !info.done && !info.error && info.progress,
-                'cancelled': info.cancelled
+                'done': info?.done,
+                'error': info?.error,
+                'pending': info?.pending,
+                'in-progress': !info?.done && !info?.error && info?.progress,
+                'cancelled': info?.cancelled
             };
         },
 
         progressBarStyle(info) {
-            return { width: `${info.progress}%` };
+            return { width: `${info?.progress}%` };
         },
 
         abortUpload(file) {
@@ -258,3 +290,4 @@ export default {
         },
     },
 }
+</script>

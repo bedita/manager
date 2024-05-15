@@ -10,6 +10,7 @@ import 'tinymce/plugins/link';
 import 'tinymce/plugins/lists';
 import 'tinymce/plugins/table';
 import 'tinymce/plugins/hr';
+import 'tinymce/plugins/visualblocks';
 import '../plugins/tinymce/placeholders.js';
 import { tinymcePlugin } from '@chialab/typos';
 
@@ -40,6 +41,7 @@ const DEFAULT_TOOLBAR = [
     'redo',
     '|',
     'fixQuotes',
+    'visualblocks',
     'code',
 ].join(' ');
 
@@ -108,10 +110,12 @@ export default {
                         'code',
                         'placeholders',
                         'typos',
+                        'visualblocks',
                     ].join(' '),
                     autoresize_bottom_margin: 50,
                     relative_urls: false,
                     paste_block_drop: true,
+                    add_unload_trigger: false, // fix populating textarea elements with garbage when the user initiates a navigation with unsaved changes, but cancels it when the alert is shown
                     readonly: element.getAttribute('readonly') === 'readonly' ? 1 : 0,
                 });
 
