@@ -38,7 +38,7 @@
                         >
                     </div>
                 </div>
-                <div>
+                <div v-show="!optionIsSet('all_day')">
                     <label class="m-0 nowrap has-text-size-smaller">
                         <input type="checkbox"
                                :disabled="!dateRange.start_date"
@@ -49,7 +49,7 @@
                         {{ msgAllDay }}
                     </label>
                 </div>
-                <div>
+                <div v-show="!optionIsSet('every_day')">
                     <label class="m-0 nowrap has-text-size-smaller">
                         <input type="checkbox"
                                :disabled="!isDaysInterval(dateRange)"
@@ -126,6 +126,10 @@ export default {
             type: String,
             default: undefined,
         },
+        options: {
+            type: Object,
+            default: () => ({}),
+        },
     },
 
     data() {
@@ -156,14 +160,21 @@ export default {
 
     created() {
         const ranges = JSON.parse(this.ranges);
+        const defaultOptions = {
+            all_day: this.options?.all_day || false,
+            every_day: this.options?.every_day || true,
+            weekdays: {},
+        };
         if (ranges) {
             this.dateRanges = ranges;
             this.dateRanges.forEach((range) => {
                 if (range.params?.length > 0) {
                     range.params = JSON.parse(range.params) || false;
                 }
-                range.params = range.params || { all_day: false, every_day: true, weekdays: {} };
-                range.params.every_day = !range.params?.weekdays || Object.keys(range.params?.weekdays).length === 0;
+                range.params = range.params || defaultOptions;
+                if (!this.optionIsSet('every_day')) {
+                    range.params.every_day = !range.params?.weekdays || Object.keys(range.params?.weekdays).length === 0;
+                }
                 if (!range.start_date) {
                     range.end_date = '';
                 }
@@ -207,14 +218,15 @@ export default {
                 start_date: '',
                 end_date: '',
                 params: {
-                    all_day: false,
+                    all_day: this.options?.all_day || false,
                 },
             });
         },
         onDateChanged(dateRange, ev) {
             const value = ev.target.value;
             const dr = {};
-            if (ev.target.name.indexOf('start_date') > 0) {
+            const isStartDate = ev.target.name.indexOf('start_date') > 0;
+            if (isStartDate) {
                 dr.start_date = value;
                 if (value.length === 0) {
                     dateRange.end_date = '';
@@ -225,8 +237,16 @@ export default {
                 dr.end_date = value;
             }
             this.validate(dr);
-            if (this.isDaysInterval(dateRange)) {
+            if (this.isDaysInterval(dateRange) && !this.optionIsSet('all_day')) {
                 dateRange.params.all_day = false;
+            }
+            if (this.options?.all_day === true) {
+                if (isStartDate) {
+                    dateRange.start_date = value;
+                } else {
+                    dateRange.end_date = value;
+                }
+                this.setAllDayRange(dateRange);
             }
         },
         onAllDayChanged(dateRange, { target: { checked } }) {
@@ -327,6 +347,10 @@ export default {
             }
 
             return '';
+        },
+
+        optionIsSet(option) {
+            return this.options[option] !== undefined;
         },
     },
 }
