@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-05-14 13:49:36 \n"
+"POT-Creation-Date: 2024-05-16 09:46:10 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -409,7 +409,7 @@ msgid "Left types"
 msgstr "Tipi di sinistra"
 
 msgid "Less"
-msgstr ""
+msgstr "Meno"
 
 msgid "List"
 msgstr "Lista"
@@ -687,7 +687,7 @@ msgid "Request password"
 msgstr "Reimposta password"
 
 msgid "Reset"
-msgstr ""
+msgstr "Resetta"
 
 msgid "Resource \"%s\" not available. Error: %s"
 msgstr "Risorsa \"%s\" non disponibile. Error: %s"
@@ -1211,14 +1211,14 @@ msgid "Mail to"
 msgstr "Invia mail a"
 
 msgid "Txt"
-msgstr ""
+msgstr "Testuale"
 
 msgid "Items"
 msgstr "Elementi"
 
 #, javascript-format
 msgid "Search by ${ selectedType }"
-msgstr ""
+msgstr "Cerca per ${ selectedType }"
 
 msgid "NULL"
 msgstr ""

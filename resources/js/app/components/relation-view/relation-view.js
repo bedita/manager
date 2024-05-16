@@ -910,6 +910,27 @@ export default {
         truncate(str, len) {
             return this.$helpers.truncate(str, len);
         },
+
+        exportFilteredUrl(url) {
+            let parts = [];
+            if (this.activeFilter.q) {
+                parts.push(`q=${this.activeFilter.q}`);
+            }
+            for (const key in this.activeFilter.filter) {
+                if (this.activeFilter.filter[key] !== null && this.activeFilter.filter[key].length > 0) {
+                    parts.push(`filter[${key}]=${this.activeFilter.filter[key]}`);
+                }
+            }
+            if (parts.length === 0) {
+                return url;
+            }
+            let query = parts.join('&');
+            if (query.charAt(0) === '&') {
+                query = query.substring(1);
+            }
+
+            return `${url}${query}`;
+        },
     }
 
 }

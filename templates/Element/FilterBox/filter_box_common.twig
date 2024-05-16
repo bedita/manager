@@ -1,15 +1,15 @@
 <div class="filters-container" :class="{ 'filters-container-active': filterActive }">
-<div class="basic-filters">
+    <div class="basic-filters">
 
         {% if currentModule.hints.multiple_types and types.right is iterable %}
-        <div class="filter-container filter-search input">
-            <object-types-picker
-                :initial-types="{{ types.right|json_encode }}"
-                :initial-selected="{{ _view.request.getQuery('filter.type')|json_encode}}"
-                @updatequerytypes="updateSelectedTypes($event)"
-            >
-            </objects-type-picker>
-        </div>
+            <div class="filter-container filter-search input">
+                <object-types-picker
+                    :initial-types="{{ types.right|json_encode }}"
+                    :initial-selected="{{ _view.request.getQuery('filter.type')|json_encode}}"
+                    @updatequerytypes="updateSelectedTypes($event)"
+                >
+                </objects-type-picker>
+            </div>
         {% endif %}
 
         <div class="filter-container filter-search input">
@@ -21,20 +21,20 @@
                 @keydown.enter.prevent="applyFilter"
             />
             {% if showFilterSearchByType %}
-            <input type="text"
-                form="_filters"
-                :placeholder="getSearchPlaceholder"
-                v-model.trim="queryFilter.filter.id"
-                v-if="selectedSearchType === 'id'"
-                @keydown.enter.prevent="applyFilter"
-            />
-            <input type="text"
-                form="_filters"
-                :placeholder="getSearchPlaceholder"
-                v-model.trim="queryFilter.filter.uname"
-                v-if="selectedSearchType === 'uname'"
-                @keydown.enter.prevent="applyFilter"
-            />
+                <input type="text"
+                    form="_filters"
+                    :placeholder="getSearchPlaceholder"
+                    v-model.trim="queryFilter.filter.id"
+                    v-if="selectedSearchType === 'id'"
+                    @keydown.enter.prevent="applyFilter"
+                />
+                <input type="text"
+                    form="_filters"
+                    :placeholder="getSearchPlaceholder"
+                    v-model.trim="queryFilter.filter.uname"
+                    v-if="selectedSearchType === 'uname'"
+                    @keydown.enter.prevent="applyFilter"
+                />
             {% endif %}
         </div>
 
@@ -44,13 +44,13 @@
                 <span class="ml-05">{{ __('Search') }}</span>
             </button>
             {% if showFilterSearchByType %}
-            <select v-model="selectedSearchType"
-                form="_filters"
-                class="has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest"
-                @change="onChangeSearchType"
-            >
-                <option v-for="type in searchByTypes" :value="type.name"><: t(capitalize(type.label)) :></option>
-            </select>
+                <select v-model="selectedSearchType"
+                    form="_filters"
+                    class="has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest"
+                    @change="onChangeSearchType"
+                >
+                    <option v-for="type in searchByTypes" :value="type.name"><: t(capitalize(type.label)) :></option>
+                </select>
             {% endif %}
 
             <button class="button button-outlined" type="button" @click="resetFilter">
@@ -101,20 +101,22 @@
 
             <span v-if="filter.name === 'categories'">
                 <label>{{ __('Categories') }}</label>
-
                 {% if schemasByType %}
                     {% for type, typeSchema in schemasByType %}
-                        <category-picker
-                            v-if="queryFilter.filter.type == '{{ type }}'"
-                            :categories="{{ typeSchema.categories|json_encode }}"
-                            :initial-categories="initCategories"
-                            id="category-filter"
-                            form="_filters"
-                            label=""
-                            @change="onCategoryChange"
-                        ></category-picker>
+                        {% if typeSchema.categories %}
+                            <template v-if="queryFilter.filter.type == '{{ type }}'">
+                                <category-picker
+                                    :categories="{{ typeSchema.categories|json_encode }}"
+                                    :initial-categories="initCategories"
+                                    id="category-filter"
+                                    form="_filters"
+                                    label=""
+                                    @change="onCategoryChange"
+                                ></category-picker>
+                            </template>
+                        {% endif %}
                     {% endfor %}
-                {% elseif schema %}
+                {% elseif schema and schema.categories %}
                     <category-picker
                         :categories="{{ schema.categories|json_encode }}"
                         :initial-categories="initCategories"
@@ -123,6 +125,8 @@
                         label=""
                         @change="onCategoryChange"
                     ></category-picker>
+                {% else %}
+                    -
                 {% endif %}
             </span>
 
