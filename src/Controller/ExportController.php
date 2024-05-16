@@ -38,6 +38,13 @@ class ExportController extends AppController
     public const DEFAULT_PAGE_SIZE = 500;
 
     /**
+     * Export filter
+     *
+     * @var array
+     */
+    public $filter = [];
+
+    /**
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
@@ -111,7 +118,7 @@ class ExportController extends AppController
         $rows = $this->rowsAllRelated($objectType, $id, $relation);
 
         // create spreadsheet and return as download
-        $filename = sprintf('%s_%s_%s.%s', $objectType, $relation, date('Ymd-His'), $format);
+        $filename = $this->getRelatedFileName($id, $objectType, $relation, $format);
         $data = $this->Export->format($format, $rows, $filename);
 
         // output
@@ -119,6 +126,22 @@ class ExportController extends AppController
         $response = $response->withType(Hash::get($data, 'contentType'));
 
         return $response->withDownload($filename);
+    }
+
+    /**
+     * Export data to format specified by user with filters
+     *
+     * @param string $id The object ID
+     * @param string $relation The relation name
+     * @param string $format The file format
+     * @param string $query The query string
+     * @return \Cake\Http\Response|null
+     */
+    public function relatedFiltered(string $id, string $relation, string $format, string $query): ?Response
+    {
+        parse_str($query, $this->filter);
+
+        return $this->related($id, $relation, $format);
     }
 
     /**
@@ -165,6 +188,33 @@ class ExportController extends AppController
     protected function getFileName(string $type, string $format): string
     {
         return sprintf('%s_%s.%s', $type, date('Ymd-His'), $format);
+    }
+
+    /**
+     * Get related exported file name.
+     *
+     * @param string $id The object ID
+     * @param string $type Object or resource type.
+     * @param string $relation The relation name.
+     * @param string $format The format.
+     * @return string
+     */
+    protected function getRelatedFileName(string $id, string $type, string $relation, string $format): string
+    {
+        if (empty($this->filter)) {
+            return sprintf('%s_%s_%s_%s.%s', $type, $id, $relation, date('Ymd-His'), $format);
+        }
+        $filter = [];
+        if (!empty($this->filter['q'])) {
+            $filter[] = $this->filter['q'];
+        }
+        if (!empty($this->filter['filter'])) {
+            foreach ($this->filter['filter'] as $value) {
+                $filter[] = $value;
+            }
+        }
+
+        return sprintf('%s_%s_%s_%s_%s.%s', $type, $id, $relation, implode('_', $filter), date('Ymd-His'), $format);
     }
 
     /**
@@ -260,6 +310,9 @@ class ExportController extends AppController
         $q = (string)$this->getRequest()->getData('q');
         if (!empty($q)) {
             $res += compact('q');
+        }
+        if (!empty($this->filter)) {
+            $res = array_merge($res, $this->filter);
         }
 
         return $res;
