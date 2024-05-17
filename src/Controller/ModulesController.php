@@ -290,7 +290,8 @@ class ModulesController extends AppController
                 (array)$this->Schema->getSchema($this->objectType),
                 (array)Hash::get($requestData, 'permissions')
             );
-            $this->Modules->saveRelated((string)Hash::get($response, 'data.id'), $this->objectType, $relatedData);
+            $id = (string)Hash::get($response, 'data.id');
+            $this->Modules->saveRelated($id, $this->objectType, $relatedData);
             $options = [
                 'id' => Hash::get($response, 'data.id'),
                 'type' => $this->objectType,
@@ -298,6 +299,7 @@ class ModulesController extends AppController
             ];
             $event = new Event('Controller.afterSave', $this, $options);
             $this->getEventManager()->dispatch($event);
+            $this->getRequest()->getSession()->delete(sprintf('failedSave.%s.%s', $this->objectType, $id));
         } catch (BEditaClientException $error) {
             $this->log($error->getMessage(), LogLevel::ERROR);
             $this->Flash->error($error->getMessage(), ['params' => $error]);
