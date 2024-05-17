@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-05-09 06:40:24 \n"
+"POT-Creation-Date: 2024-05-16 09:46:10 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1406,6 +1406,9 @@ msgstr "Traducibile"
 msgid "Error on deleting property"
 msgstr "Errore nella cancellazione della proprietà"
 
+msgid "Search on categories"
+msgstr "Cerca tra le categorie"
+
 msgid "Password"
 msgstr "Password"
 
@@ -1543,3 +1546,12 @@ msgstr "Errore durante il salvataggio della categoria"
 
 msgid "Error on deleting category"
 msgstr "Errore durante l'eliminazione della categoria"
+
+#~ msgid "Less filters"
+#~ msgstr "Meno filtri"
+
+#~ msgid "More filters"
+#~ msgstr "Più filtri"
+
+#~ msgid "Reset filters"
+#~ msgstr "Reset filtri"

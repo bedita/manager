@@ -43,6 +43,7 @@ export default {
         PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
+        ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
     },
 
     props: {

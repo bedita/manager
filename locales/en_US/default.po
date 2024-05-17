@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-05-09 06:40:24 \n"
+"POT-Creation-Date: 2024-05-16 09:46:10 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1392,6 +1392,9 @@ msgid "Translatable"
 msgstr ""
 
 msgid "Error on deleting property"
+msgstr ""
+
+msgid "Search on categories"
 msgstr ""
 
 msgid "Password"
