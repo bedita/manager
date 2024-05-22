@@ -1,5 +1,5 @@
 <template>
-    <div class="module-index">
+    <div class="appearance module-index">
         <details v-for="property,propertyKey in configs" :key="propertyKey">
             <summary>{{ title(propertyKey) }}</summary>
             <div class="main-container">
@@ -105,7 +105,7 @@ export default {
 };
 </script>
 <style>
-details>summary {
+div.appearance > details>summary {
   list-style-type: none;
   outline: none;
   cursor: pointer;
@@ -114,25 +114,25 @@ details>summary {
   font-size: 1rem;
 }
 
-details>summary::-webkit-details-marker {
+div.appearance > details>summary::-webkit-details-marker {
   display: none;
 }
 
-details>summary::before {
+div.appearance > details>summary::before {
   content: '+ ';
   font-size: 1.2rem;
 }
 
-details[open]>summary::before {
+div.appearance > details[open]>summary::before {
   content: '- ';
   font-size: 1.2rem;
 }
 
-details[open]>summary {
+div.appearance > details[open]>summary {
   margin-bottom: 0.5rem;
 }
 
-.main-container {
+div.appearance > details > .main-container {
   display: flex;
   justify-content: left;
   align-items: flex-start;
