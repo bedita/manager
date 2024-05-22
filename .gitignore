@@ -67,6 +67,7 @@ bundle-report.*.html
 /webroot/bundle-report
 /webroot/*.hot-update.*
 /webroot/vendors/async/*.hot-update.*
+/webroot/css/admin-index*
 /webroot/css/app*
 /webroot/css/category*
 /webroot/css/date-input*
@@ -76,6 +77,7 @@ bundle-report.*.html
 /webroot/css/index-cell*
 /webroot/css/map-view*
 /webroot/css/menu*
+/webroot/css/object-categories*
 /webroot/css/object-nav*
 /webroot/css/object-property*
 /webroot/css/objects-history*
