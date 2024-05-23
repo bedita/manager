@@ -346,7 +346,7 @@ export default {
         // css class on items
         selectClasses(related) {
             return [
-                `from-relation-${this.relationName}`,
+                `from-relation-${this.relationName} has-status-${related.attributes.status}`,
                 {
                     selected: this.selectedObjects.indexOf(related) !== -1,
                     unselectable: this.isUnselectableObject(related?.id),
