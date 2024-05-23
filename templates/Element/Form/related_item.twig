@@ -19,7 +19,7 @@
         draggable
         :drag-data="JSON.stringify(related)"
     {% else %}
-        :class="`${related.type} has-shadow-color-${related.type}`"
+        :class="`${related.type} has-shadow-color-${related.type} has-status-${related.attributes.status}`"
     {%- endif -%} >
 
 
@@ -68,7 +68,8 @@
 
                 <span class="icon-calendar-check-o" v-title="datesInfo(related)"></span>
             {% endif %}
-            <span class="status is-uppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
+            <span class="status is-uppercase has-text-size-smallest" :class="related.attributes.status" v-if="related.attributes.status"><: related.attributes.status :></span>
+
         </div>
 
         <div class="is-flex space-between align-center">

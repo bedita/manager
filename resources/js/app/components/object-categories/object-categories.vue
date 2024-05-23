@@ -211,7 +211,7 @@ export default {
     padding: .5rem 0;
 }
 
-.object-categories details:not(:first-child) {
+.object-categories details:nth-child(n + 3) {
     border-top: 1px dashed #555;
 }
 
