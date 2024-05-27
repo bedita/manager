@@ -40,7 +40,7 @@
                         <input
                             :id="`categories-${child.name}`"
                             type="checkbox"
-                            name="categories[]"
+                            name="selectedCategories[]"
                             :value="child.name"
                             :checked="child.name in selected"
                             v-model="selected"
@@ -70,7 +70,7 @@
                         <input
                             :id="`categories-${child.name}`"
                             type="checkbox"
-                            name="categories[]"
+                            name="selectedCategories[]"
                             :value="child.name"
                             :checked="child.name in selected"
                             v-model="selected"
@@ -80,6 +80,8 @@
                 </div>
             </div>
         </details>
+        <input type="hidden" name="categories" :value="JSON.stringify(selected)" />
+        <input type="hidden" name="_types[categories]" value="json" />
     </div>
 </template>
 <script>
