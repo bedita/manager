@@ -92,14 +92,7 @@
             {% for type, filters in filtersByType %}
                 {% set options = [] %}
                 {% for f in filters %}
-                    {% set filterName = f %}
-                    {% set filterLabel = f %}
-                    {% if f is iterable %}
-                        {% set filterName = f.name %}
-                        {% set filterLabel = f.label %}
-                    {% endif %}
-                    {% set o = Schema.controlOptions(filterName, null, schemasByType[type].properties[filterName]) %}
-                    {% set options = options|merge([o|merge({ 'name': filterName, 'label': filterLabel })]) %}
+                    {% set options = options|merge(Schema.filterOptions(f, schemasByType[type].properties)) %}
                 {% endfor %}
                 {% set list = list|merge({ (type): options }) %}
             {% endfor %}

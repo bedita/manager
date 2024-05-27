@@ -321,4 +321,21 @@ class SchemaHelper extends Helper
 
         return \App\Utility\Schema::rightTypes($relationsSchema);
     }
+
+    /**
+     * Return filter options for schema and filter.
+     *
+     * @param mixed $filter Filter name or filter array.
+     * @param array $properties Properties schema.
+     * @return array
+     */
+    public function filterOptions($filter, array $properties): array
+    {
+        $filterName = is_array($filter) ? (string)Hash::get($filter, 'name') : $filter;
+        $filterLabel = is_array($filter) ? (string)Hash::get($filter, 'label') : $filter;
+        $filterProperties = (array)Hash::get($properties, $filterName, []);
+        $options = self::controlOptions($filterName, null, $filterProperties);
+
+        return array_merge($options, ['name' => $filterName, 'label' => $filterLabel]);
+    }
 }
