@@ -1,10 +1,8 @@
 <div class="module-header">
     {% set filterActive = (_view.request.getQuery('filter') or _view.request.getQuery('q')) %}
     {% set list = [] %}
-    {% set options = [] %}
-    {% set properties = schema.properties|default([]) %}
     {% for f in filter %}
-        {% set options = options|merge(Schema.filterOptions(f, properties)) %}
+        {% set options = Schema.filterOptions(f, schema.properties|default([])) %}
         {% set list = list|merge({ (loop.index0): options }) %}
     {% endfor %}
 
