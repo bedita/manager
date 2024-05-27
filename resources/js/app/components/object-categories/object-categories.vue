@@ -81,7 +81,6 @@
             </div>
         </details>
         <input type="hidden" name="categories" :value="JSON.stringify(selected)" />
-        <input type="hidden" name="_types[categories]" value="json" />
     </div>
 </template>
 <script>
