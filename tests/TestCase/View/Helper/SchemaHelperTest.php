@@ -845,4 +845,62 @@ class SchemaHelperTest extends TestCase
         $actual = $this->Schema->rightTypes();
         static::assertSame($expected, $actual);
     }
+
+    /**
+     * Data provider for `filterOptions` test case.
+     *
+     * @return array
+     */
+    public function filterOptionsProvider(): array
+    {
+        return [
+            'parent string' => [
+                'parent',
+                [],
+                [
+                    'class' => 'json',
+                    'disabled' => false,
+                    'label' => 'parent',
+                    'name' => 'parent',
+                    'readonly' => false,
+                    'type' => 'textarea',
+                    'value' => 'null',
+                    'v-jsoneditor' => 'true',
+                ],
+            ],
+            'filter title custom' => [
+                ['name' => 'title', 'label' => 'Title'],
+                ['title' => []],
+                [
+                    'class' => 'title',
+                    'disabled' => false,
+                    'label' => 'Title',
+                    'name' => 'title',
+                    'readonly' => false,
+                    'templates' => ['inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>'],
+                    'type' => 'text',
+                    'value' => null,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `filterOptions`.
+     *
+     * @return void
+     * @dataProvider filterOptionsProvider()
+     * @covers ::filterOptions()
+     */
+    public function testFilterOptions($filter, array $properties, array $expected): void
+    {
+        $view = $this->Schema->getView();
+        $view->set('schema', [
+            'properties' => $properties,
+        ]);
+        $actual = $this->Schema->filterOptions($filter, $properties);
+        ksort($actual);
+        ksort($expected);
+        static::assertSame($expected, $actual);
+    }
 }
