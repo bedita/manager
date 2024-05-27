@@ -331,8 +331,8 @@ class SchemaHelper extends Helper
      */
     public function filterOptions($filter, array $properties): array
     {
-        $filterName = is_array($filter) ? (string)Hash::get($filter, 'name') : $filter;
-        $filterLabel = is_array($filter) ? (string)Hash::get($filter, 'label') : $filter;
+        $filterName = is_array($filter) ? (string)Hash::get($filter, 'name', __('untitled')) : $filter;
+        $filterLabel = is_array($filter) ? (string)Hash::get($filter, 'label', $filterName) : $filter;
         $filterProperties = (array)Hash::get($properties, $filterName, []);
         $options = self::controlOptions($filterName, null, $filterProperties);
 
