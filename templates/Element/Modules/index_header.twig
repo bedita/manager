@@ -2,8 +2,14 @@
     {% set filterActive = (_view.request.getQuery('filter') or _view.request.getQuery('q')) %}
     {% set list = [] %}
     {% for f in filter %}
-        {% set options = Schema.controlOptions(f, null, schema.properties[f]) %}
-        {% set options = options|merge({ 'name': f }) %}
+        {% set filterName = f %}
+        {% set filterLabel = f %}
+        {% if f is iterable %}
+            {% set filterName = f.name %}
+            {% set filterLabel = f.label %}
+        {% endif %}
+        {% set options = Schema.controlOptions(filterName, null, schema.properties[filterName]) %}
+        {% set options = options|merge({ 'name': filterName, 'label': filterLabel }) %}
         {% set list = list|merge({ (loop.index0): options }) %}
     {% endfor %}
 

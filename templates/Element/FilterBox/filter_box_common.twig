@@ -97,7 +97,7 @@
         {# other dynamic filters #}
         <div v-for="filter in dynamicFilters" class="filter-container" :class="[filter.name, filter.type, filter.date ? 'date' : '']">
             <input type="hidden" form="_filters" :name="filter.name" :value="filter.value">
-            <label class="filter-label"><: t(filter.name) | humanize :></label>
+            <label class="filter-label"><: t(filter.label || filter.name) | humanize :></label>
 
             <span v-if="filter.name === 'categories'">
                 <label>{{ __('Categories') }}</label>
