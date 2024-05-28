@@ -173,8 +173,14 @@ class HistoryComponent extends Component
      */
     public function fetch($id, array $schema, array $options): array
     {
-        $options['filter'] = ['resource_id' => $id];
-        $response = (array)ApiClientProvider::getApiClient()->get('/history?include=user', $options);
+        $response = (array)ApiClientProvider::getApiClient()->get('/history', array_merge(
+            [
+                'filter' => ['resource_id' => $id],
+                'include' => 'user',
+                'page_size' => 100,
+            ],
+            $options
+        ));
         $this->formatResponseData($response, $schema);
 
         return $response;

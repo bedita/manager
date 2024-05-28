@@ -35,8 +35,7 @@ class HistoryController extends AppController
         $this->viewBuilder()->setClassName('Json');
         $this->getRequest()->allowMethod('get');
         $schema = (array)$this->Schema->getSchema($this->getRequest()->getParam('object_type'));
-        $options = ['page_size' => 100, 'page' => $page];
-        $response = $this->History->fetch($id, $schema, $options);
+        $response = $this->History->fetch($id, $schema, compact('page'));
         $data = $response['data'];
         $meta = $response['meta'];
         $this->set(compact('data', 'meta'));
