@@ -348,7 +348,7 @@ class LayoutHelperTest extends TestCase
      * @param array $viewVars The view vars
      * @param array $query The query params
      * @param string $expected The expected result
-     * @return array
+     * @return void
      * @dataProvider moduleIndexViewTypeProvider()
      * @covers ::moduleIndexViewType()
      * @covers ::moduleIndexDefaultViewType()
