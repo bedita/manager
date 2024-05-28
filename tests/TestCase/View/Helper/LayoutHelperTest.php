@@ -511,12 +511,50 @@ class LayoutHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testTrashLink` test case.
+     *
+     * @return array
+     */
+    public function trashLinkProvider(): array
+    {
+        return [
+            'null' => [
+                null,
+                '',
+            ],
+            'empty' => [
+                '',
+                '',
+            ],
+            'trash' => [
+                'trash',
+                '',
+            ],
+            'translations' => [
+                'translations',
+                '',
+            ],
+            'not existing type' => [
+                'notExistingType',
+                '',
+            ],
+            'dummies' => [
+                'dummies',
+                '<a href="/trash?filter%5Btype%5D%5B0%5D=dummies" class="button icon icon-only-icon has-text-module-dummies" title="Dummies in Trashcan"><span class="is-sr-only">Trash</span><app-icon icon="carbon:trash-can"></app-icon></a>',
+            ],
+        ];
+    }
+
+    /**
      * Test `trashLink`.
      *
+     * @param string|null $input The input
+     * @param string $expected The expected result
      * @return void
+     * @dataProvider trashLinkProvider()
      * @covers ::trashLink()
      */
-    public function testTrashLink(): void
+    public function testTrashLink(?string $input, string $expected): void
     {
         $viewVars = [
             'modules' => [
@@ -530,14 +568,7 @@ class LayoutHelperTest extends TestCase
         $request = new ServerRequest();
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
-
-        foreach ([null, '', 'notExistingType', 'trash'] as $input) {
-            $actual = $layout->trashLink($input);
-            static::assertSame('', $actual);
-        }
-
-        $expected = '<a href="/trash?filter%5Btype%5D%5B0%5D=dummies" class="button icon icon-only-icon has-text-module-dummies" title="Dummies in Trashcan"><span class="is-sr-only">Trash</span><app-icon icon="carbon:trash-can"></app-icon></a>';
-        $actual = $layout->trashLink('dummies');
+        $actual = $layout->trashLink($input);
         static::assertSame($expected, $actual);
     }
 
