@@ -600,7 +600,7 @@ class AppControllerTest extends TestCase
                 ],
                 [
                     'id' => '2',
-                    'categories' => ['Blu', 'Red', 'Green'],
+                    'categories' => json_encode(['Blu', 'Red', 'Green']),
                 ],
             ],
             'types' => [

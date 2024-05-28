@@ -231,6 +231,7 @@ class AppController extends Controller
 
         // prepare categories
         if (!empty($data['categories'])) {
+            $data['categories'] = json_decode($data['categories'], true);
             $data['categories'] = array_map(function ($category) {
                 return ['name' => $category];
             }, $data['categories']);
