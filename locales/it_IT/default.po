@@ -1473,7 +1473,7 @@ msgid "Result"
 msgstr "Risultato"
 
 msgid "clone"
-msgstr ""
+msgstr "clona"
 
 msgid "No history data found"
 msgstr "Nessun dato di Cronologia"
