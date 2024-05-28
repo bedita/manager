@@ -100,7 +100,7 @@ class HistoryControllerTest extends TestCase
      */
     public function testInfo(): void
     {
-        $this->HistoryController->info($this->documentId);
+        $this->HistoryController->info($this->documentId, 1);
         $vars = ['data', 'meta'];
         foreach ($vars as $var) {
             static::assertNotEmpty($this->HistoryController->viewBuilder()->getVar($var));
