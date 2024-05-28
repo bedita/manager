@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-05-16 09:46:10 \n"
+"POT-Creation-Date: 2024-05-28 09:39:32 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1472,20 +1472,14 @@ msgstr "Numero di errori"
 msgid "Result"
 msgstr "Risultato"
 
-msgid "version by"
-msgstr "versione di"
+msgid "clone"
+msgstr ""
 
-msgid "date"
-msgstr "data"
-
-msgid "Trashed"
-msgstr "Rimosso"
-
-#. *
-#.  * Component to fetch and display changes' history.
-#.
-msgid "No History data found"
+msgid "No history data found"
 msgstr "Nessun dato di Cronologia"
+
+msgid "restore"
+msgstr "ripristina"
 
 #, javascript-format
 msgid "by ${ name } via ${ application }"
@@ -1501,6 +1495,15 @@ msgid ""
 msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
+
+msgid "version by"
+msgstr "versione di"
+
+msgid "date"
+msgstr "data"
+
+msgid "Trashed"
+msgstr "Rimosso"
 
 msgid "untitled"
 msgstr "senza titolo"
@@ -1546,12 +1549,3 @@ msgstr "Errore durante il salvataggio della categoria"
 
 msgid "Error on deleting category"
 msgstr "Errore durante l'eliminazione della categoria"
-
-#~ msgid "Less filters"
-#~ msgstr "Meno filtri"
-
-#~ msgid "More filters"
-#~ msgstr "Più filtri"
-
-#~ msgid "Reset filters"
-#~ msgstr "Reset filtri"
