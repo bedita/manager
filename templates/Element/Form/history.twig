@@ -8,7 +8,7 @@
                 </span>
             </header>
             <div v-show="isOpen" class="tab-container">
-                <keep-alive><history v-if="isOpen" :object="{{ object|json_encode }}" @count="onCount" :cansave="{{ Perms.canSave()|json_encode }}"></history></keep-alive>
+                <keep-alive><history-changes v-if="isOpen" :object="{{ object|json_encode }}" @count="onCount" :cansave="{{ Perms.canSave()|json_encode }}"></history-changes></keep-alive>
             </div>
         </section>
     </section>

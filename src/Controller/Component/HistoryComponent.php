@@ -170,10 +170,10 @@ class HistoryComponent extends Component
      * @param array $schema The schema for object type
      * @return array
      */
-    public function fetch($id, array $schema): array
+    public function fetch($id, array $schema, array $options): array
     {
-        $filter = ['resource_id' => $id];
-        $response = (array)ApiClientProvider::getApiClient()->get('/history?include=user', compact('filter') + ['page_size' => 100]);
+        $options['filter'] = ['resource_id' => $id];
+        $response = (array)ApiClientProvider::getApiClient()->get('/history?include=user', $options);
         $this->formatResponseData($response, $schema);
 
         return $response;
