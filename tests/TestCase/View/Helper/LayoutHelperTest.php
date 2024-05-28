@@ -22,6 +22,7 @@ use Cake\Http\Cookie\Cookie;
 use Cake\Http\Cookie\CookieCollection;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 use Cake\View\View;
 
 /**
@@ -271,6 +272,143 @@ class LayoutHelperTest extends TestCase
         $layout = new LayoutHelper($view);
         $result = $layout->moduleLink();
         static::assertSame($expected, $result);
+    }
+
+    /**
+     * Data provider for `testModuleIndexDefaultViewType` test case.
+     *
+     * @return array
+     */
+    public function moduleIndexDefaultViewTypeProvider(): array
+    {
+        return [
+            'documents' => [
+                ['currentModule' => ['name' => 'documents']],
+                'list',
+            ],
+            'folders' => [
+                ['currentModule' => ['name' => 'folders']],
+                'tree',
+            ],
+        ];
+    }
+
+    /**
+     * Test `moduleIndexDefaultViewType` method
+     *
+     * @param array $viewVars The view vars
+     * @param string $expected The expected result
+     * @return void
+     * @dataProvider moduleIndexDefaultViewTypeProvider()
+     * @covers ::moduleIndexDefaultViewType()
+     */
+    public function testModuleIndexDefaultViewType(array $viewVars, string $expected): void
+    {
+        $request = $response = $events = null;
+        $name = (string)Hash::get($viewVars, 'currentModule.name', 'dummies');
+        $data = compact('name');
+        $view = new View($request, $response, $events, $data);
+        foreach ($viewVars as $key => $value) {
+            $view->set($key, $value);
+        }
+        $layout = new LayoutHelper($view);
+        $actual = $layout->moduleIndexDefaultViewType();
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testModuleIndexViewType` test case.
+     *
+     * @return array
+     */
+    public function moduleIndexViewTypeProvider(): array
+    {
+        return [
+            'documents list' => [
+                ['currentModule' => ['name' => 'documents']],
+                [],
+                'list',
+            ],
+            'folders tree' => [
+                ['currentModule' => ['name' => 'folders']],
+                [],
+                'tree',
+            ],
+            'folders list' => [
+                ['currentModule' => ['name' => 'folders']],
+                ['view_type' => 'list'],
+                'list',
+            ],
+        ];
+    }
+
+    /**
+     * Test `moduleIndexViewType` method.
+     *
+     * @param array $viewVars The view vars
+     * @param array $query The query params
+     * @param string $expected The expected result
+     * @return array
+     * @dataProvider moduleIndexViewTypeProvider()
+     * @covers ::moduleIndexViewType()
+     * @covers ::moduleIndexDefaultViewType()
+     */
+    public function testModuleIndexViewType(array $viewVars, array $query, string $expected): void
+    {
+        $request = new ServerRequest(['query' => $query]);
+        $response = $events = null;
+        $name = (string)Hash::get($viewVars, 'currentModule.name', 'dummies');
+        $data = compact('name');
+        $view = new View($request, $response, $events, $data);
+        foreach ($viewVars as $key => $value) {
+            $view->set($key, $value);
+        }
+        $layout = new LayoutHelper($view);
+        $actual = $layout->moduleIndexViewType();
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testModuleIndexViewTypes` test case.
+     *
+     * @return array
+     */
+    public function moduleIndexViewTypesProvider(): array
+    {
+        return [
+            'documents' => [
+                ['currentModule' => ['name' => 'documents']],
+                ['list'],
+            ],
+            'folders' => [
+                ['currentModule' => ['name' => 'folders']],
+                ['tree', 'list'],
+            ],
+        ];
+    }
+
+    /**
+     * Test `moduleIndexViewTypes
+     *
+     * @param array $viewVars
+     * @param array $expected
+     * @return void
+     * @dataProvider moduleIndexViewTypesProvider()
+     * @covers ::moduleIndexViewTypes()
+     * @covers ::moduleIndexDefaultViewType()
+     */
+    public function testModuleIndexViewTypes(array $viewVars, array $expected): void
+    {
+        $request = $response = $events = null;
+        $name = (string)Hash::get($viewVars, 'currentModule.name', 'dummies');
+        $data = compact('name');
+        $view = new View($request, $response, $events, $data);
+        foreach ($viewVars as $key => $value) {
+            $view->set($key, $value);
+        }
+        $layout = new LayoutHelper($view);
+        $actual = $layout->moduleIndexViewTypes();
+        static::assertSame($expected, $actual);
     }
 
     /**

@@ -1,56 +1,12 @@
 {% do _view.assign('title', __(currentModule.name|humanize)) %}
+{% set indexViewType = Layout.moduleIndexViewType() %}
 
-{% set query = _view.getRequest().getQueryParams() %}
-{% set treeView = currentModule.name == 'folders' and query is empty %}
-
-{{ element('Modules/index_header', { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': treeView}) }}
+{{ element('Modules/index_header', { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': indexViewType == 'tree'}) }}
 
 {% set ids = Array.extract(objects, '{*}.id') %}
 <modules-index inline-template ids='{{ ids|json_encode }}'>
     <div class="module-index">
-        {% if treeView %}
-            {% set hasPermissions = 'Permissions' in schema.associations %}
-            <permission-toggle :user-roles="{{ user.roles|json_encode }}" :has-permissions="{{ hasPermissions|json_encode }}"></permission-toggle>
-            <tree-view :user-roles="{{ user.roles|json_encode }}" :has-permissions="{{ hasPermissions|json_encode }}"></tree-view>
-        {% else %}
-            <div class="table-container">
-                <div class="list-objects">
-                    {% if objects %}
-                        {{ element('Modules/index_table_header', { 'refObject': objects[0] }) }}
-                    {% endif %}
-
-                    {% for object in objects %}
-                        {{ element('Modules/index_table_row', { 'object': object }) }}
-                    {% else %}
-                        {{ __('No items found') }}
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div class="module-footer">
-                {# bulk actions #}
-                {% if objects %}
-                    {{ element('Modules/index_bulk', {}) }}
-                {% endif %}
-
-                {% if not treeView %}
-                    <filter-box-view
-                        inline-template
-                        :pagination="{{ meta.pagination|json_encode|escape('html_attr') }}"
-                        config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
-                        page-size="{{ meta.pagination.page_size }}"
-                        @filter-update-page-size="onUpdatePageSize"
-                        @filter-update-current-page="onUpdateCurrentPage"
-                    >
-                        <template v-if="pagination.count">
-                            {{ element('FilterBox/filter_box_page_toolbar') }}
-                        </template>
-                    </filter-box-view>
-                {% endif %}
-            </div>
-        {% endif %}
-
+        {{ element('Modules/' ~ indexViewType) }}
         {{ element(Element.sidebar()) }}
-
-    </div> {# end module-content #}
+    </div>
 </modules-index>
