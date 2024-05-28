@@ -88,9 +88,7 @@ export default {
         let count = 0;
         while (!done) {
             const historyRes = await fetch(`${baseUrl}${this.object.type}/history/${this.object.id}/${page}`, options);
-            console.log(historyRes);
             const historyJson = await historyRes.json();
-            console.log(historyJson);
             this.rawHistory = this.rawHistory.concat(historyJson.data);
             page++;
             if (historyJson.meta.pagination.page === historyJson.meta.pagination.page_count) {
