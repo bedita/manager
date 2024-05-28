@@ -168,6 +168,7 @@ class HistoryComponent extends Component
      *
      * @param string|int $id The ID
      * @param array $schema The schema for object type
+     * @param array $options The options
      * @return array
      */
     public function fetch($id, array $schema, array $options): array
