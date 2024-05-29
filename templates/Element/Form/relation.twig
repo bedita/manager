@@ -26,7 +26,8 @@
         <div class="related-list-container">
             {# FilterBoxView #}
             <div class="mb-1" v-show="showFilter">
-                {% set list = Schema.filterListByType(filtersByType, schemasByType) %}
+                {% set fbt = filtersByType ? filtersByType : [] %}
+                {% set list = Schema.filterListByType(fbt, schemasByType) %}
                 <filter-box-view
                     :config-paginate-sizes="configPaginateSizes"
                     :pagination.sync="pagination"

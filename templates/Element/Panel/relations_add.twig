@@ -88,7 +88,8 @@
         </header>
 
         <div class="px-1 my-1">
-            {% set list = Schema.filterListByType(filtersByType, schemasByType) %}
+            {% set fbt = filtersByType ? filtersByType : [] %}
+            {% set list = Schema.filterListByType(fbt, schemasByType) %}
             <filter-box-view
                 config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}
                 :pagination.sync="pagination"
