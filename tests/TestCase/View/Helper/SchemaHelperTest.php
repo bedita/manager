@@ -847,60 +847,181 @@ class SchemaHelperTest extends TestCase
     }
 
     /**
-     * Data provider for `filterOptions` test case.
+     * Data provider for `filterList` test case.
      *
      * @return array
      */
-    public function filterOptionsProvider(): array
+    public function filterListProvider(): array
     {
         return [
             'parent string' => [
-                'parent',
-                [],
+                ['parent'],
+                null,
                 [
-                    'class' => 'json',
-                    'disabled' => false,
-                    'label' => 'parent',
-                    'name' => 'parent',
-                    'readonly' => false,
-                    'type' => 'textarea',
-                    'value' => 'null',
-                    'v-jsoneditor' => 'true',
+                    [
+                        'disabled' => false,
+                        'label' => 'Parent',
+                        'name' => 'parent',
+                        'readonly' => false,
+                        'type' => 'text',
+                        'value' => null,
+                    ],
                 ],
             ],
             'filter title custom' => [
-                ['name' => 'title', 'label' => 'Title'],
+                [['name' => 'title', 'label' => 'My Title']],
                 ['title' => []],
                 [
-                    'class' => 'title',
-                    'disabled' => false,
-                    'label' => 'Title',
-                    'name' => 'title',
-                    'readonly' => false,
-                    'templates' => ['inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>'],
-                    'type' => 'text',
-                    'value' => null,
+                    [
+                        'class' => 'title',
+                        'disabled' => false,
+                        'label' => 'My Title',
+                        'name' => 'title',
+                        'readonly' => false,
+                        'templates' => ['inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>'],
+                        'type' => 'text',
+                        'value' => null,
+                    ],
                 ],
             ],
         ];
     }
 
     /**
-     * Test `filterOptions`.
+     * Test `filterList`.
      *
+     * @param array $filters The filters
+     * @param array|null $properties The properties
+     * @param array $expected The expected result
      * @return void
-     * @dataProvider filterOptionsProvider()
-     * @covers ::filterOptions()
+     * @dataProvider filterListProvider()
+     * @covers ::filterList()
+     * @covers ::controlOptions()
      */
-    public function testFilterOptions($filter, array $properties, array $expected): void
+    public function testFilterList(array $filters, ?array $properties, array $expected): void
     {
         $view = $this->Schema->getView();
         $view->set('schema', [
             'properties' => $properties,
         ]);
-        $actual = $this->Schema->filterOptions($filter, $properties);
-        ksort($actual);
-        ksort($expected);
+        $actual = $this->Schema->filterList($filters, $properties);
+        ksort($actual[0]);
+        ksort($expected[0]);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `filterListByType` test case.
+     *
+     * @return array
+     */
+    public function filterListByTypeProvider(): array
+    {
+        return [
+            'schema null' => [
+                [
+                    'documents' => [
+                        'parent',
+                        'status',
+                        ['name' => 'title', 'label' => 'My Title'],
+                    ],
+                ],
+                null,
+                [
+                    'documents' => [
+                        [
+                            'value' => null,
+                            'label' => 'Parent',
+                            'readonly' => false,
+                            'disabled' => false,
+                            'type' => 'text',
+                            'name' => 'parent',
+                        ],
+                        [
+                            'options' => [
+                                ['value' => 'on', 'text' => 'On'],
+                                ['value' => 'draft', 'text' => 'Draft'],
+                                ['value' => 'off', 'text' => 'Off'],
+                            ],
+                            'templateVars' => ['containerClass' => 'status'],
+                            'type' => 'radio',
+                            'value' => null,
+                            'label' => 'Status',
+                            'readonly' => false,
+                            'disabled' => false,
+                            'name' => 'status',
+                        ],
+                        [
+                            'class' => 'title',
+                            'templates' => ['inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>'],
+                            'type' => 'text',
+                            'value' => null,
+                            'label' => 'My Title',
+                            'readonly' => false,
+                            'disabled' => false,
+                            'name' => 'title',
+                        ],
+                    ],
+                ],
+            ],
+            'schema not null' => [
+                [
+                    'documents' => [
+                        'categories',
+                        ['name' => 'title', 'label' => 'My Title'],
+                    ],
+                ],
+                [
+                    'documents' => [
+                        'categories' => [
+                            'type' => 'categories',
+                        ],
+                    ],
+                ],
+                [
+                    'documents' => [
+                        [
+                            'value' => [],
+                            'label' => 'Categories',
+                            'readonly' => false,
+                            'disabled' => false,
+                            'type' => 'select',
+                            'options' => [],
+                            'multiple' => 'checkbox',
+                            'name' => 'categories',
+                        ],
+                        [
+                            'class' => 'title',
+                            'templates' => [
+                                'inputContainer' => '<div class="input title {{type}}{{required}}">{{content}}</div>',
+                            ],
+                            'type' => 'text',
+                            'value' => null,
+                            'label' => 'My Title',
+                            'readonly' => false,
+                            'disabled' => false,
+                            'name' => 'title',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `filterListByType`.
+     *
+     * @return void
+     * @dataProvider filterListByTypeProvider()
+     * @covers ::filterListByType()
+     * @covers ::filterList()
+     * @covers ::controlOptions()
+     */
+    public function testfilterListByType(array $filtersByType, ?array $schemasByType, array $expected): void
+    {
+        $view = $this->Schema->getView();
+        $view->set('schema', $schemasByType);
+        $actual = $this->Schema->filterListByType($filtersByType, $schemasByType);
         static::assertSame($expected, $actual);
     }
 }

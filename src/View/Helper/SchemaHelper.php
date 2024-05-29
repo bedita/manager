@@ -323,19 +323,45 @@ class SchemaHelper extends Helper
     }
 
     /**
-     * Return filter options for schema and filter.
+     * Get filter list from filters and schema properties
      *
-     * @param mixed $filter Filter name or filter array.
-     * @param array $properties Properties schema.
+     * @param array $filters Filters list
+     * @param array|null $schemaProperties Schema properties
      * @return array
      */
-    public function filterOptions($filter, array $properties): array
+    public function filterList(array $filters, ?array $schemaProperties): array
     {
-        $filterName = is_array($filter) ? (string)Hash::get($filter, 'name', __('untitled')) : $filter;
-        $filterLabel = is_array($filter) ? (string)Hash::get($filter, 'label', $filterName) : $filter;
-        $filterProperties = (array)Hash::get($properties, $filterName, []);
-        $options = self::controlOptions($filterName, null, $filterProperties);
+        $list = [];
+        foreach ($filters as $f) {
+            $fname = is_array($f) ? (string)Hash::get($f, 'name', __('untitled')) : $f;
+            $flabel = is_array($f) ? (string)Hash::get($f, 'label', $fname) : Inflector::humanize($f);
+            $noProperties = empty($schemaProperties) || !array_key_exists($fname, $schemaProperties);
+            $schema = $noProperties ? null : (array)Hash::get($schemaProperties, $fname);
+            $item = self::controlOptions($fname, null, $schema);
+            $item['name'] = $fname;
+            $item['label'] = $flabel;
+            $list[] = $item;
+        }
 
-        return array_merge($options, ['name' => $filterName, 'label' => $filterLabel]);
+        return $list;
+    }
+
+    /**
+     * Get filter list by type
+     *
+     * @param array $filtersByType Filters list by type
+     * @param array|null $schemasByType Schema properties by type
+     * @return array
+     */
+    public function filterListByType(array $filtersByType, ?array $schemasByType): array
+    {
+        $list = [];
+        foreach ($filtersByType as $type => $filters) {
+            $noSchema = empty($schemasByType) || !array_key_exists($type, $schemasByType);
+            $schemaProperties = $noSchema ? null : Hash::get($schemasByType, $type);
+            $list[$type] = self::filterList($filters, $schemaProperties);
+        }
+
+        return $list;
     }
 }

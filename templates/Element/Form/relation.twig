@@ -26,14 +26,7 @@
         <div class="related-list-container">
             {# FilterBoxView #}
             <div class="mb-1" v-show="showFilter">
-                {% set list = {} %}
-                {% for type, filters in filtersByType %}
-                    {% set options = [] %}
-                    {% for f in filters %}
-                        {% set options = options|merge(Schema.filterOptions(f, schemasByType[type].properties)) %}
-                     {% endfor %}
-                    {% set list = list|merge({ (type): options }) %}
-                {% endfor %}
+                {% set list = Schema.filterListByType(filtersByType, schemasByType) %}
                 <filter-box-view
                     :config-paginate-sizes="configPaginateSizes"
                     :pagination.sync="pagination"
