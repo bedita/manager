@@ -97,9 +97,9 @@
         {# other dynamic filters #}
         <div v-for="filter in dynamicFilters" class="filter-container" :class="[filter.name, filter.type, filter.date ? 'date' : '']">
             <input type="hidden" form="_filters" :name="filter.name" :value="filter.value">
-            <label class="filter-label"><: t(filter.name) | humanize :></label>
+            <label class="filter-label" v-if="filter.name != 'categories' && filter.name != 'tags'"><: t(filter.name) | humanize :></label>
 
-            <span v-if="filter.name === 'categories'">
+            <span v-if="filter.name === 'categories'" class="categories-filter">
                 <label>{{ __('Categories') }}</label>
                 {% if schemasByType %}
                     {% for type, typeSchema in schemasByType %}
@@ -130,7 +130,8 @@
                 {% endif %}
             </span>
 
-            <span v-else-if="filter.name === 'tags'">
+            <span v-else-if="filter.name === 'tags'" class="tags-filter">
+                <label>{{ __('Tags') }}</label>
                 <tag-picker
                     id="tag-filter"
                     form="_filters"
