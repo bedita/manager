@@ -27,14 +27,15 @@ class HistoryController extends AppController
      * Get history data by ID
      *
      * @param string|int $id Object ID.
+     * @param int $page Page number.
      * @return void
      */
-    public function info($id): void
+    public function info($id, int $page): void
     {
         $this->viewBuilder()->setClassName('Json');
         $this->getRequest()->allowMethod('get');
         $schema = (array)$this->Schema->getSchema($this->getRequest()->getParam('object_type'));
-        $response = $this->History->fetch($id, $schema);
+        $response = $this->History->fetch($id, $schema, compact('page'));
         $data = $response['data'];
         $meta = $response['meta'];
         $this->set(compact('data', 'meta'));

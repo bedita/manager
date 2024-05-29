@@ -129,6 +129,31 @@
                 }
             }
         }
+
+        .filter-box {
+            flex-direction: column-reverse;
+
+            .position-filter {
+                flex-wrap: wrap;
+            }
+
+            .filter-container.parent .filter-label {
+                width: 0;
+                margin: 0;
+            }
+
+            .date-filter {
+                height: fit-content;
+            }
+
+            .categories-filter {
+                display: none;
+            }
+
+            .tags-filter {
+                display: none;
+            }
+        }
     }
 }
 

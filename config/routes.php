@@ -395,9 +395,9 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id', 'historyId'], '_name' => 'history:clone']
     );
     $routes->connect(
-        '/{object_type}/history/{id}',
+        '/{object_type}/history/{id}/{page}',
         ['controller' => 'History', 'action' => 'info'],
-        ['pass' => ['id'], '_name' => 'history:info']
+        ['pass' => ['id', 'page'], '_name' => 'history:info']
     );
     $routes->connect(
         '/{object_type}/delete',
