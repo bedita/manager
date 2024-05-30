@@ -573,4 +573,18 @@ return [
     //         'copy2clipboard' => true,
     //     ],
     // ],
+
+    /**
+     * Richeditor configuration.
+     */
+    // 'Richeditor' => [
+    //     'styleFormats' => [
+    //         [
+    //             'title' => 'Custom Blocks',
+    //             'items' => [
+    //                 ['title' => 'Highlight', 'block' => 'div', 'classes' => ['be-highlight']],
+    //             ],
+    //         ],
+    //     ],
+    // ],
 ];
