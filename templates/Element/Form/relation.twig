@@ -168,6 +168,7 @@
                         <span class="ml-05">{{ __('Export') }}</span>
                     </a>
                     <a
+                        v-if="Object.keys(activeFilter).length > 0"
                         class="button button-outlined"
                         target="_blank"
                         :href="exportFilteredUrl('{{ Url.build(filteredOptions|merge({'format': format})) }}')"
