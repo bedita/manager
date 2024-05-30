@@ -297,6 +297,7 @@ class LayoutHelper extends Helper
             'cloneConfig' => (array)Configure::read('Clone'),
             'uploadConfig' => $this->System->uploadConfig(),
             'relationsSchema' => $this->getView()->get('relationsSchema', []),
+            'richeditorConfig' => Configure::read('Richeditor'),
         ];
     }
 
