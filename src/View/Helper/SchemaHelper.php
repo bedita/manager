@@ -321,4 +321,47 @@ class SchemaHelper extends Helper
 
         return \App\Utility\Schema::rightTypes($relationsSchema);
     }
+
+    /**
+     * Get filter list from filters and schema properties
+     *
+     * @param array $filters Filters list
+     * @param array|null $schemaProperties Schema properties
+     * @return array
+     */
+    public function filterList(array $filters, ?array $schemaProperties): array
+    {
+        $list = [];
+        foreach ($filters as $f) {
+            $fname = is_array($f) ? (string)Hash::get($f, 'name', __('untitled')) : $f;
+            $flabel = is_array($f) ? (string)Hash::get($f, 'label', $fname) : Inflector::humanize($f);
+            $noProperties = empty($schemaProperties) || !array_key_exists($fname, $schemaProperties);
+            $schema = $noProperties ? null : (array)Hash::get($schemaProperties, $fname);
+            $item = self::controlOptions($fname, null, $schema);
+            $item['name'] = $fname;
+            $item['label'] = $flabel;
+            $list[] = $item;
+        }
+
+        return $list;
+    }
+
+    /**
+     * Get filter list by type
+     *
+     * @param array $filtersByType Filters list by type
+     * @param array|null $schemasByType Schema properties by type
+     * @return array
+     */
+    public function filterListByType(array $filtersByType, ?array $schemasByType): array
+    {
+        $list = [];
+        foreach ($filtersByType as $type => $filters) {
+            $noSchema = empty($schemasByType) || !array_key_exists($type, $schemasByType);
+            $schemaProperties = $noSchema ? null : Hash::get($schemasByType, $type);
+            $list[$type] = self::filterList($filters, $schemaProperties);
+        }
+
+        return $list;
+    }
 }

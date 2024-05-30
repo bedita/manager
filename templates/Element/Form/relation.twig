@@ -26,15 +26,8 @@
         <div class="related-list-container">
             {# FilterBoxView #}
             <div class="mb-1" v-show="showFilter">
-                {% set list = {} %}
-                {% for type, filters in filtersByType %}
-                    {% set options = [] %}
-                    {% for f in filters %}
-                        {% set o = Schema.controlOptions(f, null, schemasByType[type].properties[f]) %}
-                        {% set options = options|merge([o|merge({ 'name': f })]) %}
-                    {% endfor %}
-                    {% set list = list|merge({ (type): options }) %}
-                {% endfor %}
+                {% set fbt = filtersByType ? filtersByType : [] %}
+                {% set list = Schema.filterListByType(fbt, schemasByType) %}
                 <filter-box-view
                     :config-paginate-sizes="configPaginateSizes"
                     :pagination.sync="pagination"
@@ -175,6 +168,7 @@
                         <span class="ml-05">{{ __('Export') }}</span>
                     </a>
                     <a
+                        v-if="Object.keys(activeFilter).length > 0"
                         class="button button-outlined"
                         target="_blank"
                         :href="exportFilteredUrl('{{ Url.build(filteredOptions|merge({'format': format})) }}')"
