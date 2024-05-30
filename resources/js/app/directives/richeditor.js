@@ -98,6 +98,8 @@ export default {
                     toolbar_mode: 'wrap',
                     block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3',
                     entity_encoding: 'raw',
+                    style_formats: BEDITA?.richeditorConfig?.styleFormats || [],
+                    style_formats_merge: true,
                     plugins: [
                         'paste',
                         'autoresize',

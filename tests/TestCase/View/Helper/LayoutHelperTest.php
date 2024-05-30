@@ -442,6 +442,7 @@ class LayoutHelperTest extends TestCase
             'cloneConfig' => (array)Configure::read('Clone'),
             'uploadConfig' => $system->uploadConfig(),
             'relationsSchema' => ['whatever'],
+            'richeditorConfig' => (array)Configure::read('Richeditor'),
         ];
         static::assertSame($expected, $conf);
     }
