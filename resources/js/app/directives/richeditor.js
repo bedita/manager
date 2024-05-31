@@ -98,8 +98,6 @@ export default {
                     toolbar_mode: 'wrap',
                     block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3',
                     entity_encoding: 'raw',
-                    style_formats: BEDITA?.richeditorConfig?.styleFormats || [],
-                    style_formats_merge: true,
                     plugins: [
                         'paste',
                         'autoresize',
@@ -119,6 +117,7 @@ export default {
                     paste_block_drop: true,
                     add_unload_trigger: false, // fix populating textarea elements with garbage when the user initiates a navigation with unsaved changes, but cancels it when the alert is shown
                     readonly: element.getAttribute('readonly') === 'readonly' ? 1 : 0,
+                    ... BEDITA?.richeditorConfig,
                 });
 
                 element.editor = editor;
