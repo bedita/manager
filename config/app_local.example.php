@@ -578,7 +578,7 @@ return [
      * Richeditor configuration.
      */
     // 'Richeditor' => [
-    //     'styleFormats' => [
+    //     'style_formats' => [
     //         [
     //             'title' => 'Custom Blocks',
     //             'items' => [
@@ -586,5 +586,7 @@ return [
     //             ],
     //         ],
     //     ],
+    //     'style_formats_merge' => true,
+    //     'content_style' => '.be-highlight { background-color: #F6F6F6; }',
     // ],
 ];
