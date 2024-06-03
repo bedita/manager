@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use App\Form\Form;
+use App\Utility\DateRangesTools;
 use Authentication\Identity;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
@@ -284,27 +285,7 @@ class AppController extends Controller
      */
     protected function prepareDateRanges(array &$data): void
     {
-        if (empty($data['date_ranges'])) {
-            return;
-        }
-        $data['date_ranges'] = array_filter(
-            (array)$data['date_ranges'],
-            function ($item) {
-                return !empty($item['start_date']) || !empty($item['end_date']);
-            }
-        );
-        $data['date_ranges'] = array_map(
-            function ($item) {
-                if (empty($item['end_date'])) {
-                    return $item;
-                }
-                $item['end_date'] = str_replace(':59:00.000', ':59:59.000', $item['end_date']);
-
-                return $item;
-            },
-            $data['date_ranges']
-        );
-        $data['date_ranges'] = array_values($data['date_ranges']);
+        $data['date_ranges'] = DateRangesTools::prepare(Hash::get($data, 'date_ranges'));
     }
 
     /**
