@@ -56,7 +56,7 @@ class DateRangesTools
             if (empty(Hash::get($item, 'params'))) {
                 continue;
             }
-            $item['params'] = self::parseParams(Hash::get($item, 'params'), self::isOneDayRange($item));
+            $item['params'] = self::parseParams((array)Hash::get($item, 'params'), self::isOneDayRange($item));
         }
         $dateRanges = array_values($dateRanges);
 
@@ -80,16 +80,12 @@ class DateRangesTools
     /**
      * Parse params.
      *
-     * @param array|null $params Params to parse.
+     * @param array $params Params to parse.
      * @param bool $oneDayRange Is one day range.
      * @return array|null
      */
-    public static function parseParams(?array $params, bool $oneDayRange): ?array
+    public static function parseParams(array $params, bool $oneDayRange): ?array
     {
-        // empty params
-        if (empty($params)) {
-            return $params;
-        }
         // remove all_day and every_day if not needed
         $params = self::filterNotOn($params, 'all_day');
         $params = self::filterNotOn($params, 'every_day');
