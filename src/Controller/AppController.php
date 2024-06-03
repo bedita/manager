@@ -285,6 +285,9 @@ class AppController extends Controller
      */
     protected function prepareDateRanges(array &$data): void
     {
+        if (empty($data['date_ranges'])) {
+            return;
+        }
         $data['date_ranges'] = DateRangesTools::prepare(Hash::get($data, 'date_ranges'));
     }
 
