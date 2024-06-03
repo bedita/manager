@@ -170,7 +170,7 @@ class TreeControllerTest extends BaseControllerTest
         $parent = $this->createTestFolder();
         $response = $this->client->save('folders', [
             'title' => 'controller test folder child',
-            'parent_id' => (string)Hash::get($parent, 'id'),
+            'parent_id' => (int)Hash::get($parent, 'id'),
         ]);
         $child = $response['data'];
         $id = (string)Hash::get($child, 'id');
