@@ -60,6 +60,12 @@ class DateRangesTools
         return $dateRanges;
     }
 
+    /**
+     * Check if date range is one day only.
+     *
+     * @param array $dateRange Date range.
+     * @return bool
+     */
     public static function isOneDayRange(array $dateRange): bool
     {
         $sd = (string)Hash::get($dateRange, 'start_date');
