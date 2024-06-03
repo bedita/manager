@@ -56,7 +56,7 @@ class DateRangesTools
             if (empty(Hash::get($item, 'params'))) {
                 continue;
             }
-            $item['params'] = self::parseParams((array)Hash::get($item, 'params'), self::isOneDayRange($item));
+            $item['params'] = self::parseParams((array)Hash::get($item, 'params'), self::isOneDayRange((array)$item));
         }
         $dateRanges = array_values($dateRanges);
 
