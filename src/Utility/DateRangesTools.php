@@ -56,7 +56,9 @@ class DateRangesTools
             if (empty(Hash::get($item, 'params'))) {
                 continue;
             }
-            $item['params'] = self::parseParams((array)Hash::get($item, 'params'), self::isOneDayRange((array)$item));
+            $params = Hash::get($item, 'params');
+            $params = is_string($params) ? json_decode($params, true) : (array)$params;
+            $item['params'] = self::parseParams($params, self::isOneDayRange((array)$item));
         }
         $dateRanges = array_values($dateRanges);
 
@@ -96,7 +98,10 @@ class DateRangesTools
         }
         // multi days range
         $everyDayOn = Hash::get($params, 'every_day') === 'on';
-        $weekdays = (array)Hash::get($params, 'weekdays');
+        $weekdays = self::weekdays((array)Hash::get($params, 'weekdays'));
+        if (!empty($weekdays)) {
+            $params['weekdays'] = $weekdays;
+        }
         if ($everyDayOn || count($weekdays) === 7) {
             $params['every_day'] = 'on';
             $params = array_filter(
@@ -127,5 +132,23 @@ class DateRangesTools
             },
             ARRAY_FILTER_USE_KEY
         );
+    }
+
+    /**
+     * Get days from form input.
+     *
+     * @param array $input Input.
+     * @return array
+     */
+    public static function weekdays(array $input): array
+    {
+        $days = [];
+        foreach ($input as $key => $value) {
+            if ($value === true) {
+                $days[] = $key;
+            }
+        }
+
+        return $days;
     }
 }
