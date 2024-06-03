@@ -153,7 +153,7 @@ class DateRangesToolsTest extends TestCase
                     ],
                 ],
             ],
-            'multi days + params every_day off and all_day on (ignore all day, as multi days)' => [
+            'multi days + params every_day off and all_day on' => [
                 [
                     [
                         'start_date' => '2021-01-01 00:00:00',
@@ -165,7 +165,7 @@ class DateRangesToolsTest extends TestCase
                     [
                         'start_date' => '2021-01-01 00:00:00',
                         'end_date' => '2021-01-02 00:00:00',
-                        'params' => ['weekdays' => ['monday']],
+                        'params' => ['all_day' => 'on', 'weekdays' => ['monday']],
                     ],
                 ],
             ],
@@ -197,7 +197,7 @@ class DateRangesToolsTest extends TestCase
                     [
                         'start_date' => '2021-01-01 00:00:00',
                         'end_date' => '2021-01-02 00:00:00',
-                        'params' => null,
+                        'params' => ['every_day' => 'on', 'all_day' => 'on'],
                     ],
                 ],
             ],

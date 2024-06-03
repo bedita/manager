@@ -94,14 +94,6 @@ class DateRangesTools
         if ($oneDayRange) {
             return $allDayOn ? ['all_day' => 'on', 'every_day' => 'on'] : null;
         }
-        // if multi day, all_day has no sense: remove it
-        $params = array_filter(
-            $params,
-            function ($key) {
-                return $key !== 'all_day';
-            },
-            ARRAY_FILTER_USE_KEY
-        );
         // multi days range
         $everyDayOn = Hash::get($params, 'every_day') === 'on';
         $weekdays = (array)Hash::get($params, 'weekdays');
