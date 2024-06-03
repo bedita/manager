@@ -25,14 +25,11 @@ class DateRangesTools
     /**
      * Prepare date ranges.
      *
-     * @param array|null $inputDateRanges Date ranges to format.
-     * @return array|null
+     * @param array $inputDateRanges Date ranges to format.
+     * @return array
      */
-    public static function prepare(?array $inputDateRanges): ?array
+    public static function prepare(array $inputDateRanges): array
     {
-        if (empty($inputDateRanges)) {
-            return $inputDateRanges;
-        }
         $dateRanges = $inputDateRanges;
         $dateRanges = array_filter(
             (array)$dateRanges,
@@ -56,29 +53,82 @@ class DateRangesTools
             $dateRanges
         );
         foreach ($dateRanges as &$item) {
-            $params = (string)Hash::get($item, 'params');
-            if (empty($params)) {
-                continue;
-            }
-            $params = json_decode($params, true);
-            $sd = (string)Hash::get($item, 'start_date');
-            $ed = (string)Hash::get($item, 'end_date');
-            $allDay = Hash::get($params, 'all_day');
-            if (!empty($sd) && empty($ed)) {
-                if (!array_key_exists('all_day', $params) || $allDay === false) {
-                    $item['params'] = null;
-
-                    continue;
-                }
-                // all_day is true, no need for weekdays, and every_day MUST be true
-                $item['params'] = json_encode([
-                    'all_day' => true,
-                    'every_day' => true,
-                ]);
-            }
+            $item['params'] = self::parseParams(Hash::get($item, 'params'), self::isOneDayRange($item));
         }
         $dateRanges = array_values($dateRanges);
 
         return $dateRanges;
+    }
+
+    public static function isOneDayRange(array $dateRange): bool
+    {
+        $sd = (string)Hash::get($dateRange, 'start_date');
+        $ed = (string)Hash::get($dateRange, 'end_date');
+
+        return empty($ed) || (substr($sd, 0, 10) === substr($ed, 0, 10));
+    }
+
+    /**
+     * Parse params.
+     *
+     * @param array|null $params Params to parse.
+     * @param bool $oneDayRange Is one day range.
+     * @return array|null
+     */
+    public static function parseParams(?array $params, bool $oneDayRange): ?array
+    {
+        // empty params
+        if (empty($params)) {
+            return $params;
+        }
+        // remove all_day and every_day if not needed
+        $params = self::filterNotOn($params, 'all_day');
+        $params = self::filterNotOn($params, 'every_day');
+        // one day range
+        $allDayOn = Hash::get($params, 'all_day') === 'on';
+        if ($oneDayRange) {
+            return $allDayOn ? ['all_day' => 'on', 'every_day' => 'on'] : null;
+        }
+        // if multi day, all_day has no sense: remove it
+        $params = array_filter(
+            $params,
+            function ($key) {
+                return $key !== 'all_day';
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+        // multi days range
+        $everyDayOn = Hash::get($params, 'every_day') === 'on';
+        $weekdays = Hash::get($params, 'weekdays');
+        if ($everyDayOn || count($weekdays) === 7) {
+            $params['every_day'] = 'on';
+            $params = array_filter(
+                $params,
+                function ($key) {
+                    return $key !== 'weekdays';
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+        }
+
+        return $params === ['every_day' => 'on'] ? null : $params;
+    }
+
+    /**
+     * Filter params removing key if value is 'on'.
+     *
+     * @param array $params Params to filter.
+     * @param string $key Key to filter.
+     * @return array
+     */
+    public static function filterNotOn(array $params, string $key): array
+    {
+        return Hash::get($params, $key) === 'on' ? $params : array_filter(
+            $params,
+            function ($k) use ($key) {
+                return $k !== $key;
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 }
