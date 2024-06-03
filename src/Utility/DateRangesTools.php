@@ -67,13 +67,14 @@ class DateRangesTools
             if (!empty($sd) && empty($ed)) {
                 if (!array_key_exists('all_day', $params) || $allDay === false) {
                     $item['params'] = null;
-                } else { // all_day is true
-                    $newParams = [
-                        'all_day' => true,
-                        'every_day' => true,
-                    ];
-                    $item['params'] = json_encode($newParams);
+
+                    continue;
                 }
+                // all_day is true, no need for weekdays
+                $item['params'] = json_encode([
+                    'all_day' => true,
+                    'every_day' => true,
+                ]);
             }
         }
         $dateRanges = array_values($dateRanges);
