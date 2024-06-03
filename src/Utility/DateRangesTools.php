@@ -70,7 +70,7 @@ class DateRangesTools
 
                     continue;
                 }
-                // all_day is true, no need for weekdays
+                // all_day is true, no need for weekdays, and every_day MUST be true
                 $item['params'] = json_encode([
                     'all_day' => true,
                     'every_day' => true,

@@ -29,7 +29,7 @@ class DateRangesToolsTest extends TestCase
                 [],
                 [],
             ],
-            'start date, params null' => [
+            'start date, end_date null, params null' => [
                 [
                     [
                         'start_date' => '2021-01-01 00:00:00',
@@ -61,7 +61,7 @@ class DateRangesToolsTest extends TestCase
                     ],
                 ],
             ],
-            'end date :59:00.000' => [
+            'start date, end date :59:00.000, params null' => [
                 [
                     [
                         'start_date' => '2021-01-01 00:00:00',
@@ -77,7 +77,7 @@ class DateRangesToolsTest extends TestCase
                     ],
                 ],
             ],
-            'start date only, every day false' => [
+            'start date, end date null, params every_day false' => [
                 [
                     [
                         'start_date' => '2021-01-01 00:00:00',
@@ -93,7 +93,7 @@ class DateRangesToolsTest extends TestCase
                     ],
                 ],
             ],
-            'start date only, every day false and all day false' => [
+            'start date, end date null, params every_day false and all_day false' => [
                 [
                     [
                         'start_date' => '2021-01-01 00:00:00',
@@ -109,7 +109,7 @@ class DateRangesToolsTest extends TestCase
                     ],
                 ],
             ],
-            'start date only, every day false and all day true' => [
+            'start date, end date null, params every_day false and all_day true' => [
                 [
                     [
                         'start_date' => '2021-01-01 00:00:00',
@@ -122,6 +122,22 @@ class DateRangesToolsTest extends TestCase
                         'start_date' => '2021-01-01 00:00:00',
                         'end_date' => null,
                         'params' => json_encode(['all_day' => true, 'every_day' => true]),
+                    ],
+                ],
+            ],
+            'start date, end date null, params every_day true and all_day false' => [
+                [
+                    [
+                        'start_date' => '2021-01-01 00:00:00',
+                        'end_date' => null,
+                        'params' => json_encode(['every_day' => true, 'all_day' => false, 'weekdays' => ['monday']]),
+                    ],
+                ],
+                [
+                    [
+                        'start_date' => '2021-01-01 00:00:00',
+                        'end_date' => null,
+                        'params' => null,
                     ],
                 ],
             ],
