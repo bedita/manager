@@ -104,7 +104,7 @@ class DateRangesTools
         );
         // multi days range
         $everyDayOn = Hash::get($params, 'every_day') === 'on';
-        $weekdays = Hash::get($params, 'weekdays');
+        $weekdays = (array)Hash::get($params, 'weekdays');
         if ($everyDayOn || count($weekdays) === 7) {
             $params['every_day'] = 'on';
             $params = array_filter(
