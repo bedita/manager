@@ -73,30 +73,59 @@
                 <div class="m-0 nowrap has-text-size-smaller weekdays"
                      v-if="dateRange.params.every_day === false"
                 >
-                    <label><input type="checkbox"
-                                  v-model="dateRange.params.weekdays.sunday"
-                    >{{ msgSunday }}</label>
-                    <label><input type="checkbox"
-                                  v-model="dateRange.params.weekdays.monday"
-                    >{{ msgMonday }}</label>
-                    <label><input type="checkbox"
-                                  v-model="dateRange.params.weekdays.tuesday"
-                    >{{ msgTuesday }}</label>
-                    <label><input type="checkbox"
-                                  v-model="dateRange.params.weekdays.wednesday"
-                    >{{ msgWednesday }}</label>
-                    <label><input type="checkbox"
-                                  v-model="dateRange.params.weekdays.thursday"
-                    >{{ msgThursday }}</label>
-                    <label><input type="checkbox"
-                                  v-model="dateRange.params.weekdays.friday"
-                    >{{ msgFriday }}</label>
-                    <label><input type="checkbox"
-                                  v-model="dateRange.params.weekdays.saturday"
-                    >{{ msgSaturday }}</label>
-                    <input type="hidden"
-                           :name="getName(index, 'params')"
-                           :value="JSON.stringify(dateRange.params)"
+                    <label>
+                        <input
+                            type="checkbox"
+                            :name="getNameWeekday(index, 'sunday')"
+                            v-model="dateRange.params.weekdays.sunday"
+                        >{{ msgSunday }}
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            :name="getNameWeekday(index, 'monday')"
+                            v-model="dateRange.params.weekdays.monday"
+                        >{{ msgMonday }}
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            :name="getNameWeekday(index, 'tuesday')"
+                            v-model="dateRange.params.weekdays.tuesday"
+                        >{{ msgTuesday }}
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            :name="getNameWeekday(index, 'wednesday')"
+                            v-model="dateRange.params.weekdays.wednesday"
+                        >{{ msgWednesday }}
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            :name="getNameWeekday(index, 'thursday')"
+                            v-model="dateRange.params.weekdays.thursday"
+                        >{{ msgThursday }}
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            :name="getNameWeekday(index, 'friday')"
+                            v-model="dateRange.params.weekdays.friday"
+                        >{{ msgFriday }}
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            :name="getNameWeekday(index, 'saturday')"
+                            v-model="dateRange.params.weekdays.saturday"
+                        >{{ msgSaturday }}
+                    </label>
+                    <input
+                        type="hidden"
+                        :name="getName(index, 'params')"
+                        :value="jsonParams(index)"
                     >
                 </div>
                 <div class="icon-error"
@@ -152,12 +181,6 @@ export default {
         }
     },
 
-    computed: {
-        emptyStartDate() {
-            return this.dateRanges.length === 1 && !this.dateRanges[0].start_date;
-        },
-    },
-
     created() {
         const ranges = JSON.parse(this.ranges);
         const defaultOptions = {
@@ -174,6 +197,7 @@ export default {
                 range.params = range.params || defaultOptions;
                 if (!this.optionIsSet('every_day')) {
                     range.params.every_day = !range.params?.weekdays || Object.keys(range.params?.weekdays).length === 0;
+                    range.params.weekdays = range?.params?.weekdays ? this.normalizeWeekdays(range?.params?.weekdays) : {};
                 }
                 if (!range.start_date) {
                     range.end_date = '';
@@ -195,6 +219,12 @@ export default {
         getNameEveryDay(index) {
             return `date_ranges[${index}][params][every_day]`;
         },
+        getNameWeekday(index, weekday) {
+            return `date_ranges[${index}][params][weekdays][${weekday}]`;
+        },
+        jsonParams(index) {
+            return JSON.stringify(this.dateRanges[index]?.params);
+        },
         isDaysInterval(range) {
             if (!range.start_date) {
                 return false;
@@ -207,6 +237,28 @@ export default {
             const diff = moment.duration(ed.diff(sd)).asDays();
 
             return diff >= 1;
+        },
+        normalizeWeekdays(wdays) {
+            if (wdays.constructor !== Array) {
+                return {
+                    sunday: false,
+                    monday: false,
+                    tuesday: false,
+                    wednesday: false,
+                    thursday: false,
+                    friday: false,
+                    saturday: false
+                };
+            }
+            return {
+                sunday: wdays.includes('sunday'),
+                monday: wdays.includes('monday'),
+                tuesday: wdays.includes('tuesday'),
+                wednesday: wdays.includes('wednesday'),
+                thursday: wdays.includes('thursday'),
+                friday: wdays.includes('friday'),
+                saturday: wdays.includes('saturday'),
+            };
         },
         /**
          * Add an empty date range to list.
@@ -258,6 +310,8 @@ export default {
         onEveryDayChanged(dateRange, { target: { checked } }) {
             if (!checked) {
                 this.resetWeekdays(dateRange);
+            } else {
+                this.setAllWeekdays(dateRange);
             }
         },
         resetWeekdays(dateRange) {
@@ -270,6 +324,19 @@ export default {
                 friday: false,
                 saturday: false
             };
+            this.$forceUpdate();
+        },
+        setAllWeekdays(dateRange) {
+            dateRange.params.weekdays = {
+                sunday: true,
+                monday: true,
+                tuesday: true,
+                wednesday: true,
+                thursday: true,
+                friday: true,
+                saturday: true
+            };
+            this.$forceUpdate();
         },
         setAllDayRange(dateRange) {
             if (!dateRange.start_date) {

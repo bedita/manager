@@ -112,6 +112,16 @@ class DateRangesTools
                 ARRAY_FILTER_USE_KEY
             );
         }
+        if (!$everyDayOn && count($weekdays) === 0) {
+            $params['every_day'] = 'on';
+            $params = array_filter(
+                $params,
+                function ($key) {
+                    return $key !== 'weekdays';
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+        }
 
         return $params === ['every_day' => 'on'] ? null : $params;
     }

@@ -217,6 +217,22 @@ class DateRangesToolsTest extends TestCase
                     ],
                 ],
             ],
+            'range with no weekdays and every_day off' => [
+                [
+                    [
+                        'start_date' => '2021-01-01 00:00:00',
+                        'end_date' => '2021-01-02 00:00:00',
+                        'params' => ['every_day' => 'off', 'all_day' => 'off', 'weekdays' => []],
+                    ],
+                ],
+                [
+                    [
+                        'start_date' => '2021-01-01 00:00:00',
+                        'end_date' => '2021-01-02 00:00:00',
+                        'params' => null,
+                    ],
+                ],
+            ],
         ];
     }
 
