@@ -110,7 +110,7 @@ class DateRangesToolsTest extends TestCase
                     [
                         'start_date' => '2021-01-01 00:00:00',
                         'end_date' => null,
-                        'params' => ['every_day' => 'on', 'all_day' => 'on', 'weekdays' => ['monday']],
+                        'params' => ['every_day' => 'on', 'all_day' => 'on', 'weekdays' => ['monday' => true]],
                     ],
                 ],
                 [
@@ -126,7 +126,7 @@ class DateRangesToolsTest extends TestCase
                     [
                         'start_date' => '2021-01-01 00:00:00',
                         'end_date' => null,
-                        'params' => ['every_day' => 'on', 'all_day' => 'off', 'weekdays' => ['monday']],
+                        'params' => ['every_day' => 'on', 'all_day' => 'off', 'weekdays' => ['monday' => true]],
                     ],
                 ],
                 [
@@ -142,7 +142,7 @@ class DateRangesToolsTest extends TestCase
                     [
                         'start_date' => '2021-01-01 00:00:00',
                         'end_date' => '2021-01-02 00:00:00',
-                        'params' => ['every_day' => 'on', 'all_day' => 'off', 'weekdays' => ['monday']],
+                        'params' => ['every_day' => 'on', 'all_day' => 'off', 'weekdays' => ['monday' => true]],
                     ],
                 ],
                 [
@@ -158,7 +158,7 @@ class DateRangesToolsTest extends TestCase
                     [
                         'start_date' => '2021-01-01 00:00:00',
                         'end_date' => '2021-01-02 00:00:00',
-                        'params' => ['every_day' => 'off', 'all_day' => 'on', 'weekdays' => ['monday']],
+                        'params' => ['every_day' => 'off', 'all_day' => 'on', 'weekdays' => ['monday' => true]],
                     ],
                 ],
                 [
@@ -174,7 +174,7 @@ class DateRangesToolsTest extends TestCase
                     [
                         'start_date' => '2021-01-01 00:00:00',
                         'end_date' => '2021-01-02 00:00:00',
-                        'params' => ['every_day' => 'off', 'all_day' => 'off', 'weekdays' => ['monday']],
+                        'params' => ['every_day' => 'off', 'all_day' => 'off', 'weekdays' => ['monday' => true]],
                     ],
                 ],
                 [
@@ -190,7 +190,7 @@ class DateRangesToolsTest extends TestCase
                     [
                         'start_date' => '2021-01-01 00:00:00',
                         'end_date' => '2021-01-02 00:00:00',
-                        'params' => ['every_day' => 'on', 'all_day' => 'on', 'weekdays' => ['monday']],
+                        'params' => ['every_day' => 'on', 'all_day' => 'on', 'weekdays' => ['monday' => true]],
                     ],
                 ],
                 [
@@ -206,7 +206,7 @@ class DateRangesToolsTest extends TestCase
                     [
                         'start_date' => '2021-01-01 00:00:00',
                         'end_date' => '2021-01-02 00:00:00',
-                        'params' => ['every_day' => 'off', 'all_day' => 'off', 'weekdays' => ['monday', 'tuesday']],
+                        'params' => ['every_day' => 'off', 'all_day' => 'off', 'weekdays' => ['monday' => true, 'tuesday' => true]],
                     ],
                 ],
                 [
