@@ -88,38 +88,59 @@ class DateRangesTools
      */
     public static function parseParams(array $params, bool $oneDayRange): ?array
     {
-        // remove all_day false, every_day false, weekdays empty
-        foreach (['all_day', 'every_day', 'weekdays'] as $key) {
-            if (isset($params[$key]) && empty($params[$key])) {
-                unset($params[$key]);
-            }
+        $params = self::cleanParams($params);
+        if (empty($params)) {
+            return null;
         }
         // one day range
-        $allDay = Hash::get($params, 'all_day') === true;
         if ($oneDayRange) {
+            $allDay = Hash::get($params, 'all_day') === 'on';
+
             return $allDay ? ['all_day' => 'on', 'every_day' => 'on'] : null;
         }
         // multi days range
-        $everyDay = Hash::get($params, 'every_day') === true;
-        $weekdays = self::weekdays((array)Hash::get($params, 'weekdays'));
-        if (!empty($weekdays)) {
-            $params['weekdays'] = $weekdays;
-        }
-        if (($everyDay && count($weekdays) === 7) || (!$everyDay && count($weekdays) === 0)) {
-            $params['every_day'] = 'on';
-            $params = array_filter(
-                $params,
-                function ($key) {
-                    return $key !== 'weekdays';
-                },
-                ARRAY_FILTER_USE_KEY
-            );
-        }
-        if ($allDay) {
-            $params['all_day'] = 'on';
-        }
 
         return $params === ['every_day' => 'on'] ? null : $params;
+    }
+
+    /**
+     * Clean params, remove all_day false, every_day false, weekdays empty.
+     *
+     * @param array $params Params to clean.
+     * @return array|null
+     */
+    public static function cleanParams(array $params): ?array
+    {
+        $data = [];
+        foreach ($params as $key => $value) {
+            if ($key === 'all_day' && $value === true) {
+                $data[$key] = 'on';
+
+                continue;
+            }
+            if ($key === 'every_day' && $value === true) {
+                $data[$key] = 'on';
+
+                continue;
+            }
+            if ($key === 'weekdays' && !empty($value)) {
+                $count = 0;
+                foreach ($value as $kk => $vv) {
+                    if ($vv === true) {
+                        $data[$key][] = $kk;
+                        $count++;
+                    }
+                }
+                if ($count === 7 || $count === 0) {
+                    $data['every_day'] = 'on';
+                    unset($data[$key]);
+                } elseif ($params['every_day'] === true) {
+                    unset($data[$key]);
+                }
+            }
+        }
+
+        return empty($data) ? null : $data;
     }
 
     /**
