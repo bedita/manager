@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-06-05 07:26:21 \n"
+"POT-Creation-Date: 2024-06-05 10:20:33 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1507,6 +1507,9 @@ msgstr "data"
 
 msgid "Trashed"
 msgstr "Rimosso"
+
+msgid "Insert date(s)"
+msgstr "Inserire data(e)"
 
 msgid "Every day"
 msgstr "Tutti i giorni"
