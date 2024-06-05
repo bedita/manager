@@ -202,7 +202,11 @@ export default {
         dateRangeClass() {
             return this.msdiff() < 0 ? 'invalid' : '';
         },
-        hasChanged() {
+        hasChanged(skip) {
+            if (skip) {
+                return true;
+            }
+
             return this.start_date !== this.range.start_date
                 || this.end_date !== this.range.end_date
                 || this.all_day !== this.range.params.all_day
@@ -329,8 +333,8 @@ export default {
             this.range.removed = false;
             this.$emit('undoRemove', this.range);
         },
-        update() {
-            if (this.hasChanged() === false) {
+        update(skip) {
+            if (this.hasChanged(skip) === false) {
                 return;
             }
             this.range.start_date = this.start_date;
@@ -338,19 +342,19 @@ export default {
             this.range.params.all_day = this.all_day;
             this.range.params.every_day = this.every_day;
             this.range.params.weekdays = this.weekdays;
-            if (!this.validate()) {
+            if (!this.validate(this.range, skip)) {
                 return;
             }
             this.$emit('update', this.range);
         },
         updateWeekDays(day, { target: { checked } }) {
             this.range.params.weekdays[day] = checked;
-            this.update();
+            this.update(true);
         },
-        validate(dateRange) {
+        validate(dateRange, skip) {
             const input = dateRange || this.range;
             const button = document.querySelector('button[form=form-main]');
-            const valid = input?.start_date ? true : this.msdiff(input) > 0;
+            const valid = skip || input?.start_date ? true : this.msdiff(input) > 0;
             if (input?.start_date && !valid) {
                 button.disabled = 'disabled';
             } else {
