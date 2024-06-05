@@ -92,7 +92,43 @@
                 <div>
                     {{ element('Form/bulk_export') }}
                 </div>
+
+                <div class="bulk-header">{{ __('Actions on selected items') }}</div>
+
+                <div :class="[!selectedRows.length ? 'disabled' : '', 'is-flex', 'is-flex-column']">
+                    {{ element('Form/bulk_properties', {
+                        'schema': {
+                            'properties': {
+                                'status': {
+                                    'type': 'string',
+                                    'enum': [
+                                        'on',
+                                        'off',
+                                        'draft',
+                                    ],
+                                    '$id': '/properties/status',
+                                    'title': 'Status',
+                                    'description': 'object status: on, draft, off',
+                                    'default': 'draft',
+                                },
+                            },
+                        }
+                    }) }}
+                </div>
             </div>
+
+            <filter-box-view
+                inline-template
+                :pagination="{{ meta.pagination|json_encode|escape('html_attr') }}"
+                config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
+                page-size="{{ meta.pagination.page_size }}"
+                @filter-update-page-size="onUpdatePageSize"
+                @filter-update-current-page="onUpdateCurrentPage"
+            >
+                <template v-if="pagination.count">
+                    {{ element('FilterBox/filter_box_page_toolbar') }}
+                </template>
+            </filter-box-view>
             {% endif %}
         </div>
 
