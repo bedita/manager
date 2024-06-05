@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-05-28 09:39:32 \n"
+"POT-Creation-Date: 2024-06-05 07:26:21 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1056,6 +1056,9 @@ msgstr "annulla"
 msgid "undo remove"
 msgstr "annulla rimozione"
 
+msgid "untitled"
+msgstr "senza titolo"
+
 msgid "username"
 msgstr "nome utente"
 
@@ -1505,9 +1508,6 @@ msgstr "data"
 msgid "Trashed"
 msgstr "Rimosso"
 
-msgid "untitled"
-msgstr "senza titolo"
-
 msgid "Every day"
 msgstr "Tutti i giorni"
 
@@ -1531,6 +1531,9 @@ msgstr "Giovedì"
 
 msgid "Tuesday"
 msgstr "Martedì"
+
+msgid "Undo"
+msgstr "Annulla"
 
 msgid "Wednesday"
 msgstr "Mercoledì"
