@@ -504,12 +504,11 @@ const _vueInstance = new Vue({
                 if (!form) {
                     return;
                 }
-
                 const trashActions = [
                     '/trash/delete',
                     '/trash/empty',
+                    '/translation/delete',
                 ];
-
                 let msg = '';
                 let done = false;
                 for (const action of trashActions) {
