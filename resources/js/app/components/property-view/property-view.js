@@ -29,6 +29,7 @@ export default {
         RelationView: () => import(/* webpackChunkName: "relation-view" */'app/components/relation-view/relation-view'),
         ResourceRelationView: () => import(/* webpackChunkName: "resource-relation-view" */'app/components/relation-view/resource-relation-view'),
         MapView: () => import(/* webpackChunkName: "map-view" */'app/components/map-view'),
+        DateRange: () => import(/* webpackChunkName: "date-range" */'app/components/date-range/date-range'),
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         HistoryChanges: () => import(/* webpackChunkName: "history-changes" */'app/components/history/history-changes'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
