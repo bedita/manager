@@ -105,7 +105,7 @@ class DateRangesTools
         if (!empty($weekdays)) {
             $params['weekdays'] = $weekdays;
         }
-        if (($everyDay || count($weekdays) === 7) || (!$everyDay && count($weekdays) === 0)) {
+        if (($everyDay && count($weekdays) === 7) || (!$everyDay && count($weekdays) === 0)) {
             $params['every_day'] = 'on';
             $params = array_filter(
                 $params,
