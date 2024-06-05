@@ -70,6 +70,7 @@ bundle-report.*.html
 /webroot/css/admin-index*
 /webroot/css/app*
 /webroot/css/category*
+/webroot/css/date-ranges*
 /webroot/css/date-input*
 /webroot/css/email-input*
 /webroot/css/flash-message*
