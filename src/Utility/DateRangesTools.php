@@ -94,13 +94,13 @@ class DateRangesTools
         }
         // one day range
         if ($oneDayRange) {
-            $allDay = Hash::get($params, 'all_day') === 'on';
+            $allDay = Hash::get($params, 'all_day') === true;
 
-            return $allDay ? ['all_day' => 'on', 'every_day' => 'on'] : null;
+            return $allDay ? ['all_day' => true, 'every_day' => true] : null;
         }
         // multi days range
 
-        return $params === ['every_day' => 'on'] ? null : $params;
+        return $params === ['every_day' => true] ? null : $params;
     }
 
     /**
@@ -114,12 +114,12 @@ class DateRangesTools
         $data = [];
         foreach ($params as $key => $value) {
             if ($key === 'all_day' && $value === true) {
-                $data[$key] = 'on';
+                $data[$key] = true;
 
                 continue;
             }
             if ($key === 'every_day' && $value === true) {
-                $data[$key] = 'on';
+                $data[$key] = true;
 
                 continue;
             }
@@ -132,7 +132,7 @@ class DateRangesTools
                     }
                 }
                 if ($count === 7 || $count === 0) {
-                    $data['every_day'] = 'on';
+                    $data['every_day'] = true;
                     unset($data[$key]);
                 } elseif ($params['every_day'] === true) {
                     unset($data[$key]);
