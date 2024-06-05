@@ -133,7 +133,13 @@
         </div>
         <div
             class="icon-error"
-            v-show="msdiff() < 0"
+            v-show="!start_date"
+        >
+            {{ msgEmptyDateRange }}
+        </div>
+        <div
+            class="icon-error"
+            v-show="validate() === false"
         >
             {{ msgInvalidDateRange }}
         </div>
@@ -166,6 +172,7 @@ export default {
             range: null,
             removed: false,
             msgAllDay: t`All day`,
+            msgEmptyDateRange: t`Insert date(s)`,
             msgEveryDay: t`Every day`,
             msgFriday: t`Friday`,
             msgFrom: t`From`,
@@ -208,12 +215,13 @@ export default {
 
             return diff >= 1;
         },
-        msdiff() {
-            if (this.start_date === '' || this.end_date === '') {
+        msdiff(dateRange) {
+            const input = dateRange || this.range;
+            if (!input?.start_date || !input?.end_date) {
                 return 0;
             }
-            const sd = moment(this.start_date);
-            const ed = moment(this.end_date);
+            const sd = moment(input?.start_date);
+            const ed = moment(input?.end_date);
 
             return moment.duration(ed.diff(sd)).asMilliseconds();
         },
@@ -239,7 +247,9 @@ export default {
                 dr.start_date = this.start_date;
                 dr.end_date = value;
             }
-            this.validate(dr);
+            if (!this.validate(dr)) {
+                return;
+            }
             if (isStartDate) {
                 this.start_date = value;
             } else {
@@ -320,19 +330,26 @@ export default {
                 every_day: this.every_day,
                 weekdays: this.weekdays,
             };
+            if (!this.validate()) {
+                return;
+            }
             this.$emit('update', this.range);
         },
         updateWeekDays(day, { target: { checked } }) {
             this.range.params.weekdays[day] = checked;
             this.update();
         },
-        valid() {
-            return (this.start_date === '' || this.end_date === '') ? true : this.msdiff() > 0;
-        },
-        validate() {
+        validate(dateRange) {
+            const input = dateRange || this.range;
             const button = document.querySelector('button[form=form-main]');
-            const valid = this.valid(this.range);
-            button.disabled = valid ? false : 'disabled';
+            const valid = input?.start_date ? true : this.msdiff(input) > 0;
+            if (input?.start_date && !valid) {
+                button.disabled = 'disabled';
+            } else {
+                button.disabled = false;
+            }
+
+            return valid;
         },
     },
 }
