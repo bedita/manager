@@ -88,21 +88,24 @@ class DateRangesTools
      */
     public static function parseParams(array $params, bool $oneDayRange): ?array
     {
-        // remove all_day and every_day if not needed
-        $params = self::filterNotOn($params, 'all_day');
-        $params = self::filterNotOn($params, 'every_day');
+        // remove all_day false, every_day false, weekdays empty
+        foreach (['all_day', 'every_day', 'weekdays'] as $key) {
+            if (isset($params[$key]) && empty($params[$key])) {
+                unset($params[$key]);
+            }
+        }
         // one day range
-        $allDayOn = Hash::get($params, 'all_day') === 'on';
+        $allDay = Hash::get($params, 'all_day') === true;
         if ($oneDayRange) {
-            return $allDayOn ? ['all_day' => 'on', 'every_day' => 'on'] : null;
+            return $allDay ? ['all_day' => 'on', 'every_day' => 'on'] : null;
         }
         // multi days range
-        $everyDayOn = Hash::get($params, 'every_day') === 'on';
+        $everyDay = Hash::get($params, 'every_day') === true;
         $weekdays = self::weekdays((array)Hash::get($params, 'weekdays'));
         if (!empty($weekdays)) {
             $params['weekdays'] = $weekdays;
         }
-        if ($everyDayOn || count($weekdays) === 7) {
+        if (($everyDay || count($weekdays) === 7) || (!$everyDay && count($weekdays) === 0)) {
             $params['every_day'] = 'on';
             $params = array_filter(
                 $params,
@@ -112,36 +115,11 @@ class DateRangesTools
                 ARRAY_FILTER_USE_KEY
             );
         }
-        if (!$everyDayOn && count($weekdays) === 0) {
-            $params['every_day'] = 'on';
-            $params = array_filter(
-                $params,
-                function ($key) {
-                    return $key !== 'weekdays';
-                },
-                ARRAY_FILTER_USE_KEY
-            );
+        if ($allDay) {
+            $params['all_day'] = 'on';
         }
 
         return $params === ['every_day' => 'on'] ? null : $params;
-    }
-
-    /**
-     * Filter params removing key if value is 'on'.
-     *
-     * @param array $params Params to filter.
-     * @param string $key Key to filter.
-     * @return array
-     */
-    public static function filterNotOn(array $params, string $key): array
-    {
-        return Hash::get($params, $key) === 'on' ? $params : array_filter(
-            $params,
-            function ($k) use ($key) {
-                return $k !== $key;
-            },
-            ARRAY_FILTER_USE_KEY
-        );
     }
 
     /**

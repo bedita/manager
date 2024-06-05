@@ -288,6 +288,7 @@ class AppController extends Controller
         if (empty($data['date_ranges'])) {
             return;
         }
+        $data['date_ranges'] = json_decode($data['date_ranges'], true);
         $data['date_ranges'] = DateRangesTools::prepare(Hash::get($data, 'date_ranges'));
     }
 
