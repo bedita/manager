@@ -202,6 +202,13 @@ export default {
         dateRangeClass() {
             return this.msdiff() < 0 ? 'invalid' : '';
         },
+        hasChanged() {
+            return this.start_date !== this.range.start_date
+                || this.end_date !== this.range.end_date
+                || this.all_day !== this.range.params.all_day
+                || this.every_day !== this.range.params.every_day
+                || JSON.stringify(this.weekdays) !== JSON.stringify(this.range.params.weekdays);
+        },
         isDaysInterval() {
             if (!this.start_date) {
                 return false;
@@ -323,13 +330,14 @@ export default {
             this.$emit('undoRemove', this.range);
         },
         update() {
+            if (this.hasChanged() === false) {
+                return;
+            }
             this.range.start_date = this.start_date;
             this.range.end_date = this.end_date;
-            this.range.params = {
-                all_day: this.all_day,
-                every_day: this.every_day,
-                weekdays: this.weekdays,
-            };
+            this.range.params.all_day = this.all_day;
+            this.range.params.every_day = this.every_day;
+            this.range.params.weekdays = this.weekdays;
             if (!this.validate()) {
                 return;
             }
