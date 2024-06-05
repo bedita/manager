@@ -142,22 +142,4 @@ class DateRangesTools
 
         return empty($data) ? null : $data;
     }
-
-    /**
-     * Get days from form input.
-     *
-     * @param array $input Input.
-     * @return array
-     */
-    public static function weekdays(array $input): array
-    {
-        $days = [];
-        foreach ($input as $key => $value) {
-            if ($value === true) {
-                $days[] = $key;
-            }
-        }
-
-        return $days;
-    }
 }
