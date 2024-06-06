@@ -234,6 +234,43 @@ class LayoutHelper extends Helper
     }
 
     /**
+     * Return module index default view type
+     *
+     * @return string
+     */
+    public function moduleIndexDefaultViewType(): string
+    {
+        $module = (array)$this->getView()->get('currentModule');
+        $name = (string)Hash::get($module, 'name');
+
+        return $name === 'folders' ? 'tree' : 'list';
+    }
+
+    /**
+     * Return module index view type
+     *
+     * @return string
+     */
+    public function moduleIndexViewType(): string
+    {
+        $query = (array)$this->getView()->getRequest()->getQueryParams();
+
+        return (string)Hash::get($query, 'view_type', $this->moduleIndexDefaultViewType());
+    }
+
+    /**
+     * Return module index view types
+     *
+     * @return array
+     */
+    public function moduleIndexViewTypes(): array
+    {
+        $defaultType = $this->moduleIndexDefaultViewType();
+
+        return $defaultType === 'tree' ? ['tree', 'list'] : ['list'];
+    }
+
+    /**
      * Return style class for command link
      *
      * @return string

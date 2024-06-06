@@ -399,7 +399,8 @@ const _vueInstance = new Vue({
                 page_size: this.pageSize,
                 page: this.page,
                 sort: this.sort,
-                _search: 1
+                _search: 1,
+                view_type: 'list',
             });
             window.location.replace(url);
         },
