@@ -78,6 +78,6 @@ class ConfigController extends AdministrationBaseController
         ksort($data);
         $data = array_flip($data);
 
-        return [0 => __('No application')] + $data;
+        return ['' => __('No application')] + $data;
     }
 }

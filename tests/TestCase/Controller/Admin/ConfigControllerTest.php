@@ -111,6 +111,6 @@ class ConfigControllerTest extends TestCase
         $actual = $this->CfgController->fetchApplications();
         static::assertIsArray($actual);
         static::assertNotEmpty($actual);
-        static::assertEquals($actual[0], __('No application'));
+        static::assertContains(__('No application'), $actual);
     }
 }
