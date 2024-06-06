@@ -1,6 +1,6 @@
 <div class="module-header">
     {% set filterActive = (_view.request.getQuery('filter') or _view.request.getQuery('q')) %}
-    {% set list = Schema.filterList(filter, schema.properties) %}
+    {% set list = Schema.filterList(filter | default([]), schema.properties) %}
     <filter-box-view
         :pagination="{{ meta.pagination|json_encode|escape('html_attr') }}"
         :init-filter="urlFilterQuery"
