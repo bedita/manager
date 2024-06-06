@@ -51,10 +51,33 @@ class ConfigController extends AdministrationBaseController
     public function beforeFilter(EventInterface $event): ?Response
     {
         parent::beforeFilter($event);
-        $response = $this->apiClient->get('/admin/applications', ['filter' => ['enabled' => 1]]);
-        $applications = ['' => __('No application')] + Hash::combine($response['data'], '{n}.id', '{n}.attributes.name');
-        $this->set('applications', $applications);
+        $this->set('applications', $this->fetchApplications());
 
         return null;
+    }
+
+    /**
+     * Fetch applications
+     *
+     * @return array
+     */
+    public function fetchApplications(): array
+    {
+        $data = [];
+        $pageCount = $page = 1;
+        $pageSize = 100;
+        $query = ['filter' => ['enabled' => 1], 'page_size' => $pageSize];
+        while ($page <= $pageCount) {
+            $response = (array)$this->apiClient->get('/admin/applications', $query + compact('page'));
+            $applications = (array)Hash::combine($response['data'], '{n}.id', '{n}.attributes.name');
+            $applications = array_flip($applications);
+            $data = empty($data) ? $applications : array_merge($data, $applications);
+            $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
+            $page++;
+        }
+        ksort($data);
+        $data = array_flip($data);
+
+        return [0 => __('No application')] + $data;
     }
 }
