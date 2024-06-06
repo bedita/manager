@@ -88,16 +88,8 @@
         </header>
 
         <div class="px-1 my-1">
-            {% set list = {} %}
-            {% for type, filters in filtersByType %}
-                {% set options = [] %}
-                {% for f in filters %}
-                    {% set o = Schema.controlOptions(f, null, schemasByType[type].properties[f]) %}
-                    {% set options = options|merge([o|merge({ 'name': f })]) %}
-                {% endfor %}
-                {% set list = list|merge({ (type): options }) %}
-            {% endfor %}
-
+            {% set fbt = filtersByType ? filtersByType : [] %}
+            {% set list = Schema.filterListByType(fbt, schemasByType) %}
             <filter-box-view
                 config-paginate-sizes={{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}
                 :pagination.sync="pagination"

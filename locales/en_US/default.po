@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-05-16 09:46:10 \n"
+"POT-Creation-Date: 2024-06-05 10:20:33 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1051,6 +1051,9 @@ msgstr ""
 msgid "undo remove"
 msgstr ""
 
+msgid "untitled"
+msgstr ""
+
 msgid "username"
 msgstr ""
 
@@ -1460,19 +1463,13 @@ msgstr ""
 msgid "Result"
 msgstr ""
 
-msgid "version by"
+msgid "clone"
 msgstr ""
 
-msgid "date"
+msgid "No history data found"
 msgstr ""
 
-msgid "Trashed"
-msgstr ""
-
-#. *
-#.  * Component to fetch and display changes' history.
-#.
-msgid "No History data found"
+msgid "restore"
 msgstr ""
 
 #, javascript-format
@@ -1488,7 +1485,16 @@ msgid ""
 "saving). Are you sure?"
 msgstr ""
 
-msgid "untitled"
+msgid "version by"
+msgstr ""
+
+msgid "date"
+msgstr ""
+
+msgid "Trashed"
+msgstr ""
+
+msgid "Insert date(s)"
 msgstr ""
 
 msgid "Every day"
@@ -1513,6 +1519,9 @@ msgid "Thursday"
 msgstr ""
 
 msgid "Tuesday"
+msgstr ""
+
+msgid "Undo"
 msgstr ""
 
 msgid "Wednesday"

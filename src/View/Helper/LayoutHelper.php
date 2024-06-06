@@ -334,6 +334,7 @@ class LayoutHelper extends Helper
             'cloneConfig' => (array)Configure::read('Clone'),
             'uploadConfig' => $this->System->uploadConfig(),
             'relationsSchema' => $this->getView()->get('relationsSchema', []),
+            'richeditorConfig' => (array)Configure::read('Richeditor'),
         ];
     }
 
@@ -368,7 +369,7 @@ class LayoutHelper extends Helper
      */
     public function trashLink(?string $type): string
     {
-        if (empty($type) || $type === 'trash') {
+        if (empty($type) || $type === 'trash' || $type === 'translations') {
             return '';
         }
 

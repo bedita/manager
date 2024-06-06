@@ -259,7 +259,7 @@ class HistoryComponentTest extends TestCase
      */
     public function testFetch(array $data, $expected): void
     {
-        $response = $this->HistoryComponent->fetch($this->documentId, $data);
+        $response = $this->HistoryComponent->fetch($this->documentId, $data, ['page_size' => 100, 'page' => 1]);
         $actual = $response['data'][0]['meta']['changed'];
         static::assertEquals($expected, $actual);
     }

@@ -471,7 +471,7 @@ class AppControllerTest extends TestCase
                 ],
                 [ // data provided
                     'id' => '7',
-                    'date_ranges' => [
+                    'date_ranges' => json_encode([
                         [
                             'start_date' => '',
                             'end_date' => '',
@@ -484,7 +484,7 @@ class AppControllerTest extends TestCase
                             'start_date' => '2020-01-01T00:00:00.000Z',
                             'end_date' => '',
                         ],
-                    ],
+                    ]),
                 ],
             ],
             'relations' => [

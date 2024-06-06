@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-05-16 09:46:10 \n"
+"POT-Creation-Date: 2024-06-05 10:20:33 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1056,6 +1056,9 @@ msgstr "annulla"
 msgid "undo remove"
 msgstr "annulla rimozione"
 
+msgid "untitled"
+msgstr "senza titolo"
+
 msgid "username"
 msgstr "nome utente"
 
@@ -1472,20 +1475,14 @@ msgstr "Numero di errori"
 msgid "Result"
 msgstr "Risultato"
 
-msgid "version by"
-msgstr "versione di"
+msgid "clone"
+msgstr "clona"
 
-msgid "date"
-msgstr "data"
-
-msgid "Trashed"
-msgstr "Rimosso"
-
-#. *
-#.  * Component to fetch and display changes' history.
-#.
-msgid "No History data found"
+msgid "No history data found"
 msgstr "Nessun dato di Cronologia"
+
+msgid "restore"
+msgstr "ripristina"
 
 #, javascript-format
 msgid "by ${ name } via ${ application }"
@@ -1502,8 +1499,17 @@ msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
 
-msgid "untitled"
-msgstr "senza titolo"
+msgid "version by"
+msgstr "versione di"
+
+msgid "date"
+msgstr "data"
+
+msgid "Trashed"
+msgstr "Rimosso"
+
+msgid "Insert date(s)"
+msgstr "Inserire data(e)"
 
 msgid "Every day"
 msgstr "Tutti i giorni"
@@ -1529,6 +1535,9 @@ msgstr "Giovedì"
 msgid "Tuesday"
 msgstr "Martedì"
 
+msgid "Undo"
+msgstr "Annulla"
+
 msgid "Wednesday"
 msgstr "Mercoledì"
 
@@ -1546,12 +1555,3 @@ msgstr "Errore durante il salvataggio della categoria"
 
 msgid "Error on deleting category"
 msgstr "Errore durante l'eliminazione della categoria"
-
-#~ msgid "Less filters"
-#~ msgstr "Meno filtri"
-
-#~ msgid "More filters"
-#~ msgstr "Più filtri"
-
-#~ msgid "Reset filters"
-#~ msgstr "Reset filtri"

@@ -42,6 +42,7 @@ const _vueInstance = new Vue({
         TagForm: () => import(/* webpackChunkName: "tag-form" */'app/components/tag-form/tag-form'),
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
         Dashboard: () => import(/* webpackChunkName: "modules-index" */'app/pages/dashboard/index'),
+        DateRange: () => import(/* webpackChunkName: "date-range" */'app/components/date-range/date-range'),
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
@@ -505,12 +506,11 @@ const _vueInstance = new Vue({
                 if (!form) {
                     return;
                 }
-
                 const trashActions = [
                     '/trash/delete',
                     '/trash/empty',
+                    '/translation/delete',
                 ];
-
                 let msg = '';
                 let done = false;
                 for (const action of trashActions) {
