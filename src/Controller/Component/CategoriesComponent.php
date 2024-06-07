@@ -93,15 +93,18 @@ class CategoriesComponent extends Component
             if (empty($category['attributes']['parent_id'])) {
                 $tree['_'][] = $category['id'];
             } else {
-                $tree[$category['attributes']['parent_id']][] = $category['id'];
+                $tree[$category['attributes']['parent_id']][] = $category;
             }
         }
         // sort by label or name
         foreach ($tree as $key => $children) {
-            usort($children, function ($a, $b) use ($map) {
-                return strcasecmp($map[$a]['attributes']['label'] ?? $map[$a]['attributes']['name'], $map[$b]['attributes']['label'] ?? $map[$b]['attributes']['name']);
+            usort($children, function ($a, $b) {
+                $tmpA = Hash::get($a, 'attributes.label') ?? Hash::get($a, 'attributes.name');
+                $tmpB = Hash::get($b, 'attributes.label') ?? Hash::get($b, 'attributes.name');
+
+                return strcasecmp($tmpA, $tmpB);
             });
-            $tree[$key] = $children;
+            $tree[$key] = Hash::extract($children, '{n}.id');
         }
 
         return $tree;

@@ -153,11 +153,12 @@ class CategoriesComponentTest extends TestCase
             ['id' => 123, 'attributes' => ['label' => 'Dummy 123', 'name' => 'dummy-123']],
             ['id' => 456, 'attributes' => ['label' => 'Dummy 456', 'name' => 'dummy-456', 'parent_id' => 123]],
             ['id' => 789, 'attributes' => ['label' => 'Dummy 789', 'name' => 'dummy-789', 'parent_id' => 456]],
+            ['id' => 999, 'attributes' => ['label' => 'Dummy 0', 'name' => 'dummy-0', 'parent_id' => 456]],
         ];
         $expected = [
-            '_' => [123],
+            '_' => [],
             123 => [456],
-            456 => [789],
+            456 => [999, 789],
         ];
         $actual = $this->Categories->tree($map);
         static::assertEquals($expected, $actual);
