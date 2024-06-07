@@ -262,7 +262,6 @@ class DateRangesToolsTest extends TestCase
      * @covers ::prepare()
      * @covers ::parseParams()
      * @covers ::cleanParams()
-     * @covers ::filterNotOn()
      * @covers ::isOneDayRange()
      */
     public function testPrepare(array $dateRanges, array $expected): void
