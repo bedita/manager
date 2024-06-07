@@ -79,6 +79,7 @@ class CategoriesComponent extends Component
 
     /**
      * Create an id-based categories tree.
+     * Sort children by label or name.
      *
      * @param array $map The categories map returned by the map function.
      * @return array The categories tree.
@@ -95,6 +96,13 @@ class CategoriesComponent extends Component
                 $tree[$category['attributes']['parent_id']][] = $category['id'];
             }
         }
+        // sort by label or name
+        foreach ($tree as $key => $children) {
+            usort($children, function ($a, $b) use ($map) {
+                return strcasecmp($map[$a]['attributes']['label'] ?? $map[$a]['attributes']['name'], $map[$b]['attributes']['label'] ?? $map[$b]['attributes']['name']);
+            });
+            $tree[$key] = $children;
+        }
 
         return $tree;
     }
@@ -107,10 +115,15 @@ class CategoriesComponent extends Component
      */
     public function getAvailableRoots(?array $map): array
     {
-        $roots = ['' => '-'];
+        $roots = ['' => ['id' => 0, 'label' => '-', 'name' => '', 'object_type_name' => '']];
         foreach ($map as $category) {
             if (empty($category['attributes']['parent_id'])) {
-                $roots[$category['id']] = empty($category['attributes']['label']) ? $category['attributes']['name'] : $category['attributes']['label'];
+                $roots[$category['id']] = [
+                    'id' => $category['id'],
+                    'label' => $category['attributes']['label'] ?? $category['attributes']['name'],
+                    'name' => $category['attributes']['name'],
+                    'object_type_name' => $category['attributes']['object_type_name'],
+                ];
             }
         }
 

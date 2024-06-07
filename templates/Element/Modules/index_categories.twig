@@ -1,5 +1,14 @@
 {% set language = config('Project.config.I18n.default')|json_encode %}
-{% set languages = config('Project.config.I18n.languages')|default([])|json_encode %}
+{% set languages = config('Project.config.I18n.languages')|json_encode %}
+{% if languages == 'null' %}{% set languages = '{}' %}{% endif %}
+{% set options = {} %}
+{% if showId %}
+	{% set options = options|merge({'showId': 1}) %}
+{% endif %}
+{% if showType %}
+    {% set options = options|merge({'showType': 1}) %}
+{% endif %}
+{% set options = options is empty ? '{}' : options|json_encode %}
 
 <div class="categories-container">
 
@@ -13,10 +22,14 @@
             <nav class="table-header has-border-black">
                 <div>{{ __('Name') }}</div>
                 <div>{{ __('Label') }}</div>
-                <div>{{ __('Parent') }}</div>
+                {% if showType %}
                 <div>{{ __('Type') }}</div>
+                {% endif %}
+                <div>{{ __('Parent') }}</div>
                 <div>{{ __('Enabled') }}</div>
+                {% if showId %}
                 <div>{{ __('Id') }}</div>
+                {% endif %}
                 <div></div>
                 <div></div>
             </nav>
@@ -30,6 +43,7 @@
                     :source="{{ resource.attributes|merge({'id': resource.id, 'type': type})|json_encode }}"
                     :parents="{{ roots|json_encode }}"
                     :names="{{ names[type]|json_encode }}"
+                    :options="{{ options }}"
                 >
                 </category-form>
 
@@ -45,8 +59,8 @@
             <nav class="table-header has-border-black">
                 <div>{{ __('Name') }}</div>
                 <div>{{ __('Label') }}</div>
-                <div>{{ __('Parent') }}</div>
                 <div>{{ __('Type') }}</div>
+                <div>{{ __('Parent') }}</div>
                 <div>{{ __('Enabled') }}</div>
                 <div></div>
             </nav>
@@ -57,16 +71,20 @@
 	                :languages="{{ languages }}"
                     :source="{{ source|json_encode }}"
                     :parents="{{ roots|json_encode }}"
-                    :names="{{ names[object_types.0]|json_encode }}">
+                    :names="{{ names[object_types.0]|json_encode }}"
+                >
                 </category-form>
             {% else %}
                 {% set source = {'types': object_types|keys} %}
+                {% set optionsNew = {'showType': true} %}
                 <category-form
                     :language="{{ language }}"
 	                :languages="{{ languages }}"
                     :source="{{ source|json_encode }}"
                     :parents="{{ roots|json_encode }}"
-                    :allnames="{{ names|json_encode }}">
+                    :allnames="{{ names|json_encode }}"
+                    :options="{{ optionsNew|json_encode }}"
+                >
                 </category-form>
             {% endif %}
         </div>
