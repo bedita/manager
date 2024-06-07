@@ -143,13 +143,17 @@ class LayoutHelper extends Helper
      * Return module count span.
      *
      * @param string $name The module name
+     * @param string|null $moduleClass The module class
      * @return string
      */
-    public function moduleCount(string $name): string
+    public function moduleCount(string $name, ?string $moduleClass = null): string
     {
         $count = CacheTools::getModuleCount($name);
+        $base = 'tag mx-05 module-items-counter';
+        $defaultModuleClass = sprintf('has-background-module-%s', $name);
+        $cssClasses = empty($moduleClass) ? sprintf('%s %s', $base, $defaultModuleClass) : sprintf('%s %s', $base, $moduleClass);
 
-        return empty($count) ? '' : sprintf('<span class="tag mx-05 has-background-module-%s module-items-counter">%s</span>', $name, $count);
+        return empty($count) ? '' : sprintf('<span class="%s">%s</span>', $cssClasses, $count);
     }
 
     /**

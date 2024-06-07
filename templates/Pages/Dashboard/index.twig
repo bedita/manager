@@ -22,7 +22,7 @@
                 {% if modules.trash %}
                     <a href="{{ Url.build({ '_name': 'trash:list' }) }}" title="{{ __('Trash') }}" class="dashboard-item has-background-black">
                         <span>{{ __('Trash can') }}</span>
-                        {{ Layout.moduleCount('trash')|raw }}
+                        {{ Layout.moduleCount('trash', 'has-background-black')|raw }}
                         <app-icon icon="carbon:trash-can"></app-icon>
                     </a>
                 {% endif %}
