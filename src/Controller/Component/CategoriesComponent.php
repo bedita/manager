@@ -91,7 +91,7 @@ class CategoriesComponent extends Component
         ];
         foreach ($map as $category) {
             if (empty($category['attributes']['parent_id'])) {
-                $tree['_'][] = $category['id'];
+                $tree['_'][] = $category;
             } else {
                 $tree[$category['attributes']['parent_id']][] = $category;
             }
