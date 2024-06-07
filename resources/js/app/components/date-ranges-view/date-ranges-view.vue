@@ -72,7 +72,7 @@ export default {
                 range.params = range.params || defaultOptions;
                 if (!this.optionIsSet('every_day')) {
                     range.params.every_day = !range.params?.weekdays || Object.keys(range.params?.weekdays).length === 0;
-                    range.params.weekdays = range?.originalParams?.weekdays ? this.normalizeWeekdays(range?.params?.weekdays) : {};
+                    range.params.weekdays = range?.originalParams?.weekdays || this.emptyWeekdays();
                 }
                 if (!range.start_date) {
                     range.end_date = '';
@@ -100,26 +100,15 @@ export default {
             this.dateRanges.push(newRange);
             this.dateRangesJson = JSON.stringify(this.dateRanges);
         },
-        normalizeWeekdays(wdays) {
-            if (wdays.constructor !== Array) {
-                return {
-                    sunday: false,
-                    monday: false,
-                    tuesday: false,
-                    wednesday: false,
-                    thursday: false,
-                    friday: false,
-                    saturday: false
-                };
-            }
+        emptyWeekdays() {
             return {
-                sunday: wdays.includes('sunday'),
-                monday: wdays.includes('monday'),
-                tuesday: wdays.includes('tuesday'),
-                wednesday: wdays.includes('wednesday'),
-                thursday: wdays.includes('thursday'),
-                friday: wdays.includes('friday'),
-                saturday: wdays.includes('saturday'),
+                sunday: false,
+                monday: false,
+                tuesday: false,
+                wednesday: false,
+                thursday: false,
+                friday: false,
+                saturday: false
             };
         },
         optionIsSet(option) {

@@ -124,12 +124,12 @@ class DateRangesTools
                 continue;
             }
             if ($key === 'weekdays' && !empty($value)) {
-                $count = 0;
-                foreach ($value as $kk => $vv) {
-                    if ($vv === true) {
-                        $data[$key][] = $kk;
-                        $count++;
-                    }
+                $checked = array_filter($value, function ($v) {
+                    return $v === true;
+                });
+                $count = count($checked);
+                if ($count > 0) {
+                    $data['weekdays'] = $value;
                 }
                 if ($count === 7 || $count === 0) {
                     $data['every_day'] = true;
