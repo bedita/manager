@@ -843,7 +843,7 @@ class LayoutHelperTest extends TestCase
         Cache::enable();
         $count = 42;
         CacheTools::setModuleCount(['meta' => ['pagination' => ['count' => $count]]], $moduleName);
-        $expected = sprintf('<span class="tag mx-05 has-background-module-%s" style="position:absolute; bottom: 1rem;">%s</span>', $moduleName, $count);
+        $expected = sprintf('<span class="tag mx-05 has-background-module-%s module-items-counter">%s</span>', $moduleName, $count);
         $actual = $layout->moduleCount($moduleName);
         static::assertEquals($expected, $actual);
         Cache::disable();

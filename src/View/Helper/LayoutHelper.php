@@ -149,7 +149,7 @@ class LayoutHelper extends Helper
     {
         $count = CacheTools::getModuleCount($name);
 
-        return empty($count) ? '' : sprintf('<span class="tag mx-05 has-background-module-%s" style="position:absolute; bottom: 1rem;">%s</span>', $name, $count);
+        return empty($count) ? '' : sprintf('<span class="tag mx-05 has-background-module-%s module-items-counter">%s</span>', $name, $count);
     }
 
     /**
