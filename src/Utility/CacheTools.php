@@ -43,7 +43,8 @@ class CacheTools
      */
     public static function getModuleCount(string $moduleName): int
     {
-        $cacheKey = sprintf('statistics_%s_count', $moduleName);
+        $name = sprintf('statistics_%s_count', $moduleName);
+        $cacheKey = self::cacheKey($name);
         $count = Cache::read($cacheKey);
 
         return $count !== false ? (int)$count : 0;
@@ -59,7 +60,8 @@ class CacheTools
     public static function setModuleCount(array $response, string $moduleName): void
     {
         $count = Hash::get($response, 'meta.pagination.count', 0);
-        $cacheKey = sprintf('statistics_%s_count', $moduleName);
+        $name = sprintf('statistics_%s_count', $moduleName);
+        $cacheKey = self::cacheKey($name);
         Cache::write($cacheKey, $count);
     }
 }

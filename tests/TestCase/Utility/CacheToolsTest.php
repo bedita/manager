@@ -57,30 +57,13 @@ class CacheToolsTest extends TestCase
     }
 
     /**
-     * Test `getModuleCount` method.
-     *
-     * @return void
-     * @covers ::getModuleCount()
-     */
-    public function testGetModuleCount(): void
-    {
-        $moduleName = 'test';
-        $cacheKey = sprintf('statistics_%s_count', $moduleName);
-        $count = 42;
-        Cache::write($cacheKey, $count);
-        $expected = $count;
-        $actual = CacheTools::getModuleCount($moduleName);
-        static::assertEquals($expected, $actual);
-    }
-
-    /**
-     * Test `setModuleCount` method.
+     * Test `getModuleCount` and `setModuleCount` methods.
      *
      * @return void
      * @covers ::setModuleCount()
      * @covers ::getModuleCount()
      */
-    public function testSetModuleCount(): void
+    public function testGetSetModuleCount(): void
     {
         $moduleName = 'test';
         $response = [

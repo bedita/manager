@@ -22,6 +22,7 @@
                 {% if modules.trash %}
                     <a href="{{ Url.build({ '_name': 'trash:list' }) }}" title="{{ __('Trash') }}" class="dashboard-item has-background-black">
                         <span>{{ __('Trash can') }}</span>
+                        {{ Layout.moduleCount('trash')|raw }}
                         <app-icon icon="carbon:trash-can"></app-icon>
                     </a>
                 {% endif %}
@@ -29,6 +30,7 @@
                 {% if modules.users %}
                     <a href="{{ Url.build({'_name': 'modules:list', 'object_type': 'users'}) }}" title="{{ __('System users') }}" class="dashboard-item has-background-black">
                         <span>{{ __('System users') }}</span>
+                        {{ Layout.moduleCount('users')|raw }}
                         <app-icon icon="carbon:user-admin"></app-icon>
                     </a>
                 {% endif %}

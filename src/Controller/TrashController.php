@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
@@ -63,6 +64,7 @@ class TrashController extends AppController
 
         try {
             $response = $this->apiClient->getObjects('trash', $this->getRequest()->getQueryParams());
+            CacheTools::setModuleCount($response, 'trash');
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
             $this->log($e->getMessage(), LogLevel::ERROR);
