@@ -13,10 +13,12 @@
 
 namespace App\Test\TestCase\View\Helper;
 
+use App\Utility\CacheTools;
 use App\View\Helper\EditorsHelper;
 use App\View\Helper\LayoutHelper;
 use App\View\Helper\PermsHelper;
 use App\View\Helper\SystemHelper;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\Cookie\CookieCollection;
@@ -820,5 +822,30 @@ class LayoutHelperTest extends TestCase
         $layout = new LayoutHelper($view);
         $actual = $layout->moduleIcon($name, $module);
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `moduleCount` method.
+     *
+     * @return void
+     * @covers moduleCount()
+     */
+    public function testModuleCount(): void
+    {
+        $moduleName = 'test';
+        $viewVars = [];
+        $request = new ServerRequest();
+        $view = new View($request, null, null, compact('viewVars'));
+        $layout = new LayoutHelper($view);
+        $actual = $layout->moduleCount($moduleName);
+        static::assertEmpty($actual);
+
+        Cache::enable();
+        $count = 42;
+        CacheTools::setModuleCount(['meta' => ['pagination' => ['count' => $count]]], $moduleName);
+        $expected = sprintf('<span class="tag mx-05 has-background-module-%s" style="position:absolute; bottom: 1rem;">%s</span>', $moduleName, $count);
+        $actual = $layout->moduleCount($moduleName);
+        static::assertEquals($expected, $actual);
+        Cache::disable();
     }
 }
