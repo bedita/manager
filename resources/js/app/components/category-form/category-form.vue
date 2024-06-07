@@ -27,7 +27,7 @@
         </template>
         <div class="parent_id-cell">
             <select v-model="parent" @change="onChangeParent" class="parent" :disabled="!type">
-                <template v-for="parent,pId in parentsByType()">
+                <template v-for="parent in parentsByType()">
                     <option :value="parent.id" v-if="parent.id != source.id">{{ parent.label }}</option>
                 </template>
             </select>
