@@ -12,6 +12,7 @@
  */
 namespace App\View\Helper;
 
+use App\Utility\CacheTools;
 use App\Utility\Translate;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
@@ -129,12 +130,26 @@ class LayoutHelper extends Helper
         $param = empty($route) ? ['_name' => 'modules:list', 'object_type' => $name, 'plugin' => null] : $route;
 
         return sprintf(
-            '<a href="%s" class="%s"><span>%s</span>%s</a>',
+            '<a href="%s" class="%s"><span>%s</span>%s%s</a>',
             $this->Url->build($param),
             sprintf('dashboard-item has-background-module-%s %s', $name, Hash::get($module, 'class', '')),
             $this->tr($label),
-            $this->moduleIcon($name, $module)
+            $this->moduleIcon($name, $module),
+            $this->moduleCount($name)
         );
+    }
+
+    /**
+     * Return module count span.
+     *
+     * @param string $name The module name
+     * @return string
+     */
+    public function moduleCount(string $name): string
+    {
+        $count = CacheTools::getModuleCount($name);
+
+        return empty($count) ? '' : sprintf('<span class="tag mx-05 has-background-module-%s" style="position:absolute; bottom: 1rem;">%s</span>', $name, $count);
     }
 
     /**
@@ -217,11 +232,12 @@ class LayoutHelper extends Helper
             $label = Hash::get($currentModule, 'label', $name);
 
             return sprintf(
-                '<a href="%s" class="%s"><span class="mr-05">%s</span>%s</a>',
+                '<a href="%s" class="%s"><span class="mr-05">%s</span>%s%s</a>',
                 $this->Url->build(['_name' => 'modules:list', 'object_type' => $name]),
                 sprintf('module-item has-background-module-%s', $name),
                 $this->tr($label),
-                $this->moduleIcon($name, $currentModule)
+                $this->moduleIcon($name, $currentModule),
+                $this->moduleCount($name)
             );
         }
 
