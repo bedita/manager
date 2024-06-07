@@ -156,7 +156,7 @@ class CategoriesComponentTest extends TestCase
             ['id' => 999, 'attributes' => ['label' => 'Dummy 0', 'name' => 'dummy-0', 'parent_id' => 456]],
         ];
         $expected = [
-            '_' => [],
+            '_' => [123],
             123 => [456],
             456 => [999, 789],
         ];
