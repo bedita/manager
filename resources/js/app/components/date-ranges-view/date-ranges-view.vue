@@ -71,8 +71,9 @@ export default {
                 range.originalParams = range.params;
                 range.params = range.params || defaultOptions;
                 if (!this.optionIsSet('every_day')) {
-                    range.params.every_day = !range.params?.weekdays || Object.keys(range.params?.weekdays).length === 0;
-                    range.params.weekdays = range?.originalParams?.weekdays || this.emptyWeekdays();
+                    range.params.weekdays = this.formatWeekdays(range?.originalParams?.weekdays);
+                    const daysCount = Object.values(range.params.weekdays).filter((v) => v === true).length;
+                    range.params.every_day = daysCount === 0;
                 }
                 if (!range.start_date) {
                     range.end_date = '';
@@ -100,15 +101,26 @@ export default {
             this.dateRanges.push(newRange);
             this.dateRangesJson = JSON.stringify(this.dateRanges);
         },
-        emptyWeekdays() {
+        formatWeekdays(wdays) {
+            if (!wdays) {
+                return {
+                    sunday: false,
+                    monday: false,
+                    tuesday: false,
+                    wednesday: false,
+                    thursday: false,
+                    friday: false,
+                    saturday: false
+                };
+            }
             return {
-                sunday: false,
-                monday: false,
-                tuesday: false,
-                wednesday: false,
-                thursday: false,
-                friday: false,
-                saturday: false
+                sunday: wdays?.sunday || false,
+                monday: wdays?.monday || false,
+                tuesday: wdays?.tuesday || false,
+                wednesday: wdays?.wednesday || false,
+                thursday: wdays?.thursday || false,
+                friday: wdays?.friday || false,
+                saturday: wdays?.saturday || false
             };
         },
         optionIsSet(option) {
