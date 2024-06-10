@@ -45,6 +45,8 @@ const DEFAULT_TOOLBAR = [
     'code',
 ].join(' ');
 
+import { EventBus } from 'app/components/event-bus';
+
 const emit = (vnode, name, data) => {
     let handlers = (vnode.data && vnode.data.on) || (vnode.componentOptions && vnode.componentOptions.listeners);
     if (handlers && handlers[name]) {
@@ -140,6 +142,16 @@ export default {
                         },
                     }));
                     changing = false;
+                });
+
+                EventBus.listen('replace-placeholder', (data) => {
+                    if (editor.id !== data?.field) {
+                        return;
+                    }
+                    const from = `<!--BE-PLACEHOLDER.${data.id}.${data.oldValue}-->`;
+                    const to = `<!--BE-PLACEHOLDER.${data.id}.${data.newValue}-->`;
+                    element.value = element.value.replace(from, to);
+                    editor.setContent(element.value);
                 });
             },
 
