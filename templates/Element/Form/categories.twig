@@ -12,7 +12,7 @@
                 <div class="categories-container">
                     <object-categories
                         :model-categories="{{ schema.categories|json_encode }}"
-                        :value="{{ object.attributes.categories|json_encode }}"
+                        :value="{{ object.attributes.categories|default([])|json_encode }}"
                     >
                     </object-categories>
                     {% do Form.unlockField('categories') %}
