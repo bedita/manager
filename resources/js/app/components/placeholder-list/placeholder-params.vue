@@ -37,6 +37,7 @@ export default {
             pitch: null,
             zoom: null,
             newValue: null,
+            oldValue: null,
         };
     },
     mounted() {
@@ -59,7 +60,7 @@ export default {
     },
     methods: {
         changeParams() {
-            this.oldValue = this.newValue ?? this.value;
+            this.oldValue = this.newValue || this.value;
             this.newValue = btoa(JSON.stringify({
                 bearing: this.bearing || null,
                 pitch: this.pitch || null,
@@ -68,8 +69,8 @@ export default {
             EventBus.send('replace-placeholder', {
                 id: this.id,
                 field: this.field,
-                oldValue: this.oldValue,
-                newValue: this.newValue,
+                oldParams: this.oldValue,
+                newParams: this.newValue,
             });
             this.oldValue = this.newValue;
         },

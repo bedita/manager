@@ -148,8 +148,8 @@ export default {
                     if (editor.id !== data?.field) {
                         return;
                     }
-                    const from = `<!--BE-PLACEHOLDER.${data.id}.${data.oldValue}-->`;
-                    const to = `<!--BE-PLACEHOLDER.${data.id}.${data.newValue}-->`;
+                    const from = `<!--BE-PLACEHOLDER.${data.id}.${data.oldParams}-->`;
+                    const to = `<!--BE-PLACEHOLDER.${data.id}.${data.newParams}-->`;
                     element.value = element.value.replace(from, to);
                     editor.setContent(element.value);
                 });
