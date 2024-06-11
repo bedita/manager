@@ -104,10 +104,6 @@ export const PanelEvents = new Vue({
         closePanel() {
             this.$emit('panel:close');
         },
-
-        refreshPlaceholders(id) {
-            this.$emit('refresh-placeholders', id);
-        },
     }
 });
 
