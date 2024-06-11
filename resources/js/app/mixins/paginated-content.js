@@ -63,6 +63,11 @@ export const PaginatedContentMixin = {
                 };
 
                 requestUrl = this.getUrlWithPaginationAndQuery(requestUrl);
+                if (requestUrl.indexOf('view/related') >= 0) {
+                    this.objects = [];
+
+                    return Promise.resolve();
+                }
 
                 // if requestQueue is populated then abort all fetch request and start over
                 if (this.requestsQueue.length > 0) {
