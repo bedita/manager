@@ -53,7 +53,7 @@ export default {
             tmpDom.innerHTML = content || document.getElementById(this.field).value || '';
             tmpDom.querySelectorAll('*[data-placeholder]').forEach(async (item) => {
                 for (const subnode of item.childNodes) {
-                    if (subnode.textContent && subnode.nodeType !== Node.COMMENT_NODE) {
+                    if (!subnode.textContent || subnode.nodeType !== Node.COMMENT_NODE) {
                         continue;
                     }
                     const m = subnode.textContent.match(regex);
