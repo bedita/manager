@@ -37,20 +37,22 @@ export default {
     },
     data() {
         return {
+            richtextContent: '',
             items: [],
         };
     },
     mounted() {
         this.$nextTick(async () => {
-            await this.extractPlaceholders(this.value);
+            this.richtextContent = this.value || document.getElementById(this.field).value || '';
+            await this.extractPlaceholders();
             EventBus.listen('refresh-placeholders', this.refresh);
         });
     },
     methods: {
-        async extractPlaceholders(content) {
+        async extractPlaceholders() {
             const regex = /BE-PLACEHOLDER\.(\d+)(?:\.([-A-Za-z0-9+=]{1,100}|=[^=]|={3,}))?/;
             const tmpDom = document.createElement('div');
-            tmpDom.innerHTML = content || document.getElementById(this.field).value || '';
+            tmpDom.innerHTML = this.richtextContent;
             tmpDom.querySelectorAll('*[data-placeholder]').forEach(async (item) => {
                 for (const subnode of item.childNodes) {
                     if (!subnode.textContent || subnode.nodeType !== Node.COMMENT_NODE) {
@@ -88,8 +90,12 @@ export default {
             if (id !== this.field) {
                 return;
             }
+            if (payload?.content === this.richtextContent) {
+                return;
+            }
+            this.richtextContent = payload.content;
             this.items = [];
-            await this.extractPlaceholders(payload.content);
+            await this.extractPlaceholders();
             this.$forceUpdate();
         },
     },
