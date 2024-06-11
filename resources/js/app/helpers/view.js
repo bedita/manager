@@ -94,6 +94,31 @@ export default {
             },
 
             /**
+             * Check image resolution.
+             * Open a warning dialog, if too big.
+             * @param {Object} file The image file to check
+             * @returns {void}
+             */
+            checkImageResolution(file) {
+                const resolution = BEDITA.uploadConfig.maxResolution;
+                const parts = resolution.split('x');
+                const maxX = parts[0];
+                const maxY = parts[1];
+                const img = new Image();
+                img.src = window.URL.createObjectURL(file);
+                img.onload = () => {
+                    const resolutionOk = (img.width <= maxX && img.height <= maxY) || (img.width <= maxY && img.height <= maxX);
+                    window.URL.revokeObjectURL(img.src);
+                    if (resolutionOk) {
+                        return;
+                    }
+                    const filename = file.name;
+                    const message = t`Resolution of ${filename} is too big (${img.width}x${img.height}), please select a file whose resolution is less than or equal to ${resolution}`;
+                    warning(message);
+                };
+            },
+
+            /**
              * Get file name without extension
              * @param {Object} file file
              * @returns {String} basename file

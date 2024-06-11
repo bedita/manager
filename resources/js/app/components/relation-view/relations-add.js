@@ -478,6 +478,9 @@ export default {
             if (this.$helpers.checkMimeForUpload(event.target.files[0], type) === false) {
                 return;
             }
+            if (type === 'images') {
+                this.$helpers.checkImageResolution(event.target.files[0]);
+            }
             if (this.$helpers.checkMaxFileSize(event.target.files[0]) === false) {
                 return false;
             }
