@@ -1,20 +1,28 @@
 <template>
-    <div class="placeholdersList input title text" v-if="items?.length > 0">
+    <div
+        class="placeholdersList input title text"
+        v-if="items?.length > 0"
+    >
         <div>
-            <app-icon icon="carbon:image" height="24"></app-icon>
+            <app-icon
+                icon="carbon:image"
+                height="24"
+            />
             <span>{{ items?.length }} placeholders</span>
         </div>
-        <template v-for="item in items">
-            <div class="placeholder-item">
-                <span>{{ item.obj?.attributes?.title }}</span>
-                <placeholder-params
-                    :field="field"
-                    :id="item.id"
-                    :text="item.text"
-                    :value="item.params_raw"
-                />
-            </div>
-        </template>
+        <div
+            class="placeholder-item"
+            v-for="item in items"
+            :key="itemKey(item)"
+        >
+            <span>{{ item.obj?.attributes?.title }}</span>
+            <placeholder-params
+                :id="item.id"
+                :field="field"
+                :text="item.text"
+                :value="item.params_raw"
+            />
+        </div>
     </div>
 </template>
 <script>
@@ -53,6 +61,7 @@ export default {
             const regex = /BE-PLACEHOLDER\.(\d+)(?:\.([-A-Za-z0-9+=]{1,100}|=[^=]|={3,}))?/;
             const tmpDom = document.createElement('div');
             tmpDom.innerHTML = this.richtextContent;
+            let matches = [];
             tmpDom.querySelectorAll('*[data-placeholder]').forEach(async (item) => {
                 for (const subnode of item.childNodes) {
                     if (!subnode.textContent || subnode.nodeType !== Node.COMMENT_NODE) {
@@ -62,16 +71,19 @@ export default {
                     if (!m) {
                         continue;
                     }
-                    const o = await this.fetchObject(m[1]);
-                    this.items.push({
-                        text: m[0],
-                        id: m[1],
-                        obj: o,
-                        params_raw: m[2],
-                        params: atob(m[2]),
-                    });
+                    matches.push(m);
                 }
             });
+            for (const m of matches) {
+                const o = await this.fetchObject(m[1]);
+                this.items.push({
+                    text: m[0],
+                    id: m[1],
+                    obj: o,
+                    params_raw: m[2],
+                    params: atob(m[2]),
+                });
+            }
         },
         async fetchObject(id) {
             const baseUrl = new URL(BEDITA.base).pathname;
@@ -84,6 +96,9 @@ export default {
             const responseJson = await response.json();
 
             return responseJson?.data || null;
+        },
+        itemKey(item) {
+            return `${item.id}-${item.params_raw}`;
         },
         async refresh(payload) {
             const id = payload?.id;
