@@ -63,6 +63,7 @@ export const PaginatedContentMixin = {
                 };
 
                 requestUrl = this.getUrlWithPaginationAndQuery(requestUrl);
+                // if url contains view/related, it means that request comes from new object page: ignore it
                 if (requestUrl.indexOf('view/related') >= 0) {
                     this.objects = [];
 
