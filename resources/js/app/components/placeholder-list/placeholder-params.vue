@@ -3,9 +3,30 @@
         <span>Bearing</span>
         <span>Pitch</span>
         <span>Zoom</span>
-        <div><input type="number" @change="changeParams" v-model="bearing" placeholder="bearing" /></div><!-- [min: -180, max: +180] -->
-        <div><input type="number" @change="changeParams" v-model="pitch" placeholder="pitch" /></div><!-- [0-60] -->
-        <div><input type="number" @change="changeParams" v-model="zoom" placeholder="zoom" /></div><!-- [2-20] -->
+        <div>
+            <input
+                type="number"
+                placeholder="bearing"
+                v-model="bearing"
+                @change="changeParams"
+            >
+        </div><!-- [min: -180, max: +180] -->
+        <div>
+            <input
+                type="number"
+                placeholder="pitch"
+                v-model="pitch"
+                @change="changeParams"
+            >
+        </div><!-- [0-60] -->
+        <div>
+            <input
+                type="number"
+                placeholder="zoom"
+                v-model="zoom"
+                @change="changeParams"
+            >
+        </div><!-- [2-20] -->
     </div>
 </template>
 <script>
