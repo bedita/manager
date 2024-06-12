@@ -99,4 +99,18 @@ class ConfigControllerTest extends TestCase
         $viewVars = (array)$this->CfgController->viewBuilder()->getVars();
         static::assertContains('manager', $viewVars['applications']);
     }
+
+    /**
+     * Test `fetchApplications`
+     *
+     * @return void
+     * @covers ::fetchApplications()
+     */
+    public function testFetchApplications(): void
+    {
+        $actual = $this->CfgController->fetchApplications();
+        static::assertIsArray($actual);
+        static::assertNotEmpty($actual);
+        static::assertContains(__('No application'), $actual);
+    }
 }
