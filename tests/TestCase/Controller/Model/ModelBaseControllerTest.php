@@ -341,7 +341,7 @@ class ModelBaseControllerTest extends TestCase
         $result = $this->ModelController->save();
         static::assertInstanceOf(Response::class, $result);
         $location = $result->getHeaderLine('Location');
-        $expected = '/new';
+        $expected = '/view';
         static::assertStringEndsWith($expected, $location);
     }
 

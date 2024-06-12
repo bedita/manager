@@ -192,7 +192,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
             );
 
             $routes->get(
-                "/$controller/view/new",
+                "/$controller/view",
                 ['controller' => $name, 'action' => 'create'],
                 'create:' . $controller
             );
@@ -297,7 +297,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:list']
     );
     $routes->connect(
-        '/{object_type}/view/new',
+        '/{object_type}/view',
         ['controller' => 'Modules', 'action' => 'create'],
         ['_name' => 'modules:create']
     );
