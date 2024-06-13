@@ -3,7 +3,7 @@
         class="placeholdersList input title text"
         v-if="items?.length > 0"
     >
-        <div>
+        <div class="header">
             <app-icon
                 icon="carbon:image"
                 height="24"
@@ -45,22 +45,23 @@ export default {
     },
     data() {
         return {
-            richtextContent: '',
+            debounceRefreshHandle: null,
             items: [],
+            richtextContent: '',
         };
     },
     mounted() {
         this.$nextTick(async () => {
             this.richtextContent = this.value || document.getElementById(this.field).value || '';
             await this.extractPlaceholders();
-            EventBus.listen('refresh-placeholders', this.refresh);
+            EventBus.listen('refresh-placeholders', this.debounceRefresh);
         });
     },
     methods: {
-        async extractPlaceholders() {
+        async extractPlaceholders(content) {
             const regex = /BE-PLACEHOLDER\.(\d+)(?:\.([-A-Za-z0-9+=]{1,100}|=[^=]|={3,}))?/;
             const tmpDom = document.createElement('div');
-            tmpDom.innerHTML = this.richtextContent;
+            tmpDom.innerHTML = content || this.richtextContent;
             let matches = [];
             tmpDom.querySelectorAll('*[data-placeholder]').forEach(async (item) => {
                 for (const subnode of item.childNodes) {
@@ -100,6 +101,14 @@ export default {
         itemKey(item) {
             return `${item.id}-${item.params_raw}`;
         },
+        async debounceRefresh(payload) {
+            if (!this.debounceRefreshHandle) {
+                this.debounceRefreshHandle = this.$helpers.debounce((val) => {
+                    this.refresh(val);
+                }, 1000);
+            }
+            return this.debounceRefreshHandle(payload);
+        },
         async refresh(payload) {
             const id = payload?.id;
             if (id !== this.field) {
@@ -108,22 +117,37 @@ export default {
             if (payload?.content === this.richtextContent) {
                 return;
             }
-            this.richtextContent = payload.content;
             this.items = [];
-            await this.extractPlaceholders();
+            await this.extractPlaceholders(payload.content);
+            this.richtextContent = payload.content;
             this.$forceUpdate();
         },
     },
 }
 </script>
 <style>
+div.placeholdersList {
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: solid #d6d1d1 1px;
+}
+div.placeholdersList > div.header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: white;
+}
 div.placeholdersList > div.placeholder-item {
     display: grid;
-    grid-template-columns: 50% 1fr;
+    grid-template-columns: 60% 1fr;
     text-align: left;
     align-items: center;
     gap: 8px;
     margin: 4px 0;
-    border-bottom: dotted 1px #ccc;
+    border-top: dotted 1px #ccc;
 }
 </style>
