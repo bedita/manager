@@ -70,6 +70,13 @@ class SystemHelper extends Helper
     ];
 
     /**
+     * Maximum resolution for images
+     *
+     * @var string
+     */
+    protected $defaultUploadMaxResolution = '4096x2160'; // 4K
+
+    /**
      * Get the minimum value between post_max_size and upload_max_filesize.
      *
      * @return int
@@ -115,8 +122,9 @@ class SystemHelper extends Helper
     {
         $accepted = (array)Configure::read('uploadAccepted', $this->defaultUploadAccepted);
         $forbidden = (array)Configure::read('uploadForbidden', $this->defaultUploadForbidden);
+        $maxResolution = (string)Configure::read('uploadMaxResolution', $this->defaultUploadMaxResolution);
 
-        return compact('accepted', 'forbidden');
+        return compact('accepted', 'forbidden', 'maxResolution');
     }
 
     /**

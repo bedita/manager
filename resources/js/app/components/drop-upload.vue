@@ -98,10 +98,13 @@ export default {
         },
 
         inputFiles(e) {
-            if (this.$helpers.checkMimeForUpload(event.target.files[0], this.objectType) === false) {
+            if (this.$helpers.checkMimeForUpload(e.target.files[0], this.objectType) === false) {
                 return;
             }
-            if (this.$helpers.checkMaxFileSize(event.target.files[0]) === false) {
+            if (this.objectType === 'images') {
+                this.$helpers.checkImageResolution(e.target.files[0]);
+            }
+            if (this.$helpers.checkMaxFileSize(e.target.files[0]) === false) {
                 return false;
             }
 
@@ -122,6 +125,9 @@ export default {
                 if (this.$helpers.checkMimeForUpload(file, this.objectType) === false) {
                     continue;
                 }
+                if (this.objectType === 'images') {
+                    this.$helpers.checkImageResolution(file);
+                }
                 if (this.$helpers.checkMaxFileSize(file) === false) {
                     continue;
                 }
@@ -141,6 +147,9 @@ export default {
                     this.removeProgressItem(file);
                     return;
                 }
+                if (this.objectType === 'images') {
+                    this.$helpers.checkImageResolution(file);
+                }
                 this.upload(file).then((object) => this.uploadSuccessful(file, object));
             });
 
@@ -150,6 +159,9 @@ export default {
                 if (this.$helpers.checkMaxFileSize(file) === false) {
                     this.removeProgressItem(file);
                     continue;
+                }
+                if (this.objectType === 'images') {
+                    this.$helpers.checkImageResolution(file);
                 }
                 const object = await this.upload(file);
                 this.uploadSuccessful(file, object);
