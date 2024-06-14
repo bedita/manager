@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-06-11 16:09:09 \n"
+"POT-Creation-Date: 2024-06-14 12:50:32 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -928,6 +928,12 @@ msgstr ""
 msgid "application_id"
 msgstr ""
 
+msgid "autoplay"
+msgstr ""
+
+msgid "bearing"
+msgstr ""
+
 msgid "cancel"
 msgstr ""
 
@@ -943,6 +949,9 @@ msgstr ""
 msgid "context"
 msgstr ""
 
+msgid "controls"
+msgstr ""
+
 msgid "create"
 msgstr ""
 
@@ -956,6 +965,9 @@ msgid "current password"
 msgstr ""
 
 msgid "description"
+msgstr ""
+
+msgid "download"
 msgstr ""
 
 msgid "elements to"
@@ -974,6 +986,9 @@ msgid "expires"
 msgstr ""
 
 msgid "from"
+msgstr ""
+
+msgid "height"
 msgstr ""
 
 msgid "id"
@@ -1016,6 +1031,9 @@ msgid "parent"
 msgstr ""
 
 msgid "phone"
+msgstr ""
+
+msgid "pitch"
 msgstr ""
 
 msgid "remove"
@@ -1070,6 +1088,12 @@ msgid "view parent"
 msgstr ""
 
 msgid "warning"
+msgstr ""
+
+msgid "width"
+msgstr ""
+
+msgid "zoom"
 msgstr ""
 
 #, javascript-format
@@ -1353,6 +1377,9 @@ msgid "Title or #id uname"
 msgstr ""
 
 msgid "(deleted)"
+msgstr ""
+
+msgid "placeholders"
 msgstr ""
 
 msgid "You can modify the permissions"

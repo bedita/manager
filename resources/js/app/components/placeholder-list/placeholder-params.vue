@@ -1,7 +1,7 @@
 <template>
     <div class="placeholderParams">
         <div v-for="column in Object.keys(parameters)">
-            <span v-if="['boolean', 'integer', 'string'].includes(parameters[column])">{{ column }}</span>
+            <span v-if="['boolean', 'integer', 'string'].includes(parameters[column])">{{ tr(column) }}</span>
             <template v-if="parameters[column] === 'integer'">
                 <input type="number" :placeholder="column" v-model="decodedValue[column]" @change="changeParams" />
             </template>
@@ -16,6 +16,7 @@
 </template>
 <script>
 import { EventBus } from 'app/components/event-bus';
+import { t } from 'ttag';
 
 export default {
     name: 'PlaceholderParams',
@@ -79,6 +80,9 @@ export default {
         },
         decoded(item) {
             return atob(item);
+        },
+        tr(item) {
+            return t(item);
         },
     },
 };

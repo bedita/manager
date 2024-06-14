@@ -4,7 +4,7 @@
         v-if="items?.length > 0"
     >
         <div class="header">
-            <span>{{ items?.length }} placeholders</span>
+            <span>{{ items?.length }} {{ msgPlaceholders }}</span>
         </div>
         <div
             class="placeholder-item"
@@ -36,6 +36,7 @@
 </template>
 <script>
 import { EventBus } from 'app/components/event-bus';
+import { t } from 'ttag';
 
 export default {
     name: 'PlaceholderList',
@@ -57,6 +58,7 @@ export default {
             debounceRefreshHandle: null,
             items: [],
             richtextContent: '',
+            msgPlaceholders: t`placeholders`,
         };
     },
     mounted() {
