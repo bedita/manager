@@ -1,21 +1,19 @@
-
-    {% set customElement = Element.custom(group, 'group') %}
-    {% if customElement %}
-        {{ element(customElement, {'properties' : properties}) }}
-    {% else %}
-        {% set locked = object.meta.locked or (object.id and Perms.isLockedByParents(object.id)) %}
-        {% for key, value in properties %}
-            {% if locked and key == 'uname' %}
-                {{ Property.control(key, value, {'readonly': 'readonly'})|raw }}
-            {% elseif locked and key == 'status' %}
-                {{ Property.control(key, value, {'disabled': 'disabled'})|raw }}
-                <input type="hidden" name="status" id="status" value="{{ value }}" />
-            {% else %}
-                {{ Property.control(key, value)|raw }}
-                {% if schema.properties[key].placeholders %}
-                    <placeholder-list field="{{ key }}" :value="{{ value|default('')|json_encode }}"></placeholder-list>
-                {% endif %}
+{% set customElement = Element.custom(group, 'group') %}
+{% if customElement %}
+    {{ element(customElement, {'properties' : properties}) }}
+{% else %}
+    {% set locked = object.meta.locked or (object.id and Perms.isLockedByParents(object.id)) %}
+    {% for key, value in properties %}
+        {% if locked and key == 'uname' %}
+            {{ Property.control(key, value, {'readonly': 'readonly'})|raw }}
+        {% elseif locked and key == 'status' %}
+            {{ Property.control(key, value, {'disabled': 'disabled'})|raw }}
+            <input type="hidden" name="status" id="status" value="{{ value }}" />
+        {% else %}
+            {{ Property.control(key, value)|raw }}
+            {% if schema.properties[key].placeholders %}
+                <placeholder-list field="{{ key }}" :value="{{ value|default('')|json_encode }}"></placeholder-list>
             {% endif %}
-        {% endfor %}
-
-    {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
