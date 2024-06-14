@@ -23,7 +23,7 @@
             <app-icon v-if="item.obj?.type === 'publications'" icon="carbon:wikis" height="24" />
             <app-icon v-if="item.obj?.type === 'videos'" icon="carbon:video" height="24" />
 
-            <span>{{ item.obj?.attributes?.title }}</span>
+            <span>{{ item.obj?.title }}</span>
             <placeholder-params
                 :id="item.id"
                 :field="field"
@@ -55,6 +55,7 @@ export default {
     },
     data() {
         return {
+            cache: {},
             debounceRefreshHandle: null,
             items: [],
             richtextContent: '',
@@ -98,6 +99,9 @@ export default {
             }
         },
         async fetchObject(id) {
+            if (this.cache[id]) {
+                return this.cache[id];
+            }
             const baseUrl = new URL(BEDITA.base).pathname;
             const response = await fetch(`${baseUrl}api/objects/${id}`, {
                 credentials: 'same-origin',
@@ -106,8 +110,13 @@ export default {
                 }
             });
             const responseJson = await response.json();
+            const data = responseJson?.data || {};
+            this.cache[id] = {
+                type: data?.type,
+                title: data?.attributes?.title,
+            };
 
-            return responseJson?.data || null;
+            return this.cache[id];
         },
         itemKey(item) {
             return `${item.id}-${item.params_raw}`;
