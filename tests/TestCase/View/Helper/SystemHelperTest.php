@@ -116,7 +116,10 @@ class SystemHelperTest extends TestCase
         $property = $reflectionClass->getProperty('defaultUploadForbidden');
         $property->setAccessible(true);
         $forbidden = $property->getValue($this->System);
-        $expected = compact('accepted', 'forbidden');
+        $property = $reflectionClass->getProperty('defaultUploadMaxResolution');
+        $property->setAccessible(true);
+        $maxResolution = $property->getValue($this->System);
+        $expected = compact('accepted', 'forbidden', 'maxResolution');
         $actual = $this->System->uploadConfig();
         static::assertSame($expected, $actual);
     }
