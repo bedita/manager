@@ -112,8 +112,7 @@ class SystemHelperTest extends TestCase
         $reflectionClass = new \ReflectionClass($this->System);
         $property = $reflectionClass->getProperty('defaultPlaceholders');
         $property->setAccessible(true);
-        $placeholders = $property->getValue($this->System);
-        $expected = compact('placeholders');
+        $expected = $property->getValue($this->System);
         $actual = $this->System->placeholdersConfig();
         static::assertSame($expected, $actual);
     }
