@@ -101,6 +101,24 @@ class SystemHelperTest extends TestCase
     }
 
     /**
+     * Test `placeholdersConfig`
+     *
+     * @return void
+     * @covers ::placeholdersConfig()
+     */
+    public function testPlaceholdersConfig(): void
+    {
+        // empty config, defaultUploadAccepted
+        $reflectionClass = new \ReflectionClass($this->System);
+        $property = $reflectionClass->getProperty('defaultPlaceholders');
+        $property->setAccessible(true);
+        $placeholders = $property->getValue($this->System);
+        $expected = compact('placeholders');
+        $actual = $this->System->placeholdersConfig();
+        static::assertSame($expected, $actual);
+    }
+
+    /**
      * Test `uploadConfig`
      *
      * @return void

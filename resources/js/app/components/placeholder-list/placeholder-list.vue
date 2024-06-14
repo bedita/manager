@@ -4,10 +4,6 @@
         v-if="items?.length > 0"
     >
         <div class="header">
-            <app-icon
-                icon="carbon:image"
-                height="24"
-            />
             <span>{{ items?.length }} placeholders</span>
         </div>
         <div
@@ -15,11 +11,24 @@
             v-for="item in items"
             :key="itemKey(item)"
         >
+            <app-icon v-if="item.obj?.type === 'audio'" icon="carbon:document-audio" height="24" />
+            <app-icon v-if="item.obj?.type === 'documents'" icon="carbon:document" height="24" />
+            <app-icon v-if="item.obj?.type === 'events'" icon="carbon:event" height="24" />
+            <app-icon v-if="item.obj?.type === 'files'" icon="carbon:document-blank" height="24" />
+            <app-icon v-if="item.obj?.type === 'images'" icon="carbon:image" height="24" />
+            <app-icon v-if="item.obj?.type === 'links'" icon="carbon:link" height="24" />
+            <app-icon v-if="item.obj?.type === 'locations'" icon="carbon:location" height="24" />
+            <app-icon v-if="item.obj?.type === 'news'" icon="carbon:calendar" height="24" />
+            <app-icon v-if="item.obj?.type === 'profiles'" icon="carbon:person" height="24" />
+            <app-icon v-if="item.obj?.type === 'publications'" icon="carbon:wikis" height="24" />
+            <app-icon v-if="item.obj?.type === 'videos'" icon="carbon:video" height="24" />
+
             <span>{{ item.obj?.attributes?.title }}</span>
             <placeholder-params
                 :id="item.id"
                 :field="field"
                 :text="item.text"
+                :type="item.obj?.type"
                 :value="item.params_raw"
             />
         </div>
@@ -143,7 +152,7 @@ div.placeholdersList > div.header {
 }
 div.placeholdersList > div.placeholder-item {
     display: grid;
-    grid-template-columns: 60% 1fr;
+    grid-template-columns: 5% 60% 1fr;
     text-align: left;
     align-items: center;
     gap: 8px;

@@ -14,6 +14,18 @@ use Cake\View\Helper;
 class SystemHelper extends Helper
 {
     /**
+     * Default placeholders configuration for media types
+     *
+     * @var array
+     */
+    protected $defaultPlaceholders = [
+        'audio' => ['controls' => 'boolean', 'autoplay' => 'boolean'],
+        'files' => ['download' => 'boolean'],
+        'images' => ['width' => 'integer', 'height' => 'integer', 'bearing' => 'integer', 'pitch' => 'integer', 'zoom' => 'integer'],
+        'videos' => ['controls' => 'boolean', 'autoplay' => 'boolean'],
+    ];
+
+    /**
      * Accepted mime types for upload
      *
      * @var array
@@ -111,6 +123,16 @@ class SystemHelper extends Helper
         }
 
         return false;
+    }
+
+    /**
+     * Placeholders config
+     *
+     * @return array
+     */
+    public function placeholdersConfig(): array
+    {
+        return (array)Configure::read('Placeholders', $this->defaultPlaceholders);
     }
 
     /**

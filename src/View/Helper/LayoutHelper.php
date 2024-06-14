@@ -332,6 +332,7 @@ class LayoutHelper extends Helper
             'canReadUsers' => $this->Perms->canRead('users'),
             'canSave' => $this->Perms->canSave(),
             'cloneConfig' => (array)Configure::read('Clone'),
+            'placeholdersConfig' => $this->System->placeholdersConfig(),
             'uploadConfig' => $this->System->uploadConfig(),
             'relationsSchema' => $this->getView()->get('relationsSchema', []),
             'richeditorConfig' => (array)Configure::read('Richeditor'),

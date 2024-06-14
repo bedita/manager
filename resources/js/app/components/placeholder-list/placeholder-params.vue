@@ -1,32 +1,17 @@
 <template>
     <div class="placeholderParams">
-        <span>Bearing</span>
-        <span>Pitch</span>
-        <span>Zoom</span>
-        <div>
-            <input
-                type="number"
-                placeholder="bearing"
-                v-model="bearing"
-                @change="changeParams"
-            >
-        </div><!-- [min: -180, max: +180] -->
-        <div>
-            <input
-                type="number"
-                placeholder="pitch"
-                v-model="pitch"
-                @change="changeParams"
-            >
-        </div><!-- [0-60] -->
-        <div>
-            <input
-                type="number"
-                placeholder="zoom"
-                v-model="zoom"
-                @change="changeParams"
-            >
-        </div><!-- [2-20] -->
+        <div v-for="column in Object.keys(parameters)">
+            <span v-if="['boolean', 'integer', 'string'].includes(parameters[column])">{{ column }}</span>
+            <template v-if="parameters[column] === 'integer'">
+                <input type="number" :placeholder="column" v-model="decodedValue[column]" @change="changeParams" />
+            </template>
+            <template v-if="parameters[column] === 'string'">
+                <input type="text" :placeholder="column" v-model="decodedValue[column]" @change="changeParams" />
+            </template>
+            <template v-if="parameters[column] === 'boolean'">
+                <input type="checkbox" v-model="decodedValue[column]" @click="changeParams" />
+            </template>
+        </div>
     </div>
 </template>
 <script>
@@ -47,6 +32,10 @@ export default {
             type: String,
             required: true,
         },
+        type: {
+            type: String,
+            required: true,
+        },
         value: {
             type: String,
             required: true,
@@ -54,15 +43,15 @@ export default {
     },
     data() {
         return {
-            bearing: null,
-            pitch: null,
-            zoom: null,
+            parameters: [],
             newValue: null,
             oldValue: null,
+            decodedValue: {},
         };
     },
     mounted() {
         this.$nextTick(() => {
+            this.parameters = BEDITA?.placeholdersConfig?.[this.type] || {};
             const decoded = this.decoded(this.value);
             if (decoded === 'undefined') {
                 this.newValue = btoa('undefined');
@@ -70,10 +59,7 @@ export default {
                 return;
             }
             try {
-                const params = JSON.parse(decoded);
-                this.bearing = params?.bearing || null;
-                this.pitch = params?.pitch || null;
-                this.zoom = params?.zoom || null;
+                this.decodedValue = JSON.parse(decoded);
             } catch(e) {
                 console.error(e, decoded, this.value);
             }
@@ -82,11 +68,7 @@ export default {
     methods: {
         changeParams() {
             this.oldValue = this.newValue || this.value;
-            this.newValue = btoa(JSON.stringify({
-                bearing: this.bearing || null,
-                pitch: this.pitch || null,
-                zoom: this.zoom || null,
-            }));
+            this.newValue = btoa(JSON.stringify(this.decodedValue));
             EventBus.send('replace-placeholder', {
                 id: this.id,
                 field: this.field,
