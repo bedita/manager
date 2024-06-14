@@ -591,6 +591,30 @@ return [
     // ],
 
     /**
+     * Placeholders configuration.
+     */
+    // 'Placeholders' => [
+    //     'audio' => [
+    //         'controls' => 'boolean',
+    //         'autoplay' => 'boolean',
+    //     ],
+    //     'files' => [
+    //         'download' => 'boolean',
+    //     ],
+    //     'images' => [
+    //         'width' => 'integer',
+    //         'height' => 'integer',
+    //         'bearing' => 'integer',
+    //         'pitch' => 'integer',
+    //         'zoom' => 'integer',
+    //     ],
+    //     'videos' => [
+    //         'controls' => 'boolean',
+    //         'autoplay' => 'boolean',
+    //     ],
+    // ],
+
+    /**
      * Upload configurations.
      */
     // 'uploadAccepted' => [
