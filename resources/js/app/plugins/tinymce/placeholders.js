@@ -5,7 +5,7 @@ import { PanelEvents } from 'app/components/panel-view';
 import tinymce from 'tinymce/tinymce';
 
 const cache = {};
-const regex = /BE-PLACEHOLDER\.(\d+)(?:\.([-A-Za-z0-9+=]{1,100}|=[^=]|={3,}))?/;
+const regex = /BE-PLACEHOLDER\.(\d+)(?:\.([a-zA-Z0-9+/]+={0,2}))?/;
 const baseUrl = new URL(BEDITA.base).pathname;
 const options = {
     credentials: 'same-origin',

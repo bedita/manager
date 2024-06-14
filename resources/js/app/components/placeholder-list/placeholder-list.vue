@@ -59,7 +59,7 @@ export default {
     },
     methods: {
         async extractPlaceholders(content) {
-            const regex = /BE-PLACEHOLDER\.(\d+)(?:\.([-A-Za-z0-9+=]{1,100}|=[^=]|={3,}))?/;
+            const regex = /BE-PLACEHOLDER\.(\d+)(?:\.([a-zA-Z0-9+/]+={0,2}))?/;
             const tmpDom = document.createElement('div');
             tmpDom.innerHTML = content || this.richtextContent;
             let matches = [];
