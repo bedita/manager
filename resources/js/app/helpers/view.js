@@ -107,7 +107,8 @@ export default {
                 const img = new Image();
                 img.src = window.URL.createObjectURL(file);
                 img.onerror = (e) => {
-                    window.URL.revokeObjectURL(img.src);console.error('error', e);
+                    window.URL.revokeObjectURL(img.src);
+                    console.error('error', e);
                     const filename = file.name;
                     const message = t`We could not calculate the resolution of the file ${filename}. Please select a file with a resolution less than or equal to ${resolution}`;
                     warning(message);
