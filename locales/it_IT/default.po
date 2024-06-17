@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-06-11 16:09:09 \n"
+"POT-Creation-Date: 2024-06-17 09:09:51 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1161,6 +1161,14 @@ msgid ""
 msgstr ""
 "File \"${ filename }\" troppo grande (${ fileSizeMb } MB), selezionare un "
 "file che non superi la dimensione massima (${ maxFileSizeMb } MB)"
+
+#, javascript-format
+msgid ""
+"We could not calculate the resolution of the file ${ filename }. Please "
+"select a file with a resolution less than or equal to ${ resolution }"
+msgstr ""
+"Non è stato possibile calcolare la risoluzione del file ${ filename }. "
+"Selezionare un file con risoluzione inferiore o uguale a ${ resolution }"
 
 #, javascript-format
 msgid ""
