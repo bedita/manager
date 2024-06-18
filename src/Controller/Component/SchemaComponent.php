@@ -224,7 +224,7 @@ class SchemaComponent extends Component
             while ($page <= $pageCount) {
                 $response = (array)ApiClientProvider::getApiClient()->get($url, $query + compact('page'));
                 $categories = (array)Hash::get($response, 'data');
-                $data = empty($data) ? $categories : array_merge($data, $categories);
+                $data = array_merge($data, $categories);
                 $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
                 $page++;
             }
