@@ -215,15 +215,22 @@ class SchemaComponent extends Component
      */
     protected function fetchCategories(string $type): array
     {
-        $query = [
-            'page_size' => 100,
-        ];
+        $data = [];
         $url = sprintf('/model/categories?filter[type]=%s', $type);
+        $pageCount = $page = 1;
+        $pageSize = 100;
+        $query = ['page_size' => $pageSize];
         try {
-            $response = ApiClientProvider::getApiClient()->get($url, $query);
+            while ($page <= $pageCount) {
+                $response = (array)ApiClientProvider::getApiClient()->get($url, $query + compact('page'));
+                $categories = (array)Hash::get($response, 'data');
+                $data = array_merge($data, $categories);
+                $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
+                $page++;
+            }
         } catch (BEditaClientException $ex) {
             // we ignore filter errors for now
-            $response = [];
+            $data = [];
         }
 
         return array_map(
@@ -236,7 +243,7 @@ class SchemaComponent extends Component
                     'enabled' => Hash::get((array)$item, 'attributes.enabled'),
                 ];
             },
-            (array)Hash::get((array)$response, 'data')
+            $data
         );
     }
 
