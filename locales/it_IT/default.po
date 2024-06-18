@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-06-05 10:20:33 \n"
+"POT-Creation-Date: 2024-06-17 09:09:51 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -413,6 +413,9 @@ msgstr "Meno"
 
 msgid "List"
 msgstr "Lista"
+
+msgid "List view"
+msgstr "Vista a lista"
 
 msgid "Locations"
 msgstr "Posizioni"
@@ -834,6 +837,9 @@ msgstr "Cestino"
 msgid "Trashd"
 msgstr "Cancellato"
 
+msgid "Tree view"
+msgstr "Vista ad albero"
+
 msgid "Type"
 msgstr "Tipo"
 
@@ -1155,6 +1161,23 @@ msgid ""
 msgstr ""
 "File \"${ filename }\" troppo grande (${ fileSizeMb } MB), selezionare un "
 "file che non superi la dimensione massima (${ maxFileSizeMb } MB)"
+
+#, javascript-format
+msgid ""
+"We could not calculate the resolution of the file ${ filename }. Please "
+"select a file with a resolution less than or equal to ${ resolution }"
+msgstr ""
+"Non è stato possibile calcolare la risoluzione del file ${ filename }. "
+"Selezionare un file con risoluzione inferiore o uguale a ${ resolution }"
+
+#, javascript-format
+msgid ""
+"Resolution of ${ filename } is too big (${ img.width }x${ img.height }), "
+"please select a file whose resolution is less than or equal to "
+"${ resolution }"
+msgstr ""
+"Risoluzione di ${ filename } troppo grande (${ img.width }x${ img.height }), "
+"selezionare un file con risoluzione inferiore o uguale a ${ resolution }"
 
 msgid "File type forbidden"
 msgstr "Tipo file non consentito"

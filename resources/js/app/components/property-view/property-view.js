@@ -220,6 +220,9 @@ export default {
             if (this.$helpers.checkMimeForUpload(files[0], type) === false) {
                 return;
             }
+            if (type === 'images') {
+                this.$helpers.checkImageResolution(e.target.files[0]);
+            }
             if (this.$helpers.checkMaxFileSize(files[0]) === false) {
                 return;
             }
