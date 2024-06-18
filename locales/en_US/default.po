@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-06-05 10:20:33 \n"
+"POT-Creation-Date: 2024-06-17 09:09:51 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -410,6 +410,9 @@ msgid "Less"
 msgstr ""
 
 msgid "List"
+msgstr ""
+
+msgid "List view"
 msgstr ""
 
 msgid "Locations"
@@ -829,6 +832,9 @@ msgstr ""
 msgid "Trashd"
 msgstr "Trashed"
 
+msgid "Tree view"
+msgstr ""
+
 msgid "Type"
 msgstr ""
 
@@ -1144,6 +1150,19 @@ msgstr ""
 msgid ""
 "File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
 "less than max file size (${ maxFileSizeMb } MB)"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"We could not calculate the resolution of the file ${ filename }. Please "
+"select a file with a resolution less than or equal to ${ resolution }"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Resolution of ${ filename } is too big (${ img.width }x${ img.height }), "
+"please select a file whose resolution is less than or equal to "
+"${ resolution }"
 msgstr ""
 
 msgid "File type forbidden"

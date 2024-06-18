@@ -589,4 +589,83 @@ return [
     //     'style_formats_merge' => true,
     //     'content_style' => '.be-highlight { background-color: #F6F6F6; }',
     // ],
+
+    /**
+     * Upload configurations.
+     */
+    // 'uploadAccepted' => [
+    //     'audio' => [
+    //         'audio/*',
+    //     ],
+    //     'files' => [
+    //         'application/msword', // .doc, .dot
+    //         'application/pdf', // .pdf
+    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
+    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
+    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
+    //         'application/x-mpegURL',
+    //         'audio/*',
+    //         'text/csv',
+    //         'text/html',
+    //         'text/plain',
+    //         'text/rtf',
+    //         'text/xml',
+    //         'image/*',
+    //         'video/*',
+    //     ],
+    //     'images' => [
+    //         'image/*',
+    //     ],
+    //     'videos' => [
+    //         'application/x-mpegURL',
+    //         'video/*',
+    //     ],
+    //     'media' => [
+    //         'application/msword', // .doc, .dot
+    //         'application/pdf', // .pdf
+    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
+    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
+    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
+    //         'application/x-mpegURL',
+    //         'audio/*',
+    //         'image/*',
+    //         'text/csv',
+    //         'text/html',
+    //         'text/plain',
+    //         'text/rtf',
+    //         'text/xml',
+    //         'video/*',
+    //     ],
+    // ],
+    // 'uploadForbidden' => [
+    //     'mimetypes' => [
+    //         'application/javascript',
+    //         'application/x-cgi',
+    //         'application/x-perl',
+    //         'application/x-php',
+    //         'application/x-ruby',
+    //         'application/x-shellscript',
+    //         'text/javascript',
+    //         'text/x-perl',
+    //         'text/x-php',
+    //         'text/x-python',
+    //         'text/x-ruby',
+    //         'text/x-shellscript',
+    //     ],
+    //     'extensions' => [
+    //         'cgi',
+    //         'exe',
+    //         'js',
+    //         'perl',
+    //         'php',
+    //         'py',
+    //         'rb',
+    //         'sh',
+    //     ],
+    // ],
+    // 'uploadMaxResolution' => '1920x1080',
 ];

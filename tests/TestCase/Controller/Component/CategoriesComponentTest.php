@@ -153,11 +153,12 @@ class CategoriesComponentTest extends TestCase
             ['id' => 123, 'attributes' => ['label' => 'Dummy 123', 'name' => 'dummy-123']],
             ['id' => 456, 'attributes' => ['label' => 'Dummy 456', 'name' => 'dummy-456', 'parent_id' => 123]],
             ['id' => 789, 'attributes' => ['label' => 'Dummy 789', 'name' => 'dummy-789', 'parent_id' => 456]],
+            ['id' => 999, 'attributes' => ['label' => 'Dummy 0', 'name' => 'dummy-0', 'parent_id' => 456]],
         ];
         $expected = [
             '_' => [123],
             123 => [456],
-            456 => [789],
+            456 => [999, 789],
         ];
         $actual = $this->Categories->tree($map);
         static::assertEquals($expected, $actual);
@@ -173,20 +174,20 @@ class CategoriesComponentTest extends TestCase
     {
         // empty map
         $map = [];
-        $expected = ['' => '-'];
+        $expected = ['' => ['id' => 0, 'label' => '-', 'name' => '', 'object_type_name' => '']];
         $actual = $this->Categories->getAvailableRoots($map);
         static::assertEquals($expected, $actual);
 
         // not empty map
         $map = [
-            ['id' => 123, 'attributes' => ['label' => 'Dummy 123', 'name' => 'dummy-123']],
-            ['id' => 456, 'attributes' => ['name' => 'dummy-456']],
-            ['id' => 789, 'attributes' => ['label' => 'Dummy 789', 'name' => 'dummy-789', 'parent_id' => 456]],
+            ['id' => 123, 'attributes' => ['label' => 'Dummy 123', 'name' => 'dummy-123', 'object_type_name' => 'documents']],
+            ['id' => 456, 'attributes' => ['name' => 'dummy-456', 'object_type_name' => 'documents']],
+            ['id' => 789, 'attributes' => ['label' => 'Dummy 789', 'name' => 'dummy-789', 'object_type_name' => 'documents', 'parent_id' => 456]],
         ];
         $expected = [
-            '' => '-',
-            123 => 'Dummy 123',
-            456 => 'dummy-456',
+            '' => ['id' => 0, 'label' => '-', 'name' => '', 'object_type_name' => ''],
+            123 => ['id' => 123, 'label' => 'Dummy 123', 'name' => 'dummy-123', 'object_type_name' => 'documents'],
+            456 => ['id' => 456, 'label' => 'dummy-456', 'name' => 'dummy-456', 'object_type_name' => 'documents'],
         ];
         $actual = $this->Categories->getAvailableRoots($map);
         static::assertEquals($expected, $actual);

@@ -14,20 +14,22 @@
             >
             </labels-form>
         </div>
+        <template v-if="options?.showType">
+            <div class="object_type_name-cell" v-show="!selectTypes">
+                <input type="hidden" name="object_type_name" v-model="type" />
+                <span :class="typeClass()">{{ type }}</span>
+            </div>
+            <div class="object_type_name-cell" v-show="selectTypes">
+                <select v-model="type" @change="updateType(type, $event)">
+                    <option v-for="t in original.types" :value="t">{{ t }}</option>
+                </select>
+            </div>
+        </template>
         <div class="parent_id-cell">
-            <select v-model="parent" @change="onChangeParent" class="parent">
-                <template v-for="pLabel,pId in parents">
-                    <option :value="pId" v-if="pId != source.id">{{ pLabel }}</option>
+            <select v-model="parent" @change="onChangeParent" class="parent" :disabled="!type">
+                <template v-for="parent in parentsByType()">
+                    <option :value="parent.id" v-if="parent.id != source.id">{{ parent.label }}</option>
                 </template>
-            </select>
-        </div>
-        <div class="object_type_name-cell" v-show="!selectTypes">
-            <input type="hidden" name="object_type_name" v-model="type" />
-            <span :class="typeClass()">{{ type }}</span>
-        </div>
-        <div class="object_type_name-cell" v-show="selectTypes">
-            <select v-model="type" @change="updateType(type, $event)">
-                <option v-for="t in original.types" :value="t">{{ t }}</option>
             </select>
         </div>
         <div class="enabled-cell">
@@ -39,9 +41,11 @@
                 <span class="ml-05">{{ msgCreate }}</span>
             </button>
         </div>
-        <div v-show="id">
-            {{ id }}
-        </div>
+        <template v-if="options?.showId">
+            <div v-show="id">
+                {{ id }}
+            </div>
+        </template>
         <div v-show="id" class="buttons-cell narrow">
             <button
                 :disabled="loading || saveDisabled"
@@ -95,6 +99,15 @@ export default {
         allnames: {
             type: Object,
             default: () => {},
+        },
+        options: {
+            type: Object,
+            default: () => {
+                return {
+                    'showId': false,
+                    'showType': false
+                };
+            },
         },
     },
 
@@ -160,6 +173,24 @@ export default {
 
         onChangeParent() {
             this.saveDisabled = this.unchanged() || !this.valid();
+        },
+
+        parentsByType() {
+            if (!this.type) {
+                return [];
+            }
+            let parents = Object.values(this.parents) || [];
+            if (!parents) {
+                return [];
+            }
+            parents = parents.filter((parent) => parent?.object_type_name === this.type) || [];
+
+            return parents.sort((a, b) => {
+                if (a.label && b.label) {
+                    return a.label.localeCompare(b.label);
+                }
+                return a.name.localeCompare(b.name);
+            });
         },
 
         updateType() {
