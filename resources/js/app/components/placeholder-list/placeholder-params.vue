@@ -1,7 +1,7 @@
 <template>
     <div class="placeholderParams">
         <div v-for="column in Object.keys(parameters)">
-            <span v-if="['boolean', 'integer', 'string'].includes(parameters[column])">{{ t(column) }}</span>
+            <span>{{ t(column) }}</span>
             <template v-if="parameters[column] === 'integer'">
                 <input type="number" :placeholder="column" v-model="decodedValue[column]" @change="changeParams" />
             </template>
@@ -10,6 +10,11 @@
             </template>
             <template v-if="parameters[column] === 'boolean'">
                 <input type="checkbox" v-model="decodedValue[column]" @click="changeParams" />
+            </template>
+            <template v-if="typeof parameters[column] === 'object' ">
+                <select v-model="decodedValue[column]" @change="changeParams">
+                    <option v-for="option in parameters[column]" :value="option">{{ t(option) }}</option>
+                </select>
             </template>
         </div>
     </div>

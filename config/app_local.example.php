@@ -602,8 +602,8 @@ return [
     //         'download' => 'boolean',
     //     ],
     //     'images' => [
-    //         'width' => 'integer',
-    //         'height' => 'integer',
+    //         'width' => ['small', 'medium', 'large'],
+    //         'height' => ['small', 'medium', 'large'],
     //         'bearing' => 'integer',
     //         'pitch' => 'integer',
     //         'zoom' => 'integer',
