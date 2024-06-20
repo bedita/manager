@@ -116,16 +116,16 @@ export default {
     computed: {
         boxClass() {
             if (this.hidden === true) {
-                return 'container box pb-05 has-background-gray-600 has-text-white';
+                return 'object-property-container box pb-05 has-background-gray-600 has-text-white';
             }
             if (this.type === 'custom') {
-                return 'container box pb-05 has-background-info has-text-white';
+                return 'object-property-container box pb-05 has-background-info has-text-white';
             }
             if (this.type === 'inherited') {
-                return 'container box pb-05 has-background-gray-800 has-text-white';
+                return 'object-property-container box pb-05 has-background-gray-800 has-text-white';
             }
 
-            return 'container box pb-05 has-background-black has-text-white';
+            return 'object-property-container box pb-05 has-background-black has-text-white';
         },
         tagClass() {
             if (this.type === 'custom') {
@@ -206,36 +206,36 @@ export default {
 }
 </script>
 <style>
-div.container {
+div.object-property-container {
     padding: 0.5rem;
     margin: 0.5rem 0;
     border-radius: 25px;
     border: 2px solid cyan;
 }
-div.column > p {
+div.object-property-container > div.columns > div.column > p {
     padding: 0.5rem 0.5rem 0.5rem 0;
     margin: 0.5rem 0;
     border-bottom: dashed 1px gray;
 }
-div.column > div > span {
+div.object-property-container > div.columns > div.column > div > span {
     padding: 4px 8px;
     border-left: 1px dotted black;
     border-bottom: 1px dotted black;
     white-space: normal;
     vertical-align: middle;
 }
-div.column > div > span > a:hover {
+div.object-property-container > div.columns > div.column > div > span > a:hover {
     text-decoration: underline;
 }
-div.column > div.rows > div {
+div.object-property-container > div.columns > div.column > div.rows > div {
     border-bottom: solid 1px gray;
     padding: 0.5rem 0;
 }
-td.column-header {
+div.object-property-container > div.columns > div.column td.column-header {
     color: yellow;
     text-align: left;
 }
-td.property-val {
+div.object-property-container > div.columns > div.column td.property-val {
     font-family: monospace;
 }
 </style>
