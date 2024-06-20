@@ -925,6 +925,12 @@ msgstr ""
 msgid "application_id"
 msgstr ""
 
+msgid "autoplay"
+msgstr ""
+
+msgid "bearing"
+msgstr ""
+
 msgid "cancel"
 msgstr ""
 
@@ -940,6 +946,9 @@ msgstr ""
 msgid "context"
 msgstr ""
 
+msgid "controls"
+msgstr ""
+
 msgid "create"
 msgstr ""
 
@@ -953,6 +962,9 @@ msgid "current password"
 msgstr ""
 
 msgid "description"
+msgstr ""
+
+msgid "download"
 msgstr ""
 
 msgid "elements to"
@@ -971,6 +983,9 @@ msgid "expires"
 msgstr ""
 
 msgid "from"
+msgstr ""
+
+msgid "height"
 msgstr ""
 
 msgid "id"
@@ -1013,6 +1028,9 @@ msgid "parent"
 msgstr ""
 
 msgid "phone"
+msgstr ""
+
+msgid "pitch"
 msgstr ""
 
 msgid "remove"
@@ -1067,6 +1085,12 @@ msgid "view parent"
 msgstr ""
 
 msgid "warning"
+msgstr ""
+
+msgid "width"
+msgstr ""
+
+msgid "zoom"
 msgstr ""
 
 #, javascript-format
@@ -1356,6 +1380,9 @@ msgid "Title or #id uname"
 msgstr ""
 
 msgid "(deleted)"
+msgstr ""
+
+msgid "placeholders"
 msgstr ""
 
 msgid "You can modify the permissions"

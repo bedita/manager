@@ -933,6 +933,12 @@ msgstr "id applicazione"
 msgid "application_id"
 msgstr "id applicazione"
 
+msgid "autoplay"
+msgstr ""
+
+msgid "bearing"
+msgstr ""
+
 msgid "cancel"
 msgstr "annulla"
 
@@ -948,6 +954,9 @@ msgstr "contenuto"
 msgid "context"
 msgstr "contesto"
 
+msgid "controls"
+msgstr ""
+
 msgid "create"
 msgstr "crea"
 
@@ -962,6 +971,9 @@ msgstr "password corrente"
 
 msgid "description"
 msgstr "descrizione"
+
+msgid "download"
+msgstr ""
 
 msgid "elements to"
 msgstr "elementi a"
@@ -980,6 +992,9 @@ msgstr "scade"
 
 msgid "from"
 msgstr "da"
+
+msgid "height"
+msgstr ""
 
 msgid "id"
 msgstr ""
@@ -1022,6 +1037,9 @@ msgstr "genitore"
 
 msgid "phone"
 msgstr "telefono"
+
+msgid "pitch"
+msgstr ""
 
 msgid "remove"
 msgstr "rimuovi"
@@ -1076,6 +1094,12 @@ msgstr "visualizza genitore"
 
 msgid "warning"
 msgstr "attenzione"
+
+msgid "width"
+msgstr ""
+
+msgid "zoom"
+msgstr ""
 
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
@@ -1376,6 +1400,9 @@ msgstr "Titolo o #id nome univoco"
 
 msgid "(deleted)"
 msgstr "(eliminato)"
+
+msgid "placeholders"
+msgstr "segnaposto"
 
 msgid "You can modify the permissions"
 msgstr "Puoi modificare i permessi"

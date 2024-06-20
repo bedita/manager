@@ -7,6 +7,7 @@ import '../../style.scss';
 
 import { BELoader } from 'libs/bedita';
 
+import { EventBus } from 'app/components/event-bus';
 import { PanelView, PanelEvents } from 'app/components/panel-view';
 import { confirm, error, info, success, prompt, warning } from 'app/components/dialog/dialog';
 
@@ -31,6 +32,7 @@ const _vueInstance = new Vue({
     el: 'main',
 
     components: {
+        EventBus,
         PanelView,
         Autocomplete,
         LoginPassword: () => import(/* webpackChunkName: "login-password" */'app/components/login-password/login-password'),
@@ -84,6 +86,7 @@ const _vueInstance = new Vue({
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
         ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
+        PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
         AppIcon,
     },
 

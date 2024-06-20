@@ -45,6 +45,8 @@ const DEFAULT_TOOLBAR = [
     'code',
 ].join(' ');
 
+import { EventBus } from 'app/components/event-bus';
+
 const emit = (vnode, name, data) => {
     let handlers = (vnode.data && vnode.data.on) || (vnode.componentOptions && vnode.componentOptions.listeners);
     if (handlers && handlers[name]) {
@@ -118,6 +120,11 @@ export default {
                     add_unload_trigger: false, // fix populating textarea elements with garbage when the user initiates a navigation with unsaved changes, but cancels it when the alert is shown
                     readonly: element.getAttribute('readonly') === 'readonly' ? 1 : 0,
                     ... BEDITA?.richeditorConfig,
+                    setup: (editor) => {
+                        editor.on('change', () => {
+                            EventBus.send('refresh-placeholders', {id: editor.id, content: editor.getContent()});
+                        });
+                    }
                 });
 
                 element.editor = editor;
@@ -140,6 +147,16 @@ export default {
                         },
                     }));
                     changing = false;
+                });
+
+                EventBus.listen('replace-placeholder', (data) => {
+                    if (editor.id !== data?.field) {
+                        return;
+                    }
+                    const from = `<!--BE-PLACEHOLDER.${data.id}.${data.oldParams}-->`;
+                    const to = `<!--BE-PLACEHOLDER.${data.id}.${data.newParams}-->`;
+                    element.value = element.value.replace(from, to);
+                    editor.setContent(element.value);
                 });
             },
 

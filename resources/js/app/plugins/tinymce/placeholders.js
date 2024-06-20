@@ -1,10 +1,11 @@
 import { t } from 'ttag';
 import 'tinymce/tinymce';
+import { EventBus } from 'app/components/event-bus';
 import { PanelEvents } from 'app/components/panel-view';
 import tinymce from 'tinymce/tinymce';
 
 const cache = {};
-const regex = /BE-PLACEHOLDER\.(\d+)(?:\.([-A-Za-z0-9+=]{1,50}|=[^=]|={3,}))?/;
+const regex = /BE-PLACEHOLDER\.(\d+)(?:\.([a-zA-Z0-9+/]+={0,2}))?/;
 const baseUrl = new URL(BEDITA.base).pathname;
 const options = {
     credentials: 'same-origin',
@@ -77,7 +78,7 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
                     return;
                 }
                 let [, id, params] = match;
-                node.attr('style', params || '');
+                node.attr('data-params', params ? atob(params) : '');
                 node.attr('contenteditable', 'false');
                 loadPreview(editor, node, id);
             });
@@ -85,7 +86,7 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
         editor.serializer.addAttributeFilter('data-placeholder', function(nodes) {
             nodes.forEach((node) => {
                 let id = node.attributes.map['data-placeholder'];
-                let params = node.attributes.map['style'];
+                let params = node.attributes.map['data-params'];
                 node.empty();
                 let comment = tinymce.html.Node.create('#comment');
                 comment.value = `BE-PLACEHOLDER.${id}.${btoa(params)}`;
@@ -117,13 +118,14 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
                     let isEmptyBlock = node && node.children.length === 1 && node.children[0].tagName === 'BR';
                     let view = editor.dom.create(isEmptyBlock ? 'div' : 'span', {
                         'data-placeholder': data.id,
-                        'style': data.params,
+                        'data-params': data.params,
                     }, `<!-- BE-PLACEHOLDER.${data.id}.${btoa(data.params)} -->`);
                     editor.insertContent(view.outerHTML);
                     if (isEmptyBlock) {
                         tinymce.dom.DOMUtils.DOM.remove(node);
                     }
                 });
+                EventBus.send('refresh-placeholders', {id: editor.id, content: editor.getContent()});
             };
 
             let onClose = () => {

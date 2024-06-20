@@ -578,6 +578,7 @@ class LayoutHelperTest extends TestCase
             'canReadUsers' => false,
             'canSave' => true,
             'cloneConfig' => (array)Configure::read('Clone'),
+            'placeholdersConfig' => $system->placeholdersConfig(),
             'uploadConfig' => $system->uploadConfig(),
             'relationsSchema' => ['whatever'],
             'richeditorConfig' => (array)Configure::read('Richeditor'),
