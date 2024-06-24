@@ -111,8 +111,8 @@ class TrashControllerTest extends BaseControllerTest
     /**
      * Test `restore` method
      *
-     * @covers ::restore()
      * @return void
+     * @covers ::restore()
      */
     public function testRestore(): void
     {
@@ -132,8 +132,8 @@ class TrashControllerTest extends BaseControllerTest
     /**
      * Test `restore` method when unauthorized
      *
-     * @covers ::restore()
      * @return void
+     * @covers ::restore()
      */
     public function testRestoreUnauthorized(): void
     {
@@ -148,8 +148,8 @@ class TrashControllerTest extends BaseControllerTest
     /**
      * Test `restore` method with multiple items
      *
-     * @covers ::restore()
      * @return void
+     * @covers ::restore()
      */
     public function testRestoreMulti(): void
     {
@@ -163,8 +163,8 @@ class TrashControllerTest extends BaseControllerTest
     /**
      * Test `restore` method failure with multiple items
      *
-     * @covers ::restore()
      * @return void
+     * @covers ::restore()
      */
     public function testRestoreMultiFailure(): void
     {
@@ -179,10 +179,11 @@ class TrashControllerTest extends BaseControllerTest
     }
 
     /**
-     * Test `delete` method
+     * Test `delete` and `deleteData` methods
      *
-     * @covers ::delete()
      * @return void
+     * @covers ::delete()
+     * @covers ::deleteData()
      */
     public function testDelete(): void
     {
@@ -205,12 +206,13 @@ class TrashControllerTest extends BaseControllerTest
     }
 
     /**
-     * Test `deleteData` method
+     * Test `delete` and `deleteData` methods with media object
      *
-     * @covers ::deleteData()
      * @return void
+     * @covers ::delete()
+     * @covers ::deleteData()
      */
-    public function testDeleteData(): void
+    public function testDeleteMediaWithStream(): void
     {
         // setup and auth
         $this->setupApi();
@@ -260,8 +262,8 @@ class TrashControllerTest extends BaseControllerTest
     /**
      * Test `delete` method when unauthorized
      *
-     * @covers ::delete()
      * @return void
+     * @covers ::delete()
      */
     public function testDeleteUnauthorized(): void
     {
@@ -278,8 +280,8 @@ class TrashControllerTest extends BaseControllerTest
     /**
      * Test `restore` method with multiple items
      *
-     * @covers ::delete()
      * @return void
+     * @covers ::delete()
      */
     public function testDeleteMulti(): void
     {
@@ -295,8 +297,8 @@ class TrashControllerTest extends BaseControllerTest
     /**
      * Test `delete` method failure with multiple items
      *
-     * @covers ::delete()
      * @return void
+     * @covers ::delete()
      */
     public function testDeleteMultiFailure(): void
     {
@@ -313,9 +315,9 @@ class TrashControllerTest extends BaseControllerTest
     /**
      * Test `emptyTrash` method
      *
+     * @return void
      * @covers ::emptyTrash()
      * @covers ::listQuery()
-     * @return void
      */
     public function testEmpty(): void
     {
@@ -332,9 +334,9 @@ class TrashControllerTest extends BaseControllerTest
     /**
      * Test `emptyTrash` method with query filter
      *
+     * @return void
      * @covers ::emptyTrash()
      * @covers ::listQuery()
-     * @return void
      */
     public function testEmptyFilter(): void
     {
@@ -348,8 +350,8 @@ class TrashControllerTest extends BaseControllerTest
     /**
      * Test `emptyTrash` method when unauthorized
      *
-     * @covers ::emptyTrash()
      * @return void
+     * @covers ::emptyTrash()
      */
     public function testEmptyUnauthorized(): void
     {
