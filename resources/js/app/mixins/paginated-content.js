@@ -16,6 +16,7 @@ export const DEFAULT_PAGINATION = {
 export const getDefaultFilter = () => ({
     q: '',
     filter: {
+        status: [],
         type: '',
     }
 });
