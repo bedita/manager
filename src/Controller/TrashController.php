@@ -173,10 +173,11 @@ class TrashController extends AppController
         foreach ($ids as $id) {
             try {
                 $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $id]]);
-                foreach ($response['data'] as $stream) {
+                $streams = (array)Hash::get($response, 'data');
+                $this->apiClient->remove($id);
+                foreach ($streams as $stream) {
                     $this->apiClient->delete(sprintf('/streams/%s', $stream['id']));
                 }
-                $this->apiClient->remove($id);
             } catch (BEditaClientException $e) {
                 // Error! Back to object view.
                 $this->log($e->getMessage(), LogLevel::ERROR);
