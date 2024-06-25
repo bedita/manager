@@ -838,7 +838,7 @@ class LayoutHelperTest extends TestCase
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
         $actual = $layout->moduleCount($moduleName);
-        static::assertEmpty($actual);
+        static::assertEquals('-', $actual);
 
         Cache::enable();
         $count = 42;
