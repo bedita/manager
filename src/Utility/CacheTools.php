@@ -14,6 +14,8 @@
 namespace App\Utility;
 
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
+use Cake\Utility\Hash;
 
 /**
  * Add cache related utility methods
@@ -31,5 +33,49 @@ class CacheTools
         $apiSignature = md5(ApiClientProvider::getApiClient()->getApiBaseUrl());
 
         return sprintf('%s_%s', $name, $apiSignature);
+    }
+
+    /**
+     * Check if module count exists in cache.
+     *
+     * @param string $moduleName Module name.
+     * @return bool
+     */
+    public static function existsCount(string $moduleName): bool
+    {
+        $name = sprintf('statistics_%s_count', $moduleName);
+        $cacheKey = self::cacheKey($name);
+
+        return Cache::read($cacheKey) !== null;
+    }
+
+    /**
+     * Get module count from cache.
+     *
+     * @param string $moduleName Module name.
+     * @return string
+     */
+    public static function getModuleCount(string $moduleName): string
+    {
+        $name = sprintf('statistics_%s_count', $moduleName);
+        $cacheKey = self::cacheKey($name);
+        $count = Cache::read($cacheKey);
+
+        return $count !== false ? (int)$count : '-';
+    }
+
+    /**
+     * Set module count in cache.
+     *
+     * @param array $response API response.
+     * @param string $moduleName Module name.
+     * @return void
+     */
+    public static function setModuleCount(array $response, string $moduleName): void
+    {
+        $count = Hash::get($response, 'meta.pagination.count', 0);
+        $name = sprintf('statistics_%s_count', $moduleName);
+        $cacheKey = self::cacheKey($name);
+        Cache::write($cacheKey, $count);
     }
 }

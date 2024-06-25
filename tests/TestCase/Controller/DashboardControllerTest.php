@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\DashboardController;
+use App\Utility\CacheTools;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identifier\IdentifierInterface;
@@ -21,6 +22,7 @@ use Authentication\Identity;
 use Authentication\IdentityInterface;
 use BEdita\WebTools\ApiClientProvider;
 use BEdita\WebTools\Identifier\ApiIdentifier;
+use Cake\Cache\Cache;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -41,6 +43,24 @@ class DashboardControllerTest extends TestCase
      * @var \App\Controller\DashboardController
      */
     public $Dashboard;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        Cache::enable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        Cache::disable();
+    }
 
     /**
      * Setup controller to test with request config
@@ -184,6 +204,8 @@ class DashboardControllerTest extends TestCase
 
         $this->setupControllerAndLogin($requestConfig);
 
+        $this->Dashboard->set('modules', ['abcde' => [], 'wrong' => [], 'documents' => [], 'images' => [], 'media' => [], 'objects' => [], 'tags' => [], 'trash' => [], 'users' => []]);
+        CacheTools::setModuleCount(['meta' => ['pagination' => ['count' => 0]]], 'abcde');
         $this->Dashboard->index();
         $response = $this->Dashboard->getResponse();
 

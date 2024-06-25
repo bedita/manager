@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\CacheTools;
 use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
@@ -102,6 +103,7 @@ class ModulesController extends AppController
 
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->Query->index());
+            CacheTools::setModuleCount((array)$response, $this->Modules->getConfig('currentModuleName'));
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
