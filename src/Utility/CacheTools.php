@@ -61,7 +61,7 @@ class CacheTools
         $cacheKey = self::cacheKey($name);
         $count = Cache::read($cacheKey);
 
-        return $count !== false ? (int)$count : '-';
+        return is_int($count) ? (int)$count : '-';
     }
 
     /**
