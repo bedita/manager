@@ -838,7 +838,7 @@ class LayoutHelperTest extends TestCase
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
         $actual = $layout->moduleCount($moduleName);
-        static::assertEquals('-', $actual);
+        static::assertEquals('<span class="tag mx-05 module-items-counter has-background-module-test">0</span>', $actual);
 
         Cache::enable();
         $count = 42;
