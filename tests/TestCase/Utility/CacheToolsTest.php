@@ -60,6 +60,7 @@ class CacheToolsTest extends TestCase
      * Test `getModuleCount` and `setModuleCount` methods.
      *
      * @return void
+     * @covers ::existsCount()
      * @covers ::setModuleCount()
      * @covers ::getModuleCount()
      */
@@ -73,6 +74,8 @@ class CacheToolsTest extends TestCase
                 ],
             ],
         ];
+        $exists = CacheTools::existsCount($moduleName);
+        static::assertFalse($exists);
         CacheTools::setModuleCount($response, $moduleName);
         $expected = 42;
         $actual = CacheTools::getModuleCount($moduleName);

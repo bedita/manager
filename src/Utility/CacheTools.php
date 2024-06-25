@@ -36,18 +36,32 @@ class CacheTools
     }
 
     /**
+     * Check if module count exists in cache.
+     *
+     * @param string $moduleName Module name.
+     * @return bool
+     */
+    public static function existsCount(string $moduleName): bool
+    {
+        $name = sprintf('statistics_%s_count', $moduleName);
+        $cacheKey = self::cacheKey($name);
+
+        return Cache::read($cacheKey) !== null;
+    }
+
+    /**
      * Get module count from cache.
      *
      * @param string $moduleName Module name.
-     * @return int
+     * @return string
      */
-    public static function getModuleCount(string $moduleName): int
+    public static function getModuleCount(string $moduleName): string
     {
         $name = sprintf('statistics_%s_count', $moduleName);
         $cacheKey = self::cacheKey($name);
         $count = Cache::read($cacheKey);
 
-        return $count !== false ? (int)$count : 0;
+        return $count !== false ? (int)$count : '-';
     }
 
     /**
