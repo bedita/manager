@@ -153,7 +153,7 @@ class LayoutHelper extends Helper
         $defaultModuleClass = sprintf('has-background-module-%s', $name);
         $cssClasses = empty($moduleClass) ? sprintf('%s %s', $base, $defaultModuleClass) : sprintf('%s %s', $base, $moduleClass);
 
-        return $count === '-' ? '-' : sprintf('<span class="%s">%s</span>', $cssClasses, $count);
+        return sprintf('<span class="%s">%s</span>', $cssClasses, $count);
     }
 
     /**
