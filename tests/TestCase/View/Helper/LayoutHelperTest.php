@@ -735,7 +735,7 @@ class LayoutHelperTest extends TestCase
             'documents' => [
                 'documents',
                 [],
-                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><app-icon icon="carbon:document"></app-icon><span class="tag mx-05 module-items-counter has-background-module-documents">0</span></a>',
+                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><app-icon icon="carbon:document"></app-icon><span class="tag mx-05 module-items-counter has-background-module-documents">-</span></a>',
             ],
         ];
     }
@@ -839,7 +839,7 @@ class LayoutHelperTest extends TestCase
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
         $actual = $layout->moduleCount($moduleName);
-        static::assertEquals('<span class="tag mx-05 module-items-counter has-background-module-test">0</span>', $actual);
+        static::assertEquals('<span class="tag mx-05 module-items-counter has-background-module-test">-</span>', $actual);
 
         Cache::enable();
         $count = 42;
