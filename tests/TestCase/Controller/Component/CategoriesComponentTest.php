@@ -282,4 +282,43 @@ class CategoriesComponentTest extends TestCase
         // restore api client
         ApiClientProvider::setApiClient($safeClient);
     }
+
+    /**
+     * Data provider for `hasChanged` test case.
+     *
+     * @return array
+     */
+    public function hasChangedProvider(): array
+    {
+        return [
+            'empty' => [
+                [],
+                [],
+                false,
+            ],
+            'same' => [
+                [['name' => 'a', 'label' => 'A'], ['name' => 'b', 'label' => 'B']],
+                [['name' => 'a'], ['name' => 'b']],
+                false,
+            ],
+            'different' => [
+                [['name' => 'a', 'label' => 'A'], ['name' => 'b', 'label' => 'B']],
+                [['name' => 'a'], ['name' => 'c']],
+                true,
+            ],
+        ];
+    }
+
+    /**
+     * Test `hasChanged`.
+     *
+     * @return void
+     * @dataProvider hasChangedProvider()
+     * @covers ::hasChanged()
+     */
+    public function testHasChanged(array $oldValue, array $newValue, bool $expected): void
+    {
+        $actual = $this->Categories->hasChanged($oldValue, $newValue);
+        static::assertSame($expected, $actual);
+    }
 }

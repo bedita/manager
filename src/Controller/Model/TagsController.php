@@ -45,7 +45,6 @@ class TagsController extends ModelBaseController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('Categories');
         $this->loadComponent('ProjectConfiguration');
     }
 

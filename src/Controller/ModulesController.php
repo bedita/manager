@@ -55,7 +55,6 @@ class ModulesController extends AppController
     {
         parent::initialize();
 
-        $this->loadComponent('Categories');
         $this->loadComponent('Children');
         $this->loadComponent('Clone');
         $this->loadComponent('History');
@@ -282,6 +281,17 @@ class ModulesController extends AppController
         unset($requestData['_api']);
 
         try {
+            $id = Hash::get($requestData, 'id');
+            // skip save if no data changed
+            if (empty($relatedData) && count($requestData) === 1 && !empty($id)) {
+                $response = $this->apiClient->getObject($id, $this->objectType, ['count' => 'all']);
+                $this->Thumbs->urls($response);
+                $this->set((array)$response);
+                $this->setSerialize(array_keys($response));
+
+                return;
+            }
+
             // upload file (if available)
             $this->Modules->upload($requestData);
 

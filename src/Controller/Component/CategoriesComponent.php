@@ -189,6 +189,25 @@ class CategoriesComponent extends Component
     }
 
     /**
+     * Check if a category has changed.
+     *
+     * @param array $oldValue The old category value.
+     * @param array $newValue The new category value.
+     * @return bool True if the category has changed, false otherwise.
+     */
+    public function hasChanged(array $oldValue, array $newValue): bool
+    {
+        $old = (array)Hash::extract($oldValue, '{n}.name');
+        sort($old);
+        $old = implode(',', $old);
+        $new = (array)Hash::extract($newValue, '{n}.name');
+        sort($new);
+        $new = implode(',', $new);
+
+        return $old !== $new;
+    }
+
+    /**
      * Invalidate schema cache for forms.
      *
      * @param string $type The object type name of the category.
