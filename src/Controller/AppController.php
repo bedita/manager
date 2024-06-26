@@ -452,7 +452,7 @@ class AppController extends Controller
         if (($oldValue === null || $oldValue === '') && ($newValue === null || $newValue === '')) {
             return false; // not changed
         }
-        if ($key === 'categories') {
+        if ($key === 'categories' || $key === 'tags') {
             return $this->Categories->hasChanged($oldValue, $newValue);
         }
         $booleanItems = ['0', '1', 'true', 'false', 0, 1];
