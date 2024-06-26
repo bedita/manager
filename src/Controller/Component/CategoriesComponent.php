@@ -189,11 +189,11 @@ class CategoriesComponent extends Component
     }
 
     /**
-     * Check if a category has changed.
+     * Check if categories or tags values has changed.
      *
-     * @param array $oldValue The old category value.
-     * @param array $newValue The new category value.
-     * @return bool True if the category has changed, false otherwise.
+     * @param array $oldValue The old value.
+     * @param array $newValue The new value.
+     * @return bool True if it has changed, false otherwise.
      */
     public function hasChanged(array $oldValue, array $newValue): bool
     {
