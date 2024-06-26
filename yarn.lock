@@ -5348,10 +5348,10 @@ text-table@^0.2.0:
   resolved "https://registry.npmjs.org/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==
 
-tinymce@^5.10.9:
-  version "5.10.9"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.10.9.tgz#1dfacb3231c71a688d90ff44a0b3f2e91b3b9edf"
-  integrity sha512-5bkrors87X9LhYX2xq8GgPHrIgJYHl87YNs+kBcjQ5I3CiUgzo/vFcGvT3MZQ9QHsEeYMhYO6a5CLGGffR8hMg==
+tinymce@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-7.0.0.tgz#d35441e15f8011cf549b39e58b64648798816e92"
+  integrity sha512-ggXLfTRrUALAcjeJSRrZcJDOl6MgC2tPXe/zNOEkQXvTDgcKqFypPRoPpfpK5wejexjyaI/7dwETOntJ5MPBFg==
 
 tinyqueue@^2.0.3:
   version "2.0.3"
