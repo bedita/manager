@@ -15,9 +15,8 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\TrashController;
 use BEdita\SDK\BEditaClientException;
-use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
-use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\TrashController} Test Case
@@ -25,7 +24,7 @@ use Cake\TestSuite\TestCase;
  * @coversDefaultClass \App\Controller\TrashController
  * @uses \App\Controller\TrashController
  */
-class TrashControllerTest extends TestCase
+class TrashControllerTest extends BaseControllerTest
 {
     /**
      * @inheritDoc
@@ -42,27 +41,6 @@ class TrashControllerTest extends TestCase
      * @var \App\Controller\TrashController
      */
     public $Trash;
-
-    /**
-     * Test api client
-     *
-     * @var \BEdita\SDK\BEditaClient
-     */
-    public $client;
-
-    /**
-     * Setup api client and auth
-     *
-     * @return void
-     */
-    private function setupApi(): void
-    {
-        $this->client = ApiClientProvider::getApiClient();
-        $adminUser = getenv('BEDITA_ADMIN_USR');
-        $adminPassword = getenv('BEDITA_ADMIN_PWD');
-        $response = $this->client->authenticate($adminUser, $adminPassword);
-        $this->client->setupTokens($response['meta']);
-    }
 
     /**
      * Create an object and "soft" delete it
@@ -133,8 +111,8 @@ class TrashControllerTest extends TestCase
     /**
      * Test `restore` method
      *
-     * @covers ::restore()
      * @return void
+     * @covers ::restore()
      */
     public function testRestore(): void
     {
@@ -154,8 +132,8 @@ class TrashControllerTest extends TestCase
     /**
      * Test `restore` method when unauthorized
      *
-     * @covers ::restore()
      * @return void
+     * @covers ::restore()
      */
     public function testRestoreUnauthorized(): void
     {
@@ -164,14 +142,14 @@ class TrashControllerTest extends TestCase
         $expected = new BEditaClientException('Not Found', 404);
         static::expectException(get_class($expected));
         static::expectExceptionCode($expected->getCode());
-        $response = $this->client->getObject($id);
+        $this->client->getObject($id);
     }
 
     /**
      * Test `restore` method with multiple items
      *
-     * @covers ::restore()
      * @return void
+     * @covers ::restore()
      */
     public function testRestoreMulti(): void
     {
@@ -185,8 +163,8 @@ class TrashControllerTest extends TestCase
     /**
      * Test `restore` method failure with multiple items
      *
-     * @covers ::restore()
      * @return void
+     * @covers ::restore()
      */
     public function testRestoreMultiFailure(): void
     {
@@ -201,10 +179,11 @@ class TrashControllerTest extends TestCase
     }
 
     /**
-     * Test `delete` method
+     * Test `delete` and `deleteData` methods
      *
-     * @covers ::delete()
      * @return void
+     * @covers ::delete()
+     * @covers ::deleteData()
      */
     public function testDelete(): void
     {
@@ -227,10 +206,64 @@ class TrashControllerTest extends TestCase
     }
 
     /**
+     * Test `delete` and `deleteData` methods with media object
+     *
+     * @return void
+     * @covers ::delete()
+     * @covers ::deleteData()
+     */
+    public function testDeleteMediaWithStream(): void
+    {
+        // setup and auth
+        $this->setupApi();
+
+        // post a new object and move it to trash (soft delete)
+        $o = $this->createTestMediaWithStream();
+        $id = (string)Hash::get($o, 'id');
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => $id,
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->Trash = new TrashController($request);
+
+        $response = $this->client->get('/streams', ['filter' => ['object_id' => $id]]);
+        $streams = (array)Hash::get($response, 'data');
+        static::assertNotEmpty($streams);
+
+        // trash image
+        $this->client->delete(sprintf('/images/%s', $id));
+        // delete image
+        $this->Trash->delete();
+
+        $response = $this->client->get('/streams', ['filter' => ['object_id' => $id]]);
+        $streams = (array)Hash::get($response, 'data');
+        static::assertEmpty($streams);
+
+        try {
+            $this->client->getObject($id);
+        } catch (BEditaClientException $e) {
+            $expected = new BEditaClientException('Not Found', 404);
+            static::assertEquals($expected->getCode(), $e->getCode());
+        }
+
+        try {
+            $this->client->get(sprintf('/trash/%d', $id));
+        } catch (BEditaClientException $e) {
+            $expected = new BEditaClientException('Not Found', 404);
+            static::assertEquals($expected->getCode(), $e->getCode());
+        }
+    }
+
+    /**
      * Test `delete` method when unauthorized
      *
-     * @covers ::delete()
      * @return void
+     * @covers ::delete()
      */
     public function testDeleteUnauthorized(): void
     {
@@ -247,8 +280,8 @@ class TrashControllerTest extends TestCase
     /**
      * Test `restore` method with multiple items
      *
-     * @covers ::delete()
      * @return void
+     * @covers ::delete()
      */
     public function testDeleteMulti(): void
     {
@@ -264,8 +297,8 @@ class TrashControllerTest extends TestCase
     /**
      * Test `delete` method failure with multiple items
      *
-     * @covers ::delete()
      * @return void
+     * @covers ::delete()
      */
     public function testDeleteMultiFailure(): void
     {
@@ -282,9 +315,9 @@ class TrashControllerTest extends TestCase
     /**
      * Test `emptyTrash` method
      *
+     * @return void
      * @covers ::emptyTrash()
      * @covers ::listQuery()
-     * @return void
      */
     public function testEmpty(): void
     {
@@ -301,9 +334,9 @@ class TrashControllerTest extends TestCase
     /**
      * Test `emptyTrash` method with query filter
      *
+     * @return void
      * @covers ::emptyTrash()
      * @covers ::listQuery()
-     * @return void
      */
     public function testEmptyFilter(): void
     {
@@ -317,8 +350,8 @@ class TrashControllerTest extends TestCase
     /**
      * Test `emptyTrash` method when unauthorized
      *
-     * @covers ::emptyTrash()
      * @return void
+     * @covers ::emptyTrash()
      */
     public function testEmptyUnauthorized(): void
     {

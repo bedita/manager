@@ -12,6 +12,7 @@
  */
 namespace App\Controller\Model;
 
+use App\Utility\CacheTools;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -44,7 +45,6 @@ class TagsController extends ModelBaseController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('Categories');
         $this->loadComponent('ProjectConfiguration');
     }
 
@@ -59,6 +59,7 @@ class TagsController extends ModelBaseController
         $options['sort'] = empty($options['sort']) ? 'name' : $options['sort'];
         $response = ApiClientProvider::getApiClient()->get('/model/tags', $options);
         $resources = Hash::combine((array)Hash::get($response, 'data'), '{n}.id', '{n}');
+        CacheTools::setModuleCount((array)$response, 'tags');
         $roots = $this->Categories->getAvailableRoots($resources);
         $tagsTree = $this->Categories->tree($resources);
         $this->set(compact('resources', 'roots', 'tagsTree'));

@@ -44,7 +44,6 @@ class CategoriesController extends ModelBaseController
     {
         parent::initialize();
 
-        $this->loadComponent('Categories');
         $this->loadComponent('ProjectConfiguration');
         $this->loadComponent('Properties');
     }

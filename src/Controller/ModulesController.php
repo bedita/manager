@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\CacheTools;
 use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
@@ -54,7 +55,6 @@ class ModulesController extends AppController
     {
         parent::initialize();
 
-        $this->loadComponent('Categories');
         $this->loadComponent('Children');
         $this->loadComponent('Clone');
         $this->loadComponent('History');
@@ -102,6 +102,7 @@ class ModulesController extends AppController
 
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->Query->index());
+            CacheTools::setModuleCount((array)$response, $this->Modules->getConfig('currentModuleName'));
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -280,6 +281,17 @@ class ModulesController extends AppController
         unset($requestData['_api']);
 
         try {
+            $id = Hash::get($requestData, 'id');
+            // skip save if no data changed
+            if (empty($relatedData) && count($requestData) === 1 && !empty($id)) {
+                $response = $this->apiClient->getObject($id, $this->objectType, ['count' => 'all']);
+                $this->Thumbs->urls($response);
+                $this->set((array)$response);
+                $this->setSerialize(array_keys($response));
+
+                return;
+            }
+
             // upload file (if available)
             $this->Modules->upload($requestData);
 

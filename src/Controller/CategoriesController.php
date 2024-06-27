@@ -39,7 +39,6 @@ class CategoriesController extends AppController
     {
         parent::initialize();
 
-        $this->loadComponent('Categories');
         $this->loadComponent('ProjectConfiguration');
         $this->loadComponent('Properties');
         if ($this->getRequest()->getParam('object_type')) {
