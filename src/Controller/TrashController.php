@@ -252,9 +252,15 @@ class TrashController extends AppController
     public function deleteData(string $id): void
     {
         $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $id]]);
-        $streams = (array)Hash::get($response, 'data');
         $this->apiClient->remove($id);
+        // this for BE versions < 5.25.1, where streams are not deleted with media on delete
+        $streams = (array)Hash::get($response, 'data');
         foreach ($streams as $stream) {
+            $search = $this->apiClient->get('/streams', ['filter' => ['uuid' => $stream['id']]]);
+            $count = (int)Hash::get($search, 'meta.pagination.count', 0);
+            if ($count === 0) {
+                continue;
+            }
             $this->apiClient->delete(sprintf('/streams/%s', $stream['id']));
         }
     }
