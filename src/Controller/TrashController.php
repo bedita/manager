@@ -258,10 +258,9 @@ class TrashController extends AppController
         foreach ($streams as $stream) {
             $search = $this->apiClient->get('/streams', ['filter' => ['uuid' => $stream['id']]]);
             $count = (int)Hash::get($search, 'meta.pagination.count', 0);
-            if ($count === 0) {
-                continue;
+            if ($count === 1) {
+                $this->apiClient->delete(sprintf('/streams/%s', $stream['id']));
             }
-            $this->apiClient->delete(sprintf('/streams/%s', $stream['id']));
         }
     }
 }
