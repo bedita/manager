@@ -128,8 +128,9 @@ class LayoutHelper extends Helper
         $label = $name === 'objects' ? __('All objects') : Hash::get($module, 'label', $name);
         $route = (array)Hash::get($module, 'route');
         $param = empty($route) ? ['_name' => 'modules:list', 'object_type' => $name, 'plugin' => null] : $route;
-        $counters = Configure::read('UI.modules.counters', 'none');
-        $count = $counters === 'none' ? '' : $this->moduleCount($name);
+        $counters = Configure::read('UI.modules.counters', ['trash']);
+        $showCounter = is_array($counters) ? in_array($name, $counters) : $counters === 'all';
+        $count = $showCounter ? '' : $this->moduleCount($name);
 
         return sprintf(
             '<a href="%s" class="%s"><span>%s</span>%s%s</a>',
@@ -236,8 +237,9 @@ class LayoutHelper extends Helper
         if (!empty($currentModule) && !empty($currentModule['name'])) {
             $name = $currentModule['name'];
             $label = Hash::get($currentModule, 'label', $name);
-            $counters = Configure::read('UI.modules.counters', 'none');
-            $count = $counters === 'none' ? '' : $this->moduleCount($name);
+            $counters = Configure::read('UI.modules.counters', ['trash']);
+            $showCounter = is_array($counters) ? in_array($name, $counters) : $counters === 'all';
+            $count = $showCounter ? '' : $this->moduleCount($name);
 
             return sprintf(
                 '<a href="%s" class="%s"><span class="mr-05">%s</span>%s%s</a>',
