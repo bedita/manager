@@ -53,10 +53,7 @@ class DashboardController extends AppController
 
         // set modules counters
         $counters = Configure::read('UI.modules.counters', 'none');
-        if ($counters === 'none') {
-            return;
-        }
-        $modules = array_keys((array)$this->viewBuilder()->getVar('modules'));
+        $modules = $counters === 'none' ? [] : array_keys((array)$this->viewBuilder()->getVar('modules'));
         $modules = $counters === 'all' ? $modules : array_intersect($modules, (array)explode(',', $counters));
         foreach ($modules as $name) {
             if (CacheTools::existsCount($name)) {
