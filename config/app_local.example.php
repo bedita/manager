@@ -615,6 +615,20 @@ return [
     // ],
 
     /**
+     * UI settings.
+     * - index: index settings. 'copy2clipboard' enables "onmouseover" of index general cells showing copy to clipboard button
+     * - modules: modules settings. 'counters' to show counters in modules; 'all', 'none', <list of modules> to show all, none or custom modules. Default is ['trash']
+     */
+    // 'UI' => [
+    //     'index' => [
+    //         'copy2clipboard' => true,
+    //     ],
+    //     'modules' => [
+    //         'counters' => ['objects', 'media', 'images', 'videos', 'audio', 'files', 'trash', 'users'],
+    //     ],
+    // ],
+
+    /**
      * Upload configurations.
      */
     // 'uploadAccepted' => [

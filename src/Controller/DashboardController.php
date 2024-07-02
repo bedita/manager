@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Utility\CacheTools;
 use App\Utility\SchemaTrait;
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 
 /**
@@ -51,7 +52,13 @@ class DashboardController extends AppController
         );
 
         // set modules counters
+        $counters = Configure::read('UI.modules.counters', ['trash']);
+        if ($counters === 'none') {
+            return;
+        }
+        $counters = in_array($counters, ['none', 'all']) ? $counters : ['trash'];
         $modules = array_keys((array)$this->viewBuilder()->getVar('modules'));
+        $modules = $counters === 'all' ? $modules : array_intersect($modules, $counters);
         foreach ($modules as $name) {
             if (CacheTools::existsCount($name)) {
                 continue;

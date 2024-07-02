@@ -128,6 +128,9 @@ class LayoutHelper extends Helper
         $label = $name === 'objects' ? __('All objects') : Hash::get($module, 'label', $name);
         $route = (array)Hash::get($module, 'route');
         $param = empty($route) ? ['_name' => 'modules:list', 'object_type' => $name, 'plugin' => null] : $route;
+        $counters = Configure::read('UI.modules.counters', ['trash']);
+        $showCounter = is_array($counters) ? in_array($name, $counters) : $counters === 'all';
+        $count = $showCounter ? '' : $this->moduleCount($name);
 
         return sprintf(
             '<a href="%s" class="%s"><span>%s</span>%s%s</a>',
@@ -135,7 +138,7 @@ class LayoutHelper extends Helper
             sprintf('dashboard-item has-background-module-%s %s', $name, Hash::get($module, 'class', '')),
             $this->tr($label),
             $this->moduleIcon($name, $module),
-            $this->moduleCount($name)
+            $count
         );
     }
 
@@ -234,6 +237,9 @@ class LayoutHelper extends Helper
         if (!empty($currentModule) && !empty($currentModule['name'])) {
             $name = $currentModule['name'];
             $label = Hash::get($currentModule, 'label', $name);
+            $counters = Configure::read('UI.modules.counters', ['trash']);
+            $showCounter = is_array($counters) ? in_array($name, $counters) : $counters === 'all';
+            $count = $showCounter ? '' : $this->moduleCount($name);
 
             return sprintf(
                 '<a href="%s" class="%s"><span class="mr-05">%s</span>%s%s</a>',
@@ -241,7 +247,7 @@ class LayoutHelper extends Helper
                 sprintf('module-item has-background-module-%s', $name),
                 $this->tr($label),
                 $this->moduleIcon($name, $currentModule),
-                $this->moduleCount($name)
+                $count
             );
         }
 

@@ -23,6 +23,7 @@ use Authentication\IdentityInterface;
 use BEdita\WebTools\ApiClientProvider;
 use BEdita\WebTools\Identifier\ApiIdentifier;
 use Cake\Cache\Cache;
+use Cake\Core\Configure;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -204,13 +205,48 @@ class DashboardControllerTest extends TestCase
 
         $this->setupControllerAndLogin($requestConfig);
 
-        $this->Dashboard->set('modules', ['abcde' => [], 'wrong' => [], 'documents' => [], 'images' => [], 'media' => [], 'objects' => [], 'tags' => [], 'trash' => [], 'users' => []]);
-        CacheTools::setModuleCount(['meta' => ['pagination' => ['count' => 0]]], 'abcde');
+        Cache::clearAll();
+        Configure::delete('UI.modules.counters'); // default ['trash']
+        $this->Dashboard->set('modules', ['wrong' => [], 'documents' => [], 'images' => [], 'media' => [], 'objects' => [], 'tags' => [], 'trash' => [], 'users' => []]);
+        CacheTools::setModuleCount(['meta' => ['pagination' => ['count' => 0]]], 'trash');
         $this->Dashboard->index();
         $response = $this->Dashboard->getResponse();
+        $vars = $this->Dashboard->viewBuilder()->getVars();
+        $modules = array_keys((array)$vars['modules']);
+        foreach ($modules as $name) {
+            $count = CacheTools::getModuleCount($name);
+            if ($name === 'trash') {
+                static::assertTrue(is_numeric($count));
+            } else {
+                static::assertEquals('-', $count);
+            }
+        }
 
         static::assertEquals(200, $response->getStatusCode());
         static::assertArrayHasKey('jobsAllow', $this->Dashboard->viewBuilder()->getVars());
+
+        Cache::clearAll();
+        Configure::write('UI.modules.counters', 'none');
+        $this->Dashboard->index();
+        $vars = $this->Dashboard->viewBuilder()->getVars();
+        $modules = array_keys((array)$vars['modules']);
+        foreach ($modules as $name) {
+            static::assertEquals('-', CacheTools::getModuleCount($name));
+        }
+
+        Cache::clearAll();
+        Configure::write('UI.modules.counters', 'all');
+        $this->Dashboard->index();
+        $vars = $this->Dashboard->viewBuilder()->getVars();
+        $modules = array_keys((array)$vars['modules']);
+        foreach ($modules as $name) {
+            $count = CacheTools::getModuleCount($name);
+            if ($name === 'wrong') {
+                static::assertEquals('-', $count);
+            } else {
+                static::assertTrue(is_numeric($count));
+            }
+        }
     }
 
     /**
