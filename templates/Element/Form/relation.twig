@@ -71,6 +71,8 @@
 
             {% set dragAndDrop = relationName != 'children' or (relationName == 'children' and mainObject.attributes.children_order in [null, 'position', '-position']) %}
             {# RELATED OBJECTS #}
+            <div class="ml-05 mb-1" v-if="loading">{{ __('Loading ...') }}</div>
+            <div class="ml-05 mb-1" v-if="!loading && objects.length === 0">{{ __('No items found') }}</div>
             <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
                 <div :data-list="dataList" class="columns" {%- if dragAndDrop %}droppable sortable{%- endif %}>
                     <div
