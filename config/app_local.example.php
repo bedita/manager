@@ -616,9 +616,13 @@ return [
 
     /**
      * UI settings.
+     * - index: index settings. 'copy2clipboard' enables "onmouseover" of index general cells showing copy to clipboard button
      * - modules: modules settings. 'counters' to show counters in modules; 'all', 'none' (default), '<comma separated list of modules>' to show all, none or custom modules
      */
     // 'UI' => [
+    //     'index' => [
+    //         'copy2clipboard' => true,
+    //     ],
     //     'modules' => [
     //         'counters' => 'documents,events,locations,media,news,objects',
     //     ],
