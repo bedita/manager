@@ -57,7 +57,7 @@ class DashboardController extends AppController
             return;
         }
         $modules = array_keys((array)$this->viewBuilder()->getVar('modules'));
-        $modules = $counters === 'all' ? $counters : array_intersect($modules, (array)explode(',', $counters));
+        $modules = $counters === 'all' ? $modules : array_intersect($modules, (array)explode(',', $counters));
         foreach ($modules as $name) {
             if (CacheTools::existsCount($name)) {
                 continue;
