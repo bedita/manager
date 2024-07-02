@@ -130,7 +130,7 @@ class LayoutHelper extends Helper
         $param = empty($route) ? ['_name' => 'modules:list', 'object_type' => $name, 'plugin' => null] : $route;
         $counters = Configure::read('UI.modules.counters', ['trash']);
         $showCounter = is_array($counters) ? in_array($name, $counters) : $counters === 'all';
-        $count = $showCounter ? '' : $this->moduleCount($name);
+        $count = !$showCounter ? '' : $this->moduleCount($name);
 
         return sprintf(
             '<a href="%s" class="%s"><span>%s</span>%s%s</a>',
@@ -239,7 +239,7 @@ class LayoutHelper extends Helper
             $label = Hash::get($currentModule, 'label', $name);
             $counters = Configure::read('UI.modules.counters', ['trash']);
             $showCounter = is_array($counters) ? in_array($name, $counters) : $counters === 'all';
-            $count = $showCounter ? '' : $this->moduleCount($name);
+            $count = !$showCounter ? '' : $this->moduleCount($name);
 
             return sprintf(
                 '<a href="%s" class="%s"><span class="mr-05">%s</span>%s%s</a>',
