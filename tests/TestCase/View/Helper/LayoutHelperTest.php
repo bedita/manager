@@ -244,7 +244,7 @@ class LayoutHelperTest extends TestCase
                 ],
             ],
             'objects' => [
-                '<a href="/objects" class="module-item has-background-module-objects"><span class="mr-05">Objects</span><span class="tag mx-05 module-items-counter has-background-module-objects">-</span></a>',
+                '<a href="/objects" class="module-item has-background-module-objects"><span class="mr-05">Objects</span></a>',
                 'Module',
                 [
                     'currentModule' => ['name' => 'objects'],
@@ -735,7 +735,7 @@ class LayoutHelperTest extends TestCase
             'documents' => [
                 'documents',
                 [],
-                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><app-icon icon="carbon:document"></app-icon><span class="tag mx-05 module-items-counter has-background-module-documents">-</span></a>',
+                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><app-icon icon="carbon:document"></app-icon></a>',
             ],
         ];
     }
