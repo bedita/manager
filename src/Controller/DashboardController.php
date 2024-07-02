@@ -56,7 +56,7 @@ class DashboardController extends AppController
         if ($counters === 'none') {
             return;
         }
-        $counters = in_array($counters, ['none', 'all']) ? $counters : ['trash'];
+        $counters = is_array($counters) || in_array($counters, ['none', 'all']) ? $counters : ['trash'];
         $modules = array_keys((array)$this->viewBuilder()->getVar('modules'));
         $modules = $counters === 'all' ? $modules : array_intersect($modules, $counters);
         foreach ($modules as $name) {
