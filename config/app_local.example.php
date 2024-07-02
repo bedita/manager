@@ -615,6 +615,16 @@ return [
     // ],
 
     /**
+     * UI settings.
+     * - modules: modules settings. 'counters' to show counters in modules; 'all', 'none' (default), '<comma separated list of modules>' to show all, none or custom modules
+     */
+    // 'UI' => [
+    //     'modules' => [
+    //         'counters' => 'documents,events,locations,media,news,objects',
+    //     ],
+    // ],
+
+    /**
      * Upload configurations.
      */
     // 'uploadAccepted' => [
