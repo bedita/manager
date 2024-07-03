@@ -152,12 +152,6 @@ export default {
             return this.pagination.page_count > 1 && this.pagination.page_count <= 7;
         },
 
-        initHistoryEditor() {
-            this.queryFilter.filter['history_editor'] = Boolean(this.initFilter?.filter?.history_editor);
-
-            return Boolean(this.initFilter?.filter?.history_editor) || false;
-        },
-
         initCategories() {
             const categories = [];
             let filterCategories = this.initFilter?.filter?.categories || '';

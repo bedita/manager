@@ -218,7 +218,12 @@ export const PaginatedContentMixin = {
          */
         toPage(page, query = {}) {
             this.pagination.page = page || 1;
-            return this.getPaginatedObjects(true, query);
+            const q = { ...query };
+            if (q.filter.history_editor === true) {
+                q.filter.history_editor = BEDITA.userId;
+            }
+
+            return this.getPaginatedObjects(true, q);
         },
 
         /**
