@@ -79,6 +79,7 @@ export default {
              * This will switch the API filter between `parent` and `ancestor`.
              */
             filterByDescendants: false,
+            folder: null,
             moreFilters: this.filterActive,
             pageSize: this.pagination.page_size,
             queryFilter: {},
@@ -218,7 +219,7 @@ export default {
         },
 
         positionFilterName() {
-            return this.filterByDescendants ? 'ancestor' : 'parent';
+            return this.filterByDescendants === true ? 'ancestor' : 'parent';
         }
     },
 
@@ -322,10 +323,13 @@ export default {
          */
         prepareFilters() {
             const filter = { ...this.queryFilter.filter };
+            if (this.folder) {
+                filter[this.positionFilterName] = this.folder.id;
+            }
 
             Object.entries(filter).forEach(([key, filterValue]) => {
                 // do nothing allowed filters, if value is set
-                if (['id', 'uname', 'status', 'type', 'ancestor', 'history_editor'].includes(key) && filterValue) {
+                if (['id', 'uname', 'status', 'type', 'ancestor', 'parent', 'history_editor'].includes(key) && filterValue) {
                     return;
                 }
 
@@ -434,20 +438,18 @@ export default {
         },
 
         onFolderChange(folder) {
+            this.folder = folder;
             this.queryFilter.filter[this.positionFilterName] = folder?.id;
         },
 
         /**
          * Switch between descendants and children filter.
-         * @param {Event} event Change event of the switch input.
          */
-        onPositionFilterChange(event) {
-            const value = event.target.checked;
-            const newFilter = value ? 'ancestor' : 'parent';
-            const oldFilter = value ? 'parent' : 'ancestor';
-
-            this.queryFilter.filter[newFilter] = this.queryFilter.filter[oldFilter];
+        onPositionFilterChange() {
+            const newFilter = this.positionFilterName;
+            const oldFilter = newFilter === 'ancestor' ? 'parent' : 'ancestor';
             delete this.queryFilter.filter[oldFilter];
+            this.queryFilter.filter[newFilter] = this.folder?.id || null;
         },
     }
 };
