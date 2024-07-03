@@ -50,7 +50,9 @@
                 {{ element('Form/custom_left') }}
 
                 {# calendar using `date_ranges` #}
-                {{ element('Form/calendar') }}
+                {% if not Element.custom('calendar', 'group') %}
+                    {{ element('Form/calendar') }}
+                {% endif %}
 
                 {{ element(Element.categories()) }}
 
