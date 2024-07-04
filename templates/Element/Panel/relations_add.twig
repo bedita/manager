@@ -112,9 +112,13 @@
 
         <div class="px-1 shrinks">
             <div class="columns">
-                <div class="related-item-column column is-3 is-one-quarter-fullhd" v-for="related in objects" v-if="relationName !== 'children' || related.type !== 'folders'">
-                    {{ element('Form/related_item', { 'add': true }) }}
-                </div>
+                <div class="ml-05 mb-1" v-if="loading">{{ __('Loading ...') }}</div>
+                <div class="ml-05 mb-1" v-if="!loading && objects.length === 0">{{ __('No items found') }}</div>
+                <template v-else>
+                    <div class="related-item-column column is-3 is-one-quarter-fullhd" v-for="related in objects" v-if="relationName !== 'children' || related.type !== 'folders'">
+                        {{ element('Form/related_item', { 'add': true }) }}
+                    </div>
+                </template>
             </div>
         </div>
 

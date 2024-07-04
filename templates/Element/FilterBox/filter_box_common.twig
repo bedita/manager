@@ -69,7 +69,8 @@
         {# object type filter #}
         <div class="filter-container search-types" v-if="rightTypes.length > 1">
             <label>{{ __('Type') }}</label>
-            <select v-model="selectedType"
+            <select v-model="queryFilter.filter.type"
+                @change="onChangeTypeFilter"
                 form="_filters"
                 class="has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest"
             >
@@ -81,7 +82,7 @@
         {# only my contents filter #}
         <div class="filter-container" v-if="showAdvanced">
             <label>
-                <input type="checkbox" form="_filters" v-model="queryFilter.filter['history_editor']" :initvalue="initHistoryEditor">{{ __('Only my contents') }}</input>
+                <input type="checkbox" form="_filters" v-model="queryFilter.filter['history_editor']">{{ __('Only my contents') }}</input>
             </label>
         </div>
 
@@ -89,7 +90,13 @@
         <div class="filter-container" v-if="statusFilter.options">
             <label>{{ __('Status') }}</label>
             <label v-for="s in statusFilter.options">
-                <input type="checkbox" form="_filters" :id="s.value" :name="statusFilter.name" :value="s.value" v-model="selectedStatuses">
+                <input
+                    type="checkbox"
+                    form="_filters"
+                    :id="s.value"
+                    :name="statusFilter.name"
+                    :value="s.value"
+                    v-model="queryFilter.filter.status">
                 <: s.text :>
             </label>
         </div>

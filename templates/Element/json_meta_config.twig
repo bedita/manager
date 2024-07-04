@@ -1,5 +1,5 @@
 <script type="text/javascript">
 
-    const BEDITA = {{ Layout.metaConfig() | json_encode | raw }};
+    const BEDITA = {{ Layout.metaConfig() | merge({ userId: user.id }) | json_encode | raw }};
 
 </script>

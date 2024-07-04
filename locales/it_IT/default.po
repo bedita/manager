@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-06-17 09:09:51 \n"
+"POT-Creation-Date: 2024-06-24 10:27:53 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -416,6 +416,9 @@ msgstr "Lista"
 
 msgid "List view"
 msgstr "Vista a lista"
+
+msgid "Loading ..."
+msgstr "Caricamento ..."
 
 msgid "Locations"
 msgstr "Posizioni"
@@ -1267,8 +1270,8 @@ msgid "Items"
 msgstr "Elementi"
 
 #, javascript-format
-msgid "Search by ${ selectedType }"
-msgstr "Cerca per ${ selectedType }"
+msgid "Search by ${ searchType }"
+msgstr "Cerca per ${ searchType }"
 
 msgid "NULL"
 msgstr ""
