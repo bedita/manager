@@ -377,6 +377,7 @@ export default {
          * @emits Event#filter-reset
          */
         resetFilter() {
+            this.folder = null;
             this.selectedSearchType = 'q';
             this.queryFilter = this.getCleanQuery();
             this.$emit('filter-reset');
@@ -418,6 +419,7 @@ export default {
             }
         },
         onChangeTypeFilter() {
+            this.folder = null;
             this.availableFilters = this.filtersByType?.[this.queryFilter.filter.type] || [];
         },
         onPageKeydown(e) {
