@@ -115,6 +115,7 @@ export default {
                         'visualblocks',
                     ].join(' '),
                     autoresize_bottom_margin: 50,
+                    convert_urls: false,
                     relative_urls: false,
                     paste_block_drop: true,
                     add_unload_trigger: false, // fix populating textarea elements with garbage when the user initiates a navigation with unsaved changes, but cancels it when the alert is shown
