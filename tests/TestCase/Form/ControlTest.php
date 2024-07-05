@@ -414,6 +414,54 @@ class ControlTest extends TestCase
     }
 
     /**
+     * Data provider for `testOneOf` test case.
+     *
+     * @return array
+     */
+    public function oneOfProvider(): array
+    {
+        return [
+            'empty schema' => [
+                [],
+                [],
+            ],
+            'no oneOf' => [
+                [
+                    'type' => 'text',
+                ],
+                [],
+            ],
+            'oneOf' => [
+                [
+                    'oneOf' => [
+                        ['type' => 'null'],
+                        ['type' => 'text'],
+                    ],
+                ],
+                [
+                    'type' => 'text',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `oneOf` method
+     *
+     * @param array $schema Object schema array.
+     * @param string $expected The expected val.
+     * @return void
+     * @dataProvider oneOfProvider()
+     * @covers ::oneOf()
+     */
+    public function testOneOf(array $schema, array $expected): void
+    {
+        $actual = Control::oneOf($schema);
+
+        static::assertSame($expected, $actual);
+    }
+
+    /**
      * Provider for testLabel
      *
      * @return array

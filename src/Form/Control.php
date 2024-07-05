@@ -39,6 +39,14 @@ class Control
     ];
 
     /**
+     * Map JSON schema properties to HTML attributes
+     */
+    public const JSON_SCHEMA_HTML_PROPERTIES_MAP = [
+        'minimum' => 'min',
+        'maximum' => 'max',
+    ];
+
+    /**
      * Get control by options
      *
      * @param array $options The options
@@ -47,8 +55,14 @@ class Control
     public static function control(array $options): array
     {
         $type = $options['propertyType'];
-        $format = self::format((array)$options['schema']);
+        $oneOf = self::oneOf((array)$options['schema']);
+        $format = (string)Hash::get($oneOf, 'format');
         $controlOptions = array_intersect_key($options, array_flip(['label', 'disabled', 'readonly', 'step', 'value']));
+        foreach (self::JSON_SCHEMA_HTML_PROPERTIES_MAP as $key => $attribute) {
+            if (array_key_exists($key, $oneOf)) {
+                $controlOptions[$attribute] = $oneOf[$key];
+            }
+        }
         if ($type === 'text' && in_array($format, ['email', 'uri'])) {
             $result = call_user_func_array(Form::getMethod(self::class, $type, $format), [$options]);
 
@@ -72,16 +86,25 @@ class Control
      */
     public static function format(array $schema): string
     {
-        if (empty($schema['oneOf'])) {
-            return '';
-        }
-        foreach ($schema['oneOf'] as $item) {
-            if (array_key_exists('format', $item)) {
-                return (string)$item['format'];
-            }
-        }
+        return (string)Hash::get(self::oneOf($schema), 'format');
+    }
 
-        return '';
+    /**
+     * Get oneOf from schema, excluding null values
+     *
+     * @param array $schema The schema
+     * @return array
+     */
+    public static function oneOf(array $schema): array
+    {
+        $oneOf = array_filter(
+            (array)Hash::get($schema, 'oneOf'),
+            function ($item) {
+                return $item['type'] !== 'null';
+            }
+        );
+
+        return (array)Hash::get(array_values($oneOf), 0);
     }
 
     /**
