@@ -449,7 +449,7 @@ class ControlTest extends TestCase
      * Test `oneOf` method
      *
      * @param array $schema Object schema array.
-     * @param string $expected The expected val.
+     * @param array $expected The expected val.
      * @return void
      * @dataProvider oneOfProvider()
      * @covers ::oneOf()
