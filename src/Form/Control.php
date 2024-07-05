@@ -100,7 +100,7 @@ class Control
         $oneOf = array_filter(
             (array)Hash::get($schema, 'oneOf'),
             function ($item) {
-                return $item['type'] !== 'null';
+                return !empty($item) && Hash::get($item, 'type') !== 'null';
             }
         );
 
