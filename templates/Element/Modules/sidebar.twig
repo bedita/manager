@@ -22,9 +22,16 @@
 {% if currentModule.sidebar.index %}
 {% for item in currentModule.sidebar.index %}
     {% set url = item.url is iterable ? Url.build(item.url) : item.url %}
+    {% set plugin = item.plugin is defined ? item.plugin : null %}
+    {% set itemLabel = '' %}
+    {% if plugin and item.label %}
+        {% set itemLabel = __d(plugin, item.label) %}
+    {% else %}
+        {% set itemLabel = item.label is defined ? item.label : __(item.labelKey) %}
+    {% endif %}
     {% do _view.append(
         'app-module-buttons',
-        '<a href="' ~ url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><app-icon icon="' ~ item.icon|default('carbon:save') ~ '"></app-icon><span class="ml-05">' ~ __(item.label) ~ '</span></a>',
+        '<a href="' ~ url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><app-icon icon="' ~ item.icon|default('carbon:save') ~ '"></app-icon><span class="ml-05">' ~ itemLabel ~ '</span></a>',
     ) %}
 {% endfor %}
 {% endif %}

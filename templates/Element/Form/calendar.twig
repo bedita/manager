@@ -2,7 +2,8 @@
 
 {% if in_array('DateRanges', schema.associations) %}
 {% set key = 'Properties.%s.options.date_ranges.label'|format(object.type) %}
-{% set label = config(key)|default('Calendar') %}
+{% set plugin = config('Properties.%s.options.date_ranges.plugin'|format(object.type)) %}
+{% set label = plugin ? __d(plugin, config(key)) : __(config(key)|default('Calendar')) %}
 {% set key2 = 'Properties.%s.options.date_ranges.options'|format(object.type) %}
 {% set options = config(key2)|default({"weekdays":{}}) %}
 <property-view inline-template :tab-open="tabsOpen" tab-name="calendar">
@@ -10,7 +11,7 @@
         <header @click.prevent="toggleVisibility()"
             class="tab unselectable"
             :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
-            <h2>{{ __(label) }}</h2>
+            <h2>{{ label }}</h2>
         </header>
 
         <div v-show="isOpen" class="tab-container">
