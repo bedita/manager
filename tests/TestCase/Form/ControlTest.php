@@ -305,6 +305,52 @@ class ControlTest extends TestCase
                     'value' => 'www.gustavosupport.com',
                 ],
             ],
+            'integer with no value, default, minimum and maximum' => [
+                [
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'integer',
+                            'default' => 8,
+                            'minimum' => 1,
+                            'maximum' => 10,
+                        ],
+                    ],
+                ],
+                'integer',
+                null,
+                [
+                    'type' => 'integer',
+                    'min' => 1,
+                    'max' => 10,
+                    'value' => 8,
+                ],
+            ],
+            'integer with value, default, minimum and maximum' => [
+                [
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'integer',
+                            'default' => 8,
+                            'minimum' => 1,
+                            'maximum' => 10,
+                        ],
+                    ],
+                ],
+                'integer',
+                5,
+                [
+                    'type' => 'integer',
+                    'min' => 1,
+                    'max' => 10,
+                    'value' => 5,
+                ],
+            ],
         ];
     }
 
@@ -409,6 +455,54 @@ class ControlTest extends TestCase
     public function testFormat(array $schema, string $expected): void
     {
         $actual = Control::format($schema);
+
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testOneOf` test case.
+     *
+     * @return array
+     */
+    public function oneOfProvider(): array
+    {
+        return [
+            'empty schema' => [
+                [],
+                [],
+            ],
+            'no oneOf' => [
+                [
+                    'type' => 'text',
+                ],
+                [],
+            ],
+            'oneOf' => [
+                [
+                    'oneOf' => [
+                        ['type' => 'null'],
+                        ['type' => 'text'],
+                    ],
+                ],
+                [
+                    'type' => 'text',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `oneOf` method
+     *
+     * @param array $schema Object schema array.
+     * @param array $expected The expected val.
+     * @return void
+     * @dataProvider oneOfProvider()
+     * @covers ::oneOf()
+     */
+    public function testOneOf(array $schema, array $expected): void
+    {
+        $actual = Control::oneOf($schema);
 
         static::assertSame($expected, $actual);
     }
