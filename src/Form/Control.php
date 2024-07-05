@@ -42,6 +42,7 @@ class Control
      * Map JSON schema properties to HTML attributes
      */
     public const JSON_SCHEMA_HTML_PROPERTIES_MAP = [
+        'default' => 'value',
         'minimum' => 'min',
         'maximum' => 'max',
     ];
@@ -63,13 +64,14 @@ class Control
                 $controlOptions[$attribute] = $oneOf[$key];
             }
         }
+        $defaultValue = Hash::get($controlOptions, 'value');
         if ($type === 'text' && in_array($format, ['email', 'uri'])) {
             $result = call_user_func_array(Form::getMethod(self::class, $type, $format), [$options]);
 
             return array_merge($controlOptions, $result);
         }
         if (!in_array($type, self::CONTROL_TYPES)) {
-            $result = compact('type') + ['value' => $options['value']];
+            $result = compact('type') + ['value' => $options['value'] === null && $defaultValue ? $defaultValue : $options['value']];
 
             return array_merge($controlOptions, $result);
         }
