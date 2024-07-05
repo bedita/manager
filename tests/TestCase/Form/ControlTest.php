@@ -305,6 +305,28 @@ class ControlTest extends TestCase
                     'value' => 'www.gustavosupport.com',
                 ],
             ],
+            'integer with minimum and maximum' => [
+                [
+                    'oneOf' => [
+                        [
+                            'type' => 'null',
+                        ],
+                        [
+                            'type' => 'integer',
+                            'minimum' => 1,
+                            'maximum' => 10,
+                        ],
+                    ],
+                ],
+                'integer',
+                5,
+                [
+                    'type' => 'integer',
+                    'min' => 1,
+                    'max' => 10,
+                    'value' => 5,
+                ],
+            ],
         ];
     }
 
