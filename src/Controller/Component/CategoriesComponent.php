@@ -120,12 +120,12 @@ class CategoriesComponent extends Component
     {
         $roots = ['' => ['id' => 0, 'label' => '-', 'name' => '', 'object_type_name' => '']];
         foreach ($map as $category) {
-            if (empty($category['attributes']['parent_id'])) {
-                $roots[$category['id']] = [
-                    'id' => $category['id'],
-                    'label' => $category['attributes']['label'] ?? $category['attributes']['name'],
-                    'name' => $category['attributes']['name'],
-                    'object_type_name' => $category['attributes']['object_type_name'],
+            if (empty(Hash::get($category, 'attributes.parent_id'))) {
+                $roots[Hash::get($category, 'id')] = [
+                    'id' => Hash::get($category, 'id'),
+                    'label' => Hash::get($category, 'attributes.label') ?? Hash::get($category, 'attributes.name'),
+                    'name' => Hash::get($category, 'attributes.name'),
+                    'object_type_name' => Hash::get($category, 'attributes.object_type_name'),
                 ];
             }
         }
