@@ -852,4 +852,21 @@ class LayoutHelperTest extends TestCase
         $expected = sprintf('<span class="module-count">%s</span>', $count);
         Cache::disable();
     }
+
+    /**
+     * Test `showCounter` method.
+     *
+     * @return void
+     * @covers ::showCounter()
+     */
+    public function testShowCounter(): void
+    {
+        $layout = new LayoutHelper(new View());
+        // false
+        $actual = $layout->showCounter('dummy');
+        static::assertFalse($actual);
+        // true
+        $actual = $layout->showCounter('trash');
+        static::assertTrue($actual);
+    }
 }
