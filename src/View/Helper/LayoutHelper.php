@@ -128,9 +128,7 @@ class LayoutHelper extends Helper
         $label = $name === 'objects' ? __('All objects') : Hash::get($module, 'label', $name);
         $route = (array)Hash::get($module, 'route');
         $param = empty($route) ? ['_name' => 'modules:list', 'object_type' => $name, 'plugin' => null] : $route;
-        $counters = Configure::read('UI.modules.counters', ['trash']);
-        $showCounter = is_array($counters) ? in_array($name, $counters) : $counters === 'all';
-        $count = !$showCounter ? '' : $this->moduleCount($name);
+        $count = !$this->showCounter($name) ? '' : $this->moduleCount($name);
 
         return sprintf(
             '<a href="%s" class="%s"><span>%s</span>%s%s</a>',
@@ -143,6 +141,19 @@ class LayoutHelper extends Helper
     }
 
     /**
+     * Show counter for module
+     *
+     * @param string $name The module name
+     * @return bool
+     */
+    public function showCounter(string $name): bool
+    {
+        $counters = Configure::read('UI.modules.counters', ['trash']);
+
+        return is_array($counters) ? in_array($name, $counters) : $counters === 'all';
+    }
+
+    /**
      * Return module count span.
      *
      * @param string $name The module name
@@ -152,11 +163,8 @@ class LayoutHelper extends Helper
     public function moduleCount(string $name, ?string $moduleClass = null): string
     {
         $count = CacheTools::getModuleCount($name);
-        $base = 'tag mx-05 module-items-counter';
-        $defaultModuleClass = sprintf('has-background-module-%s', $name);
-        $cssClasses = empty($moduleClass) ? sprintf('%s %s', $base, $defaultModuleClass) : sprintf('%s %s', $base, $moduleClass);
 
-        return sprintf('<span class="%s">%s</span>', $cssClasses, $count);
+        return sprintf('<span class="module-count">%s</span>', $count);
     }
 
     /**

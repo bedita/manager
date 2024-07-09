@@ -30,7 +30,7 @@
                 {% if modules.users %}
                     <a href="{{ Url.build({'_name': 'modules:list', 'object_type': 'users'}) }}" title="{{ __('System users') }}" class="dashboard-item has-background-black">
                         <span>{{ __('System users') }}</span>
-                        {{ Layout.moduleCount('users', 'has-background-black')|raw }}
+                        {% if Layout.showCounter('users') %}{{ Layout.moduleCount('users', 'has-background-black')|raw }}{% endif %}
                         <app-icon icon="carbon:user-admin"></app-icon>
                     </a>
                 {% endif %}

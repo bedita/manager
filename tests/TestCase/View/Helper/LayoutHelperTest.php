@@ -830,6 +830,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return void
      * @covers ::moduleCount()
+     * @covers ::showCounter()
      */
     public function testModuleCount(): void
     {
