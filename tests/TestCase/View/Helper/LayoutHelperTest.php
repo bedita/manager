@@ -861,12 +861,16 @@ class LayoutHelperTest extends TestCase
      */
     public function testShowCounter(): void
     {
+        Configure::delete('UI.modules.counters');
         $layout = new LayoutHelper(new View());
         // false
         $actual = $layout->showCounter('dummy');
         static::assertFalse($actual);
         // true
         $actual = $layout->showCounter('trash');
+        static::assertTrue($actual);
+        Configure::write('UI.modules.counters', 'all');
+        $actual = $layout->showCounter('dummy');
         static::assertTrue($actual);
     }
 }
