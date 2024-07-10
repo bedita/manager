@@ -93,6 +93,14 @@ class MessageTest extends TestCase
                 ]),
                 'Invalid data. Email is in use. Username is required',
             ],
+            '400 dummy._required (not translated)' => [
+                new BEditaClientException([
+                    'status' => 400,
+                    'title' => 'Invalid data',
+                    'detail' => '[dummy._required]: This field is required',
+                ]),
+                'Invalid data. [dummy is required]: This field is required',
+            ],
         ];
     }
 
