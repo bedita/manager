@@ -99,7 +99,15 @@ class MessageTest extends TestCase
                     'title' => 'Invalid data',
                     'detail' => '[dummy._required]: This field is required',
                 ]),
-                'Invalid data. [dummy is required]: This field is required',
+                'Invalid data. dummy is required',
+            ],
+            '400 dummy.unique (not translated)' => [
+                new BEditaClientException([
+                    'status' => 400,
+                    'title' => 'Invalid data',
+                    'detail' => '[dummy.unique]: The provided value is invalid',
+                ]),
+                'Invalid data. dummy is in use',
             ],
             '400 other not translated' => [
                 new BEditaClientException([
