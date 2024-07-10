@@ -830,6 +830,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return void
      * @covers ::moduleCount()
+     * @covers ::showCounter()
      */
     public function testModuleCount(): void
     {
@@ -839,16 +840,38 @@ class LayoutHelperTest extends TestCase
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
         $actual = $layout->moduleCount($moduleName);
-        static::assertEquals('<span class="tag mx-05 module-items-counter has-background-module-test">-</span>', $actual);
+        static::assertEquals('<span class="module-count">-</span>', $actual);
 
         Cache::enable();
         $count = 42;
         CacheTools::setModuleCount(['meta' => ['pagination' => ['count' => $count]]], $moduleName);
-        $expected = sprintf('<span class="tag mx-05 module-items-counter has-background-module-test">%s</span>', $count);
+        $expected = sprintf('<span class="module-count">%s</span>', $count);
         $actual = $layout->moduleCount($moduleName);
         static::assertEquals($expected, $actual);
         $actual = $layout->moduleCount($moduleName, 'my-dummy-css-class');
-        $expected = sprintf('<span class="tag mx-05 module-items-counter my-dummy-css-class">%s</span>', $count);
+        $expected = sprintf('<span class="module-count">%s</span>', $count);
         Cache::disable();
+    }
+
+    /**
+     * Test `showCounter` method.
+     *
+     * @return void
+     * @covers ::showCounter()
+     */
+    public function testShowCounter(): void
+    {
+        Configure::delete('UI.modules.counters');
+        $layout = new LayoutHelper(new View());
+        // false
+        $actual = $layout->showCounter('dummy');
+        static::assertFalse($actual);
+        // true
+        $actual = $layout->showCounter('trash');
+        static::assertTrue($actual);
+        Configure::write('UI.modules.counters', 'all');
+        $actual = $layout->showCounter('dummy');
+        static::assertTrue($actual);
+        Configure::delete('UI.modules.counters');
     }
 }

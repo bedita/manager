@@ -3,6 +3,13 @@
 /*****************/
 
 body.view-dashboard {
+    .dashboard-item svg {
+        position: absolute;
+        display: block;
+        top: 40%;
+        height: 32px;
+        width: 32px;
+    }
     .dashboard {
         margin-top: $gutter;
         &-section {
