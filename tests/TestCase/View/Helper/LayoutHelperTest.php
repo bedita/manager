@@ -872,5 +872,6 @@ class LayoutHelperTest extends TestCase
         Configure::write('UI.modules.counters', 'all');
         $actual = $layout->showCounter('dummy');
         static::assertTrue($actual);
+        Configure::delete('UI.modules.counters');
     }
 }
