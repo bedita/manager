@@ -87,6 +87,7 @@ class Message
     public function prepareDetail(string $detail): string
     {
         $detail = trim($detail);
+        $detail = str_replace('[0]: ', '', $detail);
         if (strpos($detail, '._required]') !== false) {
             $detail = str_replace('._required', ' is required', $detail);
             $detailonly = substr($detail, 1, strpos($detail, ']') - 1);
