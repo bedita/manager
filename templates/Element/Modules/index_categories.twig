@@ -59,7 +59,9 @@
             <nav class="table-header has-border-black">
                 <div>{{ __('Name') }}</div>
                 <div>{{ __('Label') }}</div>
+                {% if not object_types.0 %}
                 <div>{{ __('Type') }}</div>
+                {% endif %}
                 <div>{{ __('Parent') }}</div>
                 <div>{{ __('Enabled') }}</div>
                 <div></div>
