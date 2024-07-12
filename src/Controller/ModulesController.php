@@ -20,6 +20,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
+use Cake\I18n\I18n;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -297,7 +298,9 @@ class ModulesController extends AppController
             $this->Modules->upload($requestData);
 
             // save data
-            $response = $this->apiClient->save($this->objectType, $requestData);
+            $lang = I18n::getLocale();
+            $headers = ['Accept-Language' => $lang];
+            $response = $this->apiClient->save($this->objectType, $requestData, $headers);
             $this->savePermissions(
                 (array)$response,
                 (array)$this->Schema->getSchema($this->objectType),
