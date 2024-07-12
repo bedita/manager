@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-06-24 10:27:53 \n"
+"POT-Creation-Date: 2024-07-10 10:08:33 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -172,6 +172,9 @@ msgstr ""
 msgid "Confirm new password"
 msgstr ""
 
+msgid "Conflict"
+msgstr ""
+
 msgid "Copy to"
 msgstr ""
 
@@ -265,6 +268,9 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
+msgid "Email is in use"
+msgstr ""
+
 msgid "Embed online content"
 msgstr ""
 
@@ -331,6 +337,9 @@ msgstr ""
 msgid "Folders"
 msgstr ""
 
+msgid "Forbidden"
+msgstr ""
+
 msgid "Forgot your password?"
 msgstr ""
 
@@ -380,6 +389,12 @@ msgid "Import filter not selected"
 msgstr ""
 
 msgid "Inherited properties"
+msgstr ""
+
+msgid "Internal Server Error"
+msgstr ""
+
+msgid "Invalid data"
 msgstr ""
 
 msgid "Invalid username or password"
@@ -451,6 +466,9 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
+msgid "Method Not Allowed"
+msgstr ""
+
 msgid "Missing import file"
 msgstr ""
 
@@ -518,6 +536,9 @@ msgid "No items found"
 msgstr ""
 
 msgid "No language configuration found"
+msgstr ""
+
+msgid "Not Found"
 msgstr ""
 
 msgid "Number of created objects"
@@ -844,6 +865,9 @@ msgstr ""
 msgid "Uname"
 msgstr ""
 
+msgid "Unauthorized"
+msgstr ""
+
 msgid "Undo Change File"
 msgstr ""
 
@@ -878,6 +902,12 @@ msgid "User profile saved"
 msgstr ""
 
 msgid "Username"
+msgstr ""
+
+msgid "Username is in use"
+msgstr ""
+
+msgid "Username is required"
 msgstr ""
 
 msgid "Users"

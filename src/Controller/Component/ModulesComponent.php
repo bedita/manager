@@ -22,6 +22,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
+use Cake\I18n\I18n;
 use Cake\Utility\Hash;
 
 /**
@@ -641,8 +642,10 @@ class ModulesComponent extends Component
         if ($relation === 'children' && $type === 'folders') {
             return $this->Children->{$method}($id, $related);
         }
+        $lang = I18n::getLocale();
+        $headers = ['Accept-Language' => $lang];
 
-        return ApiClientProvider::getApiClient()->{$method}($id, $type, $relation, $related);
+        return ApiClientProvider::getApiClient()->{$method}($id, $type, $relation, $related, $headers);
     }
 
     /**
