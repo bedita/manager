@@ -735,7 +735,7 @@ class LayoutHelperTest extends TestCase
             'documents' => [
                 'documents',
                 [],
-                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><app-icon icon="carbon:document"></app-icon></a>',
+                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><app-icon icon="carbon:document" :style="{ width: \'28px\', height: \'28px\' }"></app-icon></a>',
             ],
         ];
     }
@@ -776,23 +776,23 @@ class LayoutHelperTest extends TestCase
                         'multiple_types' => true,
                     ],
                 ],
-                '<app-icon icon="carbon:grid"></app-icon>',
+                '<app-icon icon="carbon:grid" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>',
 
             ],
             'documents' => [
                 'documents',
                 [],
-                '<app-icon icon="carbon:document"></app-icon>',
+                '<app-icon icon="carbon:document" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>',
             ],
             'from conf' => [
                 'test_items',
                 [],
-                '<app-icon icon="test:items"></app-icon>',
+                '<app-icon icon="test:items" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>',
             ],
             'from map (core modules)' => [
                 'locations',
                 [],
-                '<app-icon icon="carbon:location"></app-icon>',
+                '<app-icon icon="carbon:location" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>',
             ],
             'other module (non core, non conf)' => [
                 'cats',
