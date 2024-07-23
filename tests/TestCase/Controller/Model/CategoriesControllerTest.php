@@ -120,6 +120,7 @@ class CategoriesControllerTest extends TestCase
         $this->Categories->Schema = $this->createMock(SchemaComponent::class);
         $this->Categories->Schema->method('objectTypesFeatures')
             ->willReturn($mockResponse);
+        $this->Categories->viewBuilder()->setVar('project', ['version' => '5.27.0']);
         $this->Categories->index();
         // verify expected vars in view
         $expected = ['resources', 'roots', 'categoriesTree', 'names', 'meta', 'links', 'schema', 'properties', 'filter', 'object_types'];
