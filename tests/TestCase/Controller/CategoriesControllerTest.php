@@ -58,7 +58,7 @@ class CategoriesControllerTest extends TestCase
                 'object_type' => 'documents',
             ],
         ]));
-        $this->CategoriesController->viewBuilder()->setVar('project', ['version' => '5.27.0']);
+        $this->CategoriesController->viewBuilder()->setVar('project', ['version' => '5.26.0']);
         $result = $this->CategoriesController->index();
 
         // verify response status code and type
