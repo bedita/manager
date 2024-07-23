@@ -169,6 +169,7 @@ class CategoriesComponentTest extends TestCase
      *
      * @return void
      * @covers ::getAvailableRoots()
+     * @covers ::fillRoots()
      */
     public function testGetAvailableRoots(): void
     {
