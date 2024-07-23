@@ -1,9 +1,20 @@
 <?php
-
 declare(strict_types=1);
 
+/**
+ * BEdita, API-first content management framework
+ * Copyright 2024 Chialab Srl
+ *
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
+ */
 namespace App\View\Helper;
 
+use App\Utility\System;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -115,9 +126,7 @@ class SystemHelper extends Helper
         }
         $requiredApiVersions = (array)Configure::read('BEditaAPI.versions');
         foreach ($requiredApiVersions as $requiredApiVersion) {
-            $apiMajor = substr($apiVersion, 0, strpos($apiVersion, '.'));
-            $requiredApiMajor = substr($requiredApiVersion, 0, strpos($requiredApiVersion, '.'));
-            if ($apiMajor === $requiredApiMajor && version_compare($apiVersion, $requiredApiVersion) >= 0) {
+            if (System::compareBEditaApiVersion($apiVersion, $requiredApiVersion)) {
                 return true;
             }
         }
