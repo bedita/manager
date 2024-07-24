@@ -40,7 +40,7 @@ class CategoriesComponent extends Component
      */
     public function index(?string $objectType = null, ?array $options = []): array
     {
-        $options = $options + ['page_size' => self::DEFAULT_PAGE_SIZE];
+        $options = array_merge(['page_size' => self::DEFAULT_PAGE_SIZE], $options);
         if (!empty($objectType)) {
             $options['filter'] = $options['filter'] ?? [];
             $options['filter']['type'] = $objectType;
