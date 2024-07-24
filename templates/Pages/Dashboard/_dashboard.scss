@@ -39,7 +39,7 @@ body.view-dashboard {
             line-height: 1;
             letter-spacing: .5px;
             display: flex;
-            align-items: center;
+            align-items: start;
             height: 100%;
             justify-content: center;
 
@@ -59,7 +59,7 @@ body.view-dashboard {
             }
 
             padding: .375rem .375rem calc(#{$dashboard-items-ratio} - .375rem);
-            @media (min-width: 667px) { padding: $gutter $gutter calc(#{$dashboard-items-ratio} - #{$gutter}); }
+            @media (min-width: 667px) { padding: $gutter*0.875 $gutter calc(#{$dashboard-items-ratio} - #{$gutter*0.875}); }
 
             &[class^="icon-"]:before, &[class*=" icon-"]:before {
                 position: absolute;

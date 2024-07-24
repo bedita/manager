@@ -177,11 +177,11 @@ class LayoutHelper extends Helper
     public function moduleIcon(string $name, array $module): string
     {
         if (Hash::get($module, 'hints.multiple_types') && !Hash::get($module, 'class')) {
-            return '<app-icon icon="carbon:grid"></app-icon>';
+            return '<app-icon icon="carbon:grid" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>';
         }
         $icon = (string)Configure::read(sprintf('Modules.%s.icon', $name));
         if (!empty($icon)) {
-            return sprintf('<app-icon icon="%s"></app-icon>', $icon);
+            return sprintf('<app-icon icon="%s" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>', $icon);
         }
         $map = [
             'audio' => 'carbon:document-audio',
@@ -204,7 +204,7 @@ class LayoutHelper extends Helper
             return '';
         }
 
-        return sprintf('<app-icon icon="%s"></app-icon>', $map[$name]);
+        return sprintf('<app-icon icon="%s" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>', $map[$name]);
     }
 
     /**
