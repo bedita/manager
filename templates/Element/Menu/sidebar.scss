@@ -4,7 +4,8 @@
     height: $dashboard-item-height;
     background-color: $gray-600;
     font-size: $font-size-base;
-    padding: $gutter;
+    line-height: 1;
+    padding: $gutter*0.875 $gutter;
     filter: brightness(1);
     transition: filter .3s;
 
@@ -64,7 +65,8 @@
     background-repeat:no-repeat;
     background-position: center center;
     font-size: $font-size-base;
-    padding: $gutter;
+    line-height: 1;
+    padding: $gutter*0.875 $gutter;
     filter: brightness(1);
     transition: filter .3s;
 
