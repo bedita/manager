@@ -18,6 +18,7 @@ use App\Controller\Model\CategoriesController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\Model\CategoriesController} Test Case
@@ -120,6 +121,8 @@ class CategoriesControllerTest extends TestCase
         $this->Categories->Schema = $this->createMock(SchemaComponent::class);
         $this->Categories->Schema->method('objectTypesFeatures')
             ->willReturn($mockResponse);
+        $beditaApiVersion = (string)Hash::get((array)ApiClientProvider::getApiClient()->get('/home'), 'meta.version');
+        $this->Categories->viewBuilder()->setVar('project', ['version' => $beditaApiVersion]);
         $this->Categories->index();
         // verify expected vars in view
         $expected = ['resources', 'roots', 'categoriesTree', 'names', 'meta', 'links', 'schema', 'properties', 'filter', 'object_types'];

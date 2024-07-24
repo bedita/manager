@@ -59,7 +59,7 @@ class CategoriesController extends AppController
         $this->getRequest()->allowMethod(['get']);
         $response = $this->Categories->index($this->objectType, $this->getRequest()->getQueryParams());
         $resources = $this->Categories->map($response);
-        $roots = $this->Categories->getAvailableRoots($resources);
+        $roots = $this->Categories->getAllAvailableRoots();
         $categoriesTree = $this->Categories->tree($resources);
         $names = [$this->objectType => $this->Categories->names($this->objectType)];
 

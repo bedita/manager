@@ -13,6 +13,7 @@
 namespace App\Controller\Component;
 
 use App\Utility\CacheTools;
+use App\Utility\System;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
@@ -24,6 +25,13 @@ use Cake\Utility\Hash;
 class CategoriesComponent extends Component
 {
     /**
+     * Default page size
+     *
+     * @var int
+     */
+    public const DEFAULT_PAGE_SIZE = 100;
+
+    /**
      * Fetch categories list.
      *
      * @param string|null $objectType The object type filter for categories.
@@ -32,17 +40,14 @@ class CategoriesComponent extends Component
      */
     public function index(?string $objectType = null, ?array $options = []): array
     {
-        $apiClient = ApiClientProvider::getApiClient();
-
-        $options = $options + [
-            'page_size' => 100,
-        ];
+        $options = array_merge(['page_size' => self::DEFAULT_PAGE_SIZE], $options);
         if (!empty($objectType)) {
             $options['filter'] = $options['filter'] ?? [];
             $options['filter']['type'] = $objectType;
         }
+        $options = array_filter($options);
 
-        return (array)$apiClient->get('/model/categories', $options);
+        return (array)ApiClientProvider::getApiClient()->get('/model/categories', $options);
     }
 
     /**
@@ -120,14 +125,55 @@ class CategoriesComponent extends Component
     {
         $roots = ['' => ['id' => 0, 'label' => '-', 'name' => '', 'object_type_name' => '']];
         foreach ($map as $category) {
-            if (empty(Hash::get($category, 'attributes.parent_id'))) {
-                $roots[Hash::get($category, 'id')] = [
-                    'id' => Hash::get($category, 'id'),
-                    'label' => Hash::get($category, 'attributes.label') ?? Hash::get($category, 'attributes.name'),
-                    'name' => Hash::get($category, 'attributes.name'),
-                    'object_type_name' => Hash::get($category, 'attributes.object_type_name'),
-                ];
+            $this->fillRoots($roots, $category);
+        }
+
+        return $roots;
+    }
+
+    /**
+     * Fill roots array with categories that have parent_id null.
+     *
+     * @param array $roots The roots array to fill.
+     * @param array $category The category data.
+     * @return void
+     */
+    protected function fillRoots(array &$roots, $category): void
+    {
+        if (!empty(Hash::get($category, 'attributes.parent_id'))) {
+            return;
+        }
+        $roots[Hash::get($category, 'id')] = [
+            'id' => Hash::get($category, 'id'),
+            'label' => Hash::get($category, 'attributes.label') ?? Hash::get($category, 'attributes.name'),
+            'name' => Hash::get($category, 'attributes.name'),
+            'object_type_name' => Hash::get($category, 'attributes.object_type_name'),
+        ];
+    }
+
+    /**
+     * Get all categories roots.
+     *
+     * @return array The list of available roots.
+     */
+    public function getAllAvailableRoots(): array
+    {
+        $roots = ['' => ['id' => 0, 'label' => '-', 'name' => '', 'object_type_name' => '']];
+        $options = ['page_size' => self::DEFAULT_PAGE_SIZE];
+        $actualApiVersion = Hash::get((array)$this->getController()->viewBuilder()->getVar('project'), 'version');
+        // BE APIs provide roots filter from version 5.27.0
+        if (System::compareBEditaApiVersion($actualApiVersion, '5.27.0')) {
+            $options['filter']['roots'] = 1;
+        }
+        $pageCount = $page = 1;
+        $endpoint = '/model/categories';
+        while ($page <= $pageCount) {
+            $response = ApiClientProvider::getApiClient()->get($endpoint, $options + compact('page'));
+            foreach ($response['data'] as $category) {
+                $this->fillRoots($roots, $category);
             }
+            $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
+            $page++;
         }
 
         return $roots;
