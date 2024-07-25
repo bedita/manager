@@ -99,7 +99,10 @@ class EndpointPermissionsControllerTest extends TestCase
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                'name' => 'dummy',
+                'endpoint_id' => 1,
+                'application_id' => '-',
+                'role_id' => '-',
+                'permission' => 15,
             ],
         ];
         $request = new ServerRequest($config);
