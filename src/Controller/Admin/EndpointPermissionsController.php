@@ -54,12 +54,36 @@ class EndpointPermissionsController extends AdministrationBaseController
     {
         parent::index();
         $applications = $this->apiClient->get('/admin/applications', []);
-        $this->set('applications', Hash::combine((array)$applications, 'data.{n}.id', 'data.{n}.attributes.name'));
+        $applications = Hash::combine((array)$applications, 'data.{n}.id', 'data.{n}.attributes.name');
+        $applications['-'] = '-';
+        $this->set('applications', $applications);
         $endpoints = $this->apiClient->get('/admin/endpoints', []);
-        $this->set('endpoints', Hash::combine((array)$endpoints, 'data.{n}.id', 'data.{n}.attributes.name'));
+        $endpoints = Hash::combine((array)$endpoints, 'data.{n}.id', 'data.{n}.attributes.name');
+        $endpoints['-'] = '-';
+        $this->set('endpoints', $endpoints);
         $roles = $this->apiClient->get('/roles', []);
-        $this->set('roles', Hash::combine((array)$roles, 'data.{n}.id', 'data.{n}.attributes.name'));
+        $roles = Hash::combine((array)$roles, 'data.{n}.id', 'data.{n}.attributes.name');
+        $roles['-'] = '-';
+        $this->set('roles', $roles);
 
         return null;
+    }
+
+    /**
+     * Save data
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function save(): ?Response
+    {
+        // check '-' values and set to null
+        $data = $this->request->getData();
+        foreach ($data as $key => $value) {
+            if ($value === '-') {
+                $data[$key] = null;
+            }
+        }
+
+        return parent::save();
     }
 }
