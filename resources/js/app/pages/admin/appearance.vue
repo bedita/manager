@@ -125,6 +125,8 @@ export default {
                     data[key] = property[key];
                 }
             }
+
+            return JSON.stringify(data, null, 2);
         },
         title(pKey) {
             const k = this.$helpers.humanize(pKey);
