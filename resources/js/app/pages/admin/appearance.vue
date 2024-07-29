@@ -101,10 +101,9 @@ export default {
             if (propertyKey === 'modules') {
                 const ordered = {};
                 for (const key of Object.keys(property)) {
-                    const child = property[key];
                     ordered[key] = {};
-                    for (const subkey of Object.keys(child).sort()) {
-                        ordered[key][subkey] = child[subkey];
+                    for (const subkey of Object.keys(property[key]).sort()) {
+                        ordered[key][subkey] = property[key][subkey];
                     }
                 }
 
