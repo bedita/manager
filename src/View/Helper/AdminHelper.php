@@ -95,6 +95,7 @@ class AdminHelper extends Helper
 
         if (in_array($type, ['applications', 'endpoints', 'roles'])) {
             $options = (array)$this->_View->get($type);
+            $value = $value ?? '-';
 
             return $this->Form->control($property, $this->options['combo'] + compact('options', 'value'));
         }
