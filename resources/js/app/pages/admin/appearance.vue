@@ -98,6 +98,9 @@ export default {
             }
         },
         text(propertyKey, property) {
+            if (!property) {
+                return 'null';
+            }
             if (propertyKey === 'modules') {
                 const ordered = {};
                 for (const key of Object.keys(property)) {
