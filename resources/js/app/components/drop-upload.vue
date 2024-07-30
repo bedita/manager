@@ -60,6 +60,7 @@ import { FetchMixin } from 'app/mixins/fetch';
 import { t } from 'ttag';
 
 export default {
+    name: 'DropUpload',
     mixins: [ FetchMixin ],
     inject: ['getCSFRToken'],
     props: {
@@ -136,12 +137,21 @@ export default {
             this.uploadFiles(toProcess);
         },
 
+        async uploadFile(file) {
+            try {
+                const object = await this.upload(file);
+                this.uploadSuccessful(file, object);
+            } catch (error) {
+                console.error('upload error', error);
+            }
+        },
+
         async uploadFiles(files) {
             this.$el.classList.remove('dragover');
             // show all files in view
             [...files].forEach(file => this.setProgressInfo(file));
             const [uniqueFiles, duplicatesFiles] = this.filterFiles([...files]);
-            uniqueFiles.forEach((file) => {
+            for (const file of uniqueFiles) {
                 // skip file not allowed by size and remove it from view
                 if (this.$helpers.checkMaxFileSize(file) === false) {
                     this.removeProgressItem(file);
@@ -150,9 +160,8 @@ export default {
                 if (this.objectType === 'images') {
                     this.$helpers.checkImageResolution(file);
                 }
-                this.upload(file).then((object) => this.uploadSuccessful(file, object));
-            });
-
+                await this.uploadFile(file);
+            }
             // use queue for file with same name
             for (const file of duplicatesFiles) {
                 // skip file not allowed by size and remove it from view
@@ -163,8 +172,7 @@ export default {
                 if (this.objectType === 'images') {
                     this.$helpers.checkImageResolution(file);
                 }
-                const object = await this.upload(file);
-                this.uploadSuccessful(file, object);
+                await this.uploadFile(file);
             }
         },
 
@@ -176,7 +184,6 @@ export default {
             this.$el.classList.remove('dragover');
         },
 
-        // return promise
         upload(file) {
             const objectType = this.getObjectType(file);
             const formData = new FormData();
