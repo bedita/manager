@@ -5,7 +5,7 @@
             <div class="main-container">
                 <div>
                     <div :id="`container-${propertyKey}`" class="jsoneditor-container"></div>
-                    <json-editor :options="jsonEditorOptions" :target="`container-${propertyKey}`" :text="JSON.stringify(property, null, 2)" />
+                    <json-editor :options="jsonEditorOptions" :target="`container-${propertyKey}`" :text="text(propertyKey, property)" />
                 </div>
                 <div class="ml-05">
                     <button class="button button-primary button-primary-hover-module-admin is-width-auto" :class="loading && loadingKey === propertyKey ? 'is-loading-spinner' : ''" @click.prevent="save(propertyKey)">
@@ -25,6 +25,7 @@
 import { t } from 'ttag';
 
 export default {
+    name: 'AdminAppearance',
 
     components: {
         JsonEditor: () => import(/* webpackChunkName: "json-editor" */'app/components/json-editor/json-editor'),
@@ -95,6 +96,36 @@ export default {
                 this.loading = false;
                 this.loadingKey = '';
             }
+        },
+        text(propertyKey, property) {
+            if (propertyKey === 'modules') {
+                const ordered = {};
+                for (const key of Object.keys(property)) {
+                    ordered[key] = {};
+                    for (const subkey of Object.keys(property[key]).sort()) {
+                        ordered[key][subkey] = property[key][subkey];
+                    }
+                }
+
+                return JSON.stringify(ordered, null, 2);
+            }
+            if (!['access_control', 'export', 'pagination', 'project', 'properties'].includes(propertyKey)) {
+                return JSON.stringify(property, null, 2);
+            }
+            let data = {};
+            for (const key of Object.keys(property).sort()) {
+                if (propertyKey === 'properties') {
+                    const ordered = {};
+                    for (const k of Object.keys(property[key]).sort()) {
+                        ordered[k] = property[key][k];
+                    }
+                    data[key] = ordered;
+                } else {
+                    data[key] = property[key];
+                }
+            }
+
+            return JSON.stringify(data, null, 2);
         },
         title(pKey) {
             const k = this.$helpers.humanize(pKey);
