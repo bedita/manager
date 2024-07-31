@@ -27,7 +27,7 @@
                 <i class="ml-05">{{ msgUser }}</i>
             </span>
             <template v-for="user in accesses">
-                <span>{{ formatDate(user?.meta?.last_login) }}</span>
+                <span>{{ $helpers.formatDate(user?.meta?.last_login) }}</span>
                 <span>
                     <a class="tag has-background-module-users" :href="`/users/view/${user.id}`" target="_new">
                         {{ user?.attributes?.title || user?.attributes?.username }}
@@ -72,9 +72,6 @@ export default {
         },
         changePageSize(pageSize) {
             this.loadAccesses(pageSize);
-        },
-        formatDate(d) {
-            return d ?  new Date(d).toLocaleDateString() + ' ' + new Date(d).toLocaleTimeString() : '';
         },
         async getAccesses(pageSize = 20, page = 1) {
             const filterDate = this.filterDate ? new Date(this.filterDate).toISOString() : '';
