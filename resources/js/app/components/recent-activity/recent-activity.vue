@@ -60,14 +60,14 @@
                     <div class="type-cell"><span :class="`tag has-background-module-${item.object_type}`">{{ t(item.object_type || '?') }}</span></div>
                     <div class="narrow">{{ item.meta.user_action }}</div>
                     <div class="narrow" :title="changes(item, false)">{{ changes(item) }}</div>
-                    <div class="narrow">{{ formatDate(item.meta.created) }}</div>
+                    <div class="narrow">{{ this.$helpers.formatDate(item.meta.created) }}</div>
                 </a>
                 <div class="table-row object-status-deleted" v-else>
                     <div class="narrow">{{ title(item) }}</div>
                     <div class="type-cell"><span :class="`tag`">?</span></div>
                     <div class="narrow">{{ item.meta.user_action }}</div>
                     <div class="narrow" :title="changes(item, false)">{{ changes(item) }}</div>
-                    <div class="narrow">{{ formatDate(item.meta.created) }}</div>
+                    <div class="narrow">{{ this.$helpers.formatDate(item.meta.created) }}</div>
                 </div>
             </template>
         </div>
@@ -170,9 +170,6 @@ export default {
             } finally {
                 this.loading = false;
             }
-        },
-        formatDate(d) {
-            return d ?  new Date(d).toLocaleDateString() + ' ' + new Date(d).toLocaleTimeString() : '';
         },
         pageButtonClass() {
             return 'has-text-size-smallest button is-width-auto button-outlined';

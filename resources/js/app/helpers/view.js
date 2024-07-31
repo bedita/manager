@@ -318,6 +318,12 @@ export default {
                 let [lon, lat] = input.split(/\s*,\s*/);
                 return `POINT(${lon} ${lat})`;
             },
+
+            formatDate(d) {
+                const locale = BEDITA?.locale?.slice(0, 2) || 'en';
+
+                return d ?  new Date(d).toLocaleDateString(locale) + ' ' + new Date(d).toLocaleTimeString(locale) : '';
+            },
         }
     }
 };

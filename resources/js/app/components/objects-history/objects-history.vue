@@ -31,7 +31,7 @@
                 <i class="ml-05">{{ msgChange }}</i>
             </span>
             <template v-for="item in items">
-                <span>{{ formatDate(item?.meta?.created) }}</span>
+                <span>{{ this.$helpers.formatDate(item?.meta?.created) }}</span>
                 <span>
                     {{ msgAction }}
                     <b class="action">{{ item?.meta?.user_action || '' }}</b>
@@ -114,9 +114,6 @@ export default {
         },
         changePageSize(pageSize) {
             this.loadHistory(pageSize);
-        },
-        formatDate(d) {
-            return d ?  new Date(d).toLocaleDateString() + ' ' + new Date(d).toLocaleTimeString() : '';
         },
         async getHistory(pageSize = 20, page = 1) {
             const filterDate = this.filterDate ? new Date(this.filterDate).toISOString() : '';
