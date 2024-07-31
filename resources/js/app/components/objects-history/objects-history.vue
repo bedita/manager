@@ -31,7 +31,7 @@
                 <i class="ml-05">{{ msgChange }}</i>
             </span>
             <template v-for="item in items">
-                <span>{{ this.$helpers.formatDate(item?.meta?.created) }}</span>
+                <span>{{ $helpers.formatDate(item?.meta?.created) }}</span>
                 <span>
                     {{ msgAction }}
                     <b class="action">{{ item?.meta?.user_action || '' }}</b>

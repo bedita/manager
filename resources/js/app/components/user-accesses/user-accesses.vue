@@ -27,7 +27,7 @@
                 <i class="ml-05">{{ msgUser }}</i>
             </span>
             <template v-for="user in accesses">
-                <span>{{ this.$helpers.formatDate(user?.meta?.last_login) }}</span>
+                <span>{{ $helpers.formatDate(user?.meta?.last_login) }}</span>
                 <span>
                     <a class="tag has-background-module-users" :href="`/users/view/${user.id}`" target="_new">
                         {{ user?.attributes?.title || user?.attributes?.username }}
