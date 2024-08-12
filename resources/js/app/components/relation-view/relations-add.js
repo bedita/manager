@@ -109,7 +109,7 @@ export default {
             try {
                 if (this.$attrs.object.type && this.$attrs.object.id) {
                     const related = await this.fetchRelated(this.$attrs.object.type, this.$attrs.object.id);
-                    for (let obj of related) {
+                    for (const obj of related) {
                         if (this.alreadyInView.indexOf(obj.id) === -1) {
                             this.addToAlreadyInView(obj);
                         }
