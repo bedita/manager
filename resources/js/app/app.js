@@ -216,12 +216,13 @@ const _vueInstance = new Vue({
             const title = document.getElementById('title').value || t('Untitled');
             const msg = t`Please insert a new title on "${title}" clone`;
             const defaultTitle = title + '-' + t`copy`;
-            const confirmCallback = (cloneTitle, cloneRelations, dialog, unique) => {
-                let query = `?title=${cloneTitle || defaultTitle}`;
-                for (const uitem of unique) {
+            const confirmCallback = (dialog, options) => {
+                let query = `?title=${options?.title || defaultTitle}`;
+                for (const uitem of options?.unique || []) {
                     query += `&${uitem.field}=${uitem.value}`;
                 }
-                query += `&cloneRelations=${cloneRelations || false}`;
+                query += `&cloneRelations=${options?.relations || false}`;
+                query += `&cloneTranslations=${options?.translations || false}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
                 const url = `${origin}${path}${query}`;
@@ -239,9 +240,13 @@ const _vueInstance = new Vue({
                     value: document.getElementById(field).value + '-' + t`copy`,
                 });
             }
-            const options = { checkLabel: t`Clone relations`, checkValue: false, unique: uniqueOptions };
-
-            prompt(msg, defaultTitle, confirmCallback, document.body, options);
+            prompt(msg, defaultTitle, confirmCallback, document.body, {
+                checks: [
+                    { name: 'relations', label: t`Clone relations`, value: false },
+                    { name: 'translations', label: t`Clone translations`, value: false }
+                ],
+                unique: uniqueOptions
+            });
         },
 
         /**

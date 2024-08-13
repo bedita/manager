@@ -132,13 +132,14 @@ class CloneComponentTest extends BaseControllerTest
      * @return void
      * @dataProvider relationsProvider()
      * @covers ::queryCloneRelations()
+     * @covers ::queryClone()
      */
     public function testQueryCloneRelations(bool $expected): void
     {
         $this->prepareClone($expected);
         $this->setupApi();
-        $actual = $this->Clone->queryCloneRelations();
-        static::assertSame($expected, $actual);
+        static::assertSame($expected, $this->Clone->queryCloneRelations());
+        static::assertSame($expected, $this->Clone->queryClone('cloneRelations'));
     }
 
     /**
@@ -374,13 +375,75 @@ class CloneComponentTest extends BaseControllerTest
         static::assertArrayNotHasKey('id', $attributes);
     }
 
-    private function prepareClone(bool $cloneRelations): void
+    /**
+     * Data provider for `testTranslations`
+     *
+     * @return array
+     */
+    public function translationsProvider(): array
+    {
+        return [
+            'do not clone translations' => [false, false],
+            'clone translations' => [true, true],
+        ];
+    }
+
+    /**
+     * Test `translations` method
+     *
+     * @param bool $clone Clone translations
+     * @param bool $expected Expected result
+     * @return void
+     * @dataProvider translationsProvider()
+     */
+    public function testTranslations(bool $clone, bool $expected): void
+    {
+        $this->prepareClone($clone);
+        $destinationId = '';
+        $source = [];
+        $expectedTranslation = [];
+        if ($clone) {
+            $this->setupApi();
+            $this->Clone->startup();
+            $response = $this->client->save('documents', ['title' => 'translations clone test document']);
+            $destinationId = (string)Hash::get($response, 'data.id');
+            $source['data'] = (array)$this->createTestObjectWithTranslation();
+            $sourceId = (string)Hash::get($source, 'data.id');
+            $response = $this->client->get(sprintf('/translations?filter[object_id]=%s', $sourceId));
+            $data = (array)Hash::get($response, 'data.0.attributes');
+            $expectedTranslation = [
+                'lang' => (string)Hash::get($data, 'lang'),
+                'object_id' => $destinationId,
+                'status' => (string)Hash::get($data, 'status'),
+                'translated_fields' => (array)Hash::get($data, 'translated_fields'),
+            ];
+        }
+        $actual = $this->Clone->translations($source, $destinationId);
+        static::assertSame($expected, $actual);
+        if (!empty($expectedTranslation)) {
+            $response = $this->client->get(sprintf('/translations?filter[object_id]=%s', $destinationId));
+            $data = (array)Hash::get($response, 'data.0.attributes');
+            static::assertSame($expectedTranslation, [
+                'lang' => (string)Hash::get($data, 'lang'),
+                'object_id' => $destinationId,
+                'status' => (string)Hash::get($data, 'status'),
+                'translated_fields' => (array)Hash::get($data, 'translated_fields'),
+            ]);
+        }
+    }
+
+    /**
+     * Prepare clone component for test.
+     *
+     * @return void
+     */
+    private function prepareClone(bool $clone): void
     {
         $config = [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'query' => compact('cloneRelations'),
+            'query' => ['cloneRelations' => $clone, 'cloneTranslations' => $clone],
         ];
         $request = new ServerRequest($config);
         $this->controller = new Controller($request);
