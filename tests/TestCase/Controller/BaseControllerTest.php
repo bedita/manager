@@ -163,17 +163,10 @@ class BaseControllerTest extends TestCase
      */
     public function createTestObjectWithTranslation(): array
     {
-        $o = $this->getTestObject();
-        if ($o == null) {
-            // create document
-            $response = $this->client->save('documents', ['title' => 'translations controller test document', 'uname' => $this->uname]);
-            $o = $response['data'];
+        $response = $this->client->save('documents', ['title' => 'test document with translation']);
+        $this->client->save('translations', ['object_id' => $response['data']['id'], 'status' => 'draft', 'lang' => 'it', 'translated_fields' => ['title' => 'Titolo di test']]);
 
-            // create translation
-            $this->client->save('translations', ['object_id' => $o['id'], 'status' => 'draft', 'lang' => 'it', 'translated_fields' => ['title' => 'Titolo di test']]);
-        }
-
-        return $o;
+        return $response['data'];
     }
 
     /**
