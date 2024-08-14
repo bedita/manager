@@ -29,7 +29,7 @@
     "@trevoreyre/autocomplete-vue": "^2.4.1",
     "abortcontroller-polyfill": "^1.7.1",
     "autosize": "^5.0.1",
-    "axios": "^1.6.0",
+    "axios": "^1.7.4",
     "codemirror": "^5.63.3",
     "deepmerge": "^4.3.0",
     "dotenv-webpack": "^8.0.1",
