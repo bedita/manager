@@ -33,16 +33,18 @@ export const Dialog = Vue.extend({
                     <label><: uitem.label :></label>
                     <input type="text" :id="uitem.field" v-model.lazy="uitem.value" />
                 </div>
-                <div class="mt-1" v-if="dialogType === 'prompt'" v-show="checkLabel">
-                    <input type="checkbox" id="_check" v-model.lazy="checkValue"  />
-                    <label for="_check"><: checkLabel :></label>
-                </div>
+                <template v-if="dialogType === 'prompt'" v-show="checks?.length > 0">
+                    <div class="mt-05" v-for="(citem, index) in checks">
+                        <input type="checkbox" :id="checkname(index)" v-model.lazy="citem.value"  />
+                        <label :for="checkname(index)"><: citem.label :></label>
+                    </div>
+                </template>
                 <div class="actions mt-2">
                     <button
                         class="button-outlined-white confirm mr-1"
                         :class="{'is-loading-spinner': loading }"
                         :disabled="loading === true"
-                        @click="prepareCallback() && confirmCallback(inputValue, checkValue, $root, unique)"
+                        @click="prepareCallback() && confirmCallback($root, callbackOptions(inputValue, unique))"
                         v-if="confirmMessage">
                         <: confirmMessage :>
                     </button>
@@ -70,13 +72,21 @@ export const Dialog = Vue.extend({
             confirmCallback: this.hide,
             cancelMessage: false,
             inputValue: '',
-            checkValue: '',
-            checkLabel: '',
+            checks: [],
             loading: false,
             unique: [],
         };
     },
     methods: {
+        callbackOptions(title, unique) {
+            const relations = this.checks?.find(c => c?.name === 'relations')?.value || false;
+            const translations = this.checks?.find(c => c?.name === 'translations')?.value || false;
+
+            return {title, relations, translations, unique};
+        },
+        checkname(index) {
+            return `check_${index}`;
+        },
         show(message, headerText = this.dialogType, root = document.body) {
             this.headerText = headerText;
             this.message = message;
@@ -126,8 +136,7 @@ export const Dialog = Vue.extend({
         prompt(message, defaultValue, confirmCallback, root = document.body, options = {}) {
             this.dialogType = 'prompt';
             this.inputValue = defaultValue || '';
-            this.checkValue = options?.checkValue || '';
-            this.checkLabel = options?.checkLabel || '';
+            this.checks = options.checks || [];
             this.unique = options?.unique || [];
             this.confirmCallback = confirmCallback;
             this.cancelMessage = t`cancel`;

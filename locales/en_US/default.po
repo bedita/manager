@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-07-10 10:08:33 \n"
+"POT-Creation-Date: 2024-08-13 09:24:59 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1137,6 +1137,9 @@ msgid "copy"
 msgstr ""
 
 msgid "Clone relations"
+msgstr ""
+
+msgid "Clone translations"
 msgstr ""
 
 msgid "If you confirm, this data will be gone forever. Are you sure?"

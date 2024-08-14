@@ -361,6 +361,7 @@ class ModulesController extends AppController
             $save = $this->apiClient->save($this->objectType, $attributes);
             $destination = (string)Hash::get($save, 'data.id');
             $this->Clone->relations($source, $destination);
+            $this->Clone->translations($source, $destination);
             $id = $destination;
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
