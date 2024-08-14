@@ -79,8 +79,8 @@ export const Dialog = Vue.extend({
     },
     methods: {
         callbackOptions(title, unique) {
-            const relations = this.checks?.filter(c => c?.name === 'relations')?.[0]?.value || false;
-            const translations = this.checks?.filter(c => c?.name === 'translations')?.[0]?.value || false;
+            const relations = this.checks?.find(c => c?.name === 'relations')?.value || false;
+            const translations = this.checks?.find(c => c?.name === 'translations')?.value || false;
 
             return {title, relations, translations, unique};
         },
