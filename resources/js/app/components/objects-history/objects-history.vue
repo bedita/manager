@@ -117,8 +117,9 @@ export default {
         },
         async getHistory(pageSize = 20, page = 1) {
             const filterDate = this.filterDate ? new Date(this.filterDate).toISOString() : '';
+            const query = filterDate ? `page_size=${pageSize}&page=${page}&filter[created][gt]=${filterDate}&sort=-created` : `page_size=${pageSize}&page=${page}&sort=-created`;
 
-            return fetch(`/api/history?page_size=${pageSize}&page=${page}&filter[created][gt]=${filterDate}&sort=-created`).then((r) => r.json());
+            return fetch(`/api/history?${query}`).then((r) => r.json());
         },
         async getObjects(ids) {
             return fetch(`/api/objects?filter[id]=${ids.join(',')}`).then((r) => r.json());
