@@ -23,7 +23,7 @@
     "require": {
         "php": ">=7.4",
         "bedita/i18n": "^4.4.3",
-        "bedita/web-tools": "^3.10.1",
+        "bedita/web-tools": "dev-feat/new-bedita-client",
         "cakephp/authentication": "^2.9",
         "cakephp/cakephp": "~4.5.0",
         "cakephp/plugin-installer": "^1.3",
@@ -75,6 +75,7 @@
         "coverage": "vendor/bin/phpunit --colors=always --coverage-html coverage"
     },
     "prefer-stable": true,
+    "minimum-stability": "dev",
     "config": {
         "sort-packages": true,
         "allow-plugins": {
@@ -99,5 +100,15 @@
             "merge-extra-deep": false,
             "merge-scripts": false
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/didoda/php-sdk"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/didoda/web-tools"
+        }
+    ]
 }
