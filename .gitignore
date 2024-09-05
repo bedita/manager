@@ -90,6 +90,7 @@ bundle-report.*.html
 /webroot/css/roles-list-view*
 /webroot/css/secret*
 /webroot/css/show-hide*
+/webroot/css/string-list*
 /webroot/css/system-info*
 /webroot/css/tag-form*
 /webroot/css/tag-picker*

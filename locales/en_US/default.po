@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-08-13 09:24:59 \n"
+"POT-Creation-Date: 2024-09-02 14:24:54 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1265,7 +1265,7 @@ msgstr ""
 msgid "Stop"
 msgstr ""
 
-msgid "Relation parameters"
+msgid "Cancel"
 msgstr ""
 
 msgid "In relation with"
@@ -1274,7 +1274,7 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-msgid "Cancel"
+msgid "Relation parameters"
 msgstr ""
 
 msgid "Mail to"
