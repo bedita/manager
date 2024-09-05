@@ -1,11 +1,11 @@
 <template>
-    <div class="module-index">
+    <div class="appearance module-index">
         <details v-for="property,propertyKey in configs" :key="propertyKey">
             <summary>{{ title(propertyKey) }}</summary>
             <div class="main-container">
                 <div>
                     <div :id="`container-${propertyKey}`" class="jsoneditor-container"></div>
-                    <json-editor :options="jsonEditorOptions" :target="`container-${propertyKey}`" :text="JSON.stringify(property, null, 2)" />
+                    <json-editor :options="jsonEditorOptions" :target="`container-${propertyKey}`" :text="text(propertyKey, property)" />
                 </div>
                 <div class="ml-05">
                     <button class="button button-primary button-primary-hover-module-admin is-width-auto" :class="loading && loadingKey === propertyKey ? 'is-loading-spinner' : ''" @click.prevent="save(propertyKey)">
@@ -25,6 +25,7 @@
 import { t } from 'ttag';
 
 export default {
+    name: 'AdminAppearance',
 
     components: {
         JsonEditor: () => import(/* webpackChunkName: "json-editor" */'app/components/json-editor/json-editor'),
@@ -96,6 +97,39 @@ export default {
                 this.loadingKey = '';
             }
         },
+        text(propertyKey, property) {
+            if (!property) {
+                return 'null';
+            }
+            if (propertyKey === 'modules') {
+                const ordered = {};
+                for (const key of Object.keys(property)) {
+                    ordered[key] = {};
+                    for (const subkey of Object.keys(property[key]).sort()) {
+                        ordered[key][subkey] = property[key][subkey];
+                    }
+                }
+
+                return JSON.stringify(ordered, null, 2);
+            }
+            if (!['access_control', 'export', 'pagination', 'project', 'properties'].includes(propertyKey)) {
+                return JSON.stringify(property, null, 2);
+            }
+            let data = {};
+            for (const key of Object.keys(property).sort()) {
+                if (propertyKey === 'properties') {
+                    const ordered = {};
+                    for (const k of Object.keys(property[key]).sort()) {
+                        ordered[k] = property[key][k];
+                    }
+                    data[key] = ordered;
+                } else {
+                    data[key] = property[key];
+                }
+            }
+
+            return JSON.stringify(data, null, 2);
+        },
         title(pKey) {
             const k = this.$helpers.humanize(pKey);
 
@@ -105,7 +139,7 @@ export default {
 };
 </script>
 <style>
-details>summary {
+div.appearance > details>summary {
   list-style-type: none;
   outline: none;
   cursor: pointer;
@@ -114,25 +148,25 @@ details>summary {
   font-size: 1rem;
 }
 
-details>summary::-webkit-details-marker {
+div.appearance > details>summary::-webkit-details-marker {
   display: none;
 }
 
-details>summary::before {
+div.appearance > details>summary::before {
   content: '+ ';
   font-size: 1.2rem;
 }
 
-details[open]>summary::before {
+div.appearance > details[open]>summary::before {
   content: '- ';
   font-size: 1.2rem;
 }
 
-details[open]>summary {
+div.appearance > details[open]>summary {
   margin-bottom: 0.5rem;
 }
 
-.main-container {
+div.appearance > details > .main-container {
   display: flex;
   justify-content: left;
   align-items: flex-start;

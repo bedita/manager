@@ -10,6 +10,8 @@
 
 .is-text-hidden { @include hide-text(); }
 
+.is-block { display: block;}
+
 .is-clipped { overflow: hidden!important; }
 
 .is-expanded { width: 100%; }
@@ -32,6 +34,7 @@
 
 .has-text-transform-upper   { text-transform: uppercase; }
 .has-text-transform-lower   { text-transform: lowercase; }
+.has-text-decoration-underline { text-decoration: underline; }
 
 .has-font-style-italic      { font-style: italic; }
 
@@ -109,6 +112,7 @@
 .mt-0     { margin-top: 0 !important; }
 .mt-025    { margin-top: $gutter * .25; }
 .mt-05    { margin-top: $gutter * .5; }
+.mt-075    { margin-top: $gutter * .75; }
 .mt-1     { margin-top: $gutter; }
 .mt-15    { margin-top: $gutter * 1.5; }
 .mt-2     { margin-top: $gutter * 2; }

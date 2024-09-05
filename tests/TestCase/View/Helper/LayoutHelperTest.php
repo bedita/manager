@@ -13,15 +13,18 @@
 
 namespace App\Test\TestCase\View\Helper;
 
+use App\Utility\CacheTools;
 use App\View\Helper\EditorsHelper;
 use App\View\Helper\LayoutHelper;
 use App\View\Helper\PermsHelper;
 use App\View\Helper\SystemHelper;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\Cookie\CookieCollection;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 use Cake\View\View;
 
 /**
@@ -274,6 +277,143 @@ class LayoutHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testModuleIndexDefaultViewType` test case.
+     *
+     * @return array
+     */
+    public function moduleIndexDefaultViewTypeProvider(): array
+    {
+        return [
+            'documents' => [
+                ['currentModule' => ['name' => 'documents']],
+                'list',
+            ],
+            'folders' => [
+                ['currentModule' => ['name' => 'folders']],
+                'tree',
+            ],
+        ];
+    }
+
+    /**
+     * Test `moduleIndexDefaultViewType` method
+     *
+     * @param array $viewVars The view vars
+     * @param string $expected The expected result
+     * @return void
+     * @dataProvider moduleIndexDefaultViewTypeProvider()
+     * @covers ::moduleIndexDefaultViewType()
+     */
+    public function testModuleIndexDefaultViewType(array $viewVars, string $expected): void
+    {
+        $request = $response = $events = null;
+        $name = (string)Hash::get($viewVars, 'currentModule.name', 'dummies');
+        $data = compact('name');
+        $view = new View($request, $response, $events, $data);
+        foreach ($viewVars as $key => $value) {
+            $view->set($key, $value);
+        }
+        $layout = new LayoutHelper($view);
+        $actual = $layout->moduleIndexDefaultViewType();
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testModuleIndexViewType` test case.
+     *
+     * @return array
+     */
+    public function moduleIndexViewTypeProvider(): array
+    {
+        return [
+            'documents list' => [
+                ['currentModule' => ['name' => 'documents']],
+                [],
+                'list',
+            ],
+            'folders tree' => [
+                ['currentModule' => ['name' => 'folders']],
+                [],
+                'tree',
+            ],
+            'folders list' => [
+                ['currentModule' => ['name' => 'folders']],
+                ['view_type' => 'list'],
+                'list',
+            ],
+        ];
+    }
+
+    /**
+     * Test `moduleIndexViewType` method.
+     *
+     * @param array $viewVars The view vars
+     * @param array $query The query params
+     * @param string $expected The expected result
+     * @return void
+     * @dataProvider moduleIndexViewTypeProvider()
+     * @covers ::moduleIndexViewType()
+     * @covers ::moduleIndexDefaultViewType()
+     */
+    public function testModuleIndexViewType(array $viewVars, array $query, string $expected): void
+    {
+        $request = new ServerRequest(['query' => $query]);
+        $response = $events = null;
+        $name = (string)Hash::get($viewVars, 'currentModule.name', 'dummies');
+        $data = compact('name');
+        $view = new View($request, $response, $events, $data);
+        foreach ($viewVars as $key => $value) {
+            $view->set($key, $value);
+        }
+        $layout = new LayoutHelper($view);
+        $actual = $layout->moduleIndexViewType();
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Data provider for `testModuleIndexViewTypes` test case.
+     *
+     * @return array
+     */
+    public function moduleIndexViewTypesProvider(): array
+    {
+        return [
+            'documents' => [
+                ['currentModule' => ['name' => 'documents']],
+                ['list'],
+            ],
+            'folders' => [
+                ['currentModule' => ['name' => 'folders']],
+                ['tree', 'list'],
+            ],
+        ];
+    }
+
+    /**
+     * Test `moduleIndexViewTypes
+     *
+     * @param array $viewVars
+     * @param array $expected
+     * @return void
+     * @dataProvider moduleIndexViewTypesProvider()
+     * @covers ::moduleIndexViewTypes()
+     * @covers ::moduleIndexDefaultViewType()
+     */
+    public function testModuleIndexViewTypes(array $viewVars, array $expected): void
+    {
+        $request = $response = $events = null;
+        $name = (string)Hash::get($viewVars, 'currentModule.name', 'dummies');
+        $data = compact('name');
+        $view = new View($request, $response, $events, $data);
+        foreach ($viewVars as $key => $value) {
+            $view->set($key, $value);
+        }
+        $layout = new LayoutHelper($view);
+        $actual = $layout->moduleIndexViewTypes();
+        static::assertSame($expected, $actual);
+    }
+
+    /**
      * Data provider for `testTitle` test case.
      *
      * @return array
@@ -440,8 +580,10 @@ class LayoutHelperTest extends TestCase
             'canReadUsers' => false,
             'canSave' => true,
             'cloneConfig' => (array)Configure::read('Clone'),
+            'placeholdersConfig' => $system->placeholdersConfig(),
             'uploadConfig' => $system->uploadConfig(),
             'relationsSchema' => ['whatever'],
+            'richeditorConfig' => (array)Configure::read('Richeditor'),
         ];
         static::assertSame($expected, $conf);
     }
@@ -511,12 +653,50 @@ class LayoutHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testTrashLink` test case.
+     *
+     * @return array
+     */
+    public function trashLinkProvider(): array
+    {
+        return [
+            'null' => [
+                null,
+                '',
+            ],
+            'empty' => [
+                '',
+                '',
+            ],
+            'trash' => [
+                'trash',
+                '',
+            ],
+            'translations' => [
+                'translations',
+                '',
+            ],
+            'not existing type' => [
+                'notExistingType',
+                '',
+            ],
+            'dummies' => [
+                'dummies',
+                '<a href="/trash?filter%5Btype%5D%5B0%5D=dummies" class="button icon icon-only-icon has-text-module-dummies" title="Dummies in Trashcan"><span class="is-sr-only">Trash</span><app-icon icon="carbon:trash-can"></app-icon></a>',
+            ],
+        ];
+    }
+
+    /**
      * Test `trashLink`.
      *
+     * @param string|null $input The input
+     * @param string $expected The expected result
      * @return void
+     * @dataProvider trashLinkProvider()
      * @covers ::trashLink()
      */
-    public function testTrashLink(): void
+    public function testTrashLink(?string $input, string $expected): void
     {
         $viewVars = [
             'modules' => [
@@ -530,14 +710,7 @@ class LayoutHelperTest extends TestCase
         $request = new ServerRequest();
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
-
-        foreach ([null, '', 'notExistingType', 'trash'] as $input) {
-            $actual = $layout->trashLink($input);
-            static::assertSame('', $actual);
-        }
-
-        $expected = '<a href="/trash?filter%5Btype%5D%5B0%5D=dummies" class="button icon icon-only-icon has-text-module-dummies" title="Dummies in Trashcan"><span class="is-sr-only">Trash</span><app-icon icon="carbon:trash-can"></app-icon></a>';
-        $actual = $layout->trashLink('dummies');
+        $actual = $layout->trashLink($input);
         static::assertSame($expected, $actual);
     }
 
@@ -562,7 +735,7 @@ class LayoutHelperTest extends TestCase
             'documents' => [
                 'documents',
                 [],
-                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><app-icon icon="carbon:document"></app-icon></a>',
+                '<a href="/documents" class="dashboard-item has-background-module-documents "><span>Documents</span><app-icon icon="carbon:document" :style="{ width: \'28px\', height: \'28px\' }"></app-icon></a>',
             ],
         ];
     }
@@ -603,23 +776,23 @@ class LayoutHelperTest extends TestCase
                         'multiple_types' => true,
                     ],
                 ],
-                '<app-icon icon="carbon:grid"></app-icon>',
+                '<app-icon icon="carbon:grid" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>',
 
             ],
             'documents' => [
                 'documents',
                 [],
-                '<app-icon icon="carbon:document"></app-icon>',
+                '<app-icon icon="carbon:document" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>',
             ],
             'from conf' => [
                 'test_items',
                 [],
-                '<app-icon icon="test:items"></app-icon>',
+                '<app-icon icon="test:items" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>',
             ],
             'from map (core modules)' => [
                 'locations',
                 [],
-                '<app-icon icon="carbon:location"></app-icon>',
+                '<app-icon icon="carbon:location" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>',
             ],
             'other module (non core, non conf)' => [
                 'cats',
@@ -650,5 +823,55 @@ class LayoutHelperTest extends TestCase
         $layout = new LayoutHelper($view);
         $actual = $layout->moduleIcon($name, $module);
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `moduleCount` method.
+     *
+     * @return void
+     * @covers ::moduleCount()
+     * @covers ::showCounter()
+     */
+    public function testModuleCount(): void
+    {
+        $moduleName = 'test';
+        $viewVars = [];
+        $request = new ServerRequest();
+        $view = new View($request, null, null, compact('viewVars'));
+        $layout = new LayoutHelper($view);
+        $actual = $layout->moduleCount($moduleName);
+        static::assertEquals('<span class="module-count">-</span>', $actual);
+
+        Cache::enable();
+        $count = 42;
+        CacheTools::setModuleCount(['meta' => ['pagination' => ['count' => $count]]], $moduleName);
+        $expected = sprintf('<span class="module-count">%s</span>', $count);
+        $actual = $layout->moduleCount($moduleName);
+        static::assertEquals($expected, $actual);
+        $actual = $layout->moduleCount($moduleName, 'my-dummy-css-class');
+        $expected = sprintf('<span class="module-count">%s</span>', $count);
+        Cache::disable();
+    }
+
+    /**
+     * Test `showCounter` method.
+     *
+     * @return void
+     * @covers ::showCounter()
+     */
+    public function testShowCounter(): void
+    {
+        Configure::delete('UI.modules.counters');
+        $layout = new LayoutHelper(new View());
+        // false
+        $actual = $layout->showCounter('dummy');
+        static::assertFalse($actual);
+        // true
+        $actual = $layout->showCounter('trash');
+        static::assertTrue($actual);
+        Configure::write('UI.modules.counters', 'all');
+        $actual = $layout->showCounter('dummy');
+        static::assertTrue($actual);
+        Configure::delete('UI.modules.counters');
     }
 }

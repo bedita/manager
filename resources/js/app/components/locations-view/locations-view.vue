@@ -48,6 +48,12 @@ export default {
 
     async created() {
         const requestUrl = `${window.location.href}/related/${this.relationName}`;
+        // if url contains view/related, it means that request comes from new object page: ignore it
+        if (requestUrl.indexOf('view/related') >= 0) {
+            this.locations = [];
+
+            return;
+        }
         this.locations = (await (await fetch(requestUrl, options)).json()).data;
 
         // add params for location that does not have them

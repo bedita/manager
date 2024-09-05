@@ -101,6 +101,23 @@ class SystemHelperTest extends TestCase
     }
 
     /**
+     * Test `placeholdersConfig`
+     *
+     * @return void
+     * @covers ::placeholdersConfig()
+     */
+    public function testPlaceholdersConfig(): void
+    {
+        // empty config, defaultUploadAccepted
+        $reflectionClass = new \ReflectionClass($this->System);
+        $property = $reflectionClass->getProperty('defaultPlaceholders');
+        $property->setAccessible(true);
+        $expected = $property->getValue($this->System);
+        $actual = $this->System->placeholdersConfig();
+        static::assertSame($expected, $actual);
+    }
+
+    /**
      * Test `uploadConfig`
      *
      * @return void
@@ -116,7 +133,10 @@ class SystemHelperTest extends TestCase
         $property = $reflectionClass->getProperty('defaultUploadForbidden');
         $property->setAccessible(true);
         $forbidden = $property->getValue($this->System);
-        $expected = compact('accepted', 'forbidden');
+        $property = $reflectionClass->getProperty('defaultUploadMaxResolution');
+        $property->setAccessible(true);
+        $maxResolution = $property->getValue($this->System);
+        $expected = compact('accepted', 'forbidden', 'maxResolution');
         $actual = $this->System->uploadConfig();
         static::assertSame($expected, $actual);
     }

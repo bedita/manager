@@ -96,6 +96,26 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Dashboard', 'action' => 'messages'],
         ['_name' => 'dashboard:messages']
     );
+    $routes->connect(
+        '/tree',
+        ['controller' => 'Tree', 'action' => 'get'],
+        ['_name' => 'tree:get']
+    );
+    $routes->connect(
+        '/tree/node/{id}',
+        ['controller' => 'Tree', 'action' => 'node'],
+        ['_name' => 'tree:node', 'pass' => ['id']]
+    );
+    $routes->connect(
+        '/tree/parent/{id}',
+        ['controller' => 'Tree', 'action' => 'parent'],
+        ['_name' => 'tree:parent', 'pass' => ['id']]
+    );
+    $routes->connect(
+        '/tree/parents/{type}/{id}',
+        ['controller' => 'Tree', 'action' => 'parents'],
+        ['_name' => 'tree:parents', 'pass' => ['type', 'id']]
+    );
 
     // Admin.
     $routes->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
@@ -172,7 +192,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
             );
 
             $routes->get(
-                "/$controller/view/new",
+                "/$controller/view",
                 ['controller' => $name, 'action' => 'create'],
                 'create:' . $controller
             );
@@ -277,9 +297,14 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['_name' => 'modules:list']
     );
     $routes->connect(
-        '/{object_type}/view/new',
+        '/{object_type}/view',
         ['controller' => 'Modules', 'action' => 'create'],
         ['_name' => 'modules:create']
+    );
+    $routes->connect(
+        '/{object_type}/multiupload',
+        ['controller' => 'Multiupload', 'action' => 'index'],
+        ['_name' => 'modules:multiupload']
     );
     $routes->connect(
         '/{object_type}/categories',
@@ -370,9 +395,9 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id', 'historyId'], '_name' => 'history:clone']
     );
     $routes->connect(
-        '/{object_type}/history/{id}',
+        '/{object_type}/history/{id}/{page}',
         ['controller' => 'History', 'action' => 'info'],
-        ['pass' => ['id'], '_name' => 'history:info']
+        ['pass' => ['id', 'page'], '_name' => 'history:info']
     );
     $routes->connect(
         '/{object_type}/delete',
@@ -390,6 +415,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
         '/{object_type}/export/{id}/{relation}/{format}',
         ['controller' => 'Export', 'action' => 'related'],
         ['pass' => ['id', 'relation', 'format'], '_name' => 'export:related']
+    );
+    $routes->connect(
+        '/{object_type}/exportFiltered/{id}/{relation}/{format}/{query}',
+        ['controller' => 'Export', 'action' => 'relatedFiltered'],
+        ['pass' => ['id', 'relation', 'format', 'query'], '_name' => 'export:related:filtered']
     );
 
     // Download stream

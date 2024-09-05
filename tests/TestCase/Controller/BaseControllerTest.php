@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Controller;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Laminas\Diactoros\UploadedFile;
 
 /**
  * Base controller test class, with utils.
@@ -37,6 +38,13 @@ class BaseControllerTest extends TestCase
      * @var string
      */
     protected $mediaUname = 'controller-test-media';
+
+    /**
+     * Uname for test media with stream
+     *
+     * @var string
+     */
+    protected $mediaWithStreamUname = 'controller-test-media-stream';
 
     /**
      * Test request config
@@ -102,6 +110,21 @@ class BaseControllerTest extends TestCase
     }
 
     /**
+     * Get a media for test purposes
+     *
+     * @return array|null
+     */
+    protected function getTestMediaWithStream(): ?array
+    {
+        $response = $this->client->getObjects('files', ['filter' => ['uname' => $this->mediaWithStreamUname]]);
+        if (!empty($response['data'][0])) {
+            return $response['data'][0];
+        }
+
+        return null;
+    }
+
+    /**
      * Get test object id
      *
      * @return string
@@ -131,6 +154,19 @@ class BaseControllerTest extends TestCase
         }
 
         return $o;
+    }
+
+    /**
+     * Create a object for test purposes (if not available already)
+     *
+     * @return array
+     */
+    public function createTestObjectWithTranslation(): array
+    {
+        $response = $this->client->save('documents', ['title' => 'test document with translation']);
+        $this->client->save('translations', ['object_id' => $response['data']['id'], 'status' => 'draft', 'lang' => 'it', 'translated_fields' => ['title' => 'Titolo di test']]);
+
+        return $response['data'];
     }
 
     /**
@@ -164,6 +200,39 @@ class BaseControllerTest extends TestCase
             $response = $this->client->save('files', [
                 'title' => 'controller test media',
                 'uname' => $this->mediaUname,
+            ]);
+            $o = $response['data'];
+        }
+
+        return $o;
+    }
+
+    /**
+     * Create a object for test purposes (if not available already)
+     *
+     * @return array
+     */
+    protected function createTestMediaWithStream(): array
+    {
+        $o = $this->getTestMediaWithStream();
+        if ($o == null) {
+            // upload file
+            $filename = sprintf('%s/tests/files/%s', getcwd(), 'test.png');
+            $file = new UploadedFile($filename, filesize($filename), 0, $filename);
+            $filename = basename($file->getClientFileName());
+            $filepath = $file->getStream()->getMetadata('uri');
+            $headers = ['Content-Type' => $file->getClientMediaType()];
+            $response = $this->client->upload($filename, $filepath, $headers);
+            $streamId = $response['data']['id'];
+            $type = 'images';
+            $attributes = [];
+            $data = compact('type', 'attributes');
+            $body = compact('data');
+            $response = $this->client->createMediaFromStream($streamId, $type, $body);
+            $response = $this->client->save('images', [
+                'id' => $response['data']['id'],
+                'title' => 'controller test media',
+                'uname' => $this->mediaWithStreamUname,
             ]);
             $o = $response['data'];
         }

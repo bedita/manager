@@ -37,7 +37,7 @@
 
             <div class="main-view-column is-flex is-flex-column">
                 {# Upload available only for new media objects #}
-                {% if objectType in uploadable and (object.id is empty or (not streams and not object.attributes.provider_extra.html)) %}
+                {% if not Element.custom('upload', 'group') and objectType in uploadable and (object.id is empty or (not streams and not object.attributes.provider_extra.html)) %}
                     {{ element('Form/upload') }}
                 {% endif %}
 
@@ -50,7 +50,9 @@
                 {{ element('Form/custom_left') }}
 
                 {# calendar using `date_ranges` #}
-                {{ element('Form/calendar') }}
+                {% if not Element.custom('calendar', 'group') %}
+                    {{ element('Form/calendar') }}
+                {% endif %}
 
                 {{ element(Element.categories()) }}
 

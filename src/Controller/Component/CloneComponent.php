@@ -114,9 +114,21 @@ class CloneComponent extends Component
      */
     public function queryCloneRelations(): bool
     {
-        $cloneRelations = $this->getController()->getRequest()->getQuery('cloneRelations');
+        return $this->queryClone('cloneRelations');
+    }
 
-        return filter_var($cloneRelations, FILTER_VALIDATE_BOOLEAN) !== false;
+    /**
+     * Get the value of query $param.
+     * Return true when $param is not false.
+     *
+     * @param string $param The query parameter
+     * @return bool
+     */
+    public function queryClone(string $param): bool
+    {
+        $clone = $this->getController()->getRequest()->getQuery($param);
+
+        return filter_var($clone, FILTER_VALIDATE_BOOLEAN) !== false;
     }
 
     /**
@@ -138,6 +150,33 @@ class CloneComponent extends Component
         $relationships = $this->filterRelations($relationships);
         foreach ($relationships as $relation) {
             $this->relation($sourceId, $type, $relation, $destinationId);
+        }
+
+        return true;
+    }
+
+    /**
+     * Clone translations from source object $source to destination object ID $destinationId.
+     *
+     * @param array $source The source object
+     * @param string $destinationId The destination ID
+     * @return bool
+     */
+    public function translations(array $source, string $destinationId): bool
+    {
+        if (!$this->queryClone('cloneTranslations')) {
+            return false;
+        }
+        $sourceId = (string)Hash::get($source, 'data.id');
+        $response = $this->apiClient->get(sprintf('/translations?filter[object_id]=%s', $sourceId));
+        $responseData = (array)Hash::get($response, 'data');
+        foreach ($responseData as $translation) {
+            $this->apiClient->save('translations', [
+                'lang' => (string)Hash::get($translation, 'attributes.lang'),
+                'object_id' => $destinationId,
+                'status' => (string)Hash::get($translation, 'attributes.status'),
+                'translated_fields' => (array)Hash::get($translation, 'attributes.translated_fields'),
+            ]);
         }
 
         return true;

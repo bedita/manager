@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClientException;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
@@ -63,6 +64,7 @@ class TrashController extends AppController
 
         try {
             $response = $this->apiClient->getObjects('trash', $this->getRequest()->getQueryParams());
+            CacheTools::setModuleCount($response, 'trash');
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
             $this->log($e->getMessage(), LogLevel::ERROR);
@@ -172,7 +174,7 @@ class TrashController extends AppController
         }
         foreach ($ids as $id) {
             try {
-                $this->apiClient->remove($id);
+                $this->deleteData($id);
             } catch (BEditaClientException $e) {
                 // Error! Back to object view.
                 $this->log($e->getMessage(), LogLevel::ERROR);
@@ -222,9 +224,9 @@ class TrashController extends AppController
         $response = $this->apiClient->getObjects('trash', $query);
         $counter = 0;
         while (Hash::get($response, 'meta.pagination.count', 0) > 0) {
-            foreach ($response['data'] as $index => $data) {
+            foreach ($response['data'] as $data) {
                 try {
-                    $this->apiClient->remove($data['id']);
+                    $this->deleteData($data['id']);
                     $counter++;
                 } catch (BEditaClientException $e) {
                     // Error! Back to trash index.
@@ -239,5 +241,26 @@ class TrashController extends AppController
         $this->Flash->success(__(sprintf('%d objects deleted from trash', $counter)));
 
         return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
+    }
+
+    /**
+     * Delete data and related streams, if any.
+     *
+     * @param string $id Object ID
+     * @return void
+     */
+    public function deleteData(string $id): void
+    {
+        $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $id]]);
+        $this->apiClient->remove($id);
+        // this for BE versions < 5.25.1, where streams are not deleted with media on delete
+        $streams = (array)Hash::get($response, 'data');
+        foreach ($streams as $stream) {
+            $search = $this->apiClient->get('/streams', ['filter' => ['uuid' => $stream['id']]]);
+            $count = (int)Hash::get($search, 'meta.pagination.count', 0);
+            if ($count === 1) {
+                $this->apiClient->delete(sprintf('/streams/%s', $stream['id']));
+            }
+        }
     }
 }

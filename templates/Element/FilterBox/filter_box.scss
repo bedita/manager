@@ -21,7 +21,6 @@
     .more-filters,
     .filter-buttons {
         display: flex;
-        align-items: center;
         flex-wrap: wrap;
         margin-bottom: 0 !important;
 
@@ -41,7 +40,6 @@
     .filter-container {
         display: flex;
         flex-wrap: wrap;
-        align-items: center;
 
         &.filter-search {
             display: flex;
@@ -83,8 +81,7 @@
             }
         }
 
-        &.parent .filter-label,
-        &.categories .filter-label {
+        &.parent .filter-label {
             display: none;
         }
 

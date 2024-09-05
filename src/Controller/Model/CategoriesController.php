@@ -18,6 +18,7 @@ use Cake\Http\Response;
  * Categories Model Controller: list, add, edit, remove categories
  *
  * @property \App\Controller\Component\CategoriesComponent $Categories
+ * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class CategoriesController extends ModelBaseController
@@ -43,7 +44,8 @@ class CategoriesController extends ModelBaseController
     {
         parent::initialize();
 
-        $this->loadComponent('Categories');
+        $this->loadComponent('ProjectConfiguration');
+        $this->loadComponent('Properties');
     }
 
     /**
@@ -58,7 +60,7 @@ class CategoriesController extends ModelBaseController
         $objectTypes = array_combine($objectTypes, $objectTypes);
         $response = $this->Categories->index(null, $this->getRequest()->getQueryParams());
         $resources = $this->Categories->map($response);
-        $roots = $this->Categories->getAvailableRoots($resources);
+        $roots = $this->Categories->getAllAvailableRoots();
         $categoriesTree = $this->Categories->tree($resources);
         $names = [];
         foreach ($objectTypes as $objectType) {
@@ -72,6 +74,7 @@ class CategoriesController extends ModelBaseController
         $this->set('schema', $this->Schema->getSchema());
         $this->set('properties', $this->Properties->indexList('categories'));
         $this->set('filter', $this->Properties->filterList('categories'));
+        $this->ProjectConfiguration->read();
 
         return null;
     }

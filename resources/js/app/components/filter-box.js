@@ -27,6 +27,7 @@ export default {
         InputDynamicAttributes: () => import(/* webpackChunkName: "input-dynamic-attributes" */'app/components/input-dynamic-attributes'),
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
+        ObjectTypesPicker: () => import(/* webpackChunkName: "object-types-picker" */'app/components/object-types-picker/object-types-picker'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
     },
 
@@ -78,11 +79,16 @@ export default {
              * This will switch the API filter between `parent` and `ancestor`.
              */
             filterByDescendants: false,
+            folder: null,
             moreFilters: this.filterActive,
             pageSize: this.pagination.page_size,
             queryFilter: {},
-            selectedStatuses: [],
-            selectedType: '',
+            searchByTypes: [
+                {name: 'q', label: t`Txt`},
+                {name: 'id', label: t`ID`},
+                {name: 'uname', label: t`Uname`},
+            ],
+            selectedSearchType: 'q',
             statusFilter: {},
             timer: null,
         };
@@ -98,8 +104,9 @@ export default {
             this.availableFilters = this.filterList;
         } else if (this.rightTypes.length == 1 && this.filtersByType) {
             this.availableFilters = this.filtersByType[this.rightTypes[0]];
+        } else {
+            this.availableFilters = this.filtersByType?.[this.queryFilter.filter.type] || [];
         }
-        this.selectedStatuses = Object.values(this.initFilter?.filter?.status || {});
         this.filterByDescendants = !!this.initFilter?.filter?.ancestor;
     },
 
@@ -128,7 +135,12 @@ export default {
          * @returns {boolean}
          */
         isSearchFieldValid() {
-            const length = this.queryFilter?.q?.length;
+            let length = this.queryFilter?.q?.length;
+
+            if (this.selectedSearchType != 'q') {
+                length = this.queryFilter?.filter[this.selectedSearchType]?.length;
+            }
+
             return length === 0 || length > 2;
         },
 
@@ -139,12 +151,6 @@ export default {
          */
         isFullPaginationLayout() {
             return this.pagination.page_count > 1 && this.pagination.page_count <= 7;
-        },
-
-        initHistoryEditor() {
-            this.queryFilter.filter['history_editor'] = Boolean(this.initFilter?.filter?.history_editor);
-
-            return Boolean(this.initFilter?.filter?.history_editor) || false;
         },
 
         initCategories() {
@@ -197,8 +203,23 @@ export default {
             return this.objectsLabel.charAt(0) + this.objectsLabel.slice(1);
         },
 
+        /**
+         * Get the placeholder for the search input.
+         * If a search type is selected, it will be used to build the placeholder.
+         * Otherwise, the default placeholder will be used.
+         * @returns {String}
+        */
+        getSearchPlaceholder() {
+            const searchType = this.selectedSearchType;
+            if (searchType != 'q') {
+                return t`Search by ${searchType}`;
+            }
+
+            return this.placeholder;
+        },
+
         positionFilterName() {
-            return this.filterByDescendants ? 'ancestor' : 'parent';
+            return this.filterByDescendants === true ? 'ancestor' : 'parent';
         }
     },
 
@@ -210,6 +231,7 @@ export default {
             this.normalizeQueryFilter();
             this.dynamicFilters = this.availableFilters.filter(f => {
                 if (f.name === 'status') {
+                    this.queryFilter.filter.status = Object.values(this.queryFilter.filter.status);
                     this.statusFilter = f;
 
                     return false;
@@ -240,38 +262,6 @@ export default {
         pageSize() {
             this.$emit('filter-update-page-size', this.pageSize);
         },
-
-        /**
-         * Add selected statuses to the query filters.
-         * @param {String[]} value Selected statuses list
-         */
-        selectedStatuses(value) {
-            this.queryFilter.filter.status = value;
-        },
-
-        /**
-         * Process dynamic filters list when selected object type changes.
-         * Then apply the current filter.
-         * @param {String} type Selected object type
-         */
-        selectedType(type) {
-            this.availableFilters = [];
-            if (this.filtersByType && this.filtersByType[type]) {
-                this.availableFilters = this.filtersByType[type];
-            };
-            const query = this.getCleanQuery();
-            // persist old compatible filter values
-            query.q = this.queryFilter.q;
-            Object.keys(query.filter).forEach(f => {
-                const oldFilter = this.queryFilter.filter[f];
-                if (oldFilter) {
-                    query.filter[f] = oldFilter;
-                }
-            });
-            query.filter.type = type;
-            this.queryFilter = query;
-            this.applyFilter();
-        }
     },
 
     methods: {
@@ -294,7 +284,11 @@ export default {
          * Normalize query filter object initializing all filters from `availableFilters` and persisting already set values.
          */
         normalizeQueryFilter() {
+            const selectedStatus = Object.values(this.queryFilter?.filter?.status) || [];
+            const selectedType = this.queryFilter?.filter?.type || '';
             const filterObj = this.getCleanQuery().filter;
+            filterObj.status = selectedStatus;
+            filterObj.type = selectedType;
             this.availableFilters.forEach(f => {
                 const defaultValue = f.date ? {} : '';
                 const currentValue = this.queryFilter.filter[f.name];
@@ -329,10 +323,13 @@ export default {
          */
         prepareFilters() {
             const filter = { ...this.queryFilter.filter };
+            if (this.folder) {
+                filter[this.positionFilterName] = this.folder.id;
+            }
 
             Object.entries(filter).forEach(([key, filterValue]) => {
                 // do nothing allowed filters, if value is set
-                if (['status', 'type', 'ancestor', 'history_editor'].includes(key) && filterValue) {
+                if (['id', 'uname', 'status', 'type', 'ancestor', 'parent', 'history_editor'].includes(key) && filterValue) {
                     return;
                 }
 
@@ -362,7 +359,16 @@ export default {
             }
 
             const filter = this.prepareFilters();
-            this.$emit('filter-objects', { ...this.queryFilter, filter });
+            const filterObject = { ...this.queryFilter, filter };
+            this.availableFilters = this.filtersByType?.[filterObject?.filter?.type] || [];
+            this.$emit('filter-objects', filterObject);
+        },
+
+        /**
+         * change selected types
+         */
+        updateSelectedTypes(types) {
+            this.queryFilter.filter.type = types;
         },
 
         /**
@@ -371,8 +377,8 @@ export default {
          * @emits Event#filter-reset
          */
         resetFilter() {
-            this.selectedStatuses = [];
-            this.selectedType = '';
+            this.folder = null;
+            this.selectedSearchType = 'q';
             this.queryFilter = this.getCleanQuery();
             this.$emit('filter-reset');
         },
@@ -401,6 +407,21 @@ export default {
             }
             this.onChangePage(val);
         },
+        onChangeSearchType() {
+            for (const searchType of this.searchByTypes) {
+                if (searchType.name != this.selectedSearchType) {
+                    if (searchType.name != 'q') {
+                        delete this.queryFilter.filter[searchType.name];
+                    } else {
+                        delete this.queryFilter.q;
+                    }
+                }
+            }
+        },
+        onChangeTypeFilter() {
+            this.folder = null;
+            this.availableFilters = this.filtersByType?.[this.queryFilter.filter.type] || [];
+        },
         onPageKeydown(e) {
             if (e.key === 'Enter' || e.keyCode === 13) {
                 e.preventDefault();
@@ -419,20 +440,18 @@ export default {
         },
 
         onFolderChange(folder) {
+            this.folder = folder;
             this.queryFilter.filter[this.positionFilterName] = folder?.id;
         },
 
         /**
          * Switch between descendants and children filter.
-         * @param {Event} event Change event of the switch input.
          */
-        onPositionFilterChange(event) {
-            const value = event.target.checked;
-            const newFilter = value ? 'ancestor' : 'parent';
-            const oldFilter = value ? 'parent' : 'ancestor';
-
-            this.queryFilter.filter[newFilter] = this.queryFilter.filter[oldFilter];
+        onPositionFilterChange() {
+            const newFilter = this.positionFilterName;
+            const oldFilter = newFilter === 'ancestor' ? 'parent' : 'ancestor';
             delete this.queryFilter.filter[oldFilter];
+            this.queryFilter.filter[newFilter] = this.folder?.id || null;
         },
     }
 };

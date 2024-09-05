@@ -7,6 +7,7 @@ import '../../style.scss';
 
 import { BELoader } from 'libs/bedita';
 
+import { EventBus } from 'app/components/event-bus';
 import { PanelView, PanelEvents } from 'app/components/panel-view';
 import { confirm, error, info, success, prompt, warning } from 'app/components/dialog/dialog';
 
@@ -31,15 +32,19 @@ const _vueInstance = new Vue({
     el: 'main',
 
     components: {
+        EventBus,
         PanelView,
         Autocomplete,
         LoginPassword: () => import(/* webpackChunkName: "login-password" */'app/components/login-password/login-password'),
-        Category: () => import(/* webpackChunkName: "category" */'app/components/category/category'),
+        LabelsForm:() => import(/* webpackChunkName: "labels-form" */'app/components/labels-form'),
+        CategoryForm: () => import(/* webpackChunkName: "category-form" */'app/components/category-form/category-form'),
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
+        ObjectTypesPicker: () => import(/* webpackChunkName: "object-types-picker" */'app/components/object-types-picker/object-types-picker'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         TagForm: () => import(/* webpackChunkName: "tag-form" */'app/components/tag-form/tag-form'),
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
         Dashboard: () => import(/* webpackChunkName: "modules-index" */'app/pages/dashboard/index'),
+        DateRange: () => import(/* webpackChunkName: "date-range" */'app/components/date-range/date-range'),
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
@@ -63,7 +68,6 @@ const _vueInstance = new Vue({
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
         HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
-        FilterTypeView: () => import(/* webpackChunkName: "filter-type-view" */'app/components/filter-type'),
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
         FlashMessage: () => import(/* webpackChunkName: "flash-message" */'app/components/flash-message'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
@@ -80,6 +84,9 @@ const _vueInstance = new Vue({
         SystemInfo:() => import(/* webpackChunkName: "system-info" */'app/components/system-info/system-info'),
         UserAccesses:() => import(/* webpackChunkName: "user-accesses" */'app/components/user-accesses/user-accesses'),
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
+        ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
+        ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
+        PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
         AppIcon,
     },
 
@@ -112,7 +119,7 @@ const _vueInstance = new Vue({
                 page: '',
                 page_size: '',
             },
-            selectedTypes: []
+            selectedTypes: [],
         }
     },
 
@@ -145,7 +152,9 @@ const _vueInstance = new Vue({
         Vue.use(autoTranslation);
         Vue.use(Autocomplete);
 
-        Vue.use(vTitle);
+        Vue.use(vTitle, {
+            bgColor: '#000000'
+        });
 
         // load BEplugins's components
         BELoader.loadBeditaPlugins();
@@ -187,6 +196,7 @@ const _vueInstance = new Vue({
             BEDITA.success = success;
             BEDITA.prompt = prompt;
             BEDITA.warning = warning;
+            this.selectedTypes = this.queryFilter?.filter?.type || [];
         });
     },
 
@@ -206,12 +216,13 @@ const _vueInstance = new Vue({
             const title = document.getElementById('title').value || t('Untitled');
             const msg = t`Please insert a new title on "${title}" clone`;
             const defaultTitle = title + '-' + t`copy`;
-            const confirmCallback = (cloneTitle, cloneRelations, dialog, unique) => {
-                let query = `?title=${cloneTitle || defaultTitle}`;
-                for (const uitem of unique) {
+            const confirmCallback = (dialog, options) => {
+                let query = `?title=${options?.title || defaultTitle}`;
+                for (const uitem of options?.unique || []) {
                     query += `&${uitem.field}=${uitem.value}`;
                 }
-                query += `&cloneRelations=${cloneRelations || false}`;
+                query += `&cloneRelations=${options?.relations || false}`;
+                query += `&cloneTranslations=${options?.translations || false}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
                 const url = `${origin}${path}${query}`;
@@ -229,9 +240,13 @@ const _vueInstance = new Vue({
                     value: document.getElementById(field).value + '-' + t`copy`,
                 });
             }
-            const options = { checkLabel: t`Clone relations`, checkValue: false, unique: uniqueOptions };
-
-            prompt(msg, defaultTitle, confirmCallback, document.body, options);
+            prompt(msg, defaultTitle, confirmCallback, document.body, {
+                checks: [
+                    { name: 'relations', label: t`Clone relations`, value: false },
+                    { name: 'translations', label: t`Clone translations`, value: false }
+                ],
+                unique: uniqueOptions
+            });
         },
 
         /**
@@ -276,13 +291,6 @@ const _vueInstance = new Vue({
         onUpdateCurrentPage(page) {
             this.page = page;
             this.applyFilters(this.urlFilterQuery);
-        },
-
-        /**
-         * listen to FilterTypeView event filter-type-page
-         */
-        onUpdateQueryTypes(types) {
-            this.selectedTypes = types;
         },
 
         /**
@@ -393,20 +401,14 @@ const _vueInstance = new Vue({
          * @returns {void}
          */
         applyFilters(filters) {
-            if (filters?.filter?.type) {
-                delete filters.filter.type;
-            }
-            if (this.selectedTypes.length > 0) {
-                const typesFilter = {type: this.selectedTypes};
-                filters.filter = {...filters.filter, ...typesFilter};
-            }
             const url = this.buildUrlWithParams({
                 q: filters.q,
                 filter: filters.filter,
                 page_size: this.pageSize,
                 page: this.page,
                 sort: this.sort,
-                _search: 1
+                _search: 1,
+                view_type: 'list',
             });
             window.location.replace(url);
         },
@@ -512,12 +514,11 @@ const _vueInstance = new Vue({
                 if (!form) {
                     return;
                 }
-
                 const trashActions = [
                     '/trash/delete',
                     '/trash/empty',
+                    '/translation/delete',
                 ];
-
                 let msg = '';
                 let done = false;
                 for (const action of trashActions) {

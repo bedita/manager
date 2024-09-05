@@ -451,6 +451,46 @@ class ModulesControllerTest extends BaseControllerTest
     }
 
     /**
+     * Test `save` method when there's only 'id' in post data
+     *
+     * @return void
+     * @covers ::save()
+     */
+    public function testSkipSave(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        $o = $this->getTestObject();
+        $id = (string)Hash::get($o, 'id');
+        $type = (string)Hash::get($o, 'type');
+
+        // get object for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => $id,
+            ],
+            'params' => [
+                'object_type' => $type,
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $this->controller->save();
+
+        // verify page has data, meta and links keys
+        $vars = $this->controller->viewBuilder()->getVars();
+        static::assertArrayHasKey('data', $vars);
+        static::assertArrayHasKey('meta', $vars);
+        static::assertArrayHasKey('links', $vars);
+    }
+
+    /**
      * Test `save` method, on error
      *
      * @covers ::save()

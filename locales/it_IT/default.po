@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-02-26 14:54:49 \n"
+"POT-Creation-Date: 2024-09-02 14:24:54 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -174,6 +174,9 @@ msgstr "Configurazioni"
 msgid "Confirm new password"
 msgstr "Conferma nuova password"
 
+msgid "Conflict"
+msgstr "Conflitto"
+
 msgid "Copy to"
 msgstr "Copia in"
 
@@ -267,6 +270,9 @@ msgstr "Modifica parametri"
 msgid "Email"
 msgstr "E-mail"
 
+msgid "Email is in use"
+msgstr "Email in uso"
+
 msgid "Embed online content"
 msgstr "Incorpora contenuti online"
 
@@ -333,6 +339,9 @@ msgstr "Cartella"
 msgid "Folders"
 msgstr "Cartelle"
 
+msgid "Forbidden"
+msgstr "Non consentito"
+
 msgid "Forgot your password?"
 msgstr "Hai dimenticato la password?"
 
@@ -384,6 +393,12 @@ msgstr "Filtro di importazione non selezionato"
 msgid "Inherited properties"
 msgstr "Proprietà ereditate"
 
+msgid "Internal Server Error"
+msgstr "Errore interno del server"
+
+msgid "Invalid data"
+msgstr "Dati non validi"
+
 msgid "Invalid username or password"
 msgstr "Username o password non validi"
 
@@ -408,11 +423,17 @@ msgstr "Lingua e traduzioni"
 msgid "Left types"
 msgstr "Tipi di sinistra"
 
-msgid "Less filters"
-msgstr "Meno filtri"
+msgid "Less"
+msgstr "Meno"
 
 msgid "List"
 msgstr "Lista"
+
+msgid "List view"
+msgstr "Vista a lista"
+
+msgid "Loading ..."
+msgstr "Caricamento ..."
 
 msgid "Locations"
 msgstr "Posizioni"
@@ -447,6 +468,9 @@ msgstr ""
 msgid "Metadata"
 msgstr "Metadati"
 
+msgid "Method Not Allowed"
+msgstr "Metodo non consentito"
+
 msgid "Missing import file"
 msgstr "File di importazione mancante"
 
@@ -471,14 +495,14 @@ msgstr "Moduli"
 msgid "More"
 msgstr "Altro"
 
-msgid "More filters"
-msgstr "Più filtri"
-
 msgid "Move to"
 msgstr "Sposta in"
 
 msgid "Move to trash"
 msgstr "Sposta nel cestino"
+
+msgid "Multi upload"
+msgstr "Upload multiplo"
 
 msgid "NEW"
 msgstr "NUOVO"
@@ -512,6 +536,12 @@ msgstr "Nessun filtro di importazione impostato"
 
 msgid "No items found"
 msgstr "Nessun elemento trovato"
+
+msgid "No language configuration found"
+msgstr "Lingue non configurate a sistema"
+
+msgid "Not Found"
+msgstr "Non trovato"
 
 msgid "Number of created objects"
 msgstr "Numero di oggetti creati"
@@ -683,8 +713,8 @@ msgstr "Rimuovi"
 msgid "Request password"
 msgstr "Reimposta password"
 
-msgid "Reset filters"
-msgstr "Reset filtri"
+msgid "Reset"
+msgstr "Resetta"
 
 msgid "Resource \"%s\" not available. Error: %s"
 msgstr "Risorsa \"%s\" non disponibile. Error: %s"
@@ -831,11 +861,17 @@ msgstr "Cestino"
 msgid "Trashd"
 msgstr "Cancellato"
 
+msgid "Tree view"
+msgstr "Vista ad albero"
+
 msgid "Type"
 msgstr "Tipo"
 
 msgid "Uname"
 msgstr "Nome univoco"
+
+msgid "Unauthorized"
+msgstr "Non autorizzato"
 
 msgid "Undo Change File"
 msgstr "Annulla Cambio File"
@@ -855,6 +891,9 @@ msgstr "Aggiornato"
 msgid "Upload local file"
 msgstr "Carica file locale"
 
+msgid "Upload multiple"
+msgstr "Upload multiplo"
+
 msgid "Url"
 msgstr ""
 
@@ -869,6 +908,12 @@ msgstr "Profilo utente salvato"
 
 msgid "Username"
 msgstr "Nome utente"
+
+msgid "Username is in use"
+msgstr "Nome utente in uso"
+
+msgid "Username is required"
+msgstr "Nome utente obbligatorio"
 
 msgid "Users"
 msgstr "Utenti"
@@ -897,6 +942,9 @@ msgstr "Sì"
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
 
+msgid "You do not have the required permissions to view this page."
+msgstr "Non hai i permessi necessari per visualizzare questa pagina."
+
 msgid "You have requested a password change, please provide a new password"
 msgstr "Hai richiesto una modifica della password, fornisci una nuova password"
 
@@ -918,6 +966,12 @@ msgstr "id applicazione"
 msgid "application_id"
 msgstr "id applicazione"
 
+msgid "autoplay"
+msgstr ""
+
+msgid "bearing"
+msgstr ""
+
 msgid "cancel"
 msgstr "annulla"
 
@@ -933,6 +987,9 @@ msgstr "contenuto"
 msgid "context"
 msgstr "contesto"
 
+msgid "controls"
+msgstr ""
+
 msgid "create"
 msgstr "crea"
 
@@ -947,6 +1004,9 @@ msgstr "password corrente"
 
 msgid "description"
 msgstr "descrizione"
+
+msgid "download"
+msgstr ""
 
 msgid "elements to"
 msgstr "elementi a"
@@ -965,6 +1025,9 @@ msgstr "scade"
 
 msgid "from"
 msgstr "da"
+
+msgid "height"
+msgstr ""
 
 msgid "id"
 msgstr ""
@@ -1008,6 +1071,9 @@ msgstr "genitore"
 msgid "phone"
 msgstr "telefono"
 
+msgid "pitch"
+msgstr ""
+
 msgid "remove"
 msgstr "rimuovi"
 
@@ -1016,6 +1082,9 @@ msgstr ""
 
 msgid "scheduled_from"
 msgstr "programmato da"
+
+msgid "search on visible positions"
+msgstr "cerca nelle posizioni visibili"
 
 msgid "service"
 msgstr "servizio"
@@ -1044,6 +1113,9 @@ msgstr "annulla"
 msgid "undo remove"
 msgstr "annulla rimozione"
 
+msgid "untitled"
+msgstr "senza titolo"
+
 msgid "username"
 msgstr "nome utente"
 
@@ -1056,6 +1128,12 @@ msgstr "visualizza genitore"
 msgid "warning"
 msgstr "attenzione"
 
+msgid "width"
+msgstr ""
+
+msgid "zoom"
+msgstr ""
+
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr "Inserisci un nuovo titolo per la copia di \"${ title }\""
@@ -1065,6 +1143,9 @@ msgstr "copia"
 
 msgid "Clone relations"
 msgstr "Clona le relazioni"
+
+msgid "Clone translations"
+msgstr "Clona le traduzioni"
 
 msgid "If you confirm, this data will be gone forever. Are you sure?"
 msgstr "Questo dato verrà eliminato definitivamente. Vuoi proseguire?"
@@ -1141,6 +1222,23 @@ msgstr ""
 "File \"${ filename }\" troppo grande (${ fileSizeMb } MB), selezionare un "
 "file che non superi la dimensione massima (${ maxFileSizeMb } MB)"
 
+#, javascript-format
+msgid ""
+"We could not calculate the resolution of the file ${ filename }. Please "
+"select a file with a resolution less than or equal to ${ resolution }"
+msgstr ""
+"Non è stato possibile calcolare la risoluzione del file ${ filename }. "
+"Selezionare un file con risoluzione inferiore o uguale a ${ resolution }"
+
+#, javascript-format
+msgid ""
+"Resolution of ${ filename } is too big (${ img.width }x${ img.height }), "
+"please select a file whose resolution is less than or equal to "
+"${ resolution }"
+msgstr ""
+"Risoluzione di ${ filename } troppo grande (${ img.width }x${ img.height }), "
+"selezionare un file con risoluzione inferiore o uguale a ${ resolution }"
+
 msgid "File type forbidden"
 msgstr "Tipo file non consentito"
 
@@ -1173,17 +1271,18 @@ msgstr ""
 "Dati mancanti per la ricerca delle coordinate: inserire almeno \"Indirizzo\" "
 "e \"Località\" (opzionali: \"CAP\", \"Paese\", \"Regione\")"
 
-msgid "stop"
-msgstr "interrompi"
-
-msgid "done"
-msgstr "fatto"
-
+#.  Map of all axios cancel token
 msgid "Cancelled"
 msgstr "Annullato"
 
-msgid "Relation parameters"
-msgstr "Parametri della relazione"
+msgid "Done"
+msgstr "Fatto"
+
+msgid "Stop"
+msgstr "Interrompi"
+
+msgid "Cancel"
+msgstr "Annulla"
 
 msgid "In relation with"
 msgstr "In relazione con"
@@ -1191,14 +1290,21 @@ msgstr "In relazione con"
 msgid "Priority"
 msgstr "Priorità"
 
-msgid "Cancel"
-msgstr "Annulla"
+msgid "Relation parameters"
+msgstr "Parametri della relazione"
 
 msgid "Mail to"
 msgstr "Invia mail a"
 
+msgid "Txt"
+msgstr "Testuale"
+
 msgid "Items"
 msgstr "Elementi"
+
+#, javascript-format
+msgid "Search by ${ searchType }"
+msgstr "Cerca per ${ searchType }"
 
 msgid "NULL"
 msgstr ""
@@ -1236,8 +1342,29 @@ msgstr "Utente"
 msgid "Canonical"
 msgstr "Canonica"
 
+msgid "Loading branches for position"
+msgstr "Caricamento rami per posizione"
+
+msgid "Loading children for folder"
+msgstr "Caricamento contenuti per cartella"
+
+msgid "Loading folder"
+msgstr "Caricamento cartella"
+
+msgid "Loading parent for folder"
+msgstr "Caricamento genitore per cartella"
+
+msgid "Loading positions for object"
+msgstr "Caricamento posizioni per oggetto"
+
+msgid "Loading root folders"
+msgstr "Caricamento cartelle principali"
+
 msgid "Menu"
 msgstr "Menù"
+
+msgid "page"
+msgstr "pagina"
 
 msgid "View"
 msgstr "Vedi"
@@ -1310,6 +1437,9 @@ msgstr "Titolo o #id nome univoco"
 msgid "(deleted)"
 msgstr "(eliminato)"
 
+msgid "placeholders"
+msgstr "segnaposto"
+
 msgid "You can modify the permissions"
 msgstr "Puoi modificare i permessi"
 
@@ -1364,6 +1494,9 @@ msgstr "Traducibile"
 
 msgid "Error on deleting property"
 msgstr "Errore nella cancellazione della proprietà"
+
+msgid "Search on categories"
+msgstr "Cerca tra le categorie"
 
 msgid "Password"
 msgstr "Password"
@@ -1428,20 +1561,14 @@ msgstr "Numero di errori"
 msgid "Result"
 msgstr "Risultato"
 
-msgid "version by"
-msgstr "versione di"
+msgid "clone"
+msgstr "clona"
 
-msgid "date"
-msgstr "data"
-
-msgid "Trashed"
-msgstr "Rimosso"
-
-#. *
-#.  * Component to fetch and display changes' history.
-#.
-msgid "No History data found"
+msgid "No history data found"
 msgstr "Nessun dato di Cronologia"
+
+msgid "restore"
+msgstr "ripristina"
 
 #, javascript-format
 msgid "by ${ name } via ${ application }"
@@ -1457,6 +1584,18 @@ msgid ""
 msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
+
+msgid "version by"
+msgstr "versione di"
+
+msgid "date"
+msgstr "data"
+
+msgid "Trashed"
+msgstr "Rimosso"
+
+msgid "Insert date(s)"
+msgstr "Inserire data(e)"
 
 msgid "Every day"
 msgstr "Tutti i giorni"
@@ -1482,11 +1621,14 @@ msgstr "Giovedì"
 msgid "Tuesday"
 msgstr "Martedì"
 
+msgid "Undo"
+msgstr "Annulla"
+
 msgid "Wednesday"
 msgstr "Mercoledì"
 
-msgid "Modify"
-msgstr "Modifica"
+msgid "Copied!"
+msgstr "Copiato!"
 
 msgid "Name already in use"
 msgstr "Nome già in uso"

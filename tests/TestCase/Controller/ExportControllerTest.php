@@ -635,6 +635,46 @@ class ExportControllerTest extends TestCase
     }
 
     /**
+     * Test `relatedFiltered` method.
+     *
+     * @return void
+     * @covers ::relatedFiltered()
+     */
+    public function testRelatedFiltered(): void
+    {
+        $this->Export = new ExportController(
+            new ServerRequest([
+                'environment' => ['REQUEST_METHOD' => 'GET'],
+                'params' => ['object_type' => 'users'],
+                'get' => ['id' => '888', 'object_type' => 'users', 'format' => 'csv'],
+            ])
+        );
+        // mock api getObjects.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn([
+                'data' => [
+                    0 => $this->testdata['input']['gustavo'],
+                ],
+                'meta' => [
+                    'pagination' => [
+                        'page_items' => 1,
+                        'page_count' => 1,
+                    ],
+                ],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        // set $this->Export->apiClient
+        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property->setAccessible(true);
+        $property->setValue($this->Export, $apiClient);
+        $this->Export->relatedFiltered('888', 'seealso', 'csv', 'q=test&filter[type]=documents');
+        static::assertEquals(['q' => 'test', 'filter' => ['type' => 'documents']], $this->Export->filter);
+    }
+
+    /**
      * Set export limit in cache.
      *
      * @param int $limit The limit
@@ -643,5 +683,112 @@ class ExportControllerTest extends TestCase
     private function setLimit(int $limit): void
     {
         Configure::write('Export.limit', $limit);
+    }
+
+    /**
+     * Data provider for `testGetFileName` test case.
+     *
+     * @return array
+     */
+    public function getRelatedFileNameProvider(): array
+    {
+        return [
+            'empty filter' => [
+                [],
+                '123',
+                'folders',
+                'children',
+                'csv',
+                'folders_123_children_',
+                3,
+                'csv',
+            ],
+            'q + filter' => [
+                ['q' => 'needle', 'filter' => ['type' => 'documents']],
+                '123',
+                'folders',
+                'children',
+                'csv',
+                'folders_123_children_needle_documents_',
+                5,
+                'csv',
+            ],
+        ];
+    }
+
+    /**
+     * Test `getRelatedFileName` method.
+     *
+     * @param array $filter The filter.
+     * @param string $id The object id.
+     * @param string $type The object type.
+     * @param string $relation The relation.
+     * @param string $format The format.
+     * @param string $expectedPrefix The expected prefix.
+     * @param string $expectedExtension The expected extension.
+     * @return void
+     * @dataProvider getRelatedFileNameProvider()
+     * @covers ::getRelatedFileName()
+     */
+    public function testGetRelatedFileName(array $filter, string $id, string $type, string $relation, string $format, string $expectedPrefix, int $expectedDash, string $expectedExtension): void
+    {
+        $this->Export->filter = $filter;
+        $reflectionClass = new \ReflectionClass($this->Export);
+        $method = $reflectionClass->getMethod('getRelatedFileName');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Export, [$id, $type, $relation, $format]);
+        static::assertStringContainsString($expectedPrefix, $actual);
+        static::assertStringContainsString($expectedExtension, $actual);
+        static::assertTrue(strpos($actual, $expectedPrefix) === 0);
+        $tmp = explode('_', $actual);
+        static::assertEquals($expectedDash, count($tmp) - 1);
+    }
+
+    /**
+     * Test `prepareQuery` method.
+     *
+     * @return void
+     * @covers ::prepareQuery()
+     */
+    public function testPrepareQuery(): void
+    {
+        $this->Export = new ExportController(
+            new ServerRequest([
+                'environment' => ['REQUEST_METHOD' => 'GET'],
+                'params' => [
+                    'objectType' => 'users',
+                ],
+                'post' => [
+                    'filter' => ['{"status":"on"}'],
+                    'q' => 'gustavo',
+                ],
+                'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
+            ])
+        );
+        $reflectionClass = new \ReflectionClass($this->Export);
+        $method = $reflectionClass->getMethod('prepareQuery');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Export, []);
+        static::assertEquals(['filter' => ['status' => 'on'], 'q' => 'gustavo'], $actual);
+
+        // use $this->filter
+        $this->Export = new ExportController(
+            new ServerRequest([
+                'environment' => ['REQUEST_METHOD' => 'GET'],
+                'params' => [
+                    'objectType' => 'users',
+                ],
+                'post' => [
+                    'q' => 'gustavo',
+                ],
+                'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
+            ])
+        );
+        $this->Export->filter = ['filter' => ['type' => 'documents'], 'q' => 'needle'];
+        $reflectionClass = new \ReflectionClass($this->Export);
+        $method = $reflectionClass->getMethod('prepareQuery');
+        $method->setAccessible(true);
+        $actual = $method->invokeArgs($this->Export, []);
+        static::assertEquals(['filter' => ['type' => 'documents'], 'q' => 'needle'], $actual);
     }
 }

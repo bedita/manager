@@ -1,16 +1,18 @@
 {% if 'Tags' in schema.associations %}
+    {% set objectTags = object.attributes.tags|default([]) %}
     <property-view inline-template :tab-open="tabsOpen" tab-name="tags">
         <section class="fieldset">
             <header @click.prevent="toggleVisibility()"
                 class="tab unselectable"
                 :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
                 <h2>{{ __('Tags') }}</h2>
+                <span class="tag is-smallest is-black mx-05 {% if objectTags|length == 0 %}empty{% endif %}">{{ objectTags|length }}</span>
             </header>
             <div v-show="isOpen" class="tab-container">
                 <div class="tags-container">
                     <tag-picker
                         :id="`tagPick`"
-                        :initial-tags="{{ object.attributes.tags|default([])|json_encode }}"
+                        :initial-tags="{{ objectTags|default([])|json_encode }}"
                         :can-save="{{ Perms.canSave('tags')|json_encode }}">
                     </tag-picker>
                 </div>

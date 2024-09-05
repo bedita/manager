@@ -4,12 +4,16 @@
 {# Use external provider thumbnail if available #}
 {% if object.attributes.provider_thumbnail %}
 
-        <img src={{ object.attributes.provider_thumbnail }} width={{ width }} />
+    <img src={{ object.attributes.provider_thumbnail }} width={{ width }} />
 
 {# Otherwise create/display thumb if type is an image #}
 {% elseif object.type ==  'images' %}
 
-    {% set thumb = Thumb.getUrl(object, { 'options': { 'w': width } }) %}
+    {% if object.relationships.streams.data[0].attributes.mime_type == 'image/svg+xml' %}
+        {% set thumb = object.relationships.streams.data[0].meta.url %}
+    {% else %}
+        {% set thumb = Thumb.getUrl(object, { 'options': { 'w': width } }) %}
+    {% endif %}
 
     {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
         <div class="missing-image has-text-size-largest" title="{{ __('Thumb not available') }}">

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2024-02-26 14:54:49 \n"
+"POT-Creation-Date: 2024-09-02 14:24:54 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -169,6 +169,9 @@ msgstr ""
 msgid "Confirm new password"
 msgstr ""
 
+msgid "Conflict"
+msgstr ""
+
 msgid "Copy to"
 msgstr ""
 
@@ -262,6 +265,9 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
+msgid "Email is in use"
+msgstr ""
+
 msgid "Embed online content"
 msgstr ""
 
@@ -328,6 +334,9 @@ msgstr ""
 msgid "Folders"
 msgstr ""
 
+msgid "Forbidden"
+msgstr ""
+
 msgid "Forgot your password?"
 msgstr ""
 
@@ -379,6 +388,12 @@ msgstr ""
 msgid "Inherited properties"
 msgstr ""
 
+msgid "Internal Server Error"
+msgstr ""
+
+msgid "Invalid data"
+msgstr ""
+
 msgid "Invalid username or password"
 msgstr ""
 
@@ -403,10 +418,16 @@ msgstr ""
 msgid "Left types"
 msgstr ""
 
-msgid "Less filters"
+msgid "Less"
 msgstr ""
 
 msgid "List"
+msgstr ""
+
+msgid "List view"
+msgstr ""
+
+msgid "Loading ..."
 msgstr ""
 
 msgid "Locations"
@@ -442,6 +463,9 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
+msgid "Method Not Allowed"
+msgstr ""
+
 msgid "Missing import file"
 msgstr ""
 
@@ -466,13 +490,13 @@ msgstr ""
 msgid "More"
 msgstr ""
 
-msgid "More filters"
-msgstr ""
-
 msgid "Move to"
 msgstr ""
 
 msgid "Move to trash"
+msgstr ""
+
+msgid "Multi upload"
 msgstr ""
 
 msgid "NEW"
@@ -506,6 +530,12 @@ msgid "No import filters set"
 msgstr ""
 
 msgid "No items found"
+msgstr ""
+
+msgid "No language configuration found"
+msgstr ""
+
+msgid "Not Found"
 msgstr ""
 
 msgid "Number of created objects"
@@ -676,7 +706,7 @@ msgstr ""
 msgid "Request password"
 msgstr ""
 
-msgid "Reset filters"
+msgid "Reset"
 msgstr ""
 
 msgid "Resource \"%s\" not available. Error: %s"
@@ -823,10 +853,16 @@ msgstr ""
 msgid "Trashd"
 msgstr ""
 
+msgid "Tree view"
+msgstr ""
+
 msgid "Type"
 msgstr ""
 
 msgid "Uname"
+msgstr ""
+
+msgid "Unauthorized"
 msgstr ""
 
 msgid "Undo Change File"
@@ -847,6 +883,9 @@ msgstr ""
 msgid "Upload local file"
 msgstr ""
 
+msgid "Upload multiple"
+msgstr ""
+
 msgid "Url"
 msgstr ""
 
@@ -860,6 +899,12 @@ msgid "User profile saved"
 msgstr ""
 
 msgid "Username"
+msgstr ""
+
+msgid "Username is in use"
+msgstr ""
+
+msgid "Username is required"
 msgstr ""
 
 msgid "Users"
@@ -889,6 +934,9 @@ msgstr ""
 msgid "You are not authorized to access that location."
 msgstr ""
 
+msgid "You do not have the required permissions to view this page."
+msgstr ""
+
 msgid "You have requested a password change, please provide a new password"
 msgstr ""
 
@@ -910,6 +958,12 @@ msgstr ""
 msgid "application_id"
 msgstr ""
 
+msgid "autoplay"
+msgstr ""
+
+msgid "bearing"
+msgstr ""
+
 msgid "cancel"
 msgstr ""
 
@@ -925,6 +979,9 @@ msgstr ""
 msgid "context"
 msgstr ""
 
+msgid "controls"
+msgstr ""
+
 msgid "create"
 msgstr ""
 
@@ -938,6 +995,9 @@ msgid "current password"
 msgstr ""
 
 msgid "description"
+msgstr ""
+
+msgid "download"
 msgstr ""
 
 msgid "elements to"
@@ -956,6 +1016,9 @@ msgid "expires"
 msgstr ""
 
 msgid "from"
+msgstr ""
+
+msgid "height"
 msgstr ""
 
 msgid "id"
@@ -1000,6 +1063,9 @@ msgstr ""
 msgid "phone"
 msgstr ""
 
+msgid "pitch"
+msgstr ""
+
 msgid "remove"
 msgstr ""
 
@@ -1007,6 +1073,9 @@ msgid "reset"
 msgstr ""
 
 msgid "scheduled_from"
+msgstr ""
+
+msgid "search on visible positions"
 msgstr ""
 
 msgid "service"
@@ -1036,6 +1105,9 @@ msgstr ""
 msgid "undo remove"
 msgstr ""
 
+msgid "untitled"
+msgstr ""
+
 msgid "username"
 msgstr ""
 
@@ -1048,6 +1120,12 @@ msgstr ""
 msgid "warning"
 msgstr ""
 
+msgid "width"
+msgstr ""
+
+msgid "zoom"
+msgstr ""
+
 #, javascript-format
 msgid "Please insert a new title on \"${ title }\" clone"
 msgstr ""
@@ -1056,6 +1134,9 @@ msgid "copy"
 msgstr ""
 
 msgid "Clone relations"
+msgstr ""
+
+msgid "Clone translations"
 msgstr ""
 
 msgid "If you confirm, this data will be gone forever. Are you sure?"
@@ -1128,6 +1209,19 @@ msgid ""
 "less than max file size (${ maxFileSizeMb } MB)"
 msgstr ""
 
+#, javascript-format
+msgid ""
+"We could not calculate the resolution of the file ${ filename }. Please "
+"select a file with a resolution less than or equal to ${ resolution }"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Resolution of ${ filename } is too big (${ img.width }x${ img.height }), "
+"please select a file whose resolution is less than or equal to "
+"${ resolution }"
+msgstr ""
+
 msgid "File type forbidden"
 msgstr ""
 
@@ -1158,16 +1252,17 @@ msgid ""
 "\"Locality\" (optional: \"Zipcode\", \"Country\", \"Region\")"
 msgstr ""
 
-msgid "stop"
-msgstr ""
-
-msgid "done"
-msgstr ""
-
+#.  Map of all axios cancel token
 msgid "Cancelled"
 msgstr ""
 
-msgid "Relation parameters"
+msgid "Done"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "In relation with"
@@ -1176,13 +1271,20 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-msgid "Cancel"
+msgid "Relation parameters"
 msgstr ""
 
 msgid "Mail to"
 msgstr ""
 
+msgid "Txt"
+msgstr ""
+
 msgid "Items"
+msgstr ""
+
+#, javascript-format
+msgid "Search by ${ searchType }"
 msgstr ""
 
 msgid "NULL"
@@ -1221,7 +1323,28 @@ msgstr ""
 msgid "Canonical"
 msgstr ""
 
+msgid "Loading branches for position"
+msgstr ""
+
+msgid "Loading children for folder"
+msgstr ""
+
+msgid "Loading folder"
+msgstr ""
+
+msgid "Loading parent for folder"
+msgstr ""
+
+msgid "Loading positions for object"
+msgstr ""
+
+msgid "Loading root folders"
+msgstr ""
+
 msgid "Menu"
+msgstr ""
+
+msgid "page"
 msgstr ""
 
 msgid "View"
@@ -1295,6 +1418,9 @@ msgstr ""
 msgid "(deleted)"
 msgstr ""
 
+msgid "placeholders"
+msgstr ""
+
 msgid "You can modify the permissions"
 msgstr ""
 
@@ -1348,6 +1474,9 @@ msgid "Translatable"
 msgstr ""
 
 msgid "Error on deleting property"
+msgstr ""
+
+msgid "Search on categories"
 msgstr ""
 
 msgid "Password"
@@ -1413,19 +1542,13 @@ msgstr ""
 msgid "Result"
 msgstr ""
 
-msgid "version by"
+msgid "clone"
 msgstr ""
 
-msgid "date"
+msgid "No history data found"
 msgstr ""
 
-msgid "Trashed"
-msgstr ""
-
-#. *
-#.  * Component to fetch and display changes' history.
-#.  
-msgid "No History data found"
+msgid "restore"
 msgstr ""
 
 #, javascript-format
@@ -1439,6 +1562,18 @@ msgstr ""
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
+msgstr ""
+
+msgid "version by"
+msgstr ""
+
+msgid "date"
+msgstr ""
+
+msgid "Trashed"
+msgstr ""
+
+msgid "Insert date(s)"
 msgstr ""
 
 msgid "Every day"
@@ -1465,10 +1600,13 @@ msgstr ""
 msgid "Tuesday"
 msgstr ""
 
+msgid "Undo"
+msgstr ""
+
 msgid "Wednesday"
 msgstr ""
 
-msgid "Modify"
+msgid "Copied!"
 msgstr ""
 
 msgid "Name already in use"

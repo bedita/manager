@@ -20,6 +20,7 @@ use Cake\Utility\Hash;
  * Categories Controller: list, save, delete categories
  *
  * @property \App\Controller\Component\CategoriesComponent $Categories
+ * @property \App\Controller\Component\ProjectConfigurationComponent $ProjectConfiguration
  * @property \App\Controller\Component\PropertiesComponent $Properties
  */
 class CategoriesController extends AppController
@@ -38,7 +39,7 @@ class CategoriesController extends AppController
     {
         parent::initialize();
 
-        $this->loadComponent('Categories');
+        $this->loadComponent('ProjectConfiguration');
         $this->loadComponent('Properties');
         if ($this->getRequest()->getParam('object_type')) {
             $this->objectType = $this->getRequest()->getParam('object_type');
@@ -58,7 +59,7 @@ class CategoriesController extends AppController
         $this->getRequest()->allowMethod(['get']);
         $response = $this->Categories->index($this->objectType, $this->getRequest()->getQueryParams());
         $resources = $this->Categories->map($response);
-        $roots = $this->Categories->getAvailableRoots($resources);
+        $roots = $this->Categories->getAllAvailableRoots();
         $categoriesTree = $this->Categories->tree($resources);
         $names = [$this->objectType => $this->Categories->names($this->objectType)];
 
@@ -70,6 +71,7 @@ class CategoriesController extends AppController
         $this->set('filter', $this->Properties->filterList('categories'));
         $this->set('object_types', [$this->objectType]);
         $this->set('objectType', $this->objectType);
+        $this->ProjectConfiguration->read();
 
         return null;
     }
@@ -88,6 +90,7 @@ class CategoriesController extends AppController
             $data = (array)$this->getRequest()->getData();
             $enabled = (string)Hash::get($data, 'enabled', null);
             $data['enabled'] = $enabled === 'true';
+            $data['labels'] = json_decode((string)Hash::get($data, 'labels'), true);
             $response = $this->Categories->save($data);
         } catch (BEditaClientException $e) {
             $error = $e->getMessage();

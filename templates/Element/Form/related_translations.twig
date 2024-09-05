@@ -22,10 +22,17 @@
 
             <div v-show="isOpen" class="tab-container">
 
+                {% if not config('Project.config.I18n') %}
+                <div class="alert alert-warning">
+                    {{ __('No language configuration found') }}
+                </div>
+                {% endif %}
+
+                {% if config('Project.config.I18n') %}
                 <div>
                     <language-selector
                         language="{{ object.id ? object.attributes.lang : config('Project.config.I18n.default') }}"
-                        :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}">
+                        :languages="{{ config('Project.config.I18n.languages')|default({"en":"English","it":"Italiano"})|json_encode|escape('html_attr') }}">
                     </language-selector>
 
                     {% if translatable and object.attributes.lang %}
@@ -39,6 +46,7 @@
                         })|raw }}
                     {% endif %}
                 </div>
+                {% endif %}
 
                 {% if object.relationships.translations %}
                 <relation-view inline-template

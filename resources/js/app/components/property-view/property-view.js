@@ -21,6 +21,7 @@ const API_OPTIONS = {
 };
 
 const STORAGE_TABS_KEY = 'tabs_open_' + BEDITA.currentModule.name;
+let debouncedSearchPosition = null;
 
 export default {
     components: {
@@ -28,8 +29,9 @@ export default {
         RelationView: () => import(/* webpackChunkName: "relation-view" */'app/components/relation-view/relation-view'),
         ResourceRelationView: () => import(/* webpackChunkName: "resource-relation-view" */'app/components/relation-view/resource-relation-view'),
         MapView: () => import(/* webpackChunkName: "map-view" */'app/components/map-view'),
+        DateRange: () => import(/* webpackChunkName: "date-range" */'app/components/date-range/date-range'),
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
-        History: () => import(/* webpackChunkName: "history" */'app/components/history/history'),
+        HistoryChanges: () => import(/* webpackChunkName: "history-changes" */'app/components/history/history-changes'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
@@ -41,6 +43,9 @@ export default {
         Permissions:() => import(/* webpackChunkName: "permissions" */'app/components/permissions/permissions'),
         PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
+        ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
+        ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
+        PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
     },
 
     props: {
@@ -85,6 +90,7 @@ export default {
             dataList: parseInt(this.uploadableNum) == 0,
             userInfoLoaded: false,
             fileChanged: false,
+            searchInPosition: '',
         }
     },
 
@@ -117,6 +123,7 @@ export default {
     methods: {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
+            this.searchInPosition = '';
             this.checkLoadRelated();
             this.updateStorage();
         },
@@ -214,6 +221,9 @@ export default {
             if (this.$helpers.checkMimeForUpload(files[0], type) === false) {
                 return;
             }
+            if (type === 'images') {
+                this.$helpers.checkImageResolution(e.target.files[0]);
+            }
             if (this.$helpers.checkMaxFileSize(files[0]) === false) {
                 return;
             }
@@ -227,6 +237,16 @@ export default {
             if (thumb && document.getElementById('imageThumb')) {
                 document.getElementById('imageThumb').src = thumb;
             }
+        },
+
+        onSearchPosition(e) {
+            if (!debouncedSearchPosition) {
+                debouncedSearchPosition = this.$helpers.debounce((val) => {
+                    this.searchInPosition = val.length < 3 ? '' : val;
+                }, 300);
+            }
+
+            return debouncedSearchPosition(e.target.value);
         },
     }
 }

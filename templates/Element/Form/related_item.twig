@@ -19,7 +19,7 @@
         draggable
         :drag-data="JSON.stringify(related)"
     {% else %}
-        :class="`${related.type} has-shadow-color-${related.type}`"
+        :class="`${related.type} has-shadow-color-${related.type} has-status-${related.attributes.status}`"
     {%- endif -%} >
 
 
@@ -68,8 +68,13 @@
 
                 <span class="icon-calendar-check-o" v-title="datesInfo(related)"></span>
             {% endif %}
+            <span class="status is-uppercase has-text-size-smallest" :class="related.attributes.status" v-if="related.attributes.status"><: related.attributes.status :></span>
 
-            <span class="status is-uppercase has-text-size-smallest" v-if="related.attributes.status"><: related.attributes.status :></span>
+        </div>
+
+        <div class="is-flex space-between align-center">
+            <clipboard-item label="ID" :text="related.id"></clipboard-item>
+            <clipboard-item label="uname" :text="related.attributes.uname"></clipboard-item>
         </div>
 
         <header class="is-flex space-between mt-05">
@@ -173,11 +178,11 @@
                 <app-icon icon="carbon:launch"></app-icon>
                 <span class="ml-05">{{ __('Open') }}</span>
             </a>
-            <a class="button button-text is-small" @click.prevent="relationToggle(related)" v-if="containsId(removedRelated, related.id)">
+            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-if="containsId(removedRelated, related.id)">
                 <app-icon icon="carbon:undo"></app-icon>
                 <span class="ml-05">{{ __('undo remove') }}</span>
             </a>
-            <a class="button button-text is-small" @click.prevent="relationToggle(related)" v-else>
+            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-else>
                 <app-icon icon="carbon:unlink"></app-icon>
                 <span class="ml-05">{{ __('remove') }}</span>
             </a>
@@ -188,11 +193,11 @@
                 <span class="ml-05">{{ __('Edit') }}</span>
             </a>
             {% if not readonly %}
-            <a class="button button-text is-small" @click.prevent="relationToggle(related)" v-if="containsId(removedRelated, related.id)">
+            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-if="containsId(removedRelated, related.id)">
                 <app-icon icon="carbon:undo"></app-icon>
                 <span class="ml-05">{{ __('undo') }}</span>
             </a>
-            <a class="button button-text is-small" @click.prevent="relationToggle(related)" v-else>
+            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-else>
                 <app-icon icon="carbon:unlink"></app-icon>
                 <span class="ml-05">{{ __('remove') }}</span>
             </a>

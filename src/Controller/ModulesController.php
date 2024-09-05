@@ -12,11 +12,15 @@
  */
 namespace App\Controller;
 
+use App\Utility\CacheTools;
+use App\Utility\Message;
 use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
+use Cake\I18n\I18n;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -53,7 +57,6 @@ class ModulesController extends AppController
     {
         parent::initialize();
 
-        $this->loadComponent('Categories');
         $this->loadComponent('Children');
         $this->loadComponent('Clone');
         $this->loadComponent('History');
@@ -101,6 +104,7 @@ class ModulesController extends AppController
 
         try {
             $response = $this->apiClient->getObjects($this->objectType, $this->Query->index());
+            CacheTools::setModuleCount((array)$response, $this->Modules->getConfig('currentModuleName'));
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -279,22 +283,44 @@ class ModulesController extends AppController
         unset($requestData['_api']);
 
         try {
+            $id = Hash::get($requestData, 'id');
+            // skip save if no data changed
+            if (empty($relatedData) && count($requestData) === 1 && !empty($id)) {
+                $response = $this->apiClient->getObject($id, $this->objectType, ['count' => 'all']);
+                $this->Thumbs->urls($response);
+                $this->set((array)$response);
+                $this->setSerialize(array_keys($response));
+
+                return;
+            }
+
             // upload file (if available)
             $this->Modules->upload($requestData);
 
             // save data
-            $response = $this->apiClient->save($this->objectType, $requestData);
+            $lang = I18n::getLocale();
+            $headers = ['Accept-Language' => $lang];
+            $response = $this->apiClient->save($this->objectType, $requestData, $headers);
             $this->savePermissions(
                 (array)$response,
                 (array)$this->Schema->getSchema($this->objectType),
                 (array)Hash::get($requestData, 'permissions')
             );
-            $this->Modules->saveRelated((string)Hash::get($response, 'data.id'), $this->objectType, $relatedData);
+            $id = (string)Hash::get($response, 'data.id');
+            $this->Modules->saveRelated($id, $this->objectType, $relatedData);
+            $options = [
+                'id' => Hash::get($response, 'data.id'),
+                'type' => $this->objectType,
+                'data' => $requestData,
+            ];
+            $event = new Event('Controller.afterSave', $this, $options);
+            $this->getEventManager()->dispatch($event);
+            $this->getRequest()->getSession()->delete(sprintf('failedSave.%s.%s', $this->objectType, $id));
         } catch (BEditaClientException $error) {
-            $this->log($error->getMessage(), LogLevel::ERROR);
-            $this->Flash->error($error->getMessage(), ['params' => $error]);
-
-            $this->set(['error' => $error->getAttributes()]);
+            $message = new Message($error);
+            $this->log($message->get(), LogLevel::ERROR);
+            $this->Flash->error($message->get(), ['params' => $error]);
+            $this->set(['error' => $message->get()]);
             $this->setSerialize(['error']);
 
             // set session data to recover form
@@ -335,6 +361,7 @@ class ModulesController extends AppController
             $save = $this->apiClient->save($this->objectType, $attributes);
             $destination = (string)Hash::get($save, 'data.id');
             $this->Clone->relations($source, $destination);
+            $this->Clone->translations($source, $destination);
             $id = $destination;
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
@@ -363,6 +390,8 @@ class ModulesController extends AppController
         foreach ($ids as $id) {
             try {
                 $this->apiClient->deleteObject($id, $this->objectType);
+                $event = new Event('Controller.afterDelete', $this, ['id' => $id, 'type' => $this->objectType]);
+                $this->getEventManager()->dispatch($event);
             } catch (BEditaClientException $e) {
                 $this->log($e->getMessage(), LogLevel::ERROR);
                 $this->Flash->error($e->getMessage(), ['params' => $e]);

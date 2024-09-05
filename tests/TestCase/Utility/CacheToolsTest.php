@@ -14,6 +14,7 @@ namespace App\Test\TestCase;
 
 use App\Utility\CacheTools;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Cache\Cache;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -23,6 +24,24 @@ use Cake\TestSuite\TestCase;
  */
 class CacheToolsTest extends TestCase
 {
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        Cache::enable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        Cache::disable();
+    }
+
     /**
      * Test `cacheKey` method.
      *
@@ -34,6 +53,32 @@ class CacheToolsTest extends TestCase
         $apiSignature = md5(ApiClientProvider::getApiClient()->getApiBaseUrl());
         $expected = sprintf('%s_%s', 'test', $apiSignature);
         $actual = CacheTools::cacheKey('test');
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `getModuleCount` and `setModuleCount` methods.
+     *
+     * @return void
+     * @covers ::existsCount()
+     * @covers ::setModuleCount()
+     * @covers ::getModuleCount()
+     */
+    public function testGetSetModuleCount(): void
+    {
+        $moduleName = 'test';
+        $response = [
+            'meta' => [
+                'pagination' => [
+                    'count' => 42,
+                ],
+            ],
+        ];
+        $exists = CacheTools::existsCount($moduleName);
+        static::assertFalse($exists);
+        CacheTools::setModuleCount($response, $moduleName);
+        $expected = 42;
+        $actual = CacheTools::getModuleCount($moduleName);
         static::assertEquals($expected, $actual);
     }
 }

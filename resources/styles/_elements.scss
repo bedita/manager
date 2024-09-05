@@ -334,3 +334,19 @@ nav.pagination {
         }
     }
 }
+.drop-area-double {
+    min-height: $gutter * 16;
+}
+
+.module-items-counter {
+    position: absolute;
+    bottom: 1rem;
+    background: transparent;
+}
+
+.module-count {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    font-size: 11px;
+}

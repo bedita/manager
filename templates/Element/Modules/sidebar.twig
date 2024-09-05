@@ -4,6 +4,12 @@
         'app-module-buttons',
         '<a href="' ~ Url.build({'_name': 'modules:create', 'object_type': objectType}) ~ '" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ '"><app-icon icon="carbon:add"></app-icon><span class="ml-05">' ~ __('Create') ~ '</span></a>'
     ) %}
+    {% if objectType in ['audio', 'images', 'files', 'videos'] %}
+        {% do _view.append(
+            'app-module-buttons',
+            '<a href="' ~ Url.build({'_name': 'modules:multiupload', 'object_type': objectType}) ~ '" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ '"><app-icon icon="carbon:upload"></app-icon><span class="ml-05">' ~ __('Upload multiple') ~ '</span></a>'
+        ) %}
+    {% endif %}
 {% endif %}
 
 {% if schema.properties.categories %}
@@ -16,9 +22,31 @@
 {% if currentModule.sidebar.index %}
 {% for item in currentModule.sidebar.index %}
     {% set url = item.url is iterable ? Url.build(item.url) : item.url %}
+    {% set plugin = item.plugin is defined ? item.plugin : null %}
+    {% set itemLabel = '' %}
+    {% if plugin and item.label %}
+        {% set itemLabel = __d(plugin, item.label) %}
+    {% else %}
+        {% set itemLabel = item.label is defined ? item.label : __(item.labelKey) %}
+    {% endif %}
     {% do _view.append(
         'app-module-buttons',
-        '<a href="' ~ url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><app-icon icon="carbon:save"></app-icon><span class="ml-05">' ~ __(item.label) ~ '</span></a>',
+        '<a href="' ~ url ~ '" class="' ~ item.class|default('button button-outlined button-outlined-hover-module-' ~ currentModule.name) ~ '"><app-icon icon="' ~ item.icon|default('carbon:save') ~ '"></app-icon><span class="ml-05">' ~ itemLabel ~ '</span></a>',
     ) %}
 {% endfor %}
+{% endif %}
+
+{% set indexViewTypes = Layout.moduleIndexViewTypes() %}
+{% if indexViewTypes|length > 1 %}
+    {% set indexViewType = Layout.moduleIndexViewType() %}
+    {% for t in indexViewTypes %}
+        {% if t != indexViewType %}
+            {% set icon = t == 'tree' ? 'carbon:tree-view' : 'carbon:list' %}
+            {% set label = t == 'tree' ? __('Tree view') : __('List view') %}
+            {% do _view.append(
+                'app-module-buttons',
+                '<a href="' ~ url ~ '?view_type=' ~ t ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><app-icon icon="' ~ icon ~ '"></app-icon><span class="ml-05">' ~ __(label) ~ '</span></a>'
+            ) %}
+        {% endif %}
+    {% endfor %}
 {% endif %}

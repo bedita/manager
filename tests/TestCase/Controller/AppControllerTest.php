@@ -471,7 +471,7 @@ class AppControllerTest extends TestCase
                 ],
                 [ // data provided
                     'id' => '7',
-                    'date_ranges' => [
+                    'date_ranges' => json_encode([
                         [
                             'start_date' => '',
                             'end_date' => '',
@@ -484,7 +484,7 @@ class AppControllerTest extends TestCase
                             'start_date' => '2020-01-01T00:00:00.000Z',
                             'end_date' => '',
                         ],
-                    ],
+                    ]),
                 ],
             ],
             'relations' => [
@@ -600,7 +600,7 @@ class AppControllerTest extends TestCase
                 ],
                 [
                     'id' => '2',
-                    'categories' => ['Blu', 'Red', 'Green'],
+                    'categories' => json_encode(['Blu', 'Red', 'Green']),
                 ],
             ],
             'types' => [
@@ -797,23 +797,25 @@ class AppControllerTest extends TestCase
         $d2 = new \DateTime('2019-01-01T16:03:01.012345Z');
 
         return [
-            'null and empty | unchanged' => [ null, '', false ],
-            'empty and null | unchanged' => [ '', null, false ],
-            'bool and int | changed' => [ true, 0, true ],
-            'bool and int | unchanged' => [ true, 1, false ],
-            'bool and string | changed' => [ true, '0', true ],
-            'bool and string | unchanged' => [ true, '1', false ],
-            'string and string | changed' => [ 'one', 'two', true ],
-            'string and string | unchanged' => [ 'three', 'three', false ],
-            'int and string | changed' => [ 1, '2', true ],
-            'int and string | unchanged' => [ 1, '1', false ],
-            'string and int | changed' => [ '1', 2, true ],
-            'string and int | unchanged' => [ '1', 1, false ],
-            'object and object | changed' => [ ['four'], ['five'], true ],
-            'object and object | unchanged' => [ ['six'], ['six'], false ],
-            'date and date | changed' => [ $d1, $d2, true ],
-            'date and date | unchanged' => [ $d1, $d1, false ],
-            'bool and not boolean string | changed' => [ true, 'whatever', true ],
+            'null and empty | unchanged' => [ null, '', 'null_and_empty', false ],
+            'empty and null | unchanged' => [ '',null, 'null_and_empty', false ],
+            'bool and int | changed' => [ true, 0, 'bool_and_int', true ],
+            'bool and int | unchanged' => [ true, 1, 'bool_and_int', false ],
+            'bool and string | changed' => [ true, '0', 'bool_and_string', true ],
+            'bool and string | unchanged' => [ true, '1', 'bool_and_string', false ],
+            'string and string | changed' => [ 'one', 'two', 'string_and_string', true ],
+            'string and string | unchanged' => [ 'three', 'three', 'string_and_string', false ],
+            'int and string | changed' => [ 1, '2', 'int_and_string', true ],
+            'int and string | unchanged' => [ 1, '1', 'int_and_string', false ],
+            'string and int | changed' => [ '1', 2, 'string_and_int', true ],
+            'string and int | unchanged' => [ '1', 1, 'string_and_int', false ],
+            'object and object | changed' => [ ['four'], ['five'], 'object_and_object', true ],
+            'object and object | unchanged' => [ ['six'], ['six'], 'object_and_object', false ],
+            'date and date | changed' => [ $d1, $d2, 'publish_start', true ],
+            'date and date | unchanged' => [ $d1, $d1, 'publish_start', false ],
+            'bool and not boolean string | changed' => [ true, 'whatever', 'enabled', true ],
+            'categories | changed' => [ [['name' => 'b', 'label' => 'B']], [['name' => 'a'], ['name' => 'b']], 'categories', true ],
+            'categories | unchanged' => [ [['name' => 'a', 'label' => 'A'], ['name' => 'b', 'label' => 'B']], [['name' => 'a'], ['name' => 'b']], 'categories', false ],
         ];
     }
 
@@ -827,10 +829,10 @@ class AppControllerTest extends TestCase
      * @dataProvider hasFieldChangedProvider()
      * @return void
      */
-    public function testHasFieldChanged($val1, $val2, $expected): void
+    public function testHasFieldChanged($val1, $val2, $key, $expected): void
     {
         $this->setupController();
-        $actual = $this->invokeMethod($this->AppController, 'hasFieldChanged', [$val1, $val2]);
+        $actual = $this->invokeMethod($this->AppController, 'hasFieldChanged', [$val1, $val2, $key]);
         static::assertEquals($expected, $actual);
     }
 

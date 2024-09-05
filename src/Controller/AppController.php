@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use App\Form\Form;
+use App\Utility\DateRangesTools;
 use Authentication\Identity;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
@@ -27,6 +28,7 @@ use Cake\Utility\Hash;
  * Base Application Controller.
  *
  * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
+ * @property \App\Controller\Component\CategoriesComponent $Categories
  * @property \App\Controller\Component\ConfigComponent $Config
  * @property \App\Controller\Component\FlashComponent $Flash
  * @property \App\Controller\Component\ModulesComponent $Modules
@@ -65,6 +67,7 @@ class AppController extends Controller
             'currentModuleName' => $this->name,
         ]);
         $this->loadComponent('Schema');
+        $this->loadComponent('Categories');
     }
 
     /**
@@ -218,6 +221,7 @@ class AppController extends Controller
     {
         // remove temporary session id
         unset($data['_session_id']);
+        unset($data['selectedCategories']);
 
         // if password is empty, unset it
         if (array_key_exists('password', $data) && empty($data['password'])) {
@@ -231,6 +235,7 @@ class AppController extends Controller
 
         // prepare categories
         if (!empty($data['categories'])) {
+            $data['categories'] = json_decode($data['categories'], true);
             $data['categories'] = array_map(function ($category) {
                 return ['name' => $category];
             }, $data['categories']);
@@ -286,24 +291,8 @@ class AppController extends Controller
         if (empty($data['date_ranges'])) {
             return;
         }
-        $data['date_ranges'] = array_filter(
-            (array)$data['date_ranges'],
-            function ($item) {
-                return !empty($item['start_date']) || !empty($item['end_date']);
-            }
-        );
-        $data['date_ranges'] = array_map(
-            function ($item) {
-                if (empty($item['end_date'])) {
-                    return $item;
-                }
-                $item['end_date'] = str_replace(':59:00.000', ':59:59.000', $item['end_date']);
-
-                return $item;
-            },
-            $data['date_ranges']
-        );
-        $data['date_ranges'] = array_values($data['date_ranges']);
+        $data['date_ranges'] = is_array($data['date_ranges']) ? $data['date_ranges'] : json_decode($data['date_ranges'], true);
+        $data['date_ranges'] = DateRangesTools::prepare(Hash::get($data, 'date_ranges'));
     }
 
     /**
@@ -440,7 +429,7 @@ class AppController extends Controller
                 $data[$key] = null;
             }
             // remove unchanged attributes from $data
-            if (!$this->hasFieldChanged($value, $data[$key])) {
+            if (!$this->hasFieldChanged($value, $data[$key], $key)) {
                 unset($data[$key]);
             }
         }
@@ -448,32 +437,36 @@ class AppController extends Controller
     }
 
     /**
-     * Return true if $value1 equals $value2 or both are empty (null|'')
+     * Return true if $oldValue equals $newValue or both are empty (null|'')
      *
-     * @param mixed $value1 The first value | field value in model data (db)
-     * @param mixed $value2 The second value | field value from form
+     * @param mixed $oldValue The first value | field value in model data (db)
+     * @param mixed $newValue The second value | field value from form
+     * @param string $key The field key
      * @return bool
      */
-    protected function hasFieldChanged($value1, $value2): bool
+    protected function hasFieldChanged($oldValue, $newValue, string $key): bool
     {
-        if ($value1 === $value2) {
+        if ($oldValue === $newValue) {
             return false; // not changed
         }
-        if (($value1 === null || $value1 === '') && ($value2 === null || $value2 === '')) {
+        if (($oldValue === null || $oldValue === '') && ($newValue === null || $newValue === '')) {
             return false; // not changed
+        }
+        if ($key === 'categories' || $key === 'tags') {
+            return $this->Categories->hasChanged($oldValue, $newValue);
         }
         $booleanItems = ['0', '1', 'true', 'false', 0, 1];
-        if (is_bool($value1) && !is_bool($value2) && in_array($value2, $booleanItems, true)) { // i.e. true / "1"
-            return $value1 !== boolval($value2);
+        if (is_bool($oldValue) && !is_bool($newValue) && in_array($newValue, $booleanItems, true)) { // i.e. true / "1"
+            return $oldValue !== boolval($newValue);
         }
-        if (is_numeric($value1) && is_string($value2)) {
-            return (string)$value1 !== $value2;
+        if (is_numeric($oldValue) && is_string($newValue)) {
+            return (string)$oldValue !== $newValue;
         }
-        if (is_string($value1) && is_numeric($value2)) {
-            return $value1 !== (string)$value2;
+        if (is_string($oldValue) && is_numeric($newValue)) {
+            return $oldValue !== (string)$newValue;
         }
 
-        return $value1 !== $value2;
+        return $oldValue !== $newValue;
     }
 
     /**

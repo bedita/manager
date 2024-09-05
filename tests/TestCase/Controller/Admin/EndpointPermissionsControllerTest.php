@@ -3,6 +3,7 @@ namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\EndpointPermissionsController;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
@@ -55,6 +56,7 @@ class EndpointPermissionsControllerTest extends TestCase
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
+        $this->loadRoutes();
     }
 
     /**
@@ -83,5 +85,33 @@ class EndpointPermissionsControllerTest extends TestCase
         }
         static::assertEquals('endpoint_permissions', $viewVars['resourceType']);
         static::assertEquals(['endpoint_id', 'application_id'], $viewVars['properties']);
+    }
+
+    /**
+     * Test `save`
+     *
+     * @return void
+     */
+    public function testSave(): void
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'endpoint_id' => 1,
+                'application_id' => '-',
+                'role_id' => '-',
+                'permission' => 15,
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->EndPermsController = new class ($request) extends EndpointPermissionsController
+        {
+            protected $resourceType = 'endpoint_permissions';
+            protected $properties = ['endpoint_id', 'application_id'];
+        };
+        $response = $this->EndPermsController->save();
+        static::assertSame(Response::class, get_class($response));
     }
 }

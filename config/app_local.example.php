@@ -573,4 +573,137 @@ return [
     //         'copy2clipboard' => true,
     //     ],
     // ],
+
+    /**
+     * Richeditor configuration.
+     */
+    // 'Richeditor' => [
+    //     'style_formats' => [
+    //         [
+    //             'title' => 'Custom Blocks',
+    //             'items' => [
+    //                 ['title' => 'Highlight', 'block' => 'div', 'classes' => ['be-highlight']],
+    //             ],
+    //         ],
+    //     ],
+    //     'style_formats_merge' => true,
+    //     'content_style' => '.be-highlight { background-color: #F6F6F6; }',
+    // ],
+
+    /**
+     * Placeholders configuration.
+     */
+    // 'Placeholders' => [
+    //     'audio' => [
+    //         'controls' => 'boolean',
+    //         'autoplay' => 'boolean',
+    //     ],
+    //     'files' => [
+    //         'download' => 'boolean',
+    //     ],
+    //     'images' => [
+    //         'width' => ['small', 'medium', 'large'],
+    //         'height' => ['small', 'medium', 'large'],
+    //         'bearing' => 'integer',
+    //         'pitch' => 'integer',
+    //         'zoom' => 'integer',
+    //     ],
+    //     'videos' => [
+    //         'controls' => 'boolean',
+    //         'autoplay' => 'boolean',
+    //     ],
+    // ],
+
+    /**
+     * UI settings.
+     * - index: index settings. 'copy2clipboard' enables "onmouseover" of index general cells showing copy to clipboard button
+     * - modules: modules settings. 'counters' to show counters in modules; 'all', 'none', <list of modules> to show all, none or custom modules. Default is ['trash']
+     */
+    // 'UI' => [
+    //     'index' => [
+    //         'copy2clipboard' => true,
+    //     ],
+    //     'modules' => [
+    //         'counters' => ['objects', 'media', 'images', 'videos', 'audio', 'files', 'trash', 'users'],
+    //     ],
+    // ],
+
+    /**
+     * Upload configurations.
+     */
+    // 'uploadAccepted' => [
+    //     'audio' => [
+    //         'audio/*',
+    //     ],
+    //     'files' => [
+    //         'application/msword', // .doc, .dot
+    //         'application/pdf', // .pdf
+    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
+    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
+    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
+    //         'application/x-mpegURL',
+    //         'audio/*',
+    //         'text/csv',
+    //         'text/html',
+    //         'text/plain',
+    //         'text/rtf',
+    //         'text/xml',
+    //         'image/*',
+    //         'video/*',
+    //     ],
+    //     'images' => [
+    //         'image/*',
+    //     ],
+    //     'videos' => [
+    //         'application/x-mpegURL',
+    //         'video/*',
+    //     ],
+    //     'media' => [
+    //         'application/msword', // .doc, .dot
+    //         'application/pdf', // .pdf
+    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
+    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
+    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
+    //         'application/x-mpegURL',
+    //         'audio/*',
+    //         'image/*',
+    //         'text/csv',
+    //         'text/html',
+    //         'text/plain',
+    //         'text/rtf',
+    //         'text/xml',
+    //         'video/*',
+    //     ],
+    // ],
+    // 'uploadForbidden' => [
+    //     'mimetypes' => [
+    //         'application/javascript',
+    //         'application/x-cgi',
+    //         'application/x-perl',
+    //         'application/x-php',
+    //         'application/x-ruby',
+    //         'application/x-shellscript',
+    //         'text/javascript',
+    //         'text/x-perl',
+    //         'text/x-php',
+    //         'text/x-python',
+    //         'text/x-ruby',
+    //         'text/x-shellscript',
+    //     ],
+    //     'extensions' => [
+    //         'cgi',
+    //         'exe',
+    //         'js',
+    //         'perl',
+    //         'php',
+    //         'py',
+    //         'rb',
+    //         'sh',
+    //     ],
+    // ],
+    // 'uploadMaxResolution' => '1920x1080',
 ];

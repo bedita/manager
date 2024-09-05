@@ -17,7 +17,7 @@ on:
 jobs:
 
   release_job:
-    uses: bedita/github-workflows/.github/workflows/release.yml@v1
+    uses: bedita/github-workflows/.github/workflows/release.yml@v2
     with:
       main_branch: 'master'
       dist_branches: '["master", "3.x"]'
@@ -64,7 +64,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         if: ${{ !contains(needs.release_job.outputs.version, 'undefined') }}
         with:
           context: .

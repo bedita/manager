@@ -75,7 +75,6 @@
                             type="number"
                             min="2"
                             max="20"
-                            :disabled="!!id"
                             v-model.number="zoom"
                             @change="onChange"
                         >
@@ -88,7 +87,6 @@
                             type="number"
                             min="0"
                             max="60"
-                            :disabled="!!id"
                             v-model.number="pitch"
                             @change="onChange"
                         >
@@ -101,7 +99,6 @@
                             type="number"
                             min="-180"
                             max="180"
-                            :disabled="!!id"
                             v-model.number="bearing"
                             @change="onChange"
                         >
@@ -166,24 +163,18 @@ export default {
     },
 
     data() {
+        const data = this.locationData || {};
+        const params = data?.meta?.relation?.params || {};
+
         return {
-            location: this.locationData,
-            id: this.locationData.id || null,
-            title: this.locationData.attributes.title,
-            address: this.locationData.attributes.address,
-            coordinates: this.$helpers.convertFromPoint(this.locationData.attributes.coords),
-            zoom: parseInt(this.locationData.meta &&
-                this.locationData.meta.relation &&
-                this.locationData.meta.relation.params &&
-                this.locationData.meta.relation.params.zoom) || 2,
-            pitch: parseInt(this.locationData.meta &&
-                this.locationData.meta.relation &&
-                this.locationData.meta.relation.params &&
-                this.locationData.meta.relation.params.pitch) || 0,
-            bearing: parseInt(this.locationData.meta &&
-                this.locationData.meta.relation &&
-                this.locationData.meta.relation.params &&
-                this.locationData.meta.relation.params.bearing) || 0,
+            location: data,
+            id: data?.id || null,
+            title: data?.attributes?.title,
+            address: data?.attributes?.address,
+            coordinates: this.$helpers.convertFromPoint(data?.attributes?.coords),
+            zoom: this.getParamValue(params.zoom),
+            pitch: this.getParamValue(params.pitch),
+            bearing: this.getParamValue(params.bearing),
             msgAddress: t`Address`,
             msgBearing: t`Bearing`,
             msgCoordinates: t`Long Lat Coordinates`,
@@ -197,15 +188,23 @@ export default {
     },
 
     methods: {
+        getParamValue(val) {
+            if (!parseInt(val)) {
+                return null;
+            }
+
+            return parseInt(val);
+        },
         onChange() {
             this.location.attributes.title = this.title;
             this.location.attributes.address = this.address;
             this.location.attributes.status = 'on';
             this.location.attributes.coords = this.$helpers.convertToPoint(this.coordinates);
             this.location.meta.relation = this.location.meta.relation || { params: {} }; // ensure relation object
-            this.location.meta.relation.params.zoom = `${this.zoom}`;
-            this.location.meta.relation.params.pitch = `${this.pitch}`;
-            this.location.meta.relation.params.bearing = `${this.bearing}`;
+            // cast to string, otherwise API will return 400
+            this.location.meta.relation.params.zoom = `${this.getParamValue(this.zoom)}`;
+            this.location.meta.relation.params.pitch = `${this.getParamValue(this.pitch)}`;
+            this.location.meta.relation.params.bearing = `${this.getParamValue(this.bearing)}`;
 
             this.$parent.$emit('updated', this.index, this.location);
         },

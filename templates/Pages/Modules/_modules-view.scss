@@ -133,3 +133,9 @@ body.translation-module {
     }
 }
 
+.related-objects article.has-status-off, .related-objects article.has-status-draft {
+    opacity: 0.7;
+}
+a.related-action-button {
+    width: 100px;
+}

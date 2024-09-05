@@ -115,3 +115,13 @@
 
 // Publications
 // __('Publications')
+
+// Placeholders parameters
+// __('autoplay');
+// __('bearing');
+// __('controls');
+// __('download');
+// __('height');
+// __('pitch');
+// __('width');
+// __('zoom');

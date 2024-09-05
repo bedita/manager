@@ -16,6 +16,7 @@ export const DEFAULT_PAGINATION = {
 export const getDefaultFilter = () => ({
     q: '',
     filter: {
+        status: [],
         type: '',
     }
 });
@@ -63,6 +64,12 @@ export const PaginatedContentMixin = {
                 };
 
                 requestUrl = this.getUrlWithPaginationAndQuery(requestUrl);
+                // if url contains view/related, it means that request comes from new object page: ignore it
+                if (requestUrl.indexOf('view/related') >= 0) {
+                    this.objects = [];
+
+                    return Promise.resolve();
+                }
 
                 // if requestQueue is populated then abort all fetch request and start over
                 if (this.requestsQueue.length > 0) {
@@ -211,7 +218,12 @@ export const PaginatedContentMixin = {
          */
         toPage(page, query = {}) {
             this.pagination.page = page || 1;
-            return this.getPaginatedObjects(true, query);
+            const q = { ...query };
+            if (q?.filter?.history_editor === true) {
+                q.filter.history_editor = BEDITA.userId;
+            }
+
+            return this.getPaginatedObjects(true, q);
         },
 
         /**

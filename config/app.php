@@ -169,7 +169,7 @@ return [
             'url' => env('CACHE_THUMBS_URL', null),
         ],
 
-        /*
+        /**
          * Configure the cache for routes. The cached routes collection is built the
          * first time the routes are processed through `config/routes.php`.
          * Duration will be set to '+2 seconds' in bootstrap.php when debug = true
@@ -181,6 +181,19 @@ return [
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEROUTES_URL', null),
+        ],
+
+        /**
+         * Configure the cache for tree data.
+         */
+        '_tree_data_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'tree_data_',
+            'groups' => ['tree'],
+            'path' => CACHE,
+            'serialize' => true,
+            'duration' => '+1 years',
+            'url' => env('CACHE_TREEDATA_URL', null),
         ],
     ],
 

@@ -36,6 +36,7 @@ export default {
     components: {
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
+        ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
     },
 
     props: {
@@ -99,9 +100,25 @@ export default {
     },
 
     mounted() {
-        // when object is staged for saving in relation view updates the list of alreadyInView
-        PanelEvents.listen('relations-view:add-already-in-view', null, this.addToAlreadyInView);
-        PanelEvents.listen('relations-view:remove-already-in-view', null, this.removeFromAlreadyInView);
+        this.$nextTick(async () => {
+            // when object is staged for saving in relation view updates the list of alreadyInView
+            PanelEvents.listen('relations-view:add-already-in-view', null, this.addToAlreadyInView);
+            PanelEvents.listen('relations-view:remove-already-in-view', null, this.removeFromAlreadyInView);
+
+            // alreadyInView doesn't get out of pagination objects. We need to "re-add" all objects
+            try {
+                if (this.$attrs.object.type && this.$attrs.object.id) {
+                    const related = await this.fetchRelated(this.$attrs.object.type, this.$attrs.object.id);
+                    for (const obj of related) {
+                        if (this.alreadyInView.indexOf(obj.id) === -1) {
+                            this.addToAlreadyInView(obj);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
     },
 
     destroyed() {
@@ -152,6 +169,32 @@ export default {
     },
 
     methods: {
+        async fetchRelated(type, id) {
+            const pageSize = 100;
+            const baseUrl = new URL(BEDITA.base).pathname;
+            const response = await fetch(`${baseUrl}api/${type}/${id}/${this.relationName}?page_size=${pageSize}&page=1`, {
+                credentials: 'same-origin',
+                headers: {
+                    accept: 'application/json',
+                }
+            });
+            const responseJson = await response.json();
+            let count = responseJson?.meta?.pagination?.page_count || 0;
+            if (count > 1) {
+                for (let i = 2; i <= count; i++) {
+                    const r = await fetch(`${baseUrl}api/${type}/${id}/${this.relationName}?page_size=${pageSize}&page=${i}`, {
+                        credentials: 'same-origin',
+                        headers: {
+                            accept: 'application/json',
+                        }
+                    });
+                    const rj = await r.json();
+                    responseJson.data = responseJson.data.concat(rj.data);
+                }
+            }
+
+            return responseJson?.data || [];
+        },
         // Events Listeners
 
         /**
@@ -345,7 +388,7 @@ export default {
         // css class on items
         selectClasses(related) {
             return [
-                `from-relation-${this.relationName}`,
+                `from-relation-${this.relationName} has-status-${related.attributes.status}`,
                 {
                     selected: this.selectedObjects.indexOf(related) !== -1,
                     unselectable: this.isUnselectableObject(related?.id),
@@ -476,6 +519,9 @@ export default {
         processFile(event, type) {
             if (this.$helpers.checkMimeForUpload(event.target.files[0], type) === false) {
                 return;
+            }
+            if (type === 'images') {
+                this.$helpers.checkImageResolution(event.target.files[0]);
             }
             if (this.$helpers.checkMaxFileSize(event.target.files[0]) === false) {
                 return false;

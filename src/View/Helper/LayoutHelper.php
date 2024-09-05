@@ -12,6 +12,7 @@
  */
 namespace App\View\Helper;
 
+use App\Utility\CacheTools;
 use App\Utility\Translate;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
@@ -127,14 +128,43 @@ class LayoutHelper extends Helper
         $label = $name === 'objects' ? __('All objects') : Hash::get($module, 'label', $name);
         $route = (array)Hash::get($module, 'route');
         $param = empty($route) ? ['_name' => 'modules:list', 'object_type' => $name, 'plugin' => null] : $route;
+        $count = !$this->showCounter($name) ? '' : $this->moduleCount($name);
 
         return sprintf(
-            '<a href="%s" class="%s"><span>%s</span>%s</a>',
+            '<a href="%s" class="%s"><span>%s</span>%s%s</a>',
             $this->Url->build($param),
             sprintf('dashboard-item has-background-module-%s %s', $name, Hash::get($module, 'class', '')),
             $this->tr($label),
-            $this->moduleIcon($name, $module)
+            $this->moduleIcon($name, $module),
+            $count
         );
+    }
+
+    /**
+     * Show counter for module
+     *
+     * @param string $name The module name
+     * @return bool
+     */
+    public function showCounter(string $name): bool
+    {
+        $counters = Configure::read('UI.modules.counters', ['trash']);
+
+        return is_array($counters) ? in_array($name, $counters) : $counters === 'all';
+    }
+
+    /**
+     * Return module count span.
+     *
+     * @param string $name The module name
+     * @param string|null $moduleClass The module class
+     * @return string
+     */
+    public function moduleCount(string $name, ?string $moduleClass = null): string
+    {
+        $count = CacheTools::getModuleCount($name);
+
+        return sprintf('<span class="module-count">%s</span>', $count);
     }
 
     /**
@@ -147,11 +177,11 @@ class LayoutHelper extends Helper
     public function moduleIcon(string $name, array $module): string
     {
         if (Hash::get($module, 'hints.multiple_types') && !Hash::get($module, 'class')) {
-            return '<app-icon icon="carbon:grid"></app-icon>';
+            return '<app-icon icon="carbon:grid" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>';
         }
         $icon = (string)Configure::read(sprintf('Modules.%s.icon', $name));
         if (!empty($icon)) {
-            return sprintf('<app-icon icon="%s"></app-icon>', $icon);
+            return sprintf('<app-icon icon="%s" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>', $icon);
         }
         $map = [
             'audio' => 'carbon:document-audio',
@@ -174,7 +204,7 @@ class LayoutHelper extends Helper
             return '';
         }
 
-        return sprintf('<app-icon icon="%s"></app-icon>', $map[$name]);
+        return sprintf('<app-icon icon="%s" :style="{ width: \'28px\', height: \'28px\' }"></app-icon>', $map[$name]);
     }
 
     /**
@@ -215,13 +245,17 @@ class LayoutHelper extends Helper
         if (!empty($currentModule) && !empty($currentModule['name'])) {
             $name = $currentModule['name'];
             $label = Hash::get($currentModule, 'label', $name);
+            $counters = Configure::read('UI.modules.counters', ['trash']);
+            $showCounter = is_array($counters) ? in_array($name, $counters) : $counters === 'all';
+            $count = !$showCounter ? '' : $this->moduleCount($name);
 
             return sprintf(
-                '<a href="%s" class="%s"><span class="mr-05">%s</span>%s</a>',
+                '<a href="%s" class="%s"><span class="mr-05">%s</span>%s%s</a>',
                 $this->Url->build(['_name' => 'modules:list', 'object_type' => $name]),
                 sprintf('module-item has-background-module-%s', $name),
                 $this->tr($label),
-                $this->moduleIcon($name, $currentModule)
+                $this->moduleIcon($name, $currentModule),
+                $count
             );
         }
 
@@ -231,6 +265,43 @@ class LayoutHelper extends Helper
             (array)$this->getView()->get('moduleLink'),
             ['class' => $this->commandLinkClass()]
         );
+    }
+
+    /**
+     * Return module index default view type
+     *
+     * @return string
+     */
+    public function moduleIndexDefaultViewType(): string
+    {
+        $module = (array)$this->getView()->get('currentModule');
+        $name = (string)Hash::get($module, 'name');
+
+        return $name === 'folders' ? 'tree' : 'list';
+    }
+
+    /**
+     * Return module index view type
+     *
+     * @return string
+     */
+    public function moduleIndexViewType(): string
+    {
+        $query = (array)$this->getView()->getRequest()->getQueryParams();
+
+        return (string)Hash::get($query, 'view_type', $this->moduleIndexDefaultViewType());
+    }
+
+    /**
+     * Return module index view types
+     *
+     * @return array
+     */
+    public function moduleIndexViewTypes(): array
+    {
+        $defaultType = $this->moduleIndexDefaultViewType();
+
+        return $defaultType === 'tree' ? ['tree', 'list'] : ['list'];
     }
 
     /**
@@ -295,8 +366,10 @@ class LayoutHelper extends Helper
             'canReadUsers' => $this->Perms->canRead('users'),
             'canSave' => $this->Perms->canSave(),
             'cloneConfig' => (array)Configure::read('Clone'),
+            'placeholdersConfig' => $this->System->placeholdersConfig(),
             'uploadConfig' => $this->System->uploadConfig(),
             'relationsSchema' => $this->getView()->get('relationsSchema', []),
+            'richeditorConfig' => (array)Configure::read('Richeditor'),
         ];
     }
 
@@ -331,7 +404,7 @@ class LayoutHelper extends Helper
      */
     public function trashLink(?string $type): string
     {
-        if (empty($type) || $type === 'trash') {
+        if (empty($type) || $type === 'trash' || $type === 'translations') {
             return '';
         }
 

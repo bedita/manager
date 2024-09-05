@@ -12,6 +12,7 @@
  */
 namespace App\Test\TestCase\Controller\Component;
 
+use App\Controller\CategoriesController;
 use App\Controller\Component\CategoriesComponent;
 use App\Controller\Component\SchemaComponent;
 use App\Utility\CacheTools;
@@ -20,6 +21,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\ComponentRegistry;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\Component\CategoriesComponent} Test Case
@@ -42,7 +44,8 @@ class CategoriesComponentTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $registry = new ComponentRegistry();
+        $controller = new CategoriesController();
+        $registry = new ComponentRegistry($controller);
         $this->Categories = new CategoriesComponent($registry);
     }
 
@@ -118,7 +121,7 @@ class CategoriesComponentTest extends TestCase
         $actual = $this->Categories->map([]);
         static::assertEmpty($actual);
 
-        // reponse
+        // response
         $response = [
             'data' => [
                 ['id' => 123, 'attributes' => ['label' => 'Dummy 123', 'name' => 'dummy-123']],
@@ -153,11 +156,12 @@ class CategoriesComponentTest extends TestCase
             ['id' => 123, 'attributes' => ['label' => 'Dummy 123', 'name' => 'dummy-123']],
             ['id' => 456, 'attributes' => ['label' => 'Dummy 456', 'name' => 'dummy-456', 'parent_id' => 123]],
             ['id' => 789, 'attributes' => ['label' => 'Dummy 789', 'name' => 'dummy-789', 'parent_id' => 456]],
+            ['id' => 999, 'attributes' => ['label' => 'Dummy 0', 'name' => 'dummy-0', 'parent_id' => 456]],
         ];
         $expected = [
             '_' => [123],
             123 => [456],
-            456 => [789],
+            456 => [999, 789],
         ];
         $actual = $this->Categories->tree($map);
         static::assertEquals($expected, $actual);
@@ -168,27 +172,62 @@ class CategoriesComponentTest extends TestCase
      *
      * @return void
      * @covers ::getAvailableRoots()
+     * @covers ::fillRoots()
      */
     public function testGetAvailableRoots(): void
     {
         // empty map
         $map = [];
-        $expected = ['' => '-'];
+        $expected = ['' => ['id' => 0, 'label' => '-', 'name' => '', 'object_type_name' => '']];
         $actual = $this->Categories->getAvailableRoots($map);
         static::assertEquals($expected, $actual);
 
         // not empty map
         $map = [
-            ['id' => 123, 'attributes' => ['label' => 'Dummy 123', 'name' => 'dummy-123']],
-            ['id' => 456, 'attributes' => ['name' => 'dummy-456']],
-            ['id' => 789, 'attributes' => ['label' => 'Dummy 789', 'name' => 'dummy-789', 'parent_id' => 456]],
+            ['id' => 123, 'attributes' => ['label' => 'Dummy 123', 'name' => 'dummy-123', 'object_type_name' => 'documents']],
+            ['id' => 456, 'attributes' => ['name' => 'dummy-456', 'object_type_name' => 'documents']],
+            ['id' => 789, 'attributes' => ['label' => 'Dummy 789', 'name' => 'dummy-789', 'object_type_name' => 'documents', 'parent_id' => 456]],
         ];
         $expected = [
-            '' => '-',
-            123 => 'Dummy 123',
-            456 => 'dummy-456',
+            '' => ['id' => 0, 'label' => '-', 'name' => '', 'object_type_name' => ''],
+            123 => ['id' => 123, 'label' => 'Dummy 123', 'name' => 'dummy-123', 'object_type_name' => 'documents'],
+            456 => ['id' => 456, 'label' => 'dummy-456', 'name' => 'dummy-456', 'object_type_name' => 'documents'],
         ];
         $actual = $this->Categories->getAvailableRoots($map);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `getAllAvailableRoots`.
+     *
+     * @return void
+     * @covers ::getAllAvailableRoots()
+     * @covers ::fillRoots()
+     */
+    public function testGetAllAvailableRoots(): void
+    {
+        $beditaApiVersion = $this->getBEditaAPIVersion();
+        $response = [
+            'data' => [
+                ['id' => 123, 'attributes' => ['label' => 'Dummy 123', 'name' => 'dummy-123', 'object_type_name' => 'documents', 'parent_id' => null]],
+                ['id' => 456, 'attributes' => ['name' => 'dummy-456', 'object_type_name' => 'documents', 'parent_id' => null]],
+            ],
+        ];
+        $safeClient = ApiClientProvider::getApiClient();
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn($response);
+        ApiClientProvider::setApiClient($apiClient);
+        $expected = [
+            '' => ['id' => 0, 'label' => '-', 'name' => '', 'object_type_name' => ''],
+            123 => ['id' => 123, 'label' => 'Dummy 123', 'name' => 'dummy-123', 'object_type_name' => 'documents'],
+            456 => ['id' => 456, 'label' => 'dummy-456', 'name' => 'dummy-456', 'object_type_name' => 'documents'],
+        ];
+        $this->Categories->getController()->viewBuilder()->setVar('project', ['version' => $beditaApiVersion]);
+        $actual = $this->Categories->getAllAvailableRoots();
+        ApiClientProvider::setApiClient($safeClient);
         static::assertEquals($expected, $actual);
     }
 
@@ -280,5 +319,54 @@ class CategoriesComponentTest extends TestCase
 
         // restore api client
         ApiClientProvider::setApiClient($safeClient);
+    }
+
+    /**
+     * Data provider for `hasChanged` test case.
+     *
+     * @return array
+     */
+    public function hasChangedProvider(): array
+    {
+        return [
+            'empty' => [
+                [],
+                [],
+                false,
+            ],
+            'same' => [
+                [['name' => 'a', 'label' => 'A'], ['name' => 'b', 'label' => 'B']],
+                [['name' => 'a'], ['name' => 'b']],
+                false,
+            ],
+            'different' => [
+                [['name' => 'a', 'label' => 'A'], ['name' => 'b', 'label' => 'B']],
+                [['name' => 'a'], ['name' => 'c']],
+                true,
+            ],
+        ];
+    }
+
+    /**
+     * Test `hasChanged`.
+     *
+     * @return void
+     * @dataProvider hasChangedProvider()
+     * @covers ::hasChanged()
+     */
+    public function testHasChanged(array $oldValue, array $newValue, bool $expected): void
+    {
+        $actual = $this->Categories->hasChanged($oldValue, $newValue);
+        static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Get BEdita API version
+     *
+     * @return string
+     */
+    protected function getBEditaAPIVersion(): string
+    {
+        return (string)Hash::get((array)ApiClientProvider::getApiClient()->get('/home'), 'meta.version');
     }
 }

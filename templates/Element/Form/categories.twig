@@ -1,4 +1,6 @@
 {% if schema.categories is defined %}
+    {% set objectCategories = object.attributes.categories|default([]) %}
+    {% set schemaCategories = schema.categories|default([]) %}
     <property-view inline-template :tab-open="tabsOpen" tab-name="categories">
 
         <section class="fieldset">
@@ -6,11 +8,17 @@
                 class="tab unselectable"
                 :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
                 <h2>{{ __('Categories') }}</h2>
+                <span class="tag is-smallest is-black mx-05 {% if objectCategories|length == 0 %}empty{% endif %}">{{ objectCategories|length }} / {{ schemaCategories|length }}</span>
             </header>
 
             <div v-show="isOpen" class="tab-container">
                 <div class="categories-container">
-                    {{ Categories.control('categories', object.attributes.categories)|raw }}
+                    <object-categories
+                        :model-categories="{{ schemaCategories|json_encode }}"
+                        :value="{{ objectCategories|json_encode }}"
+                    >
+                    </object-categories>
+                    {% do Form.unlockField('categories') %}
                 </div>
             </div>
         </section>

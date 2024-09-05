@@ -1,5 +1,6 @@
 import { Treeselect, LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect';
 import '@riophae/vue-treeselect/dist/vue-treeselect.css';
+import { t } from 'ttag';
 
 const API_URL = new URL(BEDITA.base).pathname;
 const API_OPTIONS = {
@@ -8,6 +9,7 @@ const API_OPTIONS = {
         'accept': 'application/json',
     }
 };
+const PAGE_SIZE = 100;
 
 /**
  * Folder picker component.
@@ -72,24 +74,18 @@ export default {
 
     methods: {
         async fetchFolders(parent) {
-            const pageSize = 100;
             const filter = !parent ? 'filter[roots]' : `filter[parent]=${parent.id}`;
-            const firstResponse = await fetch(`${API_URL}api/folders?${filter}&page=1&page_size=${pageSize}`, API_OPTIONS);
+            const firstResponse = await fetch(`${API_URL}tree?${filter}&page=1&page_size=${PAGE_SIZE}`, API_OPTIONS);
             const json = await firstResponse.json();
-            const folders = [...(json.data || [])];
-            const pageCount = json.meta.pagination.page_count;
-
-            const deferred = [];
+            const folders = [...(json?.tree?.data || [])];
+            const pageCount = json?.tree?.meta?.pagination?.page_count || 1;
             for (let page = 2; page <= pageCount; page++) {
-                deferred.push(fetch(`${API_URL}api/folders?${filter}&page=${page}&page_size=${pageSize}`, API_OPTIONS));
-            }
-            const responses = await Promise.all(deferred);
-            responses.forEach(async (response) => {
+                const response = await fetch(`${API_URL}tree?${filter}&page=${page}&page_size=${PAGE_SIZE}`, API_OPTIONS);
                 const json = await response.json();
-                folders.push(...(json.data || []));
-            });
+                folders.push(...(json?.tree?.data || []));
+            }
 
-            return folders.map((folder) => ({ id: folder.id, label: folder.attributes.title, children: null }));
+            return folders.map((folder) => ({ id: folder.id, label: folder.attributes.title || '(' + t`untitled` + ' ' + folder.id + ')', children: null }));
         },
 
         async loadOptions({ action, parentNode, callback }) {

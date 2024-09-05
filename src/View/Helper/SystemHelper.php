@@ -1,9 +1,20 @@
 <?php
-
 declare(strict_types=1);
 
+/**
+ * BEdita, API-first content management framework
+ * Copyright 2024 Chialab Srl
+ *
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
+ */
 namespace App\View\Helper;
 
+use App\Utility\System;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -13,6 +24,18 @@ use Cake\View\Helper;
  */
 class SystemHelper extends Helper
 {
+    /**
+     * Default placeholders configuration for media types
+     *
+     * @var array
+     */
+    protected $defaultPlaceholders = [
+        'audio' => ['controls' => 'boolean', 'autoplay' => 'boolean'],
+        'files' => ['download' => 'boolean'],
+        'images' => ['width' => 'integer', 'height' => 'integer', 'bearing' => 'integer', 'pitch' => 'integer', 'zoom' => 'integer'],
+        'videos' => ['controls' => 'boolean', 'autoplay' => 'boolean'],
+    ];
+
     /**
      * Accepted mime types for upload
      *
@@ -27,6 +50,12 @@ class SystemHelper extends Helper
         ],
         'videos' => [
             'application/x-mpegURL',
+            'video/*',
+        ],
+        'media' => [
+            'application/x-mpegURL',
+            'audio/*',
+            'image/*',
             'video/*',
         ],
     ];
@@ -64,6 +93,13 @@ class SystemHelper extends Helper
     ];
 
     /**
+     * Maximum resolution for images
+     *
+     * @var string
+     */
+    protected $defaultUploadMaxResolution = '4096x2160'; // 4K
+
+    /**
      * Get the minimum value between post_max_size and upload_max_filesize.
      *
      * @return int
@@ -90,14 +126,22 @@ class SystemHelper extends Helper
         }
         $requiredApiVersions = (array)Configure::read('BEditaAPI.versions');
         foreach ($requiredApiVersions as $requiredApiVersion) {
-            $apiMajor = substr($apiVersion, 0, strpos($apiVersion, '.'));
-            $requiredApiMajor = substr($requiredApiVersion, 0, strpos($requiredApiVersion, '.'));
-            if ($apiMajor === $requiredApiMajor && version_compare($apiVersion, $requiredApiVersion) >= 0) {
+            if (System::compareBEditaApiVersion($apiVersion, $requiredApiVersion)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Placeholders config
+     *
+     * @return array
+     */
+    public function placeholdersConfig(): array
+    {
+        return (array)Configure::read('Placeholders', $this->defaultPlaceholders);
     }
 
     /**
@@ -109,8 +153,9 @@ class SystemHelper extends Helper
     {
         $accepted = (array)Configure::read('uploadAccepted', $this->defaultUploadAccepted);
         $forbidden = (array)Configure::read('uploadForbidden', $this->defaultUploadForbidden);
+        $maxResolution = (string)Configure::read('uploadMaxResolution', $this->defaultUploadMaxResolution);
 
-        return compact('accepted', 'forbidden');
+        return compact('accepted', 'forbidden', 'maxResolution');
     }
 
     /**

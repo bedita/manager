@@ -12,7 +12,9 @@
  */
 namespace App\Controller;
 
+use App\Utility\CacheTools;
 use App\Utility\SchemaTrait;
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 
 /**
@@ -48,6 +50,28 @@ class DashboardController extends AppController
             'jobsAllow',
             (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow')
         );
+
+        // set modules counters
+        $counters = Configure::read('UI.modules.counters', ['trash']);
+        if ($counters === 'none') {
+            return;
+        }
+        $counters = is_array($counters) || in_array($counters, ['none', 'all']) ? $counters : ['trash'];
+        $modules = array_keys((array)$this->viewBuilder()->getVar('modules'));
+        $modules = $counters === 'all' ? $modules : array_intersect($modules, $counters);
+        foreach ($modules as $name) {
+            if (CacheTools::existsCount($name)) {
+                continue;
+            }
+            $endpoint = $name === 'tags' ? '/model/tags' : $name;
+            $options = $name === 'tags' ? ['page_size' => 1] : ['limit' => 1, 'page_size' => 1, 'fields' => 'id'];
+            try {
+                $response = $this->apiClient->get($endpoint, $options);
+                CacheTools::setModuleCount($response, $name);
+            } catch (\Exception $e) {
+                CacheTools::setModuleCount(['meta' => ['pagination' => ['count' => '-']]], $name);
+            }
+        }
     }
 
     /**

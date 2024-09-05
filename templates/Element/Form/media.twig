@@ -27,8 +27,11 @@
                 <div class="stream">
                     {# thumb #}
                     {% if object.type == 'images' %}
-                        {# TODO process below #}
-                        {% set thumb = Thumb.getUrl(object) %}
+                        {% if stream.attributes.mime_type == 'image/svg+xml' %}
+                            {% set thumb = stream.meta.url %}
+                        {% else %}
+                            {% set thumb = Thumb.getUrl(object) %}
+                        {% endif %}
                         {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
                             <p>{{ __('Cannot produce a thumbnail for this file') }}</p>
                         {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
@@ -49,7 +52,7 @@
                         {% else %}
                             <figure class="thumb">
                                 <a href={{ stream.meta.url }} title="{{ __('Open image') }}" target="_blank">
-                                    <img :src=previewImage("{{ thumb }}") alt="" id="imageThumb" />
+                                    <img :src=previewImage("{{ thumb }}") alt="" id="imageThumb" style="min-width:500px;" />
                                 </a>
                             </figure>
                         {% endif %}

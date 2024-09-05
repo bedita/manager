@@ -26,15 +26,8 @@
         <div class="related-list-container">
             {# FilterBoxView #}
             <div class="mb-1" v-show="showFilter">
-                {% set list = {} %}
-                {% for type, filters in filtersByType %}
-                    {% set options = [] %}
-                    {% for f in filters %}
-                        {% set o = Schema.controlOptions(f, null, schemasByType[type].properties[f]) %}
-                        {% set options = options|merge([o|merge({ 'name': f })]) %}
-                    {% endfor %}
-                    {% set list = list|merge({ (type): options }) %}
-                {% endfor %}
+                {% set fbt = filtersByType ? filtersByType : [] %}
+                {% set list = Schema.filterListByType(fbt, schemasByType) %}
                 <filter-box-view
                     :config-paginate-sizes="configPaginateSizes"
                     :pagination.sync="pagination"
@@ -78,6 +71,8 @@
 
             {% set dragAndDrop = relationName != 'children' or (relationName == 'children' and mainObject.attributes.children_order in [null, 'position', '-position']) %}
             {# RELATED OBJECTS #}
+            <div class="ml-05 mb-1" v-if="loading">{{ __('Loading ...') }}</div>
+            <div class="ml-05 mb-1" v-if="!loading && objects.length === 0">{{ __('No items found') }}</div>
             <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
                 <div :data-list="dataList" class="columns" {%- if dragAndDrop %}droppable sortable{%- endif %}>
                     <div
@@ -151,6 +146,7 @@
 
         <div class="mt-2" v-show="objects.length">
             {% set urlOptions = {'_name': 'export:related', 'object_type': object.type, 'id': object.id, 'relation': relationName} %}
+            {% set filteredOptions = {'_name': 'export:related:filtered', 'object_type': object.type, 'id': object.id, 'relation': relationName, 'query': ''} %}
             {% set formats = config('Export.formats', {
                 'CSV': 'csv',
                 'Open Document': 'ods',
@@ -164,10 +160,25 @@
             </select>
 
             {% for label, format in formats %}
-                <a v-if="exportFormat === '{{ format }}'" class="button button-outlined" target="_blank" href="{{ Url.build(urlOptions|merge({'format': format})) }}">
-                    <app-icon icon="carbon:export"></app-icon>
-                    <span class="ml-05">{{ __('Export') }}</span>
-                </a>
+                <template v-if="exportFormat === '{{ format }}'">
+                    <a
+                        class="button button-outlined"
+                        target="_blank"
+                        href="{{ Url.build(urlOptions|merge({'format': format})) }}"
+                    >
+                        <app-icon icon="carbon:export"></app-icon>
+                        <span class="ml-05">{{ __('Export') }}</span>
+                    </a>
+                    <a
+                        v-if="Object.keys(activeFilter).length > 0"
+                        class="button button-outlined"
+                        target="_blank"
+                        :href="exportFilteredUrl('{{ Url.build(filteredOptions|merge({'format': format})) }}')"
+                    >
+                        <app-icon icon="carbon:export"></app-icon>
+                        <span class="ml-05">{{ __('Export Filtered') }}</span>
+                    </a>
+                </template>
             {% endfor %}
         </div>
 
