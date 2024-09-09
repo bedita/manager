@@ -104,10 +104,6 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/didoda/php-sdk"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/didoda/web-tools"
         }
     ]
