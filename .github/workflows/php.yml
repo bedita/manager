@@ -11,7 +11,7 @@ on:
     paths:
       - '**/*.php'
       - '.github/workflows/php.yml'
-      - 'composer.json' # test
+      - 'composer.json'
       - 'psalm.xml'
 
 jobs:
