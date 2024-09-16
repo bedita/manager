@@ -165,7 +165,10 @@ class TrashController extends AppController
             $ids = [$this->getRequest()->getData('id')];
         }
         try {
+            $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $ids]]);
             $this->apiClient->removeObjects($ids);
+            $streams = (array)Hash::get($response, 'data');
+            $this->removeStreams($streams);
             $this->Flash->success(__('Object(s) deleted from trash'));
         } catch (BEditaClientException $e) {
             // Error! Back to object view.
