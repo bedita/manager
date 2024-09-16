@@ -214,7 +214,7 @@ class TrashControllerTest extends BaseControllerTest
     public function testDeleteData(): void
     {
         $id = $this->setupControllerAndData();
-        $this->Trash->deleteData($id);
+        $this->Trash->deleteData((string)$id);
 
         try {
             $this->client->getObject($id);
