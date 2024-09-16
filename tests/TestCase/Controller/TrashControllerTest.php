@@ -179,11 +179,10 @@ class TrashControllerTest extends BaseControllerTest
     }
 
     /**
-     * Test `delete` and `deleteData` methods
+     * Test `delete` method
      *
      * @return void
      * @covers ::delete()
-     * @covers ::deleteData()
      */
     public function testDelete(): void
     {
@@ -206,11 +205,36 @@ class TrashControllerTest extends BaseControllerTest
     }
 
     /**
-     * Test `delete` and `deleteData` methods with media object
+     * Test `deleteData` method. For coverage and retrocompatibility only.
+     *
+     * @return void
+     * @covers ::deleteData()
+     */
+    public function testDeleteData(): void
+    {
+        $id = $this->setupControllerAndData();
+        $this->Trash->deleteData($id);
+
+        try {
+            $this->client->getObject($id);
+        } catch (BEditaClientException $e) {
+            $expected = new BEditaClientException('Not Found', 404);
+            static::assertEquals($expected->getCode(), $e->getCode());
+        }
+
+        try {
+            $this->client->get(sprintf('/trash/%d', $id));
+        } catch (BEditaClientException $e) {
+            $expected = new BEditaClientException('Not Found', 404);
+            static::assertEquals($expected->getCode(), $e->getCode());
+        }
+    }
+
+    /**
+     * Test `delete` method with media object
      *
      * @return void
      * @covers ::delete()
-     * @covers ::deleteData()
      */
     public function testDeleteMediaWithStream(): void
     {
