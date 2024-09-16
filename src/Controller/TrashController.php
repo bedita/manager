@@ -136,20 +136,12 @@ class TrashController extends AppController
         } else {
             $ids = [$this->getRequest()->getData('id')];
         }
-        foreach ($ids as $id) {
-            try {
-                $this->apiClient->restoreObject($id, 'objects');
-            } catch (BEditaClientException $e) {
-                // Error! Back to object view.
-                $this->log($e->getMessage(), LogLevel::ERROR);
-                $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-                if (!empty($this->getRequest()->getData('ids'))) {
-                    return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
-                }
-
-                return $this->redirect(['_name' => 'trash:view', 'id' => $id]);
-            }
+        try {
+            $this->apiClient->restoreObjects($ids);
+        } catch (BEditaClientException $e) {
+            // Error! Back to object view.
+            $this->log($e->getMessage(), LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
         return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
@@ -172,23 +164,14 @@ class TrashController extends AppController
         } else {
             $ids = [$this->getRequest()->getData('id')];
         }
-        foreach ($ids as $id) {
-            try {
-                $this->deleteData($id);
-            } catch (BEditaClientException $e) {
-                // Error! Back to object view.
-                $this->log($e->getMessage(), LogLevel::ERROR);
-                $this->Flash->error($e->getMessage(), ['params' => $e]);
-
-                if (!empty($this->getRequest()->getData('ids'))) {
-                    return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
-                }
-
-                return $this->redirect(['_name' => 'trash:view', 'id' => $id]);
-            }
+        try {
+            $this->apiClient->removeObjects($ids);
+            $this->Flash->success(__('Object(s) deleted from trash'));
+        } catch (BEditaClientException $e) {
+            // Error! Back to object view.
+            $this->log($e->getMessage(), LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
-
-        $this->Flash->success(__('Object(s) deleted from trash'));
 
         return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
     }
@@ -224,17 +207,18 @@ class TrashController extends AppController
         $response = $this->apiClient->getObjects('trash', $query);
         $counter = 0;
         while (Hash::get($response, 'meta.pagination.count', 0) > 0) {
-            foreach ($response['data'] as $data) {
-                try {
-                    $this->deleteData($data['id']);
-                    $counter++;
-                } catch (BEditaClientException $e) {
-                    // Error! Back to trash index.
-                    $this->log($e->getMessage(), LogLevel::ERROR);
-                    $this->Flash->error($e->getMessage(), ['params' => $e]);
+            $ids = Hash::extract($response, 'data.{n}.id');
+            try {
+                $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $ids]]);
+                $this->apiClient->removeObjects($ids);
+                $streams = (array)Hash::get($response, 'data');
+                $this->removeStreams($streams);
+            } catch (BEditaClientException $e) {
+                // Error! Back to trash index.
+                $this->log($e->getMessage(), LogLevel::ERROR);
+                $this->Flash->error($e->getMessage(), ['params' => $e]);
 
-                    return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
-                }
+                return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
             }
             $response = $this->apiClient->getObjects('trash', $query);
         }
@@ -261,6 +245,23 @@ class TrashController extends AppController
             if ($count === 1) {
                 $this->apiClient->delete(sprintf('/streams/%s', $stream['id']));
             }
+        }
+    }
+
+    /**
+     * Remove streams
+     *
+     * @param array $streams The streams to remove
+     * @return void
+     */
+    public function removeStreams(array $streams): void
+    {
+        // this for BE versions < 5.25.1, where streams are not deleted with media on delete
+        $uuids = (array)Hash::extract($streams, '{n}.id');
+        $search = $this->apiClient->get('/streams', ['filter' => ['uuid' => $uuids]]);
+        $count = (int)Hash::get($search, 'meta.pagination.count', 0);
+        if ($count === 1) {
+            $this->apiClient->deleteObjects($uuids, 'streams');
         }
     }
 }

@@ -75,9 +75,7 @@ trait PermissionsTrait
      */
     public function removePermissions(array $objectPermissionIds): void
     {
-        foreach ($objectPermissionIds as $id) {
-            ApiClientProvider::getApiClient()->deleteObject($id, 'object_permissions');
-        }
+        ApiClientProvider::getApiClient()->deleteObjects($objectPermissionIds, 'object_permissions');
     }
 
     /**
