@@ -259,9 +259,9 @@ class TrashController extends AppController
         // this for BE versions < 5.25.1, where streams are not deleted with media on delete
         $uuids = (array)Hash::extract($streams, '{n}.id');
         $search = $this->apiClient->get('/streams', ['filter' => ['uuid' => $uuids]]);
-        $count = (int)Hash::get($search, 'meta.pagination.count', 0);
-        if ($count === 1) {
-            $this->apiClient->deleteObjects($uuids, 'streams');
+        $search = (array)Hash::get($search, 'data');
+        foreach ($search as $stream) {
+            $this->apiClient->delete(sprintf('/streams/%s', $stream['id']));
         }
     }
 }

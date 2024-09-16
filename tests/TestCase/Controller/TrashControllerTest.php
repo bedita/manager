@@ -309,7 +309,7 @@ class TrashControllerTest extends BaseControllerTest
         static::assertEquals('/trash', $response->getHeaderLine('Location'));
 
         $message = $this->Trash->getRequest()->getSession()->read('Flash.flash.0.message');
-        static::assertEquals('[404] Not Found', $message);
+        static::assertEquals('Object(s) deleted from trash', $message);
     }
 
     /**
