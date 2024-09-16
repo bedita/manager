@@ -183,6 +183,7 @@ class TrashControllerTest extends BaseControllerTest
      *
      * @return void
      * @covers ::delete()
+     * @covers ::removeStreams()
      */
     public function testDelete(): void
     {
@@ -235,6 +236,7 @@ class TrashControllerTest extends BaseControllerTest
      *
      * @return void
      * @covers ::delete()
+     * @covers ::removeStreams()
      */
     public function testDeleteMediaWithStream(): void
     {
@@ -348,6 +350,7 @@ class TrashControllerTest extends BaseControllerTest
      * @return void
      * @covers ::emptyTrash()
      * @covers ::listQuery()
+     * @covers ::removeStreams()
      */
     public function testEmpty(): void
     {
