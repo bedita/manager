@@ -75,7 +75,6 @@
         "coverage": "vendor/bin/phpunit --colors=always --coverage-html coverage"
     },
     "prefer-stable": true,
-    "minimum-stability": "dev",
     "config": {
         "sort-packages": true,
         "allow-plugins": {
