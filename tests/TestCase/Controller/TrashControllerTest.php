@@ -260,6 +260,19 @@ class TrashControllerTest extends BaseControllerTest
     }
 
     /**
+     * Test `deleteMulti` method with exception
+     *
+     * @return void
+     * @covers ::deleteMulti()
+     */
+    public function testDeleteMultiException(): void
+    {
+        $this->setupControllerAndData(true, false, true);
+        $actual = $this->Trash->deleteMulti(['abc']);
+        static::assertFalse($actual);
+    }
+
+    /**
      * Test `delete` method with media object
      *
      * @return void
