@@ -379,19 +379,16 @@ class ModulesController extends AppController
     public function delete(): ?Response
     {
         $this->getRequest()->allowMethod(['post']);
-        $ids = [];
-        if (!empty($this->getRequest()->getData('ids'))) {
-            if (is_string($this->getRequest()->getData('ids'))) {
-                $ids = explode(',', (string)$this->getRequest()->getData('ids'));
-            }
-        } elseif (!empty($this->getRequest()->getData('id'))) {
-            $ids = [$this->getRequest()->getData('id')];
-        }
+        $id = $this->getRequest()->getData('id');
+        $ids = $this->getRequest()->getData('ids');
+        $ids = is_string($ids) ? explode(',', $ids) : $ids;
+        $ids = empty($ids) ? [$id] : $ids;
         try {
             $this->apiClient->deleteObjects($ids, $this->objectType);
+            $eventManager = $this->getEventManager();
             foreach ($ids as $id) {
                 $event = new Event('Controller.afterDelete', $this, ['id' => $id, 'type' => $this->objectType]);
-                $this->getEventManager()->dispatch($event);
+                $eventManager->dispatch($event);
             }
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);

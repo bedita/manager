@@ -127,15 +127,10 @@ class TrashController extends AppController
     public function restore(): ?Response
     {
         $this->getRequest()->allowMethod(['post']);
-        $ids = [];
-        if (!empty($this->getRequest()->getData('ids'))) {
-            $ids = $this->getRequest()->getData('ids');
-            if (is_string($ids)) {
-                $ids = explode(',', (string)$this->getRequest()->getData('ids'));
-            }
-        } else {
-            $ids = [$this->getRequest()->getData('id')];
-        }
+        $id = $this->getRequest()->getData('id');
+        $ids = $this->getRequest()->getData('ids');
+        $ids = is_string($ids) ? explode(',', $ids) : $ids;
+        $ids = empty($ids) ? [$id] : $ids;
         try {
             $this->apiClient->restoreObjects($ids);
         } catch (BEditaClientException $e) {
@@ -155,25 +150,12 @@ class TrashController extends AppController
     public function delete(): ?Response
     {
         $this->getRequest()->allowMethod(['post']);
-        $ids = [];
-        if (!empty($this->getRequest()->getData('ids'))) {
-            $ids = $this->getRequest()->getData('ids');
-            if (is_string($ids)) {
-                $ids = explode(',', (string)$this->getRequest()->getData('ids'));
-            }
-        } else {
-            $ids = [$this->getRequest()->getData('id')];
-        }
-        try {
-            $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $ids]]);
-            $this->apiClient->removeObjects($ids);
-            $streams = (array)Hash::get($response, 'data');
-            $this->removeStreams($streams);
+        $id = $this->getRequest()->getData('id');
+        $ids = $this->getRequest()->getData('ids');
+        $ids = is_string($ids) ? explode(',', $ids) : $ids;
+        $ids = empty($ids) ? [$id] : $ids;
+        if ($this->deleteMulti($ids)) {
             $this->Flash->success(__('Object(s) deleted from trash'));
-        } catch (BEditaClientException $e) {
-            // Error! Back to object view.
-            $this->log($e->getMessage(), LogLevel::ERROR);
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
         return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
@@ -211,18 +193,10 @@ class TrashController extends AppController
         $counter = 0;
         while (Hash::get($response, 'meta.pagination.count', 0) > 0) {
             $ids = Hash::extract($response, 'data.{n}.id');
-            try {
-                $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $ids]]);
-                $this->apiClient->removeObjects($ids);
-                $streams = (array)Hash::get($response, 'data');
-                $this->removeStreams($streams);
-            } catch (BEditaClientException $e) {
-                // Error! Back to trash index.
-                $this->log($e->getMessage(), LogLevel::ERROR);
-                $this->Flash->error($e->getMessage(), ['params' => $e]);
-
+            if (!$this->deleteMulti($ids)) {
                 return $this->redirect(['_name' => 'trash:list'] + $this->listQuery());
             }
+            $counter += count($ids);
             $response = $this->apiClient->getObjects('trash', $query);
         }
         $this->Flash->success(__(sprintf('%d objects deleted from trash', $counter)));
@@ -252,6 +226,30 @@ class TrashController extends AppController
     }
 
     /**
+     * Delete multiple data and related streams, if any.
+     *
+     * @param array $ids Object IDs
+     * @return bool
+     */
+    public function deleteMulti(array $ids): bool
+    {
+        try {
+            $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $ids]]);
+            $this->apiClient->removeObjects($ids);
+            $streams = (array)Hash::get($response, 'data');
+            $this->removeStreams($streams);
+        } catch (BEditaClientException $e) {
+            // Error! Back to object view.
+            $this->log($e->getMessage(), LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Remove streams
      *
      * @param array $streams The streams to remove
@@ -261,6 +259,9 @@ class TrashController extends AppController
     {
         // this for BE versions < 5.25.1, where streams are not deleted with media on delete
         $uuids = (array)Hash::extract($streams, '{n}.id');
+        if (empty($uuids)) {
+            return;
+        }
         $search = $this->apiClient->get('/streams', ['filter' => ['uuid' => $uuids]]);
         $search = (array)Hash::get($search, 'data');
         foreach ($search as $stream) {

@@ -183,6 +183,7 @@ class TrashControllerTest extends BaseControllerTest
      *
      * @return void
      * @covers ::delete()
+     * @covers ::deleteMulti()
      * @covers ::removeStreams()
      */
     public function testDelete(): void
@@ -215,6 +216,33 @@ class TrashControllerTest extends BaseControllerTest
     {
         $id = $this->setupControllerAndData();
         $this->Trash->deleteData((string)$id);
+
+        try {
+            $this->client->getObject($id);
+        } catch (BEditaClientException $e) {
+            $expected = new BEditaClientException('Not Found', 404);
+            static::assertEquals($expected->getCode(), $e->getCode());
+        }
+
+        try {
+            $this->client->get(sprintf('/trash/%d', $id));
+        } catch (BEditaClientException $e) {
+            $expected = new BEditaClientException('Not Found', 404);
+            static::assertEquals($expected->getCode(), $e->getCode());
+        }
+    }
+
+    /**
+     * Test `deleteMulti` method.
+     *
+     * @return void
+     * @covers ::deleteMulti()
+     */
+    public function testDeleteMulti(): void
+    {
+        $id = $this->setupControllerAndData(true, false, true);
+        $actual = $this->Trash->deleteMulti([$id]);
+        static::assertTrue($actual);
 
         try {
             $this->client->getObject($id);
@@ -304,16 +332,15 @@ class TrashControllerTest extends BaseControllerTest
     }
 
     /**
-     * Test `restore` method with multiple items
+     * Test `delete` method passing ids in POST data
      *
      * @return void
      * @covers ::delete()
      */
-    public function testDeleteMulti(): void
+    public function testDeleteByIds(): void
     {
         $id = $this->setupControllerAndData(true, false, true);
         $this->Trash->delete();
-
         $expected = new BEditaClientException('Not Found', 404);
         static::expectException(get_class($expected));
         static::expectExceptionCode($expected->getCode());
@@ -326,7 +353,7 @@ class TrashControllerTest extends BaseControllerTest
      * @return void
      * @covers ::delete()
      */
-    public function testDeleteMultiFailure(): void
+    public function testDeleteByIdsFailure(): void
     {
         $id = $this->setupControllerAndData(true, false, true);
         $this->client->remove($id);
@@ -350,6 +377,7 @@ class TrashControllerTest extends BaseControllerTest
      * @return void
      * @covers ::emptyTrash()
      * @covers ::listQuery()
+     * @covers ::deleteMulti()
      * @covers ::removeStreams()
      */
     public function testEmpty(): void
