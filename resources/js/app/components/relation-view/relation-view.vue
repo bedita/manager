@@ -1,3 +1,4 @@
+<script>
 /**
  *  Templates that uses this component (directly or indirectly):
  *  Template/Elements/relations.twig
@@ -24,12 +25,6 @@ import { PanelEvents } from 'app/components/panel-view';
 import { DragdropMixin } from 'app/mixins/dragdrop';
 
 export default {
-    mixins: [
-        PaginatedContentMixin,
-        RelationSchemaMixin,
-        DragdropMixin,
-    ],
-
     components: {
         RelationshipsView: () => import(/* webpackChunkName: "relationships-view" */'app/components/relation-view/relationships-view/relationships-view'),
         RolesListView: () => import(/* webpackChunkName: "roles-list-view" */'app/components/relation-view/roles-list-view'),
@@ -39,6 +34,12 @@ export default {
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
     },
+
+    mixins: [
+        PaginatedContentMixin,
+        RelationSchemaMixin,
+        DragdropMixin,
+    ],
 
     props: {
         relationName: {
@@ -120,6 +121,32 @@ export default {
         },
     },
 
+    watch: {
+        /**
+         * Loading event emit
+         *
+         * @param {String} value The value associated to loading
+         *
+         * @emits Event#loading
+         *
+         * @return {void}
+         */
+        loading(value) {
+            this.$emit('loading', value);
+        },
+
+        objects(newObjects) {
+            this.positions = newObjects.reduce((positions, object) => {
+                positions[object.id] = object.meta?.relation?.position || '';
+                return positions;
+            }, {});
+            this.priorities = newObjects.reduce((priorities, object) => {
+                priorities[object.id] = object.meta?.relation?.priority || '';
+                return priorities;
+            }, {});
+        },
+    },
+
     /**
      * setup correct endpoint for PaginatedContentMixin.getPaginatedObjects()
      *
@@ -135,6 +162,13 @@ export default {
     * @return {void}
     */
     async mounted() {
+        // remember pagination.page_size (use localStorage)
+        const key = `relation-view:${this.relationName}:page_size`;
+        const pageSize = localStorage.getItem(key);
+        if (pageSize) {
+            this.setPageSize(pageSize);
+        }
+
         // set up panel events
         PanelEvents.listen('edit-params:save', this, this.editParamsSave);
         PanelEvents.listen('relations-add:save', this, this.appendRelationsFromPanel);
@@ -187,32 +221,6 @@ export default {
         PanelEvents.stop('panel:closed', null, this.resetPanelRequester);
     },
 
-    watch: {
-        /**
-         * Loading event emit
-         *
-         * @param {String} value The value associated to loading
-         *
-         * @emits Event#loading
-         *
-         * @return {void}
-         */
-        loading(value) {
-            this.$emit('loading', value);
-        },
-
-        objects(newObjects) {
-            this.positions = newObjects.reduce((positions, object) => {
-                positions[object.id] = object.meta?.relation?.position || '';
-                return positions;
-            }, {});
-            this.priorities = newObjects.reduce((priorities, object) => {
-                priorities[object.id] = object.meta?.relation?.priority || '';
-                return priorities;
-            }, {});
-        },
-    },
-
     methods: {
         // Events Listeners
 
@@ -236,6 +244,9 @@ export default {
          * @return {void}
          */
         onUpdatePageSize(pageSize) {
+            // remember pagination.page_size (use localStorage)
+            const key = `relation-view:${this.relationName}:page_size`;
+            localStorage.setItem(key, pageSize);
             this.setPageSize(pageSize);
             this.loadRelatedObjects(this.activeFilter, true);
         },
@@ -931,6 +942,6 @@ export default {
 
             return `${url}${query}`;
         },
-    }
-
+    },
 }
+</script>
