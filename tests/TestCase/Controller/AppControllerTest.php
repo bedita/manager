@@ -195,11 +195,9 @@ class AppControllerTest extends TestCase
         /** @var \Authentication\Identity|null $user */
         $user = $this->AppController->Authentication->getIdentity();
         $expectedtokens = $user->get('tokens');
-
-        $event = $this->AppController->dispatchEvent('Controller.initialize');
-
+        $this->AppController->dispatchEvent('Controller.initialize');
         $apiClient = $this->accessProperty($this->AppController, 'apiClient');
-        $apiClientTokens = $this->accessProperty($apiClient, 'tokens');
+        $apiClientTokens = $apiClient->getTokens();
 
         static::assertEquals($expectedtokens, $apiClientTokens);
     }
