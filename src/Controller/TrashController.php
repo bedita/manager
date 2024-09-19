@@ -63,8 +63,11 @@ class TrashController extends AppController
         $this->getRequest()->allowMethod(['get']);
 
         try {
-            $response = $this->apiClient->getObjects('trash', $this->getRequest()->getQueryParams());
-            CacheTools::setModuleCount($response, 'trash');
+            $params = $this->getRequest()->getQueryParams();
+            $response = $this->apiClient->getObjects('trash', $params);
+            if (empty($params['q']) && empty($params['filter'])) {
+                CacheTools::setModuleCount($response, 'trash');
+            }
         } catch (BEditaClientException $e) {
             // Error! Back to dashboard.
             $this->log($e->getMessage(), LogLevel::ERROR);

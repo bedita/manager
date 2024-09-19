@@ -103,8 +103,11 @@ class ModulesController extends AppController
         }
 
         try {
-            $response = $this->apiClient->getObjects($this->objectType, $this->Query->index());
-            CacheTools::setModuleCount((array)$response, $this->Modules->getConfig('currentModuleName'));
+            $params = $this->Query->index();
+            $response = $this->apiClient->getObjects($this->objectType, $params);
+            if (empty($params['q']) && empty($params['filter'])) {
+                CacheTools::setModuleCount((array)$response, $this->Modules->getConfig('currentModuleName'));
+            }
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
