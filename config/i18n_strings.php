@@ -115,11 +115,11 @@
 
 // Media
 // __('File Name')
+// __('File Size')
 // __('Hash Md5')
 // __('Hash Sha1')
 // __('Height')
 // __('Mime Type')
-// __('File Size')
 // __('Provider')
 // __('Provider Uid')
 // __('Provider Url')
