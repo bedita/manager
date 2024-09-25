@@ -122,7 +122,7 @@
                             {% for k, val in attributes %}
                                 {% if val and k != 'file_metadata' %}
                                     <tr>
-                                        <th class="nowrap">{{ k|humanize }} :</th>
+                                        <th class="nowrap">{{ Layout.tr(k) }} :</th>
                                         <td>
                                             {% if k == 'url' %}
                                                 <a href={{ val }} target="_blank">{{ val }}</a>

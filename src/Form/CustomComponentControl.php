@@ -13,6 +13,7 @@
 
 namespace App\Form;
 
+use App\Utility\Translate;
 use Cake\Utility\Hash;
 
 /**
@@ -28,6 +29,7 @@ class CustomComponentControl implements CustomHandlerInterface
         // you can define a custom component via `tag` option, default is <key-value-list>
         $tag = Hash::get($options, 'tag', 'key-value-list');
         $label = (string)Hash::get($options, 'label', $name);
+        $label = Translate::get($label);
         $readonly = (bool)Hash::get($options, 'readonly', false);
         $type = (string)Hash::get($options, 'type');
         if ($type === 'json' || is_array($value) || is_object($value)) {
