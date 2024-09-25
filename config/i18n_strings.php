@@ -113,6 +113,21 @@
 // Folders
 // __('Folders')
 
+// Media
+// __('File Name')
+// __('File Size')
+// __('Hash Md5')
+// __('Hash Sha1')
+// __('Height')
+// __('Mime Type')
+// __('Provider')
+// __('Provider Uid')
+// __('Provider Url')
+// __('Provider Thumbnail')
+// __('Provider Extra')
+// __('Version')
+// __('Width')
+
 // Publications
 // __('Publications')
 
