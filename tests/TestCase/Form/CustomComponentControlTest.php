@@ -34,7 +34,7 @@ class CustomComponentControlTest extends TestCase
             'default simple' => [
                 [
                     'type' => '',
-                    'html' => '<key-value-list label="field1" name="field1" value="" :readonly=false></key-value-list>',
+                    'html' => '<key-value-list label="Field1" name="field1" value="" :readonly=false></key-value-list>',
                     'readonly' => false,
                 ],
                 'field1',
@@ -58,7 +58,7 @@ class CustomComponentControlTest extends TestCase
             'json encoded' => [
                 [
                     'type' => 'json',
-                    'html' => '<key-value-list label="some_field" name="some_field" value="{&quot;a&quot;:&quot;b&quot;}" :readonly=true></key-value-list>',
+                    'html' => '<key-value-list label="Some Field" name="some_field" value="{&quot;a&quot;:&quot;b&quot;}" :readonly=true></key-value-list>',
                     'readonly' => true,
                 ],
                 'some_field',
