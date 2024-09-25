@@ -115,7 +115,6 @@
 
 // Media
 // __('File Name')
-// __('File Name')
 // __('Hash Md5')
 // __('Hash Sha1')
 // __('Height')
