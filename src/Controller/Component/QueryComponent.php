@@ -65,20 +65,14 @@ class QueryComponent extends Component
      */
     protected function handleSort(string $sort, array &$query): void
     {
-        // set sort order from query string
-        if (!empty($sort)) {
-            $query['sort'] = $sort;
-
-            return;
-        }
         // remove sort from query if `q` search is set: order is done by search engine
         if (!empty($query['q'])) {
             unset($query['sort']);
 
             return;
         }
-        // set default sort order
-        $query['sort'] = '-id';
+        // set sort order from query string or default '-id'
+        $query['sort'] = !empty($sort) ? $sort : '-id';
     }
 
     /**
