@@ -84,6 +84,7 @@ class QueryComponentTest extends TestCase
      *
      * @return void
      * @covers ::index()
+     * @covers ::handleSort()
      * @dataProvider indexProvider()
      */
     public function testIndex(array $queryParams, array $config, array $expected): void
