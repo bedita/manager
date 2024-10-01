@@ -189,7 +189,7 @@ export default {
             this.menu = this.related?.meta?.relation?.menu || null;
             this.position = this.related?.meta?.relation?.position || '';
             for (let key in this.properties) {
-                if (this.related.meta.relation.params && this.related.meta.relation.params[key]) {
+                if (this.related.meta.relation.params && Object.keys(this.related.meta.relation.params).includes(key)) {
                     this.editingParams[key] = this.related.meta.relation.params[key];
 
                     continue;
