@@ -719,45 +719,47 @@ return [
      * - `format` - The format of the parameter. Supported formats are: `date`, `date-time`.
      * - `value` - The default value of the parameter.
      * - `enum` - The list of possible values for the parameter. Required if the type is `enum`.
+     *
+     *  An example follows. Note: "author", "summary" etc. are examples, you can define your own parameters. They will be saved in `meta.relation.params`.
      */
     // 'ChildrenParams' => [
-    //     'string' => [
-    //         'description' => 'The string',
+    //     'author' => [
+    //         'description' => 'The author',
     //         'type' => 'string',
-    //         'value' => 'something',
+    //         'value' => 'john doe',
     //     ],
-    //     'text' => [
-    //         'description' => 'The text',
+    //     'summary' => [
+    //         'description' => 'The summary',
     //         'type' => 'text',
     //         'value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     //     ],
-    //     'date' => [
-    //         'description' => 'The date',
+    //     'validation_date"' => [
+    //         'description' => 'The validation date',
     //         'type' => 'string',
     //         'format' => 'date',
     //         'value' => '2024-06-30',
     //     ],
-    //     'date-time' => [
-    //         'description' => 'The date-time',
+    //     'validation_date_time' => [
+    //         'description' => 'The validation date time',
     //         'type' => 'string',
     //         'format' => 'date-time',
     //         'value' => '2020-01-01T00:00:00Z',
     //     ],
-    //     'integer' => [
-    //         'description' => 'The integer',
+    //     'score' => [
+    //         'description' => 'The score',
     //         'type' => 'integer',
-    //         'value' => 81025,
+    //         'value' => 8,
     //     ],
-    //     'boolean' => [
-    //         'description' => 'The boolean',
+    //     'visible' => [
+    //         'description' => 'The visible flag',
     //         'type' => 'boolean',
     //         'value' => true,
     //     ],
-    //     'enum' => [
-    //         'description' => 'The enum',
-    //         'enum' => ['a', 'b', 'c'],
+    //     'status' => [
+    //         'description' => 'The status',
+    //         'enum' => ['draft', 'ready', 'done'],
     //         'type' => 'string',
-    //         'value' => 'b',
+    //         'value' => 'draft',
     //     ],
     // ],
 ];
