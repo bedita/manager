@@ -8,7 +8,9 @@ use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Controller;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\Component\SchemaComponent} Test Case
@@ -340,6 +342,24 @@ class SchemaComponentTest extends TestCase
                 ->willReturn($relations);
 
         ApiClientProvider::setApiClient($apiClient);
+        $expected = [
+            'string' => [
+                'description' => 'The string',
+                'type' => 'string',
+                'value' => 'something',
+            ],
+            'text' => [
+                'description' => 'The text',
+                'type' => 'text',
+                'value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            ],
+            'date' => [
+                'description' => 'The date',
+                'type' => 'string',
+                'format' => 'date',
+            ],
+        ];
+        Configure::write('ChildrenParams', $expected);
         $result = $this->Schema->getRelationsSchema();
         static::assertNotEmpty($result);
         // count is 3 because `children` relation is automatically added
@@ -347,6 +367,8 @@ class SchemaComponentTest extends TestCase
         static::assertArrayHasKey('poster', $result);
         static::assertArrayHasKey('poster_of', $result);
         static::assertArrayHasKey('children', $result);
+        $actual = Hash::get($result, 'children.attributes.params');
+        static::assertSame($expected, $actual);
     }
 
     /**
