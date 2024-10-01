@@ -706,4 +706,58 @@ return [
     //     ],
     // ],
     // 'uploadMaxResolution' => '1920x1080',
+
+    /**
+     * Configuration for "Children" association parameters.
+     *
+     * This allows to define a set of parameters that can be used in children association between a folder and an object.
+     * The configuration is an associative array where keys are the parameter names and values are
+     * arrays with the following keys:
+     *
+     * - `description` - The description of the parameter.
+     * - `type` - The type of the parameter. Supported types are: `string`, `text`, `date`, `date-time`, `integer`, `boolean`, `enum`.
+     * - `format` - The format of the parameter. Supported formats are: `date`, `date-time`.
+     * - `value` - The default value of the parameter.
+     * - `enum` - The list of possible values for the parameter. Required if the type is `enum`.
+     */
+    // 'ChildrenParams' => [
+    //     'string' => [
+    //         'description' => 'The string',
+    //         'type' => 'string',
+    //         'value' => 'something',
+    //     ],
+    //     'text' => [
+    //         'description' => 'The text',
+    //         'type' => 'text',
+    //         'value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    //     ],
+    //     'date' => [
+    //         'description' => 'The date',
+    //         'type' => 'string',
+    //         'format' => 'date',
+    //         'value' => '2024-06-30',
+    //     ],
+    //     'date-time' => [
+    //         'description' => 'The date-time',
+    //         'type' => 'string',
+    //         'format' => 'date-time',
+    //         'value' => '2020-01-01T00:00:00Z',
+    //     ],
+    //     'integer' => [
+    //         'description' => 'The integer',
+    //         'type' => 'integer',
+    //         'value' => 81025,
+    //     ],
+    //     'boolean' => [
+    //         'description' => 'The boolean',
+    //         'type' => 'boolean',
+    //         'value' => true,
+    //     ],
+    //     'enum' => [
+    //         'description' => 'The enum',
+    //         'enum' => ['a', 'b', 'c'],
+    //         'type' => 'string',
+    //         'value' => 'b',
+    //     ],
+    // ],
 ];
