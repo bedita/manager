@@ -65,6 +65,7 @@ const _vueInstance = new Vue({
         AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
         AdminAppearance: () => import(/* webpackChunkName: "admin-appearance" */'app/pages/admin/appearance'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
+        EditChildrenParams: () => import(/* webpackChunkName: "edit-children-params" */'app/components/edit-children-params'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
         HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),

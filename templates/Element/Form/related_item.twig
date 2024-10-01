@@ -147,6 +147,20 @@
         {% endif %}
     </div>
     {% endif %}
+    {% if not readonly and children and config('ChildrenParams') %}
+        <button
+            class="is-small icon-th-list-1"
+            :disabled="isPanelOpen()"
+            @click.prevent.stop="editRelationParams({
+                object: {{ object|json_encode }},
+                related: related,
+                relationName: relationName,
+                relationLabel: relationLabel,
+                schema: {{ foldersSchema|json_encode }},
+            }, 'edit-children-params')">
+            {{ __('Edit params') }}
+        </button>
+    {% endif %}
 
     {# BUTTONS #}
     {% if Perms.canSave() %}
