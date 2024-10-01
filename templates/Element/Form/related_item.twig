@@ -148,6 +148,7 @@
     </div>
     {% endif %}
     {% if not readonly and children and config('ChildrenParams') %}
+    <div class="params p-05 has-text-size-smaller">
         <button
             class="is-small icon-th-list-1"
             :disabled="isPanelOpen()"
@@ -160,6 +161,7 @@
             }, 'edit-children-params')">
             {{ __('Edit params') }}
         </button>
+    </div>
     {% endif %}
 
     {# BUTTONS #}
