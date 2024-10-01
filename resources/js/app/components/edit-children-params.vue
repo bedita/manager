@@ -198,9 +198,9 @@ export default {
             }
             this.objectColorClass = `has-background-module-${this.object.type}`;
             this.relatedColorClass = `has-background-module-${this.related.type}`;
-            this.relatedName = this.related?.attributes?.title || t('(empty)');
-            this.relatedStatus = this.related?.attributes?.status || t('(empty)');
-            this.relatedType = this.related?.type || t('(not available)');
+            this.relatedName = this.related?.attributes?.title || t`(empty)`;
+            this.relatedStatus = this.related?.attributes?.status || t`(empty)`;
+            this.relatedType = this.related?.type || t`(not available)`;
         });
     },
 
