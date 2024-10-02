@@ -104,7 +104,7 @@
                 <button
                     class="mx-1"
                     href="#"
-                    @click="closeParamsView()"
+                    @click="close()"
                 >
                     {{ msgCancel }}
                 </button>
@@ -206,7 +206,7 @@ export default {
 
     methods: {
 
-        closeParamsView() {
+        close() {
             PanelEvents.closePanel();
         },
 
@@ -223,6 +223,11 @@ export default {
 
         save() {
             const related = {...this.related};
+            for (const key in this.editingParams) {
+                if (this.editingParams[key] === '') {
+                    this.editingParams[key] = null;
+                }
+            }
             related.meta.relation.position = this.position;
             related.meta.relation.params = this.editingParams;
             PanelEvents.sendBack('edit-params:save', related);
