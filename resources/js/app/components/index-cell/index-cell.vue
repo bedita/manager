@@ -1,21 +1,46 @@
+<template>
+    <div
+        :class="className()"
+        untitled-label="${t`Untitled`}"
+        @mouseover="onMouseover()"
+        @mouseleave="onMouseleave()"
+    >
+        {{ !msg ? truncated : '' }}
+        <app-icon
+            icon="carbon:copy"
+            @click.stop.prevent="copy()"
+            v-if="showCopyIcon()"
+        />
+        <div
+            style="color: gray"
+            v-text="msg"
+            v-if="msg"
+        />
+    </div>
+</template>
+<script>
 import { t } from 'ttag';
 
 export default {
-    name: 'index-cell',
-
-    template: `
-    <div :class="className()" untitled-label="${t`Untitled`}" @mouseover="onMouseover()" @mouseleave="onMouseleave()">
-        <: !msg ? truncated : '' :>
-        <app-icon icon="carbon:copy" v-if="showCopyIcon()" @click.stop.prevent="copy()"></app-icon>
-        <div v-if="msg" v-text="msg" style="color: gray"></div>
-    </div>
-    `,
+    name: 'IndexCell',
 
     props: {
-        settings: {},
-        prop: '',
-        text: '',
-        untitledlabel: '',
+        settings: {
+            type: Object,
+            default: () => ({}),
+        },
+        prop: {
+            type: String,
+            default: '',
+        },
+        text: {
+            type: String,
+            default: '',
+        },
+        untitledlabel: {
+            type: String,
+            default: '',
+        },
     },
 
     data() {
@@ -68,3 +93,4 @@ export default {
         },
     },
 };
+</script>
