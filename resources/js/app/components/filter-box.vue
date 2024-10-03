@@ -173,7 +173,7 @@ export default {
                 return null;
             }
 
-            return this.initFilter?.filter[this.positionFilterName] || '';
+            return this.initFilter?.filter[this.positionFilterName] || null;
         },
 
         /**
