@@ -154,6 +154,9 @@ export default {
             menu: null,
             oldParams: {},
             objectColorClass: '',
+            originalCanonical: null,
+            originalParams: {},
+            originalPosition: null,
             position: null,
             properties: [],
             relatedColorClass: '',
@@ -188,9 +191,12 @@ export default {
             this.canonical = this.related?.meta?.relation?.canonical || null;
             this.menu = this.related?.meta?.relation?.menu || null;
             this.position = this.related?.meta?.relation?.position || '';
+            this.originalCanonical = this.related?.meta?.relation?.canonical || null;
+            this.originalPosition = this.related?.meta?.relation?.position || null;
+            this.originalParams = this.related?.meta?.relation?.params || {};
             for (let key in this.properties) {
-                if (this.related.meta.relation.params && Object.keys(this.related.meta.relation.params).includes(key)) {
-                    this.editingParams[key] = this.related.meta.relation.params[key];
+                if (this.originalParams && Object.keys(this.originalParams).includes(key)) {
+                    this.editingParams[key] = this.originalParams[key];
 
                     continue;
                 }
@@ -223,13 +229,36 @@ export default {
 
         save() {
             const related = {...this.related};
-            for (const key in this.editingParams) {
+            for (const key in this.properties) {
                 if (this.editingParams[key] === '') {
                     this.editingParams[key] = null;
+
+                    continue;
+                }
+                if (this.properties[key].type === 'integer') {
+                    this.editingParams[key] = parseInt(this.editingParams[key]);
                 }
             }
-            related.meta.relation.position = this.position;
-            related.meta.relation.params = this.editingParams;
+            let changed = false;
+            if (this.position != this.originalPosition) {
+                related.meta.relation.position = this.position;
+                changed = true;
+            }
+            if (this.canonical != this.originalCanonical) {
+                related.meta.relation.canonical = this.canonical;
+                changed = true;
+            }
+            for (let key in this.editingParams) {
+                if (this.editingParams[key] != this.originalParams[key]) {
+                    related.meta.relation.params[key] = this.editingParams[key];
+                    changed = true;
+                }
+            }
+            if (!changed) {
+                PanelEvents.closePanel();
+
+                return;
+            }
             PanelEvents.sendBack('edit-params:save', related);
         },
 
