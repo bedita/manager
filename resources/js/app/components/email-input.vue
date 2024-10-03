@@ -1,17 +1,23 @@
-import { t } from 'ttag';
-
-export default {
-    template: /* template */`
+<template>
     <div>
         <slot></slot>
     </div>
-    `,
+</template>
+<script>
+import { t } from 'ttag';
+
+export default {
+    name: 'EmailInput',
 
     props: {
         el: {
             type: HTMLInputElement,
+            default: null,
         },
-        isValid: false
+        isValid: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     async mounted() {
@@ -34,3 +40,4 @@ export default {
         this.el.parentElement.appendChild(span);
     },
 };
+</script>
