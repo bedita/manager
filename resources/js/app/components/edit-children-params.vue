@@ -250,6 +250,9 @@ export default {
             }
             for (let key in this.editingParams) {
                 if (this.editingParams[key] != this.originalParams[key]) {
+                    if (related.meta.relation.params == null) {
+                        related.meta.relation.params = {};
+                    }
                     related.meta.relation.params[key] = this.editingParams[key];
                     changed = true;
                 }
