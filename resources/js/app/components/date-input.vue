@@ -1,3 +1,9 @@
+<template>
+    <div>
+        <slot></slot>
+    </div>
+</template>
+<script>
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/dark.css';
 import flatpickr from 'flatpickr';
@@ -29,14 +35,11 @@ const FLATPICKR_OPTIONS = {
 // get loaded locale
 const LOCALE = BEDITA.locale.slice(0, 2);
 export default {
-    template: /* template */`
-    <div>
-        <slot></slot>
-    </div>
-    `,
+    name: 'DateInput',
     props: {
         el: {
             type: HTMLInputElement,
+            default: null,
         },
         attrs: {
             type: Object,
@@ -129,3 +132,4 @@ export default {
         },
     },
 };
+</script>
