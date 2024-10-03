@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2024-09-02 14:24:54 \n"
+"POT-Creation-Date: 2024-09-25 14:27:54 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -316,6 +316,12 @@ msgstr ""
 msgid "File"
 msgstr ""
 
+msgid "File Name"
+msgstr ""
+
+msgid "File Size"
+msgstr ""
+
 msgid "File is too big, form MAX_FILE_SIZE exceeded"
 msgstr ""
 
@@ -356,6 +362,15 @@ msgid "General"
 msgstr ""
 
 msgid "Global"
+msgstr ""
+
+msgid "Hash Md5"
+msgstr ""
+
+msgid "Hash Sha1"
+msgstr ""
+
+msgid "Height"
 msgstr ""
 
 msgid "Hidden"
@@ -464,6 +479,9 @@ msgid "Metadata"
 msgstr ""
 
 msgid "Method Not Allowed"
+msgstr ""
+
+msgid "Mime Type"
 msgstr ""
 
 msgid "Missing import file"
@@ -665,6 +683,21 @@ msgid "Property types"
 msgstr ""
 
 msgid "PropertyTypes"
+msgstr ""
+
+msgid "Provider"
+msgstr ""
+
+msgid "Provider Extra"
+msgstr ""
+
+msgid "Provider Thumbnail"
+msgstr ""
+
+msgid "Provider Uid"
+msgstr ""
+
+msgid "Provider Url"
 msgstr ""
 
 msgid "Pseudonym"
@@ -913,6 +946,9 @@ msgstr ""
 msgid "Vat Number"
 msgstr ""
 
+msgid "Version"
+msgstr ""
+
 msgid "Videos"
 msgstr ""
 
@@ -923,6 +959,9 @@ msgid "View original"
 msgstr ""
 
 msgid "Website"
+msgstr ""
+
+msgid "Width"
 msgstr ""
 
 msgid "Write"

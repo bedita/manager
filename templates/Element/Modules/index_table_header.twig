@@ -5,9 +5,10 @@
 
     <div></div> {# thumb column #}
 
+    {% set emptyQuerySearch = (_view.getRequest().getSession().read(currentModule.name ~ '.filter.q')|length == 0) %}
     {% for prop in properties %}
         <div class="{{ Link.sortClass(prop) }}">
-            {% if Schema.sortable(prop) %}
+            {% if emptyQuerySearch and Schema.sortable(prop) %}
                 <a href="{{ Link.sortUrl(prop) }}">{{ Property.fieldLabel(prop) }}</a>
             {% else %}
                 {{ Property.fieldLabel(prop) }}
@@ -21,7 +22,7 @@
 
     {% if refObject.attributes.status %}
         <div class="narrow {{ Link.sortClass('status') }}">
-            {% if Schema.sortable('status') %}
+            {% if emptyQuerySearch and Schema.sortable('status') %}
                 <a href="{{ Link.sortUrl('status') }}">{{ __('status') }}</a>
             {% else %}
                 {{ __('status') }}
@@ -31,7 +32,7 @@
 
     {% if refObject.meta.modified %}
         <div class="{{ Link.sortClass('modified') }}">
-            {% if Schema.sortable('modified') %}
+            {% if emptyQuerySearch and Schema.sortable('modified') %}
                 <a href="{{ Link.sortUrl('modified') }}">{{ __('modified') }}</a>
             {% else %}
                 {{ __('modified') }}
@@ -40,7 +41,7 @@
     {% endif %}
 
     <div class="narrow {{ Link.sortClass('id') }}">
-        {% if Schema.sortable('id') %}
+        {% if emptyQuerySearch and Schema.sortable('id') %}
             <a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a>
         {% else %}
             {{ __('id') }}

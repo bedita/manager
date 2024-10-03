@@ -30,7 +30,7 @@ class QueryComponent extends Component
         $query = $this->getController()->getRequest()->getQueryParams();
         if (array_key_exists('sort', $query)) {
             $sort = (string)Hash::get($query, 'sort');
-            $query['sort'] = !empty($sort) ? $sort : '-id';
+            $this->handleSort($sort, $query);
         }
 
         // set include, if set in config
@@ -51,9 +51,28 @@ class QueryComponent extends Component
         // set sort order: use `currentModule.sort` or default '-id'
         $module = (array)$this->getController()->viewBuilder()->getVar('currentModule');
         $sort = (string)Hash::get($module, 'sort');
-        $query['sort'] = !empty($sort) ? $sort : '-id';
+        $this->handleSort($sort, $query);
 
         return $query;
+    }
+
+    /**
+     * Handle sort order
+     *
+     * @param string $sort Sort order
+     * @param array $query Query string
+     * @return void
+     */
+    protected function handleSort(string $sort, array &$query): void
+    {
+        // remove sort from query if `q` search is set: order is done by search engine
+        if (!empty($query['q'])) {
+            unset($query['sort']);
+
+            return;
+        }
+        // set sort order from query string or default '-id'
+        $query['sort'] = !empty($sort) ? $sort : '-id';
     }
 
     /**

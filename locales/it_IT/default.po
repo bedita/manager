@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-09-02 14:24:54 \n"
+"POT-Creation-Date: 2024-09-25 14:27:54 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -321,6 +321,12 @@ msgstr "Scrittura file su disco fallita"
 msgid "File"
 msgstr ""
 
+msgid "File Name"
+msgstr "Nome File"
+
+msgid "File Size"
+msgstr "Dimensione File"
+
 msgid "File is too big, form MAX_FILE_SIZE exceeded"
 msgstr "File troppo grande, dimensione massima form superata (MAX_FILE_SIZE)"
 
@@ -362,6 +368,15 @@ msgstr "Generale"
 
 msgid "Global"
 msgstr "Globale"
+
+msgid "Hash Md5"
+msgstr ""
+
+msgid "Hash Sha1"
+msgstr ""
+
+msgid "Height"
+msgstr "Altezza"
 
 msgid "Hidden"
 msgstr "Nascosto"
@@ -470,6 +485,9 @@ msgstr "Metadati"
 
 msgid "Method Not Allowed"
 msgstr "Metodo non consentito"
+
+msgid "Mime Type"
+msgstr "Tipo Mime"
 
 msgid "Missing import file"
 msgstr "File di importazione mancante"
@@ -673,6 +691,21 @@ msgstr "Tipi di proprietà"
 
 msgid "PropertyTypes"
 msgstr "Tipi di Proprietà"
+
+msgid "Provider"
+msgstr ""
+
+msgid "Provider Extra"
+msgstr "Extra Provider"
+
+msgid "Provider Thumbnail"
+msgstr "Miniatura Provider"
+
+msgid "Provider Uid"
+msgstr "Uid Provider"
+
+msgid "Provider Url"
+msgstr "Url Provider"
 
 msgid "Pseudonym"
 msgstr "Pseudonimo"
@@ -921,6 +954,9 @@ msgstr "Utenti"
 msgid "Vat Number"
 msgstr "Partita Iva"
 
+msgid "Version"
+msgstr "Versione"
+
 msgid "Videos"
 msgstr "Video"
 
@@ -932,6 +968,9 @@ msgstr "Vedi originale"
 
 msgid "Website"
 msgstr "Sito Web"
+
+msgid "Width"
+msgstr "Larghezza"
 
 msgid "Write"
 msgstr "Scrittura"

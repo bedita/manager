@@ -76,6 +76,11 @@ class QueryComponentTest extends TestCase
                 ['include' => 'object'],
                 ['sort' => '-id', 'include' => 'object'],
             ],
+            'unset query sort' => [
+                ['sort' => 'whatever', 'q' => 'search'],
+                ['include' => 'object'],
+                ['q' => 'search', 'include' => 'object'],
+            ],
         ];
     }
 
@@ -84,6 +89,7 @@ class QueryComponentTest extends TestCase
      *
      * @return void
      * @covers ::index()
+     * @covers ::handleSort()
      * @dataProvider indexProvider()
      */
     public function testIndex(array $queryParams, array $config, array $expected): void

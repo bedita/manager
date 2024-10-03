@@ -1,3 +1,4 @@
+<script>
 /**
  * Filter Box View component
  *
@@ -43,6 +44,7 @@ export default {
         },
         filtersByType: {
             type: Object,
+            default: () => ({}),
         },
         initFilter: {
             type: Object,
@@ -61,7 +63,8 @@ export default {
             default: t`Search`
         },
         relationTypes: {
-            type: Object
+            type: Object,
+            default: () => ({})
         },
         showAdvanced: {
             type: Boolean,
@@ -92,22 +95,6 @@ export default {
             statusFilter: {},
             timer: null,
         };
-    },
-
-    created() {
-        this.queryFilter = merge.all([
-            this.getCleanQuery(this.filterList),
-            this.initFilter,
-        ]);
-
-        if (this.filterList.length) {
-            this.availableFilters = this.filterList;
-        } else if (this.rightTypes.length == 1 && this.filtersByType) {
-            this.availableFilters = this.filtersByType[this.rightTypes[0]];
-        } else {
-            this.availableFilters = this.filtersByType?.[this.queryFilter.filter.type] || [];
-        }
-        this.filterByDescendants = !!this.initFilter?.filter?.ancestor;
     },
 
     computed: {
@@ -262,6 +249,22 @@ export default {
         pageSize() {
             this.$emit('filter-update-page-size', this.pageSize);
         },
+    },
+
+    created() {
+        this.queryFilter = merge.all([
+            this.getCleanQuery(this.filterList),
+            this.initFilter,
+        ]);
+
+        if (this.filterList.length) {
+            this.availableFilters = this.filterList;
+        } else if (this.rightTypes.length == 1 && this.filtersByType) {
+            this.availableFilters = this.filtersByType[this.rightTypes[0]];
+        } else {
+            this.availableFilters = this.filtersByType?.[this.queryFilter.filter.type] || [];
+        }
+        this.filterByDescendants = !!this.initFilter?.filter?.ancestor;
     },
 
     methods: {
@@ -455,3 +458,4 @@ export default {
         },
     }
 };
+</script>

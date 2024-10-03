@@ -134,8 +134,8 @@ class PropertyHelperTest extends TestCase
                 [
                     'name' => 'descr',
                 ],
-                '<dummy label="descr" name="descr" value="something" :readonly=false></dummy>',
-                '<dummy label="descr" name="translated_fields[descr]" value="something" :readonly=false></dummy>',
+                '<dummy label="Descr" name="descr" value="something" :readonly=false></dummy>',
+                '<dummy label="Descr" name="translated_fields[descr]" value="something" :readonly=false></dummy>',
             ],
             'html readonly' => [
                 'descr',
@@ -144,8 +144,8 @@ class PropertyHelperTest extends TestCase
                 [
                     'name' => 'descr',
                 ],
-                '<dummy label="descr" name="descr" value="something" :readonly=true></dummy>',
-                '<dummy label="descr" name="translated_fields[descr]" value="something" :readonly=true></dummy>',
+                '<dummy label="Descr" name="descr" value="something" :readonly=true></dummy>',
+                '<dummy label="Descr" name="translated_fields[descr]" value="something" :readonly=true></dummy>',
             ],
             'date readonly' => [
                 'expires',

@@ -103,8 +103,11 @@ class ModulesController extends AppController
         }
 
         try {
-            $response = $this->apiClient->getObjects($this->objectType, $this->Query->index());
-            CacheTools::setModuleCount((array)$response, $this->Modules->getConfig('currentModuleName'));
+            $params = $this->Query->index();
+            $response = $this->apiClient->getObjects($this->objectType, $params);
+            if (empty($params['q']) && empty($params['filter'])) {
+                CacheTools::setModuleCount((array)$response, $this->Modules->getConfig('currentModuleName'));
+            }
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -379,28 +382,25 @@ class ModulesController extends AppController
     public function delete(): ?Response
     {
         $this->getRequest()->allowMethod(['post']);
-        $ids = [];
-        if (!empty($this->getRequest()->getData('ids'))) {
-            if (is_string($this->getRequest()->getData('ids'))) {
-                $ids = explode(',', (string)$this->getRequest()->getData('ids'));
-            }
-        } elseif (!empty($this->getRequest()->getData('id'))) {
-            $ids = [$this->getRequest()->getData('id')];
-        }
-        foreach ($ids as $id) {
-            try {
-                $this->apiClient->deleteObject($id, $this->objectType);
+        $id = $this->getRequest()->getData('id');
+        $ids = $this->getRequest()->getData('ids');
+        $ids = is_string($ids) ? explode(',', $ids) : $ids;
+        $ids = empty($ids) ? [$id] : $ids;
+        try {
+            $this->apiClient->deleteObjects($ids, $this->objectType);
+            $eventManager = $this->getEventManager();
+            foreach ($ids as $id) {
                 $event = new Event('Controller.afterDelete', $this, ['id' => $id, 'type' => $this->objectType]);
-                $this->getEventManager()->dispatch($event);
-            } catch (BEditaClientException $e) {
-                $this->log($e->getMessage(), LogLevel::ERROR);
-                $this->Flash->error($e->getMessage(), ['params' => $e]);
-                if (!empty($this->getRequest()->getData('id'))) {
-                    return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->getRequest()->getData('id')]);
-                }
-
-                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
+                $eventManager->dispatch($event);
             }
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+            if (!empty($this->getRequest()->getData('id'))) {
+                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->getRequest()->getData('id')]);
+            }
+
+            return $this->redirect($this->referer());
         }
         $this->Flash->success(__('Object(s) deleted'));
 
