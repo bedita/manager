@@ -1,10 +1,11 @@
 <script>
-import { AjaxLogin } from '../../components/ajax-login/ajax-login.js';
+import { AjaxLogin } from '../../components/ajax-login/ajax-login.vue';
 import Vue from 'vue';
 import { t } from 'ttag';
 
 export default {
     components: {
+        AjaxLogin,
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
         PropertyView: () => import(/* webpackChunkName: "property-view" */'app/components/property-view/property-view'),
