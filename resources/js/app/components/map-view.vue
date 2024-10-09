@@ -1,24 +1,13 @@
-/**
- * Templates that uses this component (directly or indirectly):
- *  ...
- *
- * <map-view> component used for ModulesPage -> View
- *
- * Handle maps
- *
- * @prop {String} lat
- * @prop {String} lng
- * @prop {String} popupHtml
- * @prop {String} mapToken (mapBox accessToken)
- */
-
+<template>
+    <div class="map-container" />
+</template>
+<script>
 import mapbox from 'mapbox-gl';
 import Compare from 'mapbox-gl-compare';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default {
-    template: '<div class="map-container"></div>',
-
+    name: 'MapView',
     props: {
         lng: {
             type: String,
@@ -109,3 +98,4 @@ export default {
         }
     }
 }
+</script>
