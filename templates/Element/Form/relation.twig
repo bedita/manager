@@ -87,7 +87,7 @@
                         >
 
                         {% if relationName == 'children' %}
-                            {{ element('Form/related_item', { 'children': true }) }}
+                            {{ element('Form/related_item', { 'children': true, 'foldersSchema': relationsSchema[relationName] }) }}
                         {% else %}
                             {{ element('Form/related_item', { 'common': true, 'readonly': readonly }) }}
                         {% endif %}

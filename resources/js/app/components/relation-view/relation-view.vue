@@ -444,16 +444,10 @@ export default {
             this.enableDrop();
         },
 
-        /**
-         * request panel for edit relation params
-         * data object has to match edit-relation-params component property
-         *
-         * @param {Object} data
-         */
-        editRelationParams(data) {
+        editRelationParams(data, action = 'edit-relation-params') {
             this.requesterId = data.related.id;
             PanelEvents.requestPanel({
-                action: 'edit-relation-params',
+                action,
                 from: this,
                 data,
             });
