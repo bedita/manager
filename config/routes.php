@@ -131,6 +131,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
             'objects_history',
             'user_accesses',
             'system_info',
+            'stats',
         ];
 
         foreach ($adminRoutes as $controller) {

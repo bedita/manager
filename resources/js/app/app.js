@@ -64,6 +64,7 @@ const _vueInstance = new Vue({
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
         AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
         AdminAppearance: () => import(/* webpackChunkName: "admin-appearance" */'app/pages/admin/appearance'),
+        AdminStats: () => import(/* webpackChunkName: "admin-stats" */'app/pages/admin/stats'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
         HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
@@ -87,6 +88,7 @@ const _vueInstance = new Vue({
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
         ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
         PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
+        BarChart:() => import(/* webpackChunkName: "bar-chart" */'app/components/charts/bar-chart'),
         AppIcon,
     },
 
