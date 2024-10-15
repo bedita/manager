@@ -706,4 +706,60 @@ return [
     //     ],
     // ],
     // 'uploadMaxResolution' => '1920x1080',
+
+    /**
+     * Configuration for "Children" association parameters.
+     *
+     * This allows to define a set of parameters that can be used in children association between a folder and an object.
+     * The configuration is an associative array where keys are the parameter names and values are
+     * arrays with the following keys:
+     *
+     * - `description` - The description of the parameter.
+     * - `type` - The type of the parameter. Supported types are: `string`, `text`, `date`, `date-time`, `integer`, `boolean`, `enum`.
+     * - `format` - The format of the parameter. Supported formats are: `date`, `date-time`.
+     * - `value` - The default value of the parameter.
+     * - `enum` - The list of possible values for the parameter. Required if the type is `enum`.
+     *
+     *  An example follows. Note: "author", "summary" etc. are examples, you can define your own parameters. They will be saved in `meta.relation.params`.
+     */
+    // 'ChildrenParams' => [
+    //     'author' => [
+    //         'description' => 'The author',
+    //         'type' => 'string',
+    //         'value' => 'john doe',
+    //     ],
+    //     'summary' => [
+    //         'description' => 'The summary',
+    //         'type' => 'text',
+    //         'value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    //     ],
+    //     'validation_date"' => [
+    //         'description' => 'The validation date',
+    //         'type' => 'string',
+    //         'format' => 'date',
+    //         'value' => '2024-06-30',
+    //     ],
+    //     'validation_date_time' => [
+    //         'description' => 'The validation date time',
+    //         'type' => 'string',
+    //         'format' => 'date-time',
+    //         'value' => '2020-01-01T00:00:00Z',
+    //     ],
+    //     'score' => [
+    //         'description' => 'The score',
+    //         'type' => 'integer',
+    //         'value' => 8,
+    //     ],
+    //     'visible' => [
+    //         'description' => 'The visible flag',
+    //         'type' => 'boolean',
+    //         'value' => true,
+    //     ],
+    //     'status' => [
+    //         'description' => 'The status',
+    //         'enum' => ['draft', 'ready', 'done'],
+    //         'type' => 'string',
+    //         'value' => 'draft',
+    //     ],
+    // ],
 ];

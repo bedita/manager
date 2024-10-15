@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-09-25 14:27:54 \n"
+"POT-Creation-Date: 2024-10-01 11:08:05 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1323,14 +1323,26 @@ msgstr "Interrompi"
 msgid "Cancel"
 msgstr "Annulla"
 
+msgid "Canonical"
+msgstr "Canonica"
+
 msgid "In relation with"
 msgstr "In relazione con"
 
-msgid "Priority"
-msgstr "Priorità"
+msgid "Menu"
+msgstr "Menù"
 
 msgid "Relation parameters"
 msgstr "Parametri della relazione"
+
+msgid "(empty)"
+msgstr "(vuoto)"
+
+msgid "(not available)"
+msgstr "(non disponibile)"
+
+msgid "Priority"
+msgstr "Priorità"
 
 msgid "Mail to"
 msgstr "Invia mail a"
@@ -1378,9 +1390,6 @@ msgstr "Data di inizio"
 msgid "User"
 msgstr "Utente"
 
-msgid "Canonical"
-msgstr "Canonica"
-
 msgid "Loading branches for position"
 msgstr "Caricamento rami per posizione"
 
@@ -1398,9 +1407,6 @@ msgstr "Caricamento posizioni per oggetto"
 
 msgid "Loading root folders"
 msgstr "Caricamento cartelle principali"
-
-msgid "Menu"
-msgstr "Menù"
 
 msgid "page"
 msgstr "pagina"

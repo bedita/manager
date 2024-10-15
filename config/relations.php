@@ -6,7 +6,6 @@ return [
      *  - `children` relation linking folders to objects
      */
     'DefaultRelations' => [
-
         'children' => [
             'type' => 'relations',
             'attributes' => [
@@ -14,6 +13,7 @@ return [
                 'inverse_name' => 'children',
                 'label' => 'Folder children',
                 'inverse_label' => 'Folder children',
+                'params' => null,
             ],
             'left' => ['folders'],
             'right' => ['objects'],
