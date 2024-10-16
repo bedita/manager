@@ -36,6 +36,10 @@ export default {
             type: String,
             required: true,
         },
+        defaultField: {
+            type: String,
+            default: 'title',
+        },
         sortFields: {
             type: Array,
             default: () => [{label: t`Title`, value: 'title'}],
@@ -44,10 +48,15 @@ export default {
     data() {
         return {
             direction: 'asc',
-            field: 'title',
+            field: '',
             loading: false,
             msgChangeOrder: t`Sort`,
         };
+    },
+    mounted() {
+        this.$nextTick(() => {
+            this.field = this.defaultField;
+        });
     },
     methods: {
         async changeOrder() {

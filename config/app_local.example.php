@@ -762,4 +762,21 @@ return [
     //         'value' => 'draft',
     //     ],
     // ],
+
+    /**
+     * Relations sort fields.
+     * Define sortable fields per relation.
+     */
+    // 'RelationsSortFields' => [
+    //     'composed_by' => [
+    //         ['label' => 'Short title', 'value' => 'short_title'],
+    //         ['label' => 'Title', 'value' => 'title'],
+    //     ],
+    //     'composed_by_default' => 'short_title',
+    //     'part_of' => [
+    //         ['label' => 'Short title', 'value' => 'short_title'],
+    //         ['label' => 'Title', 'value' => 'title'],
+    //     ],
+    //     'part_of_default' => 'short_title',
+    // ],
 ];
