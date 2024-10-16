@@ -67,6 +67,17 @@
                 {% else %}
                     {{ Form.hidden('children_order', {'id': 'children-order'})|raw }}
                 {% endif %}
+            {% else %}
+                {% if System.isBEditaApiVersionGte('5.31.0') and Perms.canSave() and not readonly %}
+                <sort-related
+                    :object-id="{{ mainObject.id|json_encode }}"
+                    :object-type="{{ mainObject.type|json_encode }}"
+                    :relation-name="{{ relationName|json_encode }}"
+                    @reload-related="reloadObjects"
+                    v-if="objects?.length > 1"
+                >
+                </sort-related>
+                {% endif %}
             {% endif %}
 
             {% set dragAndDrop = relationName != 'children' or (relationName == 'children' and mainObject.attributes.children_order in [null, 'position', '-position']) %}

@@ -1,0 +1,87 @@
+<template>
+    <div class="mb-05">
+        <select v-model="field">
+            <option v-for="item in sortFields" :value="item.value" :key="item.value">{{ item.label }}</option>
+        </select>
+        <select v-model="direction">
+            <option value="asc">↑</option>
+            <option value="desc">↓</option>
+        </select>
+        <span v-if="loading" class="is-loading-spinner"></span>
+        <button
+            class="button button-primary"
+            @click.prevent="changeOrder()"
+            v-else
+        >
+            <app-icon icon="carbon:save"></app-icon>
+            <span class="ml-05">{{ msgChangeOrder }}</span>
+        </button>
+    </div>
+</template>
+<script>
+import { t } from 'ttag';
+
+export default {
+    name: 'SortRelated',
+    props: {
+        objectId: {
+            type: String,
+            required: true,
+        },
+        objectType: {
+            type: String,
+            required: true,
+        },
+        relationName: {
+            type: String,
+            required: true,
+        },
+        sortFields: {
+            type: Array,
+            default: () => [{label: t`Title`, value: 'title'}],
+        },
+    },
+    data() {
+        return {
+            direction: 'asc',
+            field: 'title',
+            loading: false,
+            msgChangeOrder: t`Sort`,
+        };
+    },
+    methods: {
+        async changeOrder() {
+            try {
+                this.loading = true;
+                const url = `${BEDITA.base}/api/${this.objectType}/${this.objectId}/relationships/${this.relationName}/sort`;
+                const payload = {
+                    meta: {
+                        field: this.field,
+                        direction: this.direction,
+                    }
+                };
+                const options = {
+                    method: 'PATCH',
+                    credentials: 'same-origin',
+                    headers: {
+                        'accept': 'application/json',
+                        'content-type': 'application/json',
+                        'X-CSRF-Token': BEDITA.csrfToken,
+                    },
+                    body: JSON.stringify(payload),
+                };
+                const response = await fetch(url, options);
+                if (response.status === 200) {
+                    this.$emit('reload-related', true);
+                } else if (response.error) {
+                    BEDITA.showError(response.error);
+                }
+            } catch (error) {
+                BEDITA.showError(error);
+            } finally {
+                this.loading = false;
+            }
+        },
+    },
+};
+</script>
