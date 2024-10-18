@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-10-15 07:31:20 \n"
+"POT-Creation-Date: 2024-10-18 12:35:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -351,6 +351,9 @@ msgstr "Non consentito"
 msgid "Forgot your password?"
 msgstr "Hai dimenticato la password?"
 
+msgid "Form data has been modified. Save it to persist the changes"
+msgstr "Dati del form modificati. Salva per mantenere le modifiche"
+
 msgid "Format choosen is not available"
 msgstr "Il formato selezionato non è disponibile"
 
@@ -415,7 +418,8 @@ msgid "Invalid data"
 msgstr "Dati non validi"
 
 msgid "Invalid numeric uname. Change it to a valid string"
-msgstr "Nome univoco numerico non è valido. Cambialo in una stringa non numerica"
+msgstr ""
+"Nome univoco numerico non è valido. Cambialo in una stringa non numerica"
 
 msgid "Invalid username or password"
 msgstr "Username o password non validi"

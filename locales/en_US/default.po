@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-10-15 07:31:20 \n"
+"POT-Creation-Date: 2024-10-18 12:35:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -347,6 +347,9 @@ msgid "Forbidden"
 msgstr ""
 
 msgid "Forgot your password?"
+msgstr ""
+
+msgid "Form data has been modified. Save it to persist the changes"
 msgstr ""
 
 msgid "Format choosen is not available"
