@@ -72,7 +72,7 @@
             {% set dragAndDrop = relationName != 'children' or (relationName == 'children' and mainObject.attributes.children_order in [null, 'position', '-position']) %}
             {# RELATED OBJECTS #}
             <div class="ml-05 mb-1" v-if="loading">{{ __('Loading ...') }}</div>
-            <div class="ml-05 mb-1" v-if="!loading && objects.length === 0">{{ __('No items found') }}</div>
+            <div class="ml-05 mb-1" v-if="!loading && objects.length === 0" v-if="addedRelations.length == 0">{{ __('No items found') }}</div>
             <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
                 <div :data-list="dataList" class="columns" {%- if dragAndDrop %}droppable sortable{%- endif %}>
                     <div
@@ -105,10 +105,15 @@
                     {% endif %}
                 </div>
             </div>
-
         </div>
 
         {% if Perms.canSave() and not readonly %}
+        <div v-if="changedData">
+            <p class="is-expanded tag mt-1">
+                <app-icon icon="carbon:filter"></app-icon>
+                <span class="ml-05">{{ __('Form data has been modified. Save it to persist the changes') }}</span>
+            </p>
+        </div>
         <div class="mt-5">
             {# DROP FILES #}
             {% if uploadableNum %}
@@ -126,17 +131,47 @@
                     <span class="ml-05">{{ __('cancel') }}</span>
                 </button>
 
-                <button v-else
-                    @click.prevent.stop="addRelatedObjects({
-                        object: {{object|json_encode}},
-                        relationName: relationName,
-                        relationLabel: relationLabel,
-                        alreadyInView: alreadyInView,
-                        relationTypes: relationTypes,
-                    })">
+                <template v-else>
+                    <button
+                        class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto"
+                        :class="{'is-loading-spinner': resettingRelated}"
+                        :disabled="!changedData"
+                        @click.prevent.stop="resetObjects"
+                        v-if="relationName != 'children'"
+                    >
+                        <app-icon icon="carbon:filter-reset"></app-icon>
+                        <span class="ml-05">{{ __('Reset') }}</span>
+                    </button>
+                    <button
+                        class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto"
+                        :class="{'is-loading-spinner': savingRelated}"
+                        :disabled="!changedData"
+                        @click.prevent.stop="saveRelated({
+                            object: {{object|json_encode}},
+                            relationName: relationName,
+                            relationLabel: relationLabel,
+                            alreadyInView: alreadyInView,
+                            relationTypes: relationTypes,
+                        })"
+                        v-if="relationName != 'children'"
+                    >
+                        <app-icon icon="carbon:save"></app-icon>
+                        <span class="ml-05">{{ __('Save') }}</span>
+                    </button>
+
+                    <button
+                        class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto"
+                        @click.prevent.stop="addRelatedObjects({
+                            object: {{object|json_encode}},
+                            relationName: relationName,
+                            relationLabel: relationLabel,
+                            alreadyInView: alreadyInView,
+                            relationTypes: relationTypes,
+                        })">
                         <app-icon icon="carbon:add"></app-icon>
                         <span class="ml-05">{{ __('add objects') }}</span>
                     </button>
+                </template>
             </div>
         </div>
         {% endif %} {# Perms #}

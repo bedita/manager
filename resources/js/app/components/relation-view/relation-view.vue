@@ -80,6 +80,8 @@ export default {
         return {
             method: 'related',      // define AppController method to be used
             loading: false,
+            resettingRelated: false,
+            savingRelated: false,
             objectsLoaded: false,       // objects loaded flag
             positions: {},              // used in children relations
             priorities: {},              // used in children relations
@@ -96,6 +98,8 @@ export default {
             activeFilter: {},           // current active filter for objects list
 
             exportFormat: 'csv',        // default csv
+
+            originalData: '',           // original data for comparison
         }
     },
 
@@ -105,6 +109,14 @@ export default {
             let a = this.addedRelations.map(o => o.id);
             let b = this.objects.map(o => o.id);
             return a.concat(b);
+        },
+
+        changedData() {
+            const originalData = this.originalData || JSON.stringify([]);
+            const changedIds = originalData !== JSON.stringify(this.alreadyInView || []);
+            const changedAny = (this.addedRelations.length + this.modifiedRelations.length + this.removedRelated.length) > 0;
+
+            return changedIds || changedAny;
         },
 
         /**
@@ -208,6 +220,8 @@ export default {
                 PanelEvents.send('relations-view:add-already-in-view', null, object );
             }
         });
+
+        this.originalData = JSON.stringify(this.objects.map(o => o.id));
 
         // enable related objects drop
         this.$on('sort-end', this.onSort);
@@ -519,24 +533,34 @@ export default {
          *
          * @return {Array} objs objects retrieved
          */
-        async loadRelatedObjects(filter = {}, force = false) {
+        async loadRelatedObjects(filter = {}, force = false, reset = false) {
             if (this.preCount === 0 || (this.objectsLoaded && !force)) {
                 return [];
             }
             this.loading = true;
+            if (reset) {
+                this.resettingRelated = true;
+            }
 
             return this.getPaginatedObjects(true, filter)
                 .then((objs) => {
                     this.$emit('count', this.pagination.count);
                     this.loading = false;
                     this.objectsLoaded = true;
+                    this.originalData = JSON.stringify(this.objects.map(o => o.id));
+
                     return objs;
                 })
                 .catch((error) => {
                     // code 20 is user aborted fetch which is ok
                     if (error.code !== 20) {
-                        this.loading = false;
                         console.error(error);
+                    }
+                })
+                .finally(() => {
+                    this.loading = false;
+                    if (reset) {
+                        this.resettingRelated = false;
                     }
                 });
         },
@@ -549,6 +573,11 @@ export default {
         reloadObjects() {
             this.activeFilter = {};
             return this.loadRelatedObjects({}, true);
+        },
+
+        resetObjects() {
+            this.activeFilter = {};
+            return this.loadRelatedObjects({}, true, true);
         },
 
         /**
@@ -626,6 +655,59 @@ export default {
                     isChanged,
                 }
             }));
+        },
+
+        async saveRelated(data) {
+            try {
+                this.savingRelated = true;
+                const relationName = data.relationName;
+                const objectType = data.object.type;
+                const url = `${BEDITA.base}/api/${objectType}/${data.object.id}/relationships/${relationName}`;
+                if (this.removedRelationsData.length > 0) {
+                    // save removed relations
+                    const response = await fetch(url, {
+                        method: 'DELETE',
+                        credentials: 'same-origin',
+                        headers: {
+                            'accept': 'application/json',
+                            'content-type': 'application/json',
+                            'X-CSRF-Token': BEDITA.csrfToken,
+                        },
+                        body: JSON.stringify({ data: JSON.parse(this.removedRelationsData) }),
+                    });
+                    if (response?.error) {
+                        BEDITA.error(response.error);
+                    } else {
+                        this.removedRelated = [];
+                        this.prepareRelationsToRemove(this.removedRelated);
+                    }
+                }
+                if (this.addedRelationsData.length > 0) {
+                    // save added relations
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                            'accept': 'application/json',
+                            'content-type': 'application/json',
+                            'X-CSRF-Token': BEDITA.csrfToken,
+                        },
+                        body: JSON.stringify({ data: JSON.parse(this.addedRelationsData) }),
+                    });
+                    if (response.error) {
+                        BEDITA.error(response.error);
+                    } else {
+                        this.addedRelations = [];
+                        this.modifiedRelations = [];
+                        this.prepareRelationsToSave();
+                    }
+                }
+                await this.reloadObjects();
+            } catch (error) {
+                BEDITA.error(error);
+            } finally {
+                this.savingRelated = false;
+            }
         },
 
         /**
