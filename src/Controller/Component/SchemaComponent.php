@@ -321,8 +321,12 @@ class SchemaComponent extends Component
             ];
         }
         Configure::load('relations');
+        $schema = $relations + Configure::read('DefaultRelations');
+        if (Configure::read('ChildrenParams')) {
+            $schema['children']['attributes']['params'] = Configure::read('ChildrenParams');
+        }
 
-        return $relations + Configure::read('DefaultRelations');
+        return $schema;
     }
 
     /**

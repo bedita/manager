@@ -286,6 +286,16 @@ class ModulesController extends AppController
         unset($requestData['_api']);
 
         try {
+            $uname = Hash::get($requestData, 'uname');
+            if (!empty($uname) && is_numeric($uname)) {
+                $this->set(['error' => __('Invalid numeric uname. Change it to a valid string')]);
+                $this->setSerialize(['error']);
+
+                // set session data to recover form
+                $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
+
+                return;
+            }
             $id = Hash::get($requestData, 'id');
             // skip save if no data changed
             if (empty($relatedData) && count($requestData) === 1 && !empty($id)) {
