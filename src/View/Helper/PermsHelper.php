@@ -22,7 +22,6 @@ use Cake\View\Helper;
  */
 class PermsHelper extends Helper
 {
-
     /**
      * API methods allowed in current module
      *
