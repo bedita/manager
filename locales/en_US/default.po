@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-10-21 11:05:14 \n"
+"POT-Creation-Date: 2024-10-21 13:12:14 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -674,9 +674,6 @@ msgid "Preferences and Tools"
 msgstr ""
 
 msgid "Priority"
-msgstr ""
-
-msgid "Privileges"
 msgstr ""
 
 msgid "Profiles"
