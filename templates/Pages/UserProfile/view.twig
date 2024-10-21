@@ -40,17 +40,16 @@
                 {% endfor %}
                 <section class="fieldset">
                     <header>
-                        <h2>{{ __('Privileges') }}</h2>
+                        <h2>{{ __('Roles') }}</h2>
                     </header>
                     <div class="tab-container">
                         <div>
-                            <span>{{ __('Roles') }}</span>:
                             {% for role in user.roles %}
                             <span class="tag is-black mx-05">
                                 {{ role }}
                             </span>
                             {% endfor %}
-                            <span>{{ __('Priority') }}</span>: {{ user.rolePriority|json_encode|raw }}
+                            <span>({{ __('Priority') }}: {{ Perms.userRolePriority()|json_encode|raw }})</span>
                         </div>
                     </div>
                 </section>

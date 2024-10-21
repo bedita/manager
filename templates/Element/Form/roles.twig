@@ -39,7 +39,7 @@
                         :related-objects="objects"
                         :groups="{{ rolesGroups|length == 0 ? '{}' : rolesGroups|json_encode }}"
                         :user-roles="{{ user.roles|default([])|json_encode }}"
-                        :user-role-priority="{{ user.rolePriority|default(500)|json_encode }}"
+                        :user-role-priority="{{ Perms.userRolePriority()|json_encode }}"
                         @remove-relations="setRemovedRelated">
                     </roles-list-view>
                     {% do Form.unlockField('relations.' ~ relationName ~ '.addRelated') %}
