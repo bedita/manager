@@ -20,9 +20,9 @@
 import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
 
 export default {
-    name: 'roles-list-view',
-
     extends: RelationshipsView,
+
+    name: 'RolesListView',
 
     props: {
         groups: {
@@ -32,10 +32,6 @@ export default {
         relatedObjects: {
             type: Array,
             default: () => [],
-        },
-        userRolePriority: {
-            type: Number,
-            default: () => 500,
         },
         userRoles: {
             type: Array,
@@ -47,7 +43,9 @@ export default {
         return {
             method: 'resources',
             objectsByGroups: {},
+            prioritiesMap: {},
             removedRelations: [],
+            userRolePriority: 500,
         }
     },
 
@@ -68,8 +66,12 @@ export default {
                 for (let roleName of groups[groupName]) {
                     const role = this.objects.filter((v) => v.attributes.name === roleName)[0];
                     this.objectsByGroups[groupName].push(role);
+                    this.prioritiesMap[role.attributes.name] = role.meta.priority;
                 }
             }
+            this.userRolePriority = this.userRoles.reduce((acc, role) => {
+                return Math.min(acc, this.prioritiesMap[role]);
+            }, 500);
             this.objectsByGroups = {...this.objectsByGroups};
         });
     },
