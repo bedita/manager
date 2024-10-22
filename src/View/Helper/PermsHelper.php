@@ -12,7 +12,6 @@
  */
 namespace App\View\Helper;
 
-use App\Utility\Schema;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -214,26 +213,6 @@ class PermsHelper extends Helper
         $identity = $this->_View->get('user');
 
         return (array)$identity->get('roles');
-    }
-
-    /**
-     * Return the minimum priority of the user roles.
-     * Minimum priority is the priority of the role with the lowest priority (max privilege).
-     * Default value is 500.
-     *
-     * @return int
-     */
-    public function userRolePriority(): int
-    {
-        $userRoles = $this->userRoles();
-        $roles = Schema::roles();
-        $priority = null;
-        foreach ($userRoles as $role) {
-            $rolePriority = $roles[$role];
-            $priority = $priority != null && $rolePriority != null ? min($rolePriority, $priority) : $rolePriority;
-        }
-
-        return $priority ?? 500;
     }
 
     /**

@@ -13,10 +13,6 @@
 
 namespace App\Utility;
 
-use BEdita\SDK\BEditaClientException;
-use BEdita\WebTools\ApiClientProvider;
-use Cake\Cache\Cache;
-use Cake\Core\Configure;
 use Cake\Utility\Hash;
 
 /**
@@ -24,13 +20,6 @@ use Cake\Utility\Hash;
  */
 class Schema
 {
-    /**
-     * Cache config name for roles.
-     *
-     * @var string
-     */
-    public const CACHE_CONFIG = '_roles_';
-
     /**
      * Return unique alphabetically ordered right types from schema $schema
      *
@@ -47,39 +36,5 @@ class Schema
         sort($types);
 
         return $types;
-    }
-
-    /**
-     * Fetch roles from API.
-     * If roles are already in cache, return them.
-     *
-     * @return array
-     */
-    public static function roles(): array
-    {
-        $roles = Configure::read('Roles');
-        if (!empty($roles)) {
-            return $roles;
-        }
-        try {
-            $roles = Cache::remember(
-                CacheTools::cacheKey('roles'),
-                function () {
-                    $response = ApiClientProvider::getApiClient()->get('/roles', ['page_size' => 100]);
-                    $data = (array)Hash::get($response, 'data', []);
-                    $roles = Hash::combine($data, '{n}.attributes.name', '{n}.meta.priority');
-
-                    return $roles;
-                },
-                self::CACHE_CONFIG
-            );
-            Configure::write('Roles', $roles);
-        } catch (BEditaClientException $e) {
-            // Something bad happened
-
-            return [];
-        }
-
-        return $roles;
     }
 }

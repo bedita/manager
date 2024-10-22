@@ -17,7 +17,6 @@ use App\View\Helper\PermsHelper;
 use Authentication\Identity;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
-use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
@@ -486,24 +485,5 @@ class PermsHelperTest extends TestCase
         static::assertTrue($actual);
 
         ApiClientProvider::setApiClient($safeApiClient);
-    }
-
-    /**
-     * Test `userRolePriority` method
-     *
-     * @return void
-     * @covers ::userRolePriority()
-     */
-    public function testUserRolePriority(): void
-    {
-        $this->Perms->getView()->set('user', new Identity(['roles' => ['a', 'b', 'c']]));
-        Configure::write('Roles', [
-            'a' => 100,
-            'b' => 50,
-            'c' => 200,
-        ]);
-        $expected = 50;
-        $actual = $this->Perms->userRolePriority();
-        static::assertSame($expected, $actual);
     }
 }

@@ -141,19 +141,6 @@ return [
         ],
 
         /**
-         * Configure the cache used for project configuration caching.
-         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
-         */
-        '_roles_' => [
-            'className' => FileEngine::class,
-            'prefix' => '_roles_',
-            'path' => CACHE . 'roles/',
-            'serialize' => true,
-            'duration' => '+1 day',
-            'url' => env('CACHE_ROLES_URL', null),
-        ],
-
-        /**
          * Configure the cache for model and datasource caches. This cache
          * configuration is used to store schema descriptions, and table listings
          * in connections.

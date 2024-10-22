@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-10-21 13:12:14 \n"
+"POT-Creation-Date: 2024-10-22 08:25:07 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -678,9 +678,6 @@ msgstr "Posizione ↓"
 msgid "Preferences and Tools"
 msgstr "Preferenze e Strumenti"
 
-msgid "Priority"
-msgstr "Priorità"
-
 msgid "Profiles"
 msgstr "Profili"
 
@@ -1347,6 +1344,9 @@ msgstr "(vuoto)"
 
 msgid "(not available)"
 msgstr "(non disponibile)"
+
+msgid "Priority"
+msgstr "Priorità"
 
 msgid "Mail to"
 msgstr "Invia mail a"
