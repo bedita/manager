@@ -38,6 +38,20 @@
                         </section>
                     {% endif %}
                 {% endfor %}
+                <section class="fieldset">
+                    <header>
+                        <h2>{{ __('Roles') }}</h2>
+                    </header>
+                    <div class="tab-container">
+                        <div>
+                            {% for role in user.roles %}
+                            <span class="tag is-black mx-05">
+                                {{ role }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
             </div>
 
             <div class="side-view-column">
