@@ -77,21 +77,7 @@ export default {
             loading: false,
             loadingMessage: '',
             monthChoice: '-',
-            monthChoices: [
-                { label: t`All months`, value: '-' },
-                { label: t`January`, value: 'january' },
-                { label: t`February`, value: 'february' },
-                { label: t`March`, value: 'march' },
-                { label: t`April`, value: 'april' },
-                { label: t`May`, value: 'may' },
-                { label: t`June`, value: 'june' },
-                { label: t`July`, value: 'july' },
-                { label: t`August`, value: 'august' },
-                { label: t`September`, value: 'september' },
-                { label: t`October`, value: 'october' },
-                { label: t`November`, value: 'november' },
-                { label: t`December`, value: 'december' },
-            ],
+            monthChoices: [],
             msgTitle: t`Contents creation`,
             objectTypesChoices: [],
             stats: null,
@@ -120,6 +106,7 @@ export default {
             this.yearChoices = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
             this.monthChoice = new Date().toLocaleString('en', { month: 'long' }).toLowerCase();
             this.weekChoice = Math.round(new Date().getDate() / 7) + 1;
+            this.resetMonthChoices();
             this.resetWeekChoices();
             await this.updateChartData();
         });
@@ -135,6 +122,7 @@ export default {
             this.dayChoice = '-';
             this.weekChoice = '-';
             this.resetWeekChoices();
+            this.resetMonthsPerYear();
             this.updateChartData();
         },
 
@@ -151,6 +139,8 @@ export default {
             this.dayChoice = '-';
             this.weekChoice = '-';
             this.monthChoice = '-';
+            this.resetMonthChoices();
+            this.resetMonthsPerYear();
             this.updateChartData();
         },
 
@@ -209,6 +199,40 @@ export default {
             const labels = this.labels[this.interval];
 
             return { labels, datasets };
+        },
+
+        resetMonthChoices() {
+            this.monthChoices = [
+                { label: t`All months`, value: '-' },
+                { label: t`January`, value: 'january' },
+                { label: t`February`, value: 'february' },
+                { label: t`March`, value: 'march' },
+                { label: t`April`, value: 'april' },
+                { label: t`May`, value: 'may' },
+                { label: t`June`, value: 'june' },
+                { label: t`July`, value: 'july' },
+                { label: t`August`, value: 'august' },
+                { label: t`September`, value: 'september' },
+                { label: t`October`, value: 'october' },
+                { label: t`November`, value: 'november' },
+                { label: t`December`, value: 'december' },
+            ];
+            const today = new Date();
+            if (this.yearChoice === today.getFullYear()) {
+                const month = today.toLocaleString('en', { month: 'long' }).toLowerCase();
+                const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+                for (let i = months.length; i > 0; i--) {
+                    if (months[i-1] === month) {
+                        break;
+                    }
+                    this.monthChoices.splice(i, 1);
+                }
+            }
+        },
+
+        resetMonthsPerYear() {
+            const choices = this.monthChoices.filter((item) => item.value !== '-');
+            this.labels.year = choices.map((item) => item.label);
         },
 
         resetWeekChoices() {
