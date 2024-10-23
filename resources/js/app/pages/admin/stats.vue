@@ -16,7 +16,7 @@
             <option v-for="item in timeIntervalChoices" :value="item.value">{{ item.label }}</option>
         </select>
 
-        <div class="is-loading-spinner mt-05" v-if="loading"></div>
+        <div class="is-loading-spinner mt-05" v-if="loading">{{ loadingMessage }}</div>
 
         <BarChart
             :chart-data="stats"
@@ -50,6 +50,7 @@ export default {
             },
             loaded: false,
             loading: false,
+            loadingMessage: '',
             stats: null,
             filterType: '-',
             objectTypesChoices: [],
@@ -122,6 +123,7 @@ export default {
         async dataset(objectType, backgroundColor) {
             let data = [];
             try {
+                this.loadingMessage = t`Loading stats data for` + ' ' + objectType;
                 const options = {
                     method: 'GET',
                     credentials: 'same-origin',
