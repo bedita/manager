@@ -40,7 +40,7 @@ class StatsController extends ModelBaseController
      */
     public function index(): ?Response
     {
-        if ($this->getRequest()->getQuery('interval') !== null) {
+        if ($this->getRequest()->getQuery('year') !== null) {
             return $this->fetch();
         }
         parent::index();
@@ -72,14 +72,15 @@ class StatsController extends ModelBaseController
     protected function fetch(): ?Response
     {
         $objectType = $this->getRequest()->getQuery('objectType');
-        $interval = $this->getRequest()->getQuery('interval');
-        $sub = $this->getRequest()->getQuery('sub');
         $year = $this->getRequest()->getQuery('year');
         $month = $this->getRequest()->getQuery('month');
+        $week = $this->getRequest()->getQuery('week');
+        $day = $this->getRequest()->getQuery('day');
+        $params = compact('year', 'month', 'week', 'day');
         $data = [];
-        $intervals = $this->intervals($interval, $sub, $year, $month);
+        $intervals = $this->intervals($params);
         foreach ($intervals as $item) {
-            $data[] = $this->fetchCount($objectType, $item['start'], $item['end'], $sub);
+            $data[] = $this->fetchCount($objectType, $item['start'], $item['end']);
         }
         $this->viewBuilder()->setClassName('Json');
         $this->set('data', $data);
@@ -94,17 +95,15 @@ class StatsController extends ModelBaseController
      * @param string $objectType Object type name
      * @param string $from Start date
      * @param string $to End date
-     * @param string|null $sub Subinterval
      * @return int
      */
-    protected function fetchCount(string $objectType, string $from, string $to, string $sub): int
+    protected function fetchCount(string $objectType, string $from, string $to): int
     {
         // if from is in the future, return 0
         if (new FrozenDate($from) > new FrozenDate('today')) {
             return 0;
         }
-        $subval = $sub === '-' ? 'nosub' : $sub;
-        $key = CacheTools::cacheKey(sprintf('stats-%s-%s-%s-%s', $objectType, $from, $to, $subval));
+        $key = CacheTools::cacheKey(sprintf('stats-%s-%s-%s', $objectType, $from, $to));
         try {
             $count = Cache::remember(
                 $key,
@@ -137,19 +136,29 @@ class StatsController extends ModelBaseController
     /**
      * Get intervals for a specific interval
      *
-     * @param string $interval Interval name
-     * @param string $subinterval Subinterval name
-     * @param string|null $year Year
-     * @param string|null $month Month
+     * @param array $params Interval parameters
      * @return array
      */
-    protected function intervals(string $interval, string $subinterval, ?string $year, ?string $month): array
+    protected function intervals(array $params): array
     {
-        if ($interval === 'week') {
-            $exp = $subinterval === '-' ? 'last sunday' : sprintf('last %s', $subinterval);
-            $start = new FrozenDate($exp);
-            $exp = $subinterval === '-' ? 'today' : sprintf('last %s', $subinterval);
-            $end = new FrozenDate($exp);
+        $year = Hash::get($params, 'year');
+        $month = Hash::get($params, 'month');
+        $week = Hash::get($params, 'week');
+        $day = Hash::get($params, 'day');
+        // case day: return interval with just one day
+        if ($day !== null) {
+            $start = new FrozenDate($day);
+            $end = $start->addDays(1);
+
+            return [['start' => $start->format('Y-m-d'), 'end' => $end->format('Y-m-d')]];
+        }
+        // case week: return interval with all days of the week, ~ 7 days
+        if ($week !== null) {
+            $firstWeek = intval($week);
+            $lastWeek = intval($week);
+            $start = new FrozenDate(sprintf('first day of %s', $month));
+            $start = $start->addWeeks($firstWeek - 1);
+            $end = $start->addWeeks(1)->subDays(1);
             $intervals = [];
             while ($start->lessThanOrEquals($end)) {
                 $next = $start->addDays(1);
@@ -159,38 +168,37 @@ class StatsController extends ModelBaseController
 
             return $intervals;
         }
-        if ($interval === 'month') {
-            $week = $subinterval === '-' ? null : (int)$subinterval;
-            $firstWeek = $week ?? 1;
-            $lastWeek = $week ?? 4;
-            $start = new FrozenDate('first day of this month');
+        // case month: return interval with 4 weeks
+        if ($month !== null) {
+            $firstWeek = $week ? intval($week) : 1;
+            $defaultLastWeek = $month === 'february' ? 4 : 5;
+            $lastWeek = $week ? intval($week) : $defaultLastWeek;
+            $start = new FrozenDate(sprintf('first day of %s', $month));
             $start = $start->addWeeks($firstWeek - 1);
             $end = $start->addWeeks($lastWeek)->subDays(1);
             $intervals = [];
             while ($start->lessThanOrEquals($end)) {
                 $next = $start->addWeeks(1);
+                if ($next->format('m') !== $start->format('m')) {
+                    $end = new FrozenDate(sprintf('last day of %s', $month));
+                    $next = $end->addDays(1);
+                }
                 $intervals[] = ['start' => $start->format('Y-m-d'), 'end' => $next->format('Y-m-d')];
                 $start = $next;
             }
 
             return $intervals;
         }
-        if ($interval === 'year') {
-            if ($year === null) {
-                $year = (new FrozenDate())->format('Y');
-            }
-            $firstMonth = $month ?? 'january';
-            $lastMonth = $month ?? 'december';
-            $start = new FrozenDate(sprintf('first day of %s %s', $firstMonth, $year));
-            $end = new FrozenDate(sprintf('last day of %s %s', $lastMonth, $year));
-            $intervals = [];
-            while ($start->lessThanOrEquals($end)) {
-                $next = $start->addMonths(1);
-                $intervals[] = ['start' => $start->format('Y-m-d'), 'end' => $next->format('Y-m-d')];
-                $start = $next;
-            }
-
-            return $intervals;
+        // case year: return interval with 12 months
+        $start = new FrozenDate(sprintf('first day of january %s', $year));
+        $end = new FrozenDate(sprintf('last day of december %s', $year));
+        $intervals = [];
+        while ($start->lessThanOrEquals($end)) {
+            $next = $start->addMonths(1);
+            $intervals[] = ['start' => $start->format('Y-m-d'), 'end' => $next->format('Y-m-d')];
+            $start = $next;
         }
+
+        return $intervals;
     }
 }
