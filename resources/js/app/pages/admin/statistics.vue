@@ -92,16 +92,16 @@ export default {
     async mounted() {
         this.$nextTick(async () => {
             const firstChoice = { '-': { label: t`All object types`, name: '-' } }
-            this.objectTypesChoices = {...firstChoice, ... this.objectTypes};
             // sort object types by label or name
-            this.objectTypesChoices = Object.keys(this.objectTypesChoices).sort((a, b) => {
-                const labelA = this.objectTypesChoices[a].label || this.objectTypesChoices[a].name;
-                const labelB = this.objectTypesChoices[b].label || this.objectTypesChoices[b].name;
+            this.objectTypesChoices = Object.keys(this.objectTypes).sort((a, b) => {
+                const labelA = this.objectTypes[a].label || this.objectTypes[a].name;
+                const labelB = this.objectTypes[b].label || this.objectTypes[b].name;
                 return labelA.localeCompare(labelB);
             }).reduce((obj, key) => {
-                obj[key] = this.objectTypesChoices[key];
+                obj[key] = this.objectTypes[key];
                 return obj;
             }, {});
+            this.objectTypesChoices = {...firstChoice, ... this.objectTypesChoices};
             this.yearChoice = new Date().getFullYear();
             this.yearChoices = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
             this.monthChoice = new Date().toLocaleString('en', { month: 'long' }).toLowerCase();
