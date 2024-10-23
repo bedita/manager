@@ -313,6 +313,8 @@ class PropertiesComponent extends Component
             'Tags',
             'Permissions',
         ];
+        $config = (array)Configure::read('Schema.associations');
+        $fields = array_unique(array_merge($fields, $config));
         $fields = array_unique(array_merge($fields, $value));
         foreach ($fields as $text) {
             $value = $text;

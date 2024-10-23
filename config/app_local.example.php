@@ -762,4 +762,15 @@ return [
     //         'value' => 'draft',
     //     ],
     // ],
+
+    /**
+     * Configuration for "Schema" associations provided by the API instance.
+     *
+     *  An example follows. Note: "author", "summary" etc. are examples, you can define your own parameters. They will be saved in `meta.relation.params`.
+     */
+    // 'Schema' => [
+    //     'associations' => [
+    //         'Captions',
+    //     ],
+    // ],
 ];
