@@ -1,5 +1,5 @@
 <template>
-    <div class="stats">
+    <div class="admin-statistics">
         <h2>{{ msgTitle }}</h2>
         <div>
             <!-- object type -->
@@ -40,7 +40,7 @@
 import { t } from 'ttag';
 
 export default {
-    name: 'AdminStats',
+    name: 'AdminStatistics',
 
     components: {
         BarChart:() => import(/* webpackChunkName: "bar-chart" */'app/components/charts/bar-chart'),
@@ -70,7 +70,7 @@ export default {
             daysOfWeek: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
             interval: 'year',
             labels: {
-                month: [ t`Week 1`, t`Week 2`, t`Week 3`, t`Week 4`, t`Week 5` ],
+                month: [ t`Week` + ' 1', t`Week` + ' 2', t`Week` + ' 3', t`Week` + ' 4', t`Week` + ' 5' ],
                 year: [ t`January`, t`February`, t`March`, t`April`, t`May`, t`June`, t`July`, t`August`, t`September`, t`October`, t`November`, t`December` ],
             },
             loaded: false,
@@ -97,14 +97,7 @@ export default {
             stats: null,
             typeChoice: '-',
             weekChoice: '-',
-            weekChoices: [
-                { label: t`All weeks`, value: '-' },
-                { label: t`Week 1`, value: '1' },
-                { label: t`Week 2`, value: '2' },
-                { label: t`Week 3`, value: '3' },
-                { label: t`Week 4`, value: '4' },
-                { label: t`Week 5`, value: '5' },
-            ],
+            weekChoices: [],
             yearChoice: '-',
             yearChoices: [],
         }
@@ -127,6 +120,7 @@ export default {
             this.yearChoices = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
             this.monthChoice = new Date().toLocaleString('en', { month: 'long' }).toLowerCase();
             this.weekChoice = Math.round(new Date().getDate() / 7) + 1;
+            this.resetWeekChoices();
             await this.updateChartData();
         });
     },
@@ -140,24 +134,7 @@ export default {
         changeMonth() {
             this.dayChoice = '-';
             this.weekChoice = '-';
-            if (this.monthChoice === 'february') {
-                this.weekChoices = [
-                    { label: t`All weeks`, value: '-' },
-                    { label: t`Week 1`, value: '1' },
-                    { label: t`Week 2`, value: '2' },
-                    { label: t`Week 3`, value: '3' },
-                    { label: t`Week 4`, value: '4' },
-                ];
-            } else {
-                this.weekChoices = [
-                    { label: t`All weeks`, value: '-' },
-                    { label: t`Week 1`, value: '1' },
-                    { label: t`Week 2`, value: '2' },
-                    { label: t`Week 3`, value: '3' },
-                    { label: t`Week 4`, value: '4' },
-                    { label: t`Week 5`, value: '5' },
-                ];
-            }
+            this.resetWeekChoices();
             this.updateChartData();
         },
 
@@ -200,7 +177,7 @@ export default {
                 if (this.dayChoice !== '-') {
                     filter+= `&day=${this.dayChoice}`;
                 }
-                const response = await fetch(`${BEDITA.base}/admin/stats?${filter}`, options);
+                const response = await fetch(`${BEDITA.base}/admin/statistics?${filter}`, options);
                 const json = await response.json();
                 data = json.data;
             } catch (error) {
@@ -234,15 +211,34 @@ export default {
             return { labels, datasets };
         },
 
-        rarray(size) {
-            return Array.from({ length: size }, () => this.rnum());
-        },
-
-        rnum() {
-            const min = 0;
-            const max = 10000;
-
-            return Math.floor(Math.random() * (max - min + 1) + min);
+        resetWeekChoices() {
+            if (this.monthChoice === '-') {
+                this.weekChoices = [
+                    { label: t`All weeks`, value: '-' },
+                ];
+                this.labels.month = [ t`Week` + ' 1', t`Week` + ' 2', t`Week` + ' 3', t`Week` + ' 4', t`Week` + ' 5' ];
+                return;
+            }
+            if (this.monthChoice === 'february') {
+                this.weekChoices = [
+                    { label: t`All weeks`, value: '-' },
+                    { label: this.weekLabel('1'), value: '1' },
+                    { label: this.weekLabel('2'), value: '2' },
+                    { label: this.weekLabel('3'), value: '3' },
+                    { label: this.weekLabel('4'), value: '4' },
+                ];
+            } else {
+                this.weekChoices = [
+                    { label: t`All weeks`, value: '-' },
+                    { label: this.weekLabel('1'), value: '1' },
+                    { label: this.weekLabel('2'), value: '2' },
+                    { label: this.weekLabel('3'), value: '3' },
+                    { label: this.weekLabel('4'), value: '4' },
+                    { label: this.weekLabel('5'), value: '5' },
+                ];
+            }
+            const choices = this.weekChoices.filter((item) => item.value !== '-');
+            this.labels.month = choices.map((item) => item.label);
         },
 
         async updateChartData() {
@@ -290,22 +286,38 @@ export default {
                 this.$forceUpdate();
             }
         },
+
+        weekLabel(week) {
+            const day = week * 7 - 6;
+            const month = this.monthChoices.findIndex((item) => item.value === this.monthChoice)-1;
+            const ds = new Date(this.yearChoice, month, day);
+            let next, de;
+            for (let i = 0; i < 7; i++) {
+                next = new Date(this.yearChoice, month, day + i);
+                if (next.toLocaleString('en', { month: 'long' }).toLowerCase() !== this.monthChoice) {
+                    break;
+                }
+                de = next;
+            }
+
+            return t`Week` + ` ${week} [${ds.getDate()} - ${de.getDate()}]`;
+        },
     }
 }
 </script>
 <style>
-div.stats {
+div.admin-statistics {
     border: dotted 1px #ccc;
     padding: 1rem;
     max-width: 1200px;
     background-color: #fff;
     border-radius: 25px;
 }
-div.stats select {
+div.admin-statistics select {
     margin-right: 1rem;
     background-color: #fff;
 }
-div.stats h2, div.stats span.loadingMessage {
+div.admin-statistics h2, div.admin-statistics span.loadingMessage {
     color: #000;
 }
 </style>

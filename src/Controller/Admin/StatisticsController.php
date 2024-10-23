@@ -24,9 +24,9 @@ use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 /**
- * Stats Controller
+ * Statistics Controller
  */
-class StatsController extends ModelBaseController
+class StatisticsController extends ModelBaseController
 {
     /**
      * Resource type currently used
@@ -103,7 +103,7 @@ class StatsController extends ModelBaseController
         if (new FrozenDate($from) > new FrozenDate('today')) {
             return 0;
         }
-        $key = CacheTools::cacheKey(sprintf('stats-%s-%s-%s', $objectType, $from, $to));
+        $key = CacheTools::cacheKey(sprintf('statistics-%s-%s-%s', $objectType, $from, $to));
         try {
             $count = Cache::remember(
                 $key,
@@ -173,14 +173,14 @@ class StatsController extends ModelBaseController
             $firstWeek = $week ? intval($week) : 1;
             $defaultLastWeek = $month === 'february' ? 4 : 5;
             $lastWeek = $week ? intval($week) : $defaultLastWeek;
-            $start = new FrozenDate(sprintf('first day of %s', $month));
+            $start = new FrozenDate(sprintf('first day of %s %s', $month, $year));
             $start = $start->addWeeks($firstWeek - 1);
             $end = $start->addWeeks($lastWeek)->subDays(1);
             $intervals = [];
             while ($start->lessThanOrEquals($end)) {
                 $next = $start->addWeeks(1);
                 if ($next->format('m') !== $start->format('m')) {
-                    $end = new FrozenDate(sprintf('last day of %s', $month));
+                    $end = new FrozenDate(sprintf('last day of %s %s', $month, $year));
                     $next = $end->addDays(1);
                 }
                 $intervals[] = ['start' => $start->format('Y-m-d'), 'end' => $next->format('Y-m-d')];
