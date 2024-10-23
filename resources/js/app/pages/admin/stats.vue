@@ -16,7 +16,7 @@
             <option v-for="item in timeIntervalChoices" :value="item.value">{{ item.label }}</option>
         </select>
 
-        <div class="is-loading-spinner mt-05" v-if="loading">{{ loadingMessage }}</div>
+        <div class="is-loading-spinner mt-05" v-if="loading"><span class="loadingMessage">{{ loadingMessage }}</span></div>
 
         <BarChart
             :chart-data="stats"
@@ -63,13 +63,13 @@ export default {
                     value: 'week',
                     choices: [
                         { label: t`All days`, value: '-' },
+                        { label: t`Sunday`, value: 'sunday' },
                         { label: t`Monday`, value: 'monday' },
                         { label: t`Tuesday`, value: 'tuesday' },
                         { label: t`Wednesday`, value: 'wednesday' },
                         { label: t`Thursday`, value: 'thursday' },
                         { label: t`Friday`, value: 'friday' },
                         { label: t`Saturday`, value: 'saturday' },
-                        { label: t`Sunday`, value: 'sunday' },
                     ],
                 },
                 {
@@ -150,7 +150,6 @@ export default {
                 }
                 const response = await fetch(`${BEDITA.base}/admin/stats?${filter}`, options);
                 const json = await response.json();
-                console.log(filter, json.data);
                 data = json.data;
             } catch (error) {
                 console.error(error);
@@ -168,7 +167,6 @@ export default {
             const keys = this.filterType !== '-' ? [this.filterType] : Object.keys(this.objectTypes);
             for (let i = 0; i < keys.length; i++) {
                 const objectType = keys[i];
-                console.log(objectType);
                 const backgroundColor = this.objectTypes[objectType]?.color || null;
                 const data = await this.dataset(objectType, backgroundColor);
                 datasets.push(data);
@@ -228,5 +226,8 @@ div.stats {
 div.stats select {
     margin-right: 1rem;
     background-color: #fff;
+}
+div.stats span.loadingMessage {
+    color: #000;
 }
 </style>
