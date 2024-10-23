@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="stats">
         <select v-model="filterType" @change="updateChartData">
             <option v-for="item,key in objectTypesChoices" :key="key" :value="key">{{ item.label || item.name }}</option>
         </select>
@@ -44,7 +44,7 @@ export default {
     data() {
         return {
             labels: {
-                week: [ t`Monday`, t`Tuesday`, t`Wednesday`, t`Thursday`, t`Friday`, t`Saturday`, t`Sunday` ],
+                week: [ t`Sunday`, t`Monday`, t`Tuesday`, t`Wednesday`, t`Thursday`, t`Friday`, t`Saturday` ],
                 month: [ t`Week 1`, t`Week 2`, t`Week 3`, t`Week 4` ],
                 year: [ t`January`, t`February`, t`March`, t`April`, t`May`, t`June`, t`July`, t`August`, t`September`, t`October`, t`November`, t`December` ],
             },
@@ -77,10 +77,10 @@ export default {
                     value: 'month',
                     choices: [
                         { label: t`All weeks`, value: '-' },
-                        { label: t`Week 1`, value: 'week1' },
-                        { label: t`Week 2`, value: 'week2' },
-                        { label: t`Week 3`, value: 'week3' },
-                        { label: t`Week 4`, value: 'week4' },
+                        { label: t`Week 1`, value: '1' },
+                        { label: t`Week 2`, value: '2' },
+                        { label: t`Week 3`, value: '3' },
+                        { label: t`Week 4`, value: '4' },
                     ],
                 },
                 {
@@ -112,6 +112,15 @@ export default {
         this.$nextTick(async () => {
             const firstChoice = { '-': { label: t`All object types`, name: '-' } }
             this.objectTypesChoices = {...firstChoice, ... this.objectTypes};
+            // sort object types by label or name
+            this.objectTypesChoices = Object.keys(this.objectTypesChoices).sort((a, b) => {
+                const labelA = this.objectTypesChoices[a].label || this.objectTypesChoices[a].name;
+                const labelB = this.objectTypesChoices[b].label || this.objectTypesChoices[b].name;
+                return labelA.localeCompare(labelB);
+            }).reduce((obj, key) => {
+                obj[key] = this.objectTypesChoices[key];
+                return obj;
+            }, {});
             this.yearNumber = new Date().getFullYear();
             this.yearNumbers = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
             await this.updateChartData();
@@ -135,10 +144,13 @@ export default {
                 let filter = `objectType=${objectType}&interval=${this.timeInterval}&sub=${this.timeIntervalChoice}`;
                 if (this.timeInterval === 'year') {
                     filter += `&year=${this.yearNumber}`;
+                    if (this.timeIntervalChoice !== '-') {
+                        filter += `&month=${this.timeIntervalChoice}`;
+                    }
                 }
                 const response = await fetch(`${BEDITA.base}/admin/stats?${filter}`, options);
                 const json = await response.json();
-                console.log(objectType, this.timeInterval, this.timeIntervalChoice, this.yearNumber, json.data);
+                console.log(filter, json.data);
                 data = json.data;
             } catch (error) {
                 console.error(error);
@@ -154,7 +166,6 @@ export default {
         async datasets() {
             const datasets = [];
             const keys = this.filterType !== '-' ? [this.filterType] : Object.keys(this.objectTypes);
-            console.log(keys);
             for (let i = 0; i < keys.length; i++) {
                 const objectType = keys[i];
                 console.log(objectType);
@@ -188,7 +199,6 @@ export default {
         },
 
         async updateChartData() {
-            console.log('updateChartData', this.filterType, this.timeInterval, this.timeIntervalChoice);
             this.timeIntervalChoices = this.timeIntervals.find(item => item.value === this.timeInterval).choices;
             this.loaded = false;
             this.loading = true;
@@ -207,3 +217,16 @@ export default {
     }
 }
 </script>
+<style>
+div.stats {
+    border: dotted 1px #ccc;
+    padding: 1rem;
+    max-width: 1200px;
+    background-color: #fff;
+    border-radius: 25px;
+}
+div.stats select {
+    margin-right: 1rem;
+    background-color: #fff;
+}
+</style>

@@ -1,1 +1,6 @@
+{{ element('Admin/sidebar') }}
+
+{% do _view.assign('title', __('Administration') ~ ' ' ~ __('Statistics')) %}
+{% do _view.assign('bodyViewClass',  'view-module view-admin') %}
+
 <admin-stats :object-types="{{ resources|json_encode|escape('html_attr') }}"></admin-stats>

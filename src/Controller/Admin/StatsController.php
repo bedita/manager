@@ -75,8 +75,9 @@ class StatsController extends ModelBaseController
         $interval = $this->getRequest()->getQuery('interval');
         $sub = $this->getRequest()->getQuery('sub');
         $year = $this->getRequest()->getQuery('year');
+        $month = $this->getRequest()->getQuery('month');
         $data = [];
-        $intervals = $this->intervals($interval, $sub, $year);
+        $intervals = $this->intervals($interval, $sub, $year, $month);
         foreach ($intervals as $item) {
             $data[] = $this->fetchCount($objectType, $item['start'], $item['end'], $sub);
         }
@@ -139,9 +140,10 @@ class StatsController extends ModelBaseController
      * @param string $interval Interval name
      * @param string $subinterval Subinterval name
      * @param string|null $year Year
+     * @param string|null $month Month
      * @return array
      */
-    protected function intervals(string $interval, string $subinterval, ?string $year): array
+    protected function intervals(string $interval, string $subinterval, ?string $year, ?string $month): array
     {
         if ($interval === 'week') {
             $exp = $subinterval === '-' ? 'last sunday' : sprintf('last %s', $subinterval);
@@ -158,9 +160,12 @@ class StatsController extends ModelBaseController
             return $intervals;
         }
         if ($interval === 'month') {
+            $week = $subinterval === '-' ? null : (int)$subinterval;
+            $firstWeek = $week ?? 1;
+            $lastWeek = $week ?? 4;
             $start = new FrozenDate('first day of this month');
-            $exp = $subinterval === '-' ? 'last day of this month' : sprintf('last day of %s', $subinterval);
-            $end = new FrozenDate($exp);
+            $start = $start->addWeeks($firstWeek - 1);
+            $end = $start->addWeeks($lastWeek)->subDays(1);
             $intervals = [];
             while ($start->lessThanOrEquals($end)) {
                 $next = $start->addWeeks(1);
@@ -174,9 +179,10 @@ class StatsController extends ModelBaseController
             if ($year === null) {
                 $year = (new FrozenDate())->format('Y');
             }
-            $start = new FrozenDate('first day of january ' . $year);
-            $exp = $subinterval === '-' ? 'last day of december ' . $year : sprintf('last day of %s %s', $subinterval, $year);
-            $end = new FrozenDate($exp);
+            $firstMonth = $month ?? 'january';
+            $lastMonth = $month ?? 'december';
+            $start = new FrozenDate(sprintf('first day of %s %s', $firstMonth, $year));
+            $end = new FrozenDate(sprintf('last day of %s %s', $lastMonth, $year));
             $intervals = [];
             while ($start->lessThanOrEquals($end)) {
                 $next = $start->addMonths(1);
