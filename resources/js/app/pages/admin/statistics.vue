@@ -163,7 +163,7 @@ export default {
         async dataset(objectType, label, backgroundColor) {
             let data = [];
             try {
-                this.loadingMessage = t`Loading stats data for` + ' ' + objectType;
+                this.loadingMessage = t`Loading stats data for` + ' ' + label;
                 const options = {
                     method: 'GET',
                     credentials: 'same-origin',
