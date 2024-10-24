@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-10-16 09:12:45 \n"
+"POT-Creation-Date: 2024-10-24 09:29:55 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1437,8 +1437,17 @@ msgstr "Errore nell'eliminazione del tag"
 msgid "Title"
 msgstr "Titolo"
 
+msgid "Ascending"
+msgstr "Ascendente"
+
 msgid "Sort"
 msgstr "Ordina"
+
+msgid "Descending"
+msgstr "Discendente"
+
+msgid "Sort by"
+msgstr "Ordina per"
 
 msgid "Hide"
 msgstr "Nascondi"

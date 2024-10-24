@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2024-10-16 09:12:45 \n"
+"POT-Creation-Date: 2024-10-24 09:29:55 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1417,7 +1417,16 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+msgid "Ascending"
+msgstr ""
+
 msgid "Sort"
+msgstr ""
+
+msgid "Descending"
+msgstr ""
+
+msgid "Sort by"
 msgstr ""
 
 msgid "Hide"

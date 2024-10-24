@@ -1,11 +1,12 @@
 <template>
     <div class="mb-05">
+        <span class="mr-05">{{ msgSortBy }}</span>
         <select v-model="field">
             <option v-for="item in sortFields" :value="item.value" :key="item.value">{{ item.label }}</option>
         </select>
         <select v-model="direction">
-            <option value="asc">↑</option>
-            <option value="desc">↓</option>
+            <option value="asc">{{ msgAsc }}</option>
+            <option value="desc">{{ msgDesc }}</option>
         </select>
         <span v-if="loading" class="is-loading-spinner"></span>
         <button
@@ -14,7 +15,7 @@
             v-else
         >
             <app-icon icon="carbon:save"></app-icon>
-            <span class="ml-05">{{ msgChangeOrder }}</span>
+            <span class="ml-05">{{ msgSave }}</span>
         </button>
     </div>
 </template>
@@ -50,7 +51,10 @@ export default {
             direction: 'asc',
             field: '',
             loading: false,
-            msgChangeOrder: t`Sort`,
+            msgAsc: t`Ascending`,
+            msgSave: t`Save`,
+            msgDesc: t`Descending`,
+            msgSortBy: t`Sort by`,
         };
     },
     mounted() {
