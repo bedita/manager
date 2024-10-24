@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-10-24 09:29:55 \n"
+"POT-Creation-Date: 2024-10-24 09:51:55 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -853,6 +853,9 @@ msgstr ""
 msgid "Thumbnail is not ready"
 msgstr ""
 
+msgid "Title"
+msgstr ""
+
 msgid "Title ↑"
 msgstr ""
 
@@ -1417,19 +1420,19 @@ msgstr ""
 msgid "Error on deleting tag"
 msgstr ""
 
-msgid "Title"
-msgstr ""
-
 msgid "Ascending"
-msgstr ""
-
-msgid "Sort"
 msgstr ""
 
 msgid "Descending"
 msgstr ""
 
 msgid "Sort by"
+msgstr ""
+
+msgid "Related items order will be changed."
+msgstr ""
+
+msgid "Continue?"
 msgstr ""
 
 msgid "Hide"

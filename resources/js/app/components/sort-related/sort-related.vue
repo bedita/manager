@@ -11,7 +11,7 @@
         <span v-if="loading" class="is-loading-spinner"></span>
         <button
             class="button button-primary"
-            @click.prevent="changeOrder()"
+            @click.prevent="save()"
             v-else
         >
             <app-icon icon="carbon:save"></app-icon>
@@ -48,6 +48,7 @@ export default {
     },
     data() {
         return {
+            dialog: null,
             direction: 'asc',
             field: '',
             loading: false,
@@ -94,6 +95,16 @@ export default {
             } finally {
                 this.loading = false;
             }
+        },
+        async save() {
+            this.dialog = BEDITA.confirm(
+                t`Related items order will be changed.`,
+                t`OK`,
+                async () => {
+                    this.dialog?.hide();
+                    await this.changeOrder();
+                }
+            );
         },
     },
 };
