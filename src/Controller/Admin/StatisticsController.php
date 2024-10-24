@@ -168,7 +168,7 @@ class StatisticsController extends ModelBaseController
 
             return $intervals;
         }
-        // case month: return interval with 4 weeks
+        // case month: return interval with 4/5 weeks
         if ($month !== null) {
             $firstWeek = 1;
             $defaultLastWeek = $month === 'february' ? 4 : 5;
