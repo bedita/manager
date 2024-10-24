@@ -170,9 +170,9 @@ class StatisticsController extends ModelBaseController
         }
         // case month: return interval with 4 weeks
         if ($month !== null) {
-            $firstWeek = $week ? intval($week) : 1;
+            $firstWeek = 1;
             $defaultLastWeek = $month === 'february' ? 4 : 5;
-            $lastWeek = $week ? intval($week) : $defaultLastWeek;
+            $lastWeek = $defaultLastWeek;
             $start = new FrozenDate(sprintf('first day of %s %s', $month, $year));
             $start = $start->addWeeks($firstWeek - 1);
             $end = $start->addWeeks($lastWeek)->subDays(1);
