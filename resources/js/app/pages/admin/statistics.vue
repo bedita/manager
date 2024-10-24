@@ -27,12 +27,16 @@
                 <option v-for="item in dayChoices" :value="item.value">{{ item.label }}</option>
             </select>
 
-            <div class="is-loading-spinner mt-05" v-if="loading"><span class="loadingMessage">{{ loadingMessage }}</span></div>
+            <div class="is-loading-spinner mt-05" v-if="loading"><span class="message">{{ loadingMessage }}</span></div>
 
             <BarChart
                 :chart-data="stats"
                 v-if="loaded"
             />
+
+            <div class="mt-15 totals" v-if="loaded">
+                <b>{{ msgTotal }}</b>: <b>{{ totalSum }}</b> | <span class="message" v-for="key in Object.keys(totals)" :key="key">{{ key }}: {{ totals[key] }} | </span>
+            </div>
         </div>
     </div>
 </template>
@@ -47,6 +51,10 @@ export default {
     },
 
     props: {
+        labels: {
+            type: Object,
+            required: true,
+        },
         objectTypes: {
             type: Object,
             required: true,
@@ -55,6 +63,7 @@ export default {
 
     data() {
         return {
+            abstractTypes: ['media', 'objects'],
             basedayChoices: [
                 { label: t`All days`, value: '-' },
                 { label: t`Sunday`, value: 'sunday' },
@@ -68,19 +77,22 @@ export default {
             dayChoice: '-',
             dayChoices: [],
             daysOfWeek: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
-            interval: 'year',
-            labels: {
+            internalLabels:{
                 month: [ t`Week` + ' 1', t`Week` + ' 2', t`Week` + ' 3', t`Week` + ' 4', t`Week` + ' 5' ],
                 year: [ t`January`, t`February`, t`March`, t`April`, t`May`, t`June`, t`July`, t`August`, t`September`, t`October`, t`November`, t`December` ],
             },
+            interval: 'year',
             loaded: false,
             loading: false,
             loadingMessage: '',
             monthChoice: '-',
             monthChoices: [],
             msgTitle: t`Contents creation`,
+            msgTotal: t`All contents`,
             objectTypesChoices: [],
             stats: null,
+            totals: {},
+            totalSum: 0,
             typeChoice: '-',
             weekChoice: '-',
             weekChoices: [],
@@ -91,8 +103,11 @@ export default {
 
     async mounted() {
         this.$nextTick(async () => {
-            const firstChoice = { '-': { label: t`All object types`, name: '-' } }
+            const firstChoice = { '-': { label: t`All object types`, name: '-' } };
             // sort object types by label or name
+            for (const abstractType of this.abstractTypes) {
+                delete this.objectTypes[abstractType];
+            }
             this.objectTypesChoices = Object.keys(this.objectTypes).sort((a, b) => {
                 const labelA = this.objectTypes[a].label || this.objectTypes[a].name;
                 const labelB = this.objectTypes[b].label || this.objectTypes[b].name;
@@ -145,7 +160,7 @@ export default {
         },
 
 
-        async dataset(objectType, backgroundColor) {
+        async dataset(objectType, label, backgroundColor) {
             let data = [];
             try {
                 this.loadingMessage = t`Loading stats data for` + ' ' + objectType;
@@ -177,17 +192,39 @@ export default {
             return {
                 data,
                 backgroundColor,
-                label: objectType,
+                label,
             };
         },
 
         async datasets() {
             const datasets = [];
             const keys = this.typeChoice !== '-' ? [this.typeChoice] : Object.keys(this.objectTypes);
+            const i18nKeys = [];
+            const colors = {};
+            const types = {};
+            this.totals = {};
             for (let i = 0; i < keys.length; i++) {
-                const objectType = keys[i];
-                const backgroundColor = this.objectTypes[objectType]?.color || null;
-                const data = await this.dataset(objectType, backgroundColor);
+                i18nKeys.push(this.labels[keys[i]]);
+                colors[this.labels[keys[i]]] = this.objectTypes[keys[i]]?.color || null;
+                types[this.labels[keys[i]]] = keys[i];
+            }
+            const sortedKeys = i18nKeys.sort((a, b) => {
+                return a.localeCompare(b);
+            });
+            this.totalSum = 0;
+            for (let i = 0; i < sortedKeys.length; i++) {
+                const objectType = types[sortedKeys[i]];
+                const label = sortedKeys[i];
+                const backgroundColor = colors[sortedKeys[i]];
+                const data = await this.dataset(objectType, label, backgroundColor);
+                let total = 0;
+                for (let i = 0; i < data.data.length; i++) {
+                    total = eval(total + data.data[i]);
+                }
+                if (total > 0) {
+                    this.totals[label] = total;
+                    this.totalSum = eval(this.totalSum + total);
+                }
                 datasets.push(data);
             }
 
@@ -196,7 +233,7 @@ export default {
 
         async fetchChartData() {
             const datasets = await this.datasets();
-            const labels = this.labels[this.interval];
+            const labels = this.internalLabels[this.interval];
 
             return { labels, datasets };
         },
@@ -232,7 +269,7 @@ export default {
 
         resetMonthsPerYear() {
             const choices = this.monthChoices.filter((item) => item.value !== '-');
-            this.labels.year = choices.map((item) => item.label);
+            this.internalLabels.year = choices.map((item) => item.label);
         },
 
         resetWeekChoices() {
@@ -240,7 +277,7 @@ export default {
                 this.weekChoices = [
                     { label: t`All weeks`, value: '-' },
                 ];
-                this.labels.month = [ t`Week` + ' 1', t`Week` + ' 2', t`Week` + ' 3', t`Week` + ' 4', t`Week` + ' 5' ];
+                this.internalLabels.month = [ t`Week` + ' 1', t`Week` + ' 2', t`Week` + ' 3', t`Week` + ' 4', t`Week` + ' 5' ];
                 return;
             }
             if (this.monthChoice === 'february') {
@@ -262,21 +299,21 @@ export default {
                 ];
             }
             const choices = this.weekChoices.filter((item) => item.value !== '-');
-            this.labels.month = choices.map((item) => item.label);
+            this.internalLabels.month = choices.map((item) => item.label);
         },
 
         async updateChartData() {
             this.interval = 'year';
             if (this.dayChoice !== '-') {
                 this.interval = 'day';
-                this.labels.day = [this.dayChoices.find((item) => item.value === this.dayChoice).label];
+                this.internalLabels.day = [this.dayChoices.find((item) => item.value === this.dayChoice).label];
             } else if (this.weekChoice !== '-') {
                 this.dayChoice = '-';
                 this.interval = 'week';
                 const firstDayNumber = this.weekChoice * 7 - 6;
                 const month = this.monthChoices.findIndex((item) => item.value === this.monthChoice)-1;
                 let counter = firstDayNumber;
-                this.labels.week = [];
+                this.internalLabels.week = [];
                 let newDayChoices = [];
                 newDayChoices.push({ label: t`All days`, value: '-' });
                 for (let i = 0; i < 7; i++) {
@@ -287,7 +324,7 @@ export default {
                         break;
                     }
                     const ds = this.basedayChoices.find((item) => item.value === this.daysOfWeek[d.getDay()]).label;
-                    this.labels.week.push(`${ds} ${d.getDate()}`);
+                    this.internalLabels.week.push(`${ds} ${d.getDate()}`);
                     newDayChoices.push({ label: `${ds} ${d.getDate()}`, value: `${d.getDate()} ${m} ${this.yearChoice}` });
                 }
                 this.dayChoices = newDayChoices;
@@ -341,7 +378,7 @@ div.admin-statistics select {
     margin-right: 1rem;
     background-color: #fff;
 }
-div.admin-statistics h2, div.admin-statistics span.loadingMessage {
+div.admin-statistics h2, div.admin-statistics .message, div.admin-statistics div.totals {
     color: #000;
 }
 </style>

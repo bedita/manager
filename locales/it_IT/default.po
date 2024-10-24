@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-10-23 15:00:59 \n"
+"POT-Creation-Date: 2024-10-24 08:15:35 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1323,20 +1323,23 @@ msgstr "Novembre"
 msgid "December"
 msgstr "Dicembre"
 
-msgid "All months"
-msgstr "Tutti i mesi"
-
 msgid "Contents creation"
 msgstr "Creazione contenuti"
 
-msgid "All weeks"
-msgstr "Tutte le settimane"
+msgid "All contents"
+msgstr "Tutti i contenuti"
 
 msgid "All object types"
 msgstr "Tutti i tipi di oggetto"
 
 msgid "Loading stats data for"
 msgstr "Caricamento dati statistici per"
+
+msgid "All months"
+msgstr "Tutti i mesi"
+
+msgid "All weeks"
+msgstr "Tutte le settimane"
 
 #, javascript-format
 msgid ""
