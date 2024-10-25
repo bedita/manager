@@ -68,7 +68,7 @@
                     {{ Form.hidden('children_order', {'id': 'children-order'})|raw }}
                 {% endif %}
             {% else %}
-                {% if System.isBEditaApiVersionGte('5.30.0') and Perms.canSave() and not readonly %}
+                {% if System.isBEditaApiVersionGte('5.31.0') and Perms.canSave() and not readonly %}
                 <sort-related
                     :object-id="{{ mainObject.id|json_encode }}"
                     :object-type="{{ mainObject.type|json_encode }}"
