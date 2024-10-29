@@ -101,6 +101,36 @@ class SystemHelperTest extends TestCase
     }
 
     /**
+     * Test `isBEditaApiVersionGte`
+     *
+     * @return void
+     * @covers ::isBEditaApiVersionGte()
+     */
+    public function testIsBEditaApiVersionGte(): void
+    {
+        // no project
+        static::assertFalse($this->System->isBEditaApiVersionGte('4.7.1'));
+
+        // project version 4.5.0
+        $this->System->getView()->set('project', ['version' => '4.5.0']);
+        static::assertTrue($this->System->isBEditaApiVersionGte('4.1.2'));
+        static::assertTrue($this->System->isBEditaApiVersionGte('4.5.0'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('4.5.1'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('4.7.1'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('4.13.0'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('5.12.3'));
+
+        // project version 5.12.4
+        $this->System->getView()->set('project', ['version' => '5.12.4']);
+        static::assertTrue($this->System->isBEditaApiVersionGte('4.7.1'));
+        static::assertTrue($this->System->isBEditaApiVersionGte('4.13.0'));
+        static::assertTrue($this->System->isBEditaApiVersionGte('5.12.3'));
+        static::assertTrue($this->System->isBEditaApiVersionGte('5.12.4'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('5.12.5'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('5.21.1'));
+    }
+
+    /**
      * Test `placeholdersConfig`
      *
      * @return void
