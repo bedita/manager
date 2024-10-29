@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-10-24 08:15:35 \n"
+"POT-Creation-Date: 2024-10-24 09:51:55 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -862,6 +862,9 @@ msgstr "Miniatura non pronta: in lavorazione"
 msgid "Thumbnail is not ready"
 msgstr "La miniatura non è pronta"
 
+msgid "Title"
+msgstr "Titolo"
+
 msgid "Title ↑"
 msgstr "Titolo ↑"
 
@@ -1518,6 +1521,21 @@ msgstr "Errore nel salvataggio del tag"
 msgid "Error on deleting tag"
 msgstr "Errore nell'eliminazione del tag"
 
+msgid "Ascending"
+msgstr "Ascendente"
+
+msgid "Descending"
+msgstr "Discendente"
+
+msgid "Sort by"
+msgstr "Ordina per"
+
+msgid "Related items order will be changed."
+msgstr "L'ordine degli elementi correlati verrà modificato."
+
+msgid "Continue?"
+msgstr "Vuoi continuare?"
+
 msgid "Hide"
 msgstr "Nascondi"
 
@@ -1645,9 +1663,6 @@ msgstr "modifica"
 
 msgid "Pitch"
 msgstr ""
-
-msgid "Title"
-msgstr "Titolo"
 
 msgid "Zoom"
 msgstr ""

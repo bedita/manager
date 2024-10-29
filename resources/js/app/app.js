@@ -90,6 +90,7 @@ const _vueInstance = new Vue({
         ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
         PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
         BarChart:() => import(/* webpackChunkName: "bar-chart" */'app/components/charts/bar-chart'),
+        SortRelated: () => import(/* webpackChunkName: "sort-related" */'app/components/sort-related/sort-related'),
         AppIcon,
     },
 
