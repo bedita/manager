@@ -135,6 +135,20 @@ class SystemHelper extends Helper
     }
 
     /**
+     * Check if BEdita API version is greater or equal to required version.
+     *
+     * @param string $requiredApiVersion Required API version
+     * @return bool
+     */
+    public function isBEditaApiVersionGte(string $requiredApiVersion): bool
+    {
+        $project = (array)$this->getView()->get('project');
+        $apiVersion = Hash::get($project, 'version');
+
+        return empty($apiVersion) ? false : version_compare($apiVersion, $requiredApiVersion) >= 0;
+    }
+
+    /**
      * Placeholders config
      *
      * @return array

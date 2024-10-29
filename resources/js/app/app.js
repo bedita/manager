@@ -88,6 +88,7 @@ const _vueInstance = new Vue({
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
         ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
         PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
+        SortRelated: () => import(/* webpackChunkName: "sort-related" */'app/components/sort-related/sort-related'),
         AppIcon,
     },
 

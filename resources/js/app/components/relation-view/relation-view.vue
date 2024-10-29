@@ -33,6 +33,7 @@ export default {
         LocationsView: () => import(/* webpackChunkName: "locations-view" */'app/components/locations-view/locations-view'),
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
+        SortRelated: () => import(/* webpackChunkName: "sort-related" */'app/components/sort-related/sort-related'),
     },
 
     mixins: [
