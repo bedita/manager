@@ -6,12 +6,16 @@ on:
       - '**/*.php'
       - '.github/workflows/php.yml'
       - 'composer.json'
+      - 'phpcs.xml.dist'
+      - 'phpstan.neon.dist'
       - 'psalm.xml'
   push:
     paths:
       - '**/*.php'
       - '.github/workflows/php.yml'
       - 'composer.json'
+      - 'phpcs.xml.dist'
+      - 'phpstan.neon.dist'
       - 'psalm.xml'
 
 jobs:
