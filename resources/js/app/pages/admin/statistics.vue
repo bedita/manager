@@ -204,9 +204,11 @@ export default {
             const types = {};
             this.totals = {};
             for (let i = 0; i < keys.length; i++) {
-                i18nKeys.push(this.labels[keys[i]]);
-                colors[this.labels[keys[i]]] = this.objectTypes[keys[i]]?.color || null;
-                types[this.labels[keys[i]]] = keys[i];
+                if (this.labels[keys[i]] !== undefined) {
+                    i18nKeys.push(this.labels[keys[i]]);
+                    colors[this.labels[keys[i]]] = this.objectTypes[keys[i]]?.color || null;
+                    types[this.labels[keys[i]]] = keys[i];
+                }
             }
             const sortedKeys = i18nKeys.sort((a, b) => {
                 return a.localeCompare(b);
