@@ -160,4 +160,24 @@ class AdminHelperTest extends TestCase
         $actual = $helper->control('text', $property, $value);
         static::assertEquals($expected, $actual);
     }
+
+    /**
+     * Test `getDictionary` and `setDictionary` methods.
+     *
+     * @return void
+     * @covers ::getDictionary()
+     * @covers ::setDictionary()
+     */
+    public function testDictionary(): void
+    {
+        $view = new View(null, null, null, []);
+        $view->set('modules', [
+            ['name' => 'module1'],
+            ['name' => 'module2', 'label' => 'Module 2'],
+        ]);
+        $helper = new AdminHelper($view);
+        $actual = json_decode($helper->getDictionary());
+        $expected = ['Module1', 'Module 2'];
+        static::assertSame($expected, $actual);
+    }
 }
