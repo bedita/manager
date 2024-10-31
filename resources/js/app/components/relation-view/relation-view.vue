@@ -536,6 +536,11 @@ export default {
          */
         async loadRelatedObjects(filter = {}, force = false, reset = false) {
             if (this.preCount === 0 || (this.objectsLoaded && !force)) {
+                if (reset) {
+                    this.addedRelations = [];
+                    this.modifiedRelations = [];
+                    this.removedRelated = [];
+                }
                 return [];
             }
             this.loading = true;
