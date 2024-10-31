@@ -811,6 +811,9 @@ msgstr ""
 msgid "State Name"
 msgstr ""
 
+msgid "Statistics"
+msgstr ""
+
 msgid "Status"
 msgstr ""
 
@@ -1251,6 +1254,87 @@ msgstr ""
 msgid "Remove item. Are you sure?"
 msgstr ""
 
+msgid "All days"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Monday"
+msgstr ""
+
+msgid "Tuesday"
+msgstr ""
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Thursday"
+msgstr ""
+
+msgid "Friday"
+msgstr ""
+
+msgid "Saturday"
+msgstr ""
+
+msgid "Week"
+msgstr ""
+
+msgid "January"
+msgstr ""
+
+msgid "February"
+msgstr ""
+
+msgid "March"
+msgstr ""
+
+msgid "April"
+msgstr ""
+
+msgid "May"
+msgstr ""
+
+msgid "June"
+msgstr ""
+
+msgid "July"
+msgstr ""
+
+msgid "August"
+msgstr ""
+
+msgid "September"
+msgstr ""
+
+msgid "October"
+msgstr ""
+
+msgid "November"
+msgstr ""
+
+msgid "December"
+msgstr ""
+
+msgid "Contents creation"
+msgstr ""
+
+msgid "All contents"
+msgstr ""
+
+msgid "All object types"
+msgstr ""
+
+msgid "Loading stats data for"
+msgstr ""
+
+msgid "All months"
+msgstr ""
+
+msgid "All weeks"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
@@ -1645,31 +1729,10 @@ msgstr ""
 msgid "Every day"
 msgstr ""
 
-msgid "Friday"
-msgstr ""
-
 msgid "Invalid date range"
 msgstr ""
 
-msgid "Monday"
-msgstr ""
-
-msgid "Saturday"
-msgstr ""
-
-msgid "Sunday"
-msgstr ""
-
-msgid "Thursday"
-msgstr ""
-
-msgid "Tuesday"
-msgstr ""
-
 msgid "Undo"
-msgstr ""
-
-msgid "Wednesday"
 msgstr ""
 
 msgid "Copied!"

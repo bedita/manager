@@ -819,6 +819,9 @@ msgstr "Spiacenti, il tuo browser non supporta l'elemento {0} incorporato"
 msgid "State Name"
 msgstr "Provincia"
 
+msgid "Statistics"
+msgstr "Statistiche"
+
 msgid "Status"
 msgstr "Stato"
 
@@ -1263,6 +1266,87 @@ msgstr "Vedi pagina Wiki per informazioni"
 msgid "Remove item. Are you sure?"
 msgstr "Stai per eliminare l'elemento. Vuoi procedere?"
 
+msgid "All days"
+msgstr "Tutti i giorni"
+
+msgid "Sunday"
+msgstr "Domenica"
+
+msgid "Monday"
+msgstr "Lunedì"
+
+msgid "Tuesday"
+msgstr "Martedì"
+
+msgid "Wednesday"
+msgstr "Mercoledì"
+
+msgid "Thursday"
+msgstr "Giovedì"
+
+msgid "Friday"
+msgstr "Venerdì"
+
+msgid "Saturday"
+msgstr "Sabato"
+
+msgid "Week"
+msgstr "Settimana"
+
+msgid "January"
+msgstr "Gennaio"
+
+msgid "February"
+msgstr "Febbraio"
+
+msgid "March"
+msgstr "Marzo"
+
+msgid "April"
+msgstr "Aprile"
+
+msgid "May"
+msgstr "Maggio"
+
+msgid "June"
+msgstr "Giugno"
+
+msgid "July"
+msgstr "Luglio"
+
+msgid "August"
+msgstr "Agosto"
+
+msgid "September"
+msgstr "Settembre"
+
+msgid "October"
+msgstr "Ottobre"
+
+msgid "November"
+msgstr "Novembre"
+
+msgid "December"
+msgstr "Dicembre"
+
+msgid "Contents creation"
+msgstr "Creazione contenuti"
+
+msgid "All contents"
+msgstr "Tutti i contenuti"
+
+msgid "All object types"
+msgstr "Tutti i tipi di oggetto"
+
+msgid "Loading stats data for"
+msgstr "Caricamento dati statistici per"
+
+msgid "All months"
+msgstr "Tutti i mesi"
+
+msgid "All weeks"
+msgstr "Tutte le settimane"
+
 #, javascript-format
 msgid ""
 "File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
@@ -1667,32 +1751,11 @@ msgstr "Inserire data(e)"
 msgid "Every day"
 msgstr "Tutti i giorni"
 
-msgid "Friday"
-msgstr "Venerdì"
-
 msgid "Invalid date range"
 msgstr "Intervallo date non valido"
 
-msgid "Monday"
-msgstr "Lunedì"
-
-msgid "Saturday"
-msgstr "Sabato"
-
-msgid "Sunday"
-msgstr "Domenica"
-
-msgid "Thursday"
-msgstr "Giovedì"
-
-msgid "Tuesday"
-msgstr "Martedì"
-
 msgid "Undo"
 msgstr "Annulla"
-
-msgid "Wednesday"
-msgstr "Mercoledì"
 
 msgid "Copied!"
 msgstr "Copiato!"
