@@ -291,9 +291,6 @@ class ModulesController extends AppController
                 $this->set(['error' => __('Invalid numeric uname. Change it to a valid string')]);
                 $this->setSerialize(['error']);
 
-                // set session data to recover form
-                $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
-
                 return;
             }
             $id = Hash::get($requestData, 'id');
@@ -328,16 +325,12 @@ class ModulesController extends AppController
             ];
             $event = new Event('Controller.afterSave', $this, $options);
             $this->getEventManager()->dispatch($event);
-            $this->getRequest()->getSession()->delete(sprintf('failedSave.%s.%s', $this->objectType, $id));
         } catch (BEditaClientException $error) {
             $message = new Message($error);
             $this->log($message->get(), LogLevel::ERROR);
             $this->Flash->error($message->get(), ['params' => $error]);
             $this->set(['error' => $message->get()]);
             $this->setSerialize(['error']);
-
-            // set session data to recover form
-            $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
 
             return;
         }

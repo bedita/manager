@@ -1074,65 +1074,6 @@ class ModulesComponentTest extends TestCase
     }
 
     /**
-     * Test `setDataFromFailedSave`.
-     *
-     * @covers ::setDataFromFailedSave()
-     * @return void
-     */
-    public function testSetDataFromFailedSave(): void
-    {
-        // empty case
-        $this->Modules->setDataFromFailedSave('', ['id' => 123]);
-        $actual = $this->Modules->getController()->getRequest()->getSession()->read('failedSave.123');
-        static::assertEmpty($actual);
-
-        // data and expected
-        $expected = [ 'id' => 999, 'name' => 'gustavo' ];
-        $type = 'documents';
-
-        $this->Modules->setDataFromFailedSave($type, $expected);
-
-        // verify data
-        $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
-        $actual = $this->Modules->getController()->getRequest()->getSession()->read($key);
-        unset($expected['id']);
-        static::assertEquals($expected, $actual);
-    }
-
-    /**
-     * Test `updateFromFailedSave` method.
-     *
-     * @return void
-     * @covers ::setupAttributes()
-     * @covers ::updateFromFailedSave()
-     */
-    public function testUpdateFromFailedSave(): void
-    {
-        // empty case
-        $this->Modules->setDataFromFailedSave('', ['id' => 123]); // wrong data, missing type
-        $object = ['id' => 123, 'type' => 'documents'];
-        $this->Modules->setupAttributes($object);
-        static::assertArrayNotHasKey('attributes', $object);
-
-        // write to session data, to simulate recover from session.
-        $object = [
-            'id' => 999,
-            'type' => 'documents',
-            'attributes' => [
-                'name' => 'john doe',
-            ],
-        ];
-        $recover = [ 'name' => 'gustavo' ];
-        $this->Modules->setDataFromFailedSave('documents', $recover + ['id' => 999]);
-
-        // verify data
-        $this->Modules->setupAttributes($object);
-        $expected = $object;
-        $expected['attributes'] = array_merge($object['attributes'], $recover);
-        static::assertEquals($expected, $object);
-    }
-
-    /**
      * Data provider for `testSetupRelationsMeta`
      *
      * @return array
