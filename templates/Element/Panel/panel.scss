@@ -3,6 +3,7 @@
     top: 0; right: 0;
     min-width: 20 * $gutter;
     width: 100%;
+    overflow: auto;
     @media screen and (min-width: 768px) {
         width: 60%;
     }
