@@ -549,6 +549,11 @@ export default {
                     this.loading = false;
                     this.objectsLoaded = true;
                     this.originalData = JSON.stringify(this.objects.map(o => o.id));
+                    if (reset) {
+                        this.addedRelations = [];
+                        this.modifiedRelations = [];
+                        this.removedRelated = [];
+                    }
 
                     return objs;
                 })
