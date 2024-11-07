@@ -12,7 +12,6 @@ import { PanelView, PanelEvents } from 'app/components/panel-view';
 import { confirm, error, info, success, prompt, warning } from 'app/components/dialog/dialog';
 
 import datepicker from 'app/directives/datepicker';
-import datepickerNt from 'app/directives/datepicker-nt';
 import email from 'app/directives/email';
 import jsoneditor from 'app/directives/jsoneditor';
 import richeditor from 'app/directives/richeditor';
@@ -148,7 +147,6 @@ const _vueInstance = new Vue({
         // Register directives
         Vue.use(jsoneditor);
         Vue.use(datepicker);
-        Vue.use(datepickerNt);
         Vue.use(richeditor);
         Vue.use(email);
         Vue.use(uri);
