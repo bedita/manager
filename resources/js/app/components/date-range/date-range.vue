@@ -14,22 +14,25 @@
                     v-model="start_date"
                     v-datepicker="true"
                     @change="onDateChanged(true, $event)"
+                    v-if="ready"
                 >
             </div>
         </div>
         <div :class="dateRangeClass()">
             <span>{{ msgTo }}</span>
             <div>
-                <input
-                    type="text"
-                    date="true"
-                    :time="!all_day"
-                    daterange="true"
-                    v-model="end_date"
-                    v-datepicker="true"
-                    @change="onDateChanged(false, $event)"
-                    v-if="start_date"
-                >
+                <template v-if="start_date">
+                    <input
+                        type="text"
+                        date="true"
+                        :time="!all_day"
+                        daterange="true"
+                        v-model="end_date"
+                        v-datepicker="true"
+                        @change="onDateChanged(false, $event)"
+                        v-if="ready"
+                    >
+                </template>
                 <input
                     type="text"
                     disabled="disabled"
@@ -164,6 +167,7 @@ export default {
 
     data() {
         return {
+            ready: false,
             every_day: true,
             start_date: '',
             all_day: '',
@@ -190,20 +194,23 @@ export default {
     },
 
     mounted() {
-        this.range = this.source;
-        this.start_date = this.range?.start_date;
-        this.end_date = this.range?.end_date;
-        this.all_day = this.range?.params?.all_day;
-        this.every_day = this.range?.params?.every_day;
-        this.weekdays = this.range?.params?.weekdays || {
-            sunday: false,
-            monday: false,
-            tuesday: false,
-            wednesday: false,
-            thursday: false,
-            friday: false,
-            saturday: false
-        };
+        this.$nextTick(() => {
+            this.range = this.source;
+            this.start_date = this.range?.start_date;
+            this.end_date = this.range?.end_date;
+            this.all_day = this.range?.params?.all_day;
+            this.every_day = this.range?.params?.every_day;
+            this.weekdays = this.range?.params?.weekdays || {
+                sunday: false,
+                monday: false,
+                tuesday: false,
+                wednesday: false,
+                thursday: false,
+                friday: false,
+                saturday: false
+            };
+            this.ready = true;
+        });
     },
 
     methods: {
