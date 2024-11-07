@@ -323,13 +323,13 @@ export default {
             }
             let date = moment(this.start_date);
             date.set({ hour: 0, minute: 0 });
-            this.start_date = date.format('YYYY-MM-DDTHH:mm');
+            this.start_date = date.toISOString();
             if (!this.end_date) {
-                this.end_date = date.endOf('day').format('YYYY-MM-DDTHH:mm');
+                this.end_date = date.endOf('day').toISOString();
             } else {
                 date = moment(this.end_date);
                 date.set({ hour: 23, minute: 59 });
-                this.end_date = date.format('YYYY-MM-DDTHH:mm');
+                this.end_date = date.toISOString();
             }
         },
         setAllWeekdays() {
