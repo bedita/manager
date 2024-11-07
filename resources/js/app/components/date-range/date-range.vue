@@ -195,7 +195,15 @@ export default {
         this.end_date = this.range?.end_date;
         this.all_day = this.range?.params?.all_day;
         this.every_day = this.range?.params?.every_day;
-        this.weekdays = this.range?.params?.weekdays;
+        this.weekdays = this.range?.params?.weekdays || {
+            sunday: false,
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: false
+        };
     },
 
     methods: {
