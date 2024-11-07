@@ -9,27 +9,48 @@
                 <input
                     type="text"
                     date="true"
-                    :time="!all_day"
+                    time="true"
                     daterange="true"
                     v-model="start_date"
                     v-datepicker="true"
                     @change="onDateChanged(true, $event)"
+                    v-if="!all_day"
+                >
+                <input
+                    type="text"
+                    date="true"
+                    daterange="true"
+                    v-model="start_date"
+                    v-datepicker-nt="true"
+                    @change="onDateChanged(true, $event)"
+                    v-if="all_day"
                 >
             </div>
         </div>
         <div :class="dateRangeClass()">
             <span>{{ msgTo }}</span>
             <div>
-                <input
-                    type="text"
-                    date="true"
-                    :time="!all_day"
-                    daterange="true"
-                    v-model="end_date"
-                    v-datepicker="true"
-                    @change="onDateChanged(false, $event)"
-                    v-if="start_date"
-                >
+                <template v-if="start_date">
+                    <input
+                        type="text"
+                        date="true"
+                        time="true"
+                        daterange="true"
+                        v-model="end_date"
+                        v-datepicker="true"
+                        @change="onDateChanged(false, $event)"
+                        v-if="!all_day"
+                    >
+                    <input
+                        type="text"
+                        date="true"
+                        daterange="true"
+                        v-model="end_date"
+                        v-datepicker-nt="true"
+                        @change="onDateChanged(false, $event)"
+                        v-if="all_day"
+                    >
+                </template>
                 <input
                     type="text"
                     disabled="disabled"
