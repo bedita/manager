@@ -80,7 +80,8 @@ export default {
             async inserted(element, binding) {
                 let changing = false;
                 const exp = binding.expression || '';
-                let items = exp ? JSON.parse(exp).join(' ') : DEFAULT_TOOLBAR;
+                const json = JSON.parse(exp);
+                let items = json ? json.join(' ') : DEFAULT_TOOLBAR;
                 if (!binding.modifiers?.placeholders) {
                     items = items.replace(/\bplaceholders\b/, '');
                 }
