@@ -149,11 +149,13 @@ class Control
     {
         $schema = (array)Hash::get($options, 'schema');
         $value = Hash::get($options, 'value');
-        $key = !empty($schema['placeholders']) ? 'v-richeditor.placeholders' : 'v-richeditor';
+        $richeditorKey = !empty($schema['placeholders']) ? 'v-richeditor.placeholders' : 'v-richeditor';
+        $override = !empty($options[$richeditorKey]);
+        $toolbar = $override ? $options[$richeditorKey] : json_encode(Configure::read('RichTextEditor.default.toolbar', ''));
 
         return [
             'type' => 'textarea',
-            $key => json_encode(Configure::read('RichTextEditor.default.toolbar', '')),
+            $richeditorKey => $toolbar,
             'value' => $value,
         ];
     }

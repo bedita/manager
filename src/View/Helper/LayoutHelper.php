@@ -371,6 +371,7 @@ class LayoutHelper extends Helper
             'uploadConfig' => $this->System->uploadConfig(),
             'relationsSchema' => $this->getView()->get('relationsSchema', []),
             'richeditorConfig' => (array)Configure::read('Richeditor'),
+            'richeditorByPropertyConfig' => (array)Configure::read('UI.richeditor', []),
         ];
     }
 
