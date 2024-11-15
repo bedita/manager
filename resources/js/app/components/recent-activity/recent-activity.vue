@@ -171,12 +171,20 @@ export default {
                 this.loading = false;
             }
         },
+        getTextFromHtml(s) {
+            const e = document.createElement('div');
+            e.innerHTML = s;
+
+            return e.textContent || e.innerText || '';
+        },
         pageButtonClass() {
             return 'has-text-size-smallest button is-width-auto button-outlined';
         },
         title(item) {
             if (item.object_title) {
-                return this.$helpers.truncate(item.object_title, 100);
+                const text = this.getTextFromHtml(item.object_title);
+
+                return this.$helpers.truncate(text, 100);
             }
             const id = `#${item.meta.resource_id}`;
             const uname = item.object_uname ? this.$helpers.truncate(item.object_uname, 100) : t`(deleted)`;

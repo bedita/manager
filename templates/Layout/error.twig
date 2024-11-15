@@ -29,7 +29,7 @@ BEdita Manager
 
     {{ element('custom_colors') }}
 
-    <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita Manager'}" }}</title>
+    <title>{{ Layout.title() }} | {{ "#{project.name ?: 'BEdita Manager'}" }}</title>
 
     {{ element('json_meta_config') }}
 </head>

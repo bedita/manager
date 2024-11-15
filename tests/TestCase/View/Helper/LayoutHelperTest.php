@@ -457,6 +457,18 @@ class LayoutHelperTest extends TestCase
                     'currentModule' => ['name' => 'video'],
                 ],
             ],
+            'video html' => [
+                'Video title | video',
+                'Module',
+                [
+                    'object' => [
+                        'attributes' => [
+                            'title' => '<div><i>Video</i> <b>title</b></div>',
+                        ],
+                    ],
+                    'currentModule' => ['name' => 'video'],
+                ],
+            ],
         ];
     }
 
