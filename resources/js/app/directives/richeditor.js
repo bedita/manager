@@ -94,7 +94,7 @@ export default {
                     skin: false,
                     content_css: contentCSS,
                     menubar: false,
-                    branding: false,
+                    branding: true,
                     max_height: 500,
                     toolbar: items,
                     toolbar_mode: 'wrap',
