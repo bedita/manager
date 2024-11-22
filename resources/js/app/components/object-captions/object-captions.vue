@@ -392,14 +392,13 @@ export default {
 
     data() {
         return {
-            loading: false,
-            newItem: {},
             captions: [],
             captionsValueStart: '',
             draggingIndex: null,
             formats: [],
             isDraggable: false,
             langs: [],
+            loading: false,
             msgAdd: t`Add`,
             msgCancel: t`Cancel`,
             msgCaption: t`Caption`,
@@ -417,6 +416,7 @@ export default {
             msgStatus: t`Status`,
             msgTitle: t`Title`,
             msgValid: t`Valid`,
+            newItem: {},
             originalCaptions: [],
             statuses: [
                 { value: 'on', label: 'on' },
@@ -456,39 +456,7 @@ export default {
 
     mounted() {
         this.$nextTick(() => {
-            this.formats = this.config.formats.allowed || ['webvtt'];
-            this.langs = Object.keys(this.languages).map((key) => {
-                return {
-                    value: key,
-                    label: this.languages[key],
-                };
-            });
-            for (let item of this.items) {
-                const caption = {
-                    uid: this.uid(),
-                    status: item.status,
-                    label: item.label,
-                    format: item.format,
-                    lang: item.lang,
-                    caption_text: item.caption_text,
-                    params: item.params,
-                    mode: 'view',
-                };
-                this.captions.push(caption);
-                this.originalCaptions.push({ ...caption });
-            }
-            this.captionsValueStart = this.captionsValue;
-            this.newItem = {
-                nuid: this.uid(),
-                status: 'draft',
-                label: null,
-                format: this.config?.formats?.default || 'webvtt',
-                lang: 'it',
-                caption_text: null,
-                params: null,
-                mode: 'view',
-            };
-            this.webvttParser = new WebVTTParser();
+            this.reset();
         });
     },
 
@@ -536,6 +504,43 @@ export default {
         remove(item) {
             this.captions.splice(this.captions.indexOf(item), 1);
         },
+        reset(newItems) {
+            this.formats = this.config.formats.allowed || ['webvtt'];
+            this.langs = Object.keys(this.languages).map((key) => {
+                return {
+                    value: key,
+                    label: this.languages[key],
+                };
+            });
+            const items = newItems || this.items;
+            this.captions = [];
+            for (let item of items) {
+                const caption = {
+                    uid: this.uid(),
+                    status: item.status,
+                    label: item.label,
+                    format: item.format,
+                    lang: item.lang,
+                    caption_text: item.caption_text,
+                    params: item.params,
+                    mode: 'view',
+                };
+                this.captions.push(caption);
+                this.originalCaptions.push({ ...caption });
+            }
+            this.captionsValueStart = this.captionsValue;
+            this.newItem = {
+                nuid: this.uid(),
+                status: 'draft',
+                label: null,
+                format: this.config?.formats?.default || 'webvtt',
+                lang: 'it',
+                caption_text: null,
+                params: null,
+                mode: 'view',
+            };
+            this.webvttParser = new WebVTTParser();
+        },
         async save() {
             try {
                 this.loading = true;
@@ -571,6 +576,9 @@ export default {
                 const responseJson = await response.json();
                 if (responseJson.error) {
                     BEDITA.error(responseJson.error);
+                } else {
+                    const captions = responseJson.data.attributes.captions || [];
+                    this.reset(captions);
                 }
             } catch (error) {
                 BEDITA.error(error);
