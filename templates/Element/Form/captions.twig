@@ -17,6 +17,8 @@
                     :readonly="{{ Perms.canCreate() ? 'false' : 'true' }}"
                 >
                 </object-captions>
+                {% do Form.unlockField('captions') %}
+                {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge(['captions'])) }}
 			</div>
 		</div>
 	</section>

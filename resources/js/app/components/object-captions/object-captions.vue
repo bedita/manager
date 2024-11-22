@@ -133,7 +133,7 @@
                             </select>
                         </div>
                         <div class="input textarea">
-                            <label for="captionText">{{ msgText }}</label>
+                            <label for="captionText">{{ msgCaption }}</label>
                             <textarea
                                 id="captionText"
                                 rows="10"
