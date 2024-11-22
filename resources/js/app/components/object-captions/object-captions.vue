@@ -335,6 +335,7 @@
         >
             <button
                 class="button button-primary"
+                :class="{'is-loading-spinner': loading}"
                 :disabled="captionsValueStart === captionsValue && noErrors"
                 @click.prevent="save"
             >
@@ -363,6 +364,14 @@ export default {
     inject: ['getCSFRToken'],
 
     props: {
+        objectId: {
+            type: String,
+            required: true,
+        },
+        objectType: {
+            type: String,
+            required: true,
+        },
         config: {
             type: Object,
             default: () => {},
@@ -526,6 +535,48 @@ export default {
         },
         remove(item) {
             this.captions.splice(this.captions.indexOf(item), 1);
+        },
+        async save() {
+            try {
+                this.loading = true;
+                const payload = {
+                    data: {
+                        id: this.objectId,
+                        type: this.objectType,
+                        attributes: {
+                            captions: this.captions.map((item) => {
+                                return {
+                                    status: item.status,
+                                    label: item.label,
+                                    format: item.format,
+                                    lang: item.lang,
+                                    caption_text: item.caption_text,
+                                    params: item.params,
+                                };
+                            }),
+                        },
+                    },
+                };
+                const options = {
+                    method: 'PATCH',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-Token': BEDITA.csrfToken,
+                    },
+                    body: JSON.stringify(payload)
+                };
+                const response = await fetch(`${BEDITA.base}/api/${this.objectType}/${this.objectId}`, options);
+                const responseJson = await response.json();
+                if (responseJson.error) {
+                    BEDITA.error(responseJson.error);
+                }
+            } catch (error) {
+                BEDITA.error(error);
+            } finally {
+                this.loading = false;
+            }
         },
         swapItems(fromIndex, toIndex) {
             if(fromIndex > this.captions.length || toIndex > this.captions.length) return;

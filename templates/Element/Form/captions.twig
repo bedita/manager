@@ -9,6 +9,8 @@
 		<div v-show="isOpen" class="tab-container">
 			<div class="captions-container">
                 <object-captions
+                    :object-id="{{ object.id|json_encode }}"
+                    :object-type="{{ object.type|json_encode }}"
                     :items="{{ captions|json_encode }}"
                     :config="{{ config('Captions')|default({formats:{'allowed':['webvtt'],'default':'webvtt'}})|json_encode }}"
                     :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}"
