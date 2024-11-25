@@ -30,7 +30,7 @@
         <div
             v-for="(item, index) in captions"
             :key="index"
-            :class="{'captions-container': item.mode == 'view', dragging: draggingIndex === index}"
+            :class="{'captions-container': item.mode == 'view', 'on': item.status === 'on', 'draft': item.status === 'draft', 'off': item.status === 'off', dragging: draggingIndex === index}"
             draggable="true"
             @dragstart="handleDragStart(index)"
             @dragend="draggingIndex = null"
@@ -40,7 +40,10 @@
             @drop="handleDrop(index)"
         >
             <template v-if="item.mode == 'view'">
-                <div><span>{{ truncate(item.caption_text, 100) }}</span></div>
+                <div>
+                    <app-icon icon="carbon:closed-caption" />
+                    <span class="ml-05">{{ truncate(item.caption_text, 100) }}</span>
+                </div>
                 <div><span>{{ item.label }}</span></div>
                 <div><span>{{ languages[item.lang] }}</span></div>
                 <div><span>{{ item.status }}</span></div>
@@ -70,7 +73,7 @@
                 <div>
                     <span
                         class="ribbon has-background-module-media"
-                        v-if="item.nuid"
+                        v-if="item.nuid && captionsValueStart !== captionsValue"
                     >
                         {{ msgNew }}
                     </span>
@@ -94,7 +97,7 @@
                                 v-model="item.lang"
                             >
                                 <option
-                                    v-for="lang in langs"
+                                    v-for="lang in availableLangs(item)"
                                     :key="lang.value"
                                     :value="lang.value"
                                 >
@@ -201,6 +204,7 @@
                     <button
                         class="button button-outlined"
                         @click.prevent="viewMode='new'"
+                        v-if="availableLangs().length > 0"
                     >
                         <app-icon icon="carbon:edit" />
                         <span class="ml-05">{{ msgNewCaption }}</span>
@@ -226,7 +230,7 @@
                             v-model="newItem.lang"
                         >
                             <option
-                                v-for="lang in langs"
+                                v-for="lang in availableLangs()"
                                 :key="lang.value"
                                 :value="lang.value"
                             >
@@ -478,6 +482,19 @@ export default {
             };
             this.viewMode = 'view';
         },
+        availableLangs(caption) {
+            if (caption) {
+                const available = this.langs.filter((lang) => {
+                    return !this.captions.some((item) => item.lang === lang.value && item.format === caption.format);
+                });
+                available.push(this.langs.find((lang) => lang.value === caption.lang));
+
+                return available;
+            }
+            return this.langs.filter((lang) => {
+                return !this.captions.some((item) => item.lang === lang.value && item.format === this.newItem.format);
+            });
+        },
         captionSaveDisabled(item) {
             if (item?.caption_text === null || item?.caption_text?.length === 0) {
                 return true;
@@ -631,17 +648,17 @@ export default {
 </script>
 <style>
 .object-captions > div.captions-none {
-    border-bottom: 1px dashed white;
+    border-bottom: 1px dotted #8e959e;
     padding-bottom: 1rem;
 }
 .object-captions > div.captions-container {
     display: grid;
     grid-template-columns: 30% 10% 8% 6% 40px 120px 120px 100px;
-    border-bottom: 1px dashed white;
+    border-bottom: 1px dotted #8e959e;
 }
 
 .object-captions > div.captions-container > div.column {
-    font-weight: bold;
+    font-style: italic;
     font-size: 0.9rem;
 }
 
@@ -689,5 +706,17 @@ export default {
 
 .object-captions ol.validate-results > li {
     color: red;
+}
+
+.object-captions .on {
+    color: #fff;
+}
+
+.object-captions .off {
+    color: #8e959e;
+}
+
+.object-captions .draft {
+    color: #8e959e;
 }
 </style>
