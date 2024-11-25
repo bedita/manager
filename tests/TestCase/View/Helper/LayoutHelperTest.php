@@ -457,6 +457,18 @@ class LayoutHelperTest extends TestCase
                     'currentModule' => ['name' => 'video'],
                 ],
             ],
+            'video html' => [
+                'Video title | video',
+                'Module',
+                [
+                    'object' => [
+                        'attributes' => [
+                            'title' => '<div><i>Video</i> <b>title</b></div>',
+                        ],
+                    ],
+                    'currentModule' => ['name' => 'video'],
+                ],
+            ],
         ];
     }
 
@@ -584,6 +596,7 @@ class LayoutHelperTest extends TestCase
             'uploadConfig' => $system->uploadConfig(),
             'relationsSchema' => ['whatever'],
             'richeditorConfig' => (array)Configure::read('Richeditor'),
+            'richeditorByPropertyConfig' => (array)Configure::read('RicheditorByProperty'),
         ];
         static::assertSame($expected, $conf);
     }

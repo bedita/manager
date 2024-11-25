@@ -22,7 +22,7 @@
                     {{ element('Modules/index_properties_date_ranges', { dateRanges: object.attributes[prop] }) }}
                 </div>
             {% else %}
-                <index-cell :settings="{{ config('UI.index')|default({'copy2clipboard': false})|json_encode }}" :prop="{{ prop|json_encode }}" :text="{{ Property.value(object, prop)|striptags|json_encode }}">
+                <index-cell :settings="{{ config('UI.index')|default({'copy2clipboard': false})|json_encode }}" :prop="{{ prop|json_encode }}" :text="{{ Property.value(object, prop)|json_encode }}">
                 </index-cell>
             {% endif %}
         {% endfor %}
