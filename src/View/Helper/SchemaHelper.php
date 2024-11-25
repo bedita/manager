@@ -66,6 +66,8 @@ class SchemaHelper extends Helper
         $ctrlOptions = (array)Configure::read($ctrlOptionsPath);
 
         if (!empty($options)) {
+            $this->updateRicheditorOptions($name, !empty($schema['placeholders']), $options);
+
             return array_merge($options, [
                 'label' => Hash::get($ctrlOptions, 'label'),
                 'readonly' => Hash::get($ctrlOptions, 'readonly', false),
@@ -98,8 +100,28 @@ class SchemaHelper extends Helper
         if (!empty($ctrlOptions['step'])) {
             $opts['step'] = $ctrlOptions['step'];
         }
+        $this->updateRicheditorOptions($name, !empty($schema['placeholders']), $opts);
 
         return Control::control($opts);
+    }
+
+    /**
+     * Update richeditor options if a toolbar config is defined in UI.richeditor for the property.
+     *
+     * @param string $name Property name
+     * @param bool $placeholders True if property has placeholders in schema
+     * @param array $options Control options
+     * @return void
+     */
+    protected function updateRicheditorOptions(string $name, bool $placeholders, array &$options)
+    {
+        $uiRichtext = (array)Configure::read(sprintf('UI.richeditor.%s.toolbar', $name));
+        if (empty($uiRichtext)) {
+            return;
+        }
+        $options['type'] = 'textarea';
+        $richeditorKey = $placeholders ? 'v-richeditor.placeholders' : 'v-richeditor';
+        $options[$richeditorKey] = json_encode($uiRichtext);
     }
 
     /**
