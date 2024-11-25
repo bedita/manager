@@ -124,6 +124,15 @@ export default {
                         editor.on('change', () => {
                             EventBus.send('refresh-placeholders', {id: editor.id, content: editor.getContent()});
                         });
+                        editor.on('init', () => {
+                            // force height from config
+                            const height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height;
+                            if (height) {
+                                const id = editor.id;
+                                const elem = document.getElementById(id + '_ifr').parentNode.parentNode.parentNode.parentNode;
+                                elem.style.height = height;
+                            }
+                        });
                     }
                 });
 
