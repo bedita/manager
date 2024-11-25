@@ -410,6 +410,96 @@ class SchemaHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testUpdateRicheditorOptions` test case.
+     *
+     * @return array
+     */
+    public function updateRicheditorOptionsProvider(): array
+    {
+        return [
+            'empty UI.richeditor.title.toolbar' => [
+                [],
+                'title',
+                false,
+                [],
+                [],
+            ],
+            'empty UI.richeditor.title.toolbar and placeholders' => [
+                [],
+                'title',
+                true,
+                [],
+                [],
+            ],
+            'not empty UI.richeditor.title.toolbar' => [
+                [
+                    'italic',
+                    'subscript',
+                    'superscript',
+                ],
+                'title',
+                false,
+                [],
+                [
+                    'type' => 'textarea',
+                    'v-richeditor' => '["italic","subscript","superscript"]',
+                ],
+            ],
+            'not empty UI.richeditor.title.toolbar and placeholders' => [
+                [
+                    'italic',
+                    'subscript',
+                    'superscript',
+                ],
+                'title',
+                true,
+                [],
+                [
+                    'type' => 'textarea',
+                    'v-richeditor.placeholders' => '["italic","subscript","superscript"]',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `updateRicheditorOptions` method.
+     *
+     * @param array $uiConf The UI configuration
+     * @param string $name The field name
+     * @param bool $placeholders Use placeholders
+     * @param array $options The options
+     * @param array $expected The expected result
+     * @return void
+     * @dataProvider updateRicheditorOptionsProvider()
+     * @covers ::updateRicheditorOptions()
+     */
+    public function testUpdateRicheditorOptions(array $uiConf, string $name, bool $placeholders, array $options, array $expected): void
+    {
+        Configure::write('UI.richeditor.title.toolbar', $uiConf);
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ]);
+        $view = new View($request, null, null, []);
+        $view->set('objectType', 'dummies');
+        $helper = new class ($view) extends SchemaHelper {
+            public function updateREopts(string $name, bool $placeholders, array &$options): array
+            {
+                $this->updateRicheditorOptions($name, $placeholders, $options);
+
+                return $options;
+            }
+        };
+        $actual = $helper->updateREopts($name, $placeholders, $options);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `lang` property
      *
      * @return void

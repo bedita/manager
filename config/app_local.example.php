@@ -565,16 +565,6 @@ return [
     // ],
 
     /**
-     * UI settings.
-     * index.copy2clipboard => enable "onmouseover" of index general cells showing copy to clipboard button
-     */
-    // 'UI' => [
-    //     'index' => [
-    //         'copy2clipboard' => true,
-    //     ],
-    // ],
-
-    /**
      * Richeditor configuration.
      */
     // 'Richeditor' => [
@@ -618,6 +608,7 @@ return [
      * UI settings.
      * - index: index settings. 'copy2clipboard' enables "onmouseover" of index general cells showing copy to clipboard button
      * - modules: modules settings. 'counters' to show counters in modules; 'all', 'none', <list of modules> to show all, none or custom modules. Default is ['trash']
+     * - richeditor: richeditor settings per field: you can set 'config' and 'toolbar' per single field.
      */
     // 'UI' => [
     //     'index' => [
@@ -625,6 +616,34 @@ return [
     //     ],
     //     'modules' => [
     //         'counters' => ['objects', 'media', 'images', 'videos', 'audio', 'files', 'trash', 'users'],
+    //     ],
+    //     'richeditor' => [
+    //         'title' => [
+    //             'config' => [
+    //                 'forced_root_block' => 'div',
+    //                 'forced_root_block_attrs' => ['class' => 'titleContainer'],
+    //             ],
+    //             'toolbar' => [
+    //                 'italic',
+    //                 'subscript',
+    //                 'superscript',
+    //             ],
+    //         ],
+    //         'description' => [
+    //             'config' => [
+    //                 'forced_root_block' => 'div',
+    //                 'forced_root_block_attrs' => ['class' => 'descriptionContainer'],
+    //             ],
+    //             'toolbar' => [
+    //                 'bold',
+    //                 'italic',
+    //                 'subscript',
+    //                 'superscript',
+    //                 'link',
+    //                 'unlink',
+    //                 'code',
+    //             ],
+    //         ],
     //     ],
     // ],
 

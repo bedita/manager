@@ -79,11 +79,9 @@ export default {
              */
             async inserted(element, binding) {
                 let changing = false;
-                let items = JSON.parse(binding.expression || '');
-                if (!items) {
-                    items = DEFAULT_TOOLBAR;
-                }
-
+                const exp = binding.expression || '';
+                const json = JSON.parse(exp);
+                let items = json ? json.join(' ') : DEFAULT_TOOLBAR;
                 if (!binding.modifiers?.placeholders) {
                     items = items.replace(/\bplaceholders\b/, '');
                 }
@@ -121,9 +119,19 @@ export default {
                     add_unload_trigger: false, // fix populating textarea elements with garbage when the user initiates a navigation with unsaved changes, but cancels it when the alert is shown
                     readonly: element.getAttribute('readonly') === 'readonly' ? 1 : 0,
                     ... BEDITA?.richeditorConfig,
+                    ... BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config || {},
                     setup: (editor) => {
                         editor.on('change', () => {
                             EventBus.send('refresh-placeholders', {id: editor.id, content: editor.getContent()});
+                        });
+                        editor.on('init', () => {
+                            // force height from config
+                            const height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height;
+                            if (height) {
+                                const id = editor.id;
+                                const elem = document.getElementById(id + '_ifr').parentNode.parentNode.parentNode.parentNode;
+                                elem.style.height = height;
+                            }
                         });
                     }
                 });

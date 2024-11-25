@@ -109,6 +109,7 @@ class LayoutHelper extends Helper
         $name = (string)Hash::get($module, 'name');
         $object = (array)$this->getView()->get('object');
         $title = (string)Hash::get($object, 'attributes.title');
+        $title = strip_tags($title);
 
         return empty($title) ? $name : sprintf('%s | %s', $title, $name);
     }
@@ -371,6 +372,7 @@ class LayoutHelper extends Helper
             'uploadConfig' => $this->System->uploadConfig(),
             'relationsSchema' => $this->getView()->get('relationsSchema', []),
             'richeditorConfig' => (array)Configure::read('Richeditor'),
+            'richeditorByPropertyConfig' => (array)Configure::read('UI.richeditor', []),
         ];
     }
 
