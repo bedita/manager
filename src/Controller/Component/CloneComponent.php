@@ -222,7 +222,7 @@ class CloneComponent extends Component
                 [
                     'id' => (string)Hash::get($obj, 'id'),
                     'type' => (string)Hash::get($obj, 'type'),
-                    'meta' => (array)Hash::get($obj, 'meta'), // <== questa riga
+                    'meta' => (array)Hash::get($obj, 'meta'),
                 ],
             ]);
         }
