@@ -112,6 +112,7 @@ export default {
                         'typos',
                         'visualblocks',
                     ].join(' '),
+                    resize: true,
                     autoresize_bottom_margin: 50,
                     convert_urls: false,
                     relative_urls: false,
@@ -128,7 +129,7 @@ export default {
                             if (height) {
                                 const id = editor.id;
                                 const elem = document.getElementById(id + '_ifr').parentNode.parentNode.parentNode.parentNode;
-                                elem.style.height = height;
+                                elem.style.height = `${height}px`;
                             }
                         });
                         editor.on('init', () => {
@@ -137,7 +138,7 @@ export default {
                             if (height) {
                                 const id = editor.id;
                                 const elem = document.getElementById(id + '_ifr').parentNode.parentNode.parentNode.parentNode;
-                                elem.style.height = height;
+                                elem.style.height = `${height}px`;
                             }
                         });
                     }
