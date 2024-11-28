@@ -82,12 +82,10 @@
 
                 <h3 class="title m-0 has-text-size-small" style="padding-bottom: 7px;">
                     {% if translation %}
-                        <span :title="related.attributes.translated_fields.title" v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
-                            <: truncate(related.attributes.translated_fields.title, 50) :>
+                        <span v-html="truncate(related.attributes.translated_fields.title, 50)" :title=" related.attributes.translated_fields.title" v-if=" related.attributes.translated_fields && related.attributes.translated_fields.title ">
                         </span>
                     {% else %}
-                        <span :title="related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-'">
-                            <: truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 50) :>
+                        <span v-html="truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 50)" :title=" related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-' ">
                         </span>
                     {% endif %}
                 </h3>
