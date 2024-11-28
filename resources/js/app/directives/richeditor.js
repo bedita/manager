@@ -4,7 +4,6 @@ import 'tinymce/tinymce';
 import 'tinymce/icons/default';
 import 'tinymce/themes/silver';
 import 'tinymce/plugins/paste';
-import 'tinymce/plugins/autoresize';
 import 'tinymce/plugins/charmap';
 import 'tinymce/plugins/link';
 import 'tinymce/plugins/lists';
@@ -85,7 +84,15 @@ export default {
                 if (!binding.modifiers?.placeholders) {
                     items = items.replace(/\bplaceholders\b/, '');
                 }
-
+                const sizes = {};
+                if (BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height) {
+                    sizes.height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height;
+                }
+                sizes.min_height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.min_height || sizes.height || 300;
+                if (BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.max_height) {
+                    sizes.max_height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.max_height;
+                }
+                sizes.max_height = sizes.min_height > 500 ? sizes.min_height + 500 : 500;
                 const { default: contentCSS } = await import('../../../richeditor.lazy.scss');
                 const [editor] = await tinymce.init({
                     target: element,
@@ -93,14 +100,13 @@ export default {
                     content_css: contentCSS,
                     menubar: false,
                     branding: true,
-                    max_height: 500,
+                    ... sizes,
                     toolbar: items,
                     toolbar_mode: 'wrap',
                     block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3',
                     entity_encoding: 'raw',
                     plugins: [
                         'paste',
-                        'autoresize',
                         'code',
                         'charmap',
                         'link',
@@ -113,7 +119,6 @@ export default {
                         'visualblocks',
                     ].join(' '),
                     resize: true,
-                    autoresize_bottom_margin: 50,
                     convert_urls: false,
                     relative_urls: false,
                     paste_block_drop: true,
@@ -124,22 +129,6 @@ export default {
                     setup: (editor) => {
                         editor.on('change', () => {
                             EventBus.send('refresh-placeholders', {id: editor.id, content: editor.getContent()});
-                            // force height from config
-                            const height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height;
-                            if (height) {
-                                const id = editor.id;
-                                const elem = document.getElementById(id + '_ifr').parentNode.parentNode.parentNode.parentNode;
-                                elem.style.height = `${height}px`;
-                            }
-                        });
-                        editor.on('init', () => {
-                            // force height from config
-                            const height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height;
-                            if (height) {
-                                const id = editor.id;
-                                const elem = document.getElementById(id + '_ifr').parentNode.parentNode.parentNode.parentNode;
-                                elem.style.height = `${height}px`;
-                            }
                         });
                     }
                 });
