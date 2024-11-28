@@ -47,7 +47,7 @@
                             <input type="checkbox" name="oneItem" value="{{ object.id }}" v-model="selectedRows" {% if not Perms.canRead(object.type) %}disabled="disabled"{% endif %}>
                         </div>
                         <div class="narrow">
-                            {{ object.attributes.translated_fields.title|truncate(80)|default('no title') }}
+                            {{ object.attributes.translated_fields.title|striptags|truncate(80)|default('no title') }}
                         </div>
                         <div class="narrow">
                             {% if translated.attributes.lang %}
