@@ -33,6 +33,13 @@
                     </button>
                 </div>
 
+                <div class="mt-1">
+                    <label>
+                        <input type="checkbox" @input="onSearchInPositionActived" />
+                        {{ __('Show actived positions') }}
+                    </label>
+                </div>
+
                 <p v-if="searchInPosition.length" class="is-expanded tag mt-1">
                     <app-icon icon="carbon:filter"></app-icon>
                     <span class="ml-05">{{ __('Data is filtered') }}</span>
@@ -46,7 +53,8 @@
                     :multiple-choice={{ options.multiple }}
                     :user-roles="{{ user.roles|json_encode }}"
                     :has-permissions="{{ hasPermissions|json_encode }}"
-                    :search="searchInPosition">
+                    :search="searchInPosition"
+                    :search-in-position-actived="searchInPositionActived">
                 </tree-view>
             </div>
             {% do Form.unlockField('relations.' ~ relationName ~ '.replaceRelated') %}
