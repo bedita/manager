@@ -808,4 +808,16 @@ return [
     //         'Captions',
     //     ],
     // ],
+
+    /**
+     * Configuration for "Captions".
+     * - formats.allowed: allowed formats for captions
+     * - formats.default: default format for captions
+     */
+    // 'Captions' => [
+    //     'formats' => [
+    //         'allowed' => ['srt', 'sub', 'webvtt'],
+    //         'default' => 'webvtt',
+    //     ],
+    // ],
 ];
