@@ -22,21 +22,21 @@ jobs:
   cs:
     uses: bedita/github-workflows/.github/workflows/php-cs.yml@v2
     with:
-      php_versions: '["8.4"]'
+      php_versions: '["8.3"]'
 
   psalm:
     uses: bedita/github-workflows/.github/workflows/php-psalm.yml@v2
     with:
-      php_versions: '["8.4"]'
+      php_versions: '["8.3"]'
 
   stan:
     uses: bedita/github-workflows/.github/workflows/php-stan.yml@v2
     with:
-      php_versions: '["8.4"]'
+      php_versions: '["8.3"]'
 
   unit-5:
     uses: bedita/github-workflows/.github/workflows/php-unit.yml@v2
     with:
-      php_versions: '["8.1", "8.2", "8.3", "8.4"]'
+      php_versions: '["8.1", "8.2", "8.3"]'
       bedita_version: '5'
       coverage_min_percentage: 98
