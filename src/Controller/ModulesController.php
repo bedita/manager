@@ -213,9 +213,9 @@ class ModulesController extends AppController
             $response = $this->apiClient->get(sprintf('/objects/%s', $id));
         } catch (BEditaClientException $e) {
             $msg = $e->getMessage();
-            $error = $e->getCode() === 404 ?
-                sprintf(__('Resource "%s" not found', true), $id) :
-                sprintf(__('Resource "%s" not available. Error: %s', true), $id, $msg);
+            $msgNotFound = sprintf(__('Resource "%s" not found', true), $id);
+            $msgNotAvailable = sprintf(__('Resource "%s" not available. Error: %s', true), $id, $msg);
+            $error = $e->getCode() === 404 ? $msgNotFound : $msgNotAvailable;
             $this->Flash->error($error);
 
             return $this->redirect($this->referer());
