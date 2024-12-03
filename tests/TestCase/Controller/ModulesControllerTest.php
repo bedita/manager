@@ -22,6 +22,7 @@ use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
 use Cake\Cache\Cache;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
 use Psr\Http\Message\ResponseInterface;
@@ -351,7 +352,10 @@ class ModulesControllerTest extends BaseControllerTest
     public function testClone(): void
     {
         // Setup controller for test
-        $this->setupController();
+        $this->setupController([
+            'query' => ['cloneRelations' => 1, 'cloneTranslations' => 1],
+        ]);
+        Configure::write('Clone.documents.reset', ['body']);
 
         // get object ID for test
         $id = $this->getTestId();
