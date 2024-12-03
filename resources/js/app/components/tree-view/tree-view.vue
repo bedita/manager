@@ -82,7 +82,8 @@
                 :user-roles="userRoles"
                 :has-permissions="hasPermissions"
                 :show-forbidden="showForbidden"
-                :search="search">
+                :search="search"
+                :search-in-position-active="searchInPositionActive">
             </tree-view>
         </div>
     </div>
@@ -170,6 +171,10 @@ export default {
         search: {
             type: String,
             default: '',
+        },
+        searchInPositionActive: {
+            type: Boolean,
+            default: false,
         },
     },
 
@@ -326,6 +331,10 @@ export default {
 
         showNode() {
             if (this.search && !this.foundIn(this.node)) {
+                return false;
+            }
+
+            if (this.searchInPositionActive && !this.isParent && !this.node.children) {
                 return false;
             }
 
