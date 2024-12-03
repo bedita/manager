@@ -334,7 +334,7 @@ export default {
                 return false;
             }
 
-            if (this.searchInPositionActive && !this.isParent && !!!this.node.children) {
+            if (this.searchInPositionActive && !this.isParent && !this.node.children) {
                 return false;
             }
 
