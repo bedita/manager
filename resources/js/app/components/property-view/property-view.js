@@ -126,7 +126,7 @@ export default {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
             this.searchInPosition = '';
-            this.searchInPositionActive = !this.searchInPositionActive;
+            this.searchInPositionActive = this.searchInPositionActive ? true : false;
             this.checkLoadRelated();
             this.updateStorage();
         },
