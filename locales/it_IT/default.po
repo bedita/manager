@@ -805,7 +805,7 @@ msgid "Select a project"
 msgstr "Seleziona un progetto"
 
 msgid "Show active positions"
-msgstr "Mostra posizione attive"
+msgstr "Mostra posizioni attive"
 
 msgid "Sign in"
 msgstr "Accedi"
