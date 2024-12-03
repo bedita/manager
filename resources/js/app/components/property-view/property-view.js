@@ -44,6 +44,7 @@ export default {
         PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
+        ObjectCaptions: () => import(/* webpackChunkName: "object-captions" */'app/components/object-captions/object-captions'),
         ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
         PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
     },
@@ -91,6 +92,7 @@ export default {
             userInfoLoaded: false,
             fileChanged: false,
             searchInPosition: '',
+            searchInPositionActive: false,
         }
     },
 
@@ -124,6 +126,7 @@ export default {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
             this.searchInPosition = '';
+            this.searchInPositionActive = this.searchInPositionActive ? true : false;
             this.checkLoadRelated();
             this.updateStorage();
         },
@@ -247,6 +250,10 @@ export default {
             }
 
             return debouncedSearchPosition(e.target.value);
+        },
+
+        onSearchInPositionActive(e) {
+            this.searchInPositionActive = e.target.checked ? true : false;
         },
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "bedita-manager",
-  "version": "4.39.2",
+  "version": "4.40.1",
   "description": "BEdita Manager",
   "keywords": [
     "BEdita",
@@ -47,7 +47,8 @@
     "vue": "^2.5.16",
     "vue-chartjs": "^5.3.1",
     "vuejs-title": "^1.0.16",
-    "webpack-manifest-plugin": "^5.0.0"
+    "webpack-manifest-plugin": "^5.0.0",
+    "webvtt-parser": "^2.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",

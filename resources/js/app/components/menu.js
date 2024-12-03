@@ -29,7 +29,9 @@ export default {
             let key = e.which || e.keyCode || 0;
             switch (key) {
                 case 13:
-                    this.go();
+                    if (!e.shiftKey) {
+                        this.go();
+                    }
                     break;
                 case 27:
                     this.popUpAction = '';

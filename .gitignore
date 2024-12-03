@@ -68,10 +68,12 @@ bundle-report.*.html
 /webroot/*.hot-update.*
 /webroot/vendors/async/*.hot-update.*
 /webroot/css/admin-index*
+/webroot/css/admin-statistics*
 /webroot/css/app*
 /webroot/css/category*
 /webroot/css/date-range*
 /webroot/css/date-input*
+/webroot/css/edit-children-params*
 /webroot/css/email-input*
 /webroot/css/flash-message*
 /webroot/css/folder-picker*
@@ -82,6 +84,7 @@ bundle-report.*.html
 /webroot/css/menu*
 /webroot/css/object-categories*
 /webroot/css/object-nav*
+/webroot/css/object-captions*
 /webroot/css/object-property*
 /webroot/css/objects-history*
 /webroot/css/permission*
