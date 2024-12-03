@@ -796,7 +796,7 @@ msgstr ""
 msgid "Select a project"
 msgstr ""
 
-msgid "Show actived positions"
+msgid "Show active positions"
 msgstr ""
 
 msgid "Sign in"

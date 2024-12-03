@@ -92,7 +92,7 @@ export default {
             userInfoLoaded: false,
             fileChanged: false,
             searchInPosition: '',
-            searchInPositionActived: false,
+            searchInPositionActive: false,
         }
     },
 
@@ -126,7 +126,7 @@ export default {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
             this.searchInPosition = '';
-            this.searchInPositionActived = !this.searchInPositionActived;
+            this.searchInPositionActive = !this.searchInPositionActive;
             this.checkLoadRelated();
             this.updateStorage();
         },
@@ -252,8 +252,8 @@ export default {
             return debouncedSearchPosition(e.target.value);
         },
 
-        onSearchInPositionActived(e) {
-            this.searchInPositionActived = e.target.checked ? true : false;
+        onSearchInPositionActive(e) {
+            this.searchInPositionActive = e.target.checked ? true : false;
         },
     }
 }
