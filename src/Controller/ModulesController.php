@@ -29,7 +29,6 @@ use Psr\Log\LogLevel;
  *
  * @property \App\Controller\Component\CategoriesComponent $Categories
  * @property \App\Controller\Component\ChildrenComponent $Children
- * @property \App\Controller\Component\CloneComponent $Clone
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
  * @property \App\Controller\Component\ParentsComponent $Parents
@@ -58,7 +57,6 @@ class ModulesController extends AppController
         parent::initialize();
 
         $this->loadComponent('Children');
-        $this->loadComponent('Clone');
         $this->loadComponent('History');
         $this->loadComponent('ObjectsEditors');
         $this->loadComponent('Parents');
@@ -361,14 +359,23 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
         try {
-            $source = $this->apiClient->getObject($id, $this->objectType);
-            $attributes = $this->Clone->prepareData($this->objectType, $source);
-            $this->Clone->stream($schema, $source, $attributes);
-            $save = $this->apiClient->save($this->objectType, $attributes);
-            $destination = (string)Hash::get($save, 'data.id');
-            $this->Clone->relations($source, $destination);
-            $this->Clone->translations($source, $destination);
-            $id = $destination;
+            $included = [];
+            if ($this->getRequest()->getQuery('cloneRelations')) {
+                $included[] = 'relationships';
+            }
+            if ($this->getRequest()->getQuery('cloneTranslations')) {
+                $included[] = 'translations';
+            }
+            $modified = [
+                'title' => $this->getRequest()->getQuery('title'),
+                'status' => 'draft',
+            ];
+            $reset = (array)Configure::read(sprintf('Clone.%s.reset', $this->objectType));
+            foreach ($reset as $field) {
+                $modified[$field] = null;
+            }
+            $clone = $this->apiClient->clone($this->objectType, $id, $modified, $included);
+            $id = (string)Hash::get($clone, 'data.id');
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);

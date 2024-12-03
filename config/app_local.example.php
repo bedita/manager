@@ -72,28 +72,21 @@ return [
      * Rules are defined as `object type name` => ['reset' => [], 'unique' => []]
      * where:
      * - `reset` is an array of fields to reset => unset
-     * - `unique` is an array of fields that must be unique => add `-<timestamp>` to val
      * Example:
      * 'users' => [
      *     'reset' => [
      *         'name', 'surname', 'address',
      *     ],
-     *     'unique' => [
-     *         'email',
-     *     ],
      * ],
      * will reset `name`, `surname` and `address` fields and add `-<timestamp>` to `email` field
      * when cloning a user object.
-     * Note: `reset` and `unique` are optional.
+     * Note: `reset` is optional.
      */
     // 'Clone' => [
     //     // ...
     //     'users' => [
     //         'reset' => [
     //             'name', 'surname', 'address',
-    //         ],
-    //         'unique' => [
-    //             'email',
     //         ],
     //     ],
     //     // ...
