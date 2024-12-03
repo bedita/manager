@@ -89,6 +89,7 @@ class PropertiesComponent extends Component
         'tags',
         'lang',
         'children_order',
+        'captions',
     ];
 
     /**

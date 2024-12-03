@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-10-24 09:51:55 \n"
+"POT-Creation-Date: 2024-12-02 16:33:07 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -119,6 +119,9 @@ msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
 
 msgid "Cannot produce a thumbnail for this file"
 msgstr "Impossibile produrre una miniatura per questo file"
+
+msgid "Captions"
+msgstr "Sottotitoli"
 
 msgid "Categories"
 msgstr "Categorie"
@@ -800,6 +803,9 @@ msgstr "Cerca"
 
 msgid "Select a project"
 msgstr "Seleziona un progetto"
+
+msgid "Show active positions"
+msgstr "Mostra posizioni attive"
 
 msgid "Sign in"
 msgstr "Accedi"
@@ -1533,8 +1539,8 @@ msgstr "Ordina per"
 msgid "Related items order will be changed."
 msgstr "L'ordine degli elementi correlati verrà modificato."
 
-msgid "Continue?"
-msgstr "Vuoi continuare?"
+msgid "OK"
+msgstr ""
 
 msgid "Hide"
 msgstr "Nascondi"
@@ -1648,6 +1654,30 @@ msgstr "Errore nella cancellazione della proprietà"
 
 msgid "Search on categories"
 msgstr "Cerca tra le categorie"
+
+msgid "Caption"
+msgstr "Sottotitolo"
+
+msgid "Format"
+msgstr "Formato"
+
+msgid "New caption"
+msgstr "Nuovo sottotitolo"
+
+msgid "New"
+msgstr "Nuovo"
+
+msgid "No captions"
+msgstr "Nessun sottotitolo"
+
+msgid "Not valid"
+msgstr "Non valido"
+
+msgid "Parameters"
+msgstr "Parametri"
+
+msgid "Valid"
+msgstr "Valido"
 
 msgid "Password"
 msgstr "Password"
