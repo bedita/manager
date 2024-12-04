@@ -351,7 +351,6 @@ class ModulesController extends AppController
     public function clone($id): ?Response
     {
         $this->viewBuilder()->setTemplate('view');
-
         $schema = $this->Schema->getSchema();
         if (!is_array($schema)) {
             $this->Flash->error(__('Cannot create abstract objects or objects without schema'));
@@ -359,13 +358,6 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
         try {
-            $included = [];
-            if ($this->getRequest()->getQuery('cloneRelations')) {
-                $included[] = 'relationships';
-            }
-            if ($this->getRequest()->getQuery('cloneTranslations')) {
-                $included[] = 'translations';
-            }
             $modified = [
                 'title' => $this->getRequest()->getQuery('title'),
                 'status' => 'draft',
@@ -373,6 +365,12 @@ class ModulesController extends AppController
             $reset = (array)Configure::read(sprintf('Clone.%s.reset', $this->objectType));
             foreach ($reset as $field) {
                 $modified[$field] = null;
+            }
+            $included = [];
+            foreach (['relationships', 'translations'] as $attribute) {
+                if ($this->getRequest()->getQuery($attribute) === 'true') {
+                    $included[] = $attribute;
+                }
             }
             $clone = $this->apiClient->clone($this->objectType, $id, $modified, $included);
             $id = (string)Hash::get($clone, 'data.id');
