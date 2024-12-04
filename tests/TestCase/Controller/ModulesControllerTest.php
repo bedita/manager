@@ -353,7 +353,7 @@ class ModulesControllerTest extends BaseControllerTest
     {
         // Setup controller for test
         $this->setupController([
-            'query' => ['cloneRelations' => 1, 'cloneTranslations' => 1],
+            'query' => ['relationships' => 'true', 'translations' => 'true'],
         ]);
         Configure::write('Clone.documents.reset', ['body']);
 
