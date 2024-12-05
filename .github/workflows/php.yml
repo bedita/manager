@@ -5,6 +5,7 @@ on:
     paths:
       - '**/*.php'
       - '.github/workflows/php.yml'
+      - '.scrutinizer.yml'
       - 'composer.json'
       - 'phpcs.xml.dist'
       - 'phpstan.neon.dist'
@@ -13,6 +14,7 @@ on:
     paths:
       - '**/*.php'
       - '.github/workflows/php.yml'
+      - '.scrutinizer.yml'
       - 'composer.json'
       - 'phpcs.xml.dist'
       - 'phpstan.neon.dist'
