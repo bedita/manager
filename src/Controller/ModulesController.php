@@ -404,11 +404,10 @@ class ModulesController extends AppController
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
-            if (!empty($this->getRequest()->getData('id'))) {
-                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->getRequest()->getData('id')]);
-            }
+            $id = $this->getRequest()->getData('id');
+            $options = empty($id) ? $this->referer() : ['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id];
 
-            return $this->redirect($this->referer());
+            return $this->redirect($options);
         }
         $this->Flash->success(__('Object(s) deleted'));
 
