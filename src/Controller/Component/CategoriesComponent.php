@@ -13,7 +13,6 @@
 namespace App\Controller\Component;
 
 use App\Utility\CacheTools;
-use App\Utility\System;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
