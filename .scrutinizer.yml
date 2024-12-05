@@ -7,7 +7,7 @@ filter:
     - 'vendor/*'
 
 build:
-  image: default-noble
+  image: default-jammy
   environment:
     node: v22
   nodes:
