@@ -761,7 +761,7 @@ class ModulesControllerTest extends BaseControllerTest
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                'id' => '123456789',
+                'wrongquery' => '123456789',
             ],
             'params' => [
                 'object_type' => 'documents',
