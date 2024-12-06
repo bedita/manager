@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.1
+ARG PHP_VERSION=8.3
 FROM chialab/php:${PHP_VERSION}-apache
 
 # Install Wait-for-it and configure PHP
@@ -26,7 +26,7 @@ RUN if [ ! "$DEBUG" = "true" ]; then export COMPOSER_ARGS='--no-dev'; fi \
 USER root:root
 
 # Install node and yarn
-ENV NODE_VERSION=18.12.0
+ENV NODE_VERSION=22.11.0
 RUN apt install -y curl
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
 ENV NVM_DIR=/root/.nvm

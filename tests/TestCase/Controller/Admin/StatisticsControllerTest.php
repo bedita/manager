@@ -97,6 +97,24 @@ class StatisticsControllerTest extends TestCase
     }
 
     /**
+     * Test `fetchCount` method
+     *
+     * @return void
+     * @covers ::fetchCount()
+     */
+    public function testFetchCountZero(): void
+    {
+        $controller = new class () extends StatisticsController {
+            public function fetchCount(string $objectType, string $start, string $end): int
+            {
+                return parent::fetchCount($objectType, $start, $end);
+            }
+        };
+        $actual = $controller->fetchCount('documents', '2999-01-01', '2999-12-31');
+        static::assertSame(0, $actual);
+    }
+
+    /**
      * Test `fetchCount` method when exception is thrown
      *
      * @return void

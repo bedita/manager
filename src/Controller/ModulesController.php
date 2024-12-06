@@ -29,7 +29,6 @@ use Psr\Log\LogLevel;
  *
  * @property \App\Controller\Component\CategoriesComponent $Categories
  * @property \App\Controller\Component\ChildrenComponent $Children
- * @property \App\Controller\Component\CloneComponent $Clone
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
  * @property \App\Controller\Component\ParentsComponent $Parents
@@ -58,7 +57,6 @@ class ModulesController extends AppController
         parent::initialize();
 
         $this->loadComponent('Children');
-        $this->loadComponent('Clone');
         $this->loadComponent('History');
         $this->loadComponent('ObjectsEditors');
         $this->loadComponent('Parents');
@@ -215,9 +213,9 @@ class ModulesController extends AppController
             $response = $this->apiClient->get(sprintf('/objects/%s', $id));
         } catch (BEditaClientException $e) {
             $msg = $e->getMessage();
-            $error = $e->getCode() === 404 ?
-                sprintf(__('Resource "%s" not found', true), $id) :
-                sprintf(__('Resource "%s" not available. Error: %s', true), $id, $msg);
+            $msgNotFound = sprintf(__('Resource "%s" not found', true), $id);
+            $msgNotAvailable = sprintf(__('Resource "%s" not available. Error: %s', true), $id, $msg);
+            $error = $e->getCode() === 404 ? $msgNotFound : $msgNotAvailable;
             $this->Flash->error($error);
 
             return $this->redirect($this->referer());
@@ -353,7 +351,6 @@ class ModulesController extends AppController
     public function clone($id): ?Response
     {
         $this->viewBuilder()->setTemplate('view');
-
         $schema = $this->Schema->getSchema();
         if (!is_array($schema)) {
             $this->Flash->error(__('Cannot create abstract objects or objects without schema'));
@@ -361,14 +358,22 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
         try {
-            $source = $this->apiClient->getObject($id, $this->objectType);
-            $attributes = $this->Clone->prepareData($this->objectType, $source);
-            $this->Clone->stream($schema, $source, $attributes);
-            $save = $this->apiClient->save($this->objectType, $attributes);
-            $destination = (string)Hash::get($save, 'data.id');
-            $this->Clone->relations($source, $destination);
-            $this->Clone->translations($source, $destination);
-            $id = $destination;
+            $modified = [
+                'title' => $this->getRequest()->getQuery('title'),
+                'status' => 'draft',
+            ];
+            $reset = (array)Configure::read(sprintf('Clone.%s.reset', $this->objectType));
+            foreach ($reset as $field) {
+                $modified[$field] = null;
+            }
+            $included = [];
+            foreach (['relationships', 'translations'] as $attribute) {
+                if ($this->getRequest()->getQuery($attribute) === 'true') {
+                    $included[] = $attribute;
+                }
+            }
+            $clone = $this->apiClient->clone($this->objectType, $id, $modified, $included);
+            $id = (string)Hash::get($clone, 'data.id');
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -399,11 +404,10 @@ class ModulesController extends AppController
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
-            if (!empty($this->getRequest()->getData('id'))) {
-                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->getRequest()->getData('id')]);
-            }
+            $id = $this->getRequest()->getData('id');
+            $options = empty($id) ? $this->referer() : ['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id];
 
-            return $this->redirect($this->referer());
+            return $this->redirect($options);
         }
         $this->Flash->success(__('Object(s) deleted'));
 
