@@ -93,6 +93,7 @@ export default {
             fileChanged: false,
             searchInPosition: '',
             searchInPositionActive: false,
+            positions: [],
         }
     },
 
@@ -254,6 +255,11 @@ export default {
 
         onSearchInPositionActive(e) {
             this.searchInPositionActive = e.target.checked ? true : false;
+        },
+
+        updatePositions(n) {
+            this.positions = n;
+            this.$forceUpdate();
         },
     }
 }
