@@ -15,9 +15,9 @@ Backend Manager for [BEdita API](https://gihub.com/bedita/bedita).
 
 ## Prerequisites
 
-* [PHP](https://www.php.net/) 7.4, 8.0, 8.1, 8.2 and 8.3 supported
+* [PHP](https://www.php.net/) >= 8.3
 * [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
-* [Node](https://nodejs.org) >= 16
+* [Node](https://nodejs.org) >= 20
 * [Yarn](https://yarnpkg.com) >= 1.15
 
 ## Install
@@ -61,42 +61,6 @@ For any other use than a simple test we recommend to configure your preferred we
 You can further configure your BEdita Manager instance in `config/app_local.php` with environment and project specific settings.
 
 Have look at the main [Manager configuration wiki page](https://github.com/bedita/manager/wiki/Manager-App-Configuration) on how to customize your Manager instance.
-
-## Docker
-
-### Pull official image
-
-Get latest offical image build from Docker Hub
-
-```bash
-docker pull bedita/manager:4
-```
-
-### Build image
-
-If you want to build an image from local sources you can do it like this from root folder:
-
-```bash
-
-docker build -t manager-local .
-
-```
-
-You may of course choose whatever name you like for the generated image instead of `manager-local`.
-
-### Run
-
-Run a Docker image setting API base url and API KEY like this:
-
-```bash
-
-docker run -p 8080:80 \
-    --env BEDITA_API={bedita-api-url} --env BEDITA_API_KEY={bedita-api-key} \
-    bedita/manager:latest
-
-```
-
-Replace `bedita/manager:latest` with `manager-local` (or other chosen name) to lanch a local built image.
 
 ## JS Development with webpack
 

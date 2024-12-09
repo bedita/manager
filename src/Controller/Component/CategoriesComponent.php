@@ -13,7 +13,6 @@
 namespace App\Controller\Component;
 
 use App\Utility\CacheTools;
-use App\Utility\System;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
@@ -160,12 +159,7 @@ class CategoriesComponent extends Component
     public function getAllAvailableRoots(): array
     {
         $roots = ['' => ['id' => 0, 'label' => '-', 'name' => '', 'object_type_name' => '']];
-        $options = ['page_size' => self::DEFAULT_PAGE_SIZE];
-        $actualApiVersion = Hash::get((array)$this->getController()->viewBuilder()->getVar('project'), 'version');
-        // BE APIs provide roots filter from version 5.27.0
-        if (System::compareBEditaApiVersion($actualApiVersion, '5.27.0')) {
-            $options['filter']['roots'] = 1;
-        }
+        $options = ['page_size' => self::DEFAULT_PAGE_SIZE, 'filter' => ['roots' => 1]];
         $pageCount = $page = 1;
         $endpoint = '/model/categories';
         while ($page <= $pageCount) {

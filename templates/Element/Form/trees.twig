@@ -36,7 +36,7 @@
                 <div class="mt-1">
                     <label>
                         <input type="checkbox" @input="onSearchInPositionActive" />
-                        {{ __('Show active positions') }}
+                        {{ __('Show active positions') }} <span class="tag is-smallest is-black mx-05" :class="{'empty': positions.length == 0}"><: positions.length :></span>
                     </label>
                 </div>
 
@@ -54,7 +54,8 @@
                     :user-roles="{{ user.roles|json_encode }}"
                     :has-permissions="{{ hasPermissions|json_encode }}"
                     :search="searchInPosition"
-                    :search-in-position-active="searchInPositionActive">
+                    :search-in-position-active="searchInPositionActive"
+                    @changed-parents="updatePositions">
                 </tree-view>
             </div>
             {% do Form.unlockField('relations.' ~ relationName ~ '.replaceRelated') %}
