@@ -432,6 +432,7 @@ export default {
                 this.loadingCounter++;
                 this.loadingMainMessage = this.msgLoadingBranchesForPosition + `: ${this.loadingCounter} / ${this.totalCounter}`;
             }
+            this.$emit('changed-parents', this.parents);
 
             return Promise.all(included);
         },
@@ -611,6 +612,7 @@ export default {
                 arr.push(folderId);
             }
             document.getElementById('changedParents').value = arr.join(',');
+            this.$emit('changed-parents', this.parents);
         },
 
         foundIn(item) {

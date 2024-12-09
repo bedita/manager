@@ -332,19 +332,6 @@ class SchemaHelper extends Helper
     }
 
     /**
-     * Return unique right types from schema "relationsSchema".
-     *
-     * @return array
-     * @deprecated It will be removed in version 5.x.
-     */
-    public function rightTypes(): array
-    {
-        $relationsSchema = (array)$this->_View->get('relationsSchema');
-
-        return \App\Utility\Schema::rightTypes($relationsSchema);
-    }
-
-    /**
      * Get filter list from filters and schema properties
      *
      * @param array $filters Filters list

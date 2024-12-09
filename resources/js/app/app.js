@@ -226,8 +226,8 @@ const _vueInstance = new Vue({
                 for (const uitem of options?.unique || []) {
                     query += `&${uitem.field}=${uitem.value}`;
                 }
-                query += `&cloneRelations=${options?.relations || false}`;
-                query += `&cloneTranslations=${options?.translations || false}`;
+                query += `&relationships=${options?.relations || false}`;
+                query += `&translations=${options?.translations || false}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
                 const url = `${origin}${path}${query}`;
