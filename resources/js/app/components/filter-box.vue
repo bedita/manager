@@ -170,10 +170,10 @@ export default {
 
         initFolder() {
             if (!this.initFilter?.filter) {
-                return '';
+                return null;
             }
 
-            return this.initFilter?.filter[this.positionFilterName] || '';
+            return this.initFilter?.filter[this.positionFilterName] || null;
         },
 
         /**
