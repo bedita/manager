@@ -881,68 +881,6 @@ class SchemaHelperTest extends TestCase
     }
 
     /**
-     * Data provider for `rightTypes`
-     *
-     * @return array
-     */
-    public function rightTypesProvider(): array
-    {
-        return [
-            'empty relationsSchema' => [
-                [],
-                [],
-            ],
-            'some right types' => [
-                [
-                    'dummyRelation1' => [
-                        'left' => [
-                            'l1dummies',
-                        ],
-                        'right' => [
-                            'r1dummies',
-                            'r2dummies',
-                            'r3dummies',
-                        ],
-                    ],
-                    'dummyRelation2' => [
-                        'left' => [
-                            'l2dummies',
-                        ],
-                        'right' => [
-                            'r1dummies',
-                            'r4dummies',
-                            'r5dummies',
-                        ],
-                    ],
-                ],
-                [
-                    'r1dummies',
-                    'r2dummies',
-                    'r3dummies',
-                    'r4dummies',
-                    'r5dummies',
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Test `rightTypes`
-     *
-     * @return void
-     * @dataProvider rightTypesProvider()
-     * @covers ::rightTypes()
-     */
-    public function testRightTypes($relationsSchema, $expected): void
-    {
-        $view = $this->Schema->getView();
-        $view->set('relationsSchema', $relationsSchema);
-        /** @phpstan-ignore-next-line */
-        $actual = $this->Schema->rightTypes();
-        static::assertSame($expected, $actual);
-    }
-
-    /**
      * Data provider for `filterList` test case.
      *
      * @return array

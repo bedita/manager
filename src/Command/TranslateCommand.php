@@ -67,6 +67,7 @@ class TranslateCommand extends Command
 
             return self::CODE_ERROR;
         }
+        // debug
         $o = (string)($args->getOption('output') ?? $args->getOption('o'));
         $f = (string)($args->getOption('from') ?? $args->getOption('f'));
         $t = (string)($args->getOption('to') ?? $args->getOption('t'));

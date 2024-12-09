@@ -2,6 +2,8 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\SystemInfoController;
+use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -116,5 +118,33 @@ class SystemInfoControllerTest extends TestCase
         foreach ($expectedKeys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $actual);
         }
+    }
+
+    /**
+     * Test `getApiInfo` method with exception
+     *
+     * @return void
+     * @covers ::getApiInfo()
+     */
+    public function testGetApiInfoException(): void
+    {
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->will($this->throwException(new BEditaClientException('test')));
+        $expected = [
+            'Url' => getenv('BEDITA_API'),
+            'Version' => '',
+        ];
+        $controller = new class () extends SystemInfoController {
+            public function setApiClient($client): void
+            {
+                $this->apiClient = $client;
+            }
+        };
+        $controller->setApiClient($apiClient);
+        $actual = $controller->getApiInfo();
+        static::assertEquals($expected, $actual);
     }
 }
