@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-12-02 16:33:07 \n"
+"POT-Creation-Date: 2024-12-19 11:17:51 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -116,9 +116,6 @@ msgstr "Calendario"
 
 msgid "Cannot create abstract objects or objects without schema"
 msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
-
-msgid "Cannot produce a thumbnail for this file"
-msgstr "Impossibile produrre una miniatura per questo file"
 
 msgid "Captions"
 msgstr "Sottotitoli"
@@ -616,9 +613,6 @@ msgstr "Apri"
 msgid "Open File"
 msgstr "Apri File"
 
-msgid "Open image"
-msgstr "Apri immagine"
-
 msgid "Open module"
 msgstr "Apri modulo"
 
@@ -816,9 +810,6 @@ msgstr "Accedi con {0}"
 msgid "Size"
 msgstr "Dimensione"
 
-msgid "Sorry, your browser does not support embedded {0} element"
-msgstr "Spiacenti, il tuo browser non supporta l'elemento {0} incorporato"
-
 msgid "State Name"
 msgstr "Provincia"
 
@@ -853,9 +844,6 @@ msgstr "Tag"
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
 
-msgid "The thumbnail is not available"
-msgstr "La miniatura non è disponibile"
-
 msgid "There were errors creating the thumbnail(s)"
 msgstr "È avvenuto un errore nella creazione delle miniature"
 
@@ -864,9 +852,6 @@ msgstr "Miniatura non disponibile"
 
 msgid "Thumb not ready: coming soon"
 msgstr "Miniatura non pronta: in lavorazione"
-
-msgid "Thumbnail is not ready"
-msgstr "La miniatura non è pronta"
 
 msgid "Title"
 msgstr "Titolo"
@@ -978,9 +963,6 @@ msgstr "Video"
 
 msgid "View file"
 msgstr "Vedi file"
-
-msgid "View original"
-msgstr "Vedi originale"
 
 msgid "Website"
 msgstr "Sito Web"
@@ -1678,6 +1660,31 @@ msgstr "Parametri"
 
 msgid "Valid"
 msgstr "Valido"
+
+msgid ""
+"Sorry, your browser does not support embedded <code>audio</code> element"
+msgstr ""
+"Spiacenti, il tuo browser non supporta l'elemento <code>audio</code> incorporato"
+
+msgid "Cannot produce a thumbnail for this file"
+msgstr "Impossibile produrre una miniatura per questo file"
+
+msgid "The thumbnail is not available"
+msgstr "La miniatura non è disponibile"
+
+msgid "The thumbnail is not ready"
+msgstr "La miniatura non è pronta"
+
+msgid "Open image"
+msgstr "Apri immagine"
+
+msgid ""
+"Sorry, your browser does not support embedded <code>video</code> element"
+msgstr ""
+"Spiacenti, il tuo browser non supporta l'elemento <code>video</code> incorporato"
+
+msgid "View original"
+msgstr "Vedi originale"
 
 msgid "Password"
 msgstr "Password"

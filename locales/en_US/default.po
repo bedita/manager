@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-12-02 16:33:07 \n"
+"POT-Creation-Date: 2024-12-19 11:17:51 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -113,9 +113,6 @@ msgid "Calendar"
 msgstr ""
 
 msgid "Cannot create abstract objects or objects without schema"
-msgstr ""
-
-msgid "Cannot produce a thumbnail for this file"
 msgstr ""
 
 msgid "Captions"
@@ -613,9 +610,6 @@ msgstr ""
 msgid "Open File"
 msgstr ""
 
-msgid "Open image"
-msgstr ""
-
 msgid "Open module"
 msgstr ""
 
@@ -811,9 +805,6 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-msgid "Sorry, your browser does not support embedded {0} element"
-msgstr ""
-
 msgid "State Name"
 msgstr ""
 
@@ -847,9 +838,6 @@ msgstr ""
 msgid "Temporary folder missing"
 msgstr ""
 
-msgid "The thumbnail is not available"
-msgstr ""
-
 msgid "There were errors creating the thumbnail(s)"
 msgstr ""
 
@@ -857,9 +845,6 @@ msgid "Thumb not available"
 msgstr ""
 
 msgid "Thumb not ready: coming soon"
-msgstr ""
-
-msgid "Thumbnail is not ready"
 msgstr ""
 
 msgid "Title"
@@ -971,9 +956,6 @@ msgid "Videos"
 msgstr ""
 
 msgid "View file"
-msgstr ""
-
-msgid "View original"
 msgstr ""
 
 msgid "Website"
@@ -1660,6 +1642,29 @@ msgid "Parameters"
 msgstr ""
 
 msgid "Valid"
+msgstr ""
+
+msgid ""
+"Sorry, your browser does not support embedded <code>audio</code> element"
+msgstr ""
+
+msgid "Cannot produce a thumbnail for this file"
+msgstr ""
+
+msgid "The thumbnail is not available"
+msgstr ""
+
+msgid "The thumbnail is not ready"
+msgstr ""
+
+msgid "Open image"
+msgstr ""
+
+msgid ""
+"Sorry, your browser does not support embedded <code>video</code> element"
+msgstr ""
+
+msgid "View original"
 msgstr ""
 
 msgid "Password"
