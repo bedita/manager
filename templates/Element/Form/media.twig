@@ -11,26 +11,13 @@
             {% if object.attributes.provider_extra.html %}
                 {% set height = object.attributes.provider_extra.height|default(1) %}
                 {% set width = object.attributes.provider_extra.width|default(1) %}
-                <div class="embedded-container"
+                <div class="embedded-container mt-1 grid-span-full"
                     {% if height matches '/^\\d+$/' and width matches '/^\\d+$/' %}
                         style="padding-bottom: {{ 100 * height / width|default(1) }}%;"
                     {% endif %}>
                     {{ object.attributes.provider_extra.html|raw }}
                 </div>
-                <div>
-                    <div class="input text">
-                        {{ Property.control('provider', properties['provider'])|raw }}
-                    </div>
-                    <div class="input text">
-                        {{ Property.control('provider_url', properties['provider_url'])|raw }}
-                    </div>
-                    <div class="input text">
-                        {{ Property.control('provider_uid', properties['provider_uid'])|raw }}
-                    </div>
-                    <div class="input text">
-                        {{ Property.control('provider_thumbnail', properties['provider_thumbnail'])|raw }}
-                    </div>
-                </div>
+                {{ element('Form/provider') }}
             {% else %}
 
                 {# Show first stream #}
@@ -94,6 +81,8 @@
                         {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
                     </div>
                 </div>
+
+                {{ element('Form/provider') }}
             {% endif %}
         </div>
     </section>
