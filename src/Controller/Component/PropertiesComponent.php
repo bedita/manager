@@ -45,6 +45,12 @@ class PropertiesComponent extends Component
                 'title',
                 'description',
             ],
+            'media' => [
+                'provider',
+                'provider_uid',
+                'provider_url',
+                'provider_thumbnail',
+            ],
             // publishing related
             'publish' => [
                 'uname',

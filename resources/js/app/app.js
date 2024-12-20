@@ -92,6 +92,7 @@ const _vueInstance = new Vue({
         PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
         BarChart:() => import(/* webpackChunkName: "bar-chart" */'app/components/charts/bar-chart'),
         SortRelated: () => import(/* webpackChunkName: "sort-related" */'app/components/sort-related/sort-related'),
+        MediaItem: () => import(/* webpackChunkName: "media-item" */'app/components/media-item/media-item'),
         AppIcon,
     },
 
