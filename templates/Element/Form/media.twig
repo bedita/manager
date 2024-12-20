@@ -17,6 +17,20 @@
                     {% endif %}>
                     {{ object.attributes.provider_extra.html|raw }}
                 </div>
+                <div>
+                    <div class="input text">
+                        {{ Property.control('provider', properties['provider'])|raw }}
+                    </div>
+                    <div class="input text">
+                        {{ Property.control('provider_url', properties['provider_url'])|raw }}
+                    </div>
+                    <div class="input text">
+                        {{ Property.control('provider_uid', properties['provider_uid'])|raw }}
+                    </div>
+                    <div class="input text">
+                        {{ Property.control('provider_thumbnail', properties['provider_thumbnail'])|raw }}
+                    </div>
+                </div>
             {% else %}
 
                 {# Show first stream #}
