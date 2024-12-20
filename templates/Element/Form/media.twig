@@ -17,7 +17,26 @@
                     {% endif %}>
                     {{ object.attributes.provider_extra.html|raw }}
                 </div>
-                {{ element('Form/provider') }}
+                {% if object.attributes.provider and object.attributes.provider_url %}
+                    <div class="mt-1 grid-span-full">
+                        <div class="input text">
+                            {{ Form.hidden('upload_behavior', {value: 'embed'})|raw }}
+                            {{ Property.control('remote_url', {value: object.attributes.provider_url})|raw }}
+                        </div>
+                        <div class="input text">
+                            {{ Property.control('provider', properties['provider'], {'disabled': true})|raw }}
+                        </div>
+                        <div class="input text">
+                            {{ Property.control('provider_url', properties['provider_url'], {'disabled': true})|raw }}
+                        </div>
+                        <div class="input text">
+                            {{ Property.control('provider_uid', properties['provider_uid'], {'disabled': true})|raw }}
+                        </div>
+                        <div class="input text">
+                            {{ Property.control('provider_thumbnail', properties['provider_thumbnail'], {'disabled': true})|raw }}
+                        </div>
+                    </div>
+                {% endif %}
             {% else %}
 
                 {# Show first stream #}
@@ -81,8 +100,6 @@
                         {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
                     </div>
                 </div>
-
-                {{ element('Form/provider') }}
             {% endif %}
         </div>
     </section>
