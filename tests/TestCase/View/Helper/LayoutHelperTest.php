@@ -887,4 +887,27 @@ class LayoutHelperTest extends TestCase
         static::assertTrue($actual);
         Configure::delete('UI.modules.counters');
     }
+
+    /**
+     * Test `propertyGroup` method.
+     *
+     * @return void
+     * @covers ::propertyGroup()
+     */
+    public function testPropertyGroup(): void
+    {
+        $view = new View();
+        $layout = new LayoutHelper($view);
+        $view->set('properties', [
+            'media' => [
+                'provider' => '',
+                'provider_uid' => '',
+            ],
+        ]);
+        $actual = $layout->propertyGroup('whatever');
+        static::assertNull($actual);
+        $expected = 'media';
+        $actual = $layout->propertyGroup('provider_uid');
+        static::assertEquals($expected, $actual);
+    }
 }

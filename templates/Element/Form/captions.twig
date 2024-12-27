@@ -1,3 +1,4 @@
+{% if object.id %}
 {% if schema.properties.captions %}
 {% set captions = object.attributes.captions %}
 <property-view inline-template :tab-open="tabsOpen" tab-name="captions">
@@ -23,4 +24,5 @@
 		</div>
 	</section>
 </property-view>
+{% endif %}
 {% endif %}
