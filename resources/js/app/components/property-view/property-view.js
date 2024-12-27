@@ -47,6 +47,7 @@ export default {
         ObjectCaptions: () => import(/* webpackChunkName: "object-captions" */'app/components/object-captions/object-captions'),
         ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
         PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
+        MediaItem: () => import(/* webpackChunkName: "media-item" */'app/components/media-item/media-item'),
     },
 
     props: {
