@@ -50,6 +50,7 @@ class PropertiesComponent extends Component
                 'provider_uid',
                 'provider_url',
                 'provider_thumbnail',
+                'provider_extra',
             ],
             // publishing related
             'publish' => [

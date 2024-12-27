@@ -19,22 +19,37 @@
                 </div>
                 {% if object.attributes.provider and object.attributes.provider_url %}
                     <div class="mt-1 grid-span-full">
+                        {% if Layout.propertyGroup('provider_url') == 'media' %}
                         <div class="input text">
                             {{ Form.hidden('upload_behavior', {value: 'embed'})|raw }}
                             {{ Property.control('remote_url', {value: object.attributes.provider_url})|raw }}
                         </div>
+                        {% endif %}
+                        {% if Layout.propertyGroup('provider') == 'media' %}
                         <div class="input text">
-                            {{ Property.control('provider', properties['provider'], {'disabled': true})|raw }}
+                            {{ Property.control('provider', object.attributes.provider, {'disabled': true})|raw }}
                         </div>
+                        {% endif %}
+                        {% if Layout.propertyGroup('provider_url') == 'media' %}
                         <div class="input text">
-                            {{ Property.control('provider_url', properties['provider_url'], {'disabled': true})|raw }}
+                            {{ Property.control('provider_url', object.attributes.provider_url, {'disabled': true})|raw }}
                         </div>
+                        {% endif %}
+                        {% if Layout.propertyGroup('provider_uid') == 'media' %}
                         <div class="input text">
-                            {{ Property.control('provider_uid', properties['provider_uid'], {'disabled': true})|raw }}
+                            {{ Property.control('provider_uid', object.attributes.provider_uid, {'disabled': true})|raw }}
                         </div>
+                        {% endif %}
+                        {% if Layout.propertyGroup('provider_thumbnail') == 'media' %}
                         <div class="input text">
-                            {{ Property.control('provider_thumbnail', properties['provider_thumbnail'], {'disabled': true})|raw }}
+                            {{ Property.control('provider_thumbnail', object.attributes.provider_thumbnail, {'disabled': true})|raw }}
                         </div>
+                        {% endif %}
+                        {% if Layout.propertyGroup('provider_extra') == 'media' %}
+                        <div class="input text">
+                            {{ Property.control('provider_extra', object.attributes.provider_extra, {'disabled': true, 'readonly': true})|raw }}
+                        </div>
+                        {% endif %}
                     </div>
                 {% endif %}
             {% else %}

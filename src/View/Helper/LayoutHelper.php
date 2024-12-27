@@ -426,4 +426,23 @@ class LayoutHelper extends Helper
             ['class' => $classes, 'title' => $title, 'escape' => false]
         );
     }
+
+    /**
+     * Return properties group for given property
+     *
+     * @param string $needle The property to search
+     * @return ?string
+     */
+    public function propertyGroup(string $needle): ?string
+    {
+        $properties = (array)$this->getView()->get('properties');
+        foreach ($properties as $group => $props) {
+            $keys = array_keys($props);
+            if (in_array($needle, $keys)) {
+                return $group;
+            }
+        }
+
+        return null;
+    }
 }
