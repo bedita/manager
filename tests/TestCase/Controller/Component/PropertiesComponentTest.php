@@ -259,6 +259,7 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'title' => 'A',
                     ],
+                    'media' => [],
                     'publish' => [
                         'uname' => 'an-object',
                         'status' => 'on',
@@ -284,6 +285,7 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'something' => '',
                     ],
+                    'media' => [],
                     'publish' => [
                         'uname' => 'test',
                         'status' => 'on',
@@ -314,6 +316,7 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'title' => 'A',
                     ],
+                    'media' => [],
                     'advanced' => [
                         'json_field' => 'json',
                     ],
@@ -353,6 +356,7 @@ class PropertiesComponentTest extends TestCase
                         'title' => 'A',
                         'extra' => [],
                     ],
+                    'media' => [],
                     'publish' => [
                         'uname' => 'test',
                         'status' => 'on',
@@ -389,6 +393,7 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'title' => 'A',
                     ],
+                    'media' => [],
                     'publish' => [
                         'status' => 'on',
                     ],
@@ -428,6 +433,7 @@ class PropertiesComponentTest extends TestCase
                         'title' => 'Example',
                         'body' => 'some text',
                     ],
+                    'media' => [],
                     'publish' => [
                     ],
                     'advanced' => [
@@ -454,6 +460,7 @@ class PropertiesComponentTest extends TestCase
                     'core' => [
                         'title' => 'Example',
                     ],
+                    'media' => [],
                     'publish' => [
                     ],
                     'advanced' => [
