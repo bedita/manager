@@ -368,6 +368,7 @@ class SchemaHelper extends Helper
         foreach ($filtersByType as $type => $filters) {
             $noSchema = empty($schemasByType) || !array_key_exists($type, $schemasByType);
             $schemaProperties = $noSchema ? null : Hash::get($schemasByType, $type);
+            $schemaProperties = array_key_exists('properties', $schemaProperties) ? $schemaProperties['properties'] : $schemaProperties;
             $schemaProperties = $schemaProperties !== false ? $schemaProperties : null;
             $list[$type] = self::filterList($filters, $schemaProperties);
         }
