@@ -312,23 +312,22 @@ class SchemaHelper extends Helper
      */
     public function sortable(string $field): bool
     {
-        // exception 'date_ranges' default sortable
-        if ($field === 'date_ranges') {
+        // default sortable fields
+        if (in_array($field, ['date_ranges', 'modified', 'id', 'title'])) {
             return true;
         }
         $schema = (array)$this->_View->get('schema');
         $schema = Hash::get($schema, sprintf('properties.%s', $field), []);
-
         // empty schema, then not sortable
         if (empty($schema)) {
             return false;
         }
-        $type = self::typeFromSchema($schema);
 
-        // not sortable: 'array', 'object'
-        // other types are sortable: 'string', 'number', 'integer', 'boolean', 'date-time', 'date'
+        // check from configuration Properties.%s.sortable
+        $name = Hash::get((array)$this->_View->get('currentModule'), 'name');
+        $sortable = (array)Configure::read(sprintf('Properties.%s.sortable', $name));
 
-        return !in_array($type, ['array', 'object']);
+        return in_array($field, $sortable);
     }
 
     /**
@@ -368,6 +367,7 @@ class SchemaHelper extends Helper
         foreach ($filtersByType as $type => $filters) {
             $noSchema = empty($schemasByType) || !array_key_exists($type, $schemasByType);
             $schemaProperties = $noSchema ? null : Hash::get($schemasByType, $type);
+            $schemaProperties = array_key_exists('properties', (array)$schemaProperties) ? $schemaProperties['properties'] : $schemaProperties;
             $schemaProperties = $schemaProperties !== false ? $schemaProperties : null;
             $list[$type] = self::filterList($filters, $schemaProperties);
         }

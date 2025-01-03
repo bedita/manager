@@ -261,6 +261,7 @@ export default {
             this.availableFilters = this.filterList;
         } else if (this.rightTypes.length == 1 && this.filtersByType) {
             this.availableFilters = this.filtersByType[this.rightTypes[0]];
+            this.queryFilter.filter.type = this.rightTypes[0];
         } else {
             this.availableFilters = this.filtersByType?.[this.queryFilter.filter.type] || [];
         }
@@ -383,6 +384,10 @@ export default {
             this.folder = null;
             this.selectedSearchType = 'q';
             this.queryFilter = this.getCleanQuery();
+            if (this.rightTypes.length == 1 && this.filtersByType) {
+                this.availableFilters = this.filtersByType[this.rightTypes[0]];
+                this.queryFilter.filter.type = this.rightTypes[0];
+            }
             this.$emit('filter-reset');
         },
 
