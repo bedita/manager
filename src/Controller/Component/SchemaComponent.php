@@ -365,6 +365,41 @@ class SchemaComponent extends Component
     }
 
     /**
+     * Retrieve list of custom properties for a given object type.
+     *
+     * @param string $type Object type name.
+     * @return array
+     */
+    public function customProps(string $type): array
+    {
+        return (array)Cache::remember(
+            CacheTools::cacheKey(sprintf('custom_props_%s', $type)),
+            function () use ($type) {
+                return $this->fetchCustomProps($type);
+            },
+            self::CACHE_CONFIG
+        );
+    }
+
+    /**
+     * Fetch custom properties for a given object type.
+     *
+     * @param string $type Object type name.
+     * @return array
+     */
+    protected function fetchCustomProps(string $type): array
+    {
+        $query = [
+            'fields' => 'name',
+            'filter' => ['object_type' => $type, 'type' => 'dynamic'],
+            'page_size' => 100,
+        ];
+        $response = ApiClientProvider::getApiClient()->get('/model/properties', $query);
+
+        return (array)Hash::extract($response, 'data.{n}.attributes.name');
+    }
+
+    /**
      * Read object types features from API
      *
      * @return array
