@@ -322,12 +322,12 @@ class SchemaHelper extends Helper
         if (empty($schema)) {
             return false;
         }
+        $type = self::typeFromSchema($schema);
 
-        // check from configuration Properties.%s.sortable
-        $name = Hash::get((array)$this->_View->get('currentModule'), 'name');
-        $sortable = (array)Configure::read(sprintf('Properties.%s.sortable', $name));
+        // not sortable: 'array', 'object'
+        // other types are sortable: 'string', 'number', 'integer', 'boolean', 'date-time', 'date'
 
-        return in_array($field, $sortable);
+        return !in_array($type, ['array', 'object']);
     }
 
     /**
