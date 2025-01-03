@@ -481,7 +481,7 @@ class ModulesController extends AppController
     }
 
     /**
-     * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
+     * Relation data load calling api `GET /:object_type/:id/relationships/:relation`
      * Json response
      *
      * @param string|int $id The object ID.
@@ -532,7 +532,7 @@ class ModulesController extends AppController
         $relationsSchema = $this->Schema->getRelationsSchema();
         $types = $this->Modules->relatedTypes($relationsSchema, $relation);
 
-        return '/objects?filter[type][]=' . implode('&filter[type][]=', $types);
+        return count($types) === 1 ? sprintf('/%s', $types[0]) : '/objects?filter[type][]=' . implode('&filter[type][]=', $types);
     }
 
     /**
