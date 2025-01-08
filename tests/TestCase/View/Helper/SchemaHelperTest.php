@@ -859,7 +859,7 @@ class SchemaHelperTest extends TestCase
                 'custom_prop',
                 [],
                 false,
-            ]
+            ],
         ];
     }
 
