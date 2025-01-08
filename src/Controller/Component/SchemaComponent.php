@@ -389,6 +389,9 @@ class SchemaComponent extends Component
      */
     protected function fetchCustomProps(string $type): array
     {
+        if ($this->getConfig('internalSchema')) {
+            return []; // internal resources don't have custom properties
+        }
         $query = [
             'fields' => 'name',
             'filter' => ['object_type' => $type, 'type' => 'dynamic'],
