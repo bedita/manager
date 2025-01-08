@@ -8,7 +8,7 @@
     {% set emptyQuerySearch = (_view.getRequest().getSession().read(currentModule.name ~ '.filter.q')|length == 0) %}
     {% for prop in properties %}
         <div class="{{ Link.sortClass(prop) }}">
-            {% if emptyQuerySearch and Schema.sortable(prop) and not in_array(prop, customProps) %}
+            {% if emptyQuerySearch and Schema.sortable(prop) %}
                 <a href="{{ Link.sortUrl(prop) }}">{{ Property.fieldLabel(prop) }}</a>
             {% else %}
                 {{ Property.fieldLabel(prop) }}
