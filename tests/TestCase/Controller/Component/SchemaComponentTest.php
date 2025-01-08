@@ -740,6 +740,54 @@ class SchemaComponentTest extends TestCase
     }
 
     /**
+     * Test `customProps` method.
+     *
+     * @return void
+     * @covers ::customProps()
+     * @covers ::fetchCustomProps()
+     */
+    public function testCustomProps(): void
+    {
+        $props = [
+            'data' => [
+                [
+                    'id' => '1',
+                    'attributes' => [
+                        'name' => 'custom_prop1',
+                    ],
+                ],
+                [
+                    'id' => '2',
+                    'attributes' => [
+                        'name' => 'custom_prop2',
+                    ],
+                ],
+            ],
+        ];
+
+        // Setup mock API client.
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturn($props);
+        ApiClientProvider::setApiClient($apiClient);
+
+        Cache::clearAll();
+
+        $this->Schema->setConfig(['internalSchema' => true]);
+        $result = $this->Schema->customProps('translations');
+        static::assertIsArray($result);
+        static::assertEmpty($result);
+
+        $this->Schema->setConfig(['internalSchema' => false]);
+        $result = $this->Schema->customProps('documents');
+        static::assertIsArray($result);
+        static::assertNotEmpty($result);
+        static::assertEquals($result, ['custom_prop1', 'custom_prop2']);
+    }
+
+    /**
      * Test `abstractTypes`
      *
      * @return void
