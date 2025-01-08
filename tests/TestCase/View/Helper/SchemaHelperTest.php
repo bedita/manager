@@ -770,47 +770,96 @@ class SchemaHelperTest extends TestCase
                 [],
                 false,
             ],
+            'string: sortable' => [
+                'dummy_string',
+                ['type' => 'string'],
+                true,
+            ],
+            'number: sortable' => [
+                'dummy_number',
+                ['type' => 'number'],
+                true,
+            ],
+            'integer: sortable' => [
+                'dummy_integer',
+                ['type' => 'integer'],
+                true,
+            ],
+            'boolean: sortable' => [
+                'dummy_boolean',
+                ['type' => 'boolean'],
+                true,
+            ],
+            'date-time: sortable' => [
+                'dummy_date-time',
+                ['type' => 'date-time'],
+                true,
+            ],
+            'date: sortable' => [
+                'dummy_date',
+                ['type' => 'date'],
+                true,
+            ],
+            'array: not sortable' => [
+                'dummy_array',
+                ['type' => 'array'],
+                false,
+            ],
+            'object: not sortable' => [
+                'dummy_object',
+                ['type' => 'object'],
+                false,
+            ],
+            'oneOf, string: sortable' => [
+                'dummy_oneof_string',
+                ['oneOf' => [['type' => 'null'], ['type' => 'string']]],
+                true,
+            ],
+            'oneOf, number: sortable' => [
+                'dummy_oneof_number',
+                ['oneOf' => [['type' => 'null'], ['type' => 'number']]],
+                true,
+            ],
+            'oneOf, integer: sortable' => [
+                'dummy_oneof_integer',
+                ['oneOf' => [['type' => 'null'], ['type' => 'integer']]],
+                true,
+            ],
+            'oneOf, boolean: sortable' => [
+                'dummy_oneof_boolean',
+                ['oneOf' => [['type' => 'null'], ['type' => 'boolean']]],
+                true,
+            ],
+            'oneOf, date-time: sortable' => [
+                'dummy_oneof_date-time',
+                ['oneOf' => [['type' => 'null'], ['type' => 'date-time']]],
+                true,
+            ],
+            'oneOf, date: sortable' => [
+                'dummy_oneof_date',
+                ['oneOf' => [['type' => 'null'], ['type' => 'date']]],
+                true,
+            ],
+            'oneOf, array: not sortable' => [
+                'dummy_oneof_array',
+                ['oneOf' => [['type' => 'null'], ['type' => 'array']]],
+                false,
+            ],
+            'oneOf, object: not sortable' => [
+                'dummy_oneof_object',
+                ['oneOf' => [['type' => 'null'], ['type' => 'object']]],
+                false,
+            ],
             'date_ranges' => [
                 'date_ranges',
                 [],
                 true,
             ],
-            'modified' => [
-                'modified',
-                [
-                    'type' => 'string',
-                    'format' => 'date-time',
-                ],
-                true,
-            ],
-            'id' => [
-                'id',
-                [
-                    'type' => 'integer',
-                ],
-                true,
-            ],
-            'title' => [
-                'title',
-                [
-                    'type' => 'string',
-                ],
-                true,
-            ],
-            'sortable from conf' => [
-                'dummy',
-                [
-                    'type' => 'string',
-                ],
-                true,
-            ],
-            'not sortable from conf' => [
-                'dummy2',
-                [
-                    'type' => 'string',
-                ],
+            'custom_prop' => [
+                'custom_prop',
+                [],
                 false,
-            ],
+            ]
         ];
     }
 
@@ -826,14 +875,13 @@ class SchemaHelperTest extends TestCase
      */
     public function testSortable(string $field, array $schema, bool $expected): void
     {
-        Configure::write('Properties.dummies.sortable', ['dummy']);
         $view = $this->Schema->getView();
-        $view->set('currentModule', ['name' => 'dummies']);
         $view->set('schema', [
             'properties' => [
                 $field => $schema,
             ],
         ]);
+        $view->set('custom_props', ['custom_prop']);
         $actual = $this->Schema->sortable($field);
         static::assertSame($expected, $actual);
     }
