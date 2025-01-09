@@ -228,7 +228,6 @@ class TrashController extends AppController
     public function deleteMulti(array $ids): bool
     {
         try {
-            $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $ids]]);
             $this->apiClient->removeObjects($ids);
         } catch (BEditaClientException $e) {
             // Error! Back to object view.
