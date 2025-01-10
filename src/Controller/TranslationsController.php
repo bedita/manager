@@ -126,6 +126,7 @@ class TranslationsController extends ModulesController
         }
         $this->ProjectConfiguration->read();
 
+        $this->Schema->setConfig(['internalSchema' => false]);
         $this->set('schema', $this->Schema->getSchema($this->objectType));
 
         $object = Hash::extract($response, 'data');
