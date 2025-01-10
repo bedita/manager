@@ -43,6 +43,7 @@ class TranslationsController extends ModulesController
         $this->setRequest($this->getRequest()->withParam('object_type', 'translations'));
         parent::initialize();
         $this->Query->setConfig('include', 'object');
+        $this->Schema->setConfig(['internalSchema' => true]);
     }
 
     /**
