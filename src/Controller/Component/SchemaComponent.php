@@ -392,14 +392,23 @@ class SchemaComponent extends Component
         if ($this->getConfig('internalSchema')) {
             return []; // internal resources don't have custom properties
         }
-        $query = [
-            'fields' => 'name',
-            'filter' => ['object_type' => $type, 'type' => 'dynamic'],
-            'page_size' => 100,
-        ];
-        $response = ApiClientProvider::getApiClient()->get('/model/properties', $query);
+        $customProperties = [];
+        $pageCount = $page = 1;
+        while ($page <= $pageCount) {
+            $query = [
+                'fields' => 'name',
+                'filter' => ['object_type' => $type, 'type' => 'dynamic'],
+                'page' => $page,
+                'page_size' => 100,
+            ];
+            $response = ApiClientProvider::getApiClient()->get('/model/properties', $query);
+            $customProperties = array_merge($customProperties, (array)Hash::extract($response, 'data.{n}.attributes.name'));
+            $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
+            $page++;
+        }
+        sort($customProperties);
 
-        return (array)Hash::extract($response, 'data.{n}.attributes.name');
+        return $customProperties;
     }
 
     /**
