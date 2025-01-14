@@ -365,6 +365,53 @@ class SchemaComponent extends Component
     }
 
     /**
+     * Retrieve list of custom properties for a given object type.
+     *
+     * @param string $type Object type name.
+     * @return array
+     */
+    public function customProps(string $type): array
+    {
+        return (array)Cache::remember(
+            CacheTools::cacheKey(sprintf('custom_props_%s', $type)),
+            function () use ($type) {
+                return $this->fetchCustomProps($type);
+            },
+            self::CACHE_CONFIG
+        );
+    }
+
+    /**
+     * Fetch custom properties for a given object type.
+     *
+     * @param string $type Object type name.
+     * @return array
+     */
+    protected function fetchCustomProps(string $type): array
+    {
+        if ($this->getConfig('internalSchema')) {
+            return []; // internal resources don't have custom properties
+        }
+        $customProperties = [];
+        $pageCount = $page = 1;
+        while ($page <= $pageCount) {
+            $query = [
+                'fields' => 'name',
+                'filter' => ['object_type' => $type, 'type' => 'dynamic'],
+                'page' => $page,
+                'page_size' => 100,
+            ];
+            $response = ApiClientProvider::getApiClient()->get('/model/properties', $query);
+            $customProperties = array_merge($customProperties, (array)Hash::extract($response, 'data.{n}.attributes.name'));
+            $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
+            $page++;
+        }
+        sort($customProperties);
+
+        return $customProperties;
+    }
+
+    /**
      * Read object types features from API
      *
      * @return array

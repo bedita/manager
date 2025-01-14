@@ -43,6 +43,7 @@ class TranslationsController extends ModulesController
         $this->setRequest($this->getRequest()->withParam('object_type', 'translations'));
         parent::initialize();
         $this->Query->setConfig('include', 'object');
+        $this->Schema->setConfig(['internalSchema' => true]);
     }
 
     /**
@@ -125,6 +126,7 @@ class TranslationsController extends ModulesController
         }
         $this->ProjectConfiguration->read();
 
+        $this->Schema->setConfig(['internalSchema' => false]);
         $this->set('schema', $this->Schema->getSchema($this->objectType));
 
         $object = Hash::extract($response, 'data');
