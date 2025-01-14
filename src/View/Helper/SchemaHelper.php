@@ -317,17 +317,18 @@ class SchemaHelper extends Helper
             return true;
         }
         $schema = (array)$this->_View->get('schema');
+        $customProps = (array)$this->_View->get('customProps');
         $schema = Hash::get($schema, sprintf('properties.%s', $field), []);
-        // empty schema, then not sortable
-        if (empty($schema)) {
+        // empty schema or field is a custom prop, then not sortable
+        if (empty($schema) || in_array($field, $customProps)) {
             return false;
         }
+        $type = self::typeFromSchema($schema);
 
-        // check from configuration Properties.%s.sortable
-        $name = Hash::get((array)$this->_View->get('currentModule'), 'name');
-        $sortable = (array)Configure::read(sprintf('Properties.%s.sortable', $name));
+        // not sortable: 'array', 'object'
+        // other types are sortable: 'string', 'number', 'integer', 'boolean', 'date-time', 'date'
 
-        return in_array($field, $sortable);
+        return !in_array($type, ['array', 'object']);
     }
 
     /**
