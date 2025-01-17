@@ -351,6 +351,9 @@ msgstr "Non consentito"
 msgid "Forgot your password?"
 msgstr "Hai dimenticato la password?"
 
+msgid "Form data has been modified. Save it to persist the changes"
+msgstr "Dati del form modificati. Salva per mantenere le modifiche"
+
 msgid "Format choosen is not available"
 msgstr "Il formato selezionato non è disponibile"
 
