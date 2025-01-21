@@ -121,7 +121,7 @@
         </div>
 
         {% if Perms.canSave() and not readonly %}
-        <div v-if="changedData">
+        <div v-if="changedOriginalData">
             <p class="is-expanded tag mt-1">
                 <app-icon icon="carbon:filter"></app-icon>
                 <span class="ml-05">{{ __('Form data has been modified. Save it to persist the changes') }}</span>
@@ -148,7 +148,7 @@
                     <button
                         class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto"
                         :class="{'is-loading-spinner': resettingRelated}"
-                        :disabled="!changedData"
+                        :disabled="!changedOriginalData"
                         @click.prevent.stop="resetObjects"
                         v-if="relationName != 'children'"
                     >
@@ -158,7 +158,7 @@
                     <button
                         class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto"
                         :class="{'is-loading-spinner': savingRelated}"
-                        :disabled="!changedData"
+                        :disabled="!changedOriginalData"
                         @click.prevent.stop="saveRelated({
                             object: {{object|json_encode}},
                             relationName: relationName,

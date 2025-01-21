@@ -101,6 +101,7 @@ export default {
             exportFormat: 'csv',        // default csv
 
             originalData: '',           // original data for comparison
+            changedOriginalData: false,
         }
     },
 
@@ -110,14 +111,6 @@ export default {
             let a = this.addedRelations.map(o => o.id);
             let b = this.objects.map(o => o.id);
             return a.concat(b);
-        },
-
-        changedData() {
-            const originalData = this.originalData || JSON.stringify([]);
-            const changedIds = originalData !== JSON.stringify(this.alreadyInView || []);
-            const changedAny = (this.addedRelations.length + this.modifiedRelations.length + this.removedRelated.length) > 0;
-
-            return changedIds || changedAny;
         },
 
         /**
@@ -222,7 +215,7 @@ export default {
             }
         });
 
-        this.originalData = JSON.stringify(this.objects.map(o => o.id));
+        this.updateOriginalData();
 
         // enable related objects drop
         this.$on('sort-end', this.onSort);
@@ -325,6 +318,7 @@ export default {
 
                 priority = this.objects[i].meta.relation.priority;
             }
+            this.updateOriginalData();
         },
 
         /**
@@ -376,6 +370,7 @@ export default {
 
                 return object;
             });
+            this.updateOriginalData();
         },
 
         /**
@@ -553,12 +548,12 @@ export default {
                     this.$emit('count', this.pagination.count);
                     this.loading = false;
                     this.objectsLoaded = true;
-                    this.originalData = JSON.stringify(this.objects.map(o => o.id));
                     if (reset) {
                         this.addedRelations = [];
                         this.modifiedRelations = [];
                         this.removedRelated = [];
                     }
+                    this.updateOriginalData();
 
                     return objs;
                 })
@@ -574,6 +569,20 @@ export default {
                         this.resettingRelated = false;
                     }
                 });
+        },
+
+        updateOriginalData() {
+            const data = this.objects.map(o => o.id);
+            if (!this.originalData) {
+                this.originalData = {};
+            }
+            const originalData = JSON.stringify(data);
+            const p = {...this.pagination};
+            const k = `${this.relationName}-count_${p.count}-pagecount_${p.page_count}-pageitems_${p.page_items || 0}-pagesize_${p.page_size}`;
+            this.originalData[k] = originalData;
+            const changedIds = originalData !== JSON.stringify(this.alreadyInView || []);
+            const changedAny = (this.addedRelations.length + this.modifiedRelations.length + this.removedRelated.length) > 0;
+            this.changedOriginalData = changedAny || changedIds;
         },
 
         /**
@@ -868,6 +877,7 @@ export default {
                     });
                     // sort by restored priorities
                     this.objects.sort((a, b) => a.meta.relation.priority - b.meta.relation.priority);
+                    this.updateOriginalData();
                 })
                 .catch((error) => {
                     // code 20 is user aborted fetch which is ok
