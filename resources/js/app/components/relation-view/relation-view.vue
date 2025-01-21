@@ -439,6 +439,7 @@ export default {
                 }
             }
             this.prepareRelationsToSave();
+            this.updateOriginalData();
         },
 
         /**
@@ -636,6 +637,7 @@ export default {
                 // if yes we unstage it
                 this.prepareRelationsToSave();
             }
+            this.updateOriginalData();
         },
 
         /**
@@ -655,6 +657,7 @@ export default {
                 // if yes we stage it for saving
                 this.prepareRelationsToSave();
             }
+            this.updateOriginalData();
         },
 
         /**
@@ -759,7 +762,7 @@ export default {
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
             PanelEvents.send('relations-view:remove-already-in-view', null, { id } );
-
+            this.updateOriginalData();
 
             this.prepareRelationsToSave();
         },
@@ -785,6 +788,7 @@ export default {
                 this.modifiedRelations.push(related);
             }
             this.prepareRelationsToSave();
+            this.updateOriginalData();
         },
 
         /**
@@ -801,6 +805,7 @@ export default {
             }
             this.modifiedRelations = this.modifiedRelations.filter((rel) => rel.id !== id);
             this.prepareRelationsToSave();
+            this.updateOriginalData();
         },
 
         /**
