@@ -364,6 +364,11 @@ class ModulesController extends AppController
                 'title' => $this->getRequest()->getQuery('title'),
                 'status' => 'draft',
             ];
+
+            if (!empty($modified['title'])) {
+                $modified['uname'] = $modified['title'];
+            }
+
             $reset = (array)Configure::read(sprintf('Clone.%s.reset', $this->objectType));
             foreach ($reset as $field) {
                 $modified[$field] = null;
