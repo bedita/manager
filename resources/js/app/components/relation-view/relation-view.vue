@@ -81,6 +81,8 @@ export default {
         return {
             method: 'related',      // define AppController method to be used
             loading: false,
+            resettingRelated: false,
+            savingRelated: false,
             objectsLoaded: false,       // objects loaded flag
             positions: {},              // used in children relations
             priorities: {},              // used in children relations
@@ -97,6 +99,9 @@ export default {
             activeFilter: {},           // current active filter for objects list
 
             exportFormat: 'csv',        // default csv
+
+            originalData: '',           // original data for comparison
+            changedOriginalData: false,
         }
     },
 
@@ -210,6 +215,8 @@ export default {
             }
         });
 
+        this.updateOriginalData();
+
         // enable related objects drop
         this.$on('sort-end', this.onSort);
     },
@@ -311,6 +318,7 @@ export default {
 
                 priority = this.objects[i].meta.relation.priority;
             }
+            this.updateOriginalData();
         },
 
         /**
@@ -362,6 +370,7 @@ export default {
 
                 return object;
             });
+            this.updateOriginalData();
         },
 
         /**
@@ -430,6 +439,7 @@ export default {
                 }
             }
             this.prepareRelationsToSave();
+            this.updateOriginalData();
         },
 
         /**
@@ -520,26 +530,60 @@ export default {
          *
          * @return {Array} objs objects retrieved
          */
-        async loadRelatedObjects(filter = {}, force = false) {
+        async loadRelatedObjects(filter = {}, force = false, reset = false) {
             if (this.preCount === 0 || (this.objectsLoaded && !force)) {
+                if (reset) {
+                    this.addedRelations = [];
+                    this.modifiedRelations = [];
+                    this.removedRelated = [];
+                }
                 return [];
             }
             this.loading = true;
+            if (reset) {
+                this.resettingRelated = true;
+            }
 
             return this.getPaginatedObjects(true, filter)
                 .then((objs) => {
                     this.$emit('count', this.pagination.count);
                     this.loading = false;
                     this.objectsLoaded = true;
+                    if (reset) {
+                        this.addedRelations = [];
+                        this.modifiedRelations = [];
+                        this.removedRelated = [];
+                    }
+                    this.updateOriginalData();
+
                     return objs;
                 })
                 .catch((error) => {
                     // code 20 is user aborted fetch which is ok
                     if (error.code !== 20) {
-                        this.loading = false;
                         console.error(error);
                     }
+                })
+                .finally(() => {
+                    this.loading = false;
+                    if (reset) {
+                        this.resettingRelated = false;
+                    }
                 });
+        },
+
+        updateOriginalData() {
+            const data = this.objects.map(o => o.id);
+            if (!this.originalData) {
+                this.originalData = {};
+            }
+            const originalData = JSON.stringify(data);
+            const p = {...this.pagination};
+            const k = `${this.relationName}-count_${p.count}-pagecount_${p.page_count}-pageitems_${p.page_items || 0}-pagesize_${p.page_size}`;
+            this.originalData[k] = originalData;
+            const changedIds = originalData !== JSON.stringify(this.alreadyInView || []);
+            const changedAny = (this.addedRelations.length + this.modifiedRelations.length + this.removedRelated.length) > 0;
+            this.changedOriginalData = changedAny || changedIds;
         },
 
         /**
@@ -550,6 +594,11 @@ export default {
         reloadObjects() {
             this.activeFilter = {};
             return this.loadRelatedObjects({}, true);
+        },
+
+        resetObjects() {
+            this.activeFilter = {};
+            return this.loadRelatedObjects({}, true, true);
         },
 
         /**
@@ -588,6 +637,7 @@ export default {
                 // if yes we unstage it
                 this.prepareRelationsToSave();
             }
+            this.updateOriginalData();
         },
 
         /**
@@ -607,6 +657,7 @@ export default {
                 // if yes we stage it for saving
                 this.prepareRelationsToSave();
             }
+            this.updateOriginalData();
         },
 
         /**
@@ -627,6 +678,59 @@ export default {
                     isChanged,
                 }
             }));
+        },
+
+        async saveRelated(data) {
+            try {
+                this.savingRelated = true;
+                const relationName = data.relationName;
+                const objectType = data.object.type;
+                const url = `${BEDITA.base}/api/${objectType}/${data.object.id}/relationships/${relationName}`;
+                if (this.removedRelationsData.length > 0) {
+                    // save removed relations
+                    const response = await fetch(url, {
+                        method: 'DELETE',
+                        credentials: 'same-origin',
+                        headers: {
+                            'accept': 'application/json',
+                            'content-type': 'application/json',
+                            'X-CSRF-Token': BEDITA.csrfToken,
+                        },
+                        body: JSON.stringify({ data: JSON.parse(this.removedRelationsData) }),
+                    });
+                    if (response?.error) {
+                        BEDITA.error(response.error);
+                    } else {
+                        this.removedRelated = [];
+                        this.prepareRelationsToRemove(this.removedRelated);
+                    }
+                }
+                if (this.addedRelationsData.length > 0) {
+                    // save added relations
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                            'accept': 'application/json',
+                            'content-type': 'application/json',
+                            'X-CSRF-Token': BEDITA.csrfToken,
+                        },
+                        body: JSON.stringify({ data: JSON.parse(this.addedRelationsData) }),
+                    });
+                    if (response.error) {
+                        BEDITA.error(response.error);
+                    } else {
+                        this.addedRelations = [];
+                        this.modifiedRelations = [];
+                        this.prepareRelationsToSave();
+                    }
+                }
+                await this.reloadObjects();
+            } catch (error) {
+                BEDITA.error(error);
+            } finally {
+                this.savingRelated = false;
+            }
         },
 
         /**
@@ -658,7 +762,7 @@ export default {
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
             PanelEvents.send('relations-view:remove-already-in-view', null, { id } );
-
+            this.updateOriginalData();
 
             this.prepareRelationsToSave();
         },
@@ -684,6 +788,7 @@ export default {
                 this.modifiedRelations.push(related);
             }
             this.prepareRelationsToSave();
+            this.updateOriginalData();
         },
 
         /**
@@ -700,6 +805,7 @@ export default {
             }
             this.modifiedRelations = this.modifiedRelations.filter((rel) => rel.id !== id);
             this.prepareRelationsToSave();
+            this.updateOriginalData();
         },
 
         /**
@@ -776,6 +882,7 @@ export default {
                     });
                     // sort by restored priorities
                     this.objects.sort((a, b) => a.meta.relation.priority - b.meta.relation.priority);
+                    this.updateOriginalData();
                 })
                 .catch((error) => {
                     // code 20 is user aborted fetch which is ok

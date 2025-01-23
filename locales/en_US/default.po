@@ -349,6 +349,9 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr ""
 
+msgid "Form data has been modified. Save it to persist the changes"
+msgstr ""
+
 msgid "Format choosen is not available"
 msgstr ""
 
