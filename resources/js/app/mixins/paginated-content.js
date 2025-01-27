@@ -158,7 +158,7 @@ export const PaginatedContentMixin = {
                 formattedObj.type = obj.type;
 
                 // search for meta.relation using this.formatObjectsFilter
-                const metaRelation = obj.meta.relation;
+                const metaRelation = obj?.meta?.relation || {};
                 if (metaRelation) {
                     let formattedMeta = {};
                     this.formatObjectsFilter.forEach((filter) => {
