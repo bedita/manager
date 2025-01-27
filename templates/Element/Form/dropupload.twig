@@ -1,0 +1,7 @@
+{# :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']"> #}
+<drop-upload
+    placeholder="{{ __('Click or drop new files here') }}"
+    @new-relations="appendRelations"
+    v-if="isRelationWithMedia"
+>
+</drop-upload>
