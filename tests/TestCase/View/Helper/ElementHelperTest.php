@@ -117,4 +117,48 @@ class ElementHelperTest extends TestCase
         $actual = $element->sidebar();
         static::assertSame('another_sidebar', $actual);
     }
+
+    /**
+     * Test `dropupload` method
+     *
+     * @return void
+     * @covers ::dropupload()
+     */
+    public function testDropupload(): void
+    {
+        $expected = 'Form/dropupload';
+        $viewVars = [
+            'currentModule' => ['name' => 'documents'],
+        ];
+        $view = new View(new ServerRequest(), null, null, compact('viewVars'));
+        $element = new ElementHelper($view);
+        $actual = $element->dropupload(['documents', 'events']);
+        static::assertSame($expected, $actual);
+
+        Configure::write('Modules.documents.dropupload._element', 'another_dropupload');
+        $actual = $element->dropupload(['documents', 'events']);
+        static::assertSame('another_dropupload', $actual);
+    }
+
+    /**
+     * Test `multiupload` method
+     *
+     * @return void
+     * @covers ::multiupload()
+     */
+    public function testMultiupload(): void
+    {
+        $expected = 'Form/multiupload';
+        $viewVars = [
+            'currentModule' => ['name' => 'documents'],
+        ];
+        $view = new View(new ServerRequest(), null, null, compact('viewVars'));
+        $element = new ElementHelper($view);
+        $actual = $element->multiupload();
+        static::assertSame($expected, $actual);
+
+        Configure::write('Modules.documents.multiupload._element', 'another_multiupload');
+        $actual = $element->multiupload();
+        static::assertSame('another_multiupload', $actual);
+    }
 }
