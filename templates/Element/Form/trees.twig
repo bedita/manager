@@ -55,6 +55,7 @@
                     :has-permissions="{{ hasPermissions|json_encode }}"
                     :search="searchInPosition"
                     :search-in-position-active="searchInPositionActive"
+                    :preview-config="{{ config('TreePreview')|json_encode }}"
                     @changed-parents="updatePositions">
                 </tree-view>
             </div>
