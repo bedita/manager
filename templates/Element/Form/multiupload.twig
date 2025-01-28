@@ -1,0 +1,42 @@
+{% do _view.assign('title', __('Multi upload')) %}
+{% if Perms.canSave() and not readonly %}
+<modules-index inline-template ids='{{ []|json_encode }}'>
+    <div class="module-index">
+        <drop-upload
+            object-type="{{ objectType }}"
+            double="1"
+            placeholder="{{ __('Click or drop new files here') }}"
+            @new-relations="appendUploaded"
+        >
+        </drop-upload>
+        <div v-for="item in uploaded" :key="item.id">
+            <a :href="`/view/${item.id}`">
+                <div style="display: grid; grid-template-columns: 50px 1fr; border-bottom: dashed gray 1px;">
+                    <figure class="center-icon icon-opaque" v-if="item?.meta?.thumb_url">
+                        <img :src="item?.meta?.thumb_url" :alt="item.attributes.title" style="height: 50px; width: 50px; object-fit: cover;"/>
+                    </figure>
+                    <span style="padding: 0.5rem" v-else>
+                        <app-icon icon="carbon:document"></app-icon>
+                        <: extension(item?.meta?.media_url) :>
+                    </span>
+                    <span style="padding: 1rem">
+                        <: item.attributes.title :>
+                    </span>
+                </div>
+            </a>
+        </div>
+    </div>
+</modules-index>
+{% else %}
+<div class="alert alert-danger">{{ __('You do not have the required permissions to view this page.') }}</div>
+{% endif %}
+
+{# Add links to the module #}
+{% do _view.append('app-module-links',
+    Html.link(
+        __('List'),
+        {'_name': 'modules:list', 'object_type': objectType},
+        {'title': __('List'), 'class': 'icon-left-dir button button-outlined button-outlined-hover-module-' ~ objectType}
+    )|raw
+) %}
+

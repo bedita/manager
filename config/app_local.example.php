@@ -269,6 +269,8 @@ return [
      *          for a complete list of icons
      *  'sidebar' - additional custom sidebar links added in modules index and single item view,
      *     defined as associative array with 'index' and 'view' keys
+     *  'dropupload' - custom dropupload element to use for this module, f.i. 'MyPlugin.Form/dropupload'
+     *  'multiupload' - custom multiupload element to use for this module, f.i. 'MyPlugin.Form/multiupload'
      */
     // 'Modules' => [
     //     'objects' => [
@@ -283,6 +285,12 @@ return [
     //     ],
     //     'documents' => [
     //         'color' => '#cc4700',
+    //         'dropupload' => [
+    //             '_element' => 'MyPlugin.Form/dropupload',
+    //         ],
+    //         'multiupload' => [
+    //             '_element' => 'MyPlugin.Form/multiupload',
+    //         ],
     //     ],
     //     'events' => [
     //         'color' => '#09c',

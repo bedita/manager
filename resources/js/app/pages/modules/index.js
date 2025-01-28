@@ -74,6 +74,9 @@ export default {
 
     watch: {
         selectedRows(val) {
+            if (!this.$refs.checkAllCB) {
+                return;
+            }
             if (!val.length) {
                 this.$refs.checkAllCB.checked = false;
                 this.$refs.checkAllCB.indeterminate = false;

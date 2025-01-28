@@ -224,6 +224,17 @@ export default {
                 return false;
             },
 
+            getObjectTypeFromMime(mimeType) {
+                const mimes = BEDITA.uploadConfig?.accepted;
+                for (let type in mimes) {
+                    if (this.checkAcceptedMime(mimes[type], mimeType)) {
+                        return type;
+                    }
+                }
+
+                return null;
+            },
+
             titleFromFileName(filename) {
                 let title = filename;
                 title = title.replaceAll('-', ' ');

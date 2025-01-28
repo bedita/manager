@@ -202,6 +202,7 @@ const _vueInstance = new Vue({
             BEDITA.success = success;
             BEDITA.prompt = prompt;
             BEDITA.warning = warning;
+            BEDITA.formatDate = this.$helpers.formatDate;
             this.selectedTypes = this.queryFilter?.filter?.type || [];
         });
     },
