@@ -227,5 +227,9 @@ export default {
         extension(filename) {
             return filename.split('.').pop();
         },
+
+        formatDate(d) {
+            return this.$helpers.formatDate(d);
+        },
     }
 }
