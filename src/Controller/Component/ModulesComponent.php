@@ -20,6 +20,8 @@ use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Event\EventInterface;
+use Cake\Http\Client\Response;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\I18n\I18n;
@@ -85,6 +87,21 @@ class ModulesComponent extends Component
     ];
 
     /**
+     * @inheritDoc
+     */
+    public function beforeFilter(EventInterface $event): ?Response
+    {
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->Authentication->getIdentity();
+        if (empty($user)) {
+            return null;
+        }
+        $this->getController()->set('modules', $this->getModules());
+
+        return null;
+    }
+
+    /**
      * Read modules and project info from `/home' endpoint.
      *
      * @return void
@@ -103,12 +120,12 @@ class ModulesComponent extends Component
             Cache::delete(sprintf('home_%d', $user->get('id')));
         }
 
-        $modules = $this->getModules();
         $project = $this->getProject();
         $uploadable = (array)Hash::get($this->Schema->objectTypesFeatures(), 'uploadable');
-        $this->getController()->set(compact('modules', 'project', 'uploadable'));
+        $this->getController()->set(compact('project', 'uploadable'));
 
         $currentModuleName = $this->getConfig('currentModuleName');
+        $modules = (array)$this->getController()->viewBuilder()->getVar('modules');
         if (!empty($currentModuleName)) {
             $currentModule = Hash::get($modules, $currentModuleName);
         }
