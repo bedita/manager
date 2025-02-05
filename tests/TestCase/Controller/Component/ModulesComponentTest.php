@@ -28,6 +28,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
@@ -276,6 +277,7 @@ class ModulesComponentTest extends TestCase
         // Mock Authentication component
         $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
+        $this->Modules->beforeFilter(new Event('Module.beforeFilter'));
         $this->Modules->startup();
         $actual = $this->Modules->isAbstract($data);
 
@@ -348,6 +350,7 @@ class ModulesComponentTest extends TestCase
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
 
         if (!empty($expected)) {
+            $this->Modules->beforeFilter(new Event('Module.beforeFilter'));
             $this->Modules->startup();
         }
         $actual = $this->Modules->objectTypes($data);
@@ -800,6 +803,7 @@ class ModulesComponentTest extends TestCase
 
         $clearHomeCache = true;
         $this->Modules->setConfig(compact('apiClient', 'currentModuleName', 'clearHomeCache'));
+        $this->Modules->beforeFilter(new Event('Module.beforeFilter'));
         $this->Modules->startup();
 
         $viewVars = $controller->viewBuilder()->getVars();

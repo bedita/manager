@@ -23,6 +23,7 @@ use Authentication\Identity;
 use Authentication\IdentityInterface;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
 use Psr\Http\Message\ResponseInterface;
@@ -76,6 +77,7 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
         // Mock GET /config using cache
         Cache::write(CacheTools::cacheKey('config.Modules'), []);
+        $this->controller->Modules->beforeFilter(new Event('Module.beforeFilter'));
         $this->controller->Modules->startup();
         $this->setupApi();
         $this->createTestObject();
