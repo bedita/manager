@@ -71,7 +71,7 @@ class ApiController extends AppController
         }
         $method = $this->request->getMethod();
         $action = $this->request->getParam('pass')[0] ?? null;
-        $blockedMethods = (array)Configure::read('API.blocked', [
+        $blockedMethods = (array)Configure::read('ApiProxy.blocked', [
             'objects' => ['GET', 'POST', 'PATCH', 'DELETE'],
             'users' => ['GET', 'POST', 'PATCH', 'DELETE'],
         ]);
