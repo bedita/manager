@@ -770,6 +770,7 @@ class ModulesComponentTest extends TestCase
      * @return void
      * @dataProvider startupProvider()
      * @covers ::startup()
+     * @covers ::beforeFilter()
      */
     public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $config = [], ?string $currentModuleName = null): void
     {
