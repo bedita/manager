@@ -423,6 +423,12 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['pass' => ['id', 'relation', 'format', 'query'], '_name' => 'export:related:filtered']
     );
 
+    $routes->get(
+        '/history/objects',
+        ['controller' => 'History', 'action' => 'objects'],
+        'history:objects',
+    );
+
     // Download stream
     $routes->get(
         '/download/{id}',
