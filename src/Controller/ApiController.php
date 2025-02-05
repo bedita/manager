@@ -53,8 +53,11 @@ class ApiController extends AppController
      */
     protected function allowed(): bool
     {
-        // block requests from navigate fetch mode, i.e. from browser address bar
-        if (in_array('navigate', (array)$this->request->getHeader('Sec-Fetch-Mode'))) {
+        // block requests from browser address bar
+        $sameOrigin = (string)Hash::get((array)$this->request->getHeader('Sec-Fetch-Site'), 0) === 'same-origin';
+        $noReferer = empty((array)$this->request->getHeader('Referer'));
+        $isNavigate = in_array('navigate', (array)$this->request->getHeader('Sec-Fetch-Mode'));
+        if (!$sameOrigin || $noReferer || $isNavigate) {
             return false;
         }
         /** @var \Authentication\Identity|null $user */
