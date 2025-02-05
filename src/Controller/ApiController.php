@@ -53,9 +53,8 @@ class ApiController extends AppController
      */
     protected function allowed(): bool
     {
-        // block requests without referer (i.e. from browser)
-        $referer = (array)$this->request->getHeader('Referer');
-        if (empty($referer)) {
+        // block requests from navigate fetch mode, i.e. from browser address bar
+        if (in_array('navigate', (array)$this->request->getHeader('Sec-Fetch-Mode'))) {
             return false;
         }
         /** @var \Authentication\Identity|null $user */
