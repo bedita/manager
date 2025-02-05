@@ -16,10 +16,15 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\ApiController;
+use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
+use Authentication\IdentityInterface;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\ServerRequest;
+use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\ApiController} Test Case
@@ -27,7 +32,7 @@ use Cake\Utility\Hash;
  * @coversDefaultClass \App\Controller\ApiController
  * @uses \App\Controller\ApiController
  */
-class ApiControllerTest extends AppControllerTest
+class ApiControllerTest extends TestCase
 {
     /**
      * @inheritDoc
@@ -151,7 +156,7 @@ class ApiControllerTest extends AppControllerTest
             'username' => 'dummy',
             'roles' => ['readers'],
         ]);
-        $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock($user)));
+        $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->ApiController->Authentication->setIdentity($user);
         $this->ApiController->dispatchEvent('Controller.initialize');
     }
@@ -176,7 +181,7 @@ class ApiControllerTest extends AppControllerTest
             'username' => 'admin',
             'roles' => ['admin'],
         ]);
-        $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock($user)));
+        $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->ApiController->Authentication->setIdentity($user);
         $this->ApiController->dispatchEvent('Controller.initialize');
         $actual = $this->ApiController->Security->getConfig('unlockedActions');
@@ -205,11 +210,38 @@ class ApiControllerTest extends AppControllerTest
             'username' => 'dummy',
             'roles' => ['manager'],
         ]);
-        $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock($user)));
+        $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->ApiController->Authentication->setIdentity($user);
         $this->ApiController->dispatchEvent('Controller.initialize');
         $actual = $this->ApiController->Security->getConfig('unlockedActions');
         $expected = ['post', 'patch', 'delete'];
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
+
+        return $authenticationService;
     }
 }
