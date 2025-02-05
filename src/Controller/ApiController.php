@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2020 ChannelWeb Srl, Chialab Srl
@@ -31,9 +33,7 @@ class ApiController extends AppController
     use ApiProxyTrait;
 
     /**
-     * {@inheritDoc}
-     *
-     * @codeCoverageIgnore
+     * @inheritDoc
      */
     public function beforeFilter(EventInterface $event): ?Response
     {
@@ -62,7 +62,7 @@ class ApiController extends AppController
         }
         /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
-        $roles = (array)$user->get('roles');
+        $roles = empty($user) ? [] : (array)$user->get('roles');
         if (empty($roles)) {
             return false;
         }

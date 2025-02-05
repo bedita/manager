@@ -1,0 +1,215 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * BEdita, API-first content management framework
+ * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ *
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
+ */
+
+namespace App\Test\TestCase\Controller;
+
+use App\Controller\ApiController;
+use Authentication\Identity;
+use Cake\Http\Exception\UnauthorizedException;
+use Cake\Http\ServerRequest;
+use Cake\Utility\Hash;
+
+/**
+ * {@see \App\Controller\ApiController} Test Case
+ *
+ * @coversDefaultClass \App\Controller\ApiController
+ * @uses \App\Controller\ApiController
+ */
+class ApiControllerTest extends AppControllerTest
+{
+    /**
+     * @inheritDoc
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
+     * Test subject
+     *
+     * @var \App\Controller\ApiController
+     */
+    protected $ApiController;
+
+    /**
+     * Setup controller to test with request config
+     *
+     * @param array $config configuration for controller setup
+     * @return void
+     */
+    protected function setupController($config = null): void
+    {
+        $request = null;
+        if ($config != null) {
+            $headers = (array)Hash::get($config, 'headers', []);
+            unset($config['headers']);
+            $request = new ServerRequest($config);
+            foreach ($headers as $name => $value) {
+                $request = $request->withHeader($name, $value);
+            }
+        }
+        $this->ApiController = new ApiController($request);
+    }
+
+    /**
+     * Data provider for `testUnauthorizedException` test case.
+     *
+     * @return array
+     */
+    public function unauthorizedExceptionProvider(): array
+    {
+        return [
+            'no same origin' => [
+                [
+                    'headers' => [
+                        'Referer' => 'http://example.com',
+                    ],
+                ],
+            ],
+            'no referer' => [
+                [
+                    'headers' => [
+                        'Sec-Fetch-Site' => 'same-origin',
+                    ],
+                ],
+            ],
+            'navigate' => [
+                [
+                    'headers' => [
+                        'Sec-Fetch-Site' => 'same-origin',
+                        'Referer' => 'http://example.com',
+                        'Sec-Fetch-Mode' => 'navigate',
+                    ],
+                ],
+            ],
+            'user empty roles' => [
+                [
+                    'headers' => [
+                        'Sec-Fetch-Site' => 'same-origin',
+                        'Referer' => 'http://example.com',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test for unauthorized exception
+     *
+     * @param array $config Request configuration.
+     * @return void
+     * @dataProvider unauthorizedExceptionProvider
+     * @covers ::beforeFilter()
+     * @covers ::allowed()
+     */
+    public function testUnauthorizedException(array $config): void
+    {
+        $expected = new UnauthorizedException(__('You are not authorized to access this resource'));
+        $this->expectException(get_class($expected));
+        $this->expectExceptionCode($expected->getCode());
+        $this->expectExceptionMessage($expected->getMessage());
+        $this->setupController($config);
+        $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->ApiController->dispatchEvent('Controller.initialize');
+    }
+
+    /**
+     * Test unauthorized role
+     *
+     * @return void
+     * @covers ::beforeFilter()
+     * @covers ::allowed()
+     */
+    public function testUnauthorizedRole(): void
+    {
+        $expected = new UnauthorizedException(__('You are not authorized to access this resource'));
+        $this->expectException(get_class($expected));
+        $this->expectExceptionCode($expected->getCode());
+        $this->expectExceptionMessage($expected->getMessage());
+        $this->setupController([
+            'headers' => [
+                'Sec-Fetch-Site' => 'same-origin',
+                'Referer' => 'http://example.com',
+            ],
+        ]);
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'dummy',
+            'roles' => ['readers'],
+        ]);
+        $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock($user)));
+        $this->ApiController->Authentication->setIdentity($user);
+        $this->ApiController->dispatchEvent('Controller.initialize');
+    }
+
+    /**
+     * Test for authorized admin
+     *
+     * @return void
+     * @covers ::beforeFilter()
+     * @covers ::allowed()
+     */
+    public function testAuthorizeAdmin(): void
+    {
+        $this->setupController([
+            'headers' => [
+                'Sec-Fetch-Site' => 'same-origin',
+                'Referer' => 'http://example.com',
+            ],
+        ]);
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'admin',
+            'roles' => ['admin'],
+        ]);
+        $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock($user)));
+        $this->ApiController->Authentication->setIdentity($user);
+        $this->ApiController->dispatchEvent('Controller.initialize');
+        $actual = $this->ApiController->Security->getConfig('unlockedActions');
+        $expected = ['post', 'patch', 'delete'];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test for authorized user
+     *
+     * @return void
+     * @covers ::beforeFilter()
+     * @covers ::allowed()
+     */
+    public function testUserAllowed(): void
+    {
+        $this->setupController([
+            'params' => ['pass' => ['events']],
+            'headers' => [
+                'Sec-Fetch-Site' => 'same-origin',
+                'Referer' => 'http://example.com',
+            ],
+        ]);
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'dummy',
+            'roles' => ['manager'],
+        ]);
+        $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock($user)));
+        $this->ApiController->Authentication->setIdentity($user);
+        $this->ApiController->dispatchEvent('Controller.initialize');
+        $actual = $this->ApiController->Security->getConfig('unlockedActions');
+        $expected = ['post', 'patch', 'delete'];
+        static::assertEquals($expected, $actual);
+    }
+}
