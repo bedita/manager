@@ -93,10 +93,9 @@ class ModulesComponent extends Component
     {
         /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
-        if (empty($user)) {
-            return null;
+        if (!empty($user)) {
+            $this->getController()->set('modules', $this->getModules());
         }
-        $this->getController()->set('modules', $this->getModules());
 
         return null;
     }
