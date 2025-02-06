@@ -434,6 +434,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'users'],
         'users:list',
     );
+    $routes->connect(
+        '/resources/get/{id}',
+        ['controller' => 'Modules', 'action' => 'get'],
+        ['pass' => ['id'], '_name' => 'resource:get'],
+    );
 
     // Download stream
     $routes->get(
