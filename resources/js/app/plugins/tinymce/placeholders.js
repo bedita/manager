@@ -16,11 +16,7 @@ const options = {
 
 function fetchData(id) {
     if (!cache[id]) {
-        let fetchType = fetch(`${baseUrl}api/objects/${id}`, options)
-            .then((response) => response.json())
-            .then((json) => json.data.type);
-        cache[id] = fetchType
-            .then((type) => fetch(`${baseUrl}api/${type}/${id}`, options))
+        cache[id] = fetch(`${baseUrl}resources/get/${id}`, options)
             .then((response) => response.json());
     }
 
@@ -40,6 +36,7 @@ function loadPreview(editor, node, id) {
             if (!data) {
                 return;
             }
+            console.log(data);
 
             let domElements = editor.getBody().querySelectorAll(`[data-placeholder="${data.id}"]`);
             [...domElements].forEach((dom) => {

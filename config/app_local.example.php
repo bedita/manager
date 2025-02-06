@@ -67,6 +67,22 @@ return [
     // ],
 
     /**
+     * Api Proxy configuration, for ApiController.
+     * This refers to `/api/{endpoint}` calls.
+     * Contains an array of setting to use for API proxy configuration.
+     *
+     * ## Options
+     *
+     * - `blocked` - Array of blocked methods per endpoint.
+     */
+    // 'ApiProxy' => [
+    //     'blocked' => [
+    //         'objects' => ['GET', 'POST', 'PATCH', 'DELETE'],
+    //         'users' => ['GET', 'POST', 'PATCH', 'DELETE'],
+    //     ],
+    // ],
+
+    /**
      * Clone configuration.
      * This adds custom rules to clone objects.
      * Rules are defined as `object type name` => ['reset' => [], 'unique' => []]
