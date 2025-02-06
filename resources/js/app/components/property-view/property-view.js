@@ -191,7 +191,7 @@ export default {
                 const creatorId = this.object?.meta?.created_by;
                 const modifierId = this.object?.meta?.modified_by;
                 const usersId = [creatorId, modifierId];
-                const userRes = await fetch(`${API_URL}api/users?filter[id]=${usersId.join(',')}&fields[users]=name,surname,username`, API_OPTIONS);
+                const userRes = await fetch(`${API_URL}users/list?filter[id]=${usersId.join(',')}`, API_OPTIONS);
                 const userJson = await userRes.json();
                 const users = userJson.data;
 

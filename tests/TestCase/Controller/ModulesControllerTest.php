@@ -1070,4 +1070,52 @@ class ModulesControllerTest extends BaseControllerTest
         $actual = $this->controller->getObjectType();
         static::assertSame($expected, $actual);
     }
+
+    /**
+     * Test list users
+     *
+     * @return void
+     * @covers ::users()
+     */
+    public function testListUsers(): void
+    {
+        $this->setupController();
+        // Get list of users / no email, no relationships, no links, no schema, no included.
+        $this->controller->users();
+        $actual = $this->controller->viewBuilder()->getVars();
+        // check data has only id,title,username,name,surname
+        $data = $actual['data'];
+        foreach ($data as $item) {
+            $itemKeys = array_keys($item);
+            sort($itemKeys);
+            static::assertSame(['attributes', 'id', 'meta', 'type'], $itemKeys);
+            $keys = array_keys($item['attributes']);
+            sort($keys);
+            static::assertSame($keys, ['name', 'surname', 'title', 'username']);
+        }
+    }
+
+    /**
+     * Test get single resource minimal data
+     *
+     * @return void
+     * @covers ::get()
+     */
+    public function testResourceGet(): void
+    {
+        $this->setupController();
+        // get object ID for test
+        $id = $this->getTestId();
+        // Get single resource, minimal data / no relationships, no links, no schema, no included.
+        $this->controller->get($id);
+        $actual = $this->controller->viewBuilder()->getVars();
+        // check data has only id,title,description,uname,status
+        $item = $actual['data'];
+        $itemKeys = array_keys($item);
+        sort($itemKeys);
+        static::assertSame(['attributes', 'id', 'type'], $itemKeys);
+        $keys = array_keys($item['attributes']);
+        sort($keys);
+        static::assertSame($keys, ['description', 'status', 'title', 'uname']);
+    }
 }

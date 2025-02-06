@@ -429,6 +429,12 @@ $routes->scope('/', function (RouteBuilder $routes) {
         'history:objects',
     );
 
+    $routes->get(
+        '/users/list',
+        ['controller' => 'Modules', 'action' => 'users'],
+        'users:list',
+    );
+
     // Download stream
     $routes->get(
         '/download/{id}',
