@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Utility\ApiTools;
+use BEdita\WebTools\Utility\ApiTools;
 use Cake\Http\Response;
 
 /**
