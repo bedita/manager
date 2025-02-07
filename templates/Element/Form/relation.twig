@@ -24,14 +24,16 @@
         {% else %}
 
         <div class="related-list-container">
-            {# FastCreate #}
-            {{ element(
-                config('UI.fast_create_form._element')|default('Form/fast_create'),
-                {
-                    'relationSchema': relationSchema,
-                    'schemasByType': schemasByType,
-                }
+            {% if Perms.canSave() and not readonly %}
+                {# FastCreate #}
+                {{ element(
+                    config('UI.fast_create_form._element')|default('Form/fast_create'),
+                    {
+                        'relationSchema': relationSchema,
+                        'schemasByType': schemasByType,
+                    }
             ) }}
+            {% endif %}
 
             {# FilterBoxView #}
             <div class="mb-1" v-show="showFilter">
