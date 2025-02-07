@@ -201,11 +201,12 @@ class PropertyHelper extends Helper
      */
     public function fastCreateFieldsMap(): array
     {
+        $defaultTitleType = Configure::read('UI.richeditor.title', []) ? 'textarea' : 'string';
         $map = [];
         $properties = (array)Configure::read(sprintf('Properties'));
         foreach ($properties as $name => $prop) {
             $cfg = (array)Hash::get($prop, 'fastCreate', []);
-            $fields = (array)Hash::get($cfg, 'all', ['status', 'title', 'description', 'free_access', 'publish_start', 'publish_end']);
+            $fields = (array)Hash::get($cfg, 'all', ['status', ['title' => $defaultTitleType], 'description']);
             $required = (array)Hash::get($cfg, 'required', ['status', 'title']);
             $map[$name] = compact('fields', 'required');
         }
