@@ -252,12 +252,12 @@ export default {
          *
          * @return {void}
          */
-        onUpdatePageSize(pageSize) {
+        async onUpdatePageSize(pageSize) {
             // remember pagination.page_size (use localStorage)
             const key = `relation-view:${this.relationName}:page_size`;
             localStorage.setItem(key, pageSize);
             this.setPageSize(pageSize);
-            this.loadRelatedObjects(this.activeFilter, true);
+            await this.loadRelatedObjects(this.activeFilter, true);
         },
 
         /**
@@ -532,13 +532,17 @@ export default {
          * @return {Array} objs objects retrieved
          */
         async loadRelatedObjects(filter = {}, force = false, reset = false) {
-            if (this.preCount === 0 || (this.objectsLoaded && !force)) {
-                if (reset) {
-                    this.addedRelations = [];
-                    this.modifiedRelations = [];
-                    this.removedRelated = [];
+            console.log('loadRelatedObjects', filter, force, reset);
+            if (!force) {
+                if (this.preCount === 0 || this.objectsLoaded) {
+                    if (reset) {
+                        this.addedRelations = [];
+                        this.modifiedRelations = [];
+                        this.removedRelated = [];
+                    }
+
+                    return [];
                 }
-                return [];
             }
             this.loading = true;
             if (reset) {
@@ -592,14 +596,16 @@ export default {
          *
          * @return {Array} objs objects retrieved
          */
-        reloadObjects() {
+        async reloadObjects() {
             this.activeFilter = {};
-            return this.loadRelatedObjects({}, true);
+
+            return await this.loadRelatedObjects({}, true);
         },
 
-        resetObjects() {
+        async resetObjects() {
             this.activeFilter = {};
-            return this.loadRelatedObjects({}, true, true);
+
+            return await this.loadRelatedObjects({}, true, true);
         },
 
         /**
