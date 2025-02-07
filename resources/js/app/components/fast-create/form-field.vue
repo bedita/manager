@@ -86,7 +86,7 @@
                     @change="update($event.target.value)"
                 >
                     <option
-                        v-for="item in jsonSchema.enum"
+                        v-for="item in enumItems(jsonSchema)"
                         :value="item"
                         :key="item"
                     >
@@ -97,7 +97,7 @@
             <!-- radio -->
             <template v-else-if="isRadio">
                 <label
-                    v-for="item in jsonSchema.enum"
+                    v-for="item in enumItems(jsonSchema)"
                     :key="item"
                 >
                     <input
@@ -134,6 +134,8 @@
                     v-model="value"
                     @change="update($event.target.value)"
                 >
+                {{ jsonSchema }}
+                {{ jsonSchema?.oneOf?.filter(one => one?.enum?.length > 0) }}
             </template>
             <!-- captions -->
             <template v-else-if="isCaptions">
@@ -258,13 +260,19 @@ export default {
             return this.jsonSchema?.oneOf?.filter(one => one?.type === 'number')?.length > 0;
         },
         isRadio() {
-            return this.jsonSchema?.enum && this.jsonSchema?.enum?.length <= 3;
+            const isEnum = this.jsonSchema?.enum || this.jsonSchema?.oneOf?.filter(one => one?.enum?.length > 0)?.length > 0;
+            const values = this.jsonSchema?.enum || this.jsonSchema?.oneOf?.map(one => one?.enum)?.flat();
+
+            return isEnum && values?.length <= 3;
         },
         isRichtext() {
             return this.jsonSchema?.oneOf?.filter(one => one?.contentMediaType === 'text/html')?.length > 0;
         },
         isSelect() {
-            return this.jsonSchema?.enum && this.jsonSchema?.enum?.length > 3;
+            const isEnum = this.jsonSchema?.enum || this.jsonSchema?.oneOf?.filter(one => one?.enum?.length > 0)?.length > 0;
+            const values = this.jsonSchema?.enum || this.jsonSchema?.oneOf?.map(one => one?.enum)?.flat();
+
+            return isEnum && values?.length > 3;
         },
         isString() {
             if (this.jsonSchema?.type === 'string' && !this.jsonSchema?.enum) {
@@ -315,6 +323,9 @@ export default {
         });
     },
     methods: {
+        enumItems(schema) {
+            return schema?.enum || schema?.oneOf?.map(one => one?.enum)?.flat() || [];
+        },
         update(value) {
             this.$emit('update', this.field, value);
         },
