@@ -18,7 +18,7 @@
             <template v-else-if="isDate">
                 <input
                     :id="`fast-create-${field}`"
-                    :name="field"
+                    :name="`fast-${objectType}-${field}`"
                     data-ref-fast-create="1"
                     type="text"
                     date="true"
@@ -32,7 +32,7 @@
             <template v-else-if="isInteger">
                 <input
                     :id="`fast-create-${field}`"
-                    :name="field"
+                    :name="`fast-${objectType}-${field}`"
                     data-ref-fast-create="1"
                     type="number"
                     :value="value"
@@ -43,7 +43,7 @@
             <template v-else-if="isNumber">
                 <input
                     :id="`fast-create-${field}`"
-                    :name="field"
+                    :name="`fast-${objectType}-${field}`"
                     data-ref-fast-create="1"
                     type="number"
                     step="any"
@@ -70,7 +70,7 @@
             <template v-else-if="isCheck">
                 <input
                     :id="`fast-create-${field}`"
-                    :name="field"
+                    :name="`fast-${objectType}-${field}`"
                     data-ref-fast-create="1"
                     type="checkbox"
                     :checked="!!value"
@@ -104,7 +104,7 @@
                         :id="`fast-create-${field}-${item}`"
                         type="radio"
                         data-ref-fast-create="1"
-                        :name="field"
+                        :name="`fast-${objectType}-${field}`"
                         :value="item"
                         v-model="value"
                         @change="update($event.target.value)"
@@ -117,7 +117,7 @@
                 <textarea
                     :id="`fast-create-${field}`"
                     data-ref-fast-create="1"
-                    :name="field"
+                    :name="`fast-${objectType}-${field}`"
                     :data-toolbar="toolbar"
                     v-model="value"
                     v-richeditor
@@ -152,7 +152,7 @@
                     :id="`fast-create-${field}`"
                     class="json"
                     data-ref-fast-create="1"
-                    :name="field"
+                    :name="`fast-${objectType}-${field}`"
                     v-model="value"
                     v-jsoneditor
                     @change="updateJson($event.target.value)"

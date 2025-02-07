@@ -532,7 +532,6 @@ export default {
          * @return {Array} objs objects retrieved
          */
         async loadRelatedObjects(filter = {}, force = false, reset = false) {
-            console.log('loadRelatedObjects', filter, force, reset);
             if (!force) {
                 if (this.preCount === 0 || this.objectsLoaded) {
                     if (reset) {

@@ -1,6 +1,6 @@
 <template>
     <div class="fast-create">
-        <div class="start" @click="clicked = true" v-if="!clicked">
+        <div class="start" @click="reset(); clicked = true" v-if="!clicked">
             {{ msgFastCreate }}. {{ msgClickHereToStart }}
         </div>
         <fieldset v-else>
@@ -42,7 +42,8 @@
             </template>
             <div v-if="objectType">
                 <button
-                    :disabled="invalidFields?.length > 0"
+                    :class="{'is-loading-spinner': loading}"
+                    :disabled="loading || invalidFields?.length > 0"
                     @click.prevent="save"
                 >
                     <app-icon icon="carbon:save" />
@@ -99,6 +100,7 @@ export default {
             fields: [],
             invalidFields: [],
             isUploadable: false,
+            loading: false,
             message: '',
             msgCancel: t`Cancel`,
             msgChooseType: t`Choose a type`,
