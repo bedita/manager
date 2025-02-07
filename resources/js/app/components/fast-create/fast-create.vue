@@ -26,14 +26,15 @@
                 >
                     <form-field
                         :abstract-type="abstractType"
-                        :field="field"
-                        :json-schema="schemasByType?.[objectType]?.properties?.[field] || {}"
+                        :field="fieldKey(field)"
+                        :force-type="fieldType(field)"
+                        :json-schema="schemasByType?.[objectType]?.properties?.[fieldKey(field)] || {}"
                         :is-uploadable="isUploadable"
                         :languages="languages"
                         :object-type="objectType"
-                        :required="required.includes(field)"
-                        :val="schemasByType?.[objectType]?.[field] || null"
-                        v-model="payload[field]"
+                        :required="required?.includes(fieldKey(field))"
+                        :val="schemasByType?.[objectType]?.[fieldKey(field)] || null"
+                        v-model="payload[fieldKey(field)]"
                         @error="err"
                         @update="update"
                         @success="success"
@@ -98,6 +99,7 @@ export default {
             clicked: false,
             error: '',
             fields: [],
+            fieldsMap: {},
             invalidFields: [],
             isUploadable: false,
             loading: false,
@@ -122,12 +124,27 @@ export default {
     methods: {
         changeType() {
             this.fields = [];
+            this.fieldsMap = {};
             this.required = [];
             this.payload = {};
             this.message = '';
             this.error = '';
             if (this.fieldsByType?.[this.objectType]?.fields) {
-                this.fields = this.fieldsByType[this.objectType].fields;
+                const fields = this.fieldsByType[this.objectType].fields || [];
+                let ff = fields;
+                if (fields.constructor === Object) {
+                    ff = Object.keys(fields);
+                    this.fieldsMap = fields;
+                }
+                for (const item of ff) {
+                    if (item.constructor === Object) {
+                        const itemKey = Object.keys(item)[0];
+                        this.fields.push(itemKey);
+                        this.fieldsMap[itemKey] = item[itemKey];
+                    } else {
+                        this.fields.push(item);
+                    }
+                }
             }
             if (this.fieldsByType?.[this.objectType]?.required) {
                 this.required = this.fieldsByType[this.objectType].required;
@@ -138,6 +155,19 @@ export default {
         },
         err(val) {
             this.error = val;
+        },
+        fieldKey(field) {
+            return this.isNumeric(field) ? this.fieldsMap[field] : field;
+        },
+        fieldType(field) {
+            return !this.isNumeric(field) ? this.fieldsMap[field] : null;
+        },
+        isNumeric(str) {
+            if (typeof str != 'string') {
+                return false;
+            }
+
+            return !isNaN(str) && !isNaN(parseFloat(str));
         },
         reset() {
             this.objectType = null;

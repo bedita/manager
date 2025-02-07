@@ -6,7 +6,7 @@
                 <b class="required" v-if="required">*</b>
             </label>
             <!-- file upload -->
-            <template v-if="isFile">
+            <template v-if="fieldType === 'file'">
                 <file-upload
                     :object-type="objectType"
                     object-form-reference="[data-ref-fast-create]"
@@ -15,7 +15,7 @@
                 />
             </template>
             <!-- text (date, datetime) --->
-            <template v-else-if="isDate">
+            <template v-if="fieldType === 'date'">
                 <input
                     :id="`fast-create-${field}`"
                     :name="`fast-${objectType}-${field}`"
@@ -29,7 +29,7 @@
                 >
             </template>
             <!-- text (integer) --->
-            <template v-else-if="isInteger">
+            <template v-if="fieldType === 'integer'">
                 <input
                     :id="`fast-create-${field}`"
                     :name="`fast-${objectType}-${field}`"
@@ -40,7 +40,7 @@
                 >
             </template>
             <!-- text (number) --->
-            <template v-else-if="isNumber">
+            <template v-if="fieldType === 'number'">
                 <input
                     :id="`fast-create-${field}`"
                     :name="`fast-${objectType}-${field}`"
@@ -52,14 +52,14 @@
                 >
             </template>
             <!-- date ranges -->
-            <template v-else-if="isDateRanges">
+            <template v-if="fieldType === 'calendar'">
                 <date-ranges-view
                     :ranges="value"
                     @update="update"
                 />
             </template>
             <!-- categories -->
-            <template v-else-if="isCategories">
+            <template v-if="fieldType === 'categories'">
                 <object-categories
                     :model-categories="val"
                     :value="[]"
@@ -67,7 +67,7 @@
                 />
             </template>
             <!-- check (boolean) --->
-            <template v-else-if="isCheck">
+            <template v-if="fieldType === 'checkbox'">
                 <input
                     :id="`fast-create-${field}`"
                     :name="`fast-${objectType}-${field}`"
@@ -78,7 +78,7 @@
                 >
             </template>
             <!-- select -->
-            <template v-else-if="isSelect">
+            <template v-if="fieldType === 'select'">
                 <select
                     :id="`fast-create-${field}`"
                     data-ref-fast-create="1"
@@ -95,7 +95,7 @@
                 </select>
             </template>
             <!-- radio -->
-            <template v-else-if="isRadio">
+            <template v-if="fieldType === 'radio'">
                 <label
                     v-for="item in enumItems(jsonSchema)"
                     :key="item"
@@ -113,7 +113,7 @@
                 </label>
             </template>
             <!-- richtext -->
-            <template v-else-if="isRichtext">
+            <template v-if="fieldType === 'textarea'">
                 <textarea
                     :id="`fast-create-${field}`"
                     data-ref-fast-create="1"
@@ -126,7 +126,7 @@
                 />
             </template>
             <!-- input text -->
-            <template v-else-if="isString">
+            <template v-if="fieldType === 'string'">
                 <input
                     :id="`fast-create-${field}`"
                     type="text"
@@ -134,11 +134,9 @@
                     v-model="value"
                     @change="update($event.target.value)"
                 >
-                {{ jsonSchema }}
-                {{ jsonSchema?.oneOf?.filter(one => one?.enum?.length > 0) }}
             </template>
             <!-- captions -->
-            <template v-else-if="isCaptions">
+            <template v-if="fieldType === 'captions'">
                 <object-captions
                     :object-type="objectType"
                     :items="[]"
@@ -149,7 +147,7 @@
                 />
             </template>
             <!-- json -->
-            <template v-else-if="isJson">
+            <template v-if="fieldType === 'json'">
                 <textarea
                     :id="`fast-create-${field}`"
                     class="json"
@@ -159,9 +157,6 @@
                     v-jsoneditor
                     @change="updateJson($event.target.value)"
                 />
-            </template>
-            <template v-else>
-                -
             </template>
         </div>
     </div>
@@ -183,6 +178,10 @@ export default {
         field: {
             type: String,
             required: true,
+        },
+        forceType: {
+            type: String,
+            default: '',
         },
         isUploadable: {
             type: Boolean,
@@ -232,56 +231,11 @@ export default {
         }
     },
     computed: {
-        isCategories() {
-            return this.field === 'categories';
-        },
-        isCaptions() {
-            return this.field === 'captions';
-        },
-        isCheck() {
-            return this.jsonSchema?.oneOf?.filter(one => one?.type === 'boolean')?.length > 0;
-        },
-        isDate() {
-            return this.jsonSchema?.oneOf?.filter(one => one?.type === 'string' && ['date', 'date-time'].includes(one?.format))?.length > 0;
-        },
-        isDateRanges() {
-            return this.field === 'date_ranges';
-        },
-        isFile() {
-            return this.field === 'name' && this.abstractType === 'media' && this.isUploadable;
-        },
-        isInteger() {
-            return this.jsonSchema?.oneOf?.filter(one => one?.type === 'integer')?.length > 0;
-        },
-        isJson() {
-            return this.field === 'extra' || this.jsonSchema?.oneOf?.filter(one => ['array','object'].includes(one?.type))?.length > 0;
-        },
         isNumber() {
-            return this.jsonSchema?.oneOf?.filter(one => one?.type === 'number')?.length > 0;
-        },
-        isRadio() {
-            const isEnum = this.jsonSchema?.enum || this.jsonSchema?.oneOf?.filter(one => one?.enum?.length > 0)?.length > 0;
-            const values = this.jsonSchema?.enum || this.jsonSchema?.oneOf?.map(one => one?.enum)?.flat();
-
-            return isEnum && values?.length <= 3;
-        },
-        isRichtext() {
-            return this.jsonSchema?.oneOf?.filter(one => one?.contentMediaType === 'text/html')?.length > 0;
-        },
-        isSelect() {
-            const isEnum = this.jsonSchema?.enum || this.jsonSchema?.oneOf?.filter(one => one?.enum?.length > 0)?.length > 0;
-            const values = this.jsonSchema?.enum || this.jsonSchema?.oneOf?.map(one => one?.enum)?.flat();
-
-            return isEnum && values?.length > 3;
-        },
-        isString() {
-            if (this.jsonSchema?.type === 'string' && !this.jsonSchema?.enum) {
-                return true;
-            }
-            return this.jsonSchema?.oneOf?.filter(one => one?.type === 'string')?.length > 0;
+            return this.forceType === 'number' || (!this.forceType && this.jsonSchema?.oneOf?.filter(one => one?.type === 'number')?.length > 0);
         },
         title() {
-            if (this.field === 'name' && this.abstractType === 'media' && this.isUploadable) {
+            if (this.forceType === 'file' || (!this.forceType && this.field === 'name' && this.abstractType === 'media' && this.isUploadable)) {
                 return this.t('File');
             }
             return this.t(this.jsonSchema?.title || this.field);
@@ -295,29 +249,7 @@ export default {
                     this.update(this.value);
                 }
             }
-            if (this.isCategories) {
-                this.fieldType = 'categories';
-            } else if (this.isDateRanges) {
-                this.fieldType = 'date_ranges';
-            } else if (this.isDate) {
-                this.format = this.jsonSchema?.oneOf.find(one => one.type === 'string' && ['date', 'date-time'].includes(one.format)).format;
-            } else if (this.isCheck) {
-                this.fieldType = 'checkbox';
-            } else if (this.isSelect) {
-                this.fieldType = 'select';
-            } else if (this.isRadio) {
-                this.fieldType = 'radio';
-            } else if (this.isRichtext) {
-                this.fieldType = 'textarea';
-            } else if (this.isCaptions) {
-                this.fieldType = 'captions';
-            } else if (this.isJson) {
-                this.fieldType = 'json';
-            } else if (this.isFile) {
-                this.fieldType = 'file';
-            } else {
-                this.fieldType = 'text';
-            }
+            this.fieldType = this.resetFieldType();
             this.toolbar = JSON.stringify(BEDITA?.richeditorByPropertyConfig?.[this.field]?.toolbar || null);
             this.loaded = true;
         });
@@ -325,6 +257,50 @@ export default {
     methods: {
         enumItems(schema) {
             return schema?.enum || schema?.oneOf?.map(one => one?.enum)?.flat() || [];
+        },
+        resetFieldType() {
+            if (this.forceType) {
+                return this.forceType;
+            }
+            if (['captions', 'categories'].includes(this.field)) {
+                return this.field;
+            }
+            if (this.field === 'date_ranges') {
+                return 'calendar';
+            }
+            if (this.jsonSchema?.oneOf?.filter(one => one?.type === 'string' && ['date', 'date-time'].includes(one?.format))?.length > 0) {
+                this.format = this.jsonSchema?.oneOf.find(one => one.type === 'string' && ['date', 'date-time'].includes(one.format)).format;
+
+                return 'date';
+            }
+            if (this.jsonSchema?.oneOf?.filter(one => one?.type === 'boolean')?.length > 0) {
+                return 'checkbox';
+            }
+            const isEnum = this.jsonSchema?.enum || this.jsonSchema?.oneOf?.filter(one => one?.enum?.length > 0)?.length > 0;
+            const values = this.jsonSchema?.enum || this.jsonSchema?.oneOf?.map(one => one?.enum)?.flat();
+            if (isEnum) {
+                return values?.length > 3 ? 'select' : 'radio';
+            }
+            if (this.jsonSchema?.oneOf?.filter(one => one?.contentMediaType === 'text/html')?.length > 0) {
+                return 'textarea';
+            }
+            if (this.field === 'extra' || this.jsonSchema?.oneOf?.filter(one => ['array','object'].includes(one?.type))?.length > 0) {
+                return 'json';
+            }
+            if (this.field === 'name' && this.abstractType === 'media' && this.isUploadable) {
+                return 'file';
+            }
+            if (this.jsonSchema?.oneOf?.filter(one => one?.type === 'integer')?.length > 0) {
+                return 'integer';
+            }
+            if (this.jsonSchema?.oneOf?.filter(one => one?.type === 'number')?.length > 0) {
+                return 'number';
+            }
+            if (this.jsonSchema?.type === 'string' || this.jsonSchema?.oneOf?.filter(one => one?.type === 'string')?.length > 0) {
+                return 'string';
+            }
+
+            return 'string';
         },
         update(value) {
             this.$emit('update', this.field, value);
