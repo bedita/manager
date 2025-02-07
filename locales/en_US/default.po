@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-12-19 11:17:51 \n"
+"POT-Creation-Date: 2025-02-07 09:13:18 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -134,9 +134,6 @@ msgid "Children order"
 msgstr ""
 
 msgid "Choose a file"
-msgstr ""
-
-msgid "Choose a type"
 msgstr ""
 
 msgid "City"
@@ -314,9 +311,6 @@ msgid "Export Filtered"
 msgstr ""
 
 msgid "Failed to write file to disk"
-msgstr ""
-
-msgid "File"
 msgstr ""
 
 msgid "File Name"
@@ -925,9 +919,6 @@ msgstr ""
 msgid "Upload multiple"
 msgstr ""
 
-msgid "Url"
-msgstr ""
-
 msgid "User Accesses"
 msgstr ""
 
@@ -976,6 +967,9 @@ msgstr ""
 msgid "You are not authorized to access that location."
 msgstr ""
 
+msgid "You are not authorized to access this resource"
+msgstr ""
+
 msgid "You do not have the required permissions to view this page."
 msgstr ""
 
@@ -1022,12 +1016,6 @@ msgid "context"
 msgstr ""
 
 msgid "controls"
-msgstr ""
-
-msgid "create"
-msgstr ""
-
-msgid "create new for"
 msgstr ""
 
 msgid "created"
@@ -1109,9 +1097,6 @@ msgid "pitch"
 msgstr ""
 
 msgid "remove"
-msgstr ""
-
-msgid "reset"
 msgstr ""
 
 msgid "scheduled_from"
@@ -1759,6 +1744,30 @@ msgid "date"
 msgstr ""
 
 msgid "Trashed"
+msgstr ""
+
+msgid "Canceled"
+msgstr ""
+
+msgid "Choose file"
+msgstr ""
+
+msgid "File upload"
+msgstr ""
+
+msgid "No file selected"
+msgstr ""
+
+msgid "Replace media"
+msgstr ""
+
+msgid "Choose a type"
+msgstr ""
+
+msgid "Click here to start"
+msgstr ""
+
+msgid "Fast create"
 msgstr ""
 
 msgid "Insert date(s)"

@@ -1,0 +1,8 @@
+<fast-create
+    :fields-by-type="{{ Property.fastCreateFieldsMap()|json_encode }}"
+    :items="{{ relationSchema['right']|json_encode }}"
+    :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}"
+    :schemas-by-type="{{ schemasByType|json_encode }}"
+    @created="appendRelations"
+>
+</fast-create>

@@ -24,6 +24,15 @@
         {% else %}
 
         <div class="related-list-container">
+            {# FastCreate #}
+            {{ element(
+                config('UI.fast_create_form._element')|default('Form/fast_create'),
+                {
+                    'relationSchema': relationSchema,
+                    'schemasByType': schemasByType,
+                }
+            ) }}
+
             {# FilterBoxView #}
             <div class="mb-1" v-show="showFilter">
                 {% set fbt = filtersByType ? filtersByType : [] %}
@@ -98,12 +107,11 @@
                         :drag-data="JSON.stringify(related)"
                         {%- endif %}
                         >
-
-                        {% if relationName == 'children' %}
-                            {{ element('Form/related_item', { 'children': true, 'foldersSchema': relationsSchema[relationName] }) }}
-                        {% else %}
-                            {{ element('Form/related_item', { 'common': true, 'readonly': readonly }) }}
-                        {% endif %}
+                            {% if relationName == 'children' %}
+                                {{ element('Form/related_item', { 'children': true, 'foldersSchema': relationsSchema[relationName] }) }}
+                            {% else %}
+                                {{ element('Form/related_item', { 'common': true, 'readonly': readonly }) }}
+                            {% endif %}
                     </div>
 
                     {% if not readonly %}

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-12-19 11:17:51 \n"
+"POT-Creation-Date: 2025-02-07 09:13:18 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -137,9 +137,6 @@ msgstr "Ordinamento contenuti"
 
 msgid "Choose a file"
 msgstr "Scegli un file"
-
-msgid "Choose a type"
-msgstr "Selezionare un tipo"
 
 msgid "City"
 msgstr "Città"
@@ -317,9 +314,6 @@ msgstr "Esporta Filtrati"
 
 msgid "Failed to write file to disk"
 msgstr "Scrittura file su disco fallita"
-
-msgid "File"
-msgstr ""
 
 msgid "File Name"
 msgstr "Nome File"
@@ -931,9 +925,6 @@ msgstr "Carica file locale"
 msgid "Upload multiple"
 msgstr "Upload multiplo"
 
-msgid "Url"
-msgstr ""
-
 msgid "User Accesses"
 msgstr "Accessi utente"
 
@@ -982,6 +973,9 @@ msgstr "Sì"
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
 
+msgid "You are not authorized to access this resource"
+msgstr "Non sei autorizzato ad accedere a questa risorsa"
+
 msgid "You do not have the required permissions to view this page."
 msgstr "Non hai i permessi necessari per visualizzare questa pagina."
 
@@ -1029,12 +1023,6 @@ msgstr "contesto"
 
 msgid "controls"
 msgstr ""
-
-msgid "create"
-msgstr "crea"
-
-msgid "create new for"
-msgstr "crea nuovo per"
 
 msgid "created"
 msgstr "creato"
@@ -1116,9 +1104,6 @@ msgstr ""
 
 msgid "remove"
 msgstr "rimuovi"
-
-msgid "reset"
-msgstr ""
 
 msgid "scheduled_from"
 msgstr "programmato da"
@@ -1667,7 +1652,8 @@ msgstr "Valido"
 msgid ""
 "Sorry, your browser does not support embedded <code>audio</code> element"
 msgstr ""
-"Spiacenti, il tuo browser non supporta l'elemento <code>audio</code> incorporato"
+"Spiacenti, il tuo browser non supporta l'elemento <code>audio</code> "
+"incorporato"
 
 msgid "Cannot produce a thumbnail for this file"
 msgstr "Impossibile produrre una miniatura per questo file"
@@ -1684,7 +1670,8 @@ msgstr "Apri immagine"
 msgid ""
 "Sorry, your browser does not support embedded <code>video</code> element"
 msgstr ""
-"Spiacenti, il tuo browser non supporta l'elemento <code>video</code> incorporato"
+"Spiacenti, il tuo browser non supporta l'elemento <code>video</code> "
+"incorporato"
 
 msgid "View original"
 msgstr "Vedi originale"
@@ -1781,6 +1768,30 @@ msgstr "data"
 
 msgid "Trashed"
 msgstr "Rimosso"
+
+msgid "Canceled"
+msgstr "Annullato"
+
+msgid "Choose file"
+msgstr "Scegli file"
+
+msgid "File upload"
+msgstr "Upload file"
+
+msgid "No file selected"
+msgstr "Nessun file selezionato"
+
+msgid "Replace media"
+msgstr "Sostituisci media"
+
+msgid "Choose a type"
+msgstr "Selezionare un tipo"
+
+msgid "Click here to start"
+msgstr "Clicca qui per iniziare"
+
+msgid "Fast create"
+msgstr "Creazione rapida"
 
 msgid "Insert date(s)"
 msgstr "Inserire data(e)"

@@ -93,6 +93,9 @@ const _vueInstance = new Vue({
         BarChart:() => import(/* webpackChunkName: "bar-chart" */'app/components/charts/bar-chart'),
         SortRelated: () => import(/* webpackChunkName: "sort-related" */'app/components/sort-related/sort-related'),
         MediaItem: () => import(/* webpackChunkName: "media-item" */'app/components/media-item/media-item'),
+        FastCreate: () => import(/* webpackChunkName: "fast-create" */'app/components/fast-create/fast-create'),
+        FormField: () => import(/* webpackChunkName: "form-field" */'app/components/fast-create/form-field'),
+        FileUpload: () => import(/* webpackChunkName: "file-upload" */'app/components/file-upload/file-upload'),
         AppIcon,
     },
 
