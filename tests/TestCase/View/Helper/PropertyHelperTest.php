@@ -462,6 +462,36 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
+     * Test `fastCreateFieldsMap`.
+
+     * @return void
+     * @covers ::fastCreateFieldsMap()
+     */
+    public function testFastCreateFieldsMap(): void
+    {
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        Configure::write('Properties.documents.fastCreate', [
+            'required' => ['status'],
+            'all' => ['status', 'title', 'description' => 'plaintext', 'body' => 'richtext', 'extra' => 'json', 'date_ranges'],
+        ]);
+        $map = $helper->fastCreateFieldsMap();
+        $actual = $map['documents'];
+        $expected = [
+            'required' => ['status'],
+            'fields' => [
+                'status',
+                'title',
+                'date_ranges',
+                'description' => 'plaintext',
+                'body' => 'richtext',
+                'extra' => 'json',
+            ],
+        ];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `prepareFieldOptions`.
 
      * @return void
