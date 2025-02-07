@@ -79,7 +79,7 @@
                 {{ element('Form/custom_right') }}
 
                 {# if `roles` in relationships (`users` only) display custom roles element #}
-                {% if object.relationships.roles %}
+                {% if 'roles' in object.relationships|keys %}
                     {{ element('Form/roles') }}
                 {% endif %}
 
