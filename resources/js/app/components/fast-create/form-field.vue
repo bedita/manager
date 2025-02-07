@@ -268,6 +268,12 @@ export default {
             if (this.field === 'date_ranges') {
                 return 'calendar';
             }
+            if (this.field === 'extra' || this.jsonSchema?.oneOf?.filter(one => ['array','object'].includes(one?.type))?.length > 0) {
+                return 'json';
+            }
+            if (this.field === 'name' && this.abstractType === 'media' && this.isUploadable) {
+                return 'file';
+            }
             if (this.jsonSchema?.oneOf?.filter(one => one?.type === 'string' && ['date', 'date-time'].includes(one?.format))?.length > 0) {
                 this.format = this.jsonSchema?.oneOf.find(one => one.type === 'string' && ['date', 'date-time'].includes(one.format)).format;
 
@@ -283,12 +289,6 @@ export default {
             }
             if (this.jsonSchema?.oneOf?.filter(one => one?.contentMediaType === 'text/html')?.length > 0) {
                 return 'textarea';
-            }
-            if (this.field === 'extra' || this.jsonSchema?.oneOf?.filter(one => ['array','object'].includes(one?.type))?.length > 0) {
-                return 'json';
-            }
-            if (this.field === 'name' && this.abstractType === 'media' && this.isUploadable) {
-                return 'file';
             }
             if (this.jsonSchema?.oneOf?.filter(one => one?.type === 'integer')?.length > 0) {
                 return 'integer';
@@ -331,5 +331,8 @@ div.form-field {
 }
 div.form-field b.required {
     color: red;
+}
+div.form-field .file {
+    display: block !important;
 }
 </style>
