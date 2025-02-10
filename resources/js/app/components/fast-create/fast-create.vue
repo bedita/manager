@@ -4,7 +4,7 @@
             {{ msgFastCreate }}. {{ msgClickHereToStart }}
         </div>
         <fieldset v-else>
-            <div>
+            <div v-show="!autoType">
                 <label for="objectType">{{ msgChooseType }}</label>
                 <select
                     v-model="objectType"
@@ -76,6 +76,10 @@ export default {
     },
     inject: ['getCSFRToken'],
     props: {
+        autoType: {
+            type: String,
+            default: null,
+        },
         fieldsByType: {
             type: Object,
             required: true
@@ -119,6 +123,10 @@ export default {
         this.$nextTick(() => {
             this.isUploadable = BEDITA.uploadable.includes(this.objectType);
             this.abstractType = this.isUploadable ? 'media' : 'objects';
+            if (this.autoType) {
+                this.objectType = this.autoType;
+                this.changeType();
+            }
         });
     },
     methods: {
@@ -183,13 +191,17 @@ export default {
             return !isNaN(str) && !isNaN(parseFloat(str));
         },
         reset() {
-            this.objectType = null;
             this.fields = [];
             this.required = [];
             this.payload = {};
             this.message = '';
             this.error = '';
             this.clicked = false;
+            if (!this.autoType) {
+                this.objectType = null;
+            } else {
+                this.changeType();
+            }
         },
         async save() {
             try {
