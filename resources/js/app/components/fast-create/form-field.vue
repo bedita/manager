@@ -273,18 +273,21 @@ export default {
             if (this.field === 'date_ranges') {
                 return 'calendar';
             }
-            if (this.field === 'extra' || this.jsonSchema?.oneOf?.filter(one => ['array','object'].includes(one?.type))?.length > 0) {
+            if (this.field === 'extra' || ['array','object'].includes(this.jsonSchema?.type) || this.jsonSchema?.oneOf?.filter(one => ['array','object'].includes(one?.type))?.length > 0) {
                 return 'json';
             }
             if (this.field === 'name' && this.abstractType === 'media' && this.isUploadable) {
                 return 'file';
             }
-            if (this.jsonSchema?.oneOf?.filter(one => one?.type === 'string' && ['date', 'date-time'].includes(one?.format))?.length > 0) {
-                this.format = this.jsonSchema?.oneOf.find(one => one.type === 'string' && ['date', 'date-time'].includes(one.format)).format;
+            const typeString = this.jsonSchema?.type === 'string' || this.jsonSchema?.oneOf?.filter(one => one?.type === 'string')?.length > 0;
+            const typeDate = this.jsonSchema?.format === 'date' || this.jsonSchema?.oneOf?.filter(one => one?.format === 'date')?.length > 0;
+            const typeDateTime = this.jsonSchema?.format === 'date-time' || this.jsonSchema?.oneOf?.filter(one => one?.format === 'date-time')?.length > 0;
+            if (typeString && (typeDate || typeDateTime)) {
+                this.format = this.jsonSchema?.format || this.jsonSchema?.oneOf.find(one => one.type === 'string' && ['date', 'date-time'].includes(one.format)).format;
 
                 return 'date';
             }
-            if (this.jsonSchema?.oneOf?.filter(one => one?.type === 'boolean')?.length > 0) {
+            if (this.jsonSchema?.type === 'boolean' || this.jsonSchema?.oneOf?.filter(one => one?.type === 'boolean')?.length > 0) {
                 return 'checkbox';
             }
             const isEnum = this.jsonSchema?.enum || this.jsonSchema?.oneOf?.filter(one => one?.enum?.length > 0)?.length > 0;
@@ -295,10 +298,10 @@ export default {
             if (this.jsonSchema?.oneOf?.filter(one => one?.contentMediaType === 'text/html')?.length > 0) {
                 return 'textarea';
             }
-            if (this.jsonSchema?.oneOf?.filter(one => one?.type === 'integer')?.length > 0) {
+            if (this.jsonSchema?.type === 'integer' || this.jsonSchema?.oneOf?.filter(one => one?.type === 'integer')?.length > 0) {
                 return 'integer';
             }
-            if (this.jsonSchema?.oneOf?.filter(one => one?.type === 'number')?.length > 0) {
+            if (this.jsonSchema?.type === 'number' || this.jsonSchema?.oneOf?.filter(one => one?.type === 'number')?.length > 0) {
                 return 'number';
             }
             if (this.jsonSchema?.type === 'string' || this.jsonSchema?.oneOf?.filter(one => one?.type === 'string')?.length > 0) {
