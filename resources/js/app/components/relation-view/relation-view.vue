@@ -692,7 +692,8 @@ export default {
                 const relationName = data.relationName;
                 const objectType = data.object.type;
                 const url = `${BEDITA.base}/api/${objectType}/${data.object.id}/relationships/${relationName}`;
-                if (this.removedRelationsData.length > 0) {
+                const toRemove = JSON.parse(this.removedRelationsData);
+                if (toRemove.length > 0) {
                     // save removed relations
                     const response = await fetch(url, {
                         method: 'DELETE',
@@ -702,17 +703,17 @@ export default {
                             'content-type': 'application/json',
                             'X-CSRF-Token': BEDITA.csrfToken,
                         },
-                        body: JSON.stringify({ data: JSON.parse(this.removedRelationsData) }),
+                        body: JSON.stringify({ data: toRemove }),
                     });
-                    const json = await response.json();
-                    if (json?.error) {
-                        BEDITA.error(json.error?.title);
+                    if (response?.error) {
+                        BEDITA.error(response.error?.title || response?.error);
                     } else {
                         this.removedRelated = [];
                         this.prepareRelationsToRemove(this.removedRelated);
                     }
                 }
-                if (this.addedRelationsData.length > 0) {
+                const toAdd = JSON.parse(this.addedRelationsData);
+                if (toAdd.length > 0) {
                     // save added relations
                     const response = await fetch(url, {
                         method: 'POST',
@@ -722,7 +723,7 @@ export default {
                             'content-type': 'application/json',
                             'X-CSRF-Token': BEDITA.csrfToken,
                         },
-                        body: JSON.stringify({ data: JSON.parse(this.addedRelationsData) }),
+                        body: JSON.stringify({ data: toAdd }),
                     });
                     const json = await response.json();
                     if (json?.error) {
