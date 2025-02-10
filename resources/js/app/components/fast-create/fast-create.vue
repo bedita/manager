@@ -27,7 +27,7 @@
                     <form-field
                         :abstract-type="abstractType"
                         :field="fieldKey(field)"
-                        :force-type="fieldType(field)"
+                        :render-as="fieldType(field)"
                         :json-schema="schemasByType?.[objectType]?.properties?.[fieldKey(field)] || {}"
                         :is-uploadable="isUploadable"
                         :languages="languages"
@@ -125,6 +125,7 @@ export default {
         changeType() {
             this.fields = [];
             this.fieldsMap = {};
+            this.forceUploadable = false;
             this.required = [];
             this.payload = {};
             this.message = '';
@@ -152,6 +153,18 @@ export default {
             this.isUploadable = BEDITA.uploadable.includes(this.objectType);
             this.abstractType = this.isUploadable ? 'media' : 'objects';
             this.invalidFields = this.required.filter(f => !this.payload[f]);
+            if (this.fields?.length === 0) {
+                // set defaults
+                this.fields = ['title', 'status'];
+                this.fieldsMap = { title: 'string', status: 'radio' };
+                this.required = ['title'];
+                if (this.abstractType === 'media') {
+                    this.isUploadable = true;
+                    this.fields = ['title', 'status', 'name'];
+                    this.fieldsMap = { title: 'string', status: 'radio', name: 'file' };
+                    this.required = ['title', 'name'];
+                }
+            }
         },
         err(val) {
             this.error = val;

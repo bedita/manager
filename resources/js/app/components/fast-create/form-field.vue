@@ -3,7 +3,12 @@
         <div :class="`input ${field} ${fieldType}`">
             <label :for="field">
                 {{ title }}
-                <b class="required" v-if="required">*</b>
+                <b
+                    class="required"
+                    v-if="required"
+                >
+                    *
+                </b>
             </label>
             <!-- file upload -->
             <template v-if="fieldType === 'file'">
@@ -179,10 +184,6 @@ export default {
             type: String,
             required: true,
         },
-        forceType: {
-            type: String,
-            default: '',
-        },
         isUploadable: {
             type: Boolean,
             default: false,
@@ -196,6 +197,10 @@ export default {
             default: () => {},
         },
         objectType: {
+            type: String,
+            default: '',
+        },
+        renderAs: {
             type: String,
             default: '',
         },
@@ -232,10 +237,10 @@ export default {
     },
     computed: {
         isNumber() {
-            return this.forceType === 'number' || (!this.forceType && this.jsonSchema?.oneOf?.filter(one => one?.type === 'number')?.length > 0);
+            return this.renderAs === 'number' || (!this.renderAs && this.jsonSchema?.oneOf?.filter(one => one?.type === 'number')?.length > 0);
         },
         title() {
-            if (this.forceType === 'file' || (!this.forceType && this.field === 'name' && this.abstractType === 'media' && this.isUploadable)) {
+            if (this.renderAs === 'file' || (!this.renderAs && this.field === 'name' && this.abstractType === 'media' && this.isUploadable)) {
                 return this.t('File');
             }
             return this.t(this.jsonSchema?.title || this.field);
@@ -259,8 +264,8 @@ export default {
             return schema?.enum || schema?.oneOf?.map(one => one?.enum)?.flat() || [];
         },
         resetFieldType() {
-            if (this.forceType) {
-                return this.forceType;
+            if (this.renderAs) {
+                return this.renderAs;
             }
             if (['captions', 'categories'].includes(this.field)) {
                 return this.field;
