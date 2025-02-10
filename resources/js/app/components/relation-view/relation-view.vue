@@ -704,8 +704,9 @@ export default {
                         },
                         body: JSON.stringify({ data: JSON.parse(this.removedRelationsData) }),
                     });
-                    if (response?.error) {
-                        BEDITA.error(response.error);
+                    const json = await response.json();
+                    if (json?.error) {
+                        BEDITA.error(json.error?.title);
                     } else {
                         this.removedRelated = [];
                         this.prepareRelationsToRemove(this.removedRelated);
@@ -723,8 +724,9 @@ export default {
                         },
                         body: JSON.stringify({ data: JSON.parse(this.addedRelationsData) }),
                     });
-                    if (response.error) {
-                        BEDITA.error(response.error);
+                    const json = await response.json();
+                    if (json?.error) {
+                        BEDITA.error(json.error?.title);
                     } else {
                         this.addedRelations = [];
                         this.modifiedRelations = [];
@@ -733,7 +735,11 @@ export default {
                 }
                 await this.reloadObjects();
             } catch (error) {
-                BEDITA.error(error);
+                if (typeof error === 'string') {
+                    BEDITA.error(error);
+                } else {
+                    BEDITA.error(error?.title);
+                }
             } finally {
                 this.savingRelated = false;
             }
