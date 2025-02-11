@@ -56,6 +56,7 @@ Thumbs.db
 # node, preprocessors... #
 #################################
 package-lock.json
+yarn.lock
 node_modules/
 .cache/
 yarn-error.log
