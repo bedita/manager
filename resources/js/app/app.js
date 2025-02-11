@@ -604,3 +604,7 @@ window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
 Vue.component('AppIcon', AppIcon);
+Vue.component('DateRangesView', _vueInstance.$options.components.DateRangesView);
+Vue.component('FileUpload', _vueInstance.$options.components.FileUpload);
+Vue.component('ObjectCategories', _vueInstance.$options.components.ObjectCategories);
+Vue.component('ObjectCaptions', _vueInstance.$options.components.ObjectCaptions);
