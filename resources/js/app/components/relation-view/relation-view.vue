@@ -88,8 +88,8 @@ export default {
             positions: {},              // used in children relations
             priorities: {},              // used in children relations
 
-            removedRelationsData: [],   // hidden field containing serialized json passed on form submit
-            addedRelationsData: [],     // array of serialized new relations
+            removedRelationsData: '[]',   // hidden field containing serialized json passed on form submit
+            addedRelationsData: '[]',     // array of serialized new relations
 
             requesterId: null,          // panel requerster id
             removedRelated: [],         // staged removed related objects
@@ -686,13 +686,26 @@ export default {
             }));
         },
 
+        parseStringArray(inputString) {
+            let result = [];
+            try {
+                if (inputString !== '[]') {
+                    result = JSON.parse(inputString);
+                }
+            } catch (error) {
+                console.error(`Error parsing JSON string "${inputString}": ${error}`);
+            }
+
+            return result;
+        },
+
         async saveRelated(data) {
             try {
                 this.savingRelated = true;
                 const relationName = data.relationName;
                 const objectType = data.object.type;
                 const url = `${BEDITA.base}/api/${objectType}/${data.object.id}/relationships/${relationName}`;
-                const toRemove = JSON.parse(this.removedRelationsData);
+                const toRemove = this.parseStringArray(this.removedRelationsData);
                 if (toRemove.length > 0) {
                     // save removed relations
                     const response = await fetch(url, {
@@ -712,7 +725,7 @@ export default {
                         this.prepareRelationsToRemove(this.removedRelated);
                     }
                 }
-                const toAdd = JSON.parse(this.addedRelationsData);
+                const toAdd = this.parseStringArray(this.addedRelationsData);
                 if (toAdd.length > 0) {
                     // save added relations
                     const response = await fetch(url, {
