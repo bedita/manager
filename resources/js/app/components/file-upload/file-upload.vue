@@ -110,6 +110,8 @@ export default {
             msgFileUpload: t`File upload`,
             msgNoFileSelected: t`No file selected`,
             msgReplaceMedia: t`Replace media`,
+            msgUploading: t`Uploading...`,
+            msgUploadSucceeded: t`Upload succeeded`,
             response: {},
             uploadProgressInfo: new Map(),
         };
@@ -183,10 +185,10 @@ export default {
         async upload() {
             try {
                 this.loading = true;
-                this.loadingMessage = 'Uploading...';
+                this.loadingMessage = this.msgUploading;
                 const result = await this.doUpload();
                 this.$emit('success', result);
-                this.loadingMessage = 'Upload succeeded';
+                this.loadingMessage = this.msgUploadSucceeded;
             } catch(e) {
                 this.$emit('error', e);
             } finally {

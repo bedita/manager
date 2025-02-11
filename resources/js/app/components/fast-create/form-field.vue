@@ -236,9 +236,6 @@ export default {
         }
     },
     computed: {
-        isNumber() {
-            return this.renderAs === 'number' || (!this.renderAs && this.jsonSchema?.oneOf?.filter(one => one?.type === 'number')?.length > 0);
-        },
         title() {
             if (this.renderAs === 'file' || (!this.renderAs && this.field === 'name' && this.abstractType === 'media' && this.isUploadable)) {
                 return this.t('File');
