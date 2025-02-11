@@ -204,14 +204,16 @@ export default {
                 'file': this.fileData,
             };
             if (this.objectFormReference) {
+                const prefix = `fast-${this.objectType}-`;
                 const objectData = document.querySelectorAll(this.objectFormReference);
                 for (const element of objectData) {
                     if (['radio', 'checkbox'].includes(element?.type) && !element?.checked) {
                         continue;
                     }
-                    data[element.name] = element.value;
+                    data[element.name.replace(prefix, '')] = element.value;
                 }
             }
+            data['name'] = this.fileData.name;
             const formData = new FormData();
             for (const key of Object.keys(data)) {
                 formData.append(key, data[key]);
