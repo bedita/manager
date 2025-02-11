@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-02-07 09:13:18 \n"
+"POT-Creation-Date: 2025-02-11 09:42:41 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1759,6 +1759,12 @@ msgid "No file selected"
 msgstr ""
 
 msgid "Replace media"
+msgstr ""
+
+msgid "Uploading..."
+msgstr ""
+
+msgid "Upload succeeded"
 msgstr ""
 
 msgid "Choose a type"

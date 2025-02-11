@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-02-07 09:13:18 \n"
+"POT-Creation-Date: 2025-02-11 09:42:41 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1756,6 +1756,12 @@ msgid "No file selected"
 msgstr ""
 
 msgid "Replace media"
+msgstr ""
+
+msgid "Uploading..."
+msgstr ""
+
+msgid "Upload succeeded"
 msgstr ""
 
 msgid "Choose a type"
