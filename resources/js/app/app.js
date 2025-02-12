@@ -96,6 +96,17 @@ const _vueInstance = new Vue({
         FastCreate: () => import(/* webpackChunkName: "fast-create" */'app/components/fast-create/fast-create'),
         FormField: () => import(/* webpackChunkName: "form-field" */'app/components/fast-create/form-field'),
         FileUpload: () => import(/* webpackChunkName: "file-upload" */'app/components/file-upload/file-upload'),
+        FieldCheckbox: () => import(/* webpackChunkName: "field-checkbox" */'app/components/form/field-checkbox'),
+        FieldDate: () => import(/* webpackChunkName: "field-date" */'app/components/form/field-date'),
+        FieldGeoCoordinates: () => import(/* webpackChunkName: "field-geo-coordinates" */'app/components/form/field-geo-coordinates'),
+        FieldInteger: () => import(/* webpackChunkName: "field-integer" */'app/components/form/field-integer'),
+        FieldJson: () => import(/* webpackChunkName: "field-json" */'app/components/form/field-json'),
+        FieldNumber: () => import(/* webpackChunkName: "field-number" */'app/components/form/field-number'),
+        FieldRadio: () => import(/* webpackChunkName: "field-radio" */'app/components/form/field-radio'),
+        FieldSelect: () => import(/* webpackChunkName: "field-select" */'app/components/form/field-select'),
+        FieldString: () => import(/* webpackChunkName: "field-string" */'app/components/form/field-string'),
+        FieldTextarea: () => import(/* webpackChunkName: "field-textarea" */'app/components/form/field-textarea'),
+        FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
         AppIcon,
     },
 
@@ -605,6 +616,17 @@ window._vueInstance = _vueInstance;
 // use component everywhere in Manager
 Vue.component('AppIcon', AppIcon);
 Vue.component('DateRangesView', _vueInstance.$options.components.DateRangesView);
+Vue.component('FieldCheckbox', _vueInstance.$options.components.FieldCheckbox);
+Vue.component('FieldGeoCoordinates', _vueInstance.$options.components.FieldGeoCoordinates);
+Vue.component('FieldDate', _vueInstance.$options.components.FieldDate);
+Vue.component('FieldInteger', _vueInstance.$options.components.FieldInteger);
+Vue.component('FieldJson', _vueInstance.$options.components.FieldJson);
+Vue.component('FieldNumber', _vueInstance.$options.components.FieldNumber);
+Vue.component('FieldRadio', _vueInstance.$options.components.FieldRadio);
+Vue.component('FieldSelect', _vueInstance.$options.components.FieldSelect);
+Vue.component('FieldString', _vueInstance.$options.components.FieldString);
+Vue.component('FieldTextarea', _vueInstance.$options.components.FieldTextarea);
+Vue.component('FieldTitle', _vueInstance.$options.components.FieldTitle);
 Vue.component('FileUpload', _vueInstance.$options.components.FileUpload);
 Vue.component('ObjectCategories', _vueInstance.$options.components.ObjectCategories);
 Vue.component('ObjectCaptions', _vueInstance.$options.components.ObjectCaptions);

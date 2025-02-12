@@ -79,17 +79,23 @@ export default {
             async inserted(element, binding) {
                 let changing = false;
                 let toolbar = DEFAULT_TOOLBAR;
-                if (element.dataset?.toolbar?.length > 0) {
-                    let exp = element.dataset.toolbar ? JSON.parse(element.dataset.toolbar) : false;
-                    toolbar = exp ? exp.join(' ') : toolbar;
-                } else if (binding?.expression) {
-                    let exp = JSON.parse(binding.expression);
+                if (element.dataset?.toolbar?.length > 0 || binding?.expression) {
+                    let exp = element.dataset?.toolbar?.length > 0 ? JSON.parse(element.dataset.toolbar) : JSON.parse(binding.expression);
                     toolbar = exp ? exp.join(' ') : toolbar;
                 }
                 if (!binding.modifiers?.placeholders) {
                     toolbar = toolbar.replace(/\bplaceholders\b/, '');
                 }
                 const sizes = {};
+                if (element.dataset?.config?.length > 0) {
+                    const c = JSON.parse(element.dataset.config);
+                    if (c?.height) {
+                        sizes.height = c.height;
+                    }
+                    if (c?.min_height) {
+                        sizes.min_height = c.min_height;
+                    }
+                }
                 if (BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height) {
                     sizes.height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height;
                 }

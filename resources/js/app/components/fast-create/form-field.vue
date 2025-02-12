@@ -1,180 +1,142 @@
 <template>
     <div class="form-field">
         <div :class="`input ${field} ${fieldType}`">
-            <label :for="field">
-                {{ title }}
-                <b
-                    class="required"
-                    v-if="required"
-                >
-                    *
-                </b>
-            </label>
+            <field-title
+                :field="field"
+                :required="required"
+                :title="title"
+            />
             <!-- file upload -->
-            <template v-if="fieldType === 'file'">
-                <file-upload
-                    :object-type="objectType"
-                    object-form-reference="[data-ref-fast-create]"
-                    @error="uploadError"
-                    @success="uploadSuccess"
-                />
-            </template>
+            <file-upload
+                :object-type="objectType"
+                :object-form-reference="`fast-create-${objectType}`"
+                @error="uploadError"
+                @success="uploadSuccess"
+                v-if="fieldType === 'file'"
+            />
             <!-- text (date, datetime) --->
-            <template v-if="fieldType === 'date'">
-                <input
-                    :id="`fast-create-${field}`"
-                    :name="`fast-${objectType}-${field}`"
-                    data-ref-fast-create="1"
-                    type="text"
-                    date="true"
-                    :time="format == 'date-time'"
-                    :value="value"
-                    v-datepicker
-                    @change="update($event.target.value)"
-                >
-            </template>
+            <field-date
+                :id="`fast-create-${field}`"
+                :name="`fast-${objectType}-${field}`"
+                :reference="`fast-create-${objectType}`"
+                :time="format == 'date-time'"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'date'"
+            />
             <!-- text (integer) --->
-            <template v-if="fieldType === 'integer'">
-                <input
-                    :id="`fast-create-${field}`"
-                    :name="`fast-${objectType}-${field}`"
-                    data-ref-fast-create="1"
-                    type="number"
-                    :value="value"
-                    @change="update($event.target.value)"
-                >
-            </template>
+            <field-integer
+                :id="`fast-create-${field}`"
+                :name="`fast-${objectType}-${field}`"
+                :reference="`fast-create-${objectType}`"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'integer'"
+            />
             <!-- text (number) --->
-            <template v-if="fieldType === 'number'">
-                <input
-                    :id="`fast-create-${field}`"
-                    :name="`fast-${objectType}-${field}`"
-                    data-ref-fast-create="1"
-                    type="number"
-                    step="any"
-                    :value="value"
-                    @change="update($event.target.value)"
-                >
-            </template>
+            <field-number
+                :id="`fast-create-${field}`"
+                :name="`fast-${objectType}-${field}`"
+                :reference="`fast-create-${objectType}`"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'number'"
+            />
             <!-- date ranges -->
-            <template v-if="fieldType === 'calendar'">
-                <date-ranges-view
-                    :ranges="value"
-                    @update="update"
-                />
-            </template>
+            <date-ranges-view
+                :ranges="value"
+                @update="update"
+                v-if="fieldType === 'calendar'"
+            />
             <!-- categories -->
-            <template v-if="fieldType === 'categories'">
-                <object-categories
-                    :model-categories="val"
-                    :value="[]"
-                    @update="updateCategories"
-                />
-            </template>
+            <object-categories
+                :model-categories="val"
+                :value="[]"
+                @update="updateCategories"
+                v-if="fieldType === 'categories'"
+            />
             <!-- check (boolean) --->
-            <template v-if="fieldType === 'checkbox'">
-                <input
-                    :id="`fast-create-${field}`"
-                    :name="`fast-${objectType}-${field}`"
-                    data-ref-fast-create="1"
-                    type="checkbox"
-                    :checked="!!value"
-                    @change="update($event.target.checked)"
-                >
-            </template>
+            <field-checkbox
+                :id="`fast-create-${field}`"
+                :name="`fast-${objectType}-${field}`"
+                :reference="`fast-create-${objectType}`"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'checkbox'"
+            />
             <!-- select -->
-            <template v-if="fieldType === 'select'">
-                <select
-                    :id="`fast-create-${field}`"
-                    data-ref-fast-create="1"
-                    v-model="value"
-                    @change="update($event.target.value)"
-                >
-                    <option
-                        v-for="item in enumItems(jsonSchema)"
-                        :value="item"
-                        :key="item"
-                    >
-                        {{ item }}
-                    </option>
-                </select>
-            </template>
+            <field-select
+                :id="`fast-create-${field}`"
+                :items="enumItems(jsonSchema)"
+                :name="`fast-${objectType}-${field}`"
+                :reference="`fast-create-${objectType}`"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'select'"
+            />
             <!-- radio -->
-            <template v-if="fieldType === 'radio'">
-                <label
-                    v-for="item in enumItems(jsonSchema)"
-                    :key="item"
-                >
-                    <input
-                        :id="`fast-create-${field}-${item}`"
-                        type="radio"
-                        data-ref-fast-create="1"
-                        :name="`fast-${objectType}-${field}`"
-                        :value="item"
-                        v-model="value"
-                        @change="update($event.target.value)"
-                    >
-                    {{ item }}
-                </label>
-            </template>
+            <field-radio
+                :id="`fast-create-${field}`"
+                :items="enumItems(jsonSchema)"
+                :name="`fast-${objectType}-${field}`"
+                :reference="`fast-create-${objectType}`"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'radio'"
+            />
             <!-- richtext -->
-            <template v-if="fieldType === 'textarea'">
-                <textarea
-                    :id="`fast-create-${field}`"
-                    data-ref-fast-create="1"
-                    :name="`fast-${objectType}-${field}`"
-                    :data-toolbar="toolbar"
-                    v-model="value"
-                    v-richeditor
-                    @change="update($event.target.value)"
-                    v-if="loaded"
-                />
-            </template>
+            <field-textarea
+                :id="`fast-create-${field}`"
+                :name="`fast-${objectType}-${field}`"
+                :field="field"
+                :reference="`fast-create-${objectType}`"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'textarea'"
+            />
+            <!-- geo-coordinates -->
+            <field-geo-coordinates
+                :id="`fast-create-${field}`"
+                :name="`fast-${objectType}-${field}`"
+                :reference="`fast-create-${objectType}`"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'geo-coordinates'"
+            />
             <!-- input text -->
-            <template v-if="fieldType === 'string'">
-                <input
-                    :id="`fast-create-${field}`"
-                    type="text"
-                    data-ref-fast-create="1"
-                    v-model="value"
-                    @change="update($event.target.value)"
-                >
-            </template>
+            <field-string
+                :id="`fast-create-${field}`"
+                :name="`fast-${objectType}-${field}`"
+                :reference="`fast-create-${objectType}`"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'string'"
+            />
             <!-- captions -->
-            <template v-if="fieldType === 'captions'">
-                <object-captions
-                    :object-type="objectType"
-                    :items="[]"
-                    :config="captionsConfig"
-                    :languages="languages"
-                    :readonly="false"
-                    @update="update"
-                />
-            </template>
+            <object-captions
+                :object-type="objectType"
+                :items="[]"
+                :config="captionsConfig"
+                :languages="languages"
+                :readonly="false"
+                @change="update"
+                v-if="fieldType === 'captions'"
+            />
             <!-- json -->
-            <template v-if="fieldType === 'json'">
-                <textarea
-                    :id="`fast-create-${field}`"
-                    class="json"
-                    data-ref-fast-create="1"
-                    :name="`fast-${objectType}-${field}`"
-                    v-model="value"
-                    v-jsoneditor
-                    @change="updateJson($event.target.value)"
-                />
-            </template>
+            <field-json
+                :id="`fast-create-${field}`"
+                :name="`fast-${objectType}-${field}`"
+                :reference="`fast-create-${objectType}`"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'json'"
+            />
         </div>
     </div>
 </template>
 <script>
 export default {
     name: 'FormField',
-    components: {
-        DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
-        FileUpload: () => import(/* webpackChunkName: "file-upload" */'app/components/file-upload/file-upload'),
-        ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
-        ObjectCaptions: () => import(/* webpackChunkName: "object-captions" */'app/components/object-captions/object-captions'),
-    },
     props: {
         abstractType: {
             type: String,
@@ -223,15 +185,6 @@ export default {
             },
             fieldType: 'text',
             format: '',
-            jsonEditorOptions: {
-                mainMenuBar: true,
-                mode: 'text',
-                navigationBar: false,
-                statusBar: false,
-                readOnly: false,
-            },
-            loaded: false,
-            toolbar: null,
             value: null,
         }
     },
@@ -252,8 +205,6 @@ export default {
                 }
             }
             this.fieldType = this.resetFieldType();
-            this.toolbar = JSON.stringify(BEDITA?.richeditorByPropertyConfig?.[this.field]?.toolbar || null);
-            this.loaded = true;
         });
     },
     methods: {
@@ -301,8 +252,9 @@ export default {
             if (this.jsonSchema?.type === 'number' || this.jsonSchema?.oneOf?.filter(one => one?.type === 'number')?.length > 0) {
                 return 'number';
             }
-            if (this.jsonSchema?.type === 'string' || this.jsonSchema?.oneOf?.filter(one => one?.type === 'string')?.length > 0) {
-                return 'string';
+            const isString = this.jsonSchema?.type === 'string' || this.jsonSchema?.oneOf?.filter(one => one?.type === 'string')?.length > 0;
+            if (isString && this.field === 'coords') {
+                return 'geo-coordinates';
             }
 
             return 'string';
@@ -312,14 +264,6 @@ export default {
         },
         updateCategories(value) {
             this.$emit('update', 'categories', JSON.stringify(value));
-        },
-        updateJson(value) {
-            try {
-                const parsed = JSON.parse(value);
-                this.update(parsed);
-            } catch (e) {
-                this.$emit('error', e);
-            }
         },
         uploadError(e) {
             this.$emit('error', e)
@@ -333,9 +277,6 @@ export default {
 <style scoped>
 div.form-field {
     margin-bottom: 1em;
-}
-div.form-field b.required {
-    color: red;
 }
 div.form-field .file {
     display: block !important;

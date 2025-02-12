@@ -205,7 +205,7 @@ export default {
             };
             if (this.objectFormReference) {
                 const prefix = `fast-${this.objectType}-`;
-                const objectData = document.querySelectorAll(this.objectFormReference);
+                const objectData = document.querySelectorAll(`[data-ref="${this.objectFormReference}"]`);
                 for (const element of objectData) {
                     if (['radio', 'checkbox'].includes(element?.type) && !element?.checked) {
                         continue;
