@@ -203,8 +203,8 @@ class PropertyHelper extends Helper
      */
     public function translationsMap(): array
     {
-        $key = CacheTools::cacheKey('translationsMap');
         try {
+            $key = CacheTools::cacheKey('translationsMap');
             $map = Cache::remember(
                 $key,
                 function () {
@@ -247,7 +247,7 @@ class PropertyHelper extends Helper
                     return $map;
                 }
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $map = [];
         }
 
