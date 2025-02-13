@@ -575,4 +575,21 @@ class PropertyHelperTest extends TestCase
         ];
         static::assertEquals($expected, $actual);
     }
+
+    /**
+     * Test `translationsMap` with exception.
+     *
+     * @return void
+     * @covers ::translationsMap()
+     */
+    public function testTranslationsMapExpection(): void
+    {
+        $properties = Configure::read('Properties');
+        Configure::write('Properties', 123);
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->translationsMap();
+        static::assertEquals([], $actual);
+        Configure::write('Properties', $properties);
+    }
 }
