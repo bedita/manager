@@ -563,8 +563,13 @@ class PropertyHelperTest extends TestCase
             'body' => 'Body',
             'core' => 'Core',
             'custom' => 'Custom',
+            'date_ranges' => 'Date Ranges',
             'description' => 'Description',
+            'documents' => 'Documents',
             'dummies' => 'Dummies',
+            'json' => 'Json',
+            'plaintext' => 'Plaintext',
+            'richtext' => 'Richtext',
             'status' => 'Status',
             'title' => 'Title',
         ];
