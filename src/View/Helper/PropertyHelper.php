@@ -14,7 +14,9 @@ namespace App\View\Helper;
 
 use App\Form\Control;
 use App\Form\Form;
+use App\Utility\CacheTools;
 use App\Utility\Translate;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -192,6 +194,64 @@ class PropertyHelper extends Helper
         }
 
         return $this->Schema->format($value, $this->schema($property));
+    }
+
+    /**
+     * Return translations for object fields and more.
+     *
+     * @return array
+     */
+    public function translationsMap(): array
+    {
+        $key = CacheTools::cacheKey('translationsMap');
+        try {
+            $map = Cache::remember(
+                $key,
+                function () {
+                    $map = [];
+                    $keys = [];
+                    $properties = (array)Configure::read(sprintf('Properties'));
+                    $removeKeys = ['_element', '_hide', '_keep'];
+                    foreach ($properties as $name => $prop) {
+                        $keys[] = $name;
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'fastCreate.all', []));
+                        $groups = array_keys((array)Hash::get($prop, 'view', []));
+                        $addKeys = array_reduce($groups, function ($carry, $group) use ($prop, $removeKeys) {
+                            $carry[] = $group;
+                            $groupKeys = (array)Hash::get($prop, sprintf('view.%s', $group), []);
+                            $groupKeys = array_filter(
+                                $groupKeys,
+                                function ($val, $key) use ($removeKeys) {
+                                    return is_string($val) && !in_array($key, $removeKeys);
+                                },
+                                ARRAY_FILTER_USE_BOTH
+                            );
+
+                            return array_merge($carry, $groupKeys);
+                        }, []);
+                        $keys = array_merge($keys, $addKeys);
+                    }
+                    $keys = array_map(function ($key) {
+                        return is_array($key) ? array_key_first($key) : $key;
+                    }, $keys);
+                    $keys = array_diff($keys, $removeKeys);
+                    $keys = array_unique($keys);
+                    $keys = array_map(function ($key) {
+                        return strpos($key, '/') !== false ? substr($key, strrpos($key, '/') + 1) : $key;
+                    }, $keys);
+                    sort($keys);
+                    foreach ($keys as $key) {
+                        $map[$key] = (string)Translate::get($key);
+                    }
+
+                    return $map;
+                }
+            );
+        } catch (\Exception $e) {
+            $map = [];
+        }
+
+        return $map;
     }
 
     /**

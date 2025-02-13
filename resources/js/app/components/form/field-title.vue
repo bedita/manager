@@ -3,7 +3,7 @@
         class="field-title"
         :for="field"
     >
-        {{ title }}
+        {{ getTitle() }}
         <span v-if="required">*</span>
     </label>
 </template>
@@ -23,7 +23,12 @@ export default {
             type: String,
             required: true
         },
-    }
+    },
+    methods: {
+        getTitle() {
+            return BEDITA_I18N?.[this.field] || this.title;
+        },
+    },
 }
 </script>
 <style scoped>

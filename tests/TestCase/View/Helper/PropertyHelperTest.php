@@ -529,4 +529,45 @@ class PropertyHelperTest extends TestCase
         $expected = str_replace("\n", '', $expected);
         static::assertEquals($expected, $actual);
     }
+
+    /**
+     * Test `translationsMap`.
+     *
+     * @return void
+     * @covers ::translationsMap()
+     */
+    public function testTranslationsMap(): void
+    {
+        Configure::write('Properties.dummies.fastCreate.all', [
+            ['title' => 'string'],
+            'description',
+            'body',
+        ]);
+        Configure::write('Properties.dummies.view', [
+            'core' => [
+                'title',
+                'description',
+                'body',
+            ],
+            'custom' => [
+                'status',
+                '_element' => 'MyPlugin.Form/custom-element',
+                '_hide' => ['status'],
+                '_keep' => ['title'],
+            ],
+        ]);
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->translationsMap();
+        $expected = [
+            'body' => 'Body',
+            'core' => 'Core',
+            'custom' => 'Custom',
+            'description' => 'Description',
+            'dummies' => 'Dummies',
+            'status' => 'Status',
+            'title' => 'Title',
+        ];
+        static::assertEquals($expected, $actual);
+    }
 }
