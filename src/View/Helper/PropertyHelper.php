@@ -264,10 +264,22 @@ class PropertyHelper extends Helper
         $defaultTitleType = Configure::read('UI.richeditor.title', []) ? 'textarea' : 'string';
         $map = [];
         $properties = (array)Configure::read(sprintf('Properties'));
+        $uploadable = $this->getView()->get('uploadable', []);
+        $defaults = [
+            'objects' => [
+                'all' => [['title' => $defaultTitleType], 'status', 'description'],
+                'required' => ['status', 'title'],
+            ],
+            'media' => [
+                'all' => [['title' => $defaultTitleType], 'status', 'name'],
+                'required' => ['name', 'status', 'title'],
+            ],
+        ];
         foreach ($properties as $name => $prop) {
             $cfg = (array)Hash::get($prop, 'fastCreate', []);
-            $fields = (array)Hash::get($cfg, 'all', ['status', ['title' => $defaultTitleType], 'description']);
-            $required = (array)Hash::get($cfg, 'required', ['status', 'title']);
+            $defaultFieldMap = in_array($name, $uploadable) ? $defaults['media'] : $defaults['objects'];
+            $fields = (array)Hash::get($cfg, 'all', $defaultFieldMap['all']);
+            $required = (array)Hash::get($cfg, 'required', $defaultFieldMap['required']);
             $map[$name] = compact('fields', 'required');
         }
 
