@@ -670,52 +670,18 @@ return [
 
     /**
      * Upload configurations.
+     *
+     * 'files' and 'media' accept all mimes, so no configuration needed.
      */
     // 'uploadAccepted' => [
     //     'audio' => [
     //         'audio/*',
-    //     ],
-    //     'files' => [
-    //         'application/msword', // .doc, .dot
-    //         'application/pdf', // .pdf
-    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
-    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
-    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
-    //         'application/x-mpegURL',
-    //         'audio/*',
-    //         'text/csv',
-    //         'text/html',
-    //         'text/plain',
-    //         'text/rtf',
-    //         'text/xml',
-    //         'image/*',
-    //         'video/*',
     //     ],
     //     'images' => [
     //         'image/*',
     //     ],
     //     'videos' => [
     //         'application/x-mpegURL',
-    //         'video/*',
-    //     ],
-    //     'media' => [
-    //         'application/msword', // .doc, .dot
-    //         'application/pdf', // .pdf
-    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
-    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
-    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
-    //         'application/x-mpegURL',
-    //         'audio/*',
-    //         'image/*',
-    //         'text/csv',
-    //         'text/html',
-    //         'text/plain',
-    //         'text/rtf',
-    //         'text/xml',
     //         'video/*',
     //     ],
     // ],
