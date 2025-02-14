@@ -11,6 +11,7 @@ module.exports = {
     ],
     globals: {
         'BEDITA': true,
+        'BEDITA_I18N': true,
         'tinymce': true,
         'vue': true
     },

@@ -335,7 +335,7 @@
 
         <div
             class="mt-1"
-            v-if="!readonly"
+            v-if="!readonly && objectId"
         >
             <button
                 class="button button-primary"
@@ -370,7 +370,7 @@ export default {
     props: {
         objectId: {
             type: String,
-            required: true,
+            default: null,
         },
         objectType: {
             type: String,
@@ -481,6 +481,17 @@ export default {
                 mode: 'view',
             };
             this.viewMode = 'view';
+            const captions = this.captions.map((item) => {
+                return {
+                    status: item.status,
+                    label: item.label,
+                    format: item.format,
+                    lang: item.lang,
+                    caption_text: item.caption_text,
+                    params: item.params,
+                };
+            });
+            this.$emit('update', captions);
         },
         availableLangs(caption) {
             if (caption) {

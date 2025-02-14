@@ -74,7 +74,6 @@ export default {
             saving: false,
             file: null,
             url: null,
-            showCreateObjectForm: false,
             object: createData('_choose'),
         };
     },
@@ -248,11 +247,6 @@ export default {
          */
         closePanel() {
             PanelEvents.closePanel();
-        },
-
-        resetForms() {
-            this.showCreateObjectForm = !this.showCreateObjectForm;
-            this.resetType();
         },
 
         formCheck() {
@@ -497,49 +491,8 @@ export default {
             return response;
         },
 
-        onChangeType() {
-            this.file = null;
-            for (let t of this.relationTypes?.right || []) {
-                if (this.$refs[`${t}-form`]) {
-                    this.$refs[`${t}-form`].reset();
-                }
-            }
-        },
-
         fileAcceptMimeTypes(type) {
             return this.$helpers.acceptMimeTypes(type);
-        },
-
-        /**
-         * set file, object type and placeholder
-         *
-         * @param {Event} event input file change event
-         * @param {String} type The object type
-         */
-        processFile(event, type) {
-            if (this.$helpers.checkMimeForUpload(event.target.files[0], type) === false) {
-                return;
-            }
-            if (type === 'images') {
-                this.$helpers.checkImageResolution(event.target.files[0]);
-            }
-            if (this.$helpers.checkMaxFileSize(event.target.files[0]) === false) {
-                return false;
-            }
-            this.file = event.target.files[0];
-            if (!this.file) {
-                return false;
-            }
-
-            if (!this.object.attributes.title) {
-                this.object.attributes.title = this.file.name;
-            }
-            const titleId = `_fast_create_${type}_title`;
-            this.$helpers.setTitleFromFileName(titleId, this.file.name);
-        },
-
-        previewImage() {
-            return this.$helpers.updatePreviewImage(this.file);
         },
 
         datesInfo(obj) {

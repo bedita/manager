@@ -36,8 +36,6 @@ function loadPreview(editor, node, id) {
             if (!data) {
                 return;
             }
-            console.log(data);
-
             let domElements = editor.getBody().querySelectorAll(`[data-placeholder="${data.id}"]`);
             [...domElements].forEach((dom) => {
                 let content = '';
@@ -56,7 +54,6 @@ function loadPreview(editor, node, id) {
                         }
                         break;
                 }
-
                 dom.innerHTML = content;
             });
         });

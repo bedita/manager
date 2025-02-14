@@ -626,6 +626,7 @@ return [
      * - index: index settings. 'copy2clipboard' enables "onmouseover" of index general cells showing copy to clipboard button
      * - modules: modules settings. 'counters' to show counters in modules; 'all', 'none', <list of modules> to show all, none or custom modules. Default is ['trash']
      * - richeditor: richeditor settings per field: you can set 'config' and 'toolbar' per single field.
+     * - fast_create_form: custom element to use for fast create form
      */
     // 'UI' => [
     //     'index' => [
@@ -661,6 +662,9 @@ return [
     //                 'code',
     //             ],
     //         ],
+    //     ],
+    //     'fast_create_form' => [
+    //         '_element' => 'MyPlugin.Form/fast_create',
     //     ],
     // ],
 
