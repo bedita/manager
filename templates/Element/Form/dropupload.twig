@@ -1,5 +1,7 @@
 {# :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']"> #}
+{% set ot = objectTypes|length == 1 ? objectTypes[0] : 'media' %}
 <drop-upload
+    :object-type="{{ ot|json_encode }}"
     placeholder="{{ __('Click or drop new files here') }}"
     @new-relations="appendRelations"
     v-if="isRelationWithMedia"

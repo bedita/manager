@@ -129,7 +129,9 @@
         </div>
         <div class="mt-5">
             {% if uploadableNum %}
-                {{ element(Element.dropupload(relationsSchema[relationName]['right'])) }}
+                {{ element(Element.dropupload(relationsSchema[relationName]['right']), {
+                    'objectTypes': relationsSchema[relationName]['right']
+                }) }}
             {% endif %}
             <div>
                 <button v-if="isPanelOpen({{object.id|json_encode}})" @click.prevent.stop="closePanel()">
