@@ -70,6 +70,9 @@ export const PaginatedContentMixin = {
 
                     return Promise.resolve();
                 }
+                if (requestUrl.indexOf('view/relationships') >= 0) {
+                    requestUrl = requestUrl.replace('view/relationships', 'view/0/relationships');
+                }
 
                 // if requestQueue is populated then abort all fetch request and start over
                 if (this.requestsQueue.length > 0) {
