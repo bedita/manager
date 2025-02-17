@@ -17,6 +17,17 @@
                     @click="isLocked ? $event.preventDefault() : ''"
                     @change="toggleFolderRelation" />
                 <span v-html=nodeTitle></span>
+                <template v-if="isParent && previewConfig?.[node.meta.path.match(/^\/(\d+)/)?.[1]]">
+                    <a
+                        :href="`${preview?.url}${node.meta.path.replace('/' + node.meta.path.match(/^\/(\d+)/)?.[1], '')}`"
+                        target="_blank"
+                        :title="preview?.title"
+                        v-for="preview in previewConfig?.[node.meta.path.match(/^\/(\d+)/)?.[1]]"
+                        :key="preview"
+                    >
+                        <app-icon icon="carbon:launch" :color="preview?.color || 'white'" />
+                    </a>
+                </template>
             </label>
             <span v-if="hasPermissionRoles" v-title="node.meta.perms.roles.join(', ')">
                 <app-icon icon="carbon:locked" v-if="isLocked"></app-icon>
@@ -81,6 +92,7 @@
                 :multiple-choice="multipleChoice"
                 :user-roles="userRoles"
                 :has-permissions="hasPermissions"
+                :preview-config="previewConfig"
                 :show-forbidden="showForbidden"
                 :search="search"
                 :search-in-position-active="searchInPositionActive">
@@ -167,6 +179,10 @@ export default {
         hasPermissions: {
             type: Boolean,
             default: false,
+        },
+        previewConfig: {
+            type: Object,
+            default: () => ({}),
         },
         search: {
             type: String,
