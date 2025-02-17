@@ -34,6 +34,7 @@ export default {
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
         SortRelated: () => import(/* webpackChunkName: "sort-related" */'app/components/sort-related/sort-related'),
+        FastCreate: () => import(/* webpackChunkName: "fast-create" */'app/components/fast-create/fast-create'),
     },
 
     mixins: [
@@ -87,8 +88,8 @@ export default {
             positions: {},              // used in children relations
             priorities: {},              // used in children relations
 
-            removedRelationsData: [],   // hidden field containing serialized json passed on form submit
-            addedRelationsData: [],     // array of serialized new relations
+            removedRelationsData: '[]',   // hidden field containing serialized json passed on form submit
+            addedRelationsData: '[]',     // array of serialized new relations
 
             requesterId: null,          // panel requerster id
             removedRelated: [],         // staged removed related objects
@@ -251,12 +252,12 @@ export default {
          *
          * @return {void}
          */
-        onUpdatePageSize(pageSize) {
+        async onUpdatePageSize(pageSize) {
             // remember pagination.page_size (use localStorage)
             const key = `relation-view:${this.relationName}:page_size`;
             localStorage.setItem(key, pageSize);
             this.setPageSize(pageSize);
-            this.loadRelatedObjects(this.activeFilter, true);
+            await this.loadRelatedObjects(this.activeFilter, true);
         },
 
         /**
@@ -531,13 +532,16 @@ export default {
          * @return {Array} objs objects retrieved
          */
         async loadRelatedObjects(filter = {}, force = false, reset = false) {
-            if (this.preCount === 0 || (this.objectsLoaded && !force)) {
-                if (reset) {
-                    this.addedRelations = [];
-                    this.modifiedRelations = [];
-                    this.removedRelated = [];
+            if (!force) {
+                if (this.preCount === 0 || this.objectsLoaded) {
+                    if (reset) {
+                        this.addedRelations = [];
+                        this.modifiedRelations = [];
+                        this.removedRelated = [];
+                    }
+
+                    return [];
                 }
-                return [];
             }
             this.loading = true;
             if (reset) {
@@ -591,14 +595,16 @@ export default {
          *
          * @return {Array} objs objects retrieved
          */
-        reloadObjects() {
+        async reloadObjects() {
             this.activeFilter = {};
-            return this.loadRelatedObjects({}, true);
+
+            return await this.loadRelatedObjects({}, true);
         },
 
-        resetObjects() {
+        async resetObjects() {
             this.activeFilter = {};
-            return this.loadRelatedObjects({}, true, true);
+
+            return await this.loadRelatedObjects({}, true, true);
         },
 
         /**
@@ -680,13 +686,27 @@ export default {
             }));
         },
 
+        parseStringArray(inputString) {
+            let result = [];
+            try {
+                if (inputString !== '[]') {
+                    result = JSON.parse(inputString);
+                }
+            } catch (error) {
+                console.error(`Error parsing JSON string "${inputString}": ${error}`);
+            }
+
+            return result;
+        },
+
         async saveRelated(data) {
             try {
                 this.savingRelated = true;
                 const relationName = data.relationName;
                 const objectType = data.object.type;
                 const url = `${BEDITA.base}/api/${objectType}/${data.object.id}/relationships/${relationName}`;
-                if (this.removedRelationsData.length > 0) {
+                const toRemove = this.parseStringArray(this.removedRelationsData);
+                if (toRemove.length > 0) {
                     // save removed relations
                     const response = await fetch(url, {
                         method: 'DELETE',
@@ -696,16 +716,17 @@ export default {
                             'content-type': 'application/json',
                             'X-CSRF-Token': BEDITA.csrfToken,
                         },
-                        body: JSON.stringify({ data: JSON.parse(this.removedRelationsData) }),
+                        body: JSON.stringify({ data: toRemove }),
                     });
                     if (response?.error) {
-                        BEDITA.error(response.error);
+                        BEDITA.error(response.error?.title || response?.error);
                     } else {
                         this.removedRelated = [];
                         this.prepareRelationsToRemove(this.removedRelated);
                     }
                 }
-                if (this.addedRelationsData.length > 0) {
+                const toAdd = this.parseStringArray(this.addedRelationsData);
+                if (toAdd.length > 0) {
                     // save added relations
                     const response = await fetch(url, {
                         method: 'POST',
@@ -715,10 +736,11 @@ export default {
                             'content-type': 'application/json',
                             'X-CSRF-Token': BEDITA.csrfToken,
                         },
-                        body: JSON.stringify({ data: JSON.parse(this.addedRelationsData) }),
+                        body: JSON.stringify({ data: toAdd }),
                     });
-                    if (response.error) {
-                        BEDITA.error(response.error);
+                    const json = await response.json();
+                    if (json?.error) {
+                        BEDITA.error(json.error?.title);
                     } else {
                         this.addedRelations = [];
                         this.modifiedRelations = [];
@@ -727,7 +749,11 @@ export default {
                 }
                 await this.reloadObjects();
             } catch (error) {
-                BEDITA.error(error);
+                if (typeof error === 'string') {
+                    BEDITA.error(error);
+                } else {
+                    BEDITA.error(error?.title);
+                }
             } finally {
                 this.savingRelated = false;
             }
