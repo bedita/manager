@@ -67,6 +67,22 @@ return [
     // ],
 
     /**
+     * Api Proxy configuration, for ApiController.
+     * This refers to `/api/{endpoint}` calls.
+     * Contains an array of setting to use for API proxy configuration.
+     *
+     * ## Options
+     *
+     * - `blocked` - Array of blocked methods per endpoint.
+     */
+    // 'ApiProxy' => [
+    //     'blocked' => [
+    //         'objects' => ['GET', 'POST', 'PATCH', 'DELETE'],
+    //         'users' => ['GET', 'POST', 'PATCH', 'DELETE'],
+    //     ],
+    // ],
+
+    /**
      * Clone configuration.
      * This adds custom rules to clone objects.
      * Rules are defined as `object type name` => ['reset' => [], 'unique' => []]
@@ -610,6 +626,7 @@ return [
      * - index: index settings. 'copy2clipboard' enables "onmouseover" of index general cells showing copy to clipboard button
      * - modules: modules settings. 'counters' to show counters in modules; 'all', 'none', <list of modules> to show all, none or custom modules. Default is ['trash']
      * - richeditor: richeditor settings per field: you can set 'config' and 'toolbar' per single field.
+     * - fast_create_form: custom element to use for fast create form
      */
     // 'UI' => [
     //     'index' => [
@@ -646,56 +663,25 @@ return [
     //             ],
     //         ],
     //     ],
+    //     'fast_create_form' => [
+    //         '_element' => 'MyPlugin.Form/fast_create',
+    //     ],
     // ],
 
     /**
      * Upload configurations.
+     *
+     * 'files' and 'media' accept all mimes, so no configuration needed.
      */
     // 'uploadAccepted' => [
     //     'audio' => [
     //         'audio/*',
-    //     ],
-    //     'files' => [
-    //         'application/msword', // .doc, .dot
-    //         'application/pdf', // .pdf
-    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
-    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
-    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
-    //         'application/x-mpegURL',
-    //         'audio/*',
-    //         'text/csv',
-    //         'text/html',
-    //         'text/plain',
-    //         'text/rtf',
-    //         'text/xml',
-    //         'image/*',
-    //         'video/*',
     //     ],
     //     'images' => [
     //         'image/*',
     //     ],
     //     'videos' => [
     //         'application/x-mpegURL',
-    //         'video/*',
-    //     ],
-    //     'media' => [
-    //         'application/msword', // .doc, .dot
-    //         'application/pdf', // .pdf
-    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
-    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
-    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
-    //         'application/x-mpegURL',
-    //         'audio/*',
-    //         'image/*',
-    //         'text/csv',
-    //         'text/html',
-    //         'text/plain',
-    //         'text/rtf',
-    //         'text/xml',
     //         'video/*',
     //     ],
     // ],

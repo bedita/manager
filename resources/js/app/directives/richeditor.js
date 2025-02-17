@@ -78,13 +78,26 @@ export default {
              */
             async inserted(element, binding) {
                 let changing = false;
-                const exp = binding.expression || '';
-                const json = JSON.parse(exp);
-                let items = json ? json.join(' ') : DEFAULT_TOOLBAR;
+                let toolbar = DEFAULT_TOOLBAR;
+                if (binding?.value?.toolbar) {
+                    toolbar = binding.value.toolbar.join(' ');
+                } else if (binding?.expression) {
+                    let exp = JSON.parse(binding.expression);
+                    toolbar = exp ? exp.join(' ') : toolbar;
+                }
                 if (!binding.modifiers?.placeholders) {
-                    items = items.replace(/\bplaceholders\b/, '');
+                    toolbar = toolbar.replace(/\bplaceholders\b/, '');
                 }
                 const sizes = {};
+                if (binding?.value?.config) {
+                    const c = binding.value.config;
+                    if (c?.height) {
+                        sizes.height = c.height;
+                    }
+                    if (c?.min_height) {
+                        sizes.min_height = c.min_height;
+                    }
+                }
                 if (BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height) {
                     sizes.height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height;
                 }
@@ -101,7 +114,7 @@ export default {
                     menubar: false,
                     branding: true,
                     ... sizes,
-                    toolbar: items,
+                    toolbar,
                     toolbar_mode: 'wrap',
                     block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3',
                     entity_encoding: 'raw',
@@ -140,7 +153,7 @@ export default {
                     }
                 });
 
-                editor.on('change', () => {
+                editor?.on('change', () => {
                     let isChanged = element.value !== element.dataset.originalValue;
 
                     changing = true;

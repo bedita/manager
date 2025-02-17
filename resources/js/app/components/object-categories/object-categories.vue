@@ -114,25 +114,36 @@ export default {
             msgSearch: t`Search on categories`,
         }
     },
+    watch: {
+        selected: {
+            handler: function(newVal, oldVal) {
+                if (newVal !== oldVal) {
+                    this.$emit('update', newVal)
+                }
+            },
+            deep: true,
+            immediate: true,
+        }
+    },
     mounted() {
         this.$nextTick(() => {
             this.selected = this.value;
-            this.root = this.modelCategories.filter(category => category.parent_id === null);
-            this.root.sort((a, b) => {
+            this.root = this.modelCategories?.filter(category => category.parent_id === null);
+            this.root?.sort((a, b) => {
                 if (a.label && b.label) {
                     return a.label.localeCompare(b.label);
                 }
                 return a.name.localeCompare(b.name);
             });
-            this.children = this.modelCategories.reduce((acc, category) => {
+            this.children = this.modelCategories?.reduce((acc, category) => {
                 if (!acc[category.parent_id]) {
                     acc[category.parent_id] = [];
                 }
                 acc[category.parent_id].push(category);
                 return acc;
             }, {});
-            this.root = this.root.filter(category => this.children[category.id]);
-            this.common = this.modelCategories.filter(category => category.parent_id === null && !this.children[category.id]);
+            this.root = this.root?.filter(category => this.children[category.id]);
+            this.common = this.modelCategories?.filter(category => category.parent_id === null && !this.children[category.id]);
             for (const key in this.children) {
                 this.children[key].sort((a, b) => {
                     if (a.label && b.label) {
@@ -141,13 +152,13 @@ export default {
                     return a.name.localeCompare(b.name);
                 });
             }
-            this.common.sort((a, b) => {
+            this.common?.sort((a, b) => {
                 if (a.label && b.label) {
                     return a.label.localeCompare(b.label);
                 }
                 return a.name.localeCompare(b.name);
             });
-            this.selected = this.value.map(category => category.name);
+            this.selected = this.value?.map(category => category.name);
             let groupsNumber = Object.keys(this.children).length;
             groupsNumber += this.common.length > 0 ? 1 : 0;
             this.forceOpen = groupsNumber <= 3 || this.modelCategories.length <= 20;
@@ -155,14 +166,14 @@ export default {
     },
     methods: {
         countSelectedCommon() {
-            return this.selected.filter(category => {
+            return this.selected?.filter(category => {
                 const arr = this.common || [];
 
                 return arr.find(child => child.name === category);
             }).length;
         },
         countSelectedByParent(parentId) {
-            return this.selected.filter(category => {
+            return this.selected?.filter(category => {
                 const cc = this.children || {};
                 const arr = cc?.[parentId] || [];
 

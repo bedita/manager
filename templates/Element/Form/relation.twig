@@ -24,6 +24,17 @@
         {% else %}
 
         <div class="related-list-container">
+            {% if Perms.canSave() and not readonly %}
+                {# FastCreate #}
+                {{ element(
+                    config('UI.fast_create_form._element')|default('Form/fast_create'),
+                    {
+                        'relationSchema': relationSchema,
+                        'schemasByType': schemasByType,
+                    }
+            ) }}
+            {% endif %}
+
             {# FilterBoxView #}
             <div class="mb-1" v-show="showFilter">
                 {% set fbt = filtersByType ? filtersByType : [] %}
@@ -98,12 +109,11 @@
                         :drag-data="JSON.stringify(related)"
                         {%- endif %}
                         >
-
-                        {% if relationName == 'children' %}
-                            {{ element('Form/related_item', { 'children': true, 'foldersSchema': relationsSchema[relationName] }) }}
-                        {% else %}
-                            {{ element('Form/related_item', { 'common': true, 'readonly': readonly }) }}
-                        {% endif %}
+                            {% if relationName == 'children' %}
+                                {{ element('Form/related_item', { 'children': true, 'foldersSchema': relationsSchema[relationName] }) }}
+                            {% else %}
+                                {{ element('Form/related_item', { 'common': true, 'readonly': readonly }) }}
+                            {% endif %}
                     </div>
 
                     {% if not readonly %}
@@ -129,7 +139,9 @@
         </div>
         <div class="mt-5">
             {% if uploadableNum %}
-                {{ element(Element.dropupload(relationsSchema[relationName]['right'])) }}
+                {{ element(Element.dropupload(relationsSchema[relationName]['right']), {
+                    'objectTypes': relationsSchema[relationName]['right']
+                }) }}
             {% endif %}
             <div>
                 <button v-if="isPanelOpen({{object.id|json_encode}})" @click.prevent.stop="closePanel()">
