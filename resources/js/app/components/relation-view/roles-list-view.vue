@@ -1,17 +1,36 @@
 <template>
     <div class="roles-list-view">
         <div>
-            <div v-for="groupName in Object.keys(objectsByGroups)">
-                <h4 class="is-small has-font-weight-bold has-text-transform-upper">{{ groupName }}</h4>
-                <label v-for="role in objectsByGroups[groupName]" class="cursor-pointer">
-                    <input type="checkbox" :value="role" :disabled="userRolePriority > role.meta.priority" v-model="checkedRelations"/>
+            <div
+                v-for="groupName in Object.keys(objectsByGroups)"
+                :key="groupName"
+            >
+                <h4 class="is-small has-font-weight-bold has-text-transform-upper">
+                    {{ groupName }}
+                </h4>
+                <label
+                    v-for="role in objectsByGroups[groupName]"
+                    class="cursor-pointer"
+                    :key="role.attributes.name"
+                >
+                    <input
+                        type="checkbox"
+                        :value="role"
+                        :disabled="userRolePriority > role.meta.priority"
+                        v-model="checkedRelations"
+                    >
                     <span>{{ getRoleLabel(role.attributes.name, role.attributes.description) }}</span>
                 </label>
             </div>
         </div>
 
         <div class="save-relations">
-            <input type="hidden" :id="`${relationName}addRelated`" :name="`relations[${relationName}][addRelated]`" v-model="relationsData" />
+            <input
+                :id="`${relationName}addRelated`"
+                :name="`relations[${relationName}][addRelated]`"
+                type="hidden"
+                v-model="relationsData"
+            >
         </div>
     </div>
 </template>
