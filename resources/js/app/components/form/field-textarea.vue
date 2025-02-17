@@ -3,11 +3,10 @@
         :id="id"
         :name="name"
         :data-ref="reference"
-        :data-config="config"
-        :data-toolbar="toolbar"
+        :data-loaded="loaded"
         class="field-textarea"
         v-model="v"
-        v-richeditor
+        v-richeditor="richeditorConfig"
         @change="change($event.target.value)"
         v-if="loaded"
     />
@@ -39,21 +38,17 @@ export default {
     },
     data() {
         return {
-            config: null,
+            richeditorConfig: {},
             loaded: false,
-            toolbar: null,
             v: null,
         };
     },
     mounted() {
         this.$nextTick(() => {
-            const map = BEDITA?.richeditorByPropertyConfig?.[this.field] || null;
-            if (map) {
-                map.config = map.config || {};
-                map.toolbar = map.toolbar || {};
+            this.richeditorConfig = {
+                config: BEDITA?.richeditorByPropertyConfig?.[this.field]?.config || {},
+                toolbar: BEDITA?.richeditorByPropertyConfig?.[this.field]?.toolbar || null
             }
-            this.config = JSON.stringify(map?.config) || null;
-            this.toolbar = JSON.stringify(map?.toolbar) || null;
             this.v = this.value;
             this.loaded = true;
             this.$forceUpdate();

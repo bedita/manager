@@ -79,16 +79,18 @@ export default {
             async inserted(element, binding) {
                 let changing = false;
                 let toolbar = DEFAULT_TOOLBAR;
-                if (element.dataset?.toolbar?.length > 0 || binding?.expression) {
-                    let exp = element.dataset?.toolbar?.length > 0 ? JSON.parse(element.dataset.toolbar) : JSON.parse(binding.expression);
+                if (binding?.value?.toolbar) {
+                    toolbar = binding.value.toolbar.join(' ');
+                } else if (binding?.expression) {
+                    let exp = JSON.parse(binding.expression);
                     toolbar = exp ? exp.join(' ') : toolbar;
                 }
                 if (!binding.modifiers?.placeholders) {
                     toolbar = toolbar.replace(/\bplaceholders\b/, '');
                 }
                 const sizes = {};
-                if (element.dataset?.config?.length > 0) {
-                    const c = JSON.parse(element.dataset.config);
+                if (binding?.value?.config) {
+                    const c = binding.value.config;
                     if (c?.height) {
                         sizes.height = c.height;
                     }
