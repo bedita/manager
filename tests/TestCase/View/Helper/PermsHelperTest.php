@@ -486,4 +486,17 @@ class PermsHelperTest extends TestCase
 
         ApiClientProvider::setApiClient($safeApiClient);
     }
+
+    /**
+     * Test `canCreateModules` method
+     *
+     * @return void
+     * @covers ::canCreateModules()
+     */
+    public function testCanCreateModules(): void
+    {
+        $expected = ['documents'];
+        $actual = $this->Perms->canCreateModules();
+        static::assertSame($expected, $actual);
+    }
 }

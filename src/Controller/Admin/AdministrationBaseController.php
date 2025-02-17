@@ -14,6 +14,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\Utility\ApiTools;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
@@ -215,17 +216,22 @@ abstract class AdministrationBaseController extends AppController
         $query = $this->getRequest()->getQueryParams();
         $resourceEndpoint = sprintf('%s/%s', $this->endpoint, $this->resourceType);
         $endpoint = $this->resourceType === 'roles' ? 'roles' : $resourceEndpoint;
-        $resultResponse = [];
-        $pagination = ['page' => 0];
-        while (Hash::get($pagination, 'page') === 0 || Hash::get($pagination, 'page', -1) < Hash::get($pagination, 'page_count', -1)) {
-            $query['page'] = $pagination['page'] + 1;
-            $response = (array)$this->apiClient->get($endpoint, $query);
-            $pagination = (array)Hash::get($response, 'meta.pagination');
-            foreach ((array)Hash::get($response, 'data') as $data) {
-                $resultResponse['data'][] = $data;
-            }
+        $resultResponse = ['data' => []];
+        $pageCount = $page = 1;
+        $total = 0;
+        $limit = 500;
+        while ($limit > $total && $page <= $pageCount) {
+            $response = (array)$this->apiClient->get($endpoint, compact('page') + ['page_size' => 100]);
+            $response = ApiTools::cleanResponse($response);
+            $resultResponse['data'] = array_merge(
+                $resultResponse['data'],
+                (array)Hash::get($response, 'data'),
+            );
             $resultResponse['meta'] = Hash::get($response, 'meta');
-            $resultResponse['links'] = Hash::get($response, 'links');
+            $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
+            $count = (int)Hash::get($response, 'meta.pagination.page_items');
+            $total += $count;
+            $page++;
         }
 
         return $resultResponse;

@@ -48,6 +48,41 @@ class ElementHelper extends Helper
     }
 
     /**
+     * Return dropupload element path by relation.
+     * This checks relation right types, and verify if there is a `Modules.<type>.dropupload._element` configuration.
+     * If not, return default `Form/dropupload` element.
+     * If there is a configuration, return it.
+     *
+     * @param array $rightTypes Right types of the relation
+     * @return string
+     */
+    public function dropupload(array $rightTypes): string
+    {
+        foreach ($rightTypes as $name) {
+            $path = (string)Configure::read(sprintf('Modules.%s.dropupload._element', $name));
+            if (!empty($path)) {
+                return $path;
+            }
+        }
+
+        return 'Form/dropupload';
+    }
+
+    /**
+     * Return multiupload element via `Modules.<type>.multiupload._element` configuration
+     *
+     * @return string
+     */
+    public function multiupload(): string
+    {
+        $currentModule = (array)$this->getView()->get('currentModule');
+        $name = (string)Hash::get($currentModule, 'name');
+        $path = sprintf('Modules.%s.multiupload._element', $name);
+
+        return (string)Configure::read($path, 'Form/multiupload');
+    }
+
+    /**
      * Return sidebar element via `Modules.<type>.sidebar._element` configuration
      *
      * @return string

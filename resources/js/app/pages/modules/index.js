@@ -9,6 +9,7 @@ import { confirm } from 'app/components/dialog/dialog';
 import { t } from 'ttag';
 
 export default {
+    name: 'ModulesIndex',
     components: {
         CategoryPicker: () => import(/* webpackChunkName: "category-picker" */'app/components/category-picker/category-picker'),
         TagPicker: () => import(/* webpackChunkName: "tag-picker" */'app/components/tag-picker/tag-picker'),
@@ -74,6 +75,9 @@ export default {
 
     watch: {
         selectedRows(val) {
+            if (!this.$refs.checkAllCB) {
+                return;
+            }
             if (!val.length) {
                 this.$refs.checkAllCB.checked = false;
                 this.$refs.checkAllCB.indeterminate = false;
@@ -223,6 +227,10 @@ export default {
 
         extension(filename) {
             return filename.split('.').pop();
+        },
+
+        formatDate(d) {
+            return this.$helpers.formatDate(d);
         },
     }
 }
