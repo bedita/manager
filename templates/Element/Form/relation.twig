@@ -150,6 +150,7 @@
                 </button>
 
                 <template v-else>
+                    {% if object.id %}
                     <button
                         class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto"
                         :class="{'is-loading-spinner': resettingRelated}"
@@ -176,6 +177,7 @@
                         <app-icon icon="carbon:save"></app-icon>
                         <span class="ml-05">{{ __('Save') }}</span>
                     </button>
+                    {% endif %}
 
                     <button
                         class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto"
