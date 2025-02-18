@@ -33,12 +33,13 @@
 
                 <div>
                     {% set rolesGroups = config('RolesGroups') ? config('RolesGroups') : {}  %}
+                    {% set userRoles = user and user.roles ? user.roles : [] %}
                     <roles-list-view
                         relation-name={{ relationName }}
                         relation-label="{{ Layout.tr(relationName) }}"
                         :related-objects="objects"
                         :groups="{{ rolesGroups|length == 0 ? '{}' : rolesGroups|json_encode }}"
-                        :user-roles="{{ user.roles|default([])|json_encode }}"
+                        :user-roles="{{ userRoles|default([])|json_encode }}"
                         @remove-relations="setRemovedRelated">
                     </roles-list-view>
                     {% do Form.unlockField('relations.' ~ relationName ~ '.addRelated') %}
