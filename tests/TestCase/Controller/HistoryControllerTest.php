@@ -213,4 +213,33 @@ class HistoryControllerTest extends TestCase
         $actual = $this->HistoryController->getRequest()->getSession()->read(sprintf('history.%s.attributes', $id));
         static::assertEquals($actual, $expected);
     }
+
+    /**
+     * Test `objects` method
+     *
+     * @return void
+     * @covers ::objects()
+     */
+    public function testObjects(): void
+    {
+        $this->HistoryController->objects();
+        $vars = ['data', 'meta'];
+        foreach ($vars as $var) {
+            static::assertNotEmpty($this->HistoryController->viewBuilder()->getVar($var));
+        }
+        $actual = $this->HistoryController->viewBuilder()->getVar('data');
+        foreach ($actual as $item) {
+            static::assertArrayHasKey('id', $item);
+            static::assertArrayHasKey('type', $item);
+            static::assertArrayHasKey('attributes', $item);
+            $attributes = $item['attributes'];
+            static::assertArrayHasKey('uname', $attributes);
+            static::assertArrayHasKey('title', $attributes);
+            static::assertArrayNotHasKey('links', $item);
+            static::assertArrayNotHasKey('relationships', $item);
+        }
+        $actual = $this->HistoryController->viewBuilder()->getVar('meta');
+        static::assertArrayHasKey('pagination', $actual);
+        static::assertArrayNotHasKey('schema', $actual);
+    }
 }

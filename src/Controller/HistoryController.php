@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Controller;
 
+use BEdita\WebTools\Utility\ApiTools;
 use Cake\Http\Response;
 
 /**
@@ -21,6 +24,26 @@ class HistoryController extends AppController
 
         $this->loadComponent('History');
         $this->loadComponent('Schema');
+    }
+
+    /**
+     * Get objects list: id, title, uname only / no relationships, no links.
+     *
+     * @return void
+     */
+    public function objects(): void
+    {
+        $this->viewBuilder()->setClassName('Json');
+        $this->getRequest()->allowMethod('get');
+        $query = array_merge(
+            $this->getRequest()->getQueryParams(),
+            ['fields' => 'id,title,uname']
+        );
+        $response = ApiTools::cleanResponse((array)$this->apiClient->get('objects', $query));
+        $data = $response['data'];
+        $meta = $response['meta'];
+        $this->set(compact('data', 'meta'));
+        $this->setSerialize(['data', 'meta']);
     }
 
     /**

@@ -152,6 +152,7 @@ export default {
                 }
             }
             this.dateRangesJson = JSON.stringify(dr);
+            this.$emit('update', this.dateRangesJson);
         },
         updateData(data) {
             return {

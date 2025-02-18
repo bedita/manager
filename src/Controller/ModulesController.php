@@ -16,6 +16,7 @@ use App\Utility\CacheTools;
 use App\Utility\Message;
 use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\Utility\ApiTools;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventInterface;
@@ -588,9 +589,13 @@ class ModulesController extends AppController
      */
     private function setupViewRelations(array $relations): void
     {
+        // setup relations schema
+        $relationsSchema = $this->Schema->getRelationsSchema();
+        $this->set('relationsSchema', $relationsSchema);
+
         // setup relations metadata
         $this->Modules->setupRelationsMeta(
-            $this->Schema->getRelationsSchema(),
+            $relationsSchema,
             $relations,
             $this->Properties->relationsList($this->objectType),
             $this->Properties->hiddenRelationsList($this->objectType),
@@ -606,5 +611,49 @@ class ModulesController extends AppController
         $schemasByType = $this->Schema->getSchemasByType($rightTypes);
         $this->set('schemasByType', $schemasByType);
         $this->set('filtersByType', $this->Properties->filtersByType($rightTypes));
+    }
+
+    /**
+     * Get list of users / no email, no relationships, no links, no schema, no included.
+     *
+     * @return void
+     */
+    public function users(): void
+    {
+        $this->viewBuilder()->setClassName('Json');
+        $this->getRequest()->allowMethod('get');
+        $query = array_merge(
+            $this->getRequest()->getQueryParams(),
+            ['fields' => 'id,title,username,name,surname']
+        );
+        $response = (array)$this->apiClient->get('users', $query);
+        $response = ApiTools::cleanResponse($response);
+        $data = (array)Hash::get($response, 'data');
+        $meta = (array)Hash::get($response, 'meta');
+        $this->set(compact('data', 'meta'));
+        $this->setSerialize(['data', 'meta']);
+    }
+
+    /**
+     * Get single resource, minimal data / no relationships, no links, no schema, no included.
+     *
+     * @param string $id The object ID
+     * @return void
+     */
+    public function get(string $id): void
+    {
+        $this->viewBuilder()->setClassName('Json');
+        $this->getRequest()->allowMethod('get');
+        $response = (array)$this->apiClient->getObject($id, 'objects');
+        $query = array_merge(
+            $this->getRequest()->getQueryParams(),
+            ['fields' => 'id,title,description,uname,status,media_url']
+        );
+        $response = (array)$this->apiClient->getObject($id, $response['data']['type'], $query);
+        $response = ApiTools::cleanResponse($response);
+        $data = (array)Hash::get($response, 'data');
+        $meta = (array)Hash::get($response, 'meta');
+        $this->set(compact('data', 'meta'));
+        $this->setSerialize(['data', 'meta']);
     }
 }
