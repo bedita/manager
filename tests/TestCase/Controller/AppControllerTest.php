@@ -147,7 +147,7 @@ class AppControllerTest extends TestCase
      */
     public function testInitialize(): void
     {
-        $this->setupController();
+        $this->setupControllerAndLogin();
 
         static::assertNotEmpty($this->AppController->{'RequestHandler'});
         static::assertNotEmpty($this->AppController->{'Flash'});
