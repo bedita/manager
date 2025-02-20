@@ -189,15 +189,26 @@ class AppControllerTest extends TestCase
      */
     public function testCorrectTokens(): void
     {
-        $expectedtokens = [];
+        // no auth
+        $this->setupControllerAndLogin();
+        $expected = ['jwt', 'renew'];
+        $emptyUser = new Identity([]);
+        $this->AppController->Authentication->setIdentity($emptyUser);
+        $this->AppController->dispatchEvent('Controller.initialize');
+        $apiClient = $this->accessProperty($this->AppController, 'apiClient');
+        $apiClientTokens = $apiClient->getTokens();
+        $actual = array_keys($apiClientTokens);
+        static::assertEquals($expected, $actual);
+
+        // auth
         $this->setupControllerAndLogin();
         /** @var \Authentication\Identity|null $user */
         $user = $this->AppController->Authentication->getIdentity();
         $expectedtokens = $user->get('tokens');
         $this->AppController->initialize();
+        $this->AppController->dispatchEvent('Controller.initialize');
         $apiClient = $this->accessProperty($this->AppController, 'apiClient');
         $apiClientTokens = $apiClient->getTokens();
-
         static::assertEquals($expectedtokens, $apiClientTokens);
     }
 
