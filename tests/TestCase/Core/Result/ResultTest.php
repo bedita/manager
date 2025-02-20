@@ -19,7 +19,7 @@ use Cake\TestSuite\TestCase;
 /**
  * {@see \App\Core\Result\Result} Test Case
  *
- * @coversDefaultClass \App\Core\Result\Result
+ * @covers \App\Core\Result\Result
  */
 class ResultTest extends TestCase
 {
@@ -52,7 +52,6 @@ class ResultTest extends TestCase
      * @param string $msg Message string
      * @return void
      * @dataProvider addMessageProvider
-     * @covers ::addMessage()
      */
     public function testAddMessage($expected, string $name, string $msg): void
     {
@@ -89,7 +88,6 @@ class ResultTest extends TestCase
      * @param string $name Counter name
      * @return void
      * @dataProvider incrementProvider
-     * @covers ::increment()
      */
     public function testIncrement($expected, string $name): void
     {

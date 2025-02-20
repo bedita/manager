@@ -449,7 +449,6 @@ class ModulesComponent extends Component
 
     /**
      * Set current attributes from loaded $object data in `currentAttributes`.
-     * Load session failure data if available.
      *
      * @param array $object The object.
      * @return void

@@ -19,6 +19,8 @@ use Cake\Core\Plugin as CakePlugin;
  * {@inheritDoc}
  *
  * Extended with BEdita plugins utilities
+ *
+ * @codeCoverageIgnore
  */
 class Plugin extends CakePlugin
 {

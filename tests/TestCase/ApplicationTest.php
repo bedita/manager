@@ -32,6 +32,7 @@ use Cake\Http\ServerRequest;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\TestSuite\TestCase;
+use ReflectionProperty;
 
 /**
  * \App\Application Test Case
@@ -77,6 +78,42 @@ class ApplicationTest extends TestCase
         static::assertInstanceOf(AuthenticationMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(OAuth2Middleware::class, $middleware->current());
+    }
+
+    /**
+     * Test `csrfMiddleware` method
+     *
+     * @return void
+     * @covers ::csrfMiddleware()
+     */
+    public function testCsrfMiddleware(): void
+    {
+        $app = new Application(CONFIG);
+        $app->bootstrap();
+        $middleware = new MiddlewareQueue();
+        $middleware = $app->middleware($middleware);
+        $middleware->rewind();
+        $current = $middleware->current();
+        while (!($current instanceof CsrfProtectionMiddleware)) {
+            $current = $middleware->current();
+            $middleware->next();
+        }
+        $property = new ReflectionProperty($current, 'skipCheckCallback');
+        $property->setAccessible(true);
+        $method = $property->getValue($current);
+        $actual = $method(
+            new ServerRequest(
+                [
+                    'environment' => ['REQUEST_METHOD' => 'POST'],
+                    'params' => ['controller' => 'Login', 'action' => 'login'],
+                    'post' => [
+                        'username' => 'abc',
+                        'password' => 'def',
+                    ],
+                ]
+            )
+        );
+        static::assertTrue($actual);
     }
 
     /**
