@@ -97,6 +97,7 @@ class PropertiesComponent extends Component
         'lang',
         'children_order',
         'captions',
+        'roles',
     ];
 
     /**
