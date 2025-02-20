@@ -132,6 +132,7 @@ class ApiResolverTest extends TestCase
      */
     public function testMissingMetaFromAuthenticationResponse(): void
     {
+        $safeClient = ApiClientProvider::getApiClient();
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
@@ -146,5 +147,6 @@ class ApiResolverTest extends TestCase
         $identity = $resolver->find($credentials);
         // Missing meta from authentication response
         static::assertNull($identity);
+        ApiClientProvider::setApiClient($safeClient);
     }
 }
