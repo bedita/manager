@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Authentication\Identifier\Resolver;
 
 use App\Identifier\Resolver\ApiResolver;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 
@@ -121,5 +122,29 @@ class ApiResolverTest extends TestCase
         foreach ($expected as $key => $val) {
             $this->assertEquals($val, $identity[$key]);
         }
+    }
+
+    /**
+     * Test missing meta from authentication response.
+     *
+     * @return void
+     * @covers ::find()
+     */
+    public function testMissingMetaFromAuthenticationResponse(): void
+    {
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('authenticate')
+            ->willReturn(['data' => ['id' => 1]]);
+        ApiClientProvider::setApiClient($apiClient);
+        $resolver = new ApiResolver();
+        $credentials = [
+            'username' => env('BEDITA_ADMIN_USR'),
+            'password' => env('BEDITA_ADMIN_PWD'),
+        ];
+        $identity = $resolver->find($credentials);
+        // Missing meta from authentication response
+        static::assertNull($identity);
     }
 }
