@@ -142,8 +142,8 @@ class AppControllerTest extends TestCase
     /**
      * test `initialize` function
      *
-     * @covers ::initialize()
      * @return void
+     * @covers ::initialize()
      */
     public function testInitialize(): void
     {
@@ -181,21 +181,20 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * test 'beforeFilter' for correct apiClient token setup
+     * test 'initialize' and 'beforeFilter' for correct apiClient token setup
      *
-     * @covers ::beforeFilter()
      * @return void
+     * @covers ::beforeFilter()
+     * @covers ::initialize()
      */
-    public function testBeforeFilterCorrectTokens(): void
+    public function testCorrectTokens(): void
     {
         $expectedtokens = [];
-
         $this->setupControllerAndLogin();
-
         /** @var \Authentication\Identity|null $user */
         $user = $this->AppController->Authentication->getIdentity();
         $expectedtokens = $user->get('tokens');
-        $this->AppController->dispatchEvent('Controller.initialize');
+        $this->AppController->initialize();
         $apiClient = $this->accessProperty($this->AppController, 'apiClient');
         $apiClientTokens = $apiClient->getTokens();
 
