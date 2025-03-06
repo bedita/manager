@@ -2,18 +2,27 @@
 
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use josegonzalez\Dotenv\Loader;
+
 /**
  * Test runner bootstrap.
  *
  * Add additional configuration/setup your application needs when running
  * unit tests in this file.
  */
-use josegonzalez\Dotenv\Loader;
 
 // set `APP_NAME` env to avoid config/.env load
 putenv('APP_NAME=TESTAPP');
 
 require dirname(__DIR__) . '/vendor/autoload.php';
+
+define('ROOT', dirname(__DIR__));
+define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
+define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
+define('CAKE', CORE_PATH . 'src' . DS);
+
+require CORE_PATH . 'config' . DS . 'bootstrap.php';
+require CAKE . 'functions.php';
 
 require dirname(__DIR__) . '/config/bootstrap.php';
 
@@ -38,11 +47,3 @@ if (empty(Configure::read('API'))) {
 }
 
 $_SERVER['PHP_SELF'] = '/';
-
-define('ROOT', dirname(__DIR__));
-define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
-define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
-define('CAKE', CORE_PATH . 'src' . DS);
-
-require CORE_PATH . 'config' . DS . 'bootstrap.php';
-require CAKE . 'functions.php';
