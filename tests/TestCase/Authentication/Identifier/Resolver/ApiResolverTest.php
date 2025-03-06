@@ -24,7 +24,7 @@ use Cake\TestSuite\TestCase;
  */
 class ApiResolverTest extends TestCase
 {
-    public function findProvider(): array
+    public static function findProvider(): array
     {
         return [
             'missing-credentials' => [

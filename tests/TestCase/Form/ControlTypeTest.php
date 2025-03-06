@@ -28,7 +28,7 @@ class ControlTypeTest extends TestCase
      *
      * @return array
      */
-    public function fromSchemaProvider(): array
+    public static function fromSchemaProvider(): array
     {
         return [
             'string' => [

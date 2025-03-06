@@ -28,7 +28,7 @@ class TranslateTest extends TestCase
      *
      * @return array
      */
-    public function translateProvider(): array
+    public static function translateProvider(): array
     {
         return [
             'empty' => [

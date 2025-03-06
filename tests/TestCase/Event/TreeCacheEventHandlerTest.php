@@ -69,7 +69,7 @@ class TreeCacheEventHandlerTest extends TestCase
      *
      * @return array
      */
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             'afterDelete no data' => [

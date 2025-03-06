@@ -37,21 +37,21 @@ class ExportControllerTest extends TestCase
      *
      * @var \App\Controller\ExportController
      */
-    public $Export;
+    public ExportController $Export;
 
     /**
      * The api client (not mocked).
      *
-     * @var BEditaClient
+     * @var BEditaClient|null
      */
-    protected $apiClient = null;
+    protected ?BEditaClient $apiClient = null;
 
     /**
      * Test data.
      *
      * @var array
      */
-    protected $testdata = [
+    public static array $testdata = [
         'input' => [
             'gustavo' => [
                 'id' => 999,
@@ -278,22 +278,22 @@ class ExportControllerTest extends TestCase
      *
      * @return array
      */
-    public function rowsProvider(): array
+    public static function rowsProvider(): array
     {
         return [
             'documents, all' => [
                 [
                     ['id', 'name', 'skills', 'category', 'prop'],
-                    $this->testdata['expected']['gustavo'],
-                    $this->testdata['expected']['johndoe'],
+                    ExportControllerTest::$testdata['expected']['gustavo'],
+                    ExportControllerTest::$testdata['expected']['johndoe'],
                 ],
                 [
                     'documents',
                 ],
                 [
                     'data' => [
-                        $this->testdata['input']['gustavo'],
-                        $this->testdata['input']['johndoe'],
+                        ExportControllerTest::$testdata['input']['gustavo'],
+                        ExportControllerTest::$testdata['input']['johndoe'],
                     ],
                     'meta' => [
                         'pagination' => [
@@ -306,7 +306,7 @@ class ExportControllerTest extends TestCase
             'documents with ids' => [
                 [
                     ['id', 'name', 'skills', 'category', 'prop'],
-                    $this->testdata['expected']['gustavo'],
+                    ExportControllerTest::$testdata['expected']['gustavo'],
                 ],
                 [
                     'documents',
@@ -314,7 +314,7 @@ class ExportControllerTest extends TestCase
                 ],
                 [
                     'data' => [
-                        $this->testdata['input']['gustavo'],
+                        ExportControllerTest::$testdata['input']['gustavo'],
                     ],
                     'meta' => [
                         'pagination' => [
@@ -327,14 +327,14 @@ class ExportControllerTest extends TestCase
             'query' => [
                 [
                     ['id', 'name', 'skills', 'category', 'prop'],
-                    $this->testdata['expected']['gustavo'],
+                    ExportControllerTest::$testdata['expected']['gustavo'],
                 ],
                 [
                     'documents',
                 ],
                 [
                     'data' => [
-                        $this->testdata['input']['gustavo'],
+                        ExportControllerTest::$testdata['input']['gustavo'],
                     ],
                     'meta' => [
                         'pagination' => [
@@ -405,7 +405,7 @@ class ExportControllerTest extends TestCase
      *
      * @return array
      */
-    public function fillDataFromResponseProvider(): array
+    public static function fillDataFromResponseProvider(): array
     {
         return [
             'empty data' => [
@@ -422,14 +422,14 @@ class ExportControllerTest extends TestCase
                     'fields' => ['id', 'name', 'skills', 'category', 'prop'],
                     'response' => [
                         'data' => [
-                            0 => $this->testdata['input']['gustavo'],
-                            1 => $this->testdata['input']['johndoe'],
+                            0 => ExportControllerTest::$testdata['input']['gustavo'],
+                            1 => ExportControllerTest::$testdata['input']['johndoe'],
                         ],
                     ],
                 ], // input
                 [
-                    0 => $this->testdata['expected']['gustavo'],
-                    1 => $this->testdata['expected']['johndoe'],
+                    0 => ExportControllerTest::$testdata['expected']['gustavo'],
+                    1 => ExportControllerTest::$testdata['expected']['johndoe'],
                 ], // expected
             ],
         ];
@@ -461,13 +461,13 @@ class ExportControllerTest extends TestCase
      *
      * @return array
      */
-    public function getFieldNamesProvider(): array
+    public static function getFieldNamesProvider(): array
     {
         return [
             'full data, default key' => [
                 [
                     'data' => [
-                        0 => $this->testdata['input']['gustavo'],
+                        0 => ExportControllerTest::$testdata['input']['gustavo'],
                     ],
                 ], // input
                 [
@@ -521,7 +521,7 @@ class ExportControllerTest extends TestCase
      *
      * @return array
      */
-    public function rowFieldsProvider(): array
+    public static function rowFieldsProvider(): array
     {
         return [
             'empty data' => [
@@ -543,7 +543,7 @@ class ExportControllerTest extends TestCase
             ],
             'full data' => [
                 [
-                    'data' => $this->testdata['input']['gustavo'],
+                    'data' => ExportControllerTest::$testdata['input']['gustavo'],
                     'fields' => [
                         'id',
                         'name',
@@ -588,7 +588,7 @@ class ExportControllerTest extends TestCase
      *
      * @return array
      */
-    public function getValueProvider(): array
+    public static function getValueProvider(): array
     {
         return [
             'value array' => [
@@ -692,7 +692,7 @@ class ExportControllerTest extends TestCase
      *
      * @return array
      */
-    public function getRelatedFileNameProvider(): array
+    public static function getRelatedFileNameProvider(): array
     {
         return [
             'empty filter' => [

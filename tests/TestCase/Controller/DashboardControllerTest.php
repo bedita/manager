@@ -160,7 +160,7 @@ class DashboardControllerTest extends TestCase
      *
      * @return array
      */
-    public function indexProvider(): array
+    public static function indexProvider(): array
     {
         return [
             'post' => [

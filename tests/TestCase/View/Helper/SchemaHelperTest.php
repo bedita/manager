@@ -81,7 +81,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function controlOptionsSchemaProvider(): array
+    public static function controlOptionsSchemaProvider(): array
     {
         return [
             'text' => [
@@ -414,7 +414,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function updateRicheditorOptionsProvider(): array
+    public static function updateRicheditorOptionsProvider(): array
     {
         return [
             'empty UI.richeditor.title.toolbar' => [
@@ -550,7 +550,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function translatableFieldsProvider(): array
+    public static function translatableFieldsProvider(): array
     {
         return [
             'empty translatable' => [
@@ -647,7 +647,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function formatProvider(): array
+    public static function formatProvider(): array
     {
         $d = new DateTime('2019-09-08');
         $dateExpected = $d->i18nFormat();
@@ -762,7 +762,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function sortableProvider(): array
+    public static function sortableProvider(): array
     {
         return [
             'no schema, default not sortable' => [
@@ -891,7 +891,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function filterListProvider(): array
+    public static function filterListProvider(): array
     {
         return [
             'parent string' => [
@@ -955,7 +955,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function filterListByTypeProvider(): array
+    public static function filterListByTypeProvider(): array
     {
         return [
             'schema null' => [

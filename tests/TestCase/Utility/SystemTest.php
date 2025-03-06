@@ -30,7 +30,7 @@ class SystemTest extends TestCase
      *
      * @return array
      */
-    public function compareBEditaApiVersionProvider(): array
+    public static function compareBEditaApiVersionProvider(): array
     {
         return [
             'same version' => ['4.0.0', '4.0.0', true],

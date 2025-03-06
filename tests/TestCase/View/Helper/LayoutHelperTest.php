@@ -50,7 +50,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function isDashboardProvider(): array
+    public static function isDashboardProvider(): array
     {
         return [
             'dashboard' => [
@@ -82,7 +82,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function isLoginProvider(): array
+    public static function isLoginProvider(): array
     {
         return [
             'login' => [
@@ -118,7 +118,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function messagesProvider(): array
+    public static function messagesProvider(): array
     {
         return [
             'login' => [
@@ -154,7 +154,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleClassProvider(): array
+    public static function moduleClassProvider(): array
     {
         return [
             'app-module-box locked' => [
@@ -228,7 +228,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleLinkProvider(): array
+    public static function moduleLinkProvider(): array
     {
         return [
             'user profile' => [
@@ -283,7 +283,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleIndexDefaultViewTypeProvider(): array
+    public static function moduleIndexDefaultViewTypeProvider(): array
     {
         return [
             'documents' => [
@@ -325,7 +325,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleIndexViewTypeProvider(): array
+    public static function moduleIndexViewTypeProvider(): array
     {
         return [
             'documents list' => [
@@ -377,7 +377,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleIndexViewTypesProvider(): array
+    public static function moduleIndexViewTypesProvider(): array
     {
         return [
             'documents' => [
@@ -420,7 +420,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function titleProvider(): array
+    public static function titleProvider(): array
     {
         return [
             'empty' => [
@@ -517,7 +517,7 @@ class LayoutHelperTest extends TestCase
         static::assertSame($expected, $actual);
     }
 
-    public function publishStatusProvider(): array
+    public static function publishStatusProvider(): array
     {
         return [
             'empty object' => [
@@ -624,7 +624,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function csrfTokenProvider(): array
+    public static function csrfTokenProvider(): array
     {
         $request = new ServerRequest();
 
@@ -672,7 +672,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function trashLinkProvider(): array
+    public static function trashLinkProvider(): array
     {
         return [
             'null' => [
@@ -734,7 +734,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function dashboardModuleLinkProvider(): array
+    public static function dashboardModuleLinkProvider(): array
     {
         return [
             'trash' => [
@@ -781,7 +781,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleIconProvider(): array
+    public static function moduleIconProvider(): array
     {
         return [
             'hints multiple types' => [

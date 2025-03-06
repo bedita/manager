@@ -80,12 +80,11 @@ class HistoryControllerTest extends TestCase
      *
      * @return array
      */
-    public function cloneProvider(): array
+    public static function cloneProvider(): array
     {
         return [
             'test document history 1' => [
                 [
-                    'id' => $this->documentId,
                     'historyId' => 1,
                 ],
             ],
@@ -117,6 +116,7 @@ class HistoryControllerTest extends TestCase
      */
     public function testClone(array $data): void
     {
+        $data['id'] = $this->documentId;
         /** @var string $id */
         $id = (string)$data['id'];
         /** @var string $historyId */
@@ -131,12 +131,11 @@ class HistoryControllerTest extends TestCase
      *
      * @return array
      */
-    public function restoreProvider(): array
+    public static function restoreProvider(): array
     {
         return [
             'test document history 1' => [
                 [
-                    'id' => $this->documentId,
                     'historyId' => 1,
                 ],
             ],
@@ -153,6 +152,7 @@ class HistoryControllerTest extends TestCase
      */
     public function testRestore(array $data): void
     {
+        $data['id'] = $this->documentId;
         /** @var string $id */
         $id = (string)$data['id'];
         /** @var string $historyId */
@@ -167,12 +167,11 @@ class HistoryControllerTest extends TestCase
      *
      * @return array
      */
-    public function setHistoryProvider(): array
+    public static function setHistoryProvider(): array
     {
         return [
             'document keepUname false' => [
                 [
-                    'id' => $this->documentId,
                     'historyId' => 1,
                     'keepUname' => false,
                 ],
@@ -180,7 +179,6 @@ class HistoryControllerTest extends TestCase
             ],
             'document keepUname true' => [
                 [
-                    'id' => $this->documentId,
                     'historyId' => 1,
                     'keepUname' => true,
                 ],
@@ -200,6 +198,7 @@ class HistoryControllerTest extends TestCase
      */
     public function testSetHistory(array $data, string $expected): void
     {
+        $data['id'] = $this->documentId;
         /** @var string $id */
         $id = (string)$data['id'];
         /** @var string $historyId */

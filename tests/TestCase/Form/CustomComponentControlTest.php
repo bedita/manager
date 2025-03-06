@@ -28,7 +28,7 @@ class CustomComponentControlTest extends TestCase
      *
      * @return array
      */
-    public function controlProvider(): array
+    public static function controlProvider(): array
     {
         return [
             'default simple' => [

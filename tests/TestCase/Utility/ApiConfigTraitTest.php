@@ -59,7 +59,7 @@ class ApiConfigTraitTest extends TestCase
      *
      * @return array
      */
-    public function readApiConfigProvider(): array
+    public static function readApiConfigProvider(): array
     {
         return [
             'ok' => [

@@ -27,7 +27,7 @@ class OEmbedTest extends TestCase
      *
      * @return array
      */
-    public function readMetadataProvider(): array
+    public static function readMetadataProvider(): array
     {
         return [
             'not found' => [

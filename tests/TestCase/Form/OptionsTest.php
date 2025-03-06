@@ -32,7 +32,7 @@ class OptionsTest extends TestCase
      *
      * @return array
      */
-    public function customControlProvider(): array
+    public static function customControlProvider(): array
     {
         return [
             'not custom' => [

@@ -28,7 +28,7 @@ class ResultTest extends TestCase
      *
      * @return array
      */
-    public function addMessageProvider(): array
+    public static function addMessageProvider(): array
     {
         return [
             'info' => [
@@ -68,7 +68,7 @@ class ResultTest extends TestCase
      *
      * @return array
      */
-    public function incrementProvider(): array
+    public static function incrementProvider(): array
     {
         return [
             'errors' => [

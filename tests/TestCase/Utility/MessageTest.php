@@ -30,7 +30,7 @@ class MessageTest extends TestCase
      *
      * @return array
      */
-    public function getProvider(): array
+    public static function getProvider(): array
     {
         return [
             '400 invalid data' => [

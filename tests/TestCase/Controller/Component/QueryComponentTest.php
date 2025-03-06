@@ -48,7 +48,7 @@ class QueryComponentTest extends TestCase
      *
      * @return array
      */
-    public function indexProvider(): array
+    public static function indexProvider(): array
     {
         return [
             'query filter' => [
@@ -119,7 +119,7 @@ class QueryComponentTest extends TestCase
      *
      * @return array
      */
-    public function prepareProvider(): array
+    public static function prepareProvider(): array
     {
         return [
             'simple' => [

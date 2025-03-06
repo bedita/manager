@@ -211,7 +211,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function loginRedirectRouteProvider(): array
+    public static function loginRedirectRouteProvider(): array
     {
         return [
             'request is not a get' => [
@@ -336,7 +336,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function prepareRequestProvider(): array
+    public static function prepareRequestProvider(): array
     {
         return [
             'documents' => [ // test _jsonKeys json_decode
@@ -729,7 +729,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function changedAttributesProvider(): array
+    public static function changedAttributesProvider(): array
     {
         return [
             'missing _actualAttributes' => [
@@ -793,7 +793,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function hasFieldChangedProvider(): array
+    public static function hasFieldChangedProvider(): array
     {
         $d1 = new DateTime('2019-01-01T15:03:01.012345Z');
         $d2 = new DateTime('2019-01-01T16:03:01.012345Z');
@@ -843,7 +843,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function checkRequestProvider(): array
+    public static function checkRequestProvider(): array
     {
         return [
             'methodNotAllowed' => [
@@ -937,7 +937,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function applySessionFilterProvider(): array
+    public static function applySessionFilterProvider(): array
     {
         return [
             'reset' => [ // expected remove of session filter and redirect
@@ -1052,7 +1052,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function setObjectNavProvider(): array
+    public static function setObjectNavProvider(): array
     {
         return [
             'animals' => [
@@ -1160,7 +1160,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function getObjectNavProvider(): array
+    public static function getObjectNavProvider(): array
     {
         return [
             'empty' => [
@@ -1257,7 +1257,7 @@ class AppControllerTest extends TestCase
     /**
      * Data provider for `testRelatedIds` test case.
      */
-    public function relatedIdsProvider(): array
+    public static function relatedIdsProvider(): array
     {
         return [
             'empty items' => [

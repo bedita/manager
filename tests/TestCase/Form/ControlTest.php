@@ -30,7 +30,7 @@ class ControlTest extends TestCase
      *
      * @return array
      */
-    public function controlProvider(): array
+    public static function controlProvider(): array
     {
         $value = 'something';
 
@@ -397,7 +397,7 @@ class ControlTest extends TestCase
      *
      * @return array
      */
-    public function formatProvider(): array
+    public static function formatProvider(): array
     {
         return [
             'empty schema' => [
@@ -464,7 +464,7 @@ class ControlTest extends TestCase
      *
      * @return array
      */
-    public function oneOfProvider(): array
+    public static function oneOfProvider(): array
     {
         return [
             'empty schema' => [
@@ -512,7 +512,7 @@ class ControlTest extends TestCase
      *
      * @return array
      */
-    public function labelProvider(): array
+    public static function labelProvider(): array
     {
         return [
             'no custom config' => [

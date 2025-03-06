@@ -90,10 +90,8 @@ class PropertyTypesControllerTest extends TestCase
      *
      * @return array
      */
-    public function saveProvider(): array
+    public static function saveProvider(): array
     {
-        $nextId = $this->nextId();
-
         return [
             // test with empty object
             'emptyRequest' => [
@@ -104,7 +102,6 @@ class PropertyTypesControllerTest extends TestCase
             'addPropertyTypesRequest' => [
                 [
                     [
-                        // 'id' => $nextId,
                         'type' => 'property_types',
                         'attributes' => [
                                 'name' => 'dummyone',
@@ -129,7 +126,7 @@ class PropertyTypesControllerTest extends TestCase
             'editPropertyTypesRequest' => [
                 [
                     [
-                        'id' => $nextId,
+                        'id' => 'NEXTID',
                         'type' => 'property_types',
                         'attributes' => [
                             'name' => 'dummytwo',
@@ -142,7 +139,7 @@ class PropertyTypesControllerTest extends TestCase
                 [
                     'editPropertyTypes' => [
                         [
-                            'id' => $nextId,
+                            'id' => 'NEXTID',
                             'attributes' => [
                                 'name' => 'dummytwo',
                                 'params' => [
@@ -155,10 +152,10 @@ class PropertyTypesControllerTest extends TestCase
                 'edited',
             ],
             'removePropertyTypesRequest' => [
-                [ $nextId ],
+                [ 'NEXTID' ],
                 [
                     'removePropertyTypes' => [
-                        $nextId,
+                        'NEXTID',
                     ],
                 ],
                 'removed',
@@ -182,7 +179,7 @@ class PropertyTypesControllerTest extends TestCase
      * Test `save` method
      *
      * @param array|\Exception $expectedResponse expected results from test
-     * @param bool|null $data setup data for test
+     * @param array $data setup data for test
      * @param string $action tested action
      * @dataProvider saveProvider()
      * @covers ::save()
@@ -191,7 +188,7 @@ class PropertyTypesControllerTest extends TestCase
      * @covers ::removePropertyTypes()
      * @return void
      */
-    public function testSave($expectedResponse, $data, $action): void
+    public function testSave(array|Exception $expectedResponse, array $data, string $action): void
     {
         $config = [
             'environment' => [
@@ -207,6 +204,20 @@ class PropertyTypesControllerTest extends TestCase
             $this->expectException(get_class($expectedResponse));
             $this->expectExceptionCode($expectedResponse->getCode());
             $this->expectExceptionMessage($expectedResponse->getMessage());
+        } else {
+            $nextId = $this->nextId();
+            if ($expectedResponse[0] === 'NEXTID') {
+                $expectedResponse[0] = $nextId;
+            }
+            if ($expectedResponse[0]['id'] === 'NEXTID') {
+                $data[0]['id'] = $nextId;
+            }
+            if ($data['removePropertyTypes'][0] == 'NEXTID') {
+                $data['removePropertyTypes'][0] = $nextId;
+            }
+            if ($data['editPropertyTypes'][0]['id'] == 'NEXTID') {
+                $data['editPropertyTypes'][0]['id'] = $nextId;
+            }
         }
 
         $this->ModelController->save();

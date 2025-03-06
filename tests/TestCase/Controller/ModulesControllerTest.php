@@ -604,7 +604,7 @@ class ModulesControllerTest extends BaseControllerTest
      *
      * @return array
      */
-    public function saveProvider(): array
+    public static function saveProvider(): array
     {
         return [
             'save' => [
@@ -906,7 +906,7 @@ class ModulesControllerTest extends BaseControllerTest
      *
      * @return array
      */
-    public function relationshipsProvider(): array
+    public static function relationshipsProvider(): array
     {
         return [
             'children' => [

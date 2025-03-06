@@ -30,7 +30,7 @@ class ReadCSVTraitTest extends TestCase
      *
      * @return array
      */
-    public function readCSVFileProvider(): array
+    public static function readCSVFileProvider(): array
     {
         return [
             'empty' => [

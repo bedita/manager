@@ -62,7 +62,7 @@ class SchemaComponentTest extends TestCase
      *
      * @return array
      */
-    public function getSchemaProvider(): array
+    public static function getSchemaProvider(): array
     {
         return [
             'type as argument' => [
@@ -180,7 +180,7 @@ class SchemaComponentTest extends TestCase
      *
      * @return array
      */
-    public function getSchemasByTypeProvider(): array
+    public static function getSchemasByTypeProvider(): array
     {
         return [
             'empty' => [
@@ -405,7 +405,7 @@ class SchemaComponentTest extends TestCase
      *
      * @return array
      */
-    public function concreteTypesProvider(): array
+    public static function concreteTypesProvider(): array
     {
         return [
             'empty' => [

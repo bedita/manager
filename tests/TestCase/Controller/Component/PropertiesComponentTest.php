@@ -252,7 +252,7 @@ class PropertiesComponentTest extends TestCase
      *
      * @return array
      */
-    public function viewGroupsProvider(): array
+    public static function viewGroupsProvider(): array
     {
         return [
             'minimal' => [

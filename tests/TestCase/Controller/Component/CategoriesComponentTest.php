@@ -327,7 +327,7 @@ class CategoriesComponentTest extends TestCase
      *
      * @return array
      */
-    public function hasChangedProvider(): array
+    public static function hasChangedProvider(): array
     {
         return [
             'empty' => [

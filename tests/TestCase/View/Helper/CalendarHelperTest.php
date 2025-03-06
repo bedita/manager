@@ -57,7 +57,7 @@ class CalendarHelperTest extends TestCase
      *
      * @return array
      */
-    public function listProvider(): array
+    public static function listProvider(): array
     {
         return [
             'empty date ranges' => [
@@ -99,7 +99,7 @@ class CalendarHelperTest extends TestCase
      *
      * @return array
      */
-    public function dateRangeProvider(): array
+    public static function dateRangeProvider(): array
     {
         return [
             'empty date range' => [

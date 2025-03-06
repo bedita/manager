@@ -54,7 +54,7 @@ class CategoriesHelperTest extends TestCase
      *
      * @return array
      */
-    public function controlProvider(): array
+    public static function controlProvider(): array
     {
         return [
             'is not tree' => [
@@ -119,7 +119,7 @@ class CategoriesHelperTest extends TestCase
      *
      * @return array
      */
-    public function htmlProvider(): array
+    public static function htmlProvider(): array
     {
         return [
             'multiple nodes' => [
@@ -169,7 +169,7 @@ class CategoriesHelperTest extends TestCase
      *
      * @return array
      */
-    public function nodeProvider(): array
+    public static function nodeProvider(): array
     {
         return [
             'no children' => [
@@ -231,7 +231,7 @@ class CategoriesHelperTest extends TestCase
      *
      * @return array
      */
-    public function controlOptionsProvider(): array
+    public static function controlOptionsProvider(): array
     {
         return [
             'empty node children, empty categories' => [
@@ -318,7 +318,7 @@ class CategoriesHelperTest extends TestCase
      *
      * @return array
      */
-    public function treeProvider(): array
+    public static function treeProvider(): array
     {
         return [
             'empty schema' => [

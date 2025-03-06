@@ -45,7 +45,7 @@ class ExportComponentTest extends TestCase
      *
      * @return array
      */
-    public function checkFormatProvider(): array
+    public static function checkFormatProvider(): array
     {
         return [
             'false' => [
@@ -77,7 +77,7 @@ class ExportComponentTest extends TestCase
      *
      * @return array
      */
-    public function formatProvider(): array
+    public static function formatProvider(): array
     {
         return [
             '1 A' => [
@@ -112,7 +112,7 @@ class ExportComponentTest extends TestCase
      *
      * @return array
      */
-    public function columnProvider(): array
+    public static function columnProvider(): array
     {
         return [
             '1 A' => [
@@ -160,7 +160,7 @@ class ExportComponentTest extends TestCase
      *
      * @return array
      */
-    public function formatsProvider(): array
+    public static function formatsProvider(): array
     {
         return [
             'csv' => [

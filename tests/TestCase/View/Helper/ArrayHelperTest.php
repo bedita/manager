@@ -57,7 +57,7 @@ class ArrayHelperTest extends TestCase
      *
      * @return array
      */
-    public function getCombineSchemaProvider(): array
+    public static function getCombineSchemaProvider(): array
     {
         return [
             'combine arrays' => [
@@ -93,7 +93,7 @@ class ArrayHelperTest extends TestCase
      *
      * @return array
      */
-    public function getRemoveKeysSchemaProvider(): array
+    public static function getRemoveKeysSchemaProvider(): array
     {
         return [
             'basic data' => [
@@ -139,7 +139,7 @@ class ArrayHelperTest extends TestCase
      *
      * @return array
      */
-    public function onlyKeysProvider(): array
+    public static function onlyKeysProvider(): array
     {
         return [
             'basic' => [

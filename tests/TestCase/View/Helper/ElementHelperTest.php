@@ -43,7 +43,7 @@ class ElementHelperTest extends TestCase
      *
      * @return array
      */
-    public function customProvider(): array
+    public static function customProvider(): array
     {
         return [
             'empty' => [

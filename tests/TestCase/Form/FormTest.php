@@ -32,7 +32,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function getMethodProvider(): array
+    public static function getMethodProvider(): array
     {
         return [
             'name with chars to remove 1' => [
@@ -111,7 +111,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function labelProvider(): array
+    public static function labelProvider(): array
     {
         return [
             'empty' => [

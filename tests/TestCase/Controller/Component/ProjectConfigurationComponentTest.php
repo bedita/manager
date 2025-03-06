@@ -57,7 +57,7 @@ class ProjectConfigurationComponentTest extends TestCase
      *
      * @return array
      */
-    public function readProvider(): array
+    public static function readProvider(): array
     {
         return [
             'simple conf' => [

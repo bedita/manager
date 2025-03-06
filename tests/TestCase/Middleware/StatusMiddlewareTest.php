@@ -36,7 +36,7 @@ class StatusMiddlewareTest extends TestCase
      *
      * @return array[]
      */
-    public function processProvider(): array
+    public static function processProvider(): array
     {
         $config = function (?int $status): array {
             return [

@@ -73,7 +73,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function fromAPIProvider(): array
+    public static function fromAPIProvider(): array
     {
         return [
             'empty url' => [
@@ -116,7 +116,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function sortUrlProvider(): array
+    public static function sortUrlProvider(): array
     {
         $request = new ServerRequest([
             'environment' => [
@@ -187,7 +187,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function sortClassProvider(): array
+    public static function sortClassProvider(): array
     {
         $request = new ServerRequest([
             'environment' => [
@@ -244,7 +244,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function pageProvider(): array
+    public static function pageProvider(): array
     {
         return [
             'zero' => [0],
@@ -285,7 +285,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function pageSizeProvider(): array
+    public static function pageSizeProvider(): array
     {
         return [
             '1' => [1],
@@ -328,7 +328,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function hereProvider(): array
+    public static function hereProvider(): array
     {
         $request = new ServerRequest([
             'environment' => [
@@ -385,7 +385,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function replaceQueryParamsProvider(): array
+    public static function replaceQueryParamsProvider(): array
     {
         $request = new ServerRequest([
             'environment' => [
@@ -498,7 +498,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function jsBundleProvider(): array
+    public static function jsBundleProvider(): array
     {
         return [
             'non existing js' => [
@@ -550,7 +550,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function cssBundleProvider(): array
+    public static function cssBundleProvider(): array
     {
         return [
             'non existing css' => [
@@ -583,7 +583,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function findFilesProvider(): array
+    public static function findFilesProvider(): array
     {
         return [
             'non existing file' => [

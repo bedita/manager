@@ -49,7 +49,7 @@ class PropertyHelperTest extends TestCase
      *
      * @return array
      */
-    public function controlProvider(): array
+    public static function controlProvider(): array
     {
         return [
             'text' => [
@@ -213,7 +213,7 @@ class PropertyHelperTest extends TestCase
      *
      * @return array
      */
-    public function schemaProvider(): array
+    public static function schemaProvider(): array
     {
         return [
             'string' => [
@@ -325,7 +325,7 @@ class PropertyHelperTest extends TestCase
      *
      * @return array
      */
-    public function valueProvider(): array
+    public static function valueProvider(): array
     {
         return [
             'object attribute' => [

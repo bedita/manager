@@ -34,7 +34,7 @@ class ProjectMiddlewareTest extends TestCase
      *
      * @return array
      */
-    public function invokeProvider(): array
+    public static function invokeProvider(): array
     {
         return [
             'test session' => [

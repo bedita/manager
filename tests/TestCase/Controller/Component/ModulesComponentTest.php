@@ -149,7 +149,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function getProjectProvider(): array
+    public static function getProjectProvider(): array
     {
         return [
             'ok' => [
@@ -245,7 +245,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function isAbstractProvider(): array
+    public static function isAbstractProvider(): array
     {
         return [
             'isAbstractTrue' => [
@@ -294,7 +294,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function objectTypesProvider(): array
+    public static function objectTypesProvider(): array
     {
         return [
             'empty' => [
@@ -369,7 +369,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function getModulesProvider(): array
+    public static function getModulesProvider(): array
     {
         return [
             'ok' => [
@@ -561,7 +561,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function modulesByAccessControlProvider(): array
+    public static function modulesByAccessControlProvider(): array
     {
         return [
             'empty access control' => [
@@ -676,7 +676,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function startupProvider(): array
+    public static function startupProvider(): array
     {
         return [
             'without current module' => [
@@ -830,7 +830,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function uploadProvider(): array
+    public static function uploadProvider(): array
     {
         $filename = sprintf('%s/tests/files/%s', getcwd(), 'test.png');
         $file = new UploadedFile($filename, filesize($filename), 0, $filename);
@@ -1088,7 +1088,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function setupRelationsProvider(): array
+    public static function setupRelationsProvider(): array
     {
         return [
             'simple' => [
@@ -1377,7 +1377,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function relationsSchemaProvider(): array
+    public static function relationsSchemaProvider(): array
     {
         return [
             'empty data' => [
@@ -1488,7 +1488,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function saveRelatedProvider(): array
+    public static function saveRelatedProvider(): array
     {
         $dummy = ['id' => 123, 'type' => 'dummies'];
 

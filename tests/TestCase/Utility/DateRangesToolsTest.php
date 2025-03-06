@@ -18,7 +18,7 @@ class DateRangesToolsTest extends TestCase
      *
      * @return array
      */
-    public function prepareProvider(): array
+    public static function prepareProvider(): array
     {
         return [
             'empty ranges' => [

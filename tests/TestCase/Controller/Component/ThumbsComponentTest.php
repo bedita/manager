@@ -61,7 +61,7 @@ class ThumbsComponentTest extends TestCase
      *
      * @return array
      */
-    public function urlsProvider(): array
+    public static function urlsProvider(): array
     {
         return [
             // test with empty object

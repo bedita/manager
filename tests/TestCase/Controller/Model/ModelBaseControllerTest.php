@@ -120,7 +120,7 @@ class ModelBaseControllerTest extends TestCase
      *
      * @return array
      */
-    public function beforeFilterProvider(): array
+    public static function beforeFilterProvider(): array
     {
         return [
             'not authorized' => [
@@ -259,7 +259,7 @@ class ModelBaseControllerTest extends TestCase
      *
      * @return array
      */
-    public function saveProvider(): array
+    public static function saveProvider(): array
     {
         return [
             'post' => [

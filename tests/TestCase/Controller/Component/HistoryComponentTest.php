@@ -101,7 +101,7 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function loadProvider(): array
+    public static function loadProvider(): array
     {
         return [
             'empty object' => [
@@ -155,13 +155,12 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function writeProvider(): array
+    public static function writeProvider(): array
     {
         return [
             'test document, keepUname false' => [
                 [
                     'objectType' => 'documents',
-                    'id' => $this->documentId,
                     'historyId' => 1,
                     'keepUname' => false,
                 ],
@@ -170,7 +169,6 @@ class HistoryComponentTest extends TestCase
             'test document, keepUname true' => [
                 [
                     'objectType' => 'documents',
-                    'id' => $this->documentId,
                     'historyId' => 1,
                     'keepUname' => true,
                 ],
@@ -210,6 +208,7 @@ class HistoryComponentTest extends TestCase
             ->willReturn($response);
         // set options
         $options += [
+            'id' => $this->documentId,
             'ApiClient' => $apiClient,
             'Schema' => $this->SchemaComponent,
             'Request' => $this->Request->withQueryParams(['title' => 'a new title']),
@@ -225,7 +224,7 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function fetchProvider(): array
+    public static function fetchProvider(): array
     {
         return [
             'a document history' => [
@@ -269,7 +268,7 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function formatResponseDataProvider(): array
+    public static function formatResponseDataProvider(): array
     {
         return [
             'empty response data' => [
@@ -347,7 +346,7 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function contentDataProvider(): array
+    public static function contentDataProvider(): array
     {
         return [
             'empty content' => [
@@ -422,7 +421,7 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function labelDataProvider(): array
+    public static function labelDataProvider(): array
     {
         return [
             'empty label' => [

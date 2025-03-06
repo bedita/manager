@@ -75,7 +75,7 @@ class ApiControllerTest extends TestCase
      *
      * @return array
      */
-    public function unauthorizedExceptionProvider(): array
+    public static function unauthorizedExceptionProvider(): array
     {
         return [
             'no same origin' => [

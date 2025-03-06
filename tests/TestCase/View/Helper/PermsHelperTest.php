@@ -63,7 +63,7 @@ class PermsHelperTest extends TestCase
      *
      * @return array
      */
-    public function isAllowedProvider(): array
+    public static function isAllowedProvider(): array
     {
         return [
             [
@@ -208,7 +208,7 @@ class PermsHelperTest extends TestCase
      *
      * @return array
      */
-    public function accessProvider(): array
+    public static function accessProvider(): array
     {
         return [
             'write' => [

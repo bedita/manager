@@ -45,11 +45,10 @@ class ImportFilterTest extends TestCase
      *
      * @return array
      */
-    public function createAsyncJobProvider(): array
+    public static function createAsyncJobProvider(): array
     {
         $result = new ImportResult();
         $filename = 'import.csv';
-        $result->addMessage('info', (string)__('Job {0} to import file "{1}" scheduled.', $this->asyncJobId, $filename)); // almost the same info set by ImportFilter on createAsyncJob
 
         return [
             'logic exception: service name not defined' => [
@@ -87,6 +86,8 @@ class ImportFilterTest extends TestCase
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());
+        } else {
+            $expected->addMessage('info', (string)__('Job {0} to import file "{1}" scheduled.', $this->asyncJobId, $filename)); // almost the same info set by ImportFilter on createAsyncJob
         }
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.com'])

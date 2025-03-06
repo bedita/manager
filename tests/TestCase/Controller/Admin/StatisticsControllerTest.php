@@ -150,7 +150,7 @@ class StatisticsControllerTest extends TestCase
      *
      * @return array
      */
-    public function intervalsProvider(): array
+    public static function intervalsProvider(): array
     {
         return [
             'case day: return interval with just one day' => [

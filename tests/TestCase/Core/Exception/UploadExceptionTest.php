@@ -28,7 +28,7 @@ class UploadExceptionTest extends TestCase
      *
      * @return array
      */
-    public function codeToMessageProvider(): array
+    public static function codeToMessageProvider(): array
     {
         return [
             'UPLOAD_ERR_INI_SIZE' => [

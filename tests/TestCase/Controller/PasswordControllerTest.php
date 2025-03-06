@@ -90,7 +90,7 @@ class PasswordControllerTest extends TestCase
      *
      * @return array
      */
-    public function resetProvider(): array
+    public static function resetProvider(): array
     {
         $email = 'gustavo@bedita.net';
 
@@ -181,7 +181,7 @@ class PasswordControllerTest extends TestCase
      *
      * @return array
      */
-    public function changeProvider(): array
+    public static function changeProvider(): array
     {
         $uuid = Text::uuid();
 
