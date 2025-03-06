@@ -14,15 +14,20 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\ErrorController;
+use Cake\Event\Event;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\ErrorController} Test Case
  *
- * @coversDefaultClass \App\Controller\ErrorController
  * @uses \App\Controller\ErrorController
  */
+#[CoversClass(ErrorController::class)]
+#[CoversMethod('beforeFilter')]
+#[CoversMethod('beforeRender')]
 class ErrorControllerTest extends TestCase
 {
     /**
@@ -40,5 +45,31 @@ class ErrorControllerTest extends TestCase
     protected function setupController(): void
     {
         $this->ErrorController = new ErrorController(new ServerRequest());
+    }
+
+    /**
+     * Test `beforeFiler` method
+     *
+     * @return void
+     */
+    public function testBeforeFilter(): void
+    {
+        $this->setupController();
+        $event = new Event('Controller.beforeFilter');
+        $this->assertNull($this->ErrorController->beforeFilter($event));
+    }
+
+    /**
+     * Test `beforeRender` method
+     *
+     * @return void
+     */
+    public function testBeforeRender(): void
+    {
+        $this->setupController();
+        $event = new Event('Controller.beforeRender');
+        $this->assertNull($this->ErrorController->beforeRender($event));
+        $this->assertSame('App\View\AppView', $this->ErrorController->viewBuilder()->getClassName());
+        $this->assertSame('Error', $this->ErrorController->viewBuilder()->getTemplatePath());
     }
 }
