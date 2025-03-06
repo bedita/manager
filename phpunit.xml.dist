@@ -7,15 +7,15 @@
     bootstrap="./tests/bootstrap.php"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.1/phpunit.xsd"
 >
-  <coverage>
+  <source>
     <include>
-      <directory suffix=".php">./src/</directory>
+        <directory suffix=".php">./src/</directory>
     </include>
     <exclude>
-      <file>./src/Console/Installer.php</file>
-      <file>./src/Shell/ConsoleShell.php</file>
+        <file>./src/Console/Installer.php</file>
+        <file>./src/Shell/ConsoleShell.php</file>
     </exclude>
-  </coverage>
+  </source>
   <php>
     <ini name="memory_limit" value="-1"/>
     <ini name="apc.enable_cli" value="1"/>

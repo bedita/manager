@@ -115,7 +115,7 @@ class AdminHelperTest extends TestCase
      *
      * @return array
      */
-    public function controlProviderReadonly(): array
+    public static function controlProviderReadonly(): array
     {
         return [
             'readonly' => [
