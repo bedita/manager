@@ -26,8 +26,8 @@ use PHPUnit\Framework\Attributes\CoversMethod;
  * @uses \App\Controller\ErrorController
  */
 #[CoversClass(ErrorController::class)]
-#[CoversMethod('beforeFilter')]
-#[CoversMethod('beforeRender')]
+#[CoversMethod(ErrorController::class, 'beforeFilter')]
+#[CoversMethod(ErrorController::class, 'beforeRender')]
 class ErrorControllerTest extends TestCase
 {
     /**
