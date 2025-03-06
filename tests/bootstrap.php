@@ -34,3 +34,11 @@ if (empty(\Cake\Core\Configure::read('API'))) {
 }
 
 $_SERVER['PHP_SELF'] = '/';
+
+define('ROOT', dirname(__DIR__));
+define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
+define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
+define('CAKE', CORE_PATH . 'src' . DS);
+
+require CORE_PATH . 'config' . DS . 'bootstrap.php';
+require CAKE . 'functions.php';
