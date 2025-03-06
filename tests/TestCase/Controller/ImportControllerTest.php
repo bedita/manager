@@ -100,7 +100,7 @@ class ImportControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->Import = new class ($request) extends ImportController
         {
-            public function render($view = null, $layout = null): Response
+            public function render($template = null, $layout = null): Response
             {
                 return $this->getResponse();
             }
@@ -373,7 +373,7 @@ class ImportControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->Import = new class ($request) extends ImportController
         {
-            public function render($view = null, $layout = null): Response
+            public function render($template = null, $layout = null): Response
             {
                 return $this->getResponse();
             }

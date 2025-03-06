@@ -68,6 +68,7 @@
             "@test",
             "@cs-check"
         ],
+        "psalm": "vendor/bin/psalm",
         "stan": "vendor/bin/phpstan analyse",
         "cs-check": "vendor/bin/phpcs",
         "cs-fix": "vendor/bin/phpcbf",

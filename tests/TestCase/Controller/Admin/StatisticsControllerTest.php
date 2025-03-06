@@ -105,9 +105,9 @@ class StatisticsControllerTest extends TestCase
     public function testFetchCountZero(): void
     {
         $controller = new class (new ServerRequest()) extends StatisticsController {
-            public function fetchCount(string $objectType, string $start, string $end): int
+            public function fetchCount(string $objectType, string $from, string $to): int
             {
-                return parent::fetchCount($objectType, $start, $end);
+                return parent::fetchCount($objectType, $from, $to);
             }
         };
         $actual = $controller->fetchCount('documents', '2999-01-01', '2999-12-31');
