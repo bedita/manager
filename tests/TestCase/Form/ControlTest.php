@@ -564,7 +564,7 @@ class ControlTest extends TestCase
             Configure::write(
                 sprintf('Properties.%s', $type),
                 array_merge(
-                    (array)\Cake\Core\Configure::read(sprintf('Properties.%s', $type)),
+                    (array)Configure::read(sprintf('Properties.%s', $type)),
                     ['labels' => ['options' => [$property => $customConfig]]]
                 )
             );

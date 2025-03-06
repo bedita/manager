@@ -54,7 +54,7 @@ if (Configure::read('Maintenance')) {
     return;
 }
 
-$routes->scope('/', function (RouteBuilder $routes) {
+$routes->scope('/', function (RouteBuilder $routes): void {
 
     // Reset & change password
     $routes->connect(
@@ -118,7 +118,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
     );
 
     // Admin.
-    $routes->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
+    $routes->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes): void {
         $adminRoutes = [
             'appearance',
             'applications',
@@ -181,7 +181,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
     );
 
     // Model.
-    $routes->prefix('model', ['_namePrefix' => 'model:'], function (RouteBuilder $routes) {
+    $routes->prefix('model', ['_namePrefix' => 'model:'], function (RouteBuilder $routes): void {
 
         foreach (['object_types', 'property_types', 'relations', 'categories', 'tags'] as $controller) {
             // Routes connected here are prefixed with '/model'
@@ -284,7 +284,7 @@ $routes->scope('/', function (RouteBuilder $routes) {
     );
 
     // API proxy
-    $routes->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $routes) {
+    $routes->scope('/api', ['_namePrefix' => 'api:'], function (RouteBuilder $routes): void {
         $routes->get('/**', ['controller' => 'Api', 'action' => 'get'], 'get');
         $routes->post('/**', ['controller' => 'Api', 'action' => 'post'], 'post');
         $routes->patch('/**', ['controller' => 'Api', 'action' => 'patch'], 'patch');

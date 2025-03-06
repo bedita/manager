@@ -27,7 +27,7 @@ class EndpointPermissionsController extends AdministrationBaseController
      *
      * @var string
      */
-    protected $resourceType = 'endpoint_permissions';
+    protected string $resourceType = 'endpoint_permissions';
 
     /**
      * @inheritDoc

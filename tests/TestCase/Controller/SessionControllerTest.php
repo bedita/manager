@@ -15,13 +15,14 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\SessionController;
 use Cake\Http\ServerRequest;
 use Cake\Http\Session;
+use Cake\TestSuite\TestCase;
 
 /**
  * {@see \App\Controller\SessionController} test case.
  *
  * @coversDefaultClass \App\Controller\SessionController
  */
-class SessionControllerTest extends \Cake\TestSuite\TestCase
+class SessionControllerTest extends TestCase
 {
     /**
      * Test `view` method.

@@ -23,7 +23,7 @@ trait ReadCSVTrait
      *
      * @var array
      */
-    protected $csvOptions = [
+    protected array $csvOptions = [
         'delimiter' => ',',
         'enclosure' => '"',
         'escape' => '\\',
@@ -34,14 +34,14 @@ trait ReadCSVTrait
      *
      * @var array
      */
-    protected $csvKeys = [];
+    protected array $csvKeys = [];
 
     /**
      * CSV file data content organized as associative array with `key` => `value`
      *
      * @var array
      */
-    protected $csvData = [];
+    protected array $csvData = [];
 
     /**
      * Read CSV file and populate `csvKeys` and `csvData` arrays

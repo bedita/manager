@@ -43,7 +43,7 @@ class ImportController extends AppController
      *
      * @var array
      */
-    protected $services = [];
+    protected array $services = [];
 
     /**
      * @inheritDoc
@@ -173,7 +173,7 @@ class ImportController extends AppController
      * @param string $filterClass Filter class
      * @return void
      */
-    protected function updateServiceList($filterClass): void
+    protected function updateServiceList(string $filterClass): void
     {
         $service = call_user_func([$filterClass, 'getServiceName']);
         if (!empty($service) && !in_array($service, $this->services)) {

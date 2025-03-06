@@ -99,7 +99,7 @@ class TrashController extends AppController
      * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function view($id): ?Response
+    public function view(mixed $id): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
 

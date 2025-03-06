@@ -33,7 +33,7 @@ class AppearanceController extends AdministrationBaseController
      *
      * @var string
      */
-    protected $resourceType = 'config';
+    protected string $resourceType = 'config';
 
     /**
      * @inheritDoc

@@ -434,7 +434,7 @@ class PropertyHelperTest extends TestCase
         Configure::write(
             'Properties.dummies',
             array_merge(
-                (array)\Cake\Core\Configure::read('Properties.dummies'),
+                (array)Configure::read('Properties.dummies'),
                 ['options' => ['about' => ['label' => $expected]]]
             )
         );

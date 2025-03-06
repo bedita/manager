@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Form\Form;
 use App\Utility\DateRangesTools;
 use Authentication\Identity;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Controller\Exception\SecurityException;
@@ -41,7 +42,7 @@ class AppController extends Controller
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $apiClient = null;
+    protected BEditaClient $apiClient = null;
 
     /**
      * @inheritDoc
@@ -198,7 +199,7 @@ class AppController extends Controller
      * @param string $type Object type
      * @return array request data
      */
-    protected function prepareRequest($type): array
+    protected function prepareRequest(string $type): array
     {
         $data = (array)$this->getRequest()->getData();
 
@@ -444,7 +445,7 @@ class AppController extends Controller
      * @param string $key The field key
      * @return bool
      */
-    protected function hasFieldChanged($oldValue, $newValue, string $key): bool
+    protected function hasFieldChanged(mixed $oldValue, mixed $newValue, string $key): bool
     {
         if ($oldValue === $newValue) {
             return false; // not changed
@@ -558,7 +559,7 @@ class AppController extends Controller
      * @param array $objects The objects to parse to set prev and next data
      * @return void
      */
-    protected function setObjectNav($objects): void
+    protected function setObjectNav(array $objects): void
     {
         $moduleName = $this->Modules->getConfig('currentModuleName');
         $total = count(array_keys($objects));
@@ -584,7 +585,7 @@ class AppController extends Controller
      * @param string $id The object ID
      * @return array
      */
-    protected function getObjectNav($id): array
+    protected function getObjectNav(string $id): array
     {
         // get objectNav from session
         $session = $this->getRequest()->getSession();

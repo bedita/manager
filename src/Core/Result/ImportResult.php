@@ -14,7 +14,7 @@ class ImportResult extends Result
      *
      * @var string
      */
-    public $filename;
+    public string $filename;
 
     /**
      * Constructor
@@ -29,13 +29,13 @@ class ImportResult extends Result
      * @return void
      */
     public function __construct(
-        $filename = '',
-        $created = 0,
-        $updated = 0,
-        $errors = 0,
-        $info = '',
-        $warn = '',
-        $error = ''
+        string $filename = '',
+        int $created = 0,
+        int $updated = 0,
+        int $errors = 0,
+        string $info = '',
+        string $warn = '',
+        string $error = ''
     ) {
         parent::__construct($created, $updated, $errors, $info, $warn, $error);
         $this->filename = $filename;

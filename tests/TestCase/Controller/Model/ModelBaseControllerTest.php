@@ -22,6 +22,7 @@ use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -167,7 +168,7 @@ class ModelBaseControllerTest extends TestCase
         }
         $this->ModelController->Authentication->setIdentity(new Identity($data));
 
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
         }
 

@@ -19,6 +19,7 @@ use App\View\Helper\SystemHelper;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use ReflectionClass;
 
 /**
  * {@see \App\View\Helper\SystemHelper} Test Case
@@ -149,7 +150,7 @@ class SystemHelperTest extends TestCase
     public function testPlaceholdersConfig(): void
     {
         // empty config, defaultUploadAccepted
-        $reflectionClass = new \ReflectionClass($this->System);
+        $reflectionClass = new ReflectionClass($this->System);
         $property = $reflectionClass->getProperty('defaultPlaceholders');
         $property->setAccessible(true);
         $expected = $property->getValue($this->System);
@@ -166,7 +167,7 @@ class SystemHelperTest extends TestCase
     public function testUploadConfig(): void
     {
         // empty config, defaultUploadAccepted
-        $reflectionClass = new \ReflectionClass($this->System);
+        $reflectionClass = new ReflectionClass($this->System);
         $property = $reflectionClass->getProperty('defaultUploadAccepted');
         $property->setAccessible(true);
         $accepted = $property->getValue($this->System);

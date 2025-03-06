@@ -6,6 +6,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use ReflectionClass;
 
 /**
  * {@see \App\Controller\LockController} Test Case
@@ -111,7 +112,7 @@ class LockControllerTest extends TestCase
      */
     public function testLock(): void
     {
-        $reflectionClass = new \ReflectionClass($this->LockController);
+        $reflectionClass = new ReflectionClass($this->LockController);
         $method = $reflectionClass->getMethod('lock');
         $method->setAccessible(true);
         $method->invokeArgs($this->LockController, [true]);
@@ -140,7 +141,7 @@ class LockControllerTest extends TestCase
                 ],
             ])
         );
-        $reflectionClass = new \ReflectionClass($this->LockController);
+        $reflectionClass = new ReflectionClass($this->LockController);
         $method = $reflectionClass->getMethod('lock');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->LockController, [true]);

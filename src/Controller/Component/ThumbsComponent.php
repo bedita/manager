@@ -38,7 +38,7 @@ class ThumbsComponent extends Component
      *
      * @var array
      */
-    protected $components = ['Flash', 'Query'];
+    protected array $components = ['Flash', 'Query'];
 
     /**
      * Retrieve thumbnails URL of related objects in `meta.url` if present.

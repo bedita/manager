@@ -21,6 +21,8 @@ use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * {@see \App\Controller\ExportController} Test Case
@@ -144,7 +146,7 @@ class ExportControllerTest extends TestCase
             ]);
         ApiClientProvider::setApiClient($apiClient);
         // set $this->Export->apiClient
-        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property = new ReflectionProperty(ExportController::class, 'apiClient');
         $property->setAccessible(true);
         $property->setValue($this->Export, $apiClient);
 
@@ -202,7 +204,7 @@ class ExportControllerTest extends TestCase
             ]);
         ApiClientProvider::setApiClient($apiClient);
         // set $this->Export->apiClient
-        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property = new ReflectionProperty(ExportController::class, 'apiClient');
         $property->setAccessible(true);
         $property->setValue($this->Export, $apiClient);
 
@@ -386,11 +388,11 @@ class ExportControllerTest extends TestCase
         }
 
         // set $this->Export->apiClient
-        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property = new ReflectionProperty(ExportController::class, 'apiClient');
         $property->setAccessible(true);
         $property->setValue($this->Export, $apiClient);
 
-        $reflectionClass = new \ReflectionClass($this->Export);
+        $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('rows');
         $method->setAccessible(true);
 
@@ -444,7 +446,7 @@ class ExportControllerTest extends TestCase
      */
     public function testFillDataFromResponse($input, $expected): void
     {
-        $reflectionClass = new \ReflectionClass($this->Export);
+        $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('fillDataFromResponse');
         $method->setAccessible(true);
         $data = [];
@@ -507,7 +509,7 @@ class ExportControllerTest extends TestCase
      */
     public function testGetFields($response, $expected): void
     {
-        $reflectionClass = new \ReflectionClass($this->Export);
+        $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('getFieldNames');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, [$response]);
@@ -572,7 +574,7 @@ class ExportControllerTest extends TestCase
      */
     public function testRowFields($input, $expected): void
     {
-        $reflectionClass = new \ReflectionClass($this->Export);
+        $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('rowFields');
         $method->setAccessible(true);
         $data = $input['data'];
@@ -611,7 +613,7 @@ class ExportControllerTest extends TestCase
      */
     public function testGetValue($input, $expected): void
     {
-        $reflectionClass = new \ReflectionClass($this->Export);
+        $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('getValue');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, [ $input ]);
@@ -627,7 +629,7 @@ class ExportControllerTest extends TestCase
     {
         $expected = 123;
         $this->setLimit($expected);
-        $reflectionClass = new \ReflectionClass($this->Export);
+        $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('limit');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, []);
@@ -667,7 +669,7 @@ class ExportControllerTest extends TestCase
             ]);
         ApiClientProvider::setApiClient($apiClient);
         // set $this->Export->apiClient
-        $property = new \ReflectionProperty(ExportController::class, 'apiClient');
+        $property = new ReflectionProperty(ExportController::class, 'apiClient');
         $property->setAccessible(true);
         $property->setValue($this->Export, $apiClient);
         $this->Export->relatedFiltered('888', 'seealso', 'csv', 'q=test&filter[type]=documents');
@@ -733,7 +735,7 @@ class ExportControllerTest extends TestCase
     public function testGetRelatedFileName(array $filter, string $id, string $type, string $relation, string $format, string $expectedPrefix, int $expectedDash, string $expectedExtension): void
     {
         $this->Export->filter = $filter;
-        $reflectionClass = new \ReflectionClass($this->Export);
+        $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('getRelatedFileName');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, [$id, $type, $relation, $format]);
@@ -765,7 +767,7 @@ class ExportControllerTest extends TestCase
                 'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
             ])
         );
-        $reflectionClass = new \ReflectionClass($this->Export);
+        $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('prepareQuery');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, []);
@@ -785,7 +787,7 @@ class ExportControllerTest extends TestCase
             ])
         );
         $this->Export->filter = ['filter' => ['type' => 'documents'], 'q' => 'needle'];
-        $reflectionClass = new \ReflectionClass($this->Export);
+        $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('prepareQuery');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, []);

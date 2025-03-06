@@ -30,49 +30,49 @@ abstract class AdministrationBaseController extends AppController
      *
      * @var string
      */
-    protected $endpoint = '/admin';
+    protected string $endpoint = '/admin';
 
     /**
      * Resource type in use
      *
      * @var string
      */
-    protected $resourceType = null;
+    protected string $resourceType = null;
 
     /**
      * Readonly flag view.
      *
      * @var bool
      */
-    protected $readonly = true;
+    protected bool $readonly = true;
 
     /**
      * Deleteonly flag view.
      *
      * @var bool
      */
-    protected $deleteonly = false;
+    protected bool $deleteonly = false;
 
     /**
      * Properties to show in index columns
      *
      * @var array
      */
-    protected $properties = [];
+    protected array $properties = [];
 
     /**
      * Properties that are secrets
      *
      * @var array
      */
-    protected $propertiesSecrets = [];
+    protected array $propertiesSecrets = [];
 
     /**
      * Meta to show in index columns
      *
      * @var array
      */
-    protected $meta = ['created', 'modified'];
+    protected array $meta = ['created', 'modified'];
 
     /**
      * @inheritDoc

@@ -16,6 +16,7 @@ use App\Controller\AppController;
 use App\Identifier\ApiIdentifier;
 use App\Middleware\RecoveryMiddleware;
 use Authentication\AuthenticationService;
+use Authentication\Authenticator\UnauthenticatedException;
 use Authentication\Identifier\IdentifierInterface;
 use Authentication\Identity;
 use BEdita\WebTools\ApiClientProvider;
@@ -75,7 +76,7 @@ class RecoveryMiddlewareTest extends TestCase
         // user non admin
         $user = new Identity(['id' => 1, 'roles' => ['guest']]);
         $this->AppController->Authentication->setIdentity($user);
-        $this->expectException(\Authentication\Authenticator\UnauthenticatedException::class);
+        $this->expectException(UnauthenticatedException::class);
         $middleware->process($this->AppController->getRequest()->withAttribute('identity', $user), $handler);
     }
 

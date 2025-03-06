@@ -33,10 +33,14 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Exception;
 use Laminas\Diactoros\Stream;
 use Laminas\Diactoros\UploadedFile;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionClass;
+use ReflectionProperty;
+use RuntimeException;
 
 /**
  * {@see \App\Controller\Component\ModulesComponent} Test Case
@@ -174,8 +178,8 @@ class ModulesComponentTest extends TestCase
                 new BEditaClientException('I am a client exception'),
             ],
             'other exception' => [
-                new \RuntimeException('I am some other kind of exception', 999),
-                new \RuntimeException('I am some other kind of exception', 999),
+                new RuntimeException('I am some other kind of exception', 999),
+                new RuntimeException('I am some other kind of exception', 999),
             ],
             'config' => [
                 [
@@ -208,7 +212,7 @@ class ModulesComponentTest extends TestCase
         $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity([]));
 
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());
@@ -218,7 +222,7 @@ class ModulesComponentTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
-        if ($meta instanceof \Exception) {
+        if ($meta instanceof Exception) {
             $apiClient->method('get')
                 ->with('/home')
                 ->willThrowException($meta);
@@ -483,8 +487,8 @@ class ModulesComponentTest extends TestCase
                 new BEditaClientException('I am a client exception'),
             ],
             'other exception' => [
-                new \RuntimeException('I am some other kind of exception', 999),
-                new \RuntimeException('I am some other kind of exception', 999),
+                new RuntimeException('I am some other kind of exception', 999),
+                new RuntimeException('I am some other kind of exception', 999),
             ],
         ];
     }
@@ -518,7 +522,7 @@ class ModulesComponentTest extends TestCase
 
         Configure::write('Modules', $modules);
 
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());
@@ -528,7 +532,7 @@ class ModulesComponentTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
-        if ($meta instanceof \Exception) {
+        if ($meta instanceof Exception) {
             $apiClient->method('get')
                 ->willThrowException($meta);
         } else {
@@ -647,20 +651,20 @@ class ModulesComponentTest extends TestCase
         $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
 
         // set $this->Modules->modules
-        $property = new \ReflectionProperty(ModulesComponent::class, 'modules');
+        $property = new ReflectionProperty(ModulesComponent::class, 'modules');
         $property->setAccessible(true);
         $property->setValue($this->Modules, $modules);
         // set AccessControl
         Configure::write('AccessControl', $accessControl);
         // call modulesByAccessControl
-        $reflectionClass = new \ReflectionClass($this->Modules);
+        $reflectionClass = new ReflectionClass($this->Modules);
         $method = $reflectionClass->getMethod('modulesByAccessControl');
         $method->setAccessible(true);
         $this->Modules->Authentication->setIdentity(new Identity($user));
         $method->invokeArgs($this->Modules, []);
 
         // get $this->Modules->modules
-        $property = new \ReflectionProperty(ModulesComponent::class, 'modules');
+        $property = new ReflectionProperty(ModulesComponent::class, 'modules');
         $property->setAccessible(true);
         $actual = $property->getValue($this->Modules);
         static::assertEquals($expected, $actual);
@@ -1624,7 +1628,7 @@ class ModulesComponentTest extends TestCase
      */
     public function testSaveRelated(int $id, string $type, array $relatedData, $expected): void
     {
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());

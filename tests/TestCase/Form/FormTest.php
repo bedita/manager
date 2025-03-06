@@ -18,6 +18,7 @@ use App\Form\Form;
 use App\Form\Options;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use InvalidArgumentException;
 
 /**
  * {@see \App\Form\Form} Test Case
@@ -99,7 +100,7 @@ class FormTest extends TestCase
     public function testGetMethodNotCallable(): void
     {
         $methodName = 'dummy';
-        $expected = new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
+        $expected = new InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
         static::expectException(get_class($expected));
         static::expectExceptionMessage($expected->getMessage());
         Form::getMethod(Form::class, $methodName);

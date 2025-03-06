@@ -18,6 +18,7 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
+use Exception;
 use Psr\Log\LogLevel;
 
 /**
@@ -63,7 +64,7 @@ class TranslationsController extends ModulesController
      * @param string|int $id Object ID.
      * @return \Cake\Http\Response|null
      */
-    public function add($id): ?Response
+    public function add(string|int $id): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
         $this->objectType = $this->typeFromUrl();
@@ -97,7 +98,7 @@ class TranslationsController extends ModulesController
      * @param string $lang The lang code.
      * @return \Cake\Http\Response|null
      */
-    public function edit($id, $lang): ?Response
+    public function edit(string|int $id, string $lang): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
         $this->objectType = $this->typeFromUrl();
@@ -117,7 +118,7 @@ class TranslationsController extends ModulesController
             if (empty($translation)) {
                 throw new NotFoundException(sprintf('Translation not found per %s %s and lang %s', $this->objectType, $id, $lang));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Error! Back to index.
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);

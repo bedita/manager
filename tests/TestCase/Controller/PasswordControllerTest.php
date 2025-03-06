@@ -21,6 +21,7 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Cake\Utility\Text;
+use ReflectionProperty;
 
 /**
  * {@see \App\Controller\PasswordController} Test Case
@@ -79,7 +80,7 @@ class PasswordControllerTest extends TestCase
             $this->client->method($method)->with($with[0], $with[1], $with[2])->willThrowException($exception);
         }
         // set $this->Password->apiClient
-        $property = new \ReflectionProperty(PasswordController::class, 'apiClient');
+        $property = new ReflectionProperty(PasswordController::class, 'apiClient');
         $property->setAccessible(true);
         $property->setValue($this->Password, $this->client);
     }

@@ -24,7 +24,7 @@ class AsyncJobsController extends AdministrationBaseController
      *
      * @var string
      */
-    protected $resourceType = 'async_jobs';
+    protected string $resourceType = 'async_jobs';
 
     /**
      * @inheritDoc

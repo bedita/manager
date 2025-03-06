@@ -11,8 +11,10 @@ use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionClass;
 
 /**
  * {@see \App\Controller\Admin\AdministrationBaseController} Test Case
@@ -181,7 +183,7 @@ class AdministrationBaseControllerTest extends TestCase
         $this->AdministrationBaseController->setRequest($this->AdministrationBaseController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->AdministrationBaseController->Authentication->setIdentity(new Identity($data));
 
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
         }
 
@@ -334,13 +336,13 @@ class AdministrationBaseControllerTest extends TestCase
                 ],
             ]
         );
-        $reflectionClass = new \ReflectionClass($this->RlsController);
+        $reflectionClass = new ReflectionClass($this->RlsController);
         $method = $reflectionClass->getMethod('endpoint');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->RlsController, []);
         static::assertEquals('/roles', $actual);
 
-        $reflectionClass = new \ReflectionClass($this->AdministrationBaseController);
+        $reflectionClass = new ReflectionClass($this->AdministrationBaseController);
         $method = $reflectionClass->getMethod('endpoint');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->AdministrationBaseController, []);
@@ -369,7 +371,7 @@ class AdministrationBaseControllerTest extends TestCase
                 ],
             ]
         );
-        $reflectionClass = new \ReflectionClass($this->RlsController);
+        $reflectionClass = new ReflectionClass($this->RlsController);
         $method = $reflectionClass->getMethod('loadData');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->RlsController, []);

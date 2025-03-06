@@ -28,21 +28,21 @@ class ObjectsEditorsComponent extends Component
      *
      * @var array
      */
-    protected $components = ['Authentication'];
+    protected array $components = ['Authentication'];
 
     /**
      * Objects editors.
      *
      * @var array
      */
-    public $objectsEditors;
+    public array $objectsEditors;
 
     /**
      * Concurrent check time.
      *
      * @var int
      */
-    public $concurrentCheckTime = 20000;
+    public int $concurrentCheckTime = 20000;
 
     /**
      * @inheritDoc

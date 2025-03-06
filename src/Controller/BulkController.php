@@ -29,35 +29,35 @@ class BulkController extends AppController
      *
      * @var string
      */
-    protected $objectType = null;
+    protected string $objectType = null;
 
     /**
      * Object type is abstract
      *
      * @var bool
      */
-    protected $abstractType = null;
+    protected bool $abstractType = null;
 
     /**
      * Selected objects IDs
      *
      * @var array
      */
-    protected $ids = [];
+    protected array $ids = [];
 
     /**
      * Selected categories
      *
      * @var array|string
      */
-    protected $categories = [];
+    protected array|string $categories = [];
 
     /**
      * Errors
      *
      * @var array
      */
-    protected $errors = [];
+    protected array $errors = [];
 
     /**
      * @inheritDoc

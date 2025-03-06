@@ -16,10 +16,13 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\TranslationsController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\BadRequestException;
+use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Exception;
 use Laminas\Diactoros\Uri;
+use ReflectionClass;
 
 /**
  * {@see \App\Controller\TranslationsController} Test Case
@@ -146,7 +149,7 @@ class TranslationsControllerTest extends TestCase
 
         // on error
         $result = $this->controller->add(123456789);
-        $expected = get_class(new \Cake\Http\Response());
+        $expected = get_class(new Response());
         $actual = get_class($result);
         static::assertEquals($expected, $actual);
     }
@@ -179,7 +182,7 @@ class TranslationsControllerTest extends TestCase
 
         // on error
         $result = $this->controller->edit(123456789, $lang);
-        $expected = get_class(new \Cake\Http\Response());
+        $expected = get_class(new Response());
         $actual = get_class($result);
         static::assertEquals($expected, $actual);
     }
@@ -415,7 +418,7 @@ class TranslationsControllerTest extends TestCase
         $this->controller = new TranslationsController($request);
         try {
             $this->controller->delete();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $expected = get_class(new BadRequestException());
             $actual = get_class($e);
             static::assertEquals($expected, $actual);
@@ -435,7 +438,7 @@ class TranslationsControllerTest extends TestCase
         $this->controller = new TranslationsController($request);
         try {
             $this->controller->delete();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $expected = get_class(new BadRequestException());
             $actual = get_class($e);
             static::assertEquals($expected, $actual);
@@ -455,7 +458,7 @@ class TranslationsControllerTest extends TestCase
         $this->controller = new TranslationsController($request);
         try {
             $this->controller->delete();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $expected = get_class(new BadRequestException());
             $actual = get_class($e);
             static::assertEquals($expected, $actual);
@@ -474,7 +477,7 @@ class TranslationsControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->controller = new TranslationsController($request);
         $response = $this->controller->delete();
-        $expected = get_class(new \Cake\Http\Response());
+        $expected = get_class(new Response());
         $actual = get_class($response);
         static::assertEquals($expected, $actual);
     }
@@ -490,7 +493,7 @@ class TranslationsControllerTest extends TestCase
         $uri = new Uri('/documents/1/translation/lang');
         $request = new ServerRequest($this->defaultRequestConfig + compact('uri'));
         $this->controller = new TranslationsController($request);
-        $reflectionClass = new \ReflectionClass($this->controller);
+        $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('typeFromUrl');
         $method->setAccessible(true);
         $expected = 'documents';
@@ -500,7 +503,7 @@ class TranslationsControllerTest extends TestCase
         $request = new ServerRequest($this->defaultRequestConfig);
         $this->controller = new TranslationsController($request);
         $this->controller->setObjectType('dummies');
-        $reflectionClass = new \ReflectionClass($this->controller);
+        $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('typeFromUrl');
         $method->setAccessible(true);
         $expected = 'dummies';

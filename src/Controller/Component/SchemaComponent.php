@@ -55,7 +55,7 @@ class SchemaComponent extends Component
      * @param string|null $revision Schema revision.
      * @return array|bool JSON Schema.
      */
-    public function getSchema(?string $type = null, ?string $revision = null)
+    public function getSchema(?string $type = null, ?string $revision = null): array|bool
     {
         if ($type === null) {
             $type = $this->getConfig('type');
@@ -136,7 +136,7 @@ class SchemaComponent extends Component
      * @param string $type Type to get schema for.
      * @return array|bool JSON Schema.
      */
-    protected function fetchSchema(string $type)
+    protected function fetchSchema(string $type): array|bool
     {
         $schema = ApiClientProvider::getApiClient()->schema($type);
         if (empty($schema)) {

@@ -72,14 +72,14 @@ class ModulesComponent extends Component
      *
      * @var array
      */
-    protected $modules = [];
+    protected array $modules = [];
 
     /**
      * Other "logic" modules, non objects
      *
      * @var array
      */
-    protected $otherModules = [
+    protected array $otherModules = [
         'tags' => [
             'name' => 'tags',
             'hints' => ['allow' => ['GET', 'POST', 'PATCH', 'DELETE']],
@@ -151,7 +151,7 @@ class ModulesComponent extends Component
         $modules = array_intersect_key($modules, $metaModules);
         array_walk(
             $modules,
-            function (&$data, $key) use ($metaModules) {
+            function (&$data, $key) use ($metaModules): void {
                 $data = array_merge((array)Hash::get($metaModules, $key), $data);
             }
         );

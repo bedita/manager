@@ -32,7 +32,7 @@ class CategoriesHelper extends Helper
      * @param mixed|null $value The value
      * @return string
      */
-    public function control(string $name, $value): string
+    public function control(string $name, mixed $value): string
     {
         $options = ['label' => false];
         if (!$this->isTree()) {
@@ -54,7 +54,7 @@ class CategoriesHelper extends Helper
      * @param array $options The options
      * @return string
      */
-    public function html(string $name, $value, array $options): string
+    public function html(string $name, mixed $value, array $options): string
     {
         $html = '';
         $tree = $this->tree();
@@ -76,7 +76,7 @@ class CategoriesHelper extends Helper
      * @param bool $hiddenField The hiddenField flag
      * @return string
      */
-    public function node(array $node, string $name, $value, array $options, bool &$hiddenField): string
+    public function node(array $node, string $name, mixed $value, array $options, bool &$hiddenField): string
     {
         $title = sprintf('<h3>%s</h3>', $node['label'] = $node['label'] ?: $node['name']);
         $controlOptions = $this->controlOptions($node, $value, $options, $hiddenField);
@@ -97,7 +97,7 @@ class CategoriesHelper extends Helper
      * @param bool $hiddenField The hiddenField flag
      * @return array
      */
-    public function controlOptions(array $node, $value, array $options, bool &$hiddenField): array
+    public function controlOptions(array $node, mixed $value, array $options, bool &$hiddenField): array
     {
         $controlOptions = $options + [
             'type' => 'select',

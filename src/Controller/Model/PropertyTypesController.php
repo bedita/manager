@@ -29,7 +29,7 @@ class PropertyTypesController extends ModelBaseController
      *
      * @var string
      */
-    protected $resourceType = 'property_types';
+    protected string $resourceType = 'property_types';
 
     /**
      * {@inheritDoc}

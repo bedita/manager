@@ -20,6 +20,7 @@ use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use ReflectionClass;
 
 /**
  * {@see \App\Controller\Model\ObjectTypesController} Test Case
@@ -190,7 +191,7 @@ class ObjectTypesControllerTest extends TestCase
         $this->setupController();
         $expected = $schema = ['whatever'];
         $resource = ['meta' => ['core_type' => true]];
-        $reflectionClass = new \ReflectionClass($this->ModelController);
+        $reflectionClass = new ReflectionClass($this->ModelController);
         $method = $reflectionClass->getMethod('updateSchema');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->ModelController, [$schema, $resource]);
@@ -322,7 +323,7 @@ class ObjectTypesControllerTest extends TestCase
         $expected = array_unique(array_merge($expected, ['dummy']));
         sort($expected);
         $this->setupController();
-        $reflectionClass = new \ReflectionClass($this->ModelController);
+        $reflectionClass = new ReflectionClass($this->ModelController);
         $method = $reflectionClass->getMethod('tables');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->ModelController, [['attributes' => ['table' => 'dummy']]]);

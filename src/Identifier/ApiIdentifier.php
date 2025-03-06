@@ -13,6 +13,7 @@
 namespace App\Identifier;
 
 use App\Identifier\Resolver\ApiResolver;
+use ArrayAccess;
 use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identifier\Resolver\ResolverAwareTrait;
 
@@ -30,7 +31,7 @@ class ApiIdentifier extends AbstractIdentifier
      *
      * @var array
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'timezoneField' => 'timezone',
         'resolver' => ApiResolver::class,
     ];
@@ -57,7 +58,7 @@ class ApiIdentifier extends AbstractIdentifier
      * @param array $credentials The user credentials
      * @return array|\ArrayAccess|null
      */
-    protected function findIdentity(array $credentials)
+    protected function findIdentity(array $credentials): array|ArrayAccess|null
     {
         $identity = $this->getResolver()->find($credentials);
         if (empty($identity)) {

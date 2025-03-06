@@ -11,6 +11,7 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use ReflectionClass;
 
 /**
  * {@see \App\Controller\Admin\RolesModulesController} Test Case
@@ -194,7 +195,7 @@ class RolesModulesControllerTest extends TestCase
      */
     public function testAllowedRoles(): void
     {
-        $reflection = new \ReflectionClass(get_class($this->RlsController));
+        $reflection = new ReflectionClass(get_class($this->RlsController));
         $method = $reflection->getMethod('allowedRoles');
         $method->setAccessible(true);
 

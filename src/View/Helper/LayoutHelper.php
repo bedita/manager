@@ -12,9 +12,11 @@
  */
 namespace App\View\Helper;
 
+use App\Plugin;
 use App\Utility\CacheTools;
 use App\Utility\Translate;
 use Cake\Core\Configure;
+use Cake\I18n\I18n;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 
@@ -35,7 +37,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Editors', 'Html', 'Link', 'Perms', 'System', 'Url'];
+    public array $helpers = ['Editors', 'Html', 'Link', 'Perms', 'System', 'Url'];
 
     /**
      * Is Dashboard
@@ -360,9 +362,9 @@ class LayoutHelper extends Helper
             'currentModule' => $this->getView()->get('currentModule', ['name' => 'home']),
             'template' => $this->getView()->getTemplate(),
             'modules' => array_keys($this->getView()->get('modules', [])),
-            'plugins' => \App\Plugin::loadedAppPlugins(),
+            'plugins' => Plugin::loadedAppPlugins(),
             'uploadable' => $this->getView()->get('uploadable', []),
-            'locale' => \Cake\I18n\I18n::getLocale(),
+            'locale' => I18n::getLocale(),
             'csrfToken' => $this->getCsrfToken(),
             'maxFileSize' => $this->System->getMaxFileSize(),
             'canReadUsers' => $this->Perms->canRead('users'),

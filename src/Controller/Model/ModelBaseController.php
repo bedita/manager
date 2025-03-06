@@ -32,14 +32,14 @@ abstract class ModelBaseController extends AppController
      *
      * @var string
      */
-    protected $resourceType = null;
+    protected string $resourceType = null;
 
     /**
      * Single resource view existence flag.
      *
      * @var bool
      */
-    protected $singleView = true;
+    protected bool $singleView = true;
 
     /**
      * @inheritDoc
@@ -129,7 +129,7 @@ abstract class ModelBaseController extends AppController
      * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
      */
-    public function view($id): ?Response
+    public function view(string|int $id): ?Response
     {
         $endpoint = sprintf('/model/%s/%s', $this->resourceType, $id);
         try {

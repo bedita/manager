@@ -11,6 +11,9 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Exception;
+use ReflectionClass;
+use RuntimeException;
 
 /**
  * {@see \App\Controller\Component\SchemaComponent} Test Case
@@ -92,8 +95,8 @@ class SchemaComponentTest extends TestCase
                 'you-are-not-my-type',
             ],
             'other exception' => [
-                new \RuntimeException('I am some other kind of exception', 999),
-                new \RuntimeException('I am some other kind of exception', 999),
+                new RuntimeException('I am some other kind of exception', 999),
+                new RuntimeException('I am some other kind of exception', 999),
                 'you-are-not-my-type',
             ],
             'no schema' => [
@@ -119,7 +122,7 @@ class SchemaComponentTest extends TestCase
      */
     public function testGetSchema($expected, $schema, ?string $type, array $config = []): void
     {
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());
@@ -129,7 +132,7 @@ class SchemaComponentTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
-        if ($schema instanceof \Exception) {
+        if ($schema instanceof Exception) {
             $apiClient->method('schema')
                 ->with($type ?: $config['type'])
                 ->willThrowException($schema);
@@ -161,7 +164,7 @@ class SchemaComponentTest extends TestCase
 
         // from cache
         Cache::enable();
-        $reflectionClass = new \ReflectionClass($this->Schema);
+        $reflectionClass = new ReflectionClass($this->Schema);
         $key = CacheTools::cacheKey($type);
         Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
 
@@ -233,7 +236,7 @@ class SchemaComponentTest extends TestCase
         $revision = $schema['revision'];
 
         // null
-        $reflectionClass = new \ReflectionClass($this->Schema);
+        $reflectionClass = new ReflectionClass($this->Schema);
         $method = $reflectionClass->getMethod('loadWithRevision');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
@@ -434,7 +437,7 @@ class SchemaComponentTest extends TestCase
      */
     public function testConcreteTypes(array $types, array $descendants, array $expected): void
     {
-        $reflectionClass = new \ReflectionClass($this->Schema);
+        $reflectionClass = new ReflectionClass($this->Schema);
         $method = $reflectionClass->getMethod('concreteTypes');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Schema, [$types, $descendants]);

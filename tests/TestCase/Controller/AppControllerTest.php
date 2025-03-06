@@ -28,8 +28,13 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use DateTime;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionClass;
+use ReflectionProperty;
+use stdClass;
 
 /**
  * {@see \App\Controller\AppController} Test Case
@@ -235,7 +240,7 @@ class AppControllerTest extends TestCase
     public function testLoginRedirectRoute($config, $expected): void
     {
         $this->setupController($config);
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('loginRedirectRoute');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->AppController, []);
@@ -315,7 +320,7 @@ class AppControllerTest extends TestCase
             ->willReturn($updatedToken);
 
         // set $this->AppController->apiClient
-        $property = new \ReflectionProperty(AppController::class, 'apiClient');
+        $property = new ReflectionProperty(AppController::class, 'apiClient');
         $property->setAccessible(true);
         $property->setValue($this->AppController, $apiClient);
 
@@ -624,7 +629,7 @@ class AppControllerTest extends TestCase
             'empty json' => [
                 'documents',
                 [
-                    'json_prop' => new \stdClass(),
+                    'json_prop' => new stdClass(),
                     'json_prop2' => [
                         'gin' => 'vodka',
                     ],
@@ -791,8 +796,8 @@ class AppControllerTest extends TestCase
      */
     public function hasFieldChangedProvider(): array
     {
-        $d1 = new \DateTime('2019-01-01T15:03:01.012345Z');
-        $d2 = new \DateTime('2019-01-01T16:03:01.012345Z');
+        $d1 = new DateTime('2019-01-01T15:03:01.012345Z');
+        $d2 = new DateTime('2019-01-01T16:03:01.012345Z');
 
         return [
             'null and empty | unchanged' => [ null, '', 'null_and_empty', false ],
@@ -886,7 +891,7 @@ class AppControllerTest extends TestCase
     {
         $this->setupController($config);
 
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
         }
 
@@ -905,7 +910,7 @@ class AppControllerTest extends TestCase
      */
     public function invokeMethod(&$object, $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
 
@@ -921,7 +926,7 @@ class AppControllerTest extends TestCase
      */
     public function accessProperty(&$object, $propertyName)
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new ReflectionClass(get_class($object));
         $property = $reflection->getProperty($propertyName);
         $property->setAccessible(true);
 
@@ -1025,7 +1030,7 @@ class AppControllerTest extends TestCase
         $session->write($sessionKey, $sessionValue);
 
         // do controller call
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('applySessionFilter');
         $method->setAccessible(true);
         $result = $method->invokeArgs($this->AppController, []);
@@ -1140,7 +1145,7 @@ class AppControllerTest extends TestCase
         $this->AppController->Modules->setConfig('currentModuleName', $moduleName);
 
         // do controller call
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('setObjectNav');
         $method->setAccessible(true);
         $method->invokeArgs($this->AppController, [ $objects ]);
@@ -1198,7 +1203,7 @@ class AppControllerTest extends TestCase
         $this->AppController->Modules->setConfig('currentModuleName', $moduleName);
 
         // set objectNav data
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('setObjectNav');
         $method->setAccessible(true);
         $method->invokeArgs($this->AppController, [ $objects ]);
@@ -1233,7 +1238,7 @@ class AppControllerTest extends TestCase
         $this->setupController();
 
         // set objectNav data to empty array
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('setObjectNav');
         $method->setAccessible(true);
         $method->invokeArgs($this->AppController, [ [] ]);
@@ -1307,7 +1312,7 @@ class AppControllerTest extends TestCase
     public function testRelatedIds($items, array $expected): void
     {
         $this->setupController();
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('relatedIds');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->AppController, [$items]);

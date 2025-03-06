@@ -13,10 +13,12 @@
 namespace App\Core\Filter;
 
 use App\Core\Result\ImportResult;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Filesystem\File;
 use Cake\Log\LogTrait;
 use Cake\Utility\Hash;
+use LogicException;
 
 /**
  * Import abstract class
@@ -30,14 +32,14 @@ abstract class ImportFilter
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $apiClient = null;
+    protected BEditaClient $apiClient = null;
 
     /**
      * Filter import result
      *
      * @var \App\Core\Result\ImportResult
      */
-    protected $result = null;
+    protected ImportResult $result = null;
 
     /**
      * The service name used by async job.
@@ -45,7 +47,7 @@ abstract class ImportFilter
      *
      * @var string
      */
-    protected static $serviceName = null;
+    protected static string $serviceName = null;
 
     /**
      * Constructor
@@ -78,7 +80,7 @@ abstract class ImportFilter
      * @param array $options The import options
      * @return \App\Core\Result\ImportResult The result
      */
-    abstract public function import($filename, $filepath, ?array $options = []): ImportResult;
+    abstract public function import(string $filename, string $filepath, ?array $options = []): ImportResult;
 
     /**
      * Upload file used to import data and create async job linking to it.
@@ -89,10 +91,10 @@ abstract class ImportFilter
      * @return \App\Core\Result\ImportResult
      * @throws \LogicException When method is called but missing the async job service name.
      */
-    protected function createAsyncJob($filename, $filepath, ?array $options = []): ImportResult
+    protected function createAsyncJob(string $filename, string $filepath, ?array $options = []): ImportResult
     {
         if (empty(static::getServiceName())) {
-            throw new \LogicException('Cannot create async job without service name defined.');
+            throw new LogicException('Cannot create async job without service name defined.');
         }
 
         // upload file to import

@@ -30,7 +30,7 @@ class CategoriesController extends AppController
      *
      * @var string
      */
-    protected $objectType = null;
+    protected string $objectType = null;
 
     /**
      * @inheritDoc

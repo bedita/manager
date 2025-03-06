@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\View\Helper;
 
+use App\Plugin;
 use App\Utility\CacheTools;
 use App\View\Helper\EditorsHelper;
 use App\View\Helper\LayoutHelper;
@@ -23,6 +24,7 @@ use Cake\Core\Configure;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\Cookie\CookieCollection;
 use Cake\Http\ServerRequest;
+use Cake\I18n\I18n;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Cake\View\View;
@@ -584,9 +586,9 @@ class LayoutHelperTest extends TestCase
             'currentModule' => ['name' => 'home'],
             'template' => '',
             'modules' => ['documents', 'images'],
-            'plugins' => \App\Plugin::loadedAppPlugins(),
+            'plugins' => Plugin::loadedAppPlugins(),
             'uploadable' => ['images'],
-            'locale' => \Cake\I18n\I18n::getLocale(),
+            'locale' => I18n::getLocale(),
             'csrfToken' => 'my-token',
             'maxFileSize' => $system->getMaxFileSize(),
             'canReadUsers' => false,

@@ -17,6 +17,7 @@ use App\Core\Result\ImportResult;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
+use LogicException;
 
 /**
  * {@see \App\Core\Filter\ImportFilter} Test Case
@@ -56,7 +57,7 @@ class ImportFilterTest extends TestCase
                 '',
                 '',
                 [],
-                new \LogicException('Cannot create async job without service name defined.'),
+                new LogicException('Cannot create async job without service name defined.'),
             ],
             'job to import file scheduled' => [
                 'App\Test\Utils\MyDummyImportFilter',
@@ -82,7 +83,7 @@ class ImportFilterTest extends TestCase
      */
     public function testCreateAsyncJob($filterClassName, $filename, $filepath, $options, $expected): void
     {
-        if ($expected instanceof \LogicException) {
+        if ($expected instanceof LogicException) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());

@@ -19,6 +19,7 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Exception;
 
 /**
  * {@see \App\Controller\Model\PropertyTypesController} Test Case
@@ -202,7 +203,7 @@ class PropertyTypesControllerTest extends TestCase
         $this->setupController($config);
         $this->ModelController->setResourceType('property_types');
 
-        if ($expectedResponse instanceof \Exception) {
+        if ($expectedResponse instanceof Exception) {
             $this->expectException(get_class($expectedResponse));
             $this->expectExceptionCode($expectedResponse->getCode());
             $this->expectExceptionMessage($expectedResponse->getMessage());

@@ -33,14 +33,14 @@ trait ApiConfigTrait
      *
      * @var string
      */
-    protected static $cacheKey = 'api_config';
+    protected static string $cacheKey = 'api_config';
 
     /**
      * Allowed configuration keys from API
      *
      * @var array
      */
-    protected static $configKeys = [
+    protected static array $configKeys = [
         'AccessControl',
         'AlertMessage',
         'AlertMessageByArea',

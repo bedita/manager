@@ -33,7 +33,7 @@ class StatisticsController extends ModelBaseController
      *
      * @var string
      */
-    protected $resourceType = 'object_types';
+    protected string $resourceType = 'object_types';
 
     /**
      * @inheritDoc

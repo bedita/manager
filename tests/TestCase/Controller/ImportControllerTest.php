@@ -28,6 +28,7 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Laminas\Diactoros\UploadedFile;
+use ReflectionClass;
 
 /**
  * {@see \App\Controller\ImportController} Test Case
@@ -142,7 +143,7 @@ class ImportControllerTest extends TestCase
         ];
         Configure::write('Filters.import', $filters);
         $this->setupController('App\Test\Utils\ImportFilterSample');
-        $reflectionClass = new \ReflectionClass($this->Import);
+        $reflectionClass = new ReflectionClass($this->Import);
         $method = $reflectionClass->getMethod('loadFilters');
         $method->setAccessible(true);
         $method->invokeArgs($this->Import, []);
@@ -171,7 +172,7 @@ class ImportControllerTest extends TestCase
     public function testUpdateServiceList(): void
     {
         $this->setupController('App\Test\Utils\ImportFilterSample');
-        $reflectionClass = new \ReflectionClass($this->Import);
+        $reflectionClass = new ReflectionClass($this->Import);
         $method = $reflectionClass->getMethod('updateServiceList');
         $method->setAccessible(true);
         $method->invokeArgs($this->Import, ['App\Test\Utils\ImportFilterSample']);
@@ -192,7 +193,7 @@ class ImportControllerTest extends TestCase
     {
         // empty jobs
         $this->setupController('App\Test\Utils\ImportFilterSample');
-        $reflectionClass = new \ReflectionClass($this->Import);
+        $reflectionClass = new ReflectionClass($this->Import);
         $method = $reflectionClass->getMethod('loadAsyncJobs');
         $method->setAccessible(true);
         $method->invokeArgs($this->Import, []);
@@ -276,7 +277,7 @@ class ImportControllerTest extends TestCase
     public function testUploadErrorMessage(): void
     {
         $this->setupController();
-        $reflectionClass = new \ReflectionClass($this->Import);
+        $reflectionClass = new ReflectionClass($this->Import);
         $method = $reflectionClass->getMethod('uploadErrorMessage');
         $method->setAccessible(true);
         $errors = [

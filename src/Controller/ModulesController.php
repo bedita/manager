@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Utility\CacheTools;
 use App\Utility\Message;
 use App\Utility\PermissionsTrait;
+use App\Utility\Schema;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\Utility\ApiTools;
 use Cake\Core\Configure;
@@ -48,7 +49,7 @@ class ModulesController extends AppController
      *
      * @var string
      */
-    protected $objectType = null;
+    protected string $objectType = null;
 
     /**
      * @inheritDoc
@@ -151,7 +152,7 @@ class ModulesController extends AppController
      * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
      */
-    public function view($id): ?Response
+    public function view(string|int $id): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
 
@@ -210,7 +211,7 @@ class ModulesController extends AppController
      * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
      */
-    public function uname($id): ?Response
+    public function uname(string|int $id): ?Response
     {
         try {
             $response = $this->apiClient->get(sprintf('/objects/%s', $id));
@@ -351,7 +352,7 @@ class ModulesController extends AppController
      * @param string|int $id Object ID.
      * @return \Cake\Http\Response|null
      */
-    public function clone($id): ?Response
+    public function clone(string|int $id): ?Response
     {
         $this->viewBuilder()->setTemplate('view');
         $schema = $this->Schema->getSchema();
@@ -427,7 +428,7 @@ class ModulesController extends AppController
      * @param string $relation The relation name.
      * @return void
      */
-    public function related($id, string $relation): void
+    public function related(string|int $id, string $relation): void
     {
         if ($id === 'new') {
             $this->set('data', []);
@@ -464,7 +465,7 @@ class ModulesController extends AppController
      * @param string $type the resource type name.
      * @return void
      */
-    public function resources($id, string $type): void
+    public function resources(string|int $id, string $type): void
     {
         $this->getRequest()->allowMethod(['get']);
         $query = $this->Query->prepare($this->getRequest()->getQueryParams());
@@ -491,7 +492,7 @@ class ModulesController extends AppController
      * @param string $relation The relation name.
      * @return void
      */
-    public function relationships($id, string $relation): void
+    public function relationships(string|int $id, string $relation): void
     {
         $this->getRequest()->allowMethod(['get']);
         $available = $this->availableRelationshipsUrl($relation);
@@ -544,7 +545,7 @@ class ModulesController extends AppController
      * @param string $objectType objecte type name
      * @return array $schema
      */
-    public function getSchemaForIndex($objectType): array
+    public function getSchemaForIndex(string $objectType): array
     {
         $schema = (array)$this->Schema->getSchema($objectType);
 
@@ -604,7 +605,7 @@ class ModulesController extends AppController
 
         // set right types, considering the object type relations
         $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
-        $rightTypes = \App\Utility\Schema::rightTypes($rel);
+        $rightTypes = Schema::rightTypes($rel);
         $this->set('rightTypes', $rightTypes);
 
         // set schemas for relations right types
