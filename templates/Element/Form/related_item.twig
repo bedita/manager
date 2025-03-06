@@ -202,6 +202,7 @@
             </a>
 
         {% else %}
+    	    <object-info :object-data="related" :properties-config="{{ config('Properties')|json_encode }}"></object-info>
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)">
                 <app-icon icon="carbon:launch"></app-icon>
                 <span class="ml-05">{{ __('Edit') }}</span>

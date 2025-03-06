@@ -23,7 +23,7 @@ export const Dialog = Vue.extend({
                         <app-icon icon="carbon:close"></app-icon>
                     </i>
                 </header>
-                <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>
+                <div class="message mt-1 has-text-size-larger" v-if="message" v-html="message" />
                 <details v-if="!!dumpMessage">
                     <summary><: t('details') :></summary>
                     <pre class="dump"><: dumpMessage :></pre>
