@@ -325,8 +325,11 @@ class AppController extends Controller
      * Get related ids from items array.
      * If items is string, it is json encoded array.
      * If items is array, it can be json encoded array or array of id/type data.
+     *
+     * @param mixed $items Items to parse
+     * @return array
      */
-    protected function relatedIds($items): array
+    protected function relatedIds(mixed $items): array
     {
         if (empty($items)) {
             return [];

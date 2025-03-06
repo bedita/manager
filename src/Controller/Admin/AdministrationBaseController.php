@@ -35,9 +35,9 @@ abstract class AdministrationBaseController extends AppController
     /**
      * Resource type in use
      *
-     * @var string
+     * @var string|null
      */
-    protected string $resourceType = null;
+    protected ?string $resourceType = null;
 
     /**
      * Readonly flag view.
@@ -213,7 +213,6 @@ abstract class AdministrationBaseController extends AppController
      */
     protected function loadData(): array
     {
-        $query = $this->getRequest()->getQueryParams();
         $resourceEndpoint = sprintf('%s/%s', $this->endpoint, $this->resourceType);
         $endpoint = $this->resourceType === 'roles' ? 'roles' : $resourceEndpoint;
         $resultResponse = ['data' => []];

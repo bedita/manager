@@ -23,7 +23,12 @@ use Cake\View\Helper;
  */
 class CategoriesHelper extends Helper
 {
-    public $helpers = ['Form', 'Property'];
+    /**
+     * Helpers
+     *
+     * @var array
+     */
+    public array $helpers = ['Form', 'Property'];
 
     /**
      * Control for categories

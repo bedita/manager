@@ -61,7 +61,7 @@ class TrashControllerTest extends BaseControllerTest
         ];
         $response = $this->client->post(sprintf('/%s', $type), json_encode($body));
         $id = $response['data']['id'];
-        $response = $this->client->delete(sprintf('/%s/%s', $type, $id));
+        $this->client->delete(sprintf('/%s/%s', $type, $id));
 
         return $id;
     }

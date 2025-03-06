@@ -440,7 +440,6 @@ class LinkHelperTest extends TestCase
         // load plugins from config for test
         $app = new Application(CONFIG);
         $app->bootstrap();
-        $debug = Configure::read('debug');
         $pluginsConfig = [
             'DebugKit' => ['debugOnly' => true],
             'Bake' => ['debugOnly' => false],

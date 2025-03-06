@@ -215,7 +215,7 @@ class TrashController extends AppController
      */
     public function deleteData(string $id): void
     {
-        $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $id]]);
+        $this->apiClient->get('/streams', ['filter' => ['object_id' => $id]]);
         $this->apiClient->remove($id);
     }
 

@@ -59,8 +59,6 @@ class ArrayHelperTest extends TestCase
      */
     public function getCombineSchemaProvider(): array
     {
-        $arr = [10, 20, 50, 100];
-
         return [
             'combine arrays' => [
                 [

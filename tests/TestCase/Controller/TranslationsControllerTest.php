@@ -598,7 +598,7 @@ class TranslationsControllerTest extends TestCase
     {
         $o = $this->getTestObject();
         if ($o == null) {
-            $response = $this->client->restoreObject($id, $type);
+            $this->client->restoreObject($id, $type);
         }
     }
 

@@ -865,6 +865,7 @@ class LayoutHelperTest extends TestCase
         static::assertEquals($expected, $actual);
         $actual = $layout->moduleCount($moduleName, 'my-dummy-css-class');
         $expected = sprintf('<span class="module-count">%s</span>', $count);
+        static::assertEquals($expected, $actual);
         Cache::disable();
     }
 

@@ -194,7 +194,6 @@ class ExportComponentTest extends TestCase
     {
         $filename = sprintf('test.%s', $format);
         $actual = $this->Export->format($format, [], $filename, []);
-        $options = compact('filename', 'format');
         static::assertEquals($contentType, $actual['contentType']);
     }
 }

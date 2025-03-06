@@ -175,7 +175,7 @@ class AppControllerTest extends TestCase
         // Mock Authentication component
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
 
-        $event = $this->AppController->dispatchEvent('Controller.initialize');
+        $this->AppController->dispatchEvent('Controller.initialize');
 
         $flash = $this->AppController->getRequest()->getSession()->read('Flash');
 
@@ -286,7 +286,7 @@ class AppControllerTest extends TestCase
     {
         $user = $this->setupControllerAndLogin();
 
-        $event = $this->AppController->dispatchEvent('Controller.beforeRender');
+        $this->AppController->dispatchEvent('Controller.beforeRender');
 
         static::assertArrayHasKey('user', $this->AppController->viewBuilder()->getVars());
         $user = $this->AppController->viewBuilder()->getVar('user');
