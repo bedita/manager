@@ -31,7 +31,7 @@ class PropertiesComponent extends Component
     /**
      * @inheritDoc
      */
-    protected $components = ['Config'];
+    protected array $components = ['Config'];
 
     /**
      * Default properties groups

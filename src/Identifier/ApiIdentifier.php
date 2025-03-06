@@ -16,6 +16,7 @@ use App\Identifier\Resolver\ApiResolver;
 use ArrayAccess;
 use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identifier\Resolver\ResolverAwareTrait;
+use Authentication\Identifier\TokenIdentifier;
 
 /**
  * Identifies authentication credentials through an API.
@@ -39,12 +40,12 @@ class ApiIdentifier extends AbstractIdentifier
     /**
      * @inheritDoc
      */
-    public function identify(array $credentials)
+    public function identify(array $credentials): array|ArrayAccess|null
     {
         if (
-            empty($credentials[self::CREDENTIAL_USERNAME]) &&
-            empty($credentials[self::CREDENTIAL_PASSWORD]) &&
-            empty($credentials[self::CREDENTIAL_TOKEN])
+            empty($credentials[AbstractIdentifier::CREDENTIAL_USERNAME]) &&
+            empty($credentials[AbstractIdentifier::CREDENTIAL_PASSWORD]) &&
+            empty($credentials[TokenIdentifier::CREDENTIAL_TOKEN])
         ) {
             return null;
         }
@@ -72,8 +73,8 @@ class ApiIdentifier extends AbstractIdentifier
         }
 
         // Flatten username and renew token in identity
-        $identity[self::CREDENTIAL_USERNAME] = $identity['attributes']['username'];
-        $identity[self::CREDENTIAL_TOKEN] = $identity['tokens']['renew'];
+        $identity[AbstractIdentifier::CREDENTIAL_USERNAME] = $identity['attributes']['username'];
+        $identity[TokenIdentifier::CREDENTIAL_TOKEN] = $identity['tokens']['renew'];
 
         return $identity;
     }

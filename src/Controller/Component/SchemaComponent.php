@@ -31,7 +31,7 @@ class SchemaComponent extends Component
     /**
      * @inheritDoc
      */
-    public $components = ['Flash'];
+    public array $components = ['Flash'];
 
     /**
      * Cache config name for type schemas.
@@ -43,7 +43,7 @@ class SchemaComponent extends Component
     /**
      * @inheritDoc
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'type' => null, // resource or object type name
         'internalSchema' => false, // use internal schema
     ];

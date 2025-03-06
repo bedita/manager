@@ -184,7 +184,7 @@ class ApiControllerTest extends TestCase
         $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->ApiController->Authentication->setIdentity($user);
         $this->ApiController->dispatchEvent('Controller.initialize');
-        $actual = $this->ApiController->Security->getConfig('unlockedActions');
+        $actual = $this->ApiController->FormProtection->getConfig('unlockedActions');
         $expected = ['post', 'patch', 'delete'];
         static::assertEquals($expected, $actual);
     }
@@ -213,7 +213,7 @@ class ApiControllerTest extends TestCase
         $this->ApiController->setRequest($this->ApiController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->ApiController->Authentication->setIdentity($user);
         $this->ApiController->dispatchEvent('Controller.initialize');
-        $actual = $this->ApiController->Security->getConfig('unlockedActions');
+        $actual = $this->ApiController->FormProtection->getConfig('unlockedActions');
         $expected = ['post', 'patch', 'delete'];
         static::assertEquals($expected, $actual);
     }

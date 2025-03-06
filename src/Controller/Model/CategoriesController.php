@@ -26,9 +26,9 @@ class CategoriesController extends ModelBaseController
     /**
      * Resource type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected string $resourceType = 'categories';
+    protected ?string $resourceType = 'categories';
 
     /**
      * Single resource view exists

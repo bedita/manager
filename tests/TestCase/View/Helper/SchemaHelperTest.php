@@ -16,7 +16,7 @@ namespace App\Test\TestCase\View\Helper;
 use App\View\Helper\SchemaHelper;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Cake\View\View;
@@ -649,9 +649,9 @@ class SchemaHelperTest extends TestCase
      */
     public function formatProvider(): array
     {
-        $d = new FrozenTime('2019-09-08');
+        $d = new DateTime('2019-09-08');
         $dateExpected = $d->i18nFormat();
-        $d = new FrozenTime('2019-09-08T16:35:15+00');
+        $d = new DateTime('2019-09-08T16:35:15+00');
         $dateTimeExpected = $d->i18nFormat();
 
         return [

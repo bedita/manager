@@ -34,7 +34,7 @@ class SchemaHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Time'];
+    public array $helpers = ['Time'];
 
     /**
      * Default translatable fields to be prepended in translations

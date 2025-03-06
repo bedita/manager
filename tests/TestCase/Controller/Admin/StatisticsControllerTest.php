@@ -104,7 +104,7 @@ class StatisticsControllerTest extends TestCase
      */
     public function testFetchCountZero(): void
     {
-        $controller = new class () extends StatisticsController {
+        $controller = new class (new ServerRequest()) extends StatisticsController {
             public function fetchCount(string $objectType, string $start, string $end): int
             {
                 return parent::fetchCount($objectType, $start, $end);

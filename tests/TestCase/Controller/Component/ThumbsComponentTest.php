@@ -37,7 +37,7 @@ class ThumbsComponentTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $controller = new Controller();
+        $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
         /** @var \App\Controller\Component\ThumbsComponent $thumbsComponent */
         $thumbsComponent = $registry->load(ThumbsComponent::class);

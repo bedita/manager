@@ -45,9 +45,9 @@ class ObjectTypesController extends ModelBaseController
     /**
      * Resource type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected string $resourceType = 'object_types';
+    protected ?string $resourceType = 'object_types';
 
     /**
      * @inheritDoc

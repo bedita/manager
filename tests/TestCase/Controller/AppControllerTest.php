@@ -18,7 +18,7 @@ use App\Form\Form;
 use App\Identifier\ApiIdentifier;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
-use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
@@ -102,8 +102,8 @@ class AppControllerTest extends TestCase
         $service->loadIdentifier(ApiIdentifier::class);
         $service->loadAuthenticator('Authentication.Form', [
             'fields' => [
-                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+                AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
             ],
         ]);
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $service));
@@ -154,9 +154,8 @@ class AppControllerTest extends TestCase
     {
         $this->setupController();
 
-        static::assertNotEmpty($this->AppController->{'RequestHandler'});
         static::assertNotEmpty($this->AppController->{'Flash'});
-        static::assertNotEmpty($this->AppController->{'Security'});
+        static::assertNotEmpty($this->AppController->{'FormProtection'});
         static::assertNotEmpty($this->AppController->{'Authentication'});
         static::assertNotEmpty($this->AppController->{'Modules'});
         static::assertNotEmpty($this->AppController->{'Schema'});
@@ -771,7 +770,7 @@ class AppControllerTest extends TestCase
      */
     public function testChangedAttributes(array $data, array $expected): void
     {
-        $controller = new class extends AppController {
+        $controller = new class (new ServerRequest()) extends AppController {
             /**
              * Wrapper for changedAttributes() method.
              *

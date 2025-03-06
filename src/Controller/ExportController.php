@@ -53,7 +53,7 @@ class ExportController extends AppController
         parent::initialize();
 
         $this->loadComponent('Export');
-        $this->Security->setConfig('unlockedActions', ['related']);
+        $this->FormProtection->setConfig('unlockedActions', ['related']);
     }
 
     /**

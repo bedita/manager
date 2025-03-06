@@ -208,7 +208,7 @@ class HistoryControllerTest extends TestCase
         $keepUname = (bool)$data['keepUname'];
 
         // call protected method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
+        $test = new AppControllerTest('test');
         $test->invokeMethod($this->HistoryController, 'setHistory', [$id, $historyId, $keepUname]);
         $actual = $this->HistoryController->getRequest()->getSession()->read(sprintf('history.%s.attributes', $id));
         static::assertEquals($actual, $expected);

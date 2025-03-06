@@ -26,6 +26,7 @@ use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Controller;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -48,7 +49,7 @@ class SchemaTraitTest extends TestCase
     {
         Cache::enable();
         Cache::clearAll();
-        $controller = new Controller();
+        $controller = new Controller(new ServerRequest());
         $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');

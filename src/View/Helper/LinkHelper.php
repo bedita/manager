@@ -43,7 +43,7 @@ class LinkHelper extends Helper
      *  - 'manifestPath': Manifest file path
      *  - 'manifest': Manifest content (array)
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'apiBaseUrl' => '',
         'webBaseUrl' => '',
         'query' => [],

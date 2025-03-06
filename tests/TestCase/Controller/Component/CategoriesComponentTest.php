@@ -20,6 +20,7 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\ComponentRegistry;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 
@@ -44,7 +45,7 @@ class CategoriesComponentTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $controller = new CategoriesController();
+        $controller = new CategoriesController(new ServerRequest());
         $registry = new ComponentRegistry($controller);
         $this->Categories = new CategoriesComponent($registry);
     }
@@ -75,11 +76,11 @@ class CategoriesComponentTest extends TestCase
             ->getMock();
         $apiClient->method('get')
             ->with('/model/categories')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 $args = func_get_args();
 
                 return $args[1]; // options
-            }));
+            });
         ApiClientProvider::setApiClient($apiClient);
 
         // test, default options, no type

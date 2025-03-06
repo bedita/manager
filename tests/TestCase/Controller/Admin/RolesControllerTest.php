@@ -70,8 +70,8 @@ class RolesControllerTest extends BaseControllerTest
         $request = new ServerRequest($config);
         $this->RlsController = new class ($request) extends RolesController
         {
-            protected $resourceType = 'roles';
-            protected $properties = ['name'];
+            protected ?string $resourceType = 'roles';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');

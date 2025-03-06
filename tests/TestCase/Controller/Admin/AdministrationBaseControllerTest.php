@@ -60,7 +60,7 @@ class AdministrationBaseControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->AdministrationBaseController = new class ($request) extends AdministrationBaseController
         {
-            protected $resourceType = 'applications';
+            protected ?string $resourceType = 'applications';
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -81,8 +81,8 @@ class AdministrationBaseControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->RlsController = new class ($request) extends RolesController
         {
-            protected $resourceType = 'roles';
-            protected $properties = ['name'];
+            protected ?string $resourceType = 'roles';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -227,7 +227,7 @@ class AdministrationBaseControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->AdministrationBaseController = new class ($request) extends AdministrationBaseController
         {
-            protected $resourceType = 'wrongtype';
+            protected ?string $resourceType = 'wrongtype';
         };
 
         $this->AdministrationBaseController->index();

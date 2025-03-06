@@ -26,9 +26,9 @@ class Applications
     /**
      * Applications
      *
-     * @var array
+     * @var array|null
      */
-    public static array $applications = null;
+    public static ?array $applications = null;
 
     /**
      * Get application name by application ID

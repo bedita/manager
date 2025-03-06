@@ -154,7 +154,7 @@ class UserProfileControllerTest extends TestCase
         ]);
         $this->UserProfileController = new class ($request) extends UserProfileController
         {
-            public $apiClient;
+            public ?BEditaClient $apiClient;
         };
 
         // mock api patch /auth/user
@@ -181,7 +181,7 @@ class UserProfileControllerTest extends TestCase
         ]);
         $this->UserProfileController = new class ($request) extends UserProfileController
         {
-            public $apiClient;
+            public ?BEditaClient $apiClient;
         };
         $apiClient->method('patch')
             ->with('/auth/user')
@@ -203,7 +203,7 @@ class UserProfileControllerTest extends TestCase
         ]);
         $this->UserProfileController = new class ($request) extends UserProfileController
         {
-            public $apiClient;
+            public ?BEditaClient $apiClient;
         };
         $apiClient->method('patch')
             ->with('/auth/user')

@@ -48,8 +48,8 @@ class EndpointPermissionsControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->EndPermsController = new class ($request) extends EndpointPermissionsController
         {
-            protected $resourceType = 'endpoint_permissions';
-            protected $properties = ['endpoint_id', 'application_id'];
+            protected ?string $resourceType = 'endpoint_permissions';
+            protected array $properties = ['endpoint_id', 'application_id'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -108,8 +108,8 @@ class EndpointPermissionsControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->EndPermsController = new class ($request) extends EndpointPermissionsController
         {
-            protected $resourceType = 'endpoint_permissions';
-            protected $properties = ['endpoint_id', 'application_id'];
+            protected ?string $resourceType = 'endpoint_permissions';
+            protected array $properties = ['endpoint_id', 'application_id'];
         };
         $response = $this->EndPermsController->save();
         static::assertSame(Response::class, get_class($response));

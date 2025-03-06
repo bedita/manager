@@ -22,19 +22,19 @@ class AsyncJobsController extends AdministrationBaseController
     /**
      * Resource type in use
      *
-     * @var string
+     * @var string|null
      */
-    protected string $resourceType = 'async_jobs';
+    protected ?string $resourceType = 'async_jobs';
 
     /**
      * @inheritDoc
      */
-    protected $deleteonly = true;
+    protected bool $deleteonly = true;
 
     /**
      * @inheritDoc
      */
-    protected $properties = [
+    protected array $properties = [
         'service' => 'string',
         'scheduled_from' => 'date',
         'expires' => 'date',
@@ -45,5 +45,5 @@ class AsyncJobsController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $meta = ['created', 'modified', 'completed'];
+    protected array $meta = ['created', 'modified', 'completed'];
 }

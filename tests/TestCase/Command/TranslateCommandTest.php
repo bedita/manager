@@ -28,15 +28,6 @@ class TranslateCommandTest extends TestCase
     use ConsoleIntegrationTestTrait;
 
     /**
-     * @inheritDoc
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->useCommandRunner();
-    }
-
-    /**
      * Test `execute` with code error on no file
      *
      * @return void

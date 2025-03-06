@@ -29,7 +29,7 @@ class TranslatorController extends AppController
     {
         parent::initialize();
         $this->loadComponent('Translator', (array)Configure::read('Translators'));
-        $this->Security->setConfig('unlockedActions', ['translate']);
+        $this->FormProtection->setConfig('unlockedActions', ['translate']);
     }
 
     /**

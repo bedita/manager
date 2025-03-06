@@ -273,7 +273,7 @@ class LinkHelperTest extends TestCase
         ]);
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
+        $test = new AppControllerTest('test');
         $expected = $test->invokeMethod($link, 'replaceQueryParams', [compact('page')]);
         $this->expectOutputString($expected);
         // call page method
@@ -316,7 +316,7 @@ class LinkHelperTest extends TestCase
         ]);
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
+        $test = new AppControllerTest('test');
         $expected = $test->invokeMethod($link, 'replaceQueryParams', [['page_size' => $pageSize]]);
         $this->expectOutputString($expected);
         // call page method
@@ -424,7 +424,7 @@ class LinkHelperTest extends TestCase
     {
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
+        $test = new AppControllerTest('test');
         $actual = $test->invokeMethod($link, 'replaceQueryParams', [$queryParams]);
         static::assertEquals($expected, $actual);
     }
@@ -522,7 +522,7 @@ class LinkHelperTest extends TestCase
     {
         $link = new LinkHelper(new View(new ServerRequest(), null, null, []));
         $link->jsBundle($filter);
-        $actual = $this->getActualOutput();
+        $actual = $this->output();
         static::assertEquals($expected, $actual);
     }
 
@@ -541,7 +541,7 @@ class LinkHelperTest extends TestCase
         $mock->jsBundle(['timezone']);
         $mock->method('findFiles')->willReturn(['app.css']);
         $mock->cssBundle(['timezone']);
-        $actual = $this->getActualOutput();
+        $actual = $this->output();
         static::assertEquals('<script src="/js/app.bundle.js"></script><link rel="stylesheet" href="/css/app.bundle.js.css">', $actual);
     }
 
@@ -574,7 +574,7 @@ class LinkHelperTest extends TestCase
     {
         $link = new LinkHelper(new View(new ServerRequest(), null, null, []));
         $link->cssBundle($filter);
-        $actual = $this->getActualOutput();
+        $actual = $this->output();
         static::assertEquals($expected, $actual);
     }
 

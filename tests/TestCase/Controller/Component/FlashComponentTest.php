@@ -15,6 +15,7 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\AppController;
 use App\Controller\Component\FlashComponent;
 use BEdita\SDK\BEditaClientException;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -43,7 +44,7 @@ class FlashComponentTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->controller = new AppController();
+        $this->controller = new AppController(new ServerRequest());
         $registry = $this->controller->components();
         /** @var \App\Controller\Component\FlashComponent $component */
         $component = $registry->load(FlashComponent::class);

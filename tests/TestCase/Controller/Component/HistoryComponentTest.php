@@ -60,7 +60,7 @@ class HistoryComponentTest extends TestCase
     {
         parent::setUp();
 
-        $controller = new Controller();
+        $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
         /** @var \App\Controller\Component\HistoryComponent $historyComponent */
         $historyComponent = $registry->load(HistoryComponent::class);
@@ -336,7 +336,7 @@ class HistoryComponentTest extends TestCase
     public function testFormatResponseData(array $data, $expected): void
     {
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
+        $test = new AppControllerTest('test');
         $test->invokeMethod($this->HistoryComponent, 'formatResponseData', [&$data[0], $data[1]]);
         $actual = $data[0];
         static::assertEquals($expected, $actual);

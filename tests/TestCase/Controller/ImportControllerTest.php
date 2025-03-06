@@ -16,7 +16,7 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\ImportController;
 use App\Core\Result\ImportResult;
 use Authentication\AuthenticationService;
-use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identity;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
@@ -385,8 +385,8 @@ class ImportControllerTest extends TestCase
         $service->loadIdentifier(ApiIdentifier::class);
         $service->loadAuthenticator('Authentication.Form', [
             'fields' => [
-                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+                AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
             ],
         ]);
         $this->Import->setRequest($this->Import->getRequest()->withAttribute('authentication', $service));

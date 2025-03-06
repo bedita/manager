@@ -52,8 +52,8 @@ class AsyncJobsControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->AsyncJobsController = new class ($request) extends AsyncJobsController
         {
-            protected $resourceType = 'async_jobs';
-            protected $properties = ['name'];
+            protected ?string $resourceType = 'async_jobs';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');

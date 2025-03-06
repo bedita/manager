@@ -17,7 +17,7 @@ use App\Controller\LoginController;
 use App\Identifier\ApiIdentifier;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
-use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
 use Cake\Http\ServerRequest;
@@ -81,8 +81,8 @@ class LoginControllerTest extends TestCase
         $service->loadIdentifier(ApiIdentifier::class);
         $service->loadAuthenticator('Authentication.Form', [
             'fields' => [
-                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+                AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
             ],
         ]);
         $this->Login->setRequest($this->Login->getRequest()->withAttribute('authentication', $service));

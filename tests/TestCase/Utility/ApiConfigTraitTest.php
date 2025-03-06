@@ -218,55 +218,53 @@ class ApiConfigTraitTest extends TestCase
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
         $apiClient->method('get')
-            ->will(
-                $this->returnCallback(
-                    function ($param) {
-                        if ($param === '/config') {
-                            return [
-                                'data' => [
-                                    [
-                                        'id' => 123,
-                                        'attributes' => [
-                                            'name' => 'Gustavo',
-                                            'content' => '{}',
-                                            'context' => 'app',
-                                            'application_id' => 456,
-                                        ],
-                                    ],
-                                    [
-                                        'id' => 124,
-                                        'attributes' => [
-                                            'name' => 'Export',
-                                            'content' => '{"limit":666}',
-                                            'context' => 'app',
-                                            'application_id' => 456,
-                                        ],
-                                    ],
-                                    [
-                                        'id' => 666,
-                                        'attributes' => [
-                                            'name' => 'Supporto',
-                                        ],
+            ->willReturnCallback(
+                function ($param) {
+                    if ($param === '/config') {
+                        return [
+                            'data' => [
+                                [
+                                    'id' => 123,
+                                    'attributes' => [
+                                        'name' => 'Gustavo',
+                                        'content' => '{}',
+                                        'context' => 'app',
+                                        'application_id' => 456,
                                     ],
                                 ],
-                            ];
-                        }
-                        if ($param === '/admin/applications') {
-                            return [
-                                'data' => [
-                                    ['id' => 456, 'attributes' => ['name' => 'manager']],
+                                [
+                                    'id' => 124,
+                                    'attributes' => [
+                                        'name' => 'Export',
+                                        'content' => '{"limit":666}',
+                                        'context' => 'app',
+                                        'application_id' => 456,
+                                    ],
                                 ],
-                            ];
-                        }
-                        if ($param === '/admin/endpoints') {
-                            return [
-                                'data' => [
-                                    ['id' => 123456789, 'attributes' => ['name' => 'auth']],
+                                [
+                                    'id' => 666,
+                                    'attributes' => [
+                                        'name' => 'Supporto',
+                                    ],
                                 ],
-                            ];
-                        }
+                            ],
+                        ];
                     }
-                )
+                    if ($param === '/admin/applications') {
+                        return [
+                            'data' => [
+                                ['id' => 456, 'attributes' => ['name' => 'manager']],
+                            ],
+                        ];
+                    }
+                    if ($param === '/admin/endpoints') {
+                        return [
+                            'data' => [
+                                ['id' => 123456789, 'attributes' => ['name' => 'auth']],
+                            ],
+                        ];
+                    }
+                }
             );
         $apiClient->method('post')->willReturn([]);
         $apiClient->method('patch')->willReturn([]);

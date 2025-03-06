@@ -26,9 +26,9 @@ class RelationsController extends ModelBaseController
     /**
      * Resource type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected string $resourceType = 'relations';
+    protected ?string $resourceType = 'relations';
 
     /**
      * @inheritDoc

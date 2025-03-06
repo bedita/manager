@@ -17,6 +17,7 @@ use App\Controller\ModulesController;
 use App\Utility\CacheTools;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -61,7 +62,7 @@ class PropertiesComponentTest extends TestCase
      */
     protected function createComponent(): void
     {
-        $controller = new ModulesController();
+        $controller = new ModulesController(new ServerRequest());
         $registry = $controller->components();
         // Mock GET /config using cache
         Cache::write(CacheTools::cacheKey('config.Modules'), []);

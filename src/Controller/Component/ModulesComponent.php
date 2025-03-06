@@ -57,12 +57,12 @@ class ModulesComponent extends Component
     /**
      * @inheritDoc
      */
-    public $components = ['Authentication', 'Children', 'Config', 'Parents', 'Schema'];
+    public array $components = ['Authentication', 'Children', 'Config', 'Parents', 'Schema'];
 
     /**
      * @inheritDoc
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'currentModuleName' => null,
         'clearHomeCache' => false,
     ];

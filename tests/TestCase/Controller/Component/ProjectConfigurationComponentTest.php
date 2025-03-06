@@ -8,6 +8,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -31,7 +32,7 @@ class ProjectConfigurationComponentTest extends TestCase
     {
         parent::setUp();
 
-        $controller = new Controller();
+        $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
         $registry->load('Auth');
         /** @var \App\Controller\Component\ProjectConfigurationComponent $projectConfigurationComponent */

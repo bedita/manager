@@ -28,7 +28,7 @@ class ThumbsComponent extends Component
     /**
      * @inheritDoc
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'queryParams' => ['preset' => 'default'],
         'objectTypes' => ['images', 'videos'],
     ];

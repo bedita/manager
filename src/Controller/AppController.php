@@ -40,9 +40,9 @@ class AppController extends Controller
     /**
      * BEdita4 API client
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    protected BEditaClient $apiClient = null;
+    protected ?BEditaClient $apiClient = null;
 
     /**
      * @inheritDoc
@@ -51,7 +51,6 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler', ['enableBeforeRedirect' => false]);
         $this->loadComponent('App.Flash', ['clear' => true]);
         $this->loadComponent('Security');
 
@@ -87,7 +86,7 @@ class AppController extends Controller
             return $this->redirect($route);
         }
         $this->setupOutputTimezone();
-        $this->Security->setConfig('blackHoleCallback', 'blackhole');
+        $this->FormProtection->setConfig('blackHoleCallback', 'blackhole');
 
         return null;
     }

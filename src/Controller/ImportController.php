@@ -35,7 +35,7 @@ class ImportController extends AppController
     {
         parent::initialize();
 
-        $this->Security->setConfig('unlockedActions', ['file']);
+        $this->FormProtection->setConfig('unlockedActions', ['file']);
     }
 
     /**

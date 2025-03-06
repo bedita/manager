@@ -17,7 +17,7 @@ use App\Controller\DashboardController;
 use App\Utility\CacheTools;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
-use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
 use BEdita\WebTools\ApiClientProvider;
@@ -99,8 +99,8 @@ class DashboardControllerTest extends TestCase
         $service->loadIdentifier(ApiIdentifier::class);
         $service->loadAuthenticator('Authentication.Form', [
             'fields' => [
-                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+                AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
             ],
         ]);
         $this->Dashboard->setRequest($this->Dashboard->getRequest()->withAttribute('authentication', $service));

@@ -31,6 +31,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Exception;
@@ -79,7 +80,7 @@ class ModulesComponentTest extends TestCase
     {
         parent::setUp();
 
-        $controller = new AppController();
+        $controller = new AppController(new ServerRequest());
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');
         /** @var \App\Controller\Component\ModulesComponent $modulesComponent */
@@ -537,7 +538,7 @@ class ModulesComponentTest extends TestCase
                 ->willThrowException($meta);
         } else {
             $apiClient->method('get')
-                ->will($this->returnCallback(
+                ->willReturnCallback(
                     function ($param) use ($meta, $modules) {
                         $args = func_get_args();
                         if ($args[0] === '/model/object_types') {
@@ -546,7 +547,7 @@ class ModulesComponentTest extends TestCase
 
                         return compact('meta');
                     }
-                ));
+                );
         }
         ApiClientProvider::setApiClient($apiClient);
 
@@ -934,7 +935,7 @@ class ModulesComponentTest extends TestCase
             $this->Modules->upload($requestData);
         } else {
             // mock for ModulesComponent
-            $controller = new Controller();
+            $controller = new Controller(new ServerRequest());
             $registry = $controller->components();
             $myModules = new class ($registry) extends ModulesComponent
             {
@@ -1477,7 +1478,7 @@ class ModulesComponentTest extends TestCase
     public function testRelationsSchema(array $schema, array $relationships, array $expected): void
     {
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
+        $test = new AppControllerTest('test');
         $actual = $test->invokeMethod($this->MyModules, 'relationsSchema', [$schema, $relationships]);
         static::assertEquals($expected, $actual);
     }
@@ -1639,23 +1640,23 @@ class ModulesComponentTest extends TestCase
             ->setConstructorArgs(['https://media.example.org'])
             ->getMock();
         $apiClient->method('addRelated')
-            ->will($this->returnCallback(function () use (&$actual) {
+            ->willReturnCallback(function () use (&$actual) {
                 $actual = 'addRelated';
 
                 return ['response addRelated'];
-            }));
+            });
         $apiClient->method('removeRelated')
-            ->will($this->returnCallback(function () use (&$actual) {
+            ->willReturnCallback(function () use (&$actual) {
                 $actual = 'removeRelated';
 
                 return ['response removeRelated'];
-            }));
+            });
         $apiClient->method('replaceRelated')
-            ->will($this->returnCallback(function () use (&$actual) {
+            ->willReturnCallback(function () use (&$actual) {
                 $actual = 'replaceRelated';
 
                 return ['response replaceRelated'];
-            }));
+            });
         ApiClientProvider::setApiClient($apiClient);
         $this->Modules->saveRelated((string)$id, $type, $relatedData);
         static::assertEquals($expected, $actual);

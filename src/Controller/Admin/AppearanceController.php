@@ -31,14 +31,14 @@ class AppearanceController extends AdministrationBaseController
     /**
      * Resource type in use
      *
-     * @var string
+     * @var string|null
      */
-    protected string $resourceType = 'config';
+    protected ?string $resourceType = 'config';
 
     /**
      * @inheritDoc
      */
-    protected $readonly = false;
+    protected bool $readonly = false;
 
     /**
      * @inheritDoc
@@ -47,7 +47,7 @@ class AppearanceController extends AdministrationBaseController
     {
         parent::initialize();
 
-        $this->Security->setConfig('unlockedActions', ['save']);
+        $this->FormProtection->setConfig('unlockedActions', ['save']);
     }
 
     /**

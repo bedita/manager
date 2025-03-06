@@ -9,6 +9,7 @@ use Authentication\IdentityInterface;
 use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Psr\Http\Message\ResponseInterface;
@@ -42,7 +43,7 @@ class ObjectsEditorsComponentTest extends TestCase
     {
         Cache::enable();
         parent::setUp();
-        $controller = new Controller();
+        $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');
         /** @var \App\Controller\Component\ObjectsEditorsComponent $objectsEditorsComponent */

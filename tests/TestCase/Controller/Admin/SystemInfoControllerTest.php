@@ -137,7 +137,7 @@ class SystemInfoControllerTest extends TestCase
             'Url' => getenv('BEDITA_API'),
             'Version' => '',
         ];
-        $controller = new class () extends SystemInfoController {
+        $controller = new class (new ServerRequest()) extends SystemInfoController {
             public function setApiClient($client): void
             {
                 $this->apiClient = $client;

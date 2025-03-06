@@ -27,16 +27,16 @@ class BulkController extends AppController
     /**
      * Object type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected string $objectType = null;
+    protected ?string $objectType = null;
 
     /**
      * Object type is abstract
      *
-     * @var bool
+     * @var bool|null
      */
-    protected bool $abstractType = null;
+    protected ?bool $abstractType = null;
 
     /**
      * Selected objects IDs

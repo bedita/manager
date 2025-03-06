@@ -48,8 +48,8 @@ class ConfigControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->CfgController = new class ($request) extends ConfigController
         {
-            protected $resourceType = 'config';
-            protected $properties = ['name'];
+            protected ?string $resourceType = 'config';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');

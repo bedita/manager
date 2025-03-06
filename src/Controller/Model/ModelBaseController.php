@@ -30,9 +30,9 @@ abstract class ModelBaseController extends AppController
     /**
      * Resource type in use (object_types, properties, property_types)
      *
-     * @var string
+     * @var string|null
      */
-    protected string $resourceType = null;
+    protected ?string $resourceType = null;
 
     /**
      * Single resource view existence flag.

@@ -26,7 +26,7 @@ class QueryComponentTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $controller = new Controller();
+        $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
         /** @var \App\Controller\Component\QueryComponent $queryComponent */
         $queryComponent = $registry->load(QueryComponent::class);

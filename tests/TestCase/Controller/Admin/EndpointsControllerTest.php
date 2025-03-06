@@ -47,8 +47,8 @@ class EndpointsControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->EndsController = new class ($request) extends EndpointsController
         {
-            protected $resourceType = 'endpoints';
-            protected $properties = ['name'];
+            protected string|null $resourceType = 'endpoints';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');

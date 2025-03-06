@@ -79,8 +79,8 @@ class RolesModulesControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->RlsController = new class ($request) extends RolesModulesController
         {
-            protected $resourceType = 'roles';
-            protected $properties = ['name'];
+            protected ?string $resourceType = 'roles';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -131,17 +131,15 @@ class RolesModulesControllerTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://example.com'])
             ->getMock();
-        $apiClient->method('get')->will(
-            $this->returnCallback(
-                function ($param) {
-                    if ($param === '/roles') {
-                        return ['data' => [], 'meta' => [], 'links' => []];
-                    }
-                    if ($param === '/admin/endpoint_permissions') {
-                        throw new BEditaClientException('My test exception');
-                    }
+        $apiClient->method('get')->willReturnCallback(
+            function ($param) {
+                if ($param === '/roles') {
+                    return ['data' => [], 'meta' => [], 'links' => []];
                 }
-            )
+                if ($param === '/admin/endpoint_permissions') {
+                    throw new BEditaClientException('My test exception');
+                }
+            }
         );
         $this->RlsController->apiClient = $apiClient;
         $this->RlsController->index();

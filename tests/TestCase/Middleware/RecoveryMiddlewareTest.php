@@ -17,7 +17,7 @@ use App\Identifier\ApiIdentifier;
 use App\Middleware\RecoveryMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\Authenticator\UnauthenticatedException;
-use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identity;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
@@ -104,8 +104,8 @@ class RecoveryMiddlewareTest extends TestCase
         $service->loadIdentifier(ApiIdentifier::class);
         $service->loadAuthenticator('Authentication.Form', [
             'fields' => [
-                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+                AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
             ],
         ]);
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $service));

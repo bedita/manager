@@ -68,7 +68,7 @@ class ModelBaseControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->ModelController = new class ($request) extends ModelBaseController
         {
-            protected $resourceType = 'object_types';
+            protected ?string $resourceType = 'object_types';
 
             public function setResourceType(string $type): void
             {

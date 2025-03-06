@@ -28,9 +28,9 @@ class TagsController extends ModelBaseController
     /**
      * Resource type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected string $resourceType = 'tags';
+    protected ?string $resourceType = 'tags';
 
     /**
      * Single resource view exists

@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\ErrorController;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -38,19 +39,6 @@ class ErrorControllerTest extends TestCase
      */
     protected function setupController(): void
     {
-        $this->ErrorController = new ErrorController();
-    }
-
-    /**
-     * test `initialize` function
-     *
-     * @covers ::initialize()
-     * @return void
-     */
-    public function testInitialize(): void
-    {
-        $this->setupController();
-
-        static::assertNotEmpty($this->ErrorController->{'RequestHandler'});
+        $this->ErrorController = new ErrorController(new ServerRequest());
     }
 }
