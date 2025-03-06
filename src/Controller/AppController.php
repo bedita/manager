@@ -52,7 +52,7 @@ class AppController extends Controller
         parent::initialize();
 
         $this->loadComponent('App.Flash', ['clear' => true]);
-        $this->loadComponent('Security');
+        $this->loadComponent('FormProtection');
 
         // API config may not be set in `login` for a multi-project setup
         if (Configure::check('API.apiBaseUrl')) {
