@@ -20,13 +20,19 @@ use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Text;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Event\TreeCacheEventHandler} Test Case
- *
- * @coversDefaultClass \App\Event\TreeCacheEventHandler
- * @uses \App\Event\TreeCacheEventHandler
  */
+#[CoversClass(TreeCacheEventHandler::class)]
+#[CoversMethod(TreeCacheEventHandler::class, 'afterDelete')]
+#[CoversMethod(TreeCacheEventHandler::class, 'afterSave')]
+#[CoversMethod(TreeCacheEventHandler::class, 'afterSaveRelated')]
+#[CoversMethod(TreeCacheEventHandler::class, 'implementedEvents')]
+#[CoversMethod(TreeCacheEventHandler::class, 'updateCache')]
 class TreeCacheEventHandlerTest extends TestCase
 {
     /**
@@ -50,7 +56,6 @@ class TreeCacheEventHandlerTest extends TestCase
     /**
      * Test `implementedEvents` method
      *
-     * @covers ::implementedEvents()
      * @return void
      */
     public function testImplementedEvents(): void
@@ -181,12 +186,8 @@ class TreeCacheEventHandlerTest extends TestCase
      * @param array $data Event data.
      * @param bool $cacheClear Expected cache action.
      * @return void
-     * @dataProvider dataProvider
-     * @covers ::afterDelete()
-     * @covers ::afterSave()
-     * @covers ::afterSaveRelated()
-     * @covers ::updateCache()
      */
+    #[DataProvider('dataProvider')]
     public function testAll(string $method, array $data, bool $cacheClear): void
     {
         $randomString = Text::uuid();

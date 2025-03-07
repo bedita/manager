@@ -15,12 +15,16 @@ namespace App\Test\TestCase\Core\Result;
 
 use App\Core\Result\Result;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Core\Result\Result} Test Case
- *
- * @covers \App\Core\Result\Result
  */
+#[CoversClass(Result::class)]
+#[CoversMethod(Result::class, 'addMessage')]
+#[CoversMethod(Result::class, 'increment')]
 class ResultTest extends TestCase
 {
     /**
@@ -51,8 +55,8 @@ class ResultTest extends TestCase
      * @param string $name Message name
      * @param string $msg Message string
      * @return void
-     * @dataProvider addMessageProvider
      */
+    #[DataProvider('addMessageProvider')]
     public function testAddMessage($expected, string $name, string $msg): void
     {
         $result = new Result();
@@ -87,8 +91,8 @@ class ResultTest extends TestCase
      * @param mixed $expected Expected value
      * @param string $name Counter name
      * @return void
-     * @dataProvider incrementProvider
      */
+    #[DataProvider('incrementProvider')]
     public function testIncrement($expected, string $name): void
     {
         $result = new Result();

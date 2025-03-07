@@ -13,17 +13,21 @@
 
 namespace App\Test\TestCase\Core\Filter;
 
+use App\Core\Filter\ImportFilter;
 use App\Core\Result\ImportResult;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 use LogicException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Core\Filter\ImportFilter} Test Case
- *
- * @coversDefaultClass \App\Core\Filter\ImportFilter
  */
+#[CoversClass(ImportFilter::class)]
+#[CoversMethod(ImportFilter::class, 'createAsyncJob')]
 class ImportFilterTest extends TestCase
 {
     /**
@@ -77,9 +81,8 @@ class ImportFilterTest extends TestCase
      * @param array $options The async job options
      * @param \LogicException|\App\Core\Result\ImportResult $expected The result expected
      * @return void
-     * @dataProvider createAsyncJobProvider
-     * @covers ::createAsyncJob()
      */
+    #[DataProvider('createAsyncJobProvider')]
     public function testCreateAsyncJob($filterClassName, $filename, $filepath, $options, $expected): void
     {
         if ($expected instanceof LogicException) {

@@ -15,12 +15,15 @@ namespace App\Test\TestCase\Core\Exception;
 
 use App\Core\Exception\UploadException;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Core\Exception\UploadException} Test Case
- *
- * @coversDefaultClass \App\Core\Exception\UploadException
  */
+#[CoversClass(UploadException::class)]
+#[CoversMethod(UploadException::class, 'codeToMessage')]
 class UploadExceptionTest extends TestCase
 {
     /**
@@ -70,9 +73,8 @@ class UploadExceptionTest extends TestCase
      * Test `codeToMessage` method.
      *
      * @return void
-     * @dataProvider codeToMessageProvider()
-     * @covers ::codeToMessage()
      */
+    #[DataProvider('codeToMessageProvider')]
     public function testCodeToMessage($code, $message): void
     {
         $e = new UploadException('', $code);
