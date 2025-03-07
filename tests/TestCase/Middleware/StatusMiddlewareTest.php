@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Middleware;
 
+use App\Middleware\StatusMiddleware;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -10,13 +11,17 @@ use Cake\TestSuite\TestCase;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\RequestInterface;
 
 /**
  * {@see \App\Middleware\StatusMiddleware} Test Case.
- *
- * @covers \App\Middleware\StatusMiddleware
  */
+#[CoversClass(StatusMiddleware::class)]
+#[CoversMethod(StatusMiddleware::class, 'process')]
+#[CoversMethod(StatusMiddleware::class, 'check')]
 class StatusMiddlewareTest extends TestCase
 {
     use IntegrationTestTrait;
@@ -73,8 +78,8 @@ class StatusMiddlewareTest extends TestCase
      * @param string $method Request method.
      * @param array $config Configuration.
      * @return void
-     * @dataProvider processProvider()
      */
+    #[DataProvider('processProvider')]
     public function testProcess(int $expectedStatus, ?string $expectedBody, string $url, string $method = 'GET', array $config = []): void
     {
         Configure::write($config);

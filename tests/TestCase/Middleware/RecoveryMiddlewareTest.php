@@ -25,15 +25,18 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Http\ServerRequestFactory;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * {@see \App\Middleware\RecoveryMiddleware} Test Case
- *
- * @coversDefaultClass \App\Middleware\RecoveryMiddleware
  */
+#[CoversClass(RecoveryMiddleware::class)]
+#[CoversMethod(RecoveryMiddleware::class, 'process')]
+#[CoversMethod(RecoveryMiddleware::class, 'check')]
 class RecoveryMiddlewareTest extends TestCase
 {
     /**
@@ -47,8 +50,6 @@ class RecoveryMiddlewareTest extends TestCase
      * Test `process` method.
      *
      * @return void
-     * @covers ::process()
-     * @covers ::check()
      */
     public function testProcessAndCheck(): void
     {

@@ -18,15 +18,20 @@ use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Http\ServerRequestFactory;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * {@see \App\Middleware\ProjectMiddleware} Test Case
- *
- * @coversDefaultClass \App\Middleware\ProjectMiddleware
  */
+#[CoversClass(ProjectMiddleware::class)]
+#[CoversMethod(ProjectMiddleware::class, '__construct')]
+#[CoversMethod(ProjectMiddleware::class, 'detectProject')]
+#[CoversMethod(ProjectMiddleware::class, 'process')]
 class ProjectMiddlewareTest extends TestCase
 {
     /**
@@ -68,11 +73,8 @@ class ProjectMiddlewareTest extends TestCase
      * @param int $expected The HTTP status code expected
      * @param array $data Request session data
      * @return void
-     * @dataProvider invokeProvider
-     * @covers ::__construct()
-     * @covers ::process()
-     * @covers ::detectProject()
      */
+    #[DataProvider('invokeProvider')]
     public function testInvoke($expected, $data): void
     {
         Configure::write('Project', null);
