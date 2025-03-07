@@ -55,23 +55,23 @@ class ModulesComponentTest extends TestCase
      *
      * @var \App\Controller\Component\ModulesComponent
      */
-    public $Modules;
+    public ModulesComponent $Modules;
 
     /**
      * Authentication component
      *
      * @var \Authentication\Controller\Component\AuthenticationComponent;
      */
-    public $Authentication;
+    public AuthenticationComponent $Authentication;
 
-    public $MyModules;
+    public ModulesComponent $MyModules;
 
     /**
      * Test api client
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * @inheritDoc
@@ -91,7 +91,7 @@ class ModulesComponentTest extends TestCase
         $this->Authentication = $authenticationComponent;
         $this->MyModules = new class ($registry) extends ModulesComponent
         {
-            public $meta = [];
+            public array $meta = [];
 
             protected function oEmbedMeta(string $url): ?array
             {
@@ -939,7 +939,7 @@ class ModulesComponentTest extends TestCase
             $registry = $controller->components();
             $myModules = new class ($registry) extends ModulesComponent
             {
-                public $meta = [];
+                public array $meta = [];
 
                 protected function oEmbedMeta(string $url): ?array
                 {

@@ -15,14 +15,14 @@ use Cake\TestSuite\TestCase;
  */
 class SystemInfoControllerTest extends TestCase
 {
-    public $SystemInfoController;
+    public SystemInfoController $SystemInfoController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -36,7 +36,7 @@ class SystemInfoControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc

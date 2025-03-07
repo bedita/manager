@@ -18,14 +18,14 @@ class AsyncJobsControllerTest extends TestCase
      *
      * @var \App\Controller\Admin\AsyncJobsController
      */
-    public $AsyncJobsController;
+    public AsyncJobsController $AsyncJobsController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -39,7 +39,7 @@ class AsyncJobsControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc

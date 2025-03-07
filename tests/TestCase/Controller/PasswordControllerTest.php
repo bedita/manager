@@ -45,14 +45,14 @@ class PasswordControllerTest extends TestCase
      *
      * @var \App\Controller\PasswordController
      */
-    public $Password;
+    public PasswordController $Password;
 
     /**
      * Test api client
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * Setup controller to test with request config

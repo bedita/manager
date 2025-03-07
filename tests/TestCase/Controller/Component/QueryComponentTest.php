@@ -18,7 +18,7 @@ class QueryComponentTest extends TestCase
      *
      * @var \App\Controller\Component\QueryComponent
      */
-    public $Query;
+    public QueryComponent $Query;
 
     /**
      * @inheritDoc

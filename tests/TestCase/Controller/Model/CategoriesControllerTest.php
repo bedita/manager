@@ -15,6 +15,7 @@ namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Component\SchemaComponent;
 use App\Controller\Model\CategoriesController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\ComponentRegistry;
 use Cake\Http\ServerRequest;
@@ -36,21 +37,21 @@ class CategoriesControllerTest extends TestCase
      *
      * @var \App\Controller\Model\CategoriesController
      */
-    public $Categories;
+    public CategoriesController $Categories;
 
     /**
      * Client API
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],

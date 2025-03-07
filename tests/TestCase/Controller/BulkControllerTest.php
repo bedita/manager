@@ -43,7 +43,7 @@ class BulkControllerTest extends BaseControllerTest
      *
      * @var \App\Controller\BulkController
      */
-    public $controller;
+    public BulkController $controller;
 
     /**
      * @inheritDoc

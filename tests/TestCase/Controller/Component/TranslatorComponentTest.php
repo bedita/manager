@@ -32,7 +32,7 @@ class TranslatorComponentTest extends TestCase
      *
      * @var \App\Controller\Component\TranslatorComponent
      */
-    public $Translator;
+    public TranslatorComponent $Translator;
 
     /**
      * @inheritDoc

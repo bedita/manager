@@ -37,7 +37,7 @@ class CategoriesComponentTest extends TestCase
      *
      * @var \App\Controller\Component\CategoriesComponent
      */
-    public $Categories;
+    public CategoriesComponent $Categories;
 
     /**
      * @inheritDoc

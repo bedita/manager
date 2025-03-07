@@ -20,21 +20,21 @@ class HistoryControllerTest extends TestCase
      *
      * @var \App\Controller\HistoryController
      */
-    public $HistoryController;
+    public HistoryController $HistoryController;
 
     /**
      * Client class
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    private $ApiClient = null;
+    private ?BEditaClient $ApiClient = null;
 
     /**
      * Document ID
      *
-     * @var string
+     * @var string|null
      */
-    private $documentId = null;
+    private ?string $documentId = null;
 
     /**
      * @inheritDoc

@@ -19,7 +19,7 @@ class AppearanceControllerTest extends TestCase
      *
      * @var \App\Controller\Admin\AppearanceController
      */
-    public $Appearance;
+    public AppearanceController $Appearance;
 
     /**
      * @inheritDoc

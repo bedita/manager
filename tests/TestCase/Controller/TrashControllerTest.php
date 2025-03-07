@@ -40,7 +40,7 @@ class TrashControllerTest extends BaseControllerTest
      *
      * @var \App\Controller\TrashController
      */
-    public $Trash;
+    public TrashController $Trash;
 
     /**
      * Create an object and "soft" delete it

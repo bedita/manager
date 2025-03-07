@@ -23,35 +23,35 @@ class HistoryComponentTest extends TestCase
      *
      * @var \App\Controller\Component\HistoryComponent
      */
-    public $HistoryComponent;
+    public HistoryComponent $HistoryComponent;
 
     /**
      * Http Request
      *
-     * @var \Cake\Http\ServerRequest
+     * @var \Cake\Http\ServerRequest|null
      */
-    private $Request = null;
+    private ?ServerRequest $Request = null;
 
     /**
      * Schema component
      *
      * @var \App\Controller\Component\SchemaComponent
      */
-    public $SchemaComponent;
+    public SchemaComponent $SchemaComponent;
 
     /**
      * Client class
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    private $ApiClient = null;
+    private ?BEditaClient $ApiClient = null;
 
     /**
      * Document ID
      *
-     * @var string
+     * @var string|null
      */
-    private $documentId = null;
+    private ?string $documentId = null;
 
     /**
      * @inheritDoc

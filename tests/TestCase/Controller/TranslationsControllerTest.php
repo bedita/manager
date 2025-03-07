@@ -14,6 +14,7 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\TranslationsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Response;
@@ -46,28 +47,28 @@ class TranslationsControllerTest extends TestCase
      *
      * @var \App\Controller\TranslationsController
      */
-    public $controller;
+    public TranslationsController $controller;
 
     /**
      * Test api client
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * Uname for test object
      *
      * @var string
      */
-    protected $uname = 'translations-controller-test-document';
+    protected string $uname = 'translations-controller-test-document';
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],

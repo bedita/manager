@@ -43,7 +43,7 @@ class DashboardControllerTest extends TestCase
      *
      * @var \App\Controller\DashboardController
      */
-    public $Dashboard;
+    public DashboardController $Dashboard;
 
     /**
      * {@inheritDoc}

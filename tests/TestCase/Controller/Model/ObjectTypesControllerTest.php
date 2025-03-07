@@ -33,9 +33,54 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * The original API client (not mocked).
      *
+     * @var \BEdita\SDK\BEditaClient|null
+     */
+    protected ?BEditaClient $apiClient = null;
+
+    /**
+     * Test subject
+     *
+     * @var \App\Controller\Model\ObjectTypesController
+     */
+    public ObjectTypesController $ModelController;
+
+    /**
+     * Client API
+     *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $apiClient = null;
+    public BEditaClient $client;
+
+    /**
+     * Test default request config
+     *
+     * @var array
+     */
+    public array $defaultRequestConfig = [
+        'environment' => [
+            'REQUEST_METHOD' => 'GET',
+        ],
+        'params' => [
+            'resource_type' => 'object_types',
+        ],
+    ];
+
+    /**
+     * Test `save` request config
+     *
+     * @var array
+     */
+    public array $saveRequestConfig = [
+        'environment' => [
+            'REQUEST_METHOD' => 'POST',
+        ],
+        'post' => [
+            'addedProperties' => '[{"name": "my_prop", "type": "datetime"}]',
+        ],
+        'params' => [
+            'resource_type' => 'object_types',
+        ],
+    ];
 
     /**
      * @inheritDoc
@@ -54,51 +99,6 @@ class ObjectTypesControllerTest extends TestCase
     {
         ApiClientProvider::setApiClient($this->apiClient);
     }
-
-    /**
-     * Test subject
-     *
-     * @var \App\Controller\Model\ObjectTypesController
-     */
-    public $ModelController;
-
-    /**
-     * Client API
-     *
-     * @var \BEdita\SDK\BEditaClient
-     */
-    public $client;
-
-    /**
-     * Test default request config
-     *
-     * @var array
-     */
-    public $defaultRequestConfig = [
-        'environment' => [
-            'REQUEST_METHOD' => 'GET',
-        ],
-        'params' => [
-            'resource_type' => 'object_types',
-        ],
-    ];
-
-    /**
-     * Test `save` request config
-     *
-     * @var array
-     */
-    public $saveRequestConfig = [
-        'environment' => [
-            'REQUEST_METHOD' => 'POST',
-        ],
-        'post' => [
-            'addedProperties' => '[{"name": "my_prop", "type": "datetime"}]',
-        ],
-        'params' => [
-            'resource_type' => 'object_types',
-        ],
-    ];
 
     /**
      * Setup api client and auth

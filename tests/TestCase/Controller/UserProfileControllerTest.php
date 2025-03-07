@@ -37,14 +37,14 @@ class UserProfileControllerTest extends TestCase
         $this->loadRoutes();
     }
 
-    public $UserProfileController;
+    public UserProfileController $UserProfileController;
 
     /**
      * Test api client
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * Setup api client and auth

@@ -30,14 +30,14 @@ class FlashComponentTest extends TestCase
      *
      * @var \App\Controller\Component\FlashComponent
      */
-    public $Flash;
+    public FlashComponent $Flash;
 
     /**
      * Test controller
      *
      * @var \App\Controller\AppController
      */
-    public $controller;
+    public AppController $controller;
 
     /**
      * @inheritDoc

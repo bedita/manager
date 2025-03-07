@@ -37,28 +37,28 @@ use ReflectionClass;
  */
 class ImportControllerTest extends TestCase
 {
-    public $Import;
+    public ImportController $Import;
 
     /**
      * Test file name
      *
      * @var string
      */
-    protected $filename = 'test.png';
+    protected string $filename = 'test.png';
 
     /**
      * Test file error
      *
      * @var int
      */
-    protected $fileError = 0;
+    protected int $fileError = 0;
 
     /**
      * The original API client (not mocked).
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    protected $apiClient = null;
+    protected ?BEditaClient $apiClient = null;
 
     /**
      * @inheritDoc

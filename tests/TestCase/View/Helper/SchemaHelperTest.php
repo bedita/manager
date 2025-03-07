@@ -49,7 +49,7 @@ class SchemaHelperTest extends TestCase
      *
      * @var \App\View\Helper\SchemaHelper
      */
-    public $Schema;
+    public SchemaHelper $Schema;
 
     /**
      * @inheritDoc

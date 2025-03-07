@@ -17,6 +17,7 @@ use App\Controller\Model\ModelBaseController;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
@@ -33,14 +34,14 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class ModelBaseControllerTest extends TestCase
 {
-    public $ModelController;
+    public ModelBaseController $ModelController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -54,7 +55,7 @@ class ModelBaseControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc

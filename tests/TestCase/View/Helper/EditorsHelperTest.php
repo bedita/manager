@@ -32,7 +32,7 @@ class EditorsHelperTest extends TestCase
      *
      * @var \App\View\Helper\EditorsHelper
      */
-    public $EditorsHelper;
+    public EditorsHelper $EditorsHelper;
 
     /**
      * @inheritDoc

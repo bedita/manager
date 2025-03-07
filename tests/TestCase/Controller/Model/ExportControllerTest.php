@@ -33,14 +33,14 @@ class ExportControllerTest extends TestCase
      *
      * @var \App\Controller\Model\ExportController
      */
-    public $Export;
+    public ExportController $Export;
 
     /**
      * Client API
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $apiClient;
+    public BEditaClient $apiClient;
 
     /**
      * @inheritDoc

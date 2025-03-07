@@ -33,7 +33,7 @@ class CalendarHelperTest extends TestCase
      *
      * @var \App\View\Helper\CalendarHelper
      */
-    public $Calendar;
+    public CalendarHelper $Calendar;
 
     /**
      * @inheritDoc

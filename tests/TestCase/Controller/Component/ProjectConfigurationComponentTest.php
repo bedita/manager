@@ -23,7 +23,7 @@ class ProjectConfigurationComponentTest extends TestCase
      *
      * @var \App\Controller\Component\ProjectConfigurationComponent
      */
-    public $ProjectConfiguration;
+    public ProjectConfigurationComponent $ProjectConfiguration;
 
     /**
      * @inheritDoc

@@ -27,14 +27,14 @@ class ObjectsEditorsComponentTest extends TestCase
      *
      * @var \App\Controller\Component\ObjectsEditorsComponent
      */
-    public $ObjectsEditors;
+    public ObjectsEditorsComponent $ObjectsEditors;
 
     /**
      * Authentication component
      *
      * @var \Authentication\Controller\Component\AuthenticationComponent;
      */
-    public $Authentication;
+    public AuthenticationComponent $Authentication;
 
     /**
      * @inheritDoc

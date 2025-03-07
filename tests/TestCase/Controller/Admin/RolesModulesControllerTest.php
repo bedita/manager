@@ -22,14 +22,14 @@ class RolesModulesControllerTest extends TestCase
 {
     use ApiConfigTrait;
 
-    public $RlsController;
+    public RolesModulesController $RlsController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -43,7 +43,7 @@ class RolesModulesControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc

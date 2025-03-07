@@ -20,9 +20,9 @@ class DownloadControllerTest extends TestCase
     /**
      * The original API client (not mocked).
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    protected $apiClient = null;
+    protected ?BEditaClient $apiClient = null;
 
     /**
      * @inheritDoc

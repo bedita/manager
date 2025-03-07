@@ -13,6 +13,7 @@
 namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\TagsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -30,21 +31,21 @@ class ModelTagsControllerTest extends TestCase
      *
      * @var \App\Controller\Model\TagsController
      */
-    public $Tags;
+    public TagsController $Tags;
 
     /**
      * Client API
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],

@@ -16,9 +16,9 @@ class CacheControllerTest extends TestCase
     /**
      * Test subject
      *
-     * @var CacheController
+     * @var \App\Controller\Admin\CacheController
      */
-    public $Cache;
+    public CacheController $Cache;
 
     /**
      * @inheritDoc

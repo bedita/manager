@@ -59,7 +59,7 @@ class ModulesControllerTest extends BaseControllerTest
      *
      * @var \App\Test\Utils\ModulesControllerSample
      */
-    public $controller;
+    public ModulesControllerSample $controller;
 
     /**
      * Setup controller to test with request config

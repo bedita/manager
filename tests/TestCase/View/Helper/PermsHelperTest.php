@@ -47,7 +47,7 @@ class PermsHelperTest extends TestCase
      *
      * @var \App\View\Helper\PermsHelper
      */
-    public $Perms;
+    public PermsHelper $Perms;
 
     /**
      * @inheritDoc

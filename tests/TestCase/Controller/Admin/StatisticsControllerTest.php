@@ -3,6 +3,7 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\StatisticsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -14,14 +15,14 @@ use Cake\TestSuite\TestCase;
  */
 class StatisticsControllerTest extends TestCase
 {
-    public $StatisticsController;
+    public StatisticsController $StatisticsController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -32,7 +33,7 @@ class StatisticsControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc

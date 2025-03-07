@@ -6,6 +6,7 @@ use App\Controller\Admin\RolesController;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
@@ -23,16 +24,16 @@ use ReflectionClass;
  */
 class AdministrationBaseControllerTest extends TestCase
 {
-    public $AdministrationBaseController;
+    public AdministrationBaseController $AdministrationBaseController;
 
-    public $RlsController;
+    public RolesController $RlsController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -46,7 +47,7 @@ class AdministrationBaseControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc

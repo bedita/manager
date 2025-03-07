@@ -37,7 +37,7 @@ class CategoriesHelperTest extends TestCase
      *
      * @var \App\View\Helper\CategoriesHelper
      */
-    public $Categories;
+    public CategoriesHelper $Categories;
 
     /**
      * @inheritDoc

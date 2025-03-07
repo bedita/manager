@@ -2,6 +2,7 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\LockController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -21,21 +22,21 @@ class LockControllerTest extends TestCase
      *
      * @var \App\Controller\LockController
      */
-    public $LockController;
+    public LockController $LockController;
 
     /**
      * Client class
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    private $ApiClient = null;
+    private ?BEditaClient $ApiClient = null;
 
     /**
      * Document ID
      *
-     * @var string
+     * @var string|null
      */
-    private $documentId = null;
+    private ?string $documentId = null;
 
     /**
      * @inheritDoc

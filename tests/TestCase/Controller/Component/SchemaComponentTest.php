@@ -50,7 +50,7 @@ class SchemaComponentTest extends TestCase
      *
      * @var \App\Controller\Component\SchemaComponent
      */
-    public $Schema;
+    public SchemaComponent $Schema;
 
     /**
      * @inheritDoc

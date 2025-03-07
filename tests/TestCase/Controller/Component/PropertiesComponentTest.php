@@ -32,7 +32,7 @@ class PropertiesComponentTest extends TestCase
      *
      * @var \App\Controller\Component\PropertiesComponent
      */
-    public $Properties;
+    public PropertiesComponent $Properties;
 
     /**
      * @inheritDoc

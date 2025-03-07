@@ -18,7 +18,7 @@ class ExportComponentTest extends TestCase
      *
      * @var \App\Controller\Component\ExportComponent
      */
-    public $Export;
+    public ExportComponent $Export;
 
     /**
      * @inheritDoc

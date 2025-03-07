@@ -35,7 +35,7 @@ class ArrayHelperTest extends TestCase
      *
      * @var \App\View\Helper\ArrayHelper
      */
-    public $Array;
+    public ArrayHelper $Array;
 
     /**
      * @inheritDoc

@@ -22,14 +22,14 @@ class ThumbsComponentTest extends TestCase
      *
      * @var \App\Controller\Component\ThumbsComponent
      */
-    public $Thumbs;
+    public ThumbsComponent $Thumbs;
 
     /**
      * BEdita client
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * @inheritDoc
