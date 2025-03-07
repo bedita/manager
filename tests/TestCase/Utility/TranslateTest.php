@@ -15,12 +15,15 @@ namespace App\Test\TestCase;
 use App\Utility\Translate;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * App\Utility\Translate Test Case
- *
- * @coversDefaultClass App\Utility\Translate
  */
+#[CoversClass(Translate::class)]
+#[CoversMethod(Translate::class, 'get')]
 class TranslateTest extends TestCase
 {
     /**
@@ -52,9 +55,8 @@ class TranslateTest extends TestCase
      * @param string $name The field name
      * @param string|null $expected The expected result
      * @return void
-     * @dataProvider translateProvider()
-     * @covers ::get()
      */
+    #[DataProvider('translateProvider')]
     public function testTranslate(string $name, ?string $expected): void
     {
         $actual = Translate::get($name);
@@ -65,7 +67,6 @@ class TranslateTest extends TestCase
      * Test `get` method, plugin case
      *
      * @return void
-     * @covers ::get()
      */
     public function testPlugin(): void
     {

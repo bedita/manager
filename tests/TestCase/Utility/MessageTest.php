@@ -17,12 +17,17 @@ namespace App\Test\TestCase;
 use App\Utility\Message;
 use BEdita\SDK\BEditaClientException;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * App\Utility\Message Test Case
- *
- * @coversDefaultClass App\Utility\Message
+ * {@see \App\Utility\Message} Test Case
  */
+#[CoversClass(Message::class)]
+#[CoversMethod(Message::class, '__construct')]
+#[CoversMethod(Message::class, 'get')]
+#[CoversMethod(Message::class, 'prepareDetail')]
 class MessageTest extends TestCase
 {
     /**
@@ -126,11 +131,8 @@ class MessageTest extends TestCase
      * @param \BEdita\SDK\BEditaClientException $error The error
      * @param string $expected The expected result
      * @return void
-     * @covers ::get()
-     * @covers ::__construct()
-     * @covers ::prepareDetail()
-     * @dataProvider getProvider
      */
+    #[DataProvider('getProvider')]
     public function testGet(BEditaClientException $error, string $expected): void
     {
         $message = new Message($error);

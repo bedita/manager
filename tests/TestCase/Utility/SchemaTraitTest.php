@@ -28,14 +28,18 @@ use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Utility\SchemaTrait} Test Case
- *
- * @coversDefaultClass \App\Utility\SchemaTrait
  */
+#[CoversClass(SchemaTrait::class)]
+#[CoversTrait(SchemaTrait::class)]
+#[CoversMethod(SchemaTrait::class, 'getMeta')]
 class SchemaTraitTest extends TestCase
 {
     use SchemaTrait;
@@ -76,7 +80,6 @@ class SchemaTraitTest extends TestCase
      * Test `getMeta`.
      *
      * @return void
-     * @covers ::getMeta()
      */
     public function testGetMeta(): void
     {
@@ -106,17 +109,19 @@ class SchemaTraitTest extends TestCase
      * Test `getMeta` with exception.
      *
      * @return void
-     * @covers ::getMeta()
      */
     public function testGetMetaException(): void
     {
-        $expectedException = new BEditaClientException('test');
-        $apiClient = $this->getMockBuilder(BEditaClient::class)
-            ->setConstructorArgs(['https://api.example.org'])
-            ->getMock();
-        $apiClient->method('get')
-            ->with('/home')
-            ->willThrowException($expectedException);
+        $apiClient = new class ('https://api.example.org') extends BEditaClient {
+            public function get(string $path, ?array $query = null, ?array $headers = null): ?array
+            {
+                if ($path === 'home') {
+                    throw new BEditaClientException('test');
+                }
+
+                return [];
+            }
+        };
         ApiClientProvider::setApiClient($apiClient);
         /** @var \Authentication\Identity $user */
         $user = $this->Authentication->getIdentity();

@@ -82,7 +82,7 @@ trait ApiConfigTrait
     /**
      * Fetch configurations from API
      *
-     * @param null|string $key Configuration key to fetch, fetch all keys if null.
+     * @param string|null $key Configuration key to fetch, fetch all keys if null.
      * @return array
      */
     protected function fetchConfig(?string $key = null): array

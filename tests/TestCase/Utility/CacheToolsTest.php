@@ -16,12 +16,17 @@ use App\Utility\CacheTools;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
- * App\Utility\CacheTools Test Case
- *
- * @coversDefaultClass App\Utility\CacheTools
+ * {@see \App\Utility\CacheTools} Test Case
  */
+#[CoversClass(CacheTools::class)]
+#[CoversMethod(CacheTools::class, 'cacheKey')]
+#[CoversMethod(CacheTools::class, 'existsCount')]
+#[CoversMethod(CacheTools::class, 'getModuleCount')]
+#[CoversMethod(CacheTools::class, 'setModuleCount')]
 class CacheToolsTest extends TestCase
 {
     /**
@@ -46,7 +51,6 @@ class CacheToolsTest extends TestCase
      * Test `cacheKey` method.
      *
      * @return void
-     * @covers ::cacheKey()
      */
     public function testCacheKey(): void
     {
@@ -60,9 +64,6 @@ class CacheToolsTest extends TestCase
      * Test `getModuleCount` and `setModuleCount` methods.
      *
      * @return void
-     * @covers ::existsCount()
-     * @covers ::setModuleCount()
-     * @covers ::getModuleCount()
      */
     public function testGetSetModuleCount(): void
     {

@@ -14,12 +14,16 @@ namespace App\Test\TestCase;
 
 use App\Utility\OEmbed;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * App\Utility\OEmbed Test Case
- *
- * @coversDefaultClass App\Utility\OEmbed
+ * {@see \App\Utility\OEmbed} Test Case
  */
+#[CoversClass(OEmbed::class)]
+#[CoversMethod(OEmbed::class, 'findProvider')]
+#[CoversMethod(OEmbed::class, 'readMetadata')]
 class OEmbedTest extends TestCase
 {
     /**
@@ -74,10 +78,8 @@ class OEmbedTest extends TestCase
      * Test `readMetadata` method
      *
      * @return void
-     * @covers ::readMetadata()
-     * @covers ::findProvider()
-     * @dataProvider readMetadataProvider
      */
+    #[DataProvider('readMetadataProvider')]
     public function testReadMetadata(array $expected, string $url, array $oembedResponse): void
     {
         $oembed = new class () extends OEmbed

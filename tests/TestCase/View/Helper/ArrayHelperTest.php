@@ -22,8 +22,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\ArrayHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\ArrayHelper
  */
 #[CoversClass(ArrayHelper::class)]
 #[CoversMethod(ArrayHelper::class, 'combine')]

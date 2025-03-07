@@ -5,12 +5,18 @@ namespace App\Test\TestCase;
 
 use App\Utility\DateRangesTools;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * App\Utility\DateRangesTools Test Case
- *
- * @coversDefaultClass App\Utility\DateRangesTools
+ * {@see \App\Utility\DateRangesTools} Test Case
  */
+#[CoversClass(DateRangesTools::class)]
+#[CoversMethod(DateRangesTools::class, 'cleanParams')]
+#[CoversMethod(DateRangesTools::class, 'isOneDayRange')]
+#[CoversMethod(DateRangesTools::class, 'parseParams')]
+#[CoversMethod(DateRangesTools::class, 'prepare')]
 class DateRangesToolsTest extends TestCase
 {
     /**
@@ -258,12 +264,8 @@ class DateRangesToolsTest extends TestCase
      * @param array $dateRanges Date ranges to format.
      * @param array $expected Expected result.
      * @return void
-     * @dataProvider prepareProvider()
-     * @covers ::prepare()
-     * @covers ::parseParams()
-     * @covers ::cleanParams()
-     * @covers ::isOneDayRange()
      */
+    #[DataProvider('prepareProvider')]
     public function testPrepare(array $dateRanges, array $expected): void
     {
         $actual = DateRangesTools::prepare($dateRanges);

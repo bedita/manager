@@ -23,12 +23,22 @@ use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\CoversTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Utility\ApiConfigTrait} Test Case
- *
- * @coversDefaultClass \App\Utility\ApiConfigTrait
  */
+#[CoversClass(ApiConfigTrait::class)]
+#[CoversTrait(ApiConfigTrait::class)]
+#[CoversMethod(ApiConfigTrait::class, 'authEndpointId')]
+#[CoversMethod(ApiConfigTrait::class, 'fetchConfig')]
+#[CoversMethod(ApiConfigTrait::class, 'isAppConfig')]
+#[CoversMethod(ApiConfigTrait::class, 'managerApplicationId')]
+#[CoversMethod(ApiConfigTrait::class, 'readApiConfig')]
+#[CoversMethod(ApiConfigTrait::class, 'saveApiConfig')]
 class ApiConfigTraitTest extends TestCase
 {
     use ApiConfigTrait;
@@ -86,10 +96,8 @@ class ApiConfigTraitTest extends TestCase
      * @param mixed $expected Expected result.
      * @param array $content Test cache content.
      * @return void
-     * @covers ::readApiConfig()
-     * @covers ::fetchConfig()
-     * @dataProvider readApiConfigProvider()
      */
+    #[DataProvider('readApiConfigProvider')]
     public function testReadApiCache($expected, array $content): void
     {
         Configure::delete('Export');
@@ -118,8 +126,6 @@ class ApiConfigTraitTest extends TestCase
      * Test `readApiConfig`, exception case.
      *
      * @return void
-     * @covers ::readApiConfig()
-     * @covers ::fetchConfig()
      */
     public function testReadException(): void
     {
@@ -142,7 +148,6 @@ class ApiConfigTraitTest extends TestCase
      * Test `managerApplicationId`.
      *
      * @return void
-     * @covers ::managerApplicationId()
      */
     public function testManagerApplicationId(): void
     {
@@ -156,7 +161,6 @@ class ApiConfigTraitTest extends TestCase
      * Test `authEndpointId`.
      *
      * @return void
-     * @covers ::authEndpointId()
      */
     public function testAuthEndpointId(): void
     {
@@ -170,9 +174,7 @@ class ApiConfigTraitTest extends TestCase
      * Test `save`.
      *
      * @return void
-     * @covers ::saveApiConfig()
-     * @covers ::fetchConfig()
-     * @covers ::isAppConfig()
+
      */
     public function testSave(): void
     {
@@ -195,7 +197,6 @@ class ApiConfigTraitTest extends TestCase
      * Test bad configuration key save
      *
      * @return void
-     * @covers ::saveApiConfig()
      */
     public function testSaveBadKey(): void
     {

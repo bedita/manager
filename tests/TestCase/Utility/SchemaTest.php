@@ -14,19 +14,20 @@ namespace App\Test\TestCase;
 
 use App\Utility\Schema;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * App\Utility\Schema Test Case
- *
- * @coversDefaultClass App\Utility\Schema
  */
+#[CoversClass(Schema::class)]
+#[CoversMethod(Schema::class, 'rightTypes')]
 class SchemaTest extends TestCase
 {
     /**
      * Test `rightTypes` method
      *
      * @return void
-     * @covers ::rightTypes()
      */
     public function testRightTypes(): void
     {

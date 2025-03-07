@@ -88,7 +88,6 @@ class ApplicationTest extends TestCase
      * Test `csrfMiddleware` method
      *
      * @return void
-     * @covers ::csrfMiddleware()
      */
     public function testCsrfMiddleware(): void
     {

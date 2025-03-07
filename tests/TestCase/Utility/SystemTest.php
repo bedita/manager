@@ -17,12 +17,15 @@ namespace App\Test\TestCase;
 
 use App\Utility\System;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * App\Utility\System Test Case
- *
- * @coversDefaultClass App\Utility\System
  */
+#[CoversClass(System::class)]
+#[CoversMethod(System::class, 'compareBEditaApiVersion')]
 class SystemTest extends TestCase
 {
     /**
@@ -47,9 +50,8 @@ class SystemTest extends TestCase
      * @param string $v2 The version to compare against
      * @param bool $expected The expected result
      * @return void
-     * @covers ::compareBEditaApiVersion()
-     * @dataProvider compareBEditaApiVersionProvider
      */
+    #[DataProvider('compareBEditaApiVersionProvider')]
     public function testCompareBEditaApiVersion(string $v1, string $v2, bool $expected): void
     {
         $actual = System::compareBEditaApiVersion($v1, $v2);

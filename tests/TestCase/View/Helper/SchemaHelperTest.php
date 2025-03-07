@@ -30,7 +30,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversClass(SchemaHelper::class)]
 #[CoversMethod(SchemaHelper::class, 'controlOptions')]
 #[CoversMethod(SchemaHelper::class, 'customControl')]
-#[CoversMethod(SchemaHelper::class, 'lang')]
 #[CoversMethod(SchemaHelper::class, 'format')]
 #[CoversMethod(SchemaHelper::class, 'formatByte')]
 #[CoversMethod(SchemaHelper::class, 'formatBoolean')]
