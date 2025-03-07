@@ -535,14 +535,14 @@ class LinkHelperTest extends TestCase
     {
         $view = new View(new ServerRequest(), null, null, []);
         $mock = new class ($view) extends LinkHelper {
-            public function findFiles(array $filter, string $extension): array
+            public function findFiles(array $filter, string $type): array
             {
                 return ['app.bundle.js'];
             }
         };
         $mock->jsBundle(['timezone']);
         $mock = new class ($view) extends LinkHelper {
-            public function findFiles(array $filter, string $extension): array
+            public function findFiles(array $filter, string $type): array
             {
                 return ['app.bundle.css'];
             }
