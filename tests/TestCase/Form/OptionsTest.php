@@ -16,12 +16,26 @@ namespace App\Test\TestCase\Form;
 use App\Form\Options;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Form\Options} Test Case
- *
- * @coversDefaultClass \App\Form\Options
  */
+#[CoversClass(Options::class)]
+#[CoversMethod(Options::class, 'childrenOrder')]
+#[CoversMethod(Options::class, 'confirmPassword')]
+#[CoversMethod(Options::class, 'coords')]
+#[CoversMethod(Options::class, 'customControl')]
+#[CoversMethod(Options::class, 'dateRanges')]
+#[CoversMethod(Options::class, 'endDate')]
+#[CoversMethod(Options::class, 'lang')]
+#[CoversMethod(Options::class, 'password')]
+#[CoversMethod(Options::class, 'oldPassword')]
+#[CoversMethod(Options::class, 'startDate')]
+#[CoversMethod(Options::class, 'status')]
+#[CoversMethod(Options::class, 'title')]
 class OptionsTest extends TestCase
 {
     /**
@@ -230,20 +244,8 @@ class OptionsTest extends TestCase
      * @param array $expected Expected result.
      * @param array $config Configuration.
      * @return void
-     * @dataProvider customControlProvider()
-     * @covers ::customControl()
-     * @covers ::lang
-     * @covers ::dateRanges(()
-     * @covers ::startDate()
-     * @covers ::endDate()
-     * @covers ::status
-     * @covers ::oldPassword
-     * @covers ::password
-     * @covers ::confirmPassword
-     * @covers ::title
-     * @covers ::coords
-     * @covers ::childrenOrder
      */
+    #[DataProvider('customControlProvider')]
     public function testCustomControl(string $name, $value, array $expected, array $config = []): void
     {
         if (!empty($config)) {

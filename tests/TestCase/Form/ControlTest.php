@@ -17,12 +17,30 @@ use App\Form\Control;
 use App\Form\Form;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Form\Control} Test Case
- *
- * @coversDefaultClass \App\Form\Control
  */
+#[CoversClass(Control::class)]
+#[CoversMethod(Control::class, 'categories')]
+#[CoversMethod(Control::class, 'checkbox')]
+#[CoversMethod(Control::class, 'checkboxNullable')]
+#[CoversMethod(Control::class, 'control')]
+#[CoversMethod(Control::class, 'date')]
+#[CoversMethod(Control::class, 'datetime')]
+#[CoversMethod(Control::class, 'email')]
+#[CoversMethod(Control::class, 'enum')]
+#[CoversMethod(Control::class, 'format')]
+#[CoversMethod(Control::class, 'json')]
+#[CoversMethod(Control::class, 'label')]
+#[CoversMethod(Control::class, 'oneOf')]
+#[CoversMethod(Control::class, 'oneOptions')]
+#[CoversMethod(Control::class, 'plaintext')]
+#[CoversMethod(Control::class, 'richtext')]
+#[CoversMethod(Control::class, 'uri')]
 class ControlTest extends TestCase
 {
     /**
@@ -362,21 +380,8 @@ class ControlTest extends TestCase
      * @param mixed|null $value Property value.
      * @param array $expected The expected control.
      * @return void
-     * @dataProvider controlProvider()
-     * @covers ::control()
-     * @covers ::json()
-     * @covers ::richtext()
-     * @covers ::plaintext()
-     * @covers ::datetime()
-     * @covers ::date()
-     * @covers ::checkbox()
-     * @covers ::checkboxNullable()
-     * @covers ::enum()
-     * @covers ::categories()
-     * @covers ::oneOptions()
-     * @covers ::email()
-     * @covers ::uri()
      */
+    #[DataProvider('controlProvider')]
     public function testControl(array $schema, string $type, $value, array $expected): void
     {
         $options = [
@@ -449,9 +454,8 @@ class ControlTest extends TestCase
      * @param array $schema Object schema array.
      * @param string $expected The expected format.
      * @return void
-     * @dataProvider formatProvider()
-     * @covers ::format()
      */
+    #[DataProvider('formatProvider')]
     public function testFormat(array $schema, string $expected): void
     {
         $actual = Control::format($schema);
@@ -497,9 +501,8 @@ class ControlTest extends TestCase
      * @param array $schema Object schema array.
      * @param array $expected The expected val.
      * @return void
-     * @dataProvider oneOfProvider()
-     * @covers ::oneOf()
      */
+    #[DataProvider('oneOfProvider')]
     public function testOneOf(array $schema, array $expected): void
     {
         $actual = Control::oneOf($schema);
@@ -555,9 +558,8 @@ class ControlTest extends TestCase
      * @param mixed|null $customConfig The custom configuration
      * @param string $expected The expected label
      * @return void
-     * @dataProvider labelProvider()
-     * @covers ::label()
      */
+    #[DataProvider('labelProvider')]
     public function testLabel(string $type, string $property, string $value, $customConfig, string $expected): void
     {
         if (!empty($customConfig)) {
@@ -577,9 +579,8 @@ class ControlTest extends TestCase
      * Test `oneOptions`
      *
      * @return void
-     * @dataProvider labelProvider()
-     * @covers ::oneOptions()
      */
+    #[DataProvider('labelProvider')]
     public function testOneOptions(): void
     {
         // empty one

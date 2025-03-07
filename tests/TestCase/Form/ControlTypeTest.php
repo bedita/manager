@@ -15,12 +15,21 @@ namespace App\Test\TestCase\Form;
 
 use App\Form\ControlType;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Form\ControlType} Test Case
- *
- * @coversDefaultClass \App\Form\ControlType
  */
+#[CoversClass(ControlType::class)]
+#[CoversMethod(ControlType::class, 'fromArray')]
+#[CoversMethod(ControlType::class, 'fromBoolean')]
+#[CoversMethod(ControlType::class, 'fromInteger')]
+#[CoversMethod(ControlType::class, 'fromNumber')]
+#[CoversMethod(ControlType::class, 'fromObject')]
+#[CoversMethod(ControlType::class, 'fromSchema')]
+#[CoversMethod(ControlType::class, 'fromString')]
 class ControlTypeTest extends TestCase
 {
     /**
@@ -179,15 +188,8 @@ class ControlTypeTest extends TestCase
      * @param string $expected Expected result.
      * @param array|null $schema Schema.
      * @return void
-     * @dataProvider fromSchemaProvider()
-     * @covers ::fromSchema()
-     * @covers ::fromString()
-     * @covers ::fromNumber()
-     * @covers ::fromInteger()
-     * @covers ::fromBoolean()
-     * @covers ::fromArray()
-     * @covers ::fromObject()
      */
+    #[DataProvider('fromSchemaProvider')]
     public function testFromSchema(string $expected, $schema): void
     {
         $actual = ControlType::fromSchema($schema);
