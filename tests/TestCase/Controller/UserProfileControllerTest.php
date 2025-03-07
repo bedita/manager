@@ -20,14 +20,27 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\UserProfileController} Test Case
- *
- * @coversDefaultClass \App\Controller\UserProfileController
  */
+#[CoversClass(UserProfileController::class)]
+#[CoversMethod(UserProfileController::class, 'changeData')]
+#[CoversMethod(UserProfileController::class, 'changePassword')]
+#[CoversMethod(UserProfileController::class, 'initialize')]
+#[CoversMethod(UserProfileController::class, 'view')]
+#[CoversMethod(UserProfileController::class, 'save')]
 class UserProfileControllerTest extends TestCase
 {
+    /**
+     * Test api client
+     *
+     * @var \BEdita\SDK\BEditaClient
+     */
+    public BEditaClient $client;
+
     /**
      * @inheritDoc
      */
@@ -36,15 +49,6 @@ class UserProfileControllerTest extends TestCase
         parent::setUp();
         $this->loadRoutes();
     }
-
-    public UserProfileController $UserProfileController;
-
-    /**
-     * Test api client
-     *
-     * @var \BEdita\SDK\BEditaClient
-     */
-    public BEditaClient $client;
 
     /**
      * Setup api client and auth
@@ -61,11 +65,11 @@ class UserProfileControllerTest extends TestCase
     }
 
     /**
-     * Setup user profile controller for test
+     * test `initialize` function
      *
      * @return void
      */
-    public function setupController(): void
+    public function testInitialize(): void
     {
         $this->setupApi();
         $config = [
@@ -75,36 +79,36 @@ class UserProfileControllerTest extends TestCase
             'get' => [],
         ];
         $request = new ServerRequest($config);
-        $this->UserProfileController = new class ($request) extends UserProfileController
+        $controller = new class ($request) extends UserProfileController
         {
+            public ?BEditaClient $apiClient;
         };
-    }
-
-    /**
-     * test `initialize` function
-     *
-     * @return void
-     * @covers ::initialize()
-     */
-    public function testInitialize(): void
-    {
-        $this->setupController();
-        static::assertNotEmpty($this->UserProfileController->{'Properties'});
+        static::assertNotEmpty($controller->{'Properties'});
     }
 
     /**
      * Test `view` method
      *
      * @return void
-     * @covers ::view()
      */
     public function testView(): void
     {
-        $this->setupController();
-        $this->UserProfileController->view();
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+        ];
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends UserProfileController
+        {
+            public ?BEditaClient $apiClient;
+        };
+        $controller->view();
         $vars = ['schema', 'object', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->UserProfileController->viewBuilder()->getVar($var));
+            static::assertNotEmpty($controller->viewBuilder()->getVar($var));
         }
     }
 
@@ -112,11 +116,21 @@ class UserProfileControllerTest extends TestCase
      * Test `view` method on exception
      *
      * @return void
-     * @covers ::view()
      */
     public function testViewOnException(): void
     {
-        $this->setupController();
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+        ];
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends UserProfileController
+        {
+            public ?BEditaClient $apiClient;
+        };
 
         // mock api get /auth/user
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -125,21 +139,18 @@ class UserProfileControllerTest extends TestCase
         $apiClient->method('get')
             ->with('/auth/user')
             ->willThrowException(new BEditaClientException('test'));
-        $this->UserProfileController->apiClient = $apiClient;
-        $this->UserProfileController->view();
+        $controller->apiClient = $apiClient;
+        $controller->view();
 
-        static::assertNotEmpty($this->UserProfileController->viewBuilder()->getVar('schema'));
-        static::assertEmpty($this->UserProfileController->viewBuilder()->getVar('object'));
-        static::assertNotEmpty($this->UserProfileController->viewBuilder()->getVar('properties'));
+        static::assertNotEmpty($controller->viewBuilder()->getVar('schema'));
+        static::assertEmpty($controller->viewBuilder()->getVar('object'));
+        static::assertNotEmpty($controller->viewBuilder()->getVar('properties'));
     }
 
     /**
      * Test `save` method on exception
      *
      * @return void
-     * @covers ::save()
-     * @covers ::changePassword()
-     * @covers ::changeData()
      */
     public function testSave(): void
     {
@@ -152,7 +163,7 @@ class UserProfileControllerTest extends TestCase
                 'name' => 'Gustavo',
             ],
         ]);
-        $this->UserProfileController = new class ($request) extends UserProfileController
+        $controller = new class ($request) extends UserProfileController
         {
             public ?BEditaClient $apiClient;
         };
@@ -164,9 +175,9 @@ class UserProfileControllerTest extends TestCase
         $apiClient->method('patch')
             ->with('/auth/user')
             ->willThrowException(new BEditaClientException('some error, whatever'));
-        $this->UserProfileController->apiClient = $apiClient;
-        $this->UserProfileController->save();
-        $flash = $this->UserProfileController->getRequest()->getSession()->read('Flash.flash');
+        $controller->apiClient = $apiClient;
+        $controller->save();
+        $flash = $controller->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('some error, whatever', (string)Hash::get($flash, '0.message'));
 
         // save with password data, no other changes
@@ -179,16 +190,16 @@ class UserProfileControllerTest extends TestCase
                 'old_password' => '__p4ssw0rd__',
             ],
         ]);
-        $this->UserProfileController = new class ($request) extends UserProfileController
+        $controller = new class ($request) extends UserProfileController
         {
             public ?BEditaClient $apiClient;
         };
         $apiClient->method('patch')
             ->with('/auth/user')
             ->willThrowException(new BEditaClientException('some error, whatever'));
-        $this->UserProfileController->apiClient = $apiClient;
-        $this->UserProfileController->save();
-        $flash = $this->UserProfileController->getRequest()->getSession()->read('Flash.flash');
+        $controller->apiClient = $apiClient;
+        $controller->save();
+        $flash = $controller->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('some error, whatever', (string)Hash::get($flash, '0.message'));
 
         // save with no data changed
@@ -201,16 +212,16 @@ class UserProfileControllerTest extends TestCase
                 '_actualAttributes' => json_encode(['name' => 'Gustavo']),
             ],
         ]);
-        $this->UserProfileController = new class ($request) extends UserProfileController
+        $controller = new class ($request) extends UserProfileController
         {
             public ?BEditaClient $apiClient;
         };
         $apiClient->method('patch')
             ->with('/auth/user')
             ->willThrowException(new BEditaClientException('some error, whatever'));
-        $this->UserProfileController->apiClient = $apiClient;
-        $this->UserProfileController->save();
-        $flash = $this->UserProfileController->getRequest()->getSession()->read('Flash.flash');
+        $controller->apiClient = $apiClient;
+        $controller->save();
+        $flash = $controller->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('User profile saved', (string)Hash::get($flash, '0.message'));
     }
 }

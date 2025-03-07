@@ -3,6 +3,7 @@ namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AdministrationBaseController;
 use App\Controller\Admin\RolesController;
+use App\Controller\Component\PropertiesComponent;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
@@ -13,19 +14,26 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
 
 /**
  * {@see \App\Controller\Admin\AdministrationBaseController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\AdministrationBaseController
  */
+#[CoversClass(AdministrationBaseController::class)]
+#[CoversMethod(AdministrationBaseController::class, 'beforeFilter')]
+#[CoversMethod(AdministrationBaseController::class, 'endpoint')]
+#[CoversMethod(AdministrationBaseController::class, 'index')]
+#[CoversMethod(AdministrationBaseController::class, 'initialize')]
+#[CoversMethod(AdministrationBaseController::class, 'loadData')]
+#[CoversMethod(AdministrationBaseController::class, 'remove')]
+#[CoversMethod(AdministrationBaseController::class, 'save')]
 class AdministrationBaseControllerTest extends TestCase
 {
-    public AdministrationBaseController $AdministrationBaseController;
-
     public RolesController $RlsController;
 
     /**
@@ -56,13 +64,6 @@ class AdministrationBaseControllerTest extends TestCase
     {
         parent::setUp();
         $this->loadRoutes();
-
-        $config = array_merge($this->defaultRequestConfig, []);
-        $request = new ServerRequest($config);
-        $this->AdministrationBaseController = new class ($request) extends AdministrationBaseController
-        {
-            protected ?string $resourceType = 'applications';
-        };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
@@ -123,12 +124,18 @@ class AdministrationBaseControllerTest extends TestCase
      * Test `initialize` method
      *
      * @return void
-     * @covers ::initialize()
      */
     public function testInitialize(): void
     {
-        $this->AdministrationBaseController->initialize();
-        static::assertNotEmpty($this->AdministrationBaseController->Properties);
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends AdministrationBaseController
+        {
+            public PropertiesComponent $Properties;
+            protected ?string $resourceType = 'applications';
+        };
+        $controller->initialize();
+        static::assertNotEmpty($controller->Properties);
     }
 
     /**
@@ -171,25 +178,30 @@ class AdministrationBaseControllerTest extends TestCase
      * @param \Exception|string|null $expected Expected result
      * @param array $data setup data for test
      * @return void
-     * @covers ::beforeFilter()
-     * @dataProvider beforeFilterProvider()
      */
+    #[DataProvider('beforeFilterProvider')]
     public function testBeforeFilter($expected, array $data): void
     {
         if (isset($data['tokens'])) {
             $data['tokens'] = $this->client->getTokens();
         }
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends AdministrationBaseController
+        {
+            protected ?string $resourceType = 'applications';
+        };
 
         // Mock Authentication component
-        $this->AdministrationBaseController->setRequest($this->AdministrationBaseController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
-        $this->AdministrationBaseController->Authentication->setIdentity(new Identity($data));
+        $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $controller->Authentication->setIdentity(new Identity($data));
 
         if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
         }
 
-        $event = $this->AdministrationBaseController->dispatchEvent('Controller.beforeFilter');
-        $result = $this->AdministrationBaseController->beforeFilter($event);
+        $event = $controller->dispatchEvent('Controller.beforeFilter');
+        $result = $controller->beforeFilter($event);
 
         if (is_string($expected)) {
             static::assertInstanceOf($expected, $result);
@@ -202,11 +214,16 @@ class AdministrationBaseControllerTest extends TestCase
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {
-        $this->AdministrationBaseController->index();
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends AdministrationBaseController
+        {
+            protected ?string $resourceType = 'applications';
+        };
+        $controller->index();
         $keys = [
             'resources',
             'meta',
@@ -219,20 +236,20 @@ class AdministrationBaseControllerTest extends TestCase
             'readonly',
             'deleteonly',
         ];
-        $viewVars = (array)$this->AdministrationBaseController->viewBuilder()->getVars();
+        $viewVars = (array)$controller->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AdministrationBaseController = new class ($request) extends AdministrationBaseController
+        $controller = new class ($request) extends AdministrationBaseController
         {
             protected ?string $resourceType = 'wrongtype';
         };
 
-        $this->AdministrationBaseController->index();
-        $viewVars = (array)$this->AdministrationBaseController->viewBuilder()->getVars();
+        $controller->index();
+        $viewVars = (array)$controller->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
             static::assertArrayNotHasKey($expectedKey, $viewVars);
         }
@@ -278,9 +295,8 @@ class AdministrationBaseControllerTest extends TestCase
      * Test `save` method
      *
      * @return void
-     * @covers ::save()
-     * @dataProvider saveProvider()
      */
+    #[DataProvider('saveProvider')]
     public function testSave(array $config, string $expected): void
     {
         $this->initRolesController($config);
@@ -296,7 +312,6 @@ class AdministrationBaseControllerTest extends TestCase
      * Test `remove` method
      *
      * @return void
-     * @covers ::remove()
      */
     public function testRemove(): void
     {
@@ -323,7 +338,6 @@ class AdministrationBaseControllerTest extends TestCase
      * Test `endpoint` method
      *
      * @return void
-     * @covers ::endpoint()
      */
     public function testEndpoint(): void
     {
@@ -343,10 +357,16 @@ class AdministrationBaseControllerTest extends TestCase
         $actual = $method->invokeArgs($this->RlsController, []);
         static::assertEquals('/roles', $actual);
 
-        $reflectionClass = new ReflectionClass($this->AdministrationBaseController);
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends AdministrationBaseController
+        {
+            protected ?string $resourceType = 'applications';
+        };
+        $reflectionClass = new ReflectionClass($controller);
         $method = $reflectionClass->getMethod('endpoint');
         $method->setAccessible(true);
-        $actual = $method->invokeArgs($this->AdministrationBaseController, []);
+        $actual = $method->invokeArgs($controller, []);
         static::assertEquals('/admin/applications', $actual);
     }
 
@@ -354,7 +374,6 @@ class AdministrationBaseControllerTest extends TestCase
      * Test `loadData` method
      *
      * @return void
-     * @covers ::loadData()
      */
     public function testLoadData(): void
     {

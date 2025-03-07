@@ -2,6 +2,7 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AsyncJobsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
