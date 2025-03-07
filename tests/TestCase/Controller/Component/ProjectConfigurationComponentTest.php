@@ -2,6 +2,7 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\ProjectConfigurationComponent;
+use Authentication\Controller\Component\AuthenticationComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -10,12 +11,16 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\Component\ProjectConfigurationComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\ProjectConfigurationComponent
  */
+#[CoversClass(ProjectConfigurationComponent::class)]
+#[CoversMethod(ProjectConfigurationComponent::class, 'fetchConfig')]
+#[CoversMethod(ProjectConfigurationComponent::class, 'read')]
 class ProjectConfigurationComponentTest extends TestCase
 {
     /**
@@ -34,7 +39,9 @@ class ProjectConfigurationComponentTest extends TestCase
 
         $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
-        $registry->load('Auth');
+        /** @var \Authentication\Controller\Component\AuthenticationComponent $authenticationComponent */
+        $authenticationComponent = $registry->load(AuthenticationComponent::class);
+        $registry->Authentication = $authenticationComponent;
         /** @var \App\Controller\Component\ProjectConfigurationComponent $projectConfigurationComponent */
         $projectConfigurationComponent = $registry->load(ProjectConfigurationComponent::class);
         $this->ProjectConfiguration = $projectConfigurationComponent;
@@ -82,11 +89,9 @@ class ProjectConfigurationComponentTest extends TestCase
      * @param array $expected Expected result.
      * @param array $config Response from `/config` endpoint.
      * @return void
-     * @dataProvider readProvider()
-     * @covers ::read()
-     * @covers ::fetchConfig()
      */
-    public function testRead($expected, $config): void
+    #[DataProvider('readProvider')]
+    public function testRead(array $expected, array $config): void
     {
         Configure::write('Project.config', null);
         // Setup mock API client.
@@ -108,7 +113,6 @@ class ProjectConfigurationComponentTest extends TestCase
     /**
      * Test `read()` method with configured data
      *
-     * @covers ::read()
      * @return void
      */
     public function testReadFromConf(): void
@@ -122,7 +126,6 @@ class ProjectConfigurationComponentTest extends TestCase
     /**
      * Test `read()` method with API Error
      *
-     * @covers ::read()
      * @return void
      */
     public function testReadError(): void

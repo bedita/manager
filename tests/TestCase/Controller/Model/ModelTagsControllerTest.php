@@ -17,13 +17,15 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Model\TagsController} Test Case
- *
- * @coversDefaultClass \App\Controller\Model\TagsController
- * @uses \App\Controller\Model\TagsController
  */
+#[CoversClass(TagsController::class)]
+#[CoversMethod(TagsController::class, 'index')]
+#[CoversMethod(TagsController::class, 'initialize')]
 class ModelTagsControllerTest extends TestCase
 {
     /**
@@ -85,8 +87,6 @@ class ModelTagsControllerTest extends TestCase
     /**
      * Test `index` method
      *
-     * @covers ::initialize()
-     * @covers ::index()
      * @return void
      */
     public function testIndex(): void

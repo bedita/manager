@@ -5,12 +5,17 @@ use App\Controller\Component\QueryComponent;
 use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\Component\QueryComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\QueryComponent
  */
+#[CoversClass(QueryComponent::class)]
+#[CoversMethod(QueryComponent::class, 'handleSort')]
+#[CoversMethod(QueryComponent::class, 'index')]
+#[CoversMethod(QueryComponent::class, 'prepare')]
 class QueryComponentTest extends TestCase
 {
     /**
@@ -88,10 +93,8 @@ class QueryComponentTest extends TestCase
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
-     * @covers ::handleSort()
-     * @dataProvider indexProvider()
      */
+    #[DataProvider('indexProvider')]
     public function testIndex(array $queryParams, array $config, array $expected): void
     {
         $controller = new Controller(
@@ -165,9 +168,8 @@ class QueryComponentTest extends TestCase
      * Test `prepare` method.
      *
      * @return void
-     * @dataProvider prepareProvider
-     * @covers ::prepare()
      */
+    #[DataProvider('prepareProvider')]
     public function testPrepare(array $expected, array $query): void
     {
         $actual = $this->Query->prepare($query);

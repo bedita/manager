@@ -37,6 +37,9 @@ use Cake\Utility\Hash;
 use Exception;
 use Laminas\Diactoros\Stream;
 use Laminas\Diactoros\UploadedFile;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
@@ -45,9 +48,28 @@ use RuntimeException;
 
 /**
  * {@see \App\Controller\Component\ModulesComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\ModulesComponent
  */
+#[CoversClass(ModulesComponent::class)]
+#[CoversMethod(ModulesComponent::class, 'assocStreamToMedia')]
+#[CoversMethod(ModulesComponent::class, 'beforeFilter')]
+#[CoversMethod(ModulesComponent::class, 'checkRequestForUpload')]
+#[CoversMethod(ModulesComponent::class, 'getModules')]
+#[CoversMethod(ModulesComponent::class, 'getProject')]
+#[CoversMethod(ModulesComponent::class, 'getRelated')]
+#[CoversMethod(ModulesComponent::class, 'isAbstract')]
+#[CoversMethod(ModulesComponent::class, 'modulesByAccessControl')]
+#[CoversMethod(ModulesComponent::class, 'modulesFromMeta')]
+#[CoversMethod(ModulesComponent::class, 'objectTypes')]
+#[CoversMethod(ModulesComponent::class, 'relatedTypes')]
+#[CoversMethod(ModulesComponent::class, 'relationLabels')]
+#[CoversMethod(ModulesComponent::class, 'relationsSchema')]
+#[CoversMethod(ModulesComponent::class, 'removeStream')]
+#[CoversMethod(ModulesComponent::class, 'saveRelated')]
+#[CoversMethod(ModulesComponent::class, 'saveRelatedObjects')]
+#[CoversMethod(ModulesComponent::class, 'setupAttributes')]
+#[CoversMethod(ModulesComponent::class, 'setupRelationsMeta')]
+#[CoversMethod(ModulesComponent::class, 'startup')]
+#[CoversMethod(ModulesComponent::class, 'upload')]
 class ModulesComponentTest extends TestCase
 {
     /**
@@ -204,9 +226,8 @@ class ModulesComponentTest extends TestCase
      * @param array|\Exception $meta Response to `/home` endpoint.
      * @param array $config Project config to set.
      * @return void
-     * @dataProvider getProjectProvider()
-     * @covers ::getProject()
      */
+    #[DataProvider('getProjectProvider')]
     public function testGetProject($expected, $meta, $config = []): void
     {
         // Mock Authentication component
@@ -264,10 +285,9 @@ class ModulesComponentTest extends TestCase
      *
      * @param bool $expected expected results from test
      * @param string $data setup data for test, object type
-     * @dataProvider isAbstractProvider()
-     * @covers ::isAbstract()
      * @return void
      */
+    #[DataProvider('isAbstractProvider')]
     public function testIsAbstract($expected, $data): void
     {
         /** @var \App\Controller\ModulesController $controller */
@@ -334,10 +354,9 @@ class ModulesComponentTest extends TestCase
      *
      * @param array $expected expected results from test
      * @param bool|null $data setup data for test
-     * @dataProvider objectTypesProvider()
-     * @covers ::objectTypes()
      * @return void
      */
+    #[DataProvider('objectTypesProvider')]
     public function testObjectTypes($expected, $data): void
     {
         /** @var \App\Controller\ModulesController $controller */
@@ -501,10 +520,8 @@ class ModulesComponentTest extends TestCase
      * @param array|\Exception $meta Response to `/home` endpoint.
      * @param array $modules Modules configuration.
      * @return void
-     * @dataProvider getModulesProvider()
-     * @covers ::modulesFromMeta()
-     * @covers ::getModules()
      */
+    #[DataProvider('getModulesProvider')]
     public function testGetModules($expected, $meta, array $modules = []): void
     {
         // Setup mock API client.
@@ -643,9 +660,8 @@ class ModulesComponentTest extends TestCase
      * @param array $user The user
      * @param array $expected The expected modules
      * @return void
-     * @dataProvider modulesByAccessControlProvider()
-     * @cover ::modulesByAccessControl()
      */
+    #[DataProvider('modulesByAccessControlProvider')]
     public function testModulesByAccessControl(array $modules, array $accessControl, array $user, array $expected): void
     {
         // Mock Authentication component
@@ -773,10 +789,8 @@ class ModulesComponentTest extends TestCase
      * @param string[] $config Modules configuration.
      * @param string|null $currentModuleName Current module.
      * @return void
-     * @dataProvider startupProvider()
-     * @covers ::startup()
-     * @covers ::beforeFilter()
      */
+    #[DataProvider('startupProvider')]
     public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $config = [], ?string $currentModuleName = null): void
     {
         /** @var \App\Controller\ModulesController $controller */
@@ -912,12 +926,8 @@ class ModulesComponentTest extends TestCase
      * @param \Exception|null $expectedException The exception expected
      * @param array|bool $uploaded The upload result (boolean or expected requestdata)
      * @return void
-     * @covers ::upload()
-     * @covers ::removeStream()
-     * @covers ::assocStreamToMedia()
-     * @covers ::checkRequestForUpload()
-     * @dataProvider uploadProvider()
      */
+    #[DataProvider('uploadProvider')]
     public function testUpload(array $requestData, $expectedException, $uploaded): void
     {
         // if upload failed, verify exception
@@ -984,8 +994,6 @@ class ModulesComponentTest extends TestCase
      * Test `upload` method for InternalErrorException 'Invalid form data: file.name'
      *
      * @return void
-     * @covers ::upload()
-     * @covers ::checkRequestForUpload()
      */
     public function testUploadInvalidFormDataFileName(): void
     {
@@ -1011,8 +1019,6 @@ class ModulesComponentTest extends TestCase
      * Test `upload` method for InternalErrorException 'Invalid form data: file.tmp_name'
      *
      * @return void
-     * @covers ::upload()
-     * @covers ::checkRequestForUpload()
      */
     public function testUploadInvalidFormDataFileTmpName(): void
     {
@@ -1046,7 +1052,6 @@ class ModulesComponentTest extends TestCase
      * Test `removeStream` method
      *
      * @return void
-     * @covers ::removeStream()
      */
     public function testRemoveStreamWhenThereIsNoStream(): void
     {
@@ -1315,9 +1320,6 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `setupRelationsMeta` method
      *
-     * @dataProvider setupRelationsProvider
-     * @covers ::setupRelationsMeta()
-     * @covers ::relationLabels()
      * @param array $expected Expected result.
      * @param array $schema Schema array.
      * @param array $relationships Relationships array.
@@ -1326,6 +1328,7 @@ class ModulesComponentTest extends TestCase
      * @param array $readonly Readonly array.
      * @return void
      */
+    #[DataProvider('setupRelationsProvider')]
     public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = [], array $hidden = [], array $readonly = []): void
     {
         $this->Modules->setupRelationsMeta($schema, $relationships, $order, $hidden, $readonly);
@@ -1343,7 +1346,6 @@ class ModulesComponentTest extends TestCase
      * Test `relatedTypes` method
      *
      * @return void
-     * @covers ::relatedTypes()
      */
     public function testRelatedTypes(): void
     {
@@ -1472,9 +1474,8 @@ class ModulesComponentTest extends TestCase
      * @param array $relationships The relationships
      * @param array $expected The expected result
      * @return void
-     * @dataProvider relationsSchemaProvider()
-     * @covers ::relationsSchema()
      */
+    #[DataProvider('relationsSchemaProvider')]
     public function testRelationsSchema(array $schema, array $relationships, array $expected): void
     {
         // call private method using AppControllerTest->invokeMethod
@@ -1623,10 +1624,8 @@ class ModulesComponentTest extends TestCase
      * @param array $relatedData Related objects data
      * @param mixed $expected The expected result
      * @return void
-     * @dataProvider saveRelatedProvider
-     * @covers ::saveRelated()
-     * @covers ::saveRelatedObjects()
      */
+    #[DataProvider('saveRelatedProvider')]
     public function testSaveRelated(int $id, string $type, array $relatedData, $expected): void
     {
         if ($expected instanceof Exception) {
@@ -1666,7 +1665,6 @@ class ModulesComponentTest extends TestCase
      * Test `getRelated` method on empty relatedIds.
      *
      * @return void
-     * @covers ::getRelated()
      */
     public function testGetRelatedEmpty(): void
     {
@@ -1679,7 +1677,6 @@ class ModulesComponentTest extends TestCase
      * Test `getRelated` method on non-empty relatedIds.
      *
      * @return void
-     * @covers ::getRelated()
      */
     public function testGetRelated(): void
     {
@@ -1709,7 +1706,6 @@ class ModulesComponentTest extends TestCase
      * Test `setupAttributes` method
      *
      * @return void
-     * @covers ::setupAttributes()
      */
     public function testSetupAttributes(): void
     {

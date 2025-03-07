@@ -20,14 +20,22 @@ use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use ReflectionClass;
 
 /**
  * {@see \App\Controller\Model\ObjectTypesController} Test Case
- *
- * @coversDefaultClass \App\Controller\Model\ObjectTypesController
- * @uses \App\Controller\Model\ObjectTypesController
  */
+#[CoversClass(ObjectTypesController::class)]
+#[CoversMethod(ObjectTypesController::class, 'addCustomProperties')]
+#[CoversMethod(ObjectTypesController::class, 'create')]
+#[CoversMethod(ObjectTypesController::class, 'prepareProperties')]
+#[CoversMethod(ObjectTypesController::class, 'propertiesData')]
+#[CoversMethod(ObjectTypesController::class, 'save')]
+#[CoversMethod(ObjectTypesController::class, 'tables')]
+#[CoversMethod(ObjectTypesController::class, 'updateSchema')]
+#[CoversMethod(ObjectTypesController::class, 'view')]
 class ObjectTypesControllerTest extends TestCase
 {
     /**
@@ -131,7 +139,6 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `create` method
      *
-     * @covers ::create()
      * @return void
      */
     public function testCreate(): void
@@ -147,9 +154,6 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `view` method
      *
-     * @covers ::view()
-     * @covers ::prepareProperties()
-     * @covers ::propertiesData()
      * @return void
      */
     public function testView(): void
@@ -170,7 +174,6 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `view` failure method
      *
-     * @covers ::view()
      * @return void
      */
     public function testViewFail(): void
@@ -184,7 +187,6 @@ class ObjectTypesControllerTest extends TestCase
      * Test `updateSchema`
      *
      * @return void
-     * @covers ::updateSchema()
      */
     public function testUpdateSchema(): void
     {
@@ -231,8 +233,6 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `save` method
      *
-     * @covers ::save()
-     * @covers ::addCustomProperties()
      * @return void
      */
     public function testSave(): void
@@ -250,7 +250,6 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `save` method with empty data
      *
-     * @covers ::addCustomProperties()
      * @return void
      */
     public function testSaveEmpty(): void
@@ -268,7 +267,6 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `save` method with empty associations
      *
-     * @covers ::save()
      * @return void
      */
     public function testEmptyAssocSave(): void
@@ -305,7 +303,6 @@ class ObjectTypesControllerTest extends TestCase
      * Test `tables`
      *
      * @return void
-     * @covers ::tables()
      */
     public function testTables(): void
     {

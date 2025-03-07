@@ -19,12 +19,15 @@ use Cake\Core\Configure;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Component\TranslatorComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\TranslatorComponent
  */
+#[CoversClass(TranslatorComponent::class)]
+#[CoversMethod(TranslatorComponent::class, 'initialize')]
+#[CoversMethod(TranslatorComponent::class, 'translate')]
 class TranslatorComponentTest extends TestCase
 {
     /**
@@ -62,8 +65,6 @@ class TranslatorComponentTest extends TestCase
      * Test `translate()` method.
      *
      * @return void
-     * @covers ::translate()
-     * @covers ::initialize()
      */
     public function testTranslateInternalErrorException(): void
     {
@@ -76,8 +77,6 @@ class TranslatorComponentTest extends TestCase
      * Test `translate()` method.
      *
      * @return void
-     * @covers ::translate()
-     * @covers ::initialize()
      */
     public function testTranslate(): void
     {

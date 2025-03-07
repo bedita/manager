@@ -9,12 +9,16 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\Component\ThumbsComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\ThumbsComponent
  */
+#[CoversClass(ThumbsComponent::class)]
+#[CoversMethod(ThumbsComponent::class, 'getThumbs')]
+#[CoversMethod(ThumbsComponent::class, 'urls')]
 class ThumbsComponentTest extends TestCase
 {
     /**
@@ -144,10 +148,8 @@ class ThumbsComponentTest extends TestCase
      * @param array $data The data to process
      * @param ?mixed $mockResponse The mock response, if any
      * @return void
-     * @dataProvider urlsProvider()
-     * @covers ::urls()
-     * @covers ::getThumbs()
      */
+    #[DataProvider('urlsProvider')]
     public function testUrls(array $expected, array $data, $mockResponse = null): void
     {
         $controller = new Controller(new ServerRequest([]));
@@ -171,8 +173,6 @@ class ThumbsComponentTest extends TestCase
      * Test `urls` method, with errors from thumbnail generation API.
      *
      * @return void
-     * @covers ::urls()
-     * @covers ::getThumbs()
      */
     public function testUrlsThumbErrors(): void
     {
@@ -232,8 +232,6 @@ class ThumbsComponentTest extends TestCase
     /**
      * Test `urls` method, exception case
      *
-     * @covers ::urls()
-     * @covers ::getThumbs()
      * @return void
      */
     public function testUrlsException(): void
