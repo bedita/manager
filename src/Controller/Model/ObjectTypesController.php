@@ -182,24 +182,20 @@ class ObjectTypesController extends ModelBaseController
      */
     protected function prepareProperties(array $data, string $name): array
     {
-        $inherited = $core = $custom = [];
+        $map = [
+            'core' => [],
+            'inherited' => [],
+            'custom' => [],
+        ];
         foreach ($data as $prop) {
-            if (!is_numeric($prop['id'])) {
-                $type = $prop['attributes']['object_type_name'];
-                if ($type == $name) {
-                    $core[] = $prop;
-                } else {
-                    $inherited[] = $prop;
-                }
-            } else {
-                $custom[] = $prop;
-            }
+            $key = !is_numeric($prop['id']) ? ($prop['attributes']['object_type_name'] === $name ? 'core' : 'prop') : 'custom';
+            $map[$key][] = $prop;
         }
 
         return [
-            'core' => Hash::sort($core, '{n}.attributes.name'),
-            'inherited' => Hash::sort($inherited, '{n}.attributes.name'),
-            'custom' => Hash::sort($custom, '{n}.attributes.name'),
+            'core' => Hash::sort($map['core'], '{n}.attributes.name'),
+            'inherited' => Hash::sort($map['inherited'], '{n}.attributes.name'),
+            'custom' => Hash::sort($map['custom'], '{n}.attributes.name'),
         ];
     }
 
