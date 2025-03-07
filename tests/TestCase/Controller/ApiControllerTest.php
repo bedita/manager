@@ -23,15 +23,18 @@ use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\ApiController} Test Case
- *
- * @coversDefaultClass \App\Controller\ApiController
- * @uses \App\Controller\ApiController
  */
+#[CoversClass(ApiController::class)]
+#[CoversMethod(ApiController::class, 'allowed')]
+#[CoversMethod(ApiController::class, 'beforeFilter')]
 class ApiControllerTest extends TestCase
 {
     /**
@@ -117,10 +120,8 @@ class ApiControllerTest extends TestCase
      *
      * @param array $config Request configuration.
      * @return void
-     * @dataProvider unauthorizedExceptionProvider
-     * @covers ::beforeFilter()
-     * @covers ::allowed()
      */
+    #[DataProvider('unauthorizedExceptionProvider')]
     public function testUnauthorizedException(array $config): void
     {
         $expected = new UnauthorizedException(__('You are not authorized to access this resource'));
@@ -136,8 +137,6 @@ class ApiControllerTest extends TestCase
      * Test unauthorized role
      *
      * @return void
-     * @covers ::beforeFilter()
-     * @covers ::allowed()
      */
     public function testUnauthorizedRole(): void
     {
@@ -165,8 +164,6 @@ class ApiControllerTest extends TestCase
      * Test for authorized admin
      *
      * @return void
-     * @covers ::beforeFilter()
-     * @covers ::allowed()
      */
     public function testAuthorizeAdmin(): void
     {
@@ -193,8 +190,6 @@ class ApiControllerTest extends TestCase
      * Test for authorized user
      *
      * @return void
-     * @covers ::beforeFilter()
-     * @covers ::allowed()
      */
     public function testUserAllowed(): void
     {

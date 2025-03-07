@@ -13,16 +13,20 @@
 
 namespace App\Test\TestCase\Command;
 
+use App\Command\TranslateCommand;
 use Cake\Command\Command;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Command\TranslateCommand} Test Case
- *
- * @coversDefaultClass \App\Command\TranslateCommand
  */
+#[CoversClass(TranslateCommand::class)]
+#[CoversMethod(TranslateCommand::class, 'buildOptionParser')]
+#[CoversMethod(TranslateCommand::class, 'execute')]
 class TranslateCommandTest extends TestCase
 {
     use ConsoleIntegrationTestTrait;
@@ -31,8 +35,6 @@ class TranslateCommandTest extends TestCase
      * Test `execute` with code error on no file
      *
      * @return void
-     * @covers ::buildOptionParser()
-     * @covers ::execute()
      */
     public function testExecuteNoFile(): void
     {
@@ -44,8 +46,6 @@ class TranslateCommandTest extends TestCase
      * Test `execute` with code error on no translator
      *
      * @return void
-     * @covers ::buildOptionParser()
-     * @covers ::execute()
      */
     public function testExecuteNoTranslator(): void
     {
@@ -58,8 +58,6 @@ class TranslateCommandTest extends TestCase
      * Test `execute` with code success
      *
      * @return void
-     * @covers ::buildOptionParser()
-     * @covers ::execute()
      */
     public function testExecute(): void
     {
