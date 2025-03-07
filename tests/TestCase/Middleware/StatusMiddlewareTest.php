@@ -21,7 +21,6 @@ use Psr\Http\Message\RequestInterface;
  */
 #[CoversClass(StatusMiddleware::class)]
 #[CoversMethod(StatusMiddleware::class, 'process')]
-#[CoversMethod(StatusMiddleware::class, 'check')]
 class StatusMiddlewareTest extends TestCase
 {
     use IntegrationTestTrait;
