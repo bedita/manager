@@ -8,13 +8,16 @@ use Cake\Http\Client\Adapter\Stream;
 use Cake\Http\Client\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\DownloadController} Test Case
- *
- * @coversDefaultClass \App\Controller\DownloadController
- * @uses \App\Controller\DownloadController
  */
+#[CoversClass(DownloadController::class)]
+#[CoversMethod(DownloadController::class, 'content')]
+#[CoversMethod(DownloadController::class, 'download')]
+#[CoversMethod(DownloadController::class, 'streamDownload')]
 class DownloadControllerTest extends TestCase
 {
     /**
@@ -44,8 +47,6 @@ class DownloadControllerTest extends TestCase
      * Test download from URL
      *
      * @return void
-     * @covers ::download()
-     * @covers ::content()
      */
     public function testDownloadUrl(): void
     {
@@ -94,9 +95,6 @@ class DownloadControllerTest extends TestCase
      * Test download from stream
      *
      * @return void
-     * @covers ::download()
-     * @covers ::content()
-     * @covers ::streamDownload()
      */
     public function testDownloadStream(): void
     {

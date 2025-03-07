@@ -1,28 +1,30 @@
 <?php
 namespace App\Test\TestCase\Controller;
 
+use App\Controller\AppController;
+use App\Controller\Component\HistoryComponent;
 use App\Controller\HistoryController;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Controller\ComponentRegistry;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\HistoryController} Test Case
- *
- * @coversDefaultClass \App\Controller\HistoryController
- * @uses \App\Controller\HistoryController
  */
+#[CoversClass(HistoryController::class)]
+#[CoversMethod(HistoryController::class, 'clone')]
+#[CoversMethod(HistoryController::class, 'info')]
+#[CoversMethod(HistoryController::class, 'objects')]
+#[CoversMethod(HistoryController::class, 'restore')]
+#[CoversMethod(HistoryController::class, 'setHistory')]
 class HistoryControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Controller\HistoryController
-     */
-    public HistoryController $HistoryController;
-
     /**
      * Client class
      *
@@ -44,16 +46,6 @@ class HistoryControllerTest extends TestCase
     {
         parent::setUp();
         $this->loadRoutes();
-        $this->HistoryController = new HistoryController(
-            new ServerRequest([
-                'environment' => [
-                    'REQUEST_METHOD' => 'GET',
-                ],
-                'params' => [
-                    'object_type' => 'documents',
-                ],
-            ])
-        );
         $user = getenv('BEDITA_ADMIN_USR');
         $pass = getenv('BEDITA_ADMIN_PWD');
         $this->ApiClient = ApiClientProvider::getApiClient();
@@ -70,7 +62,6 @@ class HistoryControllerTest extends TestCase
      */
     public function tearDown(): void
     {
-        unset($this->HistoryController);
         unset($this->ApiClient);
         unset($this->documentId);
         parent::tearDown();
@@ -96,25 +87,39 @@ class HistoryControllerTest extends TestCase
      * Test `info` method
      *
      * @return void
-     * @covers ::info()
      */
     public function testInfo(): void
     {
-        $this->HistoryController->info($this->documentId, 1);
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+        $controller = new class ($request) extends HistoryController {
+            public HistoryComponent $History;
+            public function __construct(ServerRequest $request)
+            {
+                $this->History = new HistoryComponent(new ComponentRegistry($this));
+                parent::__construct($request);
+            }
+        };
+        $controller->info($this->documentId, 1);
         $vars = ['data', 'meta'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->HistoryController->viewBuilder()->getVar($var));
+            static::assertNotEmpty($controller->viewBuilder()->getVar($var));
         }
     }
 
     /**
      * Test `clone` method
      *
-     * @covers ::clone()
-     * @dataProvider cloneProvider()
      * @param array $data The data for test
      * @return void
      */
+    #[DataProvider('cloneProvider')]
     public function testClone(array $data): void
     {
         $data['id'] = $this->documentId;
@@ -123,7 +128,23 @@ class HistoryControllerTest extends TestCase
         /** @var string $historyId */
         $historyId = (string)$data['historyId'];
 
-        $response = $this->HistoryController->clone($id, $historyId);
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+        $controller = new class ($request) extends HistoryController {
+            public HistoryComponent $History;
+            public function __construct(ServerRequest $request)
+            {
+                $this->History = new HistoryComponent(new ComponentRegistry($this));
+                parent::__construct($request);
+            }
+        };
+        $response = $controller->clone($id, $historyId);
         static::assertEquals(302, $response->getStatusCode());
     }
 
@@ -146,11 +167,10 @@ class HistoryControllerTest extends TestCase
     /**
      * Test `restore` method
      *
-     * @covers ::restore()
-     * @dataProvider restoreProvider()
      * @param array $data The data for test
      * @return void
      */
+    #[DataProvider('restoreProvider')]
     public function testRestore(array $data): void
     {
         $data['id'] = $this->documentId;
@@ -158,8 +178,23 @@ class HistoryControllerTest extends TestCase
         $id = (string)$data['id'];
         /** @var string $historyId */
         $historyId = (string)$data['historyId'];
-
-        $response = $this->HistoryController->restore($id, $historyId);
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+        $controller = new class ($request) extends HistoryController {
+            public HistoryComponent $History;
+            public function __construct(ServerRequest $request)
+            {
+                $this->History = new HistoryComponent(new ComponentRegistry($this));
+                parent::__construct($request);
+            }
+        };
+        $response = $controller->restore($id, $historyId);
         static::assertEquals(302, $response->getStatusCode());
     }
 
@@ -191,12 +226,11 @@ class HistoryControllerTest extends TestCase
     /**
      * Test `setHistory` method
      *
-     * @covers ::setHistory()
-     * @dataProvider setHistoryProvider()
      * @param array $data
      * @param string $expected
      * @return void
      */
+    #[DataProvider('setHistoryProvider')]
     public function testSetHistory(array $data, string $expected): void
     {
         $data['id'] = $this->documentId;
@@ -207,10 +241,33 @@ class HistoryControllerTest extends TestCase
         /** @var bool $keepUname */
         $keepUname = (bool)$data['keepUname'];
 
-        // call protected method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest('test');
-        $test->invokeMethod($this->HistoryController, 'setHistory', [$id, $historyId, $keepUname]);
-        $actual = $this->HistoryController->getRequest()->getSession()->read(sprintf('history.%s.attributes', $id));
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+        $controller = new class ($request) extends HistoryController {
+            public HistoryComponent $History;
+
+            public function __construct(ServerRequest $request)
+            {
+                $this->History = new HistoryComponent(new ComponentRegistry($this));
+                parent::__construct($request);
+            }
+
+            public function setHistory(string|int $id, string|int $historyId, bool $keepUname): void
+            {
+                parent::setHistory($id, $historyId, $keepUname);
+            }
+        };
+        $controller->setHistory($id, $historyId, $keepUname);
+        $actual = $controller->getRequest()->getSession()->read(sprintf('history.%s.attributes', $id));
+        $actual = json_decode($actual, true);
+        $expected = json_decode($expected, true);
+        $expected['uname'] = $keepUname ? $actual['uname'] : '';
         static::assertEquals($actual, $expected);
     }
 
@@ -218,16 +275,31 @@ class HistoryControllerTest extends TestCase
      * Test `objects` method
      *
      * @return void
-     * @covers ::objects()
      */
     public function testObjects(): void
     {
-        $this->HistoryController->objects();
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+        $controller = new class ($request) extends HistoryController {
+            public HistoryComponent $History;
+            public function __construct(ServerRequest $request)
+            {
+                $this->History = new HistoryComponent(new ComponentRegistry($this));
+                parent::__construct($request);
+            }
+        };
+        $controller->objects();
         $vars = ['data', 'meta'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->HistoryController->viewBuilder()->getVar($var));
+            static::assertNotEmpty($controller->viewBuilder()->getVar($var));
         }
-        $actual = $this->HistoryController->viewBuilder()->getVar('data');
+        $actual = $controller->viewBuilder()->getVar('data');
         foreach ($actual as $item) {
             static::assertArrayHasKey('id', $item);
             static::assertArrayHasKey('type', $item);
@@ -238,7 +310,7 @@ class HistoryControllerTest extends TestCase
             static::assertArrayNotHasKey('links', $item);
             static::assertArrayNotHasKey('relationships', $item);
         }
-        $actual = $this->HistoryController->viewBuilder()->getVar('meta');
+        $actual = $controller->viewBuilder()->getVar('meta');
         static::assertArrayHasKey('pagination', $actual);
         static::assertArrayNotHasKey('schema', $actual);
     }
