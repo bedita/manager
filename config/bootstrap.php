@@ -116,7 +116,7 @@ if (file_exists(CONFIG . 'app_local.php')) {
  */
 if (Configure::read('debug')) {
     Configure::write('Cache._cake_model_.duration', '+2 minutes');
-    Configure::write('Cache._cake_core_.duration', '+2 minutes');
+    Configure::write('Cache._cake_translations_.duration', '+2 minutes');
     Configure::write('Cache._schema_types_.duration', '+2 minutes');
     Configure::write('Cache._project_config_.duration', '+2 minutes');
     Configure::write('Cache._thumbs_.duration', '+2 minutes');

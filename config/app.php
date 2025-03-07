@@ -105,9 +105,9 @@ return [
          * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
          * If you set 'className' => 'Null' core cache will be disabled.
          */
-        '_cake_core_' => [
+        '_cake_translations_' => [
             'className' => FileEngine::class,
-            'prefix' => 'manager_cake_core_',
+            'prefix' => 'manager_cake_translations_',
             'path' => CACHE . 'persistent/',
             'serialize' => true,
             'duration' => '+1 years',
