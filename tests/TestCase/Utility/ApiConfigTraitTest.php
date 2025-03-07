@@ -174,7 +174,6 @@ class ApiConfigTraitTest extends TestCase
      * Test `save`.
      *
      * @return void
-
      */
     public function testSave(): void
     {
