@@ -3,6 +3,7 @@ namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\SchemaComponent;
 use App\Utility\CacheTools;
+use Authentication\Controller\Component\AuthenticationComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -13,14 +14,35 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
 use RuntimeException;
 
 /**
  * {@see \App\Controller\Component\SchemaComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\SchemaComponent
  */
+#[CoversClass(SchemaComponent::class)]
+#[CoversMethod(SchemaComponent::class, 'abstractTypes')]
+#[CoversMethod(SchemaComponent::class, 'concreteTypes')]
+#[CoversMethod(SchemaComponent::class, 'customProps')]
+#[CoversMethod(SchemaComponent::class, 'descendants')]
+#[CoversMethod(SchemaComponent::class, 'fetchCategories')]
+#[CoversMethod(SchemaComponent::class, 'fetchCustomProps')]
+#[CoversMethod(SchemaComponent::class, 'fetchObjectTypeMeta')]
+#[CoversMethod(SchemaComponent::class, 'fetchObjectTypesFeatures')]
+#[CoversMethod(SchemaComponent::class, 'fetchRelationData')]
+#[CoversMethod(SchemaComponent::class, 'fetchRoles')]
+#[CoversMethod(SchemaComponent::class, 'fetchSchema')]
+#[CoversMethod(SchemaComponent::class, 'getRelationsSchema')]
+#[CoversMethod(SchemaComponent::class, 'getSchema')]
+#[CoversMethod(SchemaComponent::class, 'getSchemasByType')]
+#[CoversMethod(SchemaComponent::class, 'loadInternalSchema')]
+#[CoversMethod(SchemaComponent::class, 'loadWithRevision')]
+#[CoversMethod(SchemaComponent::class, 'objectTypesFeatures')]
+#[CoversMethod(SchemaComponent::class, 'setDescendant')]
+#[CoversMethod(SchemaComponent::class, 'tagsInUse')]
 class SchemaComponentTest extends TestCase
 {
     /**
@@ -39,7 +61,7 @@ class SchemaComponentTest extends TestCase
 
         $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
-        $registry->load('Auth');
+        $registry->load(AuthenticationComponent::class);
         /** @var \App\Controller\Component\SchemaComponent $schemaComponent */
         $schemaComponent = $registry->load(SchemaComponent::class);
         $this->Schema = $schemaComponent;
@@ -111,17 +133,14 @@ class SchemaComponentTest extends TestCase
     /**
      * Test `getSchema()` method.
      *
-     * @param array|\Exception $expected Expected result.
+     * @param array|\Exception|bool $expected Expected result.
      * @param array|\Exception $schema Response to `/schema/:type` endpoint.
      * @param string|null $type Type to get schema for.
      * @param array $config Component configuration.
      * @return void
-     * @dataProvider getSchemaProvider()
-     * @covers ::fetchSchema()
-     * @covers ::getSchema()
-     * @covers ::loadWithRevision()
      */
-    public function testGetSchema($expected, $schema, ?string $type, array $config = []): void
+    #[DataProvider('getSchemaProvider')]
+    public function testGetSchema(array|Exception|bool $expected, array|Exception $schema, ?string $type, array $config = []): void
     {
         if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
@@ -155,7 +174,6 @@ class SchemaComponentTest extends TestCase
      * Test `getSchema`, cache case.
      *
      * @return void
-     * @covers ::getSchema()
      */
     public function testGetSchemaFromCache(): void
     {
@@ -208,9 +226,8 @@ class SchemaComponentTest extends TestCase
      * Test `getSchemasByType`.
      *
      * @return void
-     * @dataProvider getSchemasByTypeProvider()
-     * @covers ::getSchemasByType()
      */
+    #[DataProvider('getSchemasByTypeProvider')]
     public function testGetSchemasByType(array $types, array $expected): void
     {
         $schemasByType = $this->Schema->getSchemasByType($types);
@@ -228,7 +245,6 @@ class SchemaComponentTest extends TestCase
      * Test `loadWithRevision`
      *
      * @return void
-     * @covers ::loadWithRevision()
      */
     public function testLoadWithRevision(): void
     {
@@ -263,11 +279,9 @@ class SchemaComponentTest extends TestCase
     }
 
     /**
-     * Test load internal schema from configuration.
+     * Test `loadInternalSchema` method: load internal schema from configuration.
      *
      * @return void
-     * @covers ::getSchema()
-     * @covers ::loadInternalSchema
      */
     public function testInternalSchema(): void
     {
@@ -285,9 +299,6 @@ class SchemaComponentTest extends TestCase
      * Test load relations schema.
      *
      * @return void
-     * @covers ::getRelationsSchema()
-     * @covers ::fetchRelationData()
-     * @covers ::concreteTypes()
      */
     public function testRelationMethods(): void
     {
@@ -379,8 +390,6 @@ class SchemaComponentTest extends TestCase
      * Test load internal schema from configuration.
      *
      * @return void
-     * @covers ::getRelationsSchema()
-     * @covers ::fetchRelationData()
      */
     public function testFailRelationsSchema(): void
     {
@@ -433,9 +442,8 @@ class SchemaComponentTest extends TestCase
      * @param array $descendants The descendants
      * @param array $expected The expected result
      * @return void
-     * @dataProvider concreteTypesProvider()
-     * @covers ::concreteTypes()
      */
+    #[DataProvider('concreteTypesProvider')]
     public function testConcreteTypes(array $types, array $descendants, array $expected): void
     {
         $reflectionClass = new ReflectionClass($this->Schema);
@@ -449,8 +457,6 @@ class SchemaComponentTest extends TestCase
      * Test `fetchSchema` for `users`.
      *
      * @return void
-     * @covers ::fetchSchema()
-     * @covers ::fetchRoles()
      */
     public function testFetchRoles(): void
     {
@@ -495,8 +501,6 @@ class SchemaComponentTest extends TestCase
      * Test `fetchSchema` for `categories`.
      *
      * @return void
-     * @covers ::fetchSchema()
-     * @covers ::fetchCategories()
      */
     public function testFetchCategories(): void
     {
@@ -557,7 +561,6 @@ class SchemaComponentTest extends TestCase
      * Test `fetchCategories` with API error.
      *
      * @return void
-     * @covers ::fetchCategories()
      */
     public function testFetchCategoriesFail(): void
     {
@@ -600,7 +603,6 @@ class SchemaComponentTest extends TestCase
      * Test `fetchObjectTypeMeta` method.
      *
      * @return void
-     * @covers ::fetchObjectTypeMeta()
      */
     public function testFetchObjectTypeMeta(): void
     {
@@ -633,7 +635,6 @@ class SchemaComponentTest extends TestCase
     /**
      * Test `descendants` method on abstract type
      *
-     * @covers ::descendants()
      * @return void
      */
     public function testDescendants(): void
@@ -649,9 +650,6 @@ class SchemaComponentTest extends TestCase
      * Test `objectTypesFeatures` method.
      *
      * @return void
-     * @covers ::objectTypesFeatures()
-     * @covers ::fetchObjectTypesFeatures()
-     * @covers ::setDescendant()
      */
     public function testObjectTypesFeatures(): void
     {
@@ -726,7 +724,6 @@ class SchemaComponentTest extends TestCase
      * Test `objectTypesFeatures` with API error.
      *
      * @return void
-     * @covers ::objectTypesFeatures()
      */
     public function testObjectTypesFeaturesFail(): void
     {
@@ -747,8 +744,6 @@ class SchemaComponentTest extends TestCase
      * Test `customProps` method.
      *
      * @return void
-     * @covers ::customProps()
-     * @covers ::fetchCustomProps()
      */
     public function testCustomProps(): void
     {
@@ -795,7 +790,6 @@ class SchemaComponentTest extends TestCase
      * Test `abstractTypes`
      *
      * @return void
-     * @covers ::abstractTypes()
      */
     public function testAbstractTypes(): void
     {
@@ -807,7 +801,6 @@ class SchemaComponentTest extends TestCase
      * Test `tagsInUse`
      *
      * @return void
-     * @covers ::tagsInUse()
      */
     public function testTagsInUse(): void
     {
