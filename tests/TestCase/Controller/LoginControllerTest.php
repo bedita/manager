@@ -38,14 +38,14 @@ class LoginControllerTest extends TestCase
      *
      * @var \App\Controller\LoginController
      */
-    public $Login;
+    public LoginController $Login;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'POST',
         ],
