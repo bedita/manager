@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Test\TestCase;
+namespace App\Test\TestCase\Utility;
 
 use App\Utility\DateRangesTools;
 use Cake\TestSuite\TestCase;

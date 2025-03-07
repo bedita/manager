@@ -10,7 +10,7 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-namespace App\Test\TestCase\Controller;
+namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\TagsController;
 use BEdita\WebTools\ApiClientProvider;

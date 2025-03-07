@@ -13,7 +13,7 @@ declare(strict_types=1);
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 
-namespace App\Test\TestCase;
+namespace App\Test\TestCase\Utility;
 
 use App\Utility\System;
 use Cake\TestSuite\TestCase;

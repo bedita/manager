@@ -10,7 +10,7 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-namespace App\Test\Middleware;
+namespace App\Test\TestCase\Middleware;
 
 use App\Controller\AppController;
 use App\Identifier\ApiIdentifier;

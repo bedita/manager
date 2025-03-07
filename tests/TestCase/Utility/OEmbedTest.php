@@ -10,7 +10,7 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-namespace App\Test\TestCase;
+namespace App\Test\TestCase\Utility;
 
 use App\Utility\OEmbed;
 use Cake\TestSuite\TestCase;
