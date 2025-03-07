@@ -2,7 +2,6 @@
 namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\ProjectConfigurationComponent;
-use Authentication\Controller\Component\AuthenticationComponent;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -39,9 +38,6 @@ class ProjectConfigurationComponentTest extends TestCase
 
         $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
-        /** @var \Authentication\Controller\Component\AuthenticationComponent $authenticationComponent */
-        $authenticationComponent = $registry->load(AuthenticationComponent::class);
-        $registry->Authentication = $authenticationComponent;
         /** @var \App\Controller\Component\ProjectConfigurationComponent $projectConfigurationComponent */
         $projectConfigurationComponent = $registry->load(ProjectConfigurationComponent::class);
         $this->ProjectConfiguration = $projectConfigurationComponent;

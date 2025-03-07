@@ -1,7 +1,6 @@
 <?php
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\AppController;
 use App\Controller\Component\HistoryComponent;
 use App\Controller\HistoryController;
 use BEdita\SDK\BEditaClient;
