@@ -17,12 +17,14 @@ use App\View\Helper\EditorsHelper;
 use Cake\Cache\Cache;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\View\Helper\EditorsHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\EditorsHelper
  */
+#[CoversClass(EditorsHelper::class)]
+#[CoversMethod(EditorsHelper::class, 'list')]
 class EditorsHelperTest extends TestCase
 {
     /**
@@ -58,7 +60,6 @@ class EditorsHelperTest extends TestCase
      * Test `list` method
      *
      * @return void
-     * @covers ::list()
      */
     public function testlist(): void
     {

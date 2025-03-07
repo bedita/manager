@@ -18,12 +18,24 @@ use App\View\Helper\PropertyHelper;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\PropertyHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\PropertyHelper
  */
+#[CoversClass(PropertyHelper::class)]
+#[CoversMethod(PropertyHelper::class, 'control')]
+#[CoversMethod(PropertyHelper::class, 'dateRange')]
+#[CoversMethod(PropertyHelper::class, 'fastCreateFields')]
+#[CoversMethod(PropertyHelper::class, 'fastCreateFieldsMap')]
+#[CoversMethod(PropertyHelper::class, 'fieldLabel')]
+#[CoversMethod(PropertyHelper::class, 'prepareFieldOptions')]
+#[CoversMethod(PropertyHelper::class, 'schema')]
+#[CoversMethod(PropertyHelper::class, 'translationControl')]
+#[CoversMethod(PropertyHelper::class, 'translationsMap')]
+#[CoversMethod(PropertyHelper::class, 'value')]
 class PropertyHelperTest extends TestCase
 {
     /**
@@ -181,11 +193,8 @@ class PropertyHelperTest extends TestCase
      * @param string $expected The expected result
      * @param string $expectedTranslation The expected translation result
      * @return void
-     * @dataProvider controlProvider()
-     * @covers ::control()
-     * @covers ::translationControl()
-     * @covers ::schema()
      */
+    #[DataProvider('controlProvider')]
     public function testControl(string $key, $value, array $options = [], array $schema = [], string $expected = '', string $expectedTranslation = ''): void
     {
         if (array_key_exists('readonly', $options)) {
@@ -272,9 +281,8 @@ class PropertyHelperTest extends TestCase
      * @param string $name Property name
      * @param array|null $schema Object schema
      * @return void
-     * @dataProvider schemaProvider()
-     * @covers ::schema()
      */
+    #[DataProvider('schemaProvider')]
     public function testSchema(?array $expected, string $name, ?array $schema = null): void
     {
         $view = new View(null, null, null, []);
@@ -288,8 +296,6 @@ class PropertyHelperTest extends TestCase
      * Test `control` with parameter type, for "other" types schema controls
      *
      * @return void
-     * @covers ::control()
-     * @covers ::schema()
      */
     public function testControlOtherType(): void
     {
@@ -387,9 +393,8 @@ class PropertyHelperTest extends TestCase
      * @param string $property The property
      * @param string $expected The expected value
      * @return void
-     * @dataProvider valueProvider()
-     * @covers ::value()
      */
+    #[DataProvider('valueProvider')]
     public function testValue(array $object, string $property, string $expected): void
     {
         $view = new View(null, null, null, []);
@@ -413,7 +418,6 @@ class PropertyHelperTest extends TestCase
      * Test `fieldLabel`.
      *
      * @return void
-     * @covers ::fieldLabel()
      */
     public function testFieldLabel(): void
     {
@@ -446,7 +450,6 @@ class PropertyHelperTest extends TestCase
      * Test `fastCreateFields`.
 
      * @return void
-     * @covers ::fastCreateFields()
      */
     public function testFastCreateFields(): void
     {
@@ -465,7 +468,6 @@ class PropertyHelperTest extends TestCase
      * Test `fastCreateFieldsMap`.
 
      * @return void
-     * @covers ::fastCreateFieldsMap()
      */
     public function testFastCreateFieldsMap(): void
     {
@@ -495,7 +497,6 @@ class PropertyHelperTest extends TestCase
      * Test `prepareFieldOptions`.
 
      * @return void
-     * @covers ::prepareFieldOptions()
      */
     public function testPrepareFieldOptions(): void
     {
@@ -518,7 +519,6 @@ class PropertyHelperTest extends TestCase
      * Test `dateRange`.
 
      * @return void
-     * @covers ::dateRange()
      */
     public function testDateRange(): void
     {
@@ -534,7 +534,6 @@ class PropertyHelperTest extends TestCase
      * Test `translationsMap`.
      *
      * @return void
-     * @covers ::translationsMap()
      */
     public function testTranslationsMap(): void
     {
@@ -580,7 +579,6 @@ class PropertyHelperTest extends TestCase
      * Test `translationsMap` with exception.
      *
      * @return void
-     * @covers ::translationsMap()
      */
     public function testTranslationsMapExpection(): void
     {

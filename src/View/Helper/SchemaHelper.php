@@ -148,10 +148,10 @@ class SchemaHelper extends Helper
      * Display a formatted property value using schema.
      *
      * @param mixed $value Property value.
-     * @param array $schema Property schema array.
+     * @param array|null $schema Property schema array.
      * @return string
      */
-    public function format(mixed $value, array $schema = []): string
+    public function format(mixed $value, ?array $schema = []): string
     {
         $type = static::typeFromSchema((array)$schema);
         $type = Inflector::variable(str_replace('-', '_', $type));

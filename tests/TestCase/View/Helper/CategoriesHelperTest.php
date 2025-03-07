@@ -15,12 +15,21 @@ namespace App\Test\TestCase\View\Helper;
 use App\View\Helper\CategoriesHelper;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\CategoriesHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\CategoriesHelper
  */
+#[CoversClass(CategoriesHelper::class)]
+#[CoversMethod(CategoriesHelper::class, 'control')]
+#[CoversMethod(CategoriesHelper::class, 'controlOptions')]
+#[CoversMethod(CategoriesHelper::class, 'html')]
+#[CoversMethod(CategoriesHelper::class, 'isTree')]
+#[CoversMethod(CategoriesHelper::class, 'node')]
+#[CoversMethod(CategoriesHelper::class, 'sortRoots')]
+#[CoversMethod(CategoriesHelper::class, 'tree')]
 class CategoriesHelperTest extends TestCase
 {
     /**
@@ -102,9 +111,8 @@ class CategoriesHelperTest extends TestCase
      * @param mixed|null $value The value
      * @param string $expected The expected result
      * @return void
-     * @dataProvider controlProvider()
-     * @covers ::control()
      */
+    #[DataProvider('controlProvider')]
     public function testControl(array $schema, string $name, $value, string $expected): void
     {
         $view = new View(null, null, null, []);
@@ -152,9 +160,8 @@ class CategoriesHelperTest extends TestCase
      * @param array $options The options
      * @param string $expected The expected result
      * @return void
-     * @dataProvider htmlProvider()
-     * @covers ::html()
      */
+    #[DataProvider('htmlProvider')]
     public function testHtml(array $schema, string $name, $value, array $options, string $expected): void
     {
         $view = new View(null, null, null, []);
@@ -209,9 +216,8 @@ class CategoriesHelperTest extends TestCase
      * @param array $options The options
      * @param string $expected The expected result
      * @return void
-     * @dataProvider nodeProvider()
-     * @covers ::node()
      */
+    #[DataProvider('nodeProvider')]
     public function testNode(array $node, string $name, $value, array $options, string $expected): void
     {
         $hiddenField = false;
@@ -297,9 +303,8 @@ class CategoriesHelperTest extends TestCase
      * @param array $options The options
      * @param array $expected The expected result
      * @return void
-     * @dataProvider controlOptionsProvider()
-     * @covers ::controlOptions()
      */
+    #[DataProvider('controlOptionsProvider')]
     public function testControlOptions(array $node, $value, array $options, array $expected): void
     {
         $hiddenField = false;
@@ -430,11 +435,8 @@ class CategoriesHelperTest extends TestCase
      * @param bool $expectedIsTree The expected for isTree
      * @param array $expectedTree The expected for Tree
      * @return void
-     * @dataProvider treeProvider()
-     * @covers ::sortRoots()
-     * @covers ::tree()
-     * @covers ::isTree()
      */
+    #[DataProvider('treeProvider')]
     public function testTree(array $schema, bool $expectedIsTree, array $expectedTree): void
     {
         $view = new View(null, null, null, []);

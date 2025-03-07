@@ -32,22 +32,26 @@ use Cake\Http\ServerRequest;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
- * \App\Application Test Case
- *
- * @coversDefaultClass \App\Application
+ * {@see \App\Application} Test Case
  */
+#[CoversClass(Application::class)]
+#[CoversMethod(Application::class, 'bootstrap')]
+#[CoversMethod(Application::class, 'bootstrapCli')]
+#[CoversMethod(Application::class, 'csrfMiddleware')]
+#[CoversMethod(Application::class, 'getAuthenticationService')]
+#[CoversMethod(Application::class, 'loadPluginsFromConfig')]
+#[CoversMethod(Application::class, 'loadProjectConfig')]
+#[CoversMethod(Application::class, 'middleware')]
 class ApplicationTest extends TestCase
 {
     /**
      * Test `middleware` method
      *
      * @return void
-     * @covers ::middleware()
-     * @covers ::csrfMiddleware()
-     * @covers ::bootstrap()
-     * @covers ::bootstrapCli()
      */
     public function testMiddleware(): void
     {
@@ -83,8 +87,6 @@ class ApplicationTest extends TestCase
      * Test `bootstrap` method
      *
      * @return void
-     * @covers ::bootstrap()
-     * @covers ::bootstrapCli()
      */
     public function testBootstrap(): void
     {
@@ -102,7 +104,6 @@ class ApplicationTest extends TestCase
      * Test `loadPluginsFromConfig` method
      *
      * @return void
-     * @covers ::loadPluginsFromConfig()
      */
     public function testLoadPlugins(): void
     {
@@ -134,7 +135,6 @@ class ApplicationTest extends TestCase
      * Test `loadProjectConfig` method
      *
      * @return void
-     * @covers ::loadProjectConfig()
      */
     public function testLoadProjectConfig(): void
     {
@@ -154,7 +154,6 @@ class ApplicationTest extends TestCase
      * Test `getAuthenticationService` method.
      *
      * @return void
-     * @covers ::getAuthenticationService()
      */
     public function testGetAuthenticationService(): void
     {
@@ -173,7 +172,6 @@ class ApplicationTest extends TestCase
      * Test `getAuthenticationService` method on login requests.
      *
      * @return void
-     * @covers ::getAuthenticationService()
      */
     public function testLoginGetAuthenticationService(): void
     {
@@ -191,7 +189,6 @@ class ApplicationTest extends TestCase
      * Test `getAuthenticationService` method on login requests.
      *
      * @return void
-     * @covers ::getAuthenticationService()
      */
     public function testOAuth2GetAuthenticationService(): void
     {

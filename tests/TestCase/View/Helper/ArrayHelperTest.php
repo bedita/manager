@@ -16,12 +16,20 @@ namespace App\Test\TestCase\View\Helper;
 use App\View\Helper\ArrayHelper;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\ArrayHelper} Test Case
  *
  * @coversDefaultClass \App\View\Helper\ArrayHelper
  */
+#[CoversClass(ArrayHelper::class)]
+#[CoversMethod(ArrayHelper::class, 'combine')]
+#[CoversMethod(ArrayHelper::class, 'extract')]
+#[CoversMethod(ArrayHelper::class, 'onlyKeys')]
+#[CoversMethod(ArrayHelper::class, 'removeKeys')]
 class ArrayHelperTest extends TestCase
 {
     /**
@@ -75,12 +83,11 @@ class ArrayHelperTest extends TestCase
     /**
      * Test `combine()` method.
      *
-     * @dataProvider getCombineSchemaProvider()
-     * @covers ::combine()
      * @param array $expected The expected array.
      * @param array $arr The array.
      * @return void
      */
+    #[DataProvider('getCombineSchemaProvider')]
     public function testCombine(array $expected, array $arr): void
     {
         $actual = $this->Array->combine($arr);
@@ -120,13 +127,12 @@ class ArrayHelperTest extends TestCase
     /**
      * Test `removeKeys()` method.
      *
-     * @dataProvider getRemoveKeysSchemaProvider()
-     * @covers ::removeKeys()
      * @param array $expected The expected array.
      * @param array $arr The array.
      * @param array $keys The keys to remove.
      * @return void
      */
+    #[DataProvider('getRemoveKeysSchemaProvider')]
     public function testRemoveKeys(array $expected, array $arr, array $keys): void
     {
         $actual = $this->Array->removeKeys($arr, $keys);
@@ -165,13 +171,12 @@ class ArrayHelperTest extends TestCase
     /**
      * Test `onlyKeys()` method.
      *
-     * @dataProvider onlyKeysProvider()
-     * @covers ::onlyKeys()
      * @param array $expected The expected array.
      * @param array $arr The array.
      * @param array $keys The keys to keep.
      * @return void
      */
+    #[DataProvider('onlyKeysProvider')]
     public function testOnlyKeys(array $expected, array $arr, array $keys): void
     {
         $actual = $this->Array->onlyKeys($arr, $keys);
@@ -182,7 +187,6 @@ class ArrayHelperTest extends TestCase
     /**
      * Test `extract()` method.
      *
-     * @covers ::extract()
      * @return void
      */
     public function testExtract(): void

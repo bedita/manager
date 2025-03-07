@@ -16,12 +16,16 @@ namespace App\Test\TestCase\View\Helper;
 use App\View\Helper\CalendarHelper;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\CalendarHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\CalendarHelper
  */
+#[CoversClass(CalendarHelper::class)]
+#[CoversMethod(CalendarHelper::class, 'dateRange')]
+#[CoversMethod(CalendarHelper::class, 'list')]
 class CalendarHelperTest extends TestCase
 {
     /**
@@ -85,9 +89,8 @@ class CalendarHelperTest extends TestCase
      * @param array|null $dateRanges The array.
      * @param string $expected The expected string.
      * @return void
-     * @dataProvider listProvider()
-     * @covers ::list()
      */
+    #[DataProvider('listProvider')]
     public function testList(?array $dateRanges, string $expected): void
     {
         $actual = $this->Calendar->list($dateRanges);
@@ -127,9 +130,8 @@ class CalendarHelperTest extends TestCase
      * @param array $dateRange The date range.
      * @param string $expected The expected string.
      * @return void
-     * @dataProvider dateRangeProvider()
-     * @covers ::dateRange()
      */
+    #[DataProvider('dateRangeProvider')]
     public function testDateRange(array $dateRange, string $expected): void
     {
         $actual = $this->Calendar->dateRange($dateRange);
