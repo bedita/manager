@@ -40,7 +40,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversMethod(PermsHelper::class, 'userIsAdmin')]
 #[CoversMethod(PermsHelper::class, 'userIsAllowed')]
 #[CoversMethod(PermsHelper::class, 'userRoles')]
-
 class PermsHelperTest extends TestCase
 {
     /**
