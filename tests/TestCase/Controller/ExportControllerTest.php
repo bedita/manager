@@ -205,7 +205,9 @@ class ExportControllerTest extends TestCase
             public function initialize(): void
             {
                 parent::initialize();
-                $this->Export = $this->loadComponent(ExportComponent::class);
+                /** @var \App\Controller\Component\ExportComponent $component */
+                $component = $this->loadComponent(ExportComponent::class);
+                $this->Export = $component;
             }
         };
 
@@ -264,7 +266,9 @@ class ExportControllerTest extends TestCase
             public function initialize(): void
             {
                 parent::initialize();
-                $this->Export = $this->loadComponent(ExportComponent::class);
+                /** @var \App\Controller\Component\ExportComponent $component */
+                $component = $this->loadComponent(ExportComponent::class);
+                $this->Export = $component;
             }
         };
 
@@ -293,7 +297,9 @@ class ExportControllerTest extends TestCase
             public function initialize(): void
             {
                 parent::initialize();
-                $this->Export = $this->loadComponent(ExportComponent::class);
+                /** @var \App\Controller\Component\ExportComponent $component */
+                $component = $this->loadComponent(ExportComponent::class);
+                $this->Export = $component;
             }
         };
 
@@ -678,7 +684,9 @@ class ExportControllerTest extends TestCase
             public function initialize(): void
             {
                 parent::initialize();
-                $this->Export = $this->loadComponent(ExportComponent::class);
+                /** @var \App\Controller\Component\ExportComponent $component */
+                $component = $this->loadComponent(ExportComponent::class);
+                $this->Export = $component;
             }
         };
         // mock api getObjects.
