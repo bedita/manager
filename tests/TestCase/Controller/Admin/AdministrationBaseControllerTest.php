@@ -3,7 +3,6 @@ namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AdministrationBaseController;
 use App\Controller\Admin\RolesController;
-use App\Controller\Component\PropertiesComponent;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
