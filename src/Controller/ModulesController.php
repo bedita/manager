@@ -69,7 +69,9 @@ class ModulesController extends AppController
         $this->loadComponent('BEdita/WebTools.ApiFormatter');
         if ($this->getRequest()->getParam('object_type')) {
             $this->objectType = $this->getRequest()->getParam('object_type');
+            $this->Modules = $this->components()->get('Modules');
             $this->Modules->setConfig('currentModuleName', $this->objectType);
+            $this->Schema = $this->components()->get('Schema');
             $this->Schema->setConfig('type', $this->objectType);
         }
         $this->FormProtection->setConfig('unlockedActions', ['save']);
@@ -430,14 +432,14 @@ class ModulesController extends AppController
      */
     public function related(string|int $id, string $relation): void
     {
+        $this->getRequest()->allowMethod(['get']);
+        $this->viewBuilder()->setClassName('Json');
         if ($id === 'new') {
             $this->set('data', []);
             $this->setSerialize(['data']);
 
             return;
         }
-
-        $this->getRequest()->allowMethod(['get']);
         $query = $this->Query->prepare($this->getRequest()->getQueryParams());
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
@@ -450,9 +452,7 @@ class ModulesController extends AppController
 
             return;
         }
-
         $this->Thumbs->urls($response);
-
         $this->set((array)$response);
         $this->setSerialize(array_keys($response));
     }
@@ -468,6 +468,7 @@ class ModulesController extends AppController
     public function resources(string|int $id, string $type): void
     {
         $this->getRequest()->allowMethod(['get']);
+        $this->viewBuilder()->setClassName('Json');
         $query = $this->Query->prepare($this->getRequest()->getQueryParams());
         try {
             $response = $this->apiClient->get($type, $query);
@@ -495,6 +496,7 @@ class ModulesController extends AppController
     public function relationships(string|int $id, string $relation): void
     {
         $this->getRequest()->allowMethod(['get']);
+        $this->viewBuilder()->setClassName('Json');
         $available = $this->availableRelationshipsUrl($relation);
 
         try {
