@@ -614,10 +614,12 @@ return [
     //         'bearing' => 'integer',
     //         'pitch' => 'integer',
     //         'zoom' => 'integer',
+    //         'caption' => 'richtext'
     //     ],
     //     'videos' => [
     //         'controls' => 'boolean',
     //         'autoplay' => 'boolean',
+    //         'caption' => 'richtext',
     //     ],
     // ],
 
