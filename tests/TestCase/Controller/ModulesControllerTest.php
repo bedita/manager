@@ -984,9 +984,11 @@ class ModulesControllerTest extends BaseControllerTest
 
         $this->setupController();
         $controller = new class ($this->controller->getRequest()) extends ModulesController {
+            public object $Modules;
             public object $Schema;
             public function initialize(): void
             {
+                parent::initialize();
                 $this->Schema = new class (new ComponentRegistry($this)) extends SchemaComponent {
                     public function getSchema(?string $type = null, ?string $revision = null): array|bool
                     {
@@ -1004,7 +1006,6 @@ class ModulesControllerTest extends BaseControllerTest
                         ];
                     }
                 };
-                parent::initialize();
             }
         };
         $actual = $controller->getSchemaForIndex('documents');
@@ -1023,16 +1024,17 @@ class ModulesControllerTest extends BaseControllerTest
         static::assertEquals('/objects', $url);
         $controller = new class ($this->controller->getRequest()) extends ModulesController {
             public object $Modules;
+            public object $Schema;
 
             public function initialize(): void
             {
+                parent::initialize();
                 $this->Modules = new class (new ComponentRegistry($this)) extends ModulesComponent {
                     public function relatedTypes(array $schema, string $relation): array
                     {
                         return ['documents'];
                     }
                 };
-                parent::initialize();
             }
 
             public function availableRelationshipsUrl(string $relation): string
@@ -1043,19 +1045,29 @@ class ModulesControllerTest extends BaseControllerTest
 
         $url = $controller->availableRelationshipsUrl('test_relation');
         static::assertEquals('/documents', $url);
+    }
 
-        $controller = new class ($this->controller->getRequest()) extends ModulesController {
+    /**
+     * Test `availableRelationshipsUrl` method
+     *
+     * @return void
+     */
+    public function testAvailableRelationshipsUrlMulti(): void
+    {
+        $this->setupController();
+        $controller = new class($this->controller->getRequest()) extends ModulesController {
             public object $Modules;
+            public object $Schema;
 
             public function initialize(): void
             {
-                $this->Modules = new class (new ComponentRegistry($this)) extends ModulesComponent {
+                parent::initialize();
+                $this->Modules = new class(new ComponentRegistry($this)) extends ModulesComponent {
                     public function relatedTypes(array $schema, string $relation): array
                     {
                         return ['images', 'profiles'];
                     }
                 };
-                parent::initialize();
             }
 
             public function availableRelationshipsUrl(string $relation): string
