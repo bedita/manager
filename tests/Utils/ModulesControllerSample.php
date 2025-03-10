@@ -44,7 +44,7 @@ class ModulesControllerSample extends ModulesController
     /**
      * Set api client.
      *
-     * @param \BEdita\SDK\BEditaClient|null
+     * @param \BEdita\SDK\BEditaClient|null $client Api client.
      * @return void
      */
     public function setApiClient(?BEditaClient $client = null): void

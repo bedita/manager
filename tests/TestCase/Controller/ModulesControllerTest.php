@@ -773,7 +773,7 @@ class ModulesControllerTest extends BaseControllerTest
         ];
         $request = new ServerRequest($config);
         $this->controller = new ModulesControllerSample($request);
-        $apiClient = new class('https://api.example.com') extends BEditaClient {
+        $apiClient = new class ('https://api.example.com') extends BEditaClient {
             public function delete(string $path, ?string $body = null, ?array $headers = null): ?array
             {
                 throw new BEditaClientException('Error');
