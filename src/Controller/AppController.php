@@ -45,6 +45,17 @@ class AppController extends Controller
     protected ?BEditaClient $apiClient = null;
 
     /**
+     * ${@inheritDoc}
+     *
+     * From LocatorAwareTrait...
+     * Set this to empty string to avoid use of datasource and table locator.
+     * This way controller magic getter will not try to load a table instance and will search the property from components instead.
+     *
+     * @var string|null
+     */
+    protected ?string $defaultTable = '';// to avoid use of datasource and table locator
+
+    /**
      * @inheritDoc
      */
     public function initialize(): void
