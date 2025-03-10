@@ -32,13 +32,24 @@ class ModulesControllerSample extends ModulesController
     }
 
     /**
-     * Create new object from ajax request.
+     * Get api client.
      *
      * @return \BEdita\SDK\BEditaClient
      */
     public function getApiClient(): BEditaClient
     {
         return $this->apiClient;
+    }
+
+    /**
+     * Set api client.
+     *
+     * @param \BEdita\SDK\BEditaClient|null
+     * @return void
+     */
+    public function setApiClient(?BEditaClient $client = null): void
+    {
+        $this->apiClient = $client;
     }
 
     /**
