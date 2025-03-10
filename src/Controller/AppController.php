@@ -45,7 +45,7 @@ class AppController extends Controller
     protected ?BEditaClient $apiClient = null;
 
     /**
-     * ${@inheritDoc}
+     * {@inheritDoc}
      *
      * From LocatorAwareTrait...
      * Set this to empty string to avoid use of datasource and table locator.
@@ -53,7 +53,7 @@ class AppController extends Controller
      *
      * @var string|null
      */
-    protected ?string $defaultTable = '';// to avoid use of datasource and table locator
+    protected ?string $defaultTable = '';
 
     /**
      * @inheritDoc
