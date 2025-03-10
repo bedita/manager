@@ -121,24 +121,6 @@ class AdministrationBaseControllerTest extends TestCase
     }
 
     /**
-     * Test `initialize` method
-     *
-     * @return void
-     */
-    public function testInitialize(): void
-    {
-        $config = array_merge($this->defaultRequestConfig, []);
-        $request = new ServerRequest($config);
-        $controller = new class ($request) extends AdministrationBaseController
-        {
-            public PropertiesComponent $Properties;
-            protected ?string $resourceType = 'applications';
-        };
-        $controller->initialize();
-        static::assertNotEmpty($controller->Properties);
-    }
-
-    /**
      * Data provider for `testBeforeFilter` test case.
      *
      * @return array

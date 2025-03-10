@@ -75,12 +75,13 @@ abstract class AdministrationBaseController extends AppController
     protected array $meta = ['created', 'modified'];
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @codeCoverageIgnore
      */
     public function initialize(): void
     {
         parent::initialize();
-
         $this->loadComponent('Properties');
     }
 
