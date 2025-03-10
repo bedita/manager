@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Controller\Component\ExportComponent;
 use App\Controller\ExportController;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
@@ -21,15 +22,31 @@ use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
 use ReflectionProperty;
 
 /**
  * {@see \App\Controller\ExportController} Test Case
- *
- * @coversDefaultClass \App\Controller\ExportController
- * @uses \App\Controller\ExportController
  */
+#[CoversClass(ExportController::class)]
+#[CoversMethod(ExportController::class, 'apiPath')]
+#[CoversMethod(ExportController::class, 'export')]
+#[CoversMethod(ExportController::class, 'fillDataFromResponse')]
+#[CoversMethod(ExportController::class, 'getFieldNames')]
+#[CoversMethod(ExportController::class, 'getFileName')]
+#[CoversMethod(ExportController::class, 'getRelatedFileName')]
+#[CoversMethod(ExportController::class, 'getValue')]
+#[CoversMethod(ExportController::class, 'limit')]
+#[CoversMethod(ExportController::class, 'prepareQuery')]
+#[CoversMethod(ExportController::class, 'related')]
+#[CoversMethod(ExportController::class, 'relatedFiltered')]
+#[CoversMethod(ExportController::class, 'rows')]
+#[CoversMethod(ExportController::class, 'rowsAll')]
+#[CoversMethod(ExportController::class, 'rowsAllRelated')]
+#[CoversMethod(ExportController::class, 'rowFields')]
 class ExportControllerTest extends TestCase
 {
     /**
@@ -113,19 +130,23 @@ class ExportControllerTest extends TestCase
     /**
      * test 'export'.
      *
-     * @covers ::export()
-     * @covers ::getFileName()
      * @return void
      */
     public function testExport(): void
     {
-        $this->Export = new ExportController(
-            new ServerRequest([
-                'environment' => ['REQUEST_METHOD' => 'POST'],
-                'params' => ['objectType' => 'users'],
-                'post' => ['ids' => '888,999', 'objectType' => 'users', 'format' => 'csv'],
-            ])
-        );
+        $request = new ServerRequest([
+            'environment' => ['REQUEST_METHOD' => 'POST'],
+            'params' => ['objectType' => 'users'],
+            'post' => ['ids' => '888,999', 'objectType' => 'users', 'format' => 'csv'],
+        ]);
+        $controller = new class ($request) extends ExportController {
+            public ?BEditaClient $apiClient;
+            public function initialize(): void
+            {
+                parent::initialize();
+                $this->loadComponent(ExportComponent::class);
+            }
+        };
 
         // mock api getObjects.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -145,10 +166,7 @@ class ExportControllerTest extends TestCase
                 ],
             ]);
         ApiClientProvider::setApiClient($apiClient);
-        // set $this->Export->apiClient
-        $property = new ReflectionProperty(ExportController::class, 'apiClient');
-        $property->setAccessible(true);
-        $property->setValue($this->Export, $apiClient);
+        $controller->apiClient = $apiClient;
 
         // expected csv.
         $fields = '"id","name","skills","category","prop"';
@@ -157,7 +175,7 @@ class ExportControllerTest extends TestCase
         $expected = sprintf('%s%s%s%s%s%s', $fields, "\n", $row1, "\n", $row2, "\n");
 
         // call export.
-        $response = $this->Export->export();
+        $response = $controller->export();
         $content = $response->getBody()->__toString();
         static::assertInstanceOf('Cake\Http\Response', $response);
         static::assertEquals($expected, $content);
@@ -173,8 +191,6 @@ class ExportControllerTest extends TestCase
      * Test `related`.
      *
      * @return void
-     * @covers ::related()
-     * @covers ::rowsAllRelated()
      */
     public function testRelated(): void
     {
@@ -230,7 +246,6 @@ class ExportControllerTest extends TestCase
     /**
      * Test case of export of format not allowed FAIL METHOD
      *
-     * @covers ::export()
      * @return void
      */
     public function testExportFormatNotAllowed(): void
@@ -253,7 +268,6 @@ class ExportControllerTest extends TestCase
     /**
      * Test case of related of format not allowed FAIL METHOD
      *
-     * @covers ::related()
      * @return void
      */
     public function testRelatedFormatNotAllowed(): void
@@ -359,12 +373,8 @@ class ExportControllerTest extends TestCase
      * @param array $response API response.
      * @param array $post Post data.
      * @return void
-     * @covers ::rows()
-     * @covers ::rowsAll()
-     * @covers ::apiPath()
-     * @covers ::prepareQuery()
-     * @dataProvider rowsProvider()
      */
+    #[DataProvider('rowsProvider')]
     public function testRows(array $expected, array $arguments, array $response, array $post = []): void
     {
         $this->setLimit(500);
@@ -441,9 +451,8 @@ class ExportControllerTest extends TestCase
      * @param string|array $input The input for the function.
      * @param string|array $expected The expected value.
      * @return void
-     * @covers ::fillDataFromResponse()
-     * @dataProvider fillDataFromResponseProvider()
      */
+    #[DataProvider('fillDataFromResponseProvider')]
     public function testFillDataFromResponse($input, $expected): void
     {
         $reflectionClass = new ReflectionClass($this->Export);
@@ -504,9 +513,8 @@ class ExportControllerTest extends TestCase
      * @param string|array $response The response.
      * @param string|array $expected The expected value.
      * @return void
-     * @covers ::getFieldNames()
-     * @dataProvider getFieldNamesProvider()
      */
+    #[DataProvider('getFieldNamesProvider')]
     public function testGetFields($response, $expected): void
     {
         $reflectionClass = new ReflectionClass($this->Export);
@@ -569,9 +577,8 @@ class ExportControllerTest extends TestCase
      * @param string|array $input The input for the function.
      * @param string|array $expected The expected value.
      * @return void
-     * @covers ::rowFields()
-     * @dataProvider rowFieldsProvider()
      */
+    #[DataProvider('rowFieldsProvider')]
     public function testRowFields($input, $expected): void
     {
         $reflectionClass = new ReflectionClass($this->Export);
@@ -608,9 +615,8 @@ class ExportControllerTest extends TestCase
      * @param string|array $input The input for the function.
      * @param string|array $expected The expected value.
      * @return void
-     * @covers ::getValue()
-     * @dataProvider getValueProvider()
      */
+    #[DataProvider('getValueProvider')]
     public function testGetValue($input, $expected): void
     {
         $reflectionClass = new ReflectionClass($this->Export);
@@ -640,7 +646,6 @@ class ExportControllerTest extends TestCase
      * Test `relatedFiltered` method.
      *
      * @return void
-     * @covers ::relatedFiltered()
      */
     public function testRelatedFiltered(): void
     {
@@ -729,9 +734,8 @@ class ExportControllerTest extends TestCase
      * @param string $expectedPrefix The expected prefix.
      * @param string $expectedExtension The expected extension.
      * @return void
-     * @dataProvider getRelatedFileNameProvider()
-     * @covers ::getRelatedFileName()
      */
+    #[DataProvider('getRelatedFileNameProvider')]
     public function testGetRelatedFileName(array $filter, string $id, string $type, string $relation, string $format, string $expectedPrefix, int $expectedDash, string $expectedExtension): void
     {
         $this->Export->filter = $filter;
@@ -750,7 +754,6 @@ class ExportControllerTest extends TestCase
      * Test `prepareQuery` method.
      *
      * @return void
-     * @covers ::prepareQuery()
      */
     public function testPrepareQuery(): void
     {

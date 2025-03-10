@@ -6,12 +6,12 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * {@see \App\Controller\Admin\ApplicationsController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\ApplicationsController
  */
+#[CoversClass(ApplicationsController::class)]
 class ApplicationsControllerTest extends TestCase
 {
     public ApplicationsController $AppsController;

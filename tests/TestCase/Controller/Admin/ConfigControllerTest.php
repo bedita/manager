@@ -6,12 +6,15 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Admin\ConfigController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\ConfigController
  */
+#[CoversClass(ConfigController::class)]
+#[CoversMethod(ConfigController::class, 'beforeFilter')]
+#[CoversMethod(ConfigController::class, 'fetchApplications')]
 class ConfigControllerTest extends TestCase
 {
     public ConfigController $CfgController;
@@ -91,7 +94,6 @@ class ConfigControllerTest extends TestCase
      * Test `beforeFilter`
      *
      * @return void
-     * @covers ::beforeFilter()
      */
     public function testBeforeFilter(): void
     {
@@ -105,7 +107,6 @@ class ConfigControllerTest extends TestCase
      * Test `fetchApplications`
      *
      * @return void
-     * @covers ::fetchApplications()
      */
     public function testFetchApplications(): void
     {

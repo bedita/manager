@@ -7,12 +7,18 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\Admin\StatisticsController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\StatisticsController
  */
+#[CoversClass(StatisticsController::class)]
+#[CoversMethod(StatisticsController::class, 'fetch')]
+#[CoversMethod(StatisticsController::class, 'fetchCount')]
+#[CoversMethod(StatisticsController::class, 'index')]
+#[CoversMethod(StatisticsController::class, 'intervals')]
 class StatisticsControllerTest extends TestCase
 {
     public StatisticsController $StatisticsController;
@@ -56,10 +62,6 @@ class StatisticsControllerTest extends TestCase
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
-     * @covers ::fetch()
-     * @covers ::intervals()
-     * @covers ::fetchCount()
      */
     public function testIndex(): void
     {
@@ -101,7 +103,6 @@ class StatisticsControllerTest extends TestCase
      * Test `fetchCount` method
      *
      * @return void
-     * @covers ::fetchCount()
      */
     public function testFetchCountZero(): void
     {
@@ -119,8 +120,6 @@ class StatisticsControllerTest extends TestCase
      * Test `fetchCount` method when exception is thrown
      *
      * @return void
-     * @covers ::index()
-     * @covers ::fetchCount()
      */
     public function testFetchCountException(): void
     {
@@ -193,10 +192,8 @@ class StatisticsControllerTest extends TestCase
      * Test `intervals` method
      *
      * @return void
-     * @covers ::index()
-     * @covers ::intervals()
-     * @dataProvider intervalsProvider()
      */
+    #[DataProvider('intervalsProvider')]
     public function testIntervals(array $query, array $expected): void
     {
         $request = new ServerRequest([

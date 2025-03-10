@@ -6,12 +6,12 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * {@see \App\Controller\Admin\ObjectsHistoryController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\ObjectsHistoryController
  */
+#[CoversClass(ObjectsHistoryController::class)]
 class ObjectsHistoryControllerTest extends TestCase
 {
     public ObjectsHistoryController $ObjectsHistoryController;

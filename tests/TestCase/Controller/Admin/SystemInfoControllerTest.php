@@ -7,12 +7,16 @@ use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Admin\SystemInfoController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\SystemInfoController
  */
+#[CoversClass(SystemInfoController::class)]
+#[CoversMethod(SystemInfoController::class, 'getApiInfo')]
+#[CoversMethod(SystemInfoController::class, 'getSystemInfo')]
+#[CoversMethod(SystemInfoController::class, 'index')]
 class SystemInfoControllerTest extends TestCase
 {
     public SystemInfoController $SystemInfoController;
@@ -59,7 +63,6 @@ class SystemInfoControllerTest extends TestCase
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {
@@ -78,7 +81,6 @@ class SystemInfoControllerTest extends TestCase
      * Test `getSystemInfo` method
      *
      * @return void
-     * @covers ::getSystemInfo()
      */
     public function testGetSystemInfo(): void
     {
@@ -106,7 +108,6 @@ class SystemInfoControllerTest extends TestCase
      * Test `getApiInfo` method
      *
      * @return void
-     * @covers ::getApiInfo()
      */
     public function testGetApiInfo(): void
     {
@@ -124,7 +125,6 @@ class SystemInfoControllerTest extends TestCase
      * Test `getApiInfo` method with exception
      *
      * @return void
-     * @covers ::getApiInfo()
      */
     public function testGetApiInfoException(): void
     {

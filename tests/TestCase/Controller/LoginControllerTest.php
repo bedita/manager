@@ -22,15 +22,23 @@ use Authentication\Identity;
 use Authentication\IdentityInterface;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\LoginController} Test Case
- *
- * @coversDefaultClass \App\Controller\LoginController
- * @uses \App\Controller\LoginController
  */
+#[CoversClass(LoginController::class)]
+#[CoversMethod(LoginController::class, 'authRequest')]
+#[CoversMethod(LoginController::class, 'handleFlashMessages')]
+#[CoversMethod(LoginController::class, 'initialize')]
+#[CoversMethod(LoginController::class, 'loadAvailableProjects')]
+#[CoversMethod(LoginController::class, 'login')]
+#[CoversMethod(LoginController::class, 'logout')]
+#[CoversMethod(LoginController::class, 'setupCurrentProject')]
 class LoginControllerTest extends TestCase
 {
     /**
@@ -121,7 +129,6 @@ class LoginControllerTest extends TestCase
     /**
      * Test `initialize` method.
      *
-     * @covers ::initialize()
      * @return void
      */
     public function testInitialize(): void
@@ -138,8 +145,6 @@ class LoginControllerTest extends TestCase
     /**
      * Test `authRequest` method, no user timezone set
      *
-     * @covers ::authRequest()
-     * @covers ::setupCurrentProject()
      * @return void
      */
     public function testLogin(): void
@@ -159,9 +164,9 @@ class LoginControllerTest extends TestCase
     /**
      * Test `login` with HTTP HEAD method
      *
-     * @coversNothing
      * @return void
      */
+    #[CoversNothing()]
     public function testHeadLogin(): void
     {
         $this->setupController([
@@ -177,7 +182,6 @@ class LoginControllerTest extends TestCase
     /**
      * Test `login` fail method
      *
-     * @covers ::authRequest()
      * @return void
      */
     public function testLoginFailed(): void
@@ -196,7 +200,6 @@ class LoginControllerTest extends TestCase
     /**
      * Test `login` method with GET
      *
-     * @covers ::login()
      * @return void
      */
     public function testLoginForm(): void
@@ -215,7 +218,6 @@ class LoginControllerTest extends TestCase
      * Test `login` method with POST
      *
      * @return void
-     * @covers ::login()
      */
     public function testLoginPost(): void
     {
@@ -231,7 +233,6 @@ class LoginControllerTest extends TestCase
     /**
      * Test `loadAvailableProjects` method with GET
      *
-     * @covers ::loadAvailableProjects()
      * @return void
      */
     public function testLoadAvailableProjects(): void
@@ -260,7 +261,6 @@ class LoginControllerTest extends TestCase
     /**
      * Test `setupCurrentProject` method
      *
-     * @covers ::setupCurrentProject()
      * @return void
      */
     public function testSetupCurrentProject(): void
@@ -281,7 +281,6 @@ class LoginControllerTest extends TestCase
     /**
      * Test `logout` method
      *
-     * @covers ::logout()
      * @return void
      */
     public function testLogout(): void
@@ -302,7 +301,6 @@ class LoginControllerTest extends TestCase
     /**
      * Test `handleFlashMessages` method
      *
-     * @covers ::handleFlashMessages()
      * @return void
      */
     public function testHandleFlashMessages(): void

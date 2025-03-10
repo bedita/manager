@@ -23,13 +23,25 @@ use Cake\Controller\ComponentRegistry;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\Component\CategoriesComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\CategoriesComponent
- * @uses \App\Controller\Component\CategoriesComponent
  */
+#[CoversClass(CategoriesComponent::class)]
+#[CoversMethod(CategoriesComponent::class, 'delete')]
+#[CoversMethod(CategoriesComponent::class, 'fillRoots')]
+#[CoversMethod(CategoriesComponent::class, 'getAllAvailableRoots')]
+#[CoversMethod(CategoriesComponent::class, 'getAvailableRoots')]
+#[CoversMethod(CategoriesComponent::class, 'hasChanged')]
+#[CoversMethod(CategoriesComponent::class, 'index')]
+#[CoversMethod(CategoriesComponent::class, 'invalidateSchemaCache')]
+#[CoversMethod(CategoriesComponent::class, 'map')]
+#[CoversMethod(CategoriesComponent::class, 'names')]
+#[CoversMethod(CategoriesComponent::class, 'save')]
+#[CoversMethod(CategoriesComponent::class, 'tree')]
 class CategoriesComponentTest extends TestCase
 {
     /**
@@ -64,7 +76,6 @@ class CategoriesComponentTest extends TestCase
      * Test `index`
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {
@@ -102,7 +113,6 @@ class CategoriesComponentTest extends TestCase
      * Test `names`
      *
      * @return void
-     * @covers ::names()
      */
     public function testNames(): void
     {
@@ -114,7 +124,6 @@ class CategoriesComponentTest extends TestCase
      * Test `map`
      *
      * @return void
-     * @covers ::map()
      */
     public function testMap(): void
     {
@@ -143,7 +152,6 @@ class CategoriesComponentTest extends TestCase
      * Test `tree`.
      *
      * @return void
-     * @covers ::tree()
      */
     public function testTree(): void
     {
@@ -172,8 +180,6 @@ class CategoriesComponentTest extends TestCase
      * Test `getAvailableRoots`.
      *
      * @return void
-     * @covers ::getAvailableRoots()
-     * @covers ::fillRoots()
      */
     public function testGetAvailableRoots(): void
     {
@@ -202,8 +208,6 @@ class CategoriesComponentTest extends TestCase
      * Test `getAllAvailableRoots`.
      *
      * @return void
-     * @covers ::getAllAvailableRoots()
-     * @covers ::fillRoots()
      */
     public function testGetAllAvailableRoots(): void
     {
@@ -236,8 +240,6 @@ class CategoriesComponentTest extends TestCase
      * Test `save`.
      *
      * @return void
-     * @covers ::save()
-     * @covers ::invalidateSchemaCache()
      */
     public function testSave(): void
     {
@@ -290,7 +292,6 @@ class CategoriesComponentTest extends TestCase
      * Test `delete`.
      *
      * @return void
-     * @covers ::delete()
      */
     public function testDelete(): void
     {
@@ -352,9 +353,8 @@ class CategoriesComponentTest extends TestCase
      * Test `hasChanged`.
      *
      * @return void
-     * @dataProvider hasChangedProvider()
-     * @covers ::hasChanged()
      */
+    #[DataProvider('hasChangedProvider')]
     public function testHasChanged(array $oldValue, array $newValue, bool $expected): void
     {
         $actual = $this->Categories->hasChanged($oldValue, $newValue);

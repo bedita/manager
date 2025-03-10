@@ -7,12 +7,12 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * {@see \App\Controller\Admin\EndpointPermissionsController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\EndpointPermissionsController
  */
+#[CoversClass(EndpointPermissionsController::class)]
 class EndpointPermissionsControllerTest extends TestCase
 {
     public EndpointPermissionsController $EndPermsController;

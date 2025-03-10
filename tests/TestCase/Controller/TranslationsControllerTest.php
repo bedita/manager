@@ -23,14 +23,22 @@ use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Exception;
 use Laminas\Diactoros\Uri;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use ReflectionClass;
 
 /**
  * {@see \App\Controller\TranslationsController} Test Case
- *
- * @coversDefaultClass \App\Controller\TranslationsController
- * @uses \App\Controller\TranslationsController
  */
+#[CoversClass(TranslationsController::class)]
+#[CoversMethod(TranslationsController::class, 'add')]
+#[CoversMethod(TranslationsController::class, 'delete')]
+#[CoversMethod(TranslationsController::class, 'edit')]
+#[CoversMethod(TranslationsController::class, 'index')]
+#[CoversMethod(TranslationsController::class, 'initialize')]
+#[CoversMethod(TranslationsController::class, 'save')]
+#[CoversMethod(TranslationsController::class, 'setupJsonKeys')]
+#[CoversMethod(TranslationsController::class, 'typeFromUrl')]
 class TranslationsControllerTest extends TestCase
 {
     /**
@@ -111,7 +119,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `initialize` method
      *
-     * @covers ::initialize()
      * @return void
      */
     public function testInitialize(): void
@@ -126,7 +133,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `add` method
      *
-     * @covers ::add()
      * @return void
      */
     public function testAdd(): void
@@ -158,7 +164,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `edit` method
      *
-     * @covers ::edit()
      * @return void
      */
     public function testEdit(): void
@@ -191,7 +196,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `save` method
      *
-     * @covers ::save()
      * @return void
      */
     public function testSave(): void
@@ -309,8 +313,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `save` method with JSON fields
      *
-     * @covers ::save()
-     * @covers ::setupJsonKeys()
      * @return void
      */
     public function testSaveJson(): void
@@ -370,7 +372,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `delete` method
      *
-     * @covers ::delete()
      * @return void
      */
     public function testDelete(): void
@@ -487,7 +488,6 @@ class TranslationsControllerTest extends TestCase
      * Test `typeFromUrl` method.
      *
      * @return void
-     * @covers ::typeFromUrl()
      */
     public function testTypeFromUrl(): void
     {
@@ -620,7 +620,6 @@ class TranslationsControllerTest extends TestCase
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {

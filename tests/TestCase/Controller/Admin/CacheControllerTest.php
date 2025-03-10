@@ -5,12 +5,14 @@ use App\Controller\Admin\CacheController;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Admin\CacheController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\CacheController
  */
+#[CoversClass(CacheController::class)]
+#[CoversMethod(CacheController::class, 'clear')]
 class CacheControllerTest extends TestCase
 {
     /**
@@ -44,7 +46,6 @@ class CacheControllerTest extends TestCase
      * Test clear
      *
      * @return void
-     * @covers ::clear()
      */
     public function testClear(): void
     {

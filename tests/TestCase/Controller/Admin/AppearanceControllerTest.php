@@ -6,12 +6,16 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Admin\AppearanceController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\AppearanceController
  */
+#[CoversClass(AppearanceController::class)]
+#[CoversMethod(AppearanceController::class, 'index')]
+#[CoversMethod(AppearanceController::class, 'initialize')]
+#[CoversMethod(AppearanceController::class, 'save')]
 class AppearanceControllerTest extends TestCase
 {
     /**
@@ -47,7 +51,6 @@ class AppearanceControllerTest extends TestCase
      * Test index
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {
@@ -76,8 +79,6 @@ class AppearanceControllerTest extends TestCase
      * Test save
      *
      * @return void
-     * @covers ::initialize()
-     * @covers ::save()
      */
     public function testSave(): void
     {
