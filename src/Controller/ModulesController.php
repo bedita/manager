@@ -69,9 +69,13 @@ class ModulesController extends AppController
         $this->loadComponent('BEdita/WebTools.ApiFormatter');
         if ($this->getRequest()->getParam('object_type')) {
             $this->objectType = $this->getRequest()->getParam('object_type');
-            $this->Modules = $this->components()->get('Modules');
+            /** @var \App\Controller\Component\ModulesComponent $modulesComponent */
+            $modulesComponent = $this->components()->get('Modules');
+            $this->Modules = $modulesComponent;
             $this->Modules->setConfig('currentModuleName', $this->objectType);
-            $this->Schema = $this->components()->get('Schema');
+            /** @var \App\Controller\Component\SchemaComponent $schemaComponent */
+            $schemaComponent = $this->components()->get('Schema');
+            $this->Schema = $schemaComponent;
             $this->Schema->setConfig('type', $this->objectType);
         }
         $this->FormProtection->setConfig('unlockedActions', ['save']);
