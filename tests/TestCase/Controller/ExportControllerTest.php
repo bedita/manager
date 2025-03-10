@@ -155,8 +155,8 @@ class ExportControllerTest extends TestCase
         $apiClient->method('get')
             ->willReturn([
                 'data' => [
-                    0 => $this->testdata['input']['gustavo'],
-                    1 => $this->testdata['input']['johndoe'],
+                    0 => self::$testdata['input']['gustavo'],
+                    1 => self::$testdata['input']['johndoe'],
                 ],
                 'meta' => [
                     'pagination' => [
@@ -194,13 +194,20 @@ class ExportControllerTest extends TestCase
      */
     public function testRelated(): void
     {
-        $this->Export = new ExportController(
-            new ServerRequest([
-                'environment' => ['REQUEST_METHOD' => 'GET'],
-                'params' => ['object_type' => 'users'],
-                'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
-            ])
-        );
+        $request = new ServerRequest([
+            'environment' => ['REQUEST_METHOD' => 'GET'],
+            'params' => ['object_type' => 'users'],
+            'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
+        ]);
+        $controller = new class ($request) extends ExportController {
+            public ExportComponent $Export;
+            public ?BEditaClient $apiClient;
+            public function initialize(): void
+            {
+                parent::initialize();
+                $this->Export = $this->loadComponent(ExportComponent::class);
+            }
+        };
 
         // mock api getObjects.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
@@ -209,7 +216,7 @@ class ExportControllerTest extends TestCase
         $apiClient->method('get')
             ->willReturn([
                 'data' => [
-                    0 => $this->testdata['input']['gustavo'],
+                    0 => self::$testdata['input']['gustavo'],
                 ],
                 'meta' => [
                     'pagination' => [
@@ -218,11 +225,7 @@ class ExportControllerTest extends TestCase
                     ],
                 ],
             ]);
-        ApiClientProvider::setApiClient($apiClient);
-        // set $this->Export->apiClient
-        $property = new ReflectionProperty(ExportController::class, 'apiClient');
-        $property->setAccessible(true);
-        $property->setValue($this->Export, $apiClient);
+        $controller->apiClient = $apiClient;
 
         // expected csv.
         $fields = '"id","name","skills","category","prop"';
@@ -231,7 +234,7 @@ class ExportControllerTest extends TestCase
 
         // call export.
         $this->setLimit(500);
-        $response = $this->Export->related('999', 'seealso', 'csv');
+        $response = $controller->related('999', 'seealso', 'csv');
         $content = $response->getBody()->__toString();
         static::assertInstanceOf('Cake\Http\Response', $response);
         static::assertEquals($expected, $content);
@@ -250,18 +253,25 @@ class ExportControllerTest extends TestCase
      */
     public function testExportFormatNotAllowed(): void
     {
-        $this->Export = new ExportController(
-            new ServerRequest([
-                'environment' => ['REQUEST_METHOD' => 'POST'],
-                'params' => ['objectType' => 'proms'],
-                'post' => ['ids' => '655', 'objectType' => 'proms', 'format' => ''],
-            ])
-        );
+        $request = new ServerRequest([
+            'environment' => ['REQUEST_METHOD' => 'POST'],
+            'params' => ['objectType' => 'proms'],
+            'post' => ['ids' => '655', 'objectType' => 'proms', 'format' => ''],
+        ]);
+        $controller = new class ($request) extends ExportController {
+            public ExportComponent $Export;
+            public ?BEditaClient $apiClient;
+            public function initialize(): void
+            {
+                parent::initialize();
+                $this->Export = $this->loadComponent(ExportComponent::class);
+            }
+        };
 
         // call export.
-        $response = $this->Export->export();
+        $response = $controller->export();
         static::assertEquals(302, $response->getStatusCode());
-        $flash = (array)$this->Export->getRequest()->getSession()->read('Flash.flash');
+        $flash = (array)$controller->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('Format choosen is not available', Hash::get($flash, '0.message'));
     }
 
@@ -272,18 +282,25 @@ class ExportControllerTest extends TestCase
      */
     public function testRelatedFormatNotAllowed(): void
     {
-        $this->Export = new ExportController(
-            new ServerRequest([
-                'environment' => ['REQUEST_METHOD' => 'GET'],
-                'params' => ['objectType' => 'proms'],
-                'get' => ['id' => '655', 'relation' => 'dummy', 'format' => 'abcde'],
-            ])
-        );
+        $request = new ServerRequest([
+            'environment' => ['REQUEST_METHOD' => 'GET'],
+            'params' => ['objectType' => 'proms'],
+            'get' => ['id' => '655', 'relation' => 'dummy', 'format' => 'abcde'],
+        ]);
+        $controller = new class ($request) extends ExportController {
+            public ExportComponent $Export;
+            public ?BEditaClient $apiClient;
+            public function initialize(): void
+            {
+                parent::initialize();
+                $this->Export = $this->loadComponent(ExportComponent::class);
+            }
+        };
 
         // call export.
-        $response = $this->Export->related('655', 'proms', '');
+        $response = $controller->related('655', 'proms', '');
         static::assertEquals(302, $response->getStatusCode());
-        $flash = (array)$this->Export->getRequest()->getSession()->read('Flash.flash');
+        $flash = (array)$controller->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('Format choosen is not available', Hash::get($flash, '0.message'));
     }
 
@@ -649,13 +666,21 @@ class ExportControllerTest extends TestCase
      */
     public function testRelatedFiltered(): void
     {
-        $this->Export = new ExportController(
-            new ServerRequest([
-                'environment' => ['REQUEST_METHOD' => 'GET'],
-                'params' => ['object_type' => 'users'],
-                'get' => ['id' => '888', 'object_type' => 'users', 'format' => 'csv'],
-            ])
-        );
+        $request = new ServerRequest([
+            'environment' => ['REQUEST_METHOD' => 'GET'],
+            'params' => ['object_type' => 'users'],
+            'get' => ['id' => '888', 'object_type' => 'users', 'format' => 'csv'],
+        ]);
+
+        $controller = new class ($request) extends ExportController {
+            public ExportComponent $Export;
+            public ?BEditaClient $apiClient;
+            public function initialize(): void
+            {
+                parent::initialize();
+                $this->Export = $this->loadComponent(ExportComponent::class);
+            }
+        };
         // mock api getObjects.
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
@@ -663,7 +688,7 @@ class ExportControllerTest extends TestCase
         $apiClient->method('get')
             ->willReturn([
                 'data' => [
-                    0 => $this->testdata['input']['gustavo'],
+                    0 => self::$testdata['input']['gustavo'],
                 ],
                 'meta' => [
                     'pagination' => [
@@ -672,13 +697,9 @@ class ExportControllerTest extends TestCase
                     ],
                 ],
             ]);
-        ApiClientProvider::setApiClient($apiClient);
-        // set $this->Export->apiClient
-        $property = new ReflectionProperty(ExportController::class, 'apiClient');
-        $property->setAccessible(true);
-        $property->setValue($this->Export, $apiClient);
-        $this->Export->relatedFiltered('888', 'seealso', 'csv', 'q=test&filter[type]=documents');
-        static::assertEquals(['q' => 'test', 'filter' => ['type' => 'documents']], $this->Export->filter);
+        $controller->apiClient = $apiClient;
+        $controller->relatedFiltered('888', 'seealso', 'csv', 'q=test&filter[type]=documents');
+        static::assertEquals(['q' => 'test', 'filter' => ['type' => 'documents']], $controller->filter);
     }
 
     /**
