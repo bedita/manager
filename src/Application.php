@@ -108,11 +108,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         foreach ($plugins as $plugin => $options) {
             $options = array_merge(static::PLUGIN_DEFAULTS, $options);
             if (!$options['debugOnly'] || Configure::read('debug')) {
-                if ($this->getPlugins()->has($plugin)) {
-                    continue;
+                if (!$this->getPlugins()->has($plugin)) {
+                    $this->addPlugin($plugin, $options);
+                    $this->plugins->get($plugin)->bootstrap($this);
                 }
-                $this->addPlugin($plugin, $options);
-                $this->plugins->get($plugin)->bootstrap($this);
             }
         }
     }
