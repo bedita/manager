@@ -1055,14 +1055,14 @@ class ModulesControllerTest extends BaseControllerTest
     public function testAvailableRelationshipsUrlMulti(): void
     {
         $this->setupController();
-        $controller = new class($this->controller->getRequest()) extends ModulesController {
+        $controller = new class ($this->controller->getRequest()) extends ModulesController {
             public object $Modules;
             public object $Schema;
 
             public function initialize(): void
             {
                 parent::initialize();
-                $this->Modules = new class(new ComponentRegistry($this)) extends ModulesComponent {
+                $this->Modules = new class (new ComponentRegistry($this)) extends ModulesComponent {
                     public function relatedTypes(array $schema, string $relation): array
                     {
                         return ['images', 'profiles'];
