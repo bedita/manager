@@ -17,12 +17,14 @@ use App\Controller\Component\FlashComponent;
 use BEdita\SDK\BEditaClientException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Component\FlashComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\FlashComponent
  */
+#[CoversClass(FlashComponent::class)]
+#[CoversMethod(FlashComponent::class, 'set')]
 class FlashComponentTest extends TestCase
 {
     /**
@@ -67,7 +69,6 @@ class FlashComponentTest extends TestCase
      * Test `set()` method.
      *
      * @return void
-     * @covers ::set()
      */
     public function testSet(): void
     {

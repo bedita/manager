@@ -5,12 +5,21 @@ use App\Controller\Component\ExportComponent;
 use App\Test\TestCase\Controller\AppControllerTest;
 use Cake\Controller\ComponentRegistry;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\Component\ExportComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\ExportComponent
  */
+#[CoversClass(ExportComponent::class)]
+#[CoversMethod(ExportComponent::class, 'checkFormat')]
+#[CoversMethod(ExportComponent::class, 'column')]
+#[CoversMethod(ExportComponent::class, 'csv')]
+#[CoversMethod(ExportComponent::class, 'download')]
+#[CoversMethod(ExportComponent::class, 'format')]
+#[CoversMethod(ExportComponent::class, 'ods')]
+#[CoversMethod(ExportComponent::class, 'xlsx')]
 class ExportComponentTest extends TestCase
 {
     /**
@@ -63,9 +72,8 @@ class ExportComponentTest extends TestCase
      * Test `checkFormat` method
      *
      * @return void
-     * @covers ::checkFormat()
-     * @dataProvider checkFormatProvider()
      */
+    #[DataProvider('checkFormatProvider')]
     public function testCheckFormat(string $format, bool $expected): void
     {
         $actual = $this->Export->checkFormat($format);
@@ -97,10 +105,8 @@ class ExportComponentTest extends TestCase
      * Test `format` method
      *
      * @return void
-     * @covers ::format()
-     * @covers ::csv()
-     * @dataProvider formatProvider()
      */
+    #[DataProvider('formatProvider')]
     public function testFormat(string $format, array $rows, string $filename, array $properties, array $expected): void
     {
         $actual = $this->Export->format($format, $rows, $filename, $properties);
@@ -144,9 +150,8 @@ class ExportComponentTest extends TestCase
      * @param int $number The column number
      * @param string $expected The column string
      * @return void
-     * @covers ::column()
-     * @dataProvider columnProvider()
      */
+    #[DataProvider('columnProvider')]
     public function testColumn(int $number, string $expected): void
     {
         // call protected method using AppControllerTest->invokeMethod
@@ -184,12 +189,8 @@ class ExportComponentTest extends TestCase
      * @param string $format The content type format
      * @param string $contentType The content type
      * @return void
-     * @covers ::csv()
-     * @covers ::ods()
-     * @covers ::xlsx()
-     * @covers ::download()
-     * @dataProvider formatsProvider()
      */
+    #[DataProvider('formatsProvider')]
     public function testFormats(string $format, string $contentType): void
     {
         $filename = sprintf('test.%s', $format);

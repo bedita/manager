@@ -21,14 +21,17 @@ use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Cake\Utility\Text;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionProperty;
 
 /**
  * {@see \App\Controller\PasswordController} Test Case
- *
- * @coversDefaultClass \App\Controller\PasswordController
- * @uses \App\Controller\PasswordController
  */
+#[CoversClass(PasswordController::class)]
+#[CoversMethod(PasswordController::class, 'change')]
+#[CoversMethod(PasswordController::class, 'reset')]
 class PasswordControllerTest extends TestCase
 {
     /**
@@ -133,9 +136,8 @@ class PasswordControllerTest extends TestCase
      * @param array $config The config for controller setup
      * @param array $mock The parameters for api client mock
      * @return void
-     * @dataProvider resetProvider()
-     * @covers ::reset()
      */
+    #[DataProvider('resetProvider')]
     public function testReset(array $config, array $mock): void
     {
         $this->setupController($config, $mock);
@@ -147,7 +149,6 @@ class PasswordControllerTest extends TestCase
      * Test `reset` method, exception case
      *
      * @return void
-     * @covers ::reset()
      */
     public function testResetException(): void
     {
@@ -228,9 +229,8 @@ class PasswordControllerTest extends TestCase
      * @param array $mock The parameters to mock api client
      * @param Response|null $expected The expected result
      * @return void
-     * @dataProvider changeProvider()
-     * @covers ::change()
      */
+    #[DataProvider('changeProvider')]
     public function testChange(array $config, array $mock, ?Response $expected): void
     {
         $this->setupController($config, $mock);
@@ -247,7 +247,6 @@ class PasswordControllerTest extends TestCase
      * Test `change` method, exception case
      *
      * @return void
-     * @covers ::change()
      */
     public function testChangeException(): void
     {

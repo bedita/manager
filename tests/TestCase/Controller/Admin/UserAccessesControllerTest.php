@@ -6,12 +6,14 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Admin\UserAccessesController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\UserAccessesController
  */
+#[CoversClass(UserAccessesController::class)]
+#[CoversMethod(UserAccessesController::class, 'index')]
 class UserAccessesControllerTest extends TestCase
 {
     public UserAccessesController $UserAccessesController;
@@ -58,7 +60,6 @@ class UserAccessesControllerTest extends TestCase
      * Basic test
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {

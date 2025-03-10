@@ -8,12 +8,16 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\TagsController} Test Case
- *
- * @coversDefaultClass \App\Controller\TagsController
  */
+#[CoversClass(TagsController::class)]
+#[CoversMethod(TagsController::class, 'beforeRender')]
+#[CoversMethod(TagsController::class, 'index')]
+#[CoversMethod(TagsController::class, 'initialize')]
 class TagsControllerTest extends TestCase
 {
     /**
@@ -76,7 +80,6 @@ class TagsControllerTest extends TestCase
      * Test `initialize` method
      *
      * @return void
-     * @covers ::initialize()
      */
     public function testInitialize(): void
     {
@@ -89,7 +92,6 @@ class TagsControllerTest extends TestCase
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {
@@ -103,7 +105,6 @@ class TagsControllerTest extends TestCase
      * Test `beforeRender` method
      *
      * @return void
-     * @covers ::beforeRender()
      */
     public function testBeforeRender(): void
     {
