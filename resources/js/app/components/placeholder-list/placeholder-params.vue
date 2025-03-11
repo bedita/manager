@@ -21,7 +21,7 @@
             <template v-if="parameters[column] === 'boolean'">
                 <input type="checkbox"
                        v-model="decodedValue[column]"
-                       @click="changeParams"
+                       @change="changeParams"
                 >
             </template>
             <template v-if="parameters[column] === 'richtext'">
@@ -96,6 +96,7 @@ export default {
             }
             try {
                 this.decodedValue = JSON.parse(decoded);
+                console.log(this.decodedValue);
             } catch(e) {
                 console.error(e, decoded, this.value);
             }
@@ -113,6 +114,10 @@ export default {
             });
             this.oldValue = this.newValue;
         },
+        changeParamsBoolean(value, column) {
+            this.decodedValue[column] = value;
+            this.changeParams();
+        },
         changeRichText(value, column) {
             this.decodedValue[column] = value;
             this.changeParams();
@@ -125,13 +130,15 @@ export default {
 </script>
 <style>
 div.placeholderParams {
-    display: grid;
-    align-items: center;
+    display: flex;
+    flex-direction: column;
     gap: 8px;
     margin: 4px 0;
+}
 
-    .paramName {
-        text-transform: capitalize;
-    }
+.paramName {
+    display: block;
+    margin-bottom: 4px;
+    text-transform: capitalize;
 }
 </style>
