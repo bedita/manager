@@ -96,7 +96,6 @@ export default {
             }
             try {
                 this.decodedValue = JSON.parse(decoded);
-                console.log(this.decodedValue);
             } catch(e) {
                 console.error(e, decoded, this.value);
             }
