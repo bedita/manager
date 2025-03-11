@@ -186,8 +186,7 @@ class ModulesComponent extends Component
         if (empty($user) || empty($user->getOriginalData())) {
             return;
         }
-
-        $roles = (array)$user->get('roles');
+        $roles = array_intersect(array_keys($accessControl), (array)$user->get('roles'));
         $modules = (array)array_keys($this->modules);
         $hidden = [];
         $readonly = [];
