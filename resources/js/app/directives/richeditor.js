@@ -67,8 +67,8 @@ export default {
                 });
             },
 
-            unbind() {
-                tinymce.remove();
+            unbind(element) {
+                tinymce.remove(element.editor);
             },
 
             /**
@@ -82,8 +82,12 @@ export default {
                 if (binding?.value?.toolbar) {
                     toolbar = binding.value.toolbar.join(' ');
                 } else if (binding?.expression) {
-                    let exp = JSON.parse(binding.expression);
-                    toolbar = exp ? exp.join(' ') : toolbar;
+                    try {
+                        const exp = JSON.parse(binding.expression);
+                        toolbar = exp ? exp.join(' ') : toolbar;
+                    } catch (e) {
+                        // do nothing
+                    }
                 }
                 if (!binding.modifiers?.placeholders) {
                     toolbar = toolbar.replace(/\bplaceholders\b/, '');

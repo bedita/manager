@@ -212,6 +212,23 @@ class LoginControllerTest extends TestCase
     }
 
     /**
+     * Test `login` method with POST
+     *
+     * @return void
+     * @covers ::login()
+     */
+    public function testLoginPost(): void
+    {
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+        ]);
+        static::assertNull($this->Login->login());
+        static::assertSame('Invalid username or password', $this->Login->getRequest()->getSession()->read('Flash')['flash'][0]['message']);
+    }
+
+    /**
      * Test `loadAvailableProjects` method with GET
      *
      * @covers ::loadAvailableProjects()

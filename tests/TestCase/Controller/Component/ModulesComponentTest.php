@@ -1699,4 +1699,19 @@ class ModulesComponentTest extends TestCase
         $expected = ['a dummy doc one', 'a dummy doc two', 'a dummy doc three'];
         static::assertSame($expected, $titles);
     }
+
+    /**
+     * Test `setupAttributes` method
+     *
+     * @return void
+     * @covers ::setupAttributes()
+     */
+    public function testSetupAttributes(): void
+    {
+        // check that object attributes is set into controller currentAttributes var as json string
+        $obj = ['attributes' => ['title' => 'test']];
+        $this->Modules->setupAttributes($obj);
+        $viewVars = $this->Modules->getController()->viewBuilder()->getVars();
+        static::assertEquals(json_encode(['title' => 'test']), $viewVars['currentAttributes']);
+    }
 }
