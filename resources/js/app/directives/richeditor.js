@@ -84,7 +84,7 @@ export default {
                 } else if (binding?.expression) {
                     try {
                         const exp = JSON.parse(binding.expression);
-                        toolbar = exp.join(' ');
+                        toolbar = exp ? exp.join(' ') : toolbar;
                     } catch (e) {
                         // do nothing
                     }
