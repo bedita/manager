@@ -7,6 +7,7 @@ use App\Controller\TagsController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 
 /**
  * {@see \App\Controller\TagsController} Test Case
@@ -109,5 +110,102 @@ class TagsControllerTest extends TestCase
         $this->setupController();
         $this->controller->dispatchEvent('Controller.beforeRender');
         static::assertSame(['_name' => 'tags:index'], $this->controller->viewBuilder()->getVar('moduleLink'));
+    }
+
+    /**
+     * Test `create`, `patch`, `delete`, `search` methods
+     *
+     * @return void
+     * @covers ::create()
+     * @covers ::patch()
+     * @covers ::delete()
+     * @covers ::search()
+     */
+    public function testMulti(): void
+    {
+        // create with error
+        $this->setupController(['environment' => ['REQUEST_METHOD' => 'POST']]);
+        $this->controller->create();
+        static::assertNotEmpty($this->controller->viewBuilder()->getVar('error'));
+
+        // create ok
+        $data = [
+            'type' => 'tags',
+            'attributes' => [
+                'name' => 'my-dummy-test-tag',
+                'label' => 'My Dummy Test Tag',
+                'labels' => [
+                    'default' => 'My Dummy Test Tag',
+                ],
+                'enabled' => false,
+            ],
+        ];
+        $request = $this->controller->getRequest()->withData('data', $data);
+        $this->controller->setRequest($request);
+        $this->controller->create();
+        static::assertEmpty($this->controller->viewBuilder()->getVar('error'));
+        $response = $this->controller->viewBuilder()->getVar('response');
+        static::assertNotEmpty($response);
+        $id = $response['data']['id'];
+
+        // patch with error
+        $this->setupController(['environment' => ['REQUEST_METHOD' => 'PATCH']]);
+        $this->controller->getRequest()->withData('name', 'test');
+        $this->controller->patch('test');
+        static::assertNotEmpty($this->controller->viewBuilder()->getVar('error'));
+        static::assertNotEquals('ok', $this->controller->viewBuilder()->getVar('response'));
+
+        // patch ok
+        $data = [
+            'id' => $id,
+            'type' => 'tags',
+            'attributes' => [
+                'name' => 'my-dummy-test-tag',
+                'label' => 'My Dummy Test Tag',
+                'labels' => [
+                    'default' => 'My Dummy Test Tag',
+                ],
+                'enabled' => true,
+            ],
+        ];
+        $request = $this->controller->getRequest()->withData('data', $data);
+        $this->controller->setRequest($request);
+        $this->controller->patch($id);
+        static::assertEquals('ok', $this->controller->viewBuilder()->getVar('response'));
+        static::assertEmpty($this->controller->viewBuilder()->getVar('error'));
+
+        // search with error
+        $this->setupController(['environment' => ['REQUEST_METHOD' => 'GET']]);
+        $request = $this->controller->getRequest()->withQueryParams(['filter' => 'wrong']);
+        $this->controller->setRequest($request);
+        $this->controller->search();
+        static::assertNotEmpty($this->controller->viewBuilder()->getVar('error'));
+
+        // search ok
+        $request = $this->controller->getRequest()->withQueryParams(['filter' => ['name' => 'my-dummy-test-tag']]);
+        $this->controller->setRequest($request);
+        $this->controller->search();
+        static::assertEmpty($this->controller->viewBuilder()->getVar('error'));
+        $response = $this->controller->viewBuilder()->getVar('data');
+        static::assertNotEmpty($response);
+        $actual = (array)Hash::get($response, '0');
+        static::assertNotEmpty($actual);
+        static::assertEquals('my-dummy-test-tag', $actual['attributes']['name']);
+        static::assertEquals('My Dummy Test Tag', $actual['attributes']['label']);
+        static::assertEquals('My Dummy Test Tag', $actual['attributes']['labels']['default']);
+        static::assertEquals(true, $actual['attributes']['enabled']);
+        static::assertEquals($id, $actual['id']);
+
+        // delete with error
+        $this->setupController(['environment' => ['REQUEST_METHOD' => 'POST']]);
+        $this->controller->delete('test');
+        static::assertNotEmpty($this->controller->viewBuilder()->getVar('error'));
+        static::assertNotEquals('ok', $this->controller->viewBuilder()->getVar('response'));
+
+        // delete ok
+        $this->setupController(['environment' => ['REQUEST_METHOD' => 'POST']]);
+        $this->controller->delete($id);
+        static::assertEquals('ok', $this->controller->viewBuilder()->getVar('response'));
+        static::assertEmpty($this->controller->viewBuilder()->getVar('error'));
     }
 }
