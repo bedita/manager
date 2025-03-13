@@ -165,7 +165,7 @@ export default {
                 headers,
                 method: 'GET',
             };
-            const response = await fetch(`${BEDITA.base}/api/model/tags?filter[name]=${this.name}`, options);
+            const response = await fetch(`${BEDITA.base}/tags/search?filter[name]=${this.name}`, options);
             const responseJson = await response.json();
 
             return responseJson?.data?.length > 0;
@@ -212,11 +212,11 @@ export default {
                     payload.data.id = this.obj.id;
                     options.body = JSON.stringify(payload);
                     options.method = 'PATCH'
-                    response = await fetch(`${BEDITA.base}/api/model/tags/${this.obj.id}`, options);
+                    response = await fetch(`${BEDITA.base}/tags/patch/${this.obj.id}`, options);
                 } else {
                     options.body = JSON.stringify(payload);
                     options.method = 'POST'
-                    response = await fetch(`${BEDITA.base}/api/model/tags`, options);
+                    response = await fetch(`${BEDITA.base}/tags/create`, options);
                 }
                 if (response.status === 200) {
                     if (this.redir) {
@@ -253,14 +253,14 @@ export default {
             const prefix = t`Error on deleting tag`;
             try {
                 const options = {
-                    method: 'DELETE',
+                    method: 'POST',
                     credentials: 'same-origin',
                     headers: {
                         'accept': 'application/json',
                         'X-CSRF-Token': BEDITA.csrfToken,
                     },
                 };
-                const response = await fetch(`${BEDITA.base}/api/model/tags/${this.obj.id}`, options);
+                const response = await fetch(`${BEDITA.base}/tags/delete/${this.obj.id}`, options);
                 if (response.status === 200) {
                     this.$el.remove(this.$el);
                     this.dialog?.hide();
