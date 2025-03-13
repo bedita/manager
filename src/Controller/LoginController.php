@@ -26,7 +26,7 @@ class LoginController extends AppController
     /**
      * @inheritDoc
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         // Projects configuration files base path
         'projectsPath' => CONFIG . 'projects' . DS,
     ];

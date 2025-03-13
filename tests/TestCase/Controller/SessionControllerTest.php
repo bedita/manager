@@ -15,18 +15,22 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\SessionController;
 use Cake\Http\ServerRequest;
 use Cake\Http\Session;
+use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\SessionController} test case.
- *
- * @coversDefaultClass \App\Controller\SessionController
  */
-class SessionControllerTest extends \Cake\TestSuite\TestCase
+#[CoversClass(SessionController::class)]
+#[CoversMethod(SessionController::class, 'delete')]
+#[CoversMethod(SessionController::class, 'save')]
+#[CoversMethod(SessionController::class, 'view')]
+class SessionControllerTest extends TestCase
 {
     /**
      * Test `view` method.
      *
-     * @covers ::view()
      * @return void
      */
     public function testView(): void
@@ -67,7 +71,6 @@ class SessionControllerTest extends \Cake\TestSuite\TestCase
     /**
      * Test `save` method.
      *
-     * @covers ::save()
      * @return void
      */
     public function testSave(): void
@@ -119,7 +122,6 @@ class SessionControllerTest extends \Cake\TestSuite\TestCase
     /**
      * Test `delete` method.
      *
-     * @covers ::delete()
      * @return void
      */
     public function testDelete(): void

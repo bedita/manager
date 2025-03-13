@@ -20,6 +20,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Component;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
+use Cake\View\View;
 
 /**
  * History component
@@ -31,28 +32,28 @@ class HistoryComponent extends Component
      *
      * @var \App\View\Helper\CalendarHelper
      */
-    protected $Calendar;
+    protected CalendarHelper $Calendar;
 
     /**
      * Categories helper
      *
      * @var \App\View\Helper\CategoriesHelper
      */
-    protected $Categories;
+    protected CategoriesHelper $Categories;
 
     /**
      * Schema helper
      *
      * @var \App\View\Helper\SchemaHelper
      */
-    protected $Schema;
+    protected SchemaHelper $Schema;
 
     /**
      * Key for history data to store.
      *
      * @var string
      */
-    protected $key = 'history.%s.attributes';
+    protected string $key = 'history.%s.attributes';
 
     /**
      * {@inheritDoc}
@@ -60,7 +61,7 @@ class HistoryComponent extends Component
      */
     public function initialize(array $config): void
     {
-        $view = new \Cake\View\View();
+        $view = new View();
         $this->Calendar = new CalendarHelper($view);
         $this->Categories = new CategoriesHelper($view);
         $this->Schema = new SchemaHelper($view);
@@ -76,7 +77,7 @@ class HistoryComponent extends Component
      * @param array $object The object
      * @return void
      */
-    public function load($id, array &$object): void
+    public function load(string|int $id, array &$object): void
     {
         if (empty($id) || empty($object)) {
             return;
@@ -171,7 +172,7 @@ class HistoryComponent extends Component
      * @param array $options The options
      * @return array
      */
-    public function fetch($id, array $schema, array $options): array
+    public function fetch(string|int $id, array $schema, array $options): array
     {
         $response = (array)ApiClientProvider::getApiClient()->get('/history', array_merge(
             [
@@ -239,7 +240,7 @@ class HistoryComponent extends Component
      * @param mixed $value The value
      * @return string
      */
-    public function content(string $field, array $schema, $value): string
+    public function content(string $field, array $schema, mixed $value): string
     {
         if ($field === 'date_ranges') {
             return sprintf(

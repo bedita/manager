@@ -31,14 +31,14 @@ class PropertiesComponent extends Component
     /**
      * @inheritDoc
      */
-    protected $components = ['Config'];
+    protected array $components = ['Config'];
 
     /**
      * Default properties groups
      *
      * @var array
      */
-    protected $defaultGroups = [
+    protected array $defaultGroups = [
         'view' => [
             // always open on the top
             'core' => [
@@ -90,7 +90,7 @@ class PropertiesComponent extends Component
      *
      * @var array
      */
-    protected $excluded = [
+    protected array $excluded = [
         'categories',
         'date_ranges',
         'tags',

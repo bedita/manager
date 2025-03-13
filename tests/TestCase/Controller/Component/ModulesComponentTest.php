@@ -31,18 +31,45 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Exception;
 use Laminas\Diactoros\Stream;
 use Laminas\Diactoros\UploadedFile;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionClass;
+use ReflectionProperty;
+use RuntimeException;
 
 /**
  * {@see \App\Controller\Component\ModulesComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\ModulesComponent
  */
+#[CoversClass(ModulesComponent::class)]
+#[CoversMethod(ModulesComponent::class, 'assocStreamToMedia')]
+#[CoversMethod(ModulesComponent::class, 'beforeFilter')]
+#[CoversMethod(ModulesComponent::class, 'checkRequestForUpload')]
+#[CoversMethod(ModulesComponent::class, 'getModules')]
+#[CoversMethod(ModulesComponent::class, 'getProject')]
+#[CoversMethod(ModulesComponent::class, 'getRelated')]
+#[CoversMethod(ModulesComponent::class, 'isAbstract')]
+#[CoversMethod(ModulesComponent::class, 'modulesByAccessControl')]
+#[CoversMethod(ModulesComponent::class, 'modulesFromMeta')]
+#[CoversMethod(ModulesComponent::class, 'objectTypes')]
+#[CoversMethod(ModulesComponent::class, 'relatedTypes')]
+#[CoversMethod(ModulesComponent::class, 'relationLabels')]
+#[CoversMethod(ModulesComponent::class, 'relationsSchema')]
+#[CoversMethod(ModulesComponent::class, 'removeStream')]
+#[CoversMethod(ModulesComponent::class, 'saveRelated')]
+#[CoversMethod(ModulesComponent::class, 'saveRelatedObjects')]
+#[CoversMethod(ModulesComponent::class, 'setupAttributes')]
+#[CoversMethod(ModulesComponent::class, 'setupRelationsMeta')]
+#[CoversMethod(ModulesComponent::class, 'startup')]
+#[CoversMethod(ModulesComponent::class, 'upload')]
 class ModulesComponentTest extends TestCase
 {
     /**
@@ -50,23 +77,23 @@ class ModulesComponentTest extends TestCase
      *
      * @var \App\Controller\Component\ModulesComponent
      */
-    public $Modules;
+    public ModulesComponent $Modules;
 
     /**
      * Authentication component
      *
      * @var \Authentication\Controller\Component\AuthenticationComponent;
      */
-    public $Authentication;
+    public AuthenticationComponent $Authentication;
 
-    public $MyModules;
+    public ModulesComponent $MyModules;
 
     /**
      * Test api client
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * @inheritDoc
@@ -75,7 +102,7 @@ class ModulesComponentTest extends TestCase
     {
         parent::setUp();
 
-        $controller = new AppController();
+        $controller = new AppController(new ServerRequest());
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');
         /** @var \App\Controller\Component\ModulesComponent $modulesComponent */
@@ -86,7 +113,7 @@ class ModulesComponentTest extends TestCase
         $this->Authentication = $authenticationComponent;
         $this->MyModules = new class ($registry) extends ModulesComponent
         {
-            public $meta = [];
+            public array $meta = [];
 
             protected function oEmbedMeta(string $url): ?array
             {
@@ -144,7 +171,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function getProjectProvider(): array
+    public static function getProjectProvider(): array
     {
         return [
             'ok' => [
@@ -174,8 +201,8 @@ class ModulesComponentTest extends TestCase
                 new BEditaClientException('I am a client exception'),
             ],
             'other exception' => [
-                new \RuntimeException('I am some other kind of exception', 999),
-                new \RuntimeException('I am some other kind of exception', 999),
+                new RuntimeException('I am some other kind of exception', 999),
+                new RuntimeException('I am some other kind of exception', 999),
             ],
             'config' => [
                 [
@@ -199,16 +226,15 @@ class ModulesComponentTest extends TestCase
      * @param array|\Exception $meta Response to `/home` endpoint.
      * @param array $config Project config to set.
      * @return void
-     * @dataProvider getProjectProvider()
-     * @covers ::getProject()
      */
+    #[DataProvider('getProjectProvider')]
     public function testGetProject($expected, $meta, $config = []): void
     {
         // Mock Authentication component
         $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity([]));
 
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());
@@ -218,7 +244,7 @@ class ModulesComponentTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
-        if ($meta instanceof \Exception) {
+        if ($meta instanceof Exception) {
             $apiClient->method('get')
                 ->with('/home')
                 ->willThrowException($meta);
@@ -240,7 +266,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function isAbstractProvider(): array
+    public static function isAbstractProvider(): array
     {
         return [
             'isAbstractTrue' => [
@@ -259,10 +285,9 @@ class ModulesComponentTest extends TestCase
      *
      * @param bool $expected expected results from test
      * @param string $data setup data for test, object type
-     * @dataProvider isAbstractProvider()
-     * @covers ::isAbstract()
      * @return void
      */
+    #[DataProvider('isAbstractProvider')]
     public function testIsAbstract($expected, $data): void
     {
         /** @var \App\Controller\ModulesController $controller */
@@ -289,7 +314,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function objectTypesProvider(): array
+    public static function objectTypesProvider(): array
     {
         return [
             'empty' => [
@@ -329,10 +354,9 @@ class ModulesComponentTest extends TestCase
      *
      * @param array $expected expected results from test
      * @param bool|null $data setup data for test
-     * @dataProvider objectTypesProvider()
-     * @covers ::objectTypes()
      * @return void
      */
+    #[DataProvider('objectTypesProvider')]
     public function testObjectTypes($expected, $data): void
     {
         /** @var \App\Controller\ModulesController $controller */
@@ -364,7 +388,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function getModulesProvider(): array
+    public static function getModulesProvider(): array
     {
         return [
             'ok' => [
@@ -483,8 +507,8 @@ class ModulesComponentTest extends TestCase
                 new BEditaClientException('I am a client exception'),
             ],
             'other exception' => [
-                new \RuntimeException('I am some other kind of exception', 999),
-                new \RuntimeException('I am some other kind of exception', 999),
+                new RuntimeException('I am some other kind of exception', 999),
+                new RuntimeException('I am some other kind of exception', 999),
             ],
         ];
     }
@@ -496,10 +520,8 @@ class ModulesComponentTest extends TestCase
      * @param array|\Exception $meta Response to `/home` endpoint.
      * @param array $modules Modules configuration.
      * @return void
-     * @dataProvider getModulesProvider()
-     * @covers ::modulesFromMeta()
-     * @covers ::getModules()
      */
+    #[DataProvider('getModulesProvider')]
     public function testGetModules($expected, $meta, array $modules = []): void
     {
         // Setup mock API client.
@@ -518,7 +540,7 @@ class ModulesComponentTest extends TestCase
 
         Configure::write('Modules', $modules);
 
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());
@@ -528,12 +550,12 @@ class ModulesComponentTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://api.example.org'])
             ->getMock();
-        if ($meta instanceof \Exception) {
+        if ($meta instanceof Exception) {
             $apiClient->method('get')
                 ->willThrowException($meta);
         } else {
             $apiClient->method('get')
-                ->will($this->returnCallback(
+                ->willReturnCallback(
                     function ($param) use ($meta, $modules) {
                         $args = func_get_args();
                         if ($args[0] === '/model/object_types') {
@@ -542,7 +564,7 @@ class ModulesComponentTest extends TestCase
 
                         return compact('meta');
                     }
-                ));
+                );
         }
         ApiClientProvider::setApiClient($apiClient);
 
@@ -556,7 +578,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function modulesByAccessControlProvider(): array
+    public static function modulesByAccessControlProvider(): array
     {
         return [
             'empty access control' => [
@@ -638,29 +660,28 @@ class ModulesComponentTest extends TestCase
      * @param array $user The user
      * @param array $expected The expected modules
      * @return void
-     * @dataProvider modulesByAccessControlProvider()
-     * @cover ::modulesByAccessControl()
      */
+    #[DataProvider('modulesByAccessControlProvider')]
     public function testModulesByAccessControl(array $modules, array $accessControl, array $user, array $expected): void
     {
         // Mock Authentication component
         $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
 
         // set $this->Modules->modules
-        $property = new \ReflectionProperty(ModulesComponent::class, 'modules');
+        $property = new ReflectionProperty(ModulesComponent::class, 'modules');
         $property->setAccessible(true);
         $property->setValue($this->Modules, $modules);
         // set AccessControl
         Configure::write('AccessControl', $accessControl);
         // call modulesByAccessControl
-        $reflectionClass = new \ReflectionClass($this->Modules);
+        $reflectionClass = new ReflectionClass($this->Modules);
         $method = $reflectionClass->getMethod('modulesByAccessControl');
         $method->setAccessible(true);
         $this->Modules->Authentication->setIdentity(new Identity($user));
         $method->invokeArgs($this->Modules, []);
 
         // get $this->Modules->modules
-        $property = new \ReflectionProperty(ModulesComponent::class, 'modules');
+        $property = new ReflectionProperty(ModulesComponent::class, 'modules');
         $property->setAccessible(true);
         $actual = $property->getValue($this->Modules);
         static::assertEquals($expected, $actual);
@@ -671,7 +692,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function startupProvider(): array
+    public static function startupProvider(): array
     {
         return [
             'without current module' => [
@@ -768,10 +789,8 @@ class ModulesComponentTest extends TestCase
      * @param string[] $config Modules configuration.
      * @param string|null $currentModuleName Current module.
      * @return void
-     * @dataProvider startupProvider()
-     * @covers ::startup()
-     * @covers ::beforeFilter()
      */
+    #[DataProvider('startupProvider')]
     public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $config = [], ?string $currentModuleName = null): void
     {
         /** @var \App\Controller\ModulesController $controller */
@@ -825,7 +844,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function uploadProvider(): array
+    public static function uploadProvider(): array
     {
         $filename = sprintf('%s/tests/files/%s', getcwd(), 'test.png');
         $file = new UploadedFile($filename, filesize($filename), 0, $filename);
@@ -907,12 +926,8 @@ class ModulesComponentTest extends TestCase
      * @param \Exception|null $expectedException The exception expected
      * @param array|bool $uploaded The upload result (boolean or expected requestdata)
      * @return void
-     * @covers ::upload()
-     * @covers ::removeStream()
-     * @covers ::assocStreamToMedia()
-     * @covers ::checkRequestForUpload()
-     * @dataProvider uploadProvider()
      */
+    #[DataProvider('uploadProvider')]
     public function testUpload(array $requestData, $expectedException, $uploaded): void
     {
         // if upload failed, verify exception
@@ -930,11 +945,11 @@ class ModulesComponentTest extends TestCase
             $this->Modules->upload($requestData);
         } else {
             // mock for ModulesComponent
-            $controller = new Controller();
+            $controller = new Controller(new ServerRequest());
             $registry = $controller->components();
             $myModules = new class ($registry) extends ModulesComponent
             {
-                public $meta = [];
+                public array $meta = [];
 
                 protected function oEmbedMeta(string $url): ?array
                 {
@@ -979,8 +994,6 @@ class ModulesComponentTest extends TestCase
      * Test `upload` method for InternalErrorException 'Invalid form data: file.name'
      *
      * @return void
-     * @covers ::upload()
-     * @covers ::checkRequestForUpload()
      */
     public function testUploadInvalidFormDataFileName(): void
     {
@@ -1006,8 +1019,6 @@ class ModulesComponentTest extends TestCase
      * Test `upload` method for InternalErrorException 'Invalid form data: file.tmp_name'
      *
      * @return void
-     * @covers ::upload()
-     * @covers ::checkRequestForUpload()
      */
     public function testUploadInvalidFormDataFileTmpName(): void
     {
@@ -1041,7 +1052,6 @@ class ModulesComponentTest extends TestCase
      * Test `removeStream` method
      *
      * @return void
-     * @covers ::removeStream()
      */
     public function testRemoveStreamWhenThereIsNoStream(): void
     {
@@ -1083,7 +1093,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function setupRelationsProvider(): array
+    public static function setupRelationsProvider(): array
     {
         return [
             'simple' => [
@@ -1310,9 +1320,6 @@ class ModulesComponentTest extends TestCase
     /**
      * Test `setupRelationsMeta` method
      *
-     * @dataProvider setupRelationsProvider
-     * @covers ::setupRelationsMeta()
-     * @covers ::relationLabels()
      * @param array $expected Expected result.
      * @param array $schema Schema array.
      * @param array $relationships Relationships array.
@@ -1321,6 +1328,7 @@ class ModulesComponentTest extends TestCase
      * @param array $readonly Readonly array.
      * @return void
      */
+    #[DataProvider('setupRelationsProvider')]
     public function testSetupRelationsMeta(array $expected, array $schema, array $relationships, array $order = [], array $hidden = [], array $readonly = []): void
     {
         $this->Modules->setupRelationsMeta($schema, $relationships, $order, $hidden, $readonly);
@@ -1338,7 +1346,6 @@ class ModulesComponentTest extends TestCase
      * Test `relatedTypes` method
      *
      * @return void
-     * @covers ::relatedTypes()
      */
     public function testRelatedTypes(): void
     {
@@ -1372,7 +1379,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function relationsSchemaProvider(): array
+    public static function relationsSchemaProvider(): array
     {
         return [
             'empty data' => [
@@ -1467,13 +1474,12 @@ class ModulesComponentTest extends TestCase
      * @param array $relationships The relationships
      * @param array $expected The expected result
      * @return void
-     * @dataProvider relationsSchemaProvider()
-     * @covers ::relationsSchema()
      */
+    #[DataProvider('relationsSchemaProvider')]
     public function testRelationsSchema(array $schema, array $relationships, array $expected): void
     {
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
+        $test = new AppControllerTest('test');
         $actual = $test->invokeMethod($this->MyModules, 'relationsSchema', [$schema, $relationships]);
         static::assertEquals($expected, $actual);
     }
@@ -1483,7 +1489,7 @@ class ModulesComponentTest extends TestCase
      *
      * @return array
      */
-    public function saveRelatedProvider(): array
+    public static function saveRelatedProvider(): array
     {
         $dummy = ['id' => 123, 'type' => 'dummies'];
 
@@ -1618,13 +1624,11 @@ class ModulesComponentTest extends TestCase
      * @param array $relatedData Related objects data
      * @param mixed $expected The expected result
      * @return void
-     * @dataProvider saveRelatedProvider
-     * @covers ::saveRelated()
-     * @covers ::saveRelatedObjects()
      */
+    #[DataProvider('saveRelatedProvider')]
     public function testSaveRelated(int $id, string $type, array $relatedData, $expected): void
     {
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());
@@ -1635,23 +1639,23 @@ class ModulesComponentTest extends TestCase
             ->setConstructorArgs(['https://media.example.org'])
             ->getMock();
         $apiClient->method('addRelated')
-            ->will($this->returnCallback(function () use (&$actual) {
+            ->willReturnCallback(function () use (&$actual) {
                 $actual = 'addRelated';
 
                 return ['response addRelated'];
-            }));
+            });
         $apiClient->method('removeRelated')
-            ->will($this->returnCallback(function () use (&$actual) {
+            ->willReturnCallback(function () use (&$actual) {
                 $actual = 'removeRelated';
 
                 return ['response removeRelated'];
-            }));
+            });
         $apiClient->method('replaceRelated')
-            ->will($this->returnCallback(function () use (&$actual) {
+            ->willReturnCallback(function () use (&$actual) {
                 $actual = 'replaceRelated';
 
                 return ['response replaceRelated'];
-            }));
+            });
         ApiClientProvider::setApiClient($apiClient);
         $this->Modules->saveRelated((string)$id, $type, $relatedData);
         static::assertEquals($expected, $actual);
@@ -1661,7 +1665,6 @@ class ModulesComponentTest extends TestCase
      * Test `getRelated` method on empty relatedIds.
      *
      * @return void
-     * @covers ::getRelated()
      */
     public function testGetRelatedEmpty(): void
     {
@@ -1674,7 +1677,6 @@ class ModulesComponentTest extends TestCase
      * Test `getRelated` method on non-empty relatedIds.
      *
      * @return void
-     * @covers ::getRelated()
      */
     public function testGetRelated(): void
     {
@@ -1704,7 +1706,6 @@ class ModulesComponentTest extends TestCase
      * Test `setupAttributes` method
      *
      * @return void
-     * @covers ::setupAttributes()
      */
     public function testSetupAttributes(): void
     {

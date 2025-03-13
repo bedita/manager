@@ -19,42 +19,42 @@ class Result
      *
      * @var int
      */
-    public $created;
+    public int $created;
 
     /**
      * Counter of updated resources
      *
      * @var int
      */
-    public $updated;
+    public int $updated;
 
     /**
      * Counter of errors
      *
      * @var int
      */
-    public $errors;
+    public int $errors;
 
     /**
      * Info message
      *
      * @var string
      */
-    public $info;
+    public string $info;
 
     /**
      * Warning message
      *
      * @var string
      */
-    public $warn;
+    public string $warn;
 
     /**
      * Error message
      *
      * @var string
      */
-    public $error;
+    public string $error;
 
     /**
      * Constructor
@@ -68,12 +68,12 @@ class Result
      * @return void
      */
     public function __construct(
-        $created = 0,
-        $updated = 0,
-        $errors = 0,
-        $info = '',
-        $warn = '',
-        $error = ''
+        int $created = 0,
+        int $updated = 0,
+        int $errors = 0,
+        string $info = '',
+        string $warn = '',
+        string $error = ''
     ) {
         $this->created = $created;
         $this->updated = $updated;

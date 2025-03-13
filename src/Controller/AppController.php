@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Form\Form;
 use App\Utility\DateRangesTools;
 use Authentication\Identity;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
 use Cake\Controller\Exception\SecurityException;
@@ -39,9 +40,20 @@ class AppController extends Controller
     /**
      * BEdita4 API client
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    protected $apiClient = null;
+    protected ?BEditaClient $apiClient = null;
+
+    /**
+     * {@inheritDoc}
+     *
+     * From LocatorAwareTrait...
+     * Set this to empty string to avoid use of datasource and table locator.
+     * This way controller magic getter will not try to load a table instance and will search the property from components instead.
+     *
+     * @var string|null
+     */
+    protected ?string $defaultTable = '';
 
     /**
      * @inheritDoc
@@ -50,9 +62,8 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler', ['enableBeforeRedirect' => false]);
         $this->loadComponent('App.Flash', ['clear' => true]);
-        $this->loadComponent('Security');
+        $this->loadComponent('FormProtection');
 
         // API config may not be set in `login` for a multi-project setup
         if (Configure::check('API.apiBaseUrl')) {
@@ -90,7 +101,7 @@ class AppController extends Controller
             return $this->redirect($route);
         }
         $this->setupOutputTimezone();
-        $this->Security->setConfig('blackHoleCallback', 'blackhole');
+        $this->FormProtection->setConfig('blackHoleCallback', 'blackhole');
 
         return null;
     }
@@ -202,7 +213,7 @@ class AppController extends Controller
      * @param string $type Object type
      * @return array request data
      */
-    protected function prepareRequest($type): array
+    protected function prepareRequest(string $type): array
     {
         $data = (array)$this->getRequest()->getData();
 
@@ -328,8 +339,11 @@ class AppController extends Controller
      * Get related ids from items array.
      * If items is string, it is json encoded array.
      * If items is array, it can be json encoded array or array of id/type data.
+     *
+     * @param mixed $items Items to parse
+     * @return array
      */
-    protected function relatedIds($items): array
+    protected function relatedIds(mixed $items): array
     {
         if (empty($items)) {
             return [];
@@ -448,7 +462,7 @@ class AppController extends Controller
      * @param string $key The field key
      * @return bool
      */
-    protected function hasFieldChanged($oldValue, $newValue, string $key): bool
+    protected function hasFieldChanged(mixed $oldValue, mixed $newValue, string $key): bool
     {
         if ($oldValue === $newValue) {
             return false; // not changed
@@ -562,7 +576,7 @@ class AppController extends Controller
      * @param array $objects The objects to parse to set prev and next data
      * @return void
      */
-    protected function setObjectNav($objects): void
+    protected function setObjectNav(array $objects): void
     {
         $moduleName = $this->Modules->getConfig('currentModuleName');
         $total = count(array_keys($objects));
@@ -588,7 +602,7 @@ class AppController extends Controller
      * @param string $id The object ID
      * @return array
      */
-    protected function getObjectNav($id): array
+    protected function getObjectNav(string $id): array
     {
         // get objectNav from session
         $session = $this->getRequest()->getSession();

@@ -19,13 +19,22 @@ use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Model\RelationsController} Test Case
- *
- * @coversDefaultClass \App\Controller\Model\RelationsController
- * @uses \App\Controller\Model\RelationsController
  */
+#[CoversClass(RelationsController::class)]
+#[CoversMethod(RelationsController::class, 'allTypes')]
+#[CoversMethod(RelationsController::class, 'index')]
+#[CoversMethod(RelationsController::class, 'indexQuery')]
+#[CoversMethod(RelationsController::class, 'relatedItems')]
+#[CoversMethod(RelationsController::class, 'relatedTypes')]
+#[CoversMethod(RelationsController::class, 'save')]
+#[CoversMethod(RelationsController::class, 'updateRelatedTypes')]
+#[CoversMethod(RelationsController::class, 'view')]
+#[CoversMethod(RelationsController::class, 'viewQuery')]
 class RelationsControllerTest extends TestCase
 {
     /**
@@ -33,21 +42,21 @@ class RelationsControllerTest extends TestCase
      *
      * @var \App\Controller\Model\RelationsController
      */
-    public $Relations;
+    public RelationsController $Relations;
 
     /**
      * The original API client (not mocked).
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    protected $apiClient = null;
+    protected ?BEditaClient $apiClient = null;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -61,7 +70,7 @@ class RelationsControllerTest extends TestCase
      *
      * @var array
      */
-    public $testRelation = [
+    public array $testRelation = [
         'id' => 999,
         'type' => 'relations',
         'attributes' => [
@@ -139,8 +148,6 @@ class RelationsControllerTest extends TestCase
     /**
      * Test `index` method
      *
-     * @covers ::index()
-     * @covers ::indexQuery()
      * @return void
      */
     public function testIndex(): void
@@ -158,8 +165,6 @@ class RelationsControllerTest extends TestCase
     /**
      * Test `view` method
      *
-     * @covers ::view()
-     * @covers ::viewQuery()
      * @return void
      */
     public function testView(): void
@@ -199,7 +204,6 @@ class RelationsControllerTest extends TestCase
     /**
      * Test `relatedTypes` method
      *
-     * @covers ::relatedTypes()
      * @return void
      */
     public function testRelatedTypes(): void
@@ -218,7 +222,6 @@ class RelationsControllerTest extends TestCase
     /**
      * Test `allTypes` method
      *
-     * @covers ::allTypes()
      * @return void
      */
     public function testAllTypes(): void
@@ -233,7 +236,6 @@ class RelationsControllerTest extends TestCase
     /**
      * Test `allTypes` method, exception case
      *
-     * @covers ::allTypes()
      * @return void
      */
     public function testAllTypesException(): void
@@ -256,9 +258,6 @@ class RelationsControllerTest extends TestCase
     /**
      * Test `save` method
      *
-     * @covers ::save()
-     * @covers ::updateRelatedTypes()
-     * @covers ::relatedItems()
      * @return void
      */
     public function testSave(): void

@@ -41,7 +41,7 @@ class ApiController extends AppController
         if (!$this->allowed()) {
             throw new UnauthorizedException(__('You are not authorized to access this resource'));
         }
-        $this->Security->setConfig('unlockedActions', ['post', 'patch', 'delete']);
+        $this->FormProtection->setConfig('unlockedActions', ['post', 'patch', 'delete']);
 
         return null;
     }

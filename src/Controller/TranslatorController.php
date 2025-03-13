@@ -13,6 +13,7 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Exception;
 
 /**
  * Translator controller.
@@ -28,7 +29,8 @@ class TranslatorController extends AppController
     {
         parent::initialize();
         $this->loadComponent('Translator', (array)Configure::read('Translators'));
-        $this->Security->setConfig('unlockedActions', ['translate']);
+        $this->FormProtection->setConfig('unlockedActions', ['translate']);
+        $this->defaultTable = null;
     }
 
     /**
@@ -51,7 +53,7 @@ class TranslatorController extends AppController
             );
             $decoded = json_decode($json);
             $this->set('translation', $decoded->translation);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $error = $e->getMessage();
             $this->set(compact('error'));
         }

@@ -53,7 +53,7 @@ class HistoryController extends AppController
      * @param int $page Page number.
      * @return void
      */
-    public function info($id, int $page): void
+    public function info(string|int $id, int $page): void
     {
         $this->viewBuilder()->setClassName('Json');
         $this->getRequest()->allowMethod('get');
@@ -72,7 +72,7 @@ class HistoryController extends AppController
      * @param string|int $historyId History object ID.
      * @return \Cake\Http\Response|null
      */
-    public function clone($id, $historyId): ?Response
+    public function clone(string|int $id, string|int $historyId): ?Response
     {
         $this->setHistory($id, $historyId, false);
 
@@ -86,7 +86,7 @@ class HistoryController extends AppController
      * @param string|int $historyId History object ID.
      * @return \Cake\Http\Response|null
      */
-    public function restore($id, $historyId): ?Response
+    public function restore(string|int $id, string|int $historyId): ?Response
     {
         $this->setHistory($id, $historyId, true);
 
@@ -101,7 +101,7 @@ class HistoryController extends AppController
      * @param bool $keepUname Keep previous uname.
      * @return void
      */
-    protected function setHistory($id, $historyId, $keepUname): void
+    protected function setHistory(string|int $id, string|int $historyId, bool $keepUname): void
     {
         $objectType = $this->getRequest()->getParam('object_type');
         $options = compact('objectType', 'id', 'historyId', 'keepUname') + [
