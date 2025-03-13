@@ -53,6 +53,7 @@ class CalendarHelper extends Helper
      *
      * @param array $dateRange The date range interval
      * @return string
+     * @deprecated version 5.4.10. This will be removed in 6.0.0
      */
     public function dateRange(array $dateRange): string
     {
