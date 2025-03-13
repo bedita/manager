@@ -8,6 +8,7 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -90,6 +91,9 @@ class TagsControllerTest extends TestCase
         $this->setupController();
         $this->controller->index();
         static::assertInstanceOf('App\Controller\Component\ProjectConfigurationComponent', $this->controller->ProjectConfiguration);
+        $actual = $this->controller->FormProtection->getConfig('unlockedActions');
+        $expected = ['create', 'patch', 'delete'];
+        static::assertEquals($expected, $actual);
     }
 
     /**
