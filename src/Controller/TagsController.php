@@ -77,7 +77,8 @@ class TagsController extends ModelTagsController
         $this->viewBuilder()->setClassName('Json');
         $response = $error = null;
         try {
-            $response = $this->apiClient->delete(sprintf('/model/tags/%s', $id));
+            $this->apiClient->delete(sprintf('/model/tags/%s', $id));
+            $response = 'ok';
         } catch (BEditaClientException $e) {
             $error = $e->getMessage();
             $this->log($error, 'error');
