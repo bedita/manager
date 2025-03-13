@@ -1,42 +1,93 @@
-import { t } from 'ttag';
-import Vue from 'vue';
-
-/**
- * Component to display a dialog.
- */
-export const Dialog = Vue.extend({
-    template: `<div class="bedita-dialog" role="dialog">
+<template>
+    <dialog class="bedita-dialog">
         <transition name="fade">
-            <div class="backdrop" @click="hide()" v-if="isOpen"></div>
+            <div
+                class="backdrop"
+                @click="hide()"
+                v-if="isOpen"
+            />
         </transition>
         <transition name="slide">
-            <div class="dialog p-1 has-background-white has-text-black" :class="dialogType" v-if="isOpen">
+            <div
+                class="dialog p-1 has-background-white has-text-black"
+                :class="dialogType"
+                v-if="isOpen"
+            >
                 <header class="is-flex space-between align-center is-expanded">
                     <div class="is-flex align-center">
-                        <span class="is-capitalized mr-05" v-if="headerText"><: t(headerText) :></span>
-                        <app-icon icon="carbon:checkmark" color="green" v-if="dialogType === 'success'"></app-icon>
-                        <app-icon icon="carbon:information" color="blue" v-if="dialogType === 'info'"></app-icon>
-                        <app-icon icon="carbon:warning" color="orange" v-if="dialogType === 'warning'"></app-icon>
-                        <app-icon icon="carbon:misuse" color="red" v-if="dialogType === 'error'"></app-icon>
+                        <span
+                            class="is-capitalized mr-05"
+                            v-if="headerText"
+                        >
+                            {{ t(headerText) }}
+                        </span>
+                        <app-icon
+                            icon="carbon:checkmark"
+                            color="green"
+                            v-if="dialogType === 'success'"
+                        />
+                        <app-icon
+                            icon="carbon:information"
+                            color="blue"
+                            v-if="dialogType === 'info'"
+                        />
+                        <app-icon
+                            icon="carbon:warning"
+                            color="orange"
+                            v-if="dialogType === 'warning'"
+                        />
+                        <app-icon
+                            icon="carbon:misuse"
+                            color="red"
+                            v-if="dialogType === 'error'"
+                        />
                     </div>
                     <i @click="hide()">
-                        <app-icon icon="carbon:close"></app-icon>
+                        <app-icon
+                            icon="carbon:close"
+                        />
                     </i>
                 </header>
-                <div class="message mt-1 has-text-size-larger" v-if="message"><: message :></div>
-                <details v-if="!!dumpMessage">
-                    <summary><: t('details') :></summary>
-                    <pre class="dump"><: dumpMessage :></pre>
-                </details>
-                <input class="mt-1" type="text" v-if="dialogType === 'prompt'" v-model.lazy="inputValue" />
-                <div class="mt-1" v-for="uitem in unique">
-                    <label><: uitem.label :></label>
-                    <input type="text" :id="uitem.field" v-model.lazy="uitem.value" />
+                <div
+                    class="message mt-1 has-text-size-larger"
+                    v-if="message"
+                >
+                    {{ message }}
                 </div>
-                <template v-if="dialogType === 'prompt'" v-show="checks?.length > 0">
-                    <div class="mt-05" v-for="(citem, index) in checks">
-                        <input type="checkbox" :id="checkname(index)" v-model.lazy="citem.value"  />
-                        <label :for="checkname(index)"><: citem.label :></label>
+                <details v-if="!!dumpMessage">
+                    <summary>{{ msgDetails }}</summary>
+                    <pre class="dump">{{ dumpMessage }}</pre>
+                </details>
+                <input
+                    class="mt-1"
+                    type="text"
+                    v-model.lazy="inputValue"
+                    v-if="dialogType === 'prompt'"
+                >
+                <div
+                    class="mt-1"
+                    v-for="uitem in unique"
+                    :key="uitem.field"
+                >
+                    <label>{{ uitem.label }}</label>
+                    <input
+                        :id="uitem.field"
+                        type="text"
+                        v-model.lazy="uitem.value"
+                    >
+                </div>
+                <template v-if="dialogType === 'prompt' && checks?.length > 0">
+                    <div
+                        class="mt-05"
+                        v-for="(citem, index) in checks"
+                        :key="citem.label"
+                    >
+                        <input
+                            :id="checkname(index)"
+                            type="checkbox"
+                            v-model.lazy="citem.value"
+                        >
+                        <label :for="checkname(index)">{{ citem.label }}</label>
                     </div>
                 </template>
                 <div class="actions mt-2">
@@ -46,20 +97,26 @@ export const Dialog = Vue.extend({
                         :disabled="loading === true"
                         @click="prepareCallback() && confirmCallback($root, callbackOptions(inputValue, unique))"
                         v-if="confirmMessage">
-                        <: confirmMessage :>
+                        {{ confirmMessage }}
                     </button>
                     <button
                         class="button-secondary cancel"
                         :disabled="loading === true"
                         @click="hide()"
                         v-if="cancelMessage">
-                        <: cancelMessage :>
+                        {{ cancelMessage }}
                     </button>
                 </div>
             </div>
         </transition>
-    </div>`,
+    </dialog>
+</template>
+<script>
+import { t } from 'ttag';
+import Vue from 'vue';
 
+export const Dialog = Vue.extend({
+    name: 'WinDialog',
     data() {
         return {
             destroyOnHide: true,
@@ -75,6 +132,7 @@ export const Dialog = Vue.extend({
             checks: [],
             loading: false,
             unique: [],
+            msgDetails: t`details`,
         };
     },
     methods: {
@@ -191,3 +249,6 @@ export const prompt = (message, defaultValue, confirmCallback, root, options) =>
 
     return dialog;
 };
+
+export default Dialog;
+</script>
