@@ -21,6 +21,8 @@ use App\Utility\CacheTools;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
+use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -763,7 +765,7 @@ class ModulesControllerTest extends BaseControllerTest
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                'wrongquery' => '123456789',
+                'id' => '123456789',
             ],
             'params' => [
                 'object_type' => 'documents',
@@ -771,6 +773,13 @@ class ModulesControllerTest extends BaseControllerTest
         ];
         $request = new ServerRequest($config);
         $this->controller = new ModulesControllerSample($request);
+        $apiClient = new class ('https://api.example.com') extends BEditaClient {
+            public function delete(string $path, ?string $body = null, ?array $headers = null): ?array
+            {
+                throw new BEditaClientException('Error');
+            }
+        };
+        $this->controller->setApiClient($apiClient);
 
         // do controller call
         $result = $this->controller->delete();
