@@ -49,10 +49,8 @@
 import moment from 'moment';
 import { t } from 'ttag';
 import { PanelEvents } from '../panel-view';
-
 export default {
     name: 'HistoryInfo',
-
     props: {
         meta: {
             type: Object,
@@ -67,7 +65,6 @@ export default {
             default: true,
         },
     },
-
     data() {
         return {
             changed: this.meta.changed,
@@ -85,14 +82,12 @@ export default {
             msgVersionBy: t`version by`,
         }
     },
-
     computed: {
         authorName: function() {
             if (!this.user?.attributes) {
                 return;
             }
             const user = this.user.attributes;
-
             return user.title ||
                 `${user.name || ''} ${user.surname || ''}`.trim() ||
                 user.username ||
@@ -102,7 +97,6 @@ export default {
             return moment(this.created).format('D MMM YYYY kk:mm');
         },
     },
-
     mounted() {
         this.$nextTick(() => {
             this.changedAllowed = {...this.changed};
@@ -114,11 +108,9 @@ export default {
             }
         });
     },
-
     async created() {
         this.canSave = this.cansave;
     },
-
     methods: {
         restore() {
             PanelEvents.sendBack('history-info:restore', this.id);

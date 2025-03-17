@@ -14,6 +14,8 @@
     z-index: 1001;
 
     .main-panel {
+        overflow-x: hidden;
+        overflow-y: auto;
         height: 100%;
         background-color: $gray-800;
     }
