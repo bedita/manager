@@ -239,7 +239,7 @@ class TreeController extends AppController
      */
     protected function fetchTreeData(array $query): array
     {
-        $fields = 'id,status,title';
+        $fields = 'id,status,title,perms,relation,slug_path';
         $response = ApiClientProvider::getApiClient()->get('/folders', compact('fields') + $query);
         $data = (array)Hash::get($response, 'data');
         $meta = (array)Hash::get($response, 'meta');
@@ -261,6 +261,8 @@ class TreeController extends AppController
         if (empty($fullData)) {
             return [];
         }
+        $meta = (array)Hash::get($fullData, 'meta');
+        $meta['slug_path_compact'] = $this->slugPathCompact((array)Hash::get($meta, 'slug_path'));
 
         return [
             'id' => (string)Hash::get($fullData, 'id'),
@@ -269,6 +271,7 @@ class TreeController extends AppController
                 'title' => (string)Hash::get($fullData, 'attributes.title'),
                 'status' => (string)Hash::get($fullData, 'attributes.status'),
             ],
+            'meta' => $meta,
         ];
     }
 
@@ -293,12 +296,31 @@ class TreeController extends AppController
             ],
             'meta' => [
                 'path' => (string)Hash::get($fullData, 'meta.path'),
+                'slug_path' => (array)Hash::get($fullData, 'meta.slug_path'),
+                'slug_path_compact' => $this->slugPathCompact((array)Hash::get($fullData, 'meta.slug_path')),
                 'relation' => [
                     'canonical' => (string)Hash::get($fullData, 'meta.relation.canonical'),
                     'depth_level' => (string)Hash::get($fullData, 'meta.relation.depth_level'),
                     'menu' => (string)Hash::get($fullData, 'meta.relation.menu'),
+                    'slug' => (string)Hash::get($fullData, 'meta.relation.slug'),
                 ],
             ],
         ];
+    }
+
+    /**
+     * Get compact slug path.
+     *
+     * @param array $slugPath Slug path.
+     * @return string
+     */
+    protected function slugPathCompact(array $slugPath): string
+    {
+        $slugPathCompact = '';
+        foreach ($slugPath as $item) {
+            $slugPathCompact = sprintf('%s/%s', $slugPathCompact, (string)Hash::get($item, 'slug'));
+        }
+
+        return $slugPathCompact;
     }
 }
