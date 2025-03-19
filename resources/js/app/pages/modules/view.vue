@@ -105,7 +105,7 @@ export default {
                 }
                 if (json?.error) {
                     await this.showFlashMessages();
-                    BEDITA.error(json.error);
+                    this.$helpers.handleApiError(json);
                     throw new Error(json.error);
                 }
 
@@ -210,12 +210,13 @@ export default {
                     details = details + '\n' + e.details;
                 }
             }
-            const message = t`OOOPS! Something went wrong` + '. ' + this.errors[0].message;
-            if (this.userRoles.includes('admin')) {
-                BEDITA.error(message, document.body, details);
-            } else {
-                BEDITA.error(message);
-            }
+            const title = t`OOOPS! Something went wrong` + '. ' + this.errors[0].message;
+            this.$helpers.handleApiError({
+                error: {
+                    title,
+                    details
+                }
+            });
             this.errors = [];
         },
 

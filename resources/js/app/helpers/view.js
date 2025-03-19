@@ -336,6 +336,22 @@ export default {
 
                 return d ?  new Date(d).toLocaleDateString(locale) + ' ' + new Date(d).toLocaleTimeString(locale) : '';
             },
+
+            handleApiError(response) {
+                if (typeof response === 'string') {
+                    BEDITA.error(response);
+
+                    return;
+                }
+                if (response?.error && typeof response.error === 'string') {
+                    BEDITA.error(response.error);
+
+                    return;
+                }
+                const message = response?.error?.title || 'An error occurred';
+                const detail = response?.error?.detail || false;
+                BEDITA.error(message, document.body, detail);
+            },
         }
     }
 };
