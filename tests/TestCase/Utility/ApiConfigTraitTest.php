@@ -264,7 +264,7 @@ class ApiConfigTraitTest extends TestCase
                             ],
                         ];
                     }
-                }
+                },
             );
         $apiClient->method('post')->willReturn([]);
         $apiClient->method('patch')->willReturn([]);

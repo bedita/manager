@@ -104,8 +104,8 @@ class QueryComponentTest extends TestCase
                     'environment' => [
                         'REQUEST_METHOD' => 'GET',
                     ],
-                ]
-            )
+                ],
+            ),
         );
         $registry = $controller->components();
         /** @var \App\Controller\Component\QueryComponent $Query */

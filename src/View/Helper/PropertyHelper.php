@@ -225,7 +225,7 @@ class PropertyHelper extends Helper
                                 function ($val, $key) use ($removeKeys) {
                                     return is_string($val) && !in_array($key, $removeKeys);
                                 },
-                                ARRAY_FILTER_USE_BOTH
+                                ARRAY_FILTER_USE_BOTH,
                             );
 
                             return array_merge($carry, $groupKeys);
@@ -246,7 +246,7 @@ class PropertyHelper extends Helper
                     }
 
                     return $map;
-                }
+                },
             );
         } catch (Throwable $e) {
             $map = [];

@@ -112,7 +112,7 @@ class ObjectTypesController extends ModelBaseController
         while (!$done) {
             $response = $this->apiClient->get(
                 '/model/properties',
-                compact('filter', 'page') + ['page_size' => 100]
+                compact('filter', 'page') + ['page_size' => 100],
             );
             $data = array_merge($data, (array)Hash::get($response, 'data'));
             $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
@@ -159,14 +159,14 @@ class ObjectTypesController extends ModelBaseController
         $tables = array_unique(
             array_merge(
                 self::TABLES,
-                (array)Configure::read('Model.objectTypesTables')
-            )
+                (array)Configure::read('Model.objectTypesTables'),
+            ),
         );
         $tables = array_unique(
             array_merge(
                 $tables,
-                (array)Hash::get($resource, 'attributes.table')
-            )
+                (array)Hash::get($resource, 'attributes.table'),
+            ),
         );
         sort($tables);
 

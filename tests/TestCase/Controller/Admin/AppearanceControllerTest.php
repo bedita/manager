@@ -60,8 +60,8 @@ class AppearanceControllerTest extends TestCase
                     'environment' => [
                         'REQUEST_METHOD' => 'GET',
                     ],
-                ]
-            )
+                ],
+            ),
         );
         $this->Appearance->index();
         $viewVars = (array)$this->Appearance->viewBuilder()->getVars();
@@ -92,8 +92,8 @@ class AppearanceControllerTest extends TestCase
                         'property_name' => 'properties',
                         'property_value' => '[]',
                     ],
-                ]
-            )
+                ],
+            ),
         );
         $this->Appearance->save();
         $viewVars = (array)$this->Appearance->viewBuilder()->getVars();

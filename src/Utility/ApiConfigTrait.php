@@ -64,7 +64,7 @@ trait ApiConfigTrait
                 CacheTools::cacheKey(static::$cacheKey),
                 function () {
                     return $this->fetchConfig();
-                }
+                },
             );
         } catch (BEditaClientException $e) {
             Log::error($e->getMessage());

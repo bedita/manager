@@ -49,7 +49,7 @@ class DashboardController extends AppController
         $user = $this->Authentication->getIdentity();
         $this->set(
             'jobsAllow',
-            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow')
+            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow'),
         );
 
         // set modules counters

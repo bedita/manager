@@ -226,7 +226,7 @@ class CategoriesHelperTest extends TestCase
             $name,
             $value,
             $options,
-            $hiddenField
+            $hiddenField,
         );
 
         static::assertEquals($expected, $actual);
@@ -312,7 +312,7 @@ class CategoriesHelperTest extends TestCase
             $node,
             $value,
             $options,
-            $hiddenField
+            $hiddenField,
         );
 
         static::assertEquals($expected, $actual);

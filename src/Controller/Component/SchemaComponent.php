@@ -76,7 +76,7 @@ class SchemaComponent extends Component
                 function () use ($type) {
                     return $this->fetchSchema($type);
                 },
-                self::CACHE_CONFIG
+                self::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // Something bad happened. Booleans **ARE** valid JSON Schemas: returning `false` instead.
@@ -197,7 +197,7 @@ class SchemaComponent extends Component
         ];
         $response = ApiClientProvider::getApiClient()->get(
             sprintf('/model/object_types/%s', $type),
-            $query
+            $query,
         );
 
         return [
@@ -243,7 +243,7 @@ class SchemaComponent extends Component
                     'enabled' => Hash::get((array)$item, 'attributes.enabled'),
                 ];
             },
-            $data
+            $data,
         );
     }
 
@@ -274,7 +274,7 @@ class SchemaComponent extends Component
                 function () {
                     return $this->fetchRelationData();
                 },
-                self::CACHE_CONFIG
+                self::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
@@ -377,7 +377,7 @@ class SchemaComponent extends Component
             function () use ($type) {
                 return $this->fetchCustomProps($type);
             },
-            self::CACHE_CONFIG
+            self::CACHE_CONFIG,
         );
     }
 
@@ -424,7 +424,7 @@ class SchemaComponent extends Component
                 function () {
                     return $this->fetchObjectTypesFeatures();
                 },
-                self::CACHE_CONFIG
+                self::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);

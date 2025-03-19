@@ -65,7 +65,7 @@ class LockControllerTest extends TestCase
                     'object_type' => 'documents',
                     'id' => $this->documentId,
                 ],
-            ])
+            ]),
         );
     }
 
@@ -139,7 +139,7 @@ class LockControllerTest extends TestCase
                     'object_type' => 'documents',
                     'id' => 999999999,
                 ],
-            ])
+            ]),
         );
         $reflectionClass = new ReflectionClass($this->LockController);
         $method = $reflectionClass->getMethod('lock');

@@ -49,7 +49,7 @@ class TranslatorController extends AppController
                 $texts,
                 (string)$this->getRequest()->getData('from'),
                 (string)$this->getRequest()->getData('to'),
-                (string)$this->getRequest()->getData('translator')
+                (string)$this->getRequest()->getData('translator'),
             );
             $decoded = json_decode($json);
             $this->set('translation', $decoded->translation);

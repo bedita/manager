@@ -93,7 +93,7 @@ abstract class ModelBaseController extends AppController
         try {
             $response = $this->apiClient->get(
                 sprintf('/model/%s', $this->resourceType),
-                $this->indexQuery()
+                $this->indexQuery(),
             );
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
@@ -178,10 +178,10 @@ abstract class ModelBaseController extends AppController
                     $schema['properties'],
                     function ($schema) {
                         return empty($schema['readOnly']);
-                    }
-                )
+                    },
+                ),
             ),
-            null
+            null,
         );
         $resource = [
             'type' => $this->resourceType,

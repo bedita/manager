@@ -69,7 +69,7 @@ class ImportController extends AppController
         $user = $this->Authentication->getIdentity();
         $this->set(
             'jobsAllow',
-            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow')
+            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow'),
         );
     }
 
@@ -112,7 +112,7 @@ class ImportController extends AppController
             $result = $importFilter->import(
                 $file->getClientFileName(),
                 $file->getStream()->getMetadata('uri'),
-                $this->getRequest()->getData('filter_options')
+                $this->getRequest()->getData('filter_options'),
             );
             $this->getRequest()->getSession()->write(['Import.result' => $result]);
         } catch (Exception $e) {

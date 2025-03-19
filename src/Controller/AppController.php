@@ -356,7 +356,7 @@ class AppController extends Controller
                 function ($json) {
                     return json_decode($json, true);
                 },
-                $items
+                $items,
             );
         }
 
@@ -390,19 +390,19 @@ class AppController extends Controller
 
                 return $acc;
             },
-            []
+            [],
         );
         $addRelated = array_map(
             function ($id) use ($replaceRelated) {
                 return Hash::get($replaceRelated, $id);
             },
-            $changedParents
+            $changedParents,
         );
         $addRelated = array_filter(
             $addRelated,
             function ($elem) {
                 return !empty($elem);
-            }
+            },
         );
         $data['relations'][$relation]['addRelated'] = $addRelated;
 
@@ -414,7 +414,7 @@ class AppController extends Controller
                 function ($id) {
                     return ['id' => $id, 'type' => 'folders'];
                 },
-                $rem
+                $rem,
             );
         }
         unset($data['relations'][$relation]['replaceRelated']);

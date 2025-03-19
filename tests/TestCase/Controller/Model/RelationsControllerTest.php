@@ -278,7 +278,7 @@ class RelationsControllerTest extends TestCase
             ],
         ];
         $controller = new RelationsController(
-            new ServerRequest($config)
+            new ServerRequest($config),
         );
         $controller->save();
         $data = $controller->getRequest()->getData();

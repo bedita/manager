@@ -50,7 +50,7 @@ class TranslatorControllerTest extends TestCase
                 'environment' => [
                     'REQUEST_METHOD' => 'GET',
                 ],
-            ])
+            ]),
         );
         $this->controller->translate();
     }
@@ -73,7 +73,7 @@ class TranslatorControllerTest extends TestCase
                     'to' => 'it',
                     'translator' => 'xxx',
                 ],
-            ])
+            ]),
         );
         $this->controller->translate();
 
@@ -109,7 +109,7 @@ class TranslatorControllerTest extends TestCase
                     'to' => 'it',
                     'translator' => 'dummy',
                 ],
-            ])
+            ]),
         );
         $this->controller->translate();
         $actual = $this->controller->viewBuilder()->getVar('translation');
@@ -135,7 +135,7 @@ class TranslatorControllerTest extends TestCase
                     'from' => 'en',
                     'to' => 'it',
                 ],
-            ])
+            ]),
         );
         static::assertNotEmpty($this->controller->{'Translator'});
     }

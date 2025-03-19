@@ -57,8 +57,8 @@ class CacheControllerTest extends TestCase
                     'environment' => [
                         'REQUEST_METHOD' => 'GET',
                     ],
-                ]
-            )
+                ],
+            ),
         );
         $this->Cache->clear();
         static::assertEmpty(Cache::read('something'));

@@ -44,7 +44,7 @@ class SessionControllerTest extends TestCase
                 ],
                 'url' => '/session/test',
                 'session' => $session,
-            ])
+            ]),
         );
         $controller->view('test');
         static::assertEquals(200, $controller->getResponse()->getStatusCode());
@@ -59,7 +59,7 @@ class SessionControllerTest extends TestCase
                 ],
                 'url' => '/session/tast',
                 'session' => $session,
-            ])
+            ]),
         );
         $controller->view('tast');
         static::assertEquals(200, $controller->getResponse()->getStatusCode());
@@ -87,7 +87,7 @@ class SessionControllerTest extends TestCase
                 ],
                 'url' => '/session',
                 'session' => $session,
-            ])
+            ]),
         );
         $controller->save();
         static::assertEquals('tost', $session->read('test'));
@@ -108,7 +108,7 @@ class SessionControllerTest extends TestCase
                 ],
                 'url' => '/session',
                 'session' => $session,
-            ])
+            ]),
         );
         $controller->save();
         static::assertEquals('tast', $session->read('test'));
@@ -135,7 +135,7 @@ class SessionControllerTest extends TestCase
                 ],
                 'url' => '/session/test',
                 'session' => $session,
-            ])
+            ]),
         );
         $controller->delete('test');
         static::assertNull($session->read('test'));
@@ -148,7 +148,7 @@ class SessionControllerTest extends TestCase
                 ],
                 'url' => '/session/tast',
                 'session' => $session,
-            ])
+            ]),
         );
         $controller->delete('tast');
         static::assertNull($session->read('tast'));

@@ -120,15 +120,15 @@ class PropertiesComponent extends Component
         $keys = array_unique(
             array_merge(
                 array_keys($properties),
-                array_keys($defaultProperties)
-            )
+                array_keys($defaultProperties),
+            ),
         );
         sort($keys);
         $config = [];
         foreach ($keys as $key) {
             $config[$key] = array_merge(
                 (array)Hash::get($defaultProperties, $key),
-                (array)Hash::get($properties, $key)
+                (array)Hash::get($properties, $key),
             );
         }
         $this->setConfig('Properties', $config);
@@ -232,8 +232,8 @@ class PropertiesComponent extends Component
 
                     return $accumulator;
                 },
-                []
-            )
+                [],
+            ),
         );
     }
 

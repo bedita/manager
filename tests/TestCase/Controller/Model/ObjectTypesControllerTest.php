@@ -239,7 +239,7 @@ class ObjectTypesControllerTest extends TestCase
     {
         $this->saveApiMock();
         $controller = new ObjectTypesController(
-            new ServerRequest($this->saveRequestConfig)
+            new ServerRequest($this->saveRequestConfig),
         );
         $controller->save();
 
@@ -314,7 +314,7 @@ class ObjectTypesControllerTest extends TestCase
                 [
                     'objectTypesTables' => $testTables,
                 ],
-            )
+            ),
         );
         $expected = array_unique(array_merge(ObjectTypesController::TABLES, $testTables));
         $expected = array_unique(array_merge($expected, ['dummy']));

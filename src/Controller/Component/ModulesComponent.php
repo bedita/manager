@@ -153,12 +153,12 @@ class ModulesComponent extends Component
             $modules,
             function (&$data, $key) use ($metaModules): void {
                 $data = array_merge((array)Hash::get($metaModules, $key), $data);
-            }
+            },
         );
         $this->modules = array_merge(
             $modules,
             array_diff_key($metaModules, $modules),
-            $pluginModules
+            $pluginModules,
         );
         $this->modulesByAccessControl();
         if (!$this->Schema->tagsInUse()) {
@@ -539,8 +539,8 @@ class ModulesComponent extends Component
 
                     return $attributes['inverse_label'];
                 },
-                $names
-            )
+                $names,
+            ),
         );
     }
 
@@ -629,7 +629,7 @@ class ModulesComponent extends Component
             }
             $response = ApiClientProvider::getApiClient()->save(
                 (string)Hash::get($obj, 'type'),
-                (array)Hash::get($obj, 'attributes')
+                (array)Hash::get($obj, 'attributes'),
             );
             $relatedObjects[] = [
                 'id' => Hash::get($response, 'data.id'),

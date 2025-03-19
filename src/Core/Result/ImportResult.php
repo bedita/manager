@@ -35,7 +35,7 @@ class ImportResult extends Result
         int $errors = 0,
         string $info = '',
         string $warn = '',
-        string $error = ''
+        string $error = '',
     ) {
         parent::__construct($created, $updated, $errors, $info, $warn, $error);
         $this->filename = $filename;

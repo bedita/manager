@@ -44,7 +44,7 @@ class CategoriesHelper extends Helper
             return sprintf(
                 '<div class="categories"><h3>%s</h3>%s</div>',
                 __('Global'),
-                $this->Property->control($name, $value, $options)
+                $this->Property->control($name, $value, $options),
             );
         }
 
@@ -89,7 +89,7 @@ class CategoriesHelper extends Helper
         return sprintf(
             '<div class="categories">%s%s</div>',
             $title,
-            $this->Form->control($name, $controlOptions)
+            $this->Form->control($name, $controlOptions),
         );
     }
 
@@ -185,7 +185,7 @@ class CategoriesHelper extends Helper
     {
         return strcmp(
             strtolower((string)Hash::get($a, 'name')),
-            strtolower((string)Hash::get($b, 'name'))
+            strtolower((string)Hash::get($b, 'name')),
         );
     }
 

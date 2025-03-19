@@ -73,7 +73,7 @@ class Result
         int $errors = 0,
         string $info = '',
         string $warn = '',
-        string $error = ''
+        string $error = '',
     ) {
         $this->created = $created;
         $this->updated = $updated;

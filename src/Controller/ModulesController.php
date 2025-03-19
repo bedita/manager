@@ -191,7 +191,7 @@ class ModulesController extends AppController
 
                 return $acc;
             },
-            []
+            [],
         );
         $this->setupViewRelations($computedRelations);
 
@@ -253,10 +253,10 @@ class ModulesController extends AppController
                     $schema['properties'],
                     function ($schema) {
                         return empty($schema['readOnly']);
-                    }
-                )
+                    },
+                ),
             ),
-            null
+            null,
         );
         $object = [
             'type' => $this->objectType,
@@ -316,7 +316,7 @@ class ModulesController extends AppController
             $this->savePermissions(
                 (array)$response,
                 (array)$this->Schema->getSchema($this->objectType),
-                (array)Hash::get($requestData, 'permissions')
+                (array)Hash::get($requestData, 'permissions'),
             );
             $id = (string)Hash::get($response, 'data.id');
             $this->Modules->saveRelated($id, $this->objectType, $relatedData);
@@ -600,7 +600,7 @@ class ModulesController extends AppController
             $relations,
             $this->Properties->relationsList($this->objectType),
             $this->Properties->hiddenRelationsList($this->objectType),
-            $this->Properties->readonlyRelationsList($this->objectType)
+            $this->Properties->readonlyRelationsList($this->objectType),
         );
 
         // set right types, considering the object type relations
@@ -625,7 +625,7 @@ class ModulesController extends AppController
         $this->getRequest()->allowMethod('get');
         $query = array_merge(
             $this->getRequest()->getQueryParams(),
-            ['fields' => 'id,title,username,name,surname']
+            ['fields' => 'id,title,username,name,surname'],
         );
         $response = (array)$this->apiClient->get('users', $query);
         $response = ApiTools::cleanResponse($response);
@@ -648,7 +648,7 @@ class ModulesController extends AppController
         $response = (array)$this->apiClient->getObject($id, 'objects');
         $query = array_merge(
             $this->getRequest()->getQueryParams(),
-            ['fields' => 'id,title,description,uname,status,media_url']
+            ['fields' => 'id,title,description,uname,status,media_url'],
         );
         $response = (array)$this->apiClient->getObject($id, $response['data']['type'], $query);
         $response = ApiTools::cleanResponse($response);

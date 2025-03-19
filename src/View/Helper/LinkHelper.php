@@ -210,7 +210,7 @@ class LinkHelper extends Helper
         $here = sprintf(
             '%s%s',
             $url,
-            $this->getView()->getRequest()->getAttribute('here')
+            $this->getView()->getRequest()->getAttribute('here'),
         );
         $query = (array)$this->getConfig('query');
         if (empty($query) || !empty($options['no-query'])) {

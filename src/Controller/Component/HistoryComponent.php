@@ -133,10 +133,10 @@ class HistoryComponent extends Component
                     $schema['properties'],
                     function ($schema) {
                         return empty($schema['readOnly']);
-                    }
-                )
+                    },
+                ),
             ),
-            ''
+            '',
         );
 
         // rebuild attributes along history items
@@ -180,7 +180,7 @@ class HistoryComponent extends Component
                 'include' => 'user',
                 'page_size' => 100,
             ],
-            $options
+            $options,
         ));
         $this->formatResponseData($response, $schema);
 
@@ -245,7 +245,7 @@ class HistoryComponent extends Component
         if ($field === 'date_ranges') {
             return sprintf(
                 '<date-ranges-list inline-template><div class="index-date-ranges" :class="show-all"><div>%s</div></date-ranges-list>',
-                $this->Calendar->list($value)
+                $this->Calendar->list($value),
             );
         }
         if ($field === 'categories') {

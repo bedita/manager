@@ -37,7 +37,7 @@ class HistoryController extends AppController
         $this->getRequest()->allowMethod('get');
         $query = array_merge(
             $this->getRequest()->getQueryParams(),
-            ['fields' => 'id,title,uname']
+            ['fields' => 'id,title,uname'],
         );
         $response = ApiTools::cleanResponse((array)$this->apiClient->get('objects', $query));
         $data = $response['data'];

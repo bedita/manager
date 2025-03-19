@@ -110,7 +110,7 @@ class ExportControllerTest extends TestCase
                 'environment' => [
                     'REQUEST_METHOD' => 'GET',
                 ],
-            ])
+            ]),
         );
 
         $this->apiClient = ApiClientProvider::getApiClient();
@@ -416,7 +416,7 @@ class ExportControllerTest extends TestCase
                     'environment' => [
                         'REQUEST_METHOD' => 'GET',
                     ],
-                ])
+                ]),
             );
         }
 
@@ -797,7 +797,7 @@ class ExportControllerTest extends TestCase
                     'q' => 'gustavo',
                 ],
                 'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
-            ])
+            ]),
         );
         $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('prepareQuery');
@@ -816,7 +816,7 @@ class ExportControllerTest extends TestCase
                     'q' => 'gustavo',
                 ],
                 'get' => ['id' => '888', 'objectType' => 'users', 'format' => 'csv'],
-            ])
+            ]),
         );
         $this->Export->filter = ['filter' => ['type' => 'documents'], 'q' => 'needle'];
         $reflectionClass = new ReflectionClass($this->Export);

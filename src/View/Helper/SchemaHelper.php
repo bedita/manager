@@ -269,7 +269,7 @@ class SchemaHelper extends Helper
             $priorityFields = array_intersect(static::DEFAULT_TRANSLATABLE, array_keys($properties));
             $otherFields = array_keys(array_filter(
                 array_diff_key($properties, array_flip($priorityFields)),
-                [$this, 'translatableType']
+                [$this, 'translatableType'],
             ));
         }
 
@@ -293,7 +293,7 @@ class SchemaHelper extends Helper
                     }
 
                     return $this->translatableType((array)$item);
-                }
+                },
             );
         }
         // accept as translatable 'string' type having text/html or tex/plain 'contentMediaType'

@@ -120,11 +120,11 @@ class StatisticsController extends ModelBaseController
                             ],
                             'page' => 1,
                             'page_size' => 1,
-                        ]
+                        ],
                     );
 
                     return (int)Hash::get($response, 'meta.pagination.count', 0);
-                }
+                },
             );
         } catch (BEditaClientException $e) {
             $count = 0;

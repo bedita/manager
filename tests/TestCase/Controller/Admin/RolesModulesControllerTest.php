@@ -141,7 +141,7 @@ class RolesModulesControllerTest extends TestCase
                 if ($param === '/admin/endpoint_permissions') {
                     throw new BEditaClientException('My test exception');
                 }
-            }
+            },
         );
         $controller = new class ($this->RlsController->getRequest()) extends RolesModulesController
         {
@@ -183,8 +183,8 @@ class RolesModulesControllerTest extends TestCase
                     'post' => [
                         'roles' => $roles,
                     ],
-                ]
-            )
+                ],
+            ),
         );
         $response = $this->RlsController->save();
         static::assertSame(Response::class, get_class($response));

@@ -439,8 +439,8 @@ class PropertyHelperTest extends TestCase
             'Properties.dummies',
             array_merge(
                 (array)Configure::read('Properties.dummies'),
-                ['options' => ['about' => ['label' => $expected]]]
-            )
+                ['options' => ['about' => ['label' => $expected]]],
+            ),
         );
         $actual = $helper->fieldLabel('about', 'dummies');
         static::assertEquals($expected, $actual);

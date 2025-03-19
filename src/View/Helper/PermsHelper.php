@@ -100,8 +100,8 @@ class PermsHelper extends Helper
                 $modules,
                 function ($module) {
                     return $this->canCreate($module);
-                }
-            )
+                },
+            ),
         );
     }
 

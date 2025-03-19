@@ -200,7 +200,7 @@ class TranslationsController extends ModulesController
             function ($v) {
                 return sprintf('translated_fields.%s', $v);
             },
-            explode(',', (string)$this->request->getData('_jsonKeys'))
+            explode(',', (string)$this->request->getData('_jsonKeys')),
         );
         $this->request = $this->request->withData('_jsonKeys', implode(',', $jsonKeys));
     }

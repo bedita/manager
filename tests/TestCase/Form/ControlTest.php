@@ -567,8 +567,8 @@ class ControlTest extends TestCase
                 sprintf('Properties.%s', $type),
                 array_merge(
                     (array)Configure::read(sprintf('Properties.%s', $type)),
-                    ['labels' => ['options' => [$property => $customConfig]]]
-                )
+                    ['labels' => ['options' => [$property => $customConfig]]],
+                ),
             );
         }
         $actual = Control::label($type, $property, $value);

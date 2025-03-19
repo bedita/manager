@@ -113,8 +113,8 @@ class ApplicationTest extends TestCase
                         'username' => 'abc',
                         'password' => 'def',
                     ],
-                ]
-            )
+                ],
+            ),
         );
         static::assertTrue($actual);
     }

@@ -304,7 +304,7 @@ class AdministrationBaseControllerTest extends TestCase
                 'params' => [
                     'resource_type' => 'roles',
                 ],
-            ]
+            ],
         );
         $response = $this->RlsController->remove('9999999999');
         static::assertEquals(302, $response->getStatusCode());
@@ -330,7 +330,7 @@ class AdministrationBaseControllerTest extends TestCase
                 'params' => [
                     'resource_type' => 'roles',
                 ],
-            ]
+            ],
         );
         $reflectionClass = new ReflectionClass($this->RlsController);
         $method = $reflectionClass->getMethod('endpoint');
@@ -370,7 +370,7 @@ class AdministrationBaseControllerTest extends TestCase
                     'page' => 1,
                     'page_size' => 1,
                 ],
-            ]
+            ],
         );
         $reflectionClass = new ReflectionClass($this->RlsController);
         $method = $reflectionClass->getMethod('loadData');

@@ -138,7 +138,7 @@ class RelationsController extends ModelBaseController
 
                 return compact('id') + ['type' => 'object_types'];
             },
-            $types
+            $types,
         );
     }
 

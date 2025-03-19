@@ -97,7 +97,7 @@ class RecoveryMiddlewareTest extends TestCase
                     'username' => env('BEDITA_ADMIN_USR'),
                     'password' => env('BEDITA_ADMIN_PWD'),
                 ],
-            ])
+            ]),
         );
 
         ApiClientProvider::getApiClient()->setupTokens([]); // reset client

@@ -87,7 +87,7 @@ class ExportControllerTest extends TestCase
                 'environment' => [
                     'REQUEST_METHOD' => 'GET',
                 ],
-            ])
+            ]),
         );
 
         $result = $this->Export->model();

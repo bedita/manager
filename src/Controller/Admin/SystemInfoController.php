@@ -71,7 +71,7 @@ class SystemInfoController extends AdministrationBaseController
         try {
             $info = (array)Hash::get(
                 $this->apiClient->get('/admin/sysinfo'),
-                'meta.info'
+                'meta.info',
             );
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');

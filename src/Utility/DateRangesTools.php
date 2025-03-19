@@ -38,7 +38,7 @@ class DateRangesTools
                 $ed = (string)Hash::get($item, 'end_date');
 
                 return !empty($sd) || !empty($ed);
-            }
+            },
         );
         $dateRanges = array_map(
             function ($item) {
@@ -50,7 +50,7 @@ class DateRangesTools
 
                 return $item;
             },
-            $dateRanges
+            $dateRanges,
         );
         foreach ($dateRanges as &$item) {
             if (empty(Hash::get($item, 'params'))) {

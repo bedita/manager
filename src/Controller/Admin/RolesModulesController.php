@@ -68,7 +68,7 @@ class RolesModulesController extends AdministrationBaseController
             ]);
             $this->set('resources', $this->allowedRoles(
                 $this->viewBuilder()->getVar('resources'),
-                (array)Hash::extract($endpointPermissions, 'data')
+                (array)Hash::extract($endpointPermissions, 'data'),
             ));
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');

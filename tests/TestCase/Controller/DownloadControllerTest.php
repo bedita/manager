@@ -79,7 +79,7 @@ class DownloadControllerTest extends TestCase
                 'params' => [
                     'id' => $uuid,
                 ],
-            ])
+            ]),
         );
 
         $response = $controller->download($uuid);
@@ -129,7 +129,7 @@ class DownloadControllerTest extends TestCase
                 'params' => [
                     'id' => $uuid,
                 ],
-            ])
+            ]),
         );
 
         $response = new Response([], 'test');
