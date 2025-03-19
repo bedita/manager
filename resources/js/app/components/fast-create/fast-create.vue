@@ -16,8 +16,10 @@
         >
             <div class="main-panel">
                 <div class="fast-create-form-container">
-                    <header class="is-flex space-between align-center is-expanded">
-                        <span class="mb-1">{{ msgFastCreate }} {{ moduleName() }}</span>
+                    <header class="mx-1 tab tab-static unselectable">
+                        <h2>
+                            <span class="mb-1"><strong>{{ msgFastCreate }} {{ moduleName() }}</strong></span>
+                        </h2>
                         <span
                             class="mb-1 close"
                             :title="msgClose"
