@@ -78,8 +78,11 @@ export default {
              * @returns {Boolean}
              */
             checkMaxFileSize(file) {
-                const fileSize = Math.round(file.size);
                 const maxFileSize = BEDITA.maxFileSize;
+                if (maxFileSize < 0) {// no limit
+                    return true;
+                }
+                const fileSize = Math.round(file.size);
                 if (fileSize >= maxFileSize) {
                     const filename = file.name;
                     const fileSizeMb = Math.round(fileSize / 1024 / 1024);
