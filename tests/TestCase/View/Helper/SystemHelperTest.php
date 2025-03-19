@@ -70,6 +70,12 @@ class SystemHelperTest extends TestCase
         $expected = min($pms, $umf) * 1024 * 1024;
         $actual = $this->System->getMaxFileSize();
         static::assertSame($expected, $actual);
+        // test with forced max file size
+        $forcedMaxFileSize = -1;
+        Configure::write('Upload.uploadMaxSize', $forcedMaxFileSize);
+        $actual = $this->System->getMaxFileSize();
+        static::assertSame($forcedMaxFileSize, $actual);
+        Configure::delete('Upload.uploadMaxSize');
     }
 
     /**
