@@ -714,7 +714,7 @@ return [
     //     ],
     // ],
     // 'uploadMaxResolution' => '1920x1080',
-    // 'uploadMaxSize' => '-1', // -1 means no limit, otherwise set a limit in megabytes
+    // 'uploadMaxSize' => -1, // -1 means no limit, otherwise set a limit in megabytes
 
     /**
      * Configuration for "Children" association parameters.
