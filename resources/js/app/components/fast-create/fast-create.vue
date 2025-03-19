@@ -1,5 +1,9 @@
 <template>
     <div class="fast-create">
+        <div
+            class="backdrop"
+            v-if="clicked"
+        />
         <div>
             <button
                 class="button button-primary is-width-auto"
@@ -326,5 +330,26 @@ div.fast-create > div.fast-create-form-container header {
     margin: auto;
     padding: 1rem 4rem 0rem 4rem;
     font-style: italic;
+}
+div.fast-create > div.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 1;
+}
+div.fast-create > div.fade-enter-active,
+div.fast-create > div.fade-leave-active {
+    transition: opacity .5s;
+}
+div.fast-create > div.fade-enter,
+div.fast-create > div.fade-leave-to {
+    opacity: 0;
+}
+div.fast-create > div.fade-enter-to,
+div.fast-create > div.fade-leave {
+    opacity: 0.75;
 }
 </style>
