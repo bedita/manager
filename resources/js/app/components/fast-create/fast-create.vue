@@ -138,7 +138,6 @@ export default {
             message: '',
             msgClose: t`Close`,
             msgChooseType: t`Choose a type`,
-            msgClickHereToStart: t`Click here to start`,
             msgCreated: t`Created`,
             msgCreateObject: t`Create object`,
             msgFastCreate: t`Fast create`,
