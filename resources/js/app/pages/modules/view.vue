@@ -211,12 +211,20 @@ export default {
                 }
             }
             const title = t`OOOPS! Something went wrong` + '. ' + this.errors[0].message;
-            this.$helpers.handleApiError({
+            let params = {
                 error: {
                     title,
-                    details
                 }
-            });
+            };
+            if (this.userRoles.includes('admin')) {
+                params = {
+                    error: {
+                        title,
+                        details
+                    }
+                }
+            }
+            this.$helpers.handleApiError(params);
             this.errors = [];
         },
 
