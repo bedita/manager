@@ -20,20 +20,29 @@
         >
             <div class="main-panel">
                 <div class="fast-create-form-container">
-                    <header class="mx-1 tab tab-static unselectable">
+                    <header
+                        class="mx-1 tab tab-static unselectable"
+                        style="padding-left: 0px !important"
+                    >
                         <h2>
                             <span class="mb-1"><strong>{{ msgFastCreate }} {{ moduleName() }}</strong></span>
                         </h2>
                         <span
-                            class="mb-1 close"
+                            class="close"
                             :title="msgClose"
                             @click.prevent="reset()"
                         >
-                            <app-icon icon="carbon:close" />
+                            <app-icon
+                                icon="carbon:close"
+                                class="hw-30"
+                            />
                         </span>
                     </header>
                     <fieldset>
-                        <div v-show="!autoType">
+                        <div
+                            class="mb-1"
+                            v-show="!autoType"
+                        >
                             <label for="objectType">{{ msgChooseType }}</label>
                             <select
                                 v-model="objectType"
@@ -63,16 +72,17 @@
                                     :object-type="objectType"
                                     :required="required?.includes(fieldKey(field))"
                                     :val="schemasByType?.[objectType]?.[fieldKey(field)] || null"
-                                    v-model="payload[fieldKey(field)]"
+                                    v-model="formFieldProperties[fieldKey(field)]"
                                     @error="err"
                                     @update="update"
-                                    @success="success" />
+                                    @success="success"
+                                />
                             </div>
                         </template>
                         <div v-if="objectType">
                             <button
                                 :class="{ 'is-loading-spinner': loading }"
-                                :disabled="loading || invalidFields?.length > 0"
+                                :disabled="saveDisabled"
                                 @click.prevent="save"
                             >
                                 <app-icon icon="carbon:save" />
@@ -150,8 +160,14 @@ export default {
             msgSave: t`Save`,
             objectType: null,
             payload: {},
+            formFieldProperties: {},
             required: [],
         }
+    },
+    computed: {
+        saveDisabled() {
+            return this.invalidFields.length > 0 || this.loading;
+        },
     },
     mounted() {
         this.$nextTick(() => {
@@ -161,6 +177,12 @@ export default {
                 this.objectType = this.autoType;
                 this.changeType();
             }
+            if (this.objectType) {
+                for (const field of this.fields) {
+                    this.payload[this.fieldKey(field)] = this.schemasByType?.[this.objectType]?.[this.fieldKey(field)] || null;
+                }
+            }
+            this.formFieldProperties = Object.assign({}, this.payload);
         });
     },
     methods: {
@@ -194,7 +216,6 @@ export default {
             }
             this.isUploadable = BEDITA.uploadable.includes(this.objectType);
             this.abstractType = this.isUploadable ? 'media' : 'objects';
-            this.invalidFields = this.required.filter(f => !this.payload[f]);
             if (this.fields?.length === 0) {
                 // set defaults
                 this.fields = ['title', 'status'];
@@ -207,6 +228,7 @@ export default {
                     this.required = ['title', 'name'];
                 }
             }
+            this.invalidFields = this.required.filter(f => !this.payload[f]);
         },
         err(val) {
             this.error = val;
@@ -243,6 +265,7 @@ export default {
         async save() {
             try {
                 this.loading = true;
+                this.payload = Object.assign({}, this.formFieldProperties[this.objectType]);
                 this.payload.objectType = this.objectType;
                 const url = `/${this.objectType}/save`;
                 const options = {
@@ -275,8 +298,8 @@ export default {
             this.$emit('created', [objectData]);
         },
         update(k,v) {
-            this.payload[k] = v;
-            this.invalidFields = this.required.filter(f => !this.payload[f]);
+            this.formFieldProperties[k] = v;
+            this.invalidFields = this.required.filter(f => !this.formFieldProperties[f]);
         },
     },
 }
@@ -325,11 +348,6 @@ div.fast-create > div.fast-create-form-container div.close {
 }
 div.fast-create > div.fast-create-form-container span.close {
     cursor: pointer;
-}
-div.fast-create > div.fast-create-form-container header {
-    margin: auto;
-    padding: 1rem 4rem 0rem 4rem;
-    font-style: italic;
 }
 div.fast-create > div.backdrop {
     position: fixed;
