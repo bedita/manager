@@ -277,6 +277,11 @@ class LayoutHelper extends Helper
     {
         $module = (array)$this->getView()->get('currentModule');
         $name = (string)Hash::get($module, 'name');
+        // if module has association with date ranges, 'calendar' view is available
+        $schema = (array)$this->_View->get('schema');
+        if (in_array('DateRanges', (array)Hash::get($schema, 'associations'))) {
+            return 'calendar';
+        }
 
         return $name === 'folders' ? 'tree' : 'list';
     }
@@ -301,6 +306,9 @@ class LayoutHelper extends Helper
     public function moduleIndexViewTypes(): array
     {
         $defaultType = $this->moduleIndexDefaultViewType();
+        if ($defaultType === 'calendar') {
+            return ['calendar', 'list'];
+        }
 
         return $defaultType === 'tree' ? ['tree', 'list'] : ['list'];
     }
