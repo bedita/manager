@@ -17,6 +17,7 @@
         <aside
             class="main-panel-container"
             :class="clicked ? 'on' : ''"
+            v-if="clicked"
         >
             <div class="main-panel">
                 <div class="fast-create-form-container">
