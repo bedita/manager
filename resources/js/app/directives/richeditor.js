@@ -67,8 +67,8 @@ export default {
                 });
             },
 
-            unbind() {
-                tinymce.remove();
+            unbind(element) {
+                tinymce.remove(element.editor);
             },
 
             /**
@@ -77,13 +77,23 @@ export default {
              * @param {Object} element DOM object
              */
             async inserted(element, binding) {
+                let elementName = element?.name || '';
+                if (elementName.indexOf('fast-') === 0) {
+                    const lastPos = elementName.lastIndexOf('-');
+                    elementName = elementName.substring(lastPos + 1);
+                }
+
                 let changing = false;
                 let toolbar = DEFAULT_TOOLBAR;
                 if (binding?.value?.toolbar) {
                     toolbar = binding.value.toolbar.join(' ');
                 } else if (binding?.expression) {
-                    let exp = JSON.parse(binding.expression);
-                    toolbar = exp ? exp.join(' ') : toolbar;
+                    try {
+                        const exp = JSON.parse(binding.expression);
+                        toolbar = exp ? exp.join(' ') : toolbar;
+                    } catch (e) {
+                        // do nothing
+                    }
                 }
                 if (!binding.modifiers?.placeholders) {
                     toolbar = toolbar.replace(/\bplaceholders\b/, '');
@@ -98,12 +108,12 @@ export default {
                         sizes.min_height = c.min_height;
                     }
                 }
-                if (BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height) {
-                    sizes.height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.height;
+                if (BEDITA?.richeditorByPropertyConfig?.[elementName]?.config?.height) {
+                    sizes.height = BEDITA?.richeditorByPropertyConfig?.[elementName]?.config?.height;
                 }
-                sizes.min_height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.min_height || sizes.height || 300;
-                if (BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.max_height) {
-                    sizes.max_height = BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config?.max_height;
+                sizes.min_height = BEDITA?.richeditorByPropertyConfig?.[elementName]?.config?.min_height || sizes.height || 300;
+                if (BEDITA?.richeditorByPropertyConfig?.[elementName]?.config?.max_height) {
+                    sizes.max_height = BEDITA?.richeditorByPropertyConfig?.[elementName]?.config?.max_height;
                 }
                 sizes.max_height = sizes.min_height > 500 ? sizes.min_height + 500 : 500;
                 const { default: contentCSS } = await import('../../../richeditor.lazy.scss');
@@ -138,7 +148,7 @@ export default {
                     add_unload_trigger: false, // fix populating textarea elements with garbage when the user initiates a navigation with unsaved changes, but cancels it when the alert is shown
                     readonly: element.getAttribute('readonly') === 'readonly' ? 1 : 0,
                     ... BEDITA?.richeditorConfig,
-                    ... BEDITA?.richeditorByPropertyConfig?.[element?.name]?.config || {},
+                    ... BEDITA?.richeditorByPropertyConfig?.[elementName]?.config || {},
                     setup: (editor) => {
                         editor.on('change', () => {
                             EventBus.send('refresh-placeholders', {id: editor.id, content: editor.getContent()});

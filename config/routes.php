@@ -275,6 +275,26 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Tags', 'action' => 'index'],
         ['_name' => 'tags:index']
     );
+    $routes->connect(
+        '/tags/delete/{id}',
+        ['controller' => 'Tags', 'action' => 'delete'],
+        ['pass' => ['id'], '_name' => 'tags:delete']
+    );
+    $routes->connect(
+        '/tags/create',
+        ['controller' => 'Tags', 'action' => 'create'],
+        ['_name' => 'tags:create']
+    );
+    $routes->connect(
+        '/tags/patch/{id}',
+        ['controller' => 'Tags', 'action' => 'patch'],
+        ['pass' => ['id'], '_name' => 'tags:patch']
+    );
+    $routes->connect(
+        '/tags/search',
+        ['controller' => 'Tags', 'action' => 'search'],
+        ['_name' => 'tags:search']
+    );
 
     // view resource by id / uname
     $routes->connect(
