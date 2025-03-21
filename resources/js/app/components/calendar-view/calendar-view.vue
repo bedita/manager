@@ -1,9 +1,12 @@
 <template>
     <div class="calendar-view">
         <div
-            class="loading is-loading-spinner"
+            class="loading"
             v-if="loading"
-        />
+        >
+            <span class="is-loading-spinner" />
+            <span class="ml-05">{{ msgLoading }} ...</span>
+        </div>
         <div
             id="loading-background"
             v-if="loading"
@@ -23,6 +26,7 @@ import listPlugin from '@fullcalendar/list';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import enLocale from '@fullcalendar/core/locales/en-gb';
 import itLocale from '@fullcalendar/core/locales/it';
+import { t } from 'ttag';
 
 export default {
     name: 'CalendarView',
@@ -70,6 +74,7 @@ export default {
                 },
             },
             loading: false,
+            msgLoading: t`Loading`,
             pageSize: 100,
         }
     },
@@ -139,16 +144,17 @@ export default {
 </script>
 <style scoped>
 .calendar-view .loading {
+    display: flex;
     position: fixed;
     z-index: 999;
     overflow: show;
     margin: auto;
     top: 0;
-    left: 0;
+    left: 180px;
     bottom: 0;
     right: 0;
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
 }
 .calendar-view #loading-background {
     position: fixed;
