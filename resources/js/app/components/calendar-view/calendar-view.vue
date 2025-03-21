@@ -9,6 +9,7 @@
             v-if="loading"
         />
         <FullCalendar
+            id="full-calendar"
             :options="calendarOptions"
             ref="fullCal"
         />
