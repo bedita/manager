@@ -48,6 +48,7 @@ const _vueInstance = new Vue({
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
+        TreeSlug: () => import(/* webpackChunkName: "tree-slug" */'app/components/tree-slug/tree-slug'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),

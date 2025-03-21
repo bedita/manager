@@ -104,6 +104,7 @@ class TreeControllerTest extends BaseControllerTest
      * @covers ::node()
      * @covers ::fetchNodeData()
      * @covers ::minimalData()
+     * @covers ::slugPathCompact()
      */
     public function testNode(): void
     {
