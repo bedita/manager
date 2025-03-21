@@ -8,19 +8,25 @@ use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\ElementHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\ElementHelper
  */
+#[CoversClass(ElementHelper::class)]
+#[CoversMethod(ElementHelper::class, 'categories')]
+#[CoversMethod(ElementHelper::class, 'custom')]
+#[CoversMethod(ElementHelper::class, 'dropupload')]
+#[CoversMethod(ElementHelper::class, 'multiupload')]
+#[CoversMethod(ElementHelper::class, 'sidebar')]
 class ElementHelperTest extends TestCase
 {
     /**
      * Test `categories` method
      *
      * @return void
-     * @covers ::categories()
      */
     public function testCategories(): void
     {
@@ -43,7 +49,7 @@ class ElementHelperTest extends TestCase
      *
      * @return array
      */
-    public function customProvider(): array
+    public static function customProvider(): array
     {
         return [
             'empty' => [
@@ -83,9 +89,8 @@ class ElementHelperTest extends TestCase
      * @param string $type The item type
      * @param array $conf Configuration to use
      * @return void
-     * @dataProvider customProvider()
-     * @covers ::custom()
      */
+    #[DataProvider('customProvider')]
     public function testCustom(string $expected, string $item, string $type = 'relation', array $conf = []): void
     {
         Configure::write('Properties.documents', $conf);
@@ -100,7 +105,6 @@ class ElementHelperTest extends TestCase
      * Test `sidebar` method
      *
      * @return void
-     * @covers ::sidebar()
      */
     public function testSidebar(): void
     {
@@ -122,7 +126,6 @@ class ElementHelperTest extends TestCase
      * Test `dropupload` method
      *
      * @return void
-     * @covers ::dropupload()
      */
     public function testDropupload(): void
     {
@@ -144,7 +147,6 @@ class ElementHelperTest extends TestCase
      * Test `multiupload` method
      *
      * @return void
-     * @covers ::multiupload()
      */
     public function testMultiupload(): void
     {

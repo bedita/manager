@@ -107,7 +107,7 @@ class TreeController extends AppController
             function ($key) {
                 return $key !== 'filter';
             },
-            ARRAY_FILTER_USE_KEY
+            ARRAY_FILTER_USE_KEY,
         );
         $key = CacheTools::cacheKey(sprintf('tree-%s-%s', $subkey, md5(serialize($tmp))));
         $data = [];
@@ -117,7 +117,7 @@ class TreeController extends AppController
                 function () use ($query) {
                     return $this->fetchTreeData($query);
                 },
-                TreeCacheEventHandler::CACHE_CONFIG
+                TreeCacheEventHandler::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // Something bad happened
@@ -149,7 +149,7 @@ class TreeController extends AppController
 
                     return $this->minimalData($data);
                 },
-                TreeCacheEventHandler::CACHE_CONFIG
+                TreeCacheEventHandler::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // Something bad happened
@@ -181,7 +181,7 @@ class TreeController extends AppController
 
                     return $this->minimalDataWithMeta($data);
                 },
-                TreeCacheEventHandler::CACHE_CONFIG
+                TreeCacheEventHandler::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // Something bad happened
@@ -217,7 +217,7 @@ class TreeController extends AppController
 
                     return $included;
                 },
-                TreeCacheEventHandler::CACHE_CONFIG
+                TreeCacheEventHandler::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // Something bad happened

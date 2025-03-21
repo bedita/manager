@@ -29,7 +29,7 @@ class OEmbed
      * @param string $url Media remote URL
      * @return array Media metadata, empty array if no data is found
      */
-    public function readMetadata($url): array
+    public function readMetadata(string $url): array
     {
         $parsed = parse_url($url);
         $host = Hash::get($parsed, 'host', '');

@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Utility\CacheTools;
 use App\Utility\Message;
 use App\Utility\PermissionsTrait;
+use App\Utility\Schema;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\Utility\ApiTools;
 use Cake\Core\Configure;
@@ -46,9 +47,9 @@ class ModulesController extends AppController
     /**
      * Object type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected $objectType = null;
+    protected ?string $objectType = null;
 
     /**
      * @inheritDoc
@@ -71,7 +72,7 @@ class ModulesController extends AppController
             $this->Modules->setConfig('currentModuleName', $this->objectType);
             $this->Schema->setConfig('type', $this->objectType);
         }
-        $this->Security->setConfig('unlockedActions', ['save']);
+        $this->FormProtection->setConfig('unlockedActions', ['save']);
     }
 
     /**
@@ -151,7 +152,7 @@ class ModulesController extends AppController
      * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
      */
-    public function view($id): ?Response
+    public function view(string|int $id): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
 
@@ -190,7 +191,7 @@ class ModulesController extends AppController
 
                 return $acc;
             },
-            []
+            [],
         );
         $this->setupViewRelations($computedRelations);
 
@@ -210,7 +211,7 @@ class ModulesController extends AppController
      * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
      */
-    public function uname($id): ?Response
+    public function uname(string|int $id): ?Response
     {
         try {
             $response = $this->apiClient->get(sprintf('/objects/%s', $id));
@@ -252,10 +253,10 @@ class ModulesController extends AppController
                     $schema['properties'],
                     function ($schema) {
                         return empty($schema['readOnly']);
-                    }
-                )
+                    },
+                ),
             ),
-            null
+            null,
         );
         $object = [
             'type' => $this->objectType,
@@ -315,7 +316,7 @@ class ModulesController extends AppController
             $this->savePermissions(
                 (array)$response,
                 (array)$this->Schema->getSchema($this->objectType),
-                (array)Hash::get($requestData, 'permissions')
+                (array)Hash::get($requestData, 'permissions'),
             );
             $id = (string)Hash::get($response, 'data.id');
             $this->Modules->saveRelated($id, $this->objectType, $relatedData);
@@ -351,7 +352,7 @@ class ModulesController extends AppController
      * @param string|int $id Object ID.
      * @return \Cake\Http\Response|null
      */
-    public function clone($id): ?Response
+    public function clone(string|int $id): ?Response
     {
         $this->viewBuilder()->setTemplate('view');
         $schema = $this->Schema->getSchema();
@@ -427,16 +428,16 @@ class ModulesController extends AppController
      * @param string $relation The relation name.
      * @return void
      */
-    public function related($id, string $relation): void
+    public function related(string|int $id, string $relation): void
     {
+        $this->getRequest()->allowMethod(['get']);
+        $this->viewBuilder()->setClassName('Json');
         if ($id === 'new') {
             $this->set('data', []);
             $this->setSerialize(['data']);
 
             return;
         }
-
-        $this->getRequest()->allowMethod(['get']);
         $query = $this->Query->prepare($this->getRequest()->getQueryParams());
         try {
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
@@ -449,9 +450,7 @@ class ModulesController extends AppController
 
             return;
         }
-
         $this->Thumbs->urls($response);
-
         $this->set((array)$response);
         $this->setSerialize(array_keys($response));
     }
@@ -464,9 +463,10 @@ class ModulesController extends AppController
      * @param string $type the resource type name.
      * @return void
      */
-    public function resources($id, string $type): void
+    public function resources(string|int $id, string $type): void
     {
         $this->getRequest()->allowMethod(['get']);
+        $this->viewBuilder()->setClassName('Json');
         $query = $this->Query->prepare($this->getRequest()->getQueryParams());
         try {
             $response = $this->apiClient->get($type, $query);
@@ -491,9 +491,10 @@ class ModulesController extends AppController
      * @param string $relation The relation name.
      * @return void
      */
-    public function relationships($id, string $relation): void
+    public function relationships(string|int $id, string $relation): void
     {
         $this->getRequest()->allowMethod(['get']);
+        $this->viewBuilder()->setClassName('Json');
         $available = $this->availableRelationshipsUrl($relation);
 
         try {
@@ -544,7 +545,7 @@ class ModulesController extends AppController
      * @param string $objectType objecte type name
      * @return array $schema
      */
-    public function getSchemaForIndex($objectType): array
+    public function getSchemaForIndex(string $objectType): array
     {
         $schema = (array)$this->Schema->getSchema($objectType);
 
@@ -599,12 +600,12 @@ class ModulesController extends AppController
             $relations,
             $this->Properties->relationsList($this->objectType),
             $this->Properties->hiddenRelationsList($this->objectType),
-            $this->Properties->readonlyRelationsList($this->objectType)
+            $this->Properties->readonlyRelationsList($this->objectType),
         );
 
         // set right types, considering the object type relations
         $rel = (array)$this->viewBuilder()->getVar('relationsSchema');
-        $rightTypes = \App\Utility\Schema::rightTypes($rel);
+        $rightTypes = Schema::rightTypes($rel);
         $this->set('rightTypes', $rightTypes);
 
         // set schemas for relations right types
@@ -624,7 +625,7 @@ class ModulesController extends AppController
         $this->getRequest()->allowMethod('get');
         $query = array_merge(
             $this->getRequest()->getQueryParams(),
-            ['fields' => 'id,title,username,name,surname']
+            ['fields' => 'id,title,username,name,surname'],
         );
         $response = (array)$this->apiClient->get('users', $query);
         $response = ApiTools::cleanResponse($response);
@@ -647,7 +648,7 @@ class ModulesController extends AppController
         $response = (array)$this->apiClient->getObject($id, 'objects');
         $query = array_merge(
             $this->getRequest()->getQueryParams(),
-            ['fields' => 'id,title,description,uname,status,media_url']
+            ['fields' => 'id,title,description,uname,status,media_url'],
         );
         $response = (array)$this->apiClient->getObject($id, $response['data']['type'], $query);
         $response = ApiTools::cleanResponse($response);
