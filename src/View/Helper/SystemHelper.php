@@ -100,6 +100,10 @@ class SystemHelper extends Helper
      */
     public function getMaxFileSize(): int
     {
+        $forcedMaxFileSize = Configure::read('Upload.uploadMaxSize');
+        if ($forcedMaxFileSize) {
+            return $forcedMaxFileSize;
+        }
         $postMaxSize = intVal(substr(ini_get('post_max_size'), 0, -1));
         $uploadMaxFilesize = intVal(substr(ini_get('upload_max_filesize'), 0, -1));
 
