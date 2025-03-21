@@ -1,12 +1,12 @@
 <template>
     <div class="object-info">
-        <button
-            class="button button-outlined-white is-small mr-1"
+        <a
+            class="button button-outlined-white is-small"
             @click.prevent="showInfo()"
         >
             <app-icon icon="carbon:information" />
             <span class="ml-05">Info</span>
-        </button>
+        </a>
     </div>
 </template>
 <script>
@@ -56,8 +56,32 @@ export default {
                 return '-';
             }
             return data.map((dateRange) => {
-                return dateRange.end_date ? `<div>${dateRange.start_date} - ${dateRange.end_date}</div>` : `<div>${dateRange.start_date}</div>`;
+                return dateRange.end_date ? `<div>${this.$helpers.formatDate(dateRange.start_date)} - ${this.$helpers.formatDate(dateRange.end_date)}</div>` : `<div>${this.$helpers.formatDate(dateRange.start_date)}</div>`;
             }).join(' ');
+        },
+        getFieldVal(val) {
+            if (!val) {
+                return '<span>-</span>';
+            }
+            if (val === 'true' || val === true) {
+                return '<input type="checkbox" checked />';
+            }
+            if (val === 'false' || val === false) {
+                return '<input type="checkbox" />';
+            }
+            if (Array.isArray(val)) {
+                return val.map((item) => {
+                    if (typeof item === 'object') {
+                        return `<span>${JSON.stringify(item)}</span>`;
+                    }
+                    return `<span>${item}</span>`;
+                }).join(', ');
+            }
+            if (typeof val === 'object') {
+                return `<span>${JSON.stringify(val)}</span>`;
+            }
+
+            return `<span>${val}</span>`;
         },
         showInfo() {
             let content = '';
@@ -71,16 +95,10 @@ export default {
                     content += `<div><label>${this.labelsMap.get(field)}</label><div>${this.categories(this.objectData.attributes.categories)}</div>`;
                     continue;
                 }
-                content += `<div><label>${this.labelsMap.get(field)}</label><div>${this.objectData.attributes[field] || '-'}</div></div>`;
+                content += `<div><label>${this.labelsMap.get(field)}</label><div>${this.getFieldVal(this.objectData.attributes[field])}</div></div>`;
             }
             BEDITA.info(content);
         }
     },
 }
 </script>
-<style scoped>
-.object-info button {
-    color: white;
-    border: solid transparent 0px;
-}
-</style>
