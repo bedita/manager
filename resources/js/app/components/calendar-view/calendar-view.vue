@@ -1,6 +1,17 @@
 <template>
     <div class="calendar-view">
-        <FullCalendar :options="calendarOptions" ref="fullCal" />
+        <div
+            class="loading is-loading-spinner"
+            v-if="loading"
+        />
+        <div
+            id="loading-background"
+            v-if="loading"
+        />
+        <FullCalendar
+            :options="calendarOptions"
+            ref="fullCal"
+        />
     </div>
 </template>
 <script>
@@ -57,6 +68,7 @@ export default {
                     return [...items];
                 },
             },
+            loading: false,
             pageSize: 100,
         }
     },
@@ -101,6 +113,9 @@ export default {
             return items;
         },
         searchItemsConcat(items, responseJson) {
+            if (!responseJson?.data) {
+                return;
+            }
             for (const item of responseJson.data) {
                 for (const subItem of item.attributes.date_ranges) {
                     if (subItem.start_date) {
@@ -121,3 +136,27 @@ export default {
     },
 }
 </script>
+<style scoped>
+.calendar-view .loading {
+    position: fixed;
+    z-index: 999;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+}
+.calendar-view #loading-background {
+    position: fixed;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+	width:100%;
+    background-color: rgba(255,255,255,0.1);
+    z-index:9999;
+}
+</style>
