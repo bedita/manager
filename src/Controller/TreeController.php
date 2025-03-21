@@ -106,7 +106,7 @@ class TreeController extends AppController
      * Saves the current slug
      */
     public function slug(): ?Response
-        {
+    {
         $this->getRequest()->allowMethod(['post']);
         $this->viewBuilder()->setClassName('Json');
         $response = $error = null;
@@ -144,7 +144,7 @@ class TreeController extends AppController
         $this->set('error', $error);
         $this->setSerialize(['response', 'error']);
 
-        return null;        
+        return null;
     }
 
     /**
