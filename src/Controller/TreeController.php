@@ -112,25 +112,21 @@ class TreeController extends AppController
         $response = $error = null;
         try {
             $data = (array)$this->getRequest()->getData();
-            $parentId = $data['parent'];
-            $newSlug = $data['slug'];
-            $type = $data['type'];
-            $id = $data['id'];
             $body = [
                 'data' => [
                     [
-                        'type' => $type,
-                        'id' => $id,
+                        'id' => (string)Hash::get($data, 'id'),
+                        'type' => (string)Hash::get($data, 'type'),
                         'meta' => [
                             'relation' => [
-                                'slug' => $newSlug,
+                                'slug' => (string)Hash::get($data, 'slug'),
                             ],
                         ],
                     ],
                 ],
             ];
             $response = $this->apiClient->post(
-                sprintf('/folders/%s/relationships/children', $parentId),
+                sprintf('/folders/%s/relationships/children', (string)Hash::get($data, 'parent')),
                 json_encode($body)
             );
             // Clearing cache after successful save
