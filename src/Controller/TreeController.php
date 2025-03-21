@@ -17,7 +17,7 @@ use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
-use Cake\Event\Event;
+use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -26,12 +26,16 @@ use Psr\Log\LogLevel;
  */
 class TreeController extends AppController
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(): void
     {
         parent::initialize();
 
         $this->Security->setConfig('unlockedActions', ['slug']);
     }
+
     /**
      * Get tree data.
      * Use this for /tree?filter[roots]&... and /tree?filter[parent]=x&...
@@ -98,8 +102,11 @@ class TreeController extends AppController
         $this->setSerialize(['parents']);
     }
 
-    public function slug(): ?Response 
-    {
+    /**
+     * Saves the current slug
+     */
+    public function slug(): ?Response
+        {
         $this->getRequest()->allowMethod(['post']);
         $this->viewBuilder()->setClassName('Json');
         $response = $error = null;
@@ -119,7 +126,7 @@ class TreeController extends AppController
                                 'slug' => $newSlug,
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ];
             $response = $this->apiClient->post(
@@ -128,8 +135,8 @@ class TreeController extends AppController
             );
             // Clearing cache after successful save
             Cache::clearGroup('tree', TreeCacheEventHandler::CACHE_CONFIG);
-        } catch (eBEditaClientException $err) {
-            $error = $e->getMessage();
+        } catch (BEditaClientException $err) {
+            $error = $err->getMessage();
             $this->log($error, 'error');
             $this->set('error', $error);
         }
@@ -137,8 +144,7 @@ class TreeController extends AppController
         $this->set('error', $error);
         $this->setSerialize(['response', 'error']);
 
-        return null;
-        
+        return null;        
     }
 
     /**
