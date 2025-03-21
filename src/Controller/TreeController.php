@@ -17,6 +17,7 @@ use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
+use Cake\Event\Event;
 use Cake\Utility\Hash;
 use Psr\Log\LogLevel;
 
@@ -25,6 +26,12 @@ use Psr\Log\LogLevel;
  */
 class TreeController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->Security->setConfig('unlockedActions', ['slug']);
+    }
     /**
      * Get tree data.
      * Use this for /tree?filter[roots]&... and /tree?filter[parent]=x&...
@@ -89,6 +96,49 @@ class TreeController extends AppController
         $parents = $this->fetchParentsData($id, $type);
         $this->set('parents', $parents);
         $this->setSerialize(['parents']);
+    }
+
+    public function slug(): ?Response 
+    {
+        $this->getRequest()->allowMethod(['post']);
+        $this->viewBuilder()->setClassName('Json');
+        $response = $error = null;
+        try {
+            $data = (array)$this->getRequest()->getData();
+            $parentId = $data['parent'];
+            $newSlug = $data['slug'];
+            $type = $data['type'];
+            $id = $data['id'];
+            $body = [
+                'data' => [
+                    [
+                        'type' => $type,
+                        'id' => $id,
+                        'meta' => [
+                            'relation' => [
+                                'slug' => $newSlug,
+                            ],
+                        ],
+                    ]
+                ],
+            ];
+            $response = $this->apiClient->post(
+                sprintf('/folders/%s/relationships/children', $parentId),
+                json_encode($body)
+            );
+            // Clearing cache after successful save
+            Cache::clearGroup('tree', TreeCacheEventHandler::CACHE_CONFIG);
+        } catch (eBEditaClientException $err) {
+            $error = $e->getMessage();
+            $this->log($error, 'error');
+            $this->set('error', $error);
+        }
+        $this->set('response', $response);
+        $this->set('error', $error);
+        $this->setSerialize(['response', 'error']);
+
+        return null;
+        
     }
 
     /**
