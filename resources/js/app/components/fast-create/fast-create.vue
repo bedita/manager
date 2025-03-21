@@ -1,85 +1,114 @@
 <template>
     <div class="fast-create">
         <div
-            class="start"
-            @click="reset(); clicked = true"
-            v-if="!clicked"
-        >
-            {{ msgFastCreate }}. {{ msgClickHereToStart }}
+            class="backdrop"
+            v-if="clicked"
+        />
+        <div>
+            <button
+                class="button button-primary is-width-auto"
+                :disabled="loading || clicked"
+                @click.prevent.stop="reset(); clicked = true"
+            >
+                <app-icon icon="carbon:add" />
+                <span class="ml-05">{{ msgCreateObject }}</span>
+            </button>
         </div>
-        <template v-else>
-            <header class="is-flex space-between align-center is-expanded">
-                <span class="mb-1">{{ msgFastCreate }} {{ moduleName() }}</span>
-                <span
-                    class="mb-1 close"
-                    :title="msgClose"
-                    @click.prevent="reset()"
-                >
-                    <app-icon icon="carbon:close" />
-                </span>
-            </header>
-            <fieldset>
-                <div v-show="!autoType">
-                    <label for="objectType">{{ msgChooseType }}</label>
-                    <select
-                        v-model="objectType"
-                        @change="changeType"
+        <aside
+            class="main-panel-container"
+            :class="clicked ? 'on' : ''"
+            v-if="clicked"
+        >
+            <div class="main-panel">
+                <div class="fast-create-form-container">
+                    <header
+                        class="mx-1 tab tab-static unselectable"
+                        style="padding-left: 0px !important"
                     >
-                        <option
-                            v-for="item in items"
-                            :value="item"
-                            :key="item"
+                        <h2>
+                            <span class="mb-1"><strong>{{ msgFastCreate }} {{ moduleName() }}</strong></span>
+                        </h2>
+                        <span
+                            class="close"
+                            :title="msgClose"
+                            @click.prevent="reset()"
                         >
-                            {{ t(capitalize(item)) }}
-                        </option>
-                    </select>
+                            <app-icon
+                                icon="carbon:close"
+                                class="hw-30"
+                            />
+                        </span>
+                    </header>
+                    <fieldset>
+                        <div
+                            class="mb-1"
+                            v-show="!autoType"
+                        >
+                            <label for="objectType">{{ msgChooseType }}</label>
+                            <select
+                                v-model="objectType"
+                                @change="changeType"
+                            >
+                                <option
+                                    v-for="item in items"
+                                    :value="item"
+                                    :key="item"
+                                >
+                                    {{ t(capitalize(item)) }}
+                                </option>
+                            </select>
+                        </div>
+                        <template v-if="objectType">
+                            <div
+                                v-for="field in fields"
+                                :key="field"
+                            >
+                                <form-field
+                                    :abstract-type="abstractType"
+                                    :field="fieldKey(field)"
+                                    :render-as="fieldType(field)"
+                                    :json-schema="schemasByType?.[objectType]?.properties?.[fieldKey(field)] || {}"
+                                    :is-uploadable="isUploadable"
+                                    :languages="languages"
+                                    :object-type="objectType"
+                                    :required="required?.includes(fieldKey(field))"
+                                    :val="schemasByType?.[objectType]?.[fieldKey(field)] || null"
+                                    v-model="formFieldProperties[fieldKey(field)]"
+                                    @error="err"
+                                    @update="update"
+                                    @success="success"
+                                />
+                            </div>
+                        </template>
+                        <div v-if="objectType">
+                            <button
+                                :class="{ 'is-loading-spinner': loading }"
+                                :disabled="saveDisabled"
+                                @click.prevent="save"
+                            >
+                                <app-icon icon="carbon:save" />
+                                <span class="ml-05">{{ msgSave }}</span>
+                            </button>
+                            <button @click.prevent="reset()">
+                                <app-icon icon="carbon:close" />
+                                <span class="ml-05">{{ msgClose }}</span>
+                            </button>
+                        </div>
+                        <div
+                            class="error"
+                            v-if="error"
+                        >
+                            <app-icon icon="carbon:error" />
+                            <span class="ml-05">{{ error }}</span>
+                        </div>
+                        <div v-if="message">
+                            <app-icon icon="carbon:checkmark" />
+                            <span class="ml-05">{{ message }}</span>
+                        </div>
+                    </fieldset>
                 </div>
-                <template v-if="objectType">
-                    <div
-                        v-for="field in fields"
-                        :key="field"
-                    >
-                        <form-field
-                            :abstract-type="abstractType"
-                            :field="fieldKey(field)"
-                            :render-as="fieldType(field)"
-                            :json-schema="schemasByType?.[objectType]?.properties?.[fieldKey(field)] || {}"
-                            :is-uploadable="isUploadable"
-                            :languages="languages"
-                            :object-type="objectType"
-                            :required="required?.includes(fieldKey(field))"
-                            :val="schemasByType?.[objectType]?.[fieldKey(field)] || null"
-                            v-model="payload[fieldKey(field)]"
-                            @error="err"
-                            @update="update"
-                            @success="success"
-                        />
-                    </div>
-                </template>
-                <div v-if="objectType">
-                    <button
-                        :class="{'is-loading-spinner': loading}"
-                        :disabled="loading || invalidFields?.length > 0"
-                        @click.prevent="save"
-                    >
-                        <app-icon icon="carbon:save" />
-                        <span class="ml-05">{{ msgSave }}</span>
-                    </button>
-                    <button @click.prevent="reset()">
-                        <app-icon icon="carbon:close" />
-                        <span class="ml-05">{{ msgClose }}</span>
-                    </button>
-                </div>
-                <div class="error" v-if="error">
-                    <app-icon icon="carbon:error" />
-                    <span class="ml-05">{{ error }}</span>
-                </div>
-                <div v-if="message">
-                    <app-icon icon="carbon:checkmark" />
-                    <span class="ml-05">{{ message }}</span>
-                </div>
-            </fieldset>
-        </template>
+            </div>
+        </aside>
     </div>
 </template>
 <script>
@@ -126,14 +155,20 @@ export default {
             message: '',
             msgClose: t`Close`,
             msgChooseType: t`Choose a type`,
-            msgClickHereToStart: t`Click here to start`,
             msgCreated: t`Created`,
+            msgCreateObject: t`Create object`,
             msgFastCreate: t`Fast create`,
             msgSave: t`Save`,
             objectType: null,
             payload: {},
+            formFieldProperties: {},
             required: [],
         }
+    },
+    computed: {
+        saveDisabled() {
+            return this.invalidFields.length > 0 || this.loading;
+        },
     },
     mounted() {
         this.$nextTick(() => {
@@ -143,6 +178,12 @@ export default {
                 this.objectType = this.autoType;
                 this.changeType();
             }
+            if (this.objectType) {
+                for (const field of this.fields) {
+                    this.payload[this.fieldKey(field)] = this.schemasByType?.[this.objectType]?.[this.fieldKey(field)] || null;
+                }
+            }
+            this.formFieldProperties = Object.assign({}, this.payload);
         });
     },
     methods: {
@@ -176,7 +217,6 @@ export default {
             }
             this.isUploadable = BEDITA.uploadable.includes(this.objectType);
             this.abstractType = this.isUploadable ? 'media' : 'objects';
-            this.invalidFields = this.required.filter(f => !this.payload[f]);
             if (this.fields?.length === 0) {
                 // set defaults
                 this.fields = ['title', 'status'];
@@ -189,6 +229,7 @@ export default {
                     this.required = ['title', 'name'];
                 }
             }
+            this.invalidFields = this.required.filter(f => !this.payload[f]);
         },
         err(val) {
             this.error = val;
@@ -225,6 +266,7 @@ export default {
         async save() {
             try {
                 this.loading = true;
+                this.payload = Object.assign({}, this.formFieldProperties[this.objectType]);
                 this.payload.objectType = this.objectType;
                 const url = `/${this.objectType}/save`;
                 const options = {
@@ -257,58 +299,76 @@ export default {
             this.$emit('created', [objectData]);
         },
         update(k,v) {
-            this.payload[k] = v;
-            this.invalidFields = this.required.filter(f => !this.payload[f]);
+            this.formFieldProperties[k] = v;
+            this.invalidFields = this.required.filter(f => !this.formFieldProperties[f]);
         },
     },
 }
 </script>
 <style scoped>
 div.fast-create {
+    display: inline-block;
+}
+div.fast-create > div.fast-create-form-container {
     display: flex;
     flex-direction: column;
     margin: 1rem 0;
     padding: 1rem 0;
-    border: solid 1px white;
 }
-div.fast-create > div {
+div.fast-create > div.fast-create-form-container > div {
     margin: 0.5rem 1rem 0.5rem 1rem;
     display: inline-block;
 }
-div.fast-create > div.start {
+div.fast-create > div.fast-create-form-container > div.start {
     cursor: pointer;
     text-align: center;
     width: 100%;
 }
-div.fast-create > fieldset {
+div.fast-create > div.fast-create-form-container > fieldset {
     margin: 1rem;
 }
-div.fast-create > fieldset > div {
+div.fast-create > div.fast-create-form-container > fieldset > div {
     margin: 1rem;
 }
-div.fast-create > fieldset > div > label {
+div.fast-create > div.fast-create-form-container > fieldset > div > label {
     display: block;
 }
-div.fast-create > fieldset > div > input {
+div.fast-create > div.fast-create-form-container > fieldset > div > input {
     width: 100%;
 }
-div.fast-create > div > button {
+div.fast-create > div.fast-create-form-container > div > button {
     margin: 1rem;
 }
-div.fast-create div.error {
+div.fast-create > div.fast-create-form-container div.error {
     color: red;
 }
-div.fast-create div.close {
+div.fast-create > div.fast-create-form-container div.close {
     position: fixed;
     right: 0;
     cursor: pointer;
 }
-div.fast-create span.close {
+div.fast-create > div.fast-create-form-container span.close {
     cursor: pointer;
 }
-div.fast-create header {
-    margin: auto;
-    padding: 1rem 4rem 0rem 4rem;
-    font-style: italic;
+div.fast-create > div.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 1;
+}
+div.fast-create > div.fade-enter-active,
+div.fast-create > div.fade-leave-active {
+    transition: opacity .5s;
+}
+div.fast-create > div.fade-enter,
+div.fast-create > div.fade-leave-to {
+    opacity: 0;
+}
+div.fast-create > div.fade-enter-to,
+div.fast-create > div.fade-leave {
+    opacity: 0.75;
 }
 </style>

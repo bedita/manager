@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-02-13 09:15:27 \n"
+"POT-Creation-Date: 2025-03-19 11:05:13 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1737,13 +1737,13 @@ msgid ""
 "saving). Are you sure?"
 msgstr ""
 
-msgid "version by"
-msgstr ""
-
 msgid "date"
 msgstr ""
 
 msgid "Trashed"
+msgstr ""
+
+msgid "version by"
 msgstr ""
 
 msgid "Latitude"
@@ -1776,7 +1776,7 @@ msgstr ""
 msgid "Choose a type"
 msgstr ""
 
-msgid "Click here to start"
+msgid "Create object"
 msgstr ""
 
 msgid "Fast create"
