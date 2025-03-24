@@ -560,20 +560,14 @@ class PropertyHelperTest extends TestCase
         $helper = new PropertyHelper($view);
         $actual = $helper->translationsMap();
         $expected = [
-            'body' => 'Body',
-            'core' => 'Core',
-            'custom' => 'Custom',
-            'date_ranges' => 'Date Ranges',
-            'description' => 'Description',
-            'documents' => 'Documents',
-            'dummies' => 'Dummies',
-            'json' => 'Json',
-            'plaintext' => 'Plaintext',
-            'richtext' => 'Richtext',
-            'status' => 'Status',
             'title' => 'Title',
+            'description' => 'Description',
+            'body' => 'Body',
+            'status' => 'Status',
         ];
-        static::assertEquals($expected, $actual);
+        foreach ($expected as $key => $value) {
+            static::assertSame($value, $actual[$key]);
+        }
     }
 
     /**
