@@ -86,7 +86,7 @@ class AuthProvidersControllerTest extends TestCase
         foreach ($keys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $viewVars);
         }
-        static::assertEquals('async_jobs', $viewVars['resourceType']);
+        static::assertEquals('auth_providers', $viewVars['resourceType']);
         static::assertEquals(['name'], $viewVars['properties']);
     }
 }
