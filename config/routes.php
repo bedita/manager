@@ -122,9 +122,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
         $adminRoutes = [
             'appearance',
             'applications',
+            'auth_providers',
             'async_jobs',
             'config',
             'endpoints',
+            'external_auth',
             'roles',
             'roles_modules',
             'endpoint_permissions',

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-02-13 09:15:27 \n"
+"POT-Creation-Date: 2025-03-24 09:41:00 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -991,6 +991,12 @@ msgstr ""
 msgid "application_id"
 msgstr ""
 
+msgid "auth_class"
+msgstr ""
+
+msgid "auth_provider_id"
+msgstr ""
+
 msgid "autoplay"
 msgstr ""
 
@@ -1093,6 +1099,9 @@ msgstr ""
 msgid "pitch"
 msgstr ""
 
+msgid "provider_username"
+msgstr ""
+
 msgid "remove"
 msgstr ""
 
@@ -1130,6 +1139,9 @@ msgid "undo remove"
 msgstr ""
 
 msgid "untitled"
+msgstr ""
+
+msgid "user_id"
 msgstr ""
 
 msgid "username"
@@ -1195,8 +1207,8 @@ msgstr ""
 
 #, javascript-format
 msgid ""
-"Could not translate field \"${ field }\" with translation engine "
-"\"${ engine }\""
+"Could not translate field \"${ field }\" with translation engine \"$"
+"{ engine }\""
 msgstr ""
 
 msgid "OOOPS! Something went wrong"
@@ -1323,8 +1335,8 @@ msgstr ""
 #, javascript-format
 msgid ""
 "Resolution of ${ filename } is too big (${ img.width }x${ img.height }), "
-"please select a file whose resolution is less than or equal to "
-"${ resolution }"
+"please select a file whose resolution is less than or equal to $"
+"{ resolution }"
 msgstr ""
 
 msgid "File type forbidden"
@@ -1734,13 +1746,13 @@ msgid ""
 "saving). Are you sure?"
 msgstr ""
 
-msgid "version by"
-msgstr ""
-
 msgid "date"
 msgstr ""
 
 msgid "Trashed"
+msgstr ""
+
+msgid "version by"
 msgstr ""
 
 msgid "Latitude"

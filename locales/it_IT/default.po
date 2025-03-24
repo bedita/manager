@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-02-13 09:15:27 \n"
+"POT-Creation-Date: 2025-03-24 09:41:00 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1000,6 +1000,12 @@ msgstr "id applicazione"
 msgid "application_id"
 msgstr "id applicazione"
 
+msgid "auth_class"
+msgstr "classe di autenticazione"
+
+msgid "auth_provider_id"
+msgstr "provider di autenticazione"
+
 msgid "autoplay"
 msgstr ""
 
@@ -1102,6 +1108,9 @@ msgstr "telefono"
 msgid "pitch"
 msgstr ""
 
+msgid "provider_username"
+msgstr "campo autenticazione provider"
+
 msgid "remove"
 msgstr "rimuovi"
 
@@ -1140,6 +1149,9 @@ msgstr "annulla rimozione"
 
 msgid "untitled"
 msgstr "senza titolo"
+
+msgid "user_id"
+msgstr "id utente"
 
 msgid "username"
 msgstr "nome utente"
@@ -1205,11 +1217,11 @@ msgstr "Errore nella traduzione da \"${ from }\" a \"${ to }\""
 
 #, javascript-format
 msgid ""
-"Could not translate field \"${ field }\" with translation engine "
-"\"${ engine }\""
+"Could not translate field \"${ field }\" with translation engine \"$"
+"{ engine }\""
 msgstr ""
-"Non è stato possibile tradurre il campo \"${ field }\" con il motore "
-"\"${ engine }\""
+"Non è stato possibile tradurre il campo \"${ field }\" con il motore \"$"
+"{ engine }\""
 
 msgid "OOOPS! Something went wrong"
 msgstr "OOOPS! Qualcosa è andato storto"
@@ -1339,8 +1351,8 @@ msgstr ""
 #, javascript-format
 msgid ""
 "Resolution of ${ filename } is too big (${ img.width }x${ img.height }), "
-"please select a file whose resolution is less than or equal to "
-"${ resolution }"
+"please select a file whose resolution is less than or equal to $"
+"{ resolution }"
 msgstr ""
 "Risoluzione di ${ filename } troppo grande (${ img.width }x${ img.height }), "
 "selezionare un file con risoluzione inferiore o uguale a ${ resolution }"
@@ -1760,14 +1772,14 @@ msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
 
-msgid "version by"
-msgstr "versione di"
-
 msgid "date"
 msgstr "data"
 
 msgid "Trashed"
 msgstr "Rimosso"
+
+msgid "version by"
+msgstr "versione di"
 
 msgid "Latitude"
 msgstr "Latitudine"

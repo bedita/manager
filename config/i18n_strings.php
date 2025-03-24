@@ -58,9 +58,13 @@
 
 // Admin
 // __('application_id');
+// __('auth_class');
 // __('scheduled_from');
 // __('max_attempts');
 // __('locked_until');
+// __('user_id');
+// __('auth_provider_id');
+// __('provider_username');
 
 // Modelling
 // __('ObjectTypes');

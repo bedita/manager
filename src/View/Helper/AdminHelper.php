@@ -104,7 +104,7 @@ class AdminHelper extends Helper
             return $this->Form->control($property, $this->options[$type] + compact('value'));
         }
 
-        if (in_array($type, ['applications', 'endpoints', 'roles'])) {
+        if (in_array($type, ['applications', 'auth_providers', 'endpoints', 'roles'])) {
             $options = (array)$this->_View->get($type);
             $value = $value ?? '-';
 
