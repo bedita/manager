@@ -17,29 +17,29 @@ export default {
             type: Object,
             required: true
         },
-        propertiesConfig: {
-            type: Object,
-            required: true
-        },
     },
     data() {
         return {
             fields: ['title', 'description'],
             labelsMap: new Map(),
+            values: {},
         };
     },
     mounted() {
         this.$nextTick(() => {
-            if (this.propertiesConfig?.[this.objectData?.type]) {
-                const hasInfo = this.propertiesConfig[this.objectData.type]?.['info'];
-                const hasIndex = this.propertiesConfig[this.objectData.type]?.['index'];
-                if (hasInfo || hasIndex) {
-                    this.fields = this.propertiesConfig[this.objectData.type]?.['info'] || this.propertiesConfig[this.objectData.type]?.['index'] || ['title', 'description'];
-                }
-            }
+            const source = BEDITA?.indexLists?.[this.objectData?.type] || {};
+            this.fields = source || ['title', 'description'];
             for (const field of this.fields) {
                 this.labelsMap.set(field, BEDITA_I18N?.[field] || field);
+                this.values[field] = this.objectData?.relationships?.streams?.data?.[0]?.attributes?.[field]
+                    || this.objectData?.relationships?.streams?.data?.[0]?.meta?.[field]
+                    || this.objectData?.attributes?.[field]
+                    || '-';
+                if (field === 'file_size') {
+                    this.values[field] = this.$helpers.formatBytes(this.values[field]);
+                }
             }
+
         });
     },
     methods: {
@@ -95,7 +95,7 @@ export default {
                     content += `<div><label>${this.labelsMap.get(field)}</label><div>${this.categories(this.objectData.attributes.categories)}</div>`;
                     continue;
                 }
-                content += `<div><label>${this.labelsMap.get(field)}</label><div>${this.getFieldVal(this.objectData.attributes[field])}</div></div>`;
+                content += `<div><label>${this.labelsMap.get(field)}</label><div>${this.getFieldVal(this.values[field])}</div></div>`;
             }
             BEDITA.info(content);
         }
