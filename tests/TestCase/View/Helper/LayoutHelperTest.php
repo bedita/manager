@@ -568,6 +568,7 @@ class LayoutHelperTest extends TestCase
      */
     public function testMetaConfig(): void
     {
+        Cache::enable();
         $params = ['_csrfToken' => 'my-token'];
         $request = new ServerRequest(compact('params'));
         $viewVars = [
@@ -597,8 +598,10 @@ class LayoutHelperTest extends TestCase
             'relationsSchema' => ['whatever'],
             'richeditorConfig' => (array)Configure::read('Richeditor'),
             'richeditorByPropertyConfig' => (array)Configure::read('RicheditorByProperty'),
+            'indexLists' => (array)$layout->indexLists(),
         ];
         static::assertSame($expected, $conf);
+        Cache::disable();
     }
 
     /**
