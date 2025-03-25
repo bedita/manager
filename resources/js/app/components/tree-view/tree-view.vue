@@ -143,7 +143,6 @@
                     </template>
                 </div>
             </div>
-            {{ JSON.stringify(object) }}
             <tree-slug
                 :mode="relationName && isParent ? 'edit' : 'view'"
                 :object-id="object.id"

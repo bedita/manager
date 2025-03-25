@@ -105,15 +105,14 @@ export default {
         return {
             editing: false,
             saving: false,
-            slugOriginalContent: this.slugContent || '',
-            v: this.slugContent,
+            slugOriginalContent: this.slugContent || (this.objectUname + '-' + this.objectId),
+            v: this.slugContent || (this.objectUname + '-' + this.objectId),
         }
     },
     methods: {
         async save() {
             this.saving = true;
             // Getting the right parent for this slug
-            API_OPTIONS.method = 'GET';
             let parentId = this.parentId;
             API_OPTIONS.method = 'POST';
             API_OPTIONS.body = JSON.stringify({type: this.objectType, parent: parentId, id: this.objectId, slug: this.v})
