@@ -80,6 +80,10 @@ export default {
             type: String,
             required: true
         },
+        parentId: {
+            type: String,
+            required: true
+        },
         slugContent: {
             type: String,
             default: null
@@ -97,7 +101,7 @@ export default {
         return {
             editing: false,
             saving: false,
-            slugOriginalContent: this.slugContent,
+            slugOriginalContent: this.slugContent || '',
             v: this.slugContent,
         }
     },
@@ -106,11 +110,7 @@ export default {
             this.saving = true;
             // Getting the right parent for this slug
             API_OPTIONS.method = 'GET';
-            let parentsResp = await fetch(`${API_URL}tree/parents/${this.objectType}/${this.objectId}`, API_OPTIONS);
-            let parentsJson = (await parentsResp.json())
-            let parentId = parentsJson.parents.filter(
-                p => p.meta.slug_path_compact === this.slugPathCompact
-            )[0].id;
+            let parentId = this.parentId;
             API_OPTIONS.method = 'POST';
             API_OPTIONS.body = JSON.stringify({type: this.objectType, parent: parentId, id: this.objectId, slug: this.v})
             const response = await fetch(`${API_URL}tree/slug`, API_OPTIONS);

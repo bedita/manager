@@ -147,6 +147,7 @@
                 :mode="relationName && isParent ? 'edit' : 'view'"
                 :object-id="object.id"
                 :object-type="object.type"
+                :parent-id="node?.id"
                 :slug-content="node?.meta?.relation?.slug"
                 :slug-path="node?.meta?.slug_path"
                 :slug-path-compact="node.meta?.slug_path_compact"
