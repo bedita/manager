@@ -143,10 +143,12 @@
                     </template>
                 </div>
             </div>
+            {{ JSON.stringify(object) }}
             <tree-slug
                 :mode="relationName && isParent ? 'edit' : 'view'"
                 :object-id="object.id"
                 :object-type="object.type"
+                :object-uname="object.uname"
                 :parent-id="node?.id"
                 :slug-content="node?.meta?.relation?.slug"
                 :slug-path="node?.meta?.slug_path"

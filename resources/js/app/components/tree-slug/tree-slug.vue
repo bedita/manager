@@ -19,8 +19,8 @@
                     class="button button-outlined ml-05"
                     @click.stop.prevent="save"
                 >
-                    <app-icon 
-                        :class="saving?'saving':''" 
+                    <app-icon
+                        :class="saving?'saving':''"
                         :icon="saving?'carbon:cics-transaction-server-zos':'carbon:save'"
                     />
                 </button>
@@ -80,6 +80,10 @@ export default {
             type: String,
             required: true
         },
+        objectUname: {
+            type: String,
+            required: true
+        },
         parentId: {
             type: String,
             required: true
@@ -119,7 +123,7 @@ export default {
             }
             this.editing = false;
             setTimeout(() => this.saving = false, 1500);
-            
+
         },
     },
 }
