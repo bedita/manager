@@ -43,7 +43,7 @@
                     v-if="relationName"
                 >
                 <span v-html="nodeTitle" />
-                <template v-if="isParent && previewConfig?.[node.meta.path.match(/^\/(\d+)/)?.[1]]">
+                <template v-if="isParent && node?.meta?.path && previewConfig?.[node?.meta?.path?.match(/^\/(\d+)/)?.[1]]">
                     <a
                         :href="`${preview?.url}${node.meta.path.replace('/' + node.meta.path.match(/^\/(\d+)/)?.[1], '')}`"
                         target="_blank"
