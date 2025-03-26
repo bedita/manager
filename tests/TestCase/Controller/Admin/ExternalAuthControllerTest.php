@@ -88,5 +88,8 @@ class ExternalAuthControllerTest extends TestCase
         }
         static::assertEquals('external_auth', $viewVars['resourceType']);
         static::assertEquals(['name'], $viewVars['properties']);
+        $flash = $this->ExternalAuthController->getRequest()->getSession()->read('Flash');
+        $expected = 'No auth providers found: you cannot create external auth entries. Create at least one auth provider first';
+        static::assertEquals($expected, $flash['flash'][0]['message']);
     }
 }

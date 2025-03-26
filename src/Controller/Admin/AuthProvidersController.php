@@ -43,5 +43,12 @@ class AuthProvidersController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
+    protected $propertiesForceJson = [
+        'params',
+    ];
+
+    /**
+     * @inheritDoc
+     */
     protected $meta = [];
 }

@@ -43,6 +43,13 @@ class ExternalAuthController extends AdministrationBaseController
     ];
 
     /**
+     * @inheritDoc
+     */
+    protected $propertiesForceJson = [
+        'params',
+    ];
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null
@@ -52,28 +59,12 @@ class ExternalAuthController extends AdministrationBaseController
         parent::index();
         $authProviders = $this->apiClient->get('/admin/auth_providers', []);
         $authProviders = Hash::combine((array)$authProviders, 'data.{n}.id', 'data.{n}.attributes.name');
-        $authProviders['-'] = '-';
         $this->set('auth_providers', $authProviders);
-
-        return null;
-    }
-
-    /**
-     * Save data
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function save(): ?Response
-    {
-        // check '-' values and set to null
-        $data = $this->request->getData();
-        foreach ($data as $key => $value) {
-            if ($value === '-') {
-                $data[$key] = null;
-            }
+        if (empty($authProviders)) {
+            $this->Flash->warning(__('No auth providers found: you cannot create external auth entries. Create at least one auth provider first'));
         }
 
-        return parent::save();
+        return null;
     }
 
     /**
