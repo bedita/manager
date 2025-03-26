@@ -353,11 +353,11 @@ class TreeControllerTest extends BaseControllerTest
 
     /**
      * Test `slug` method
-     * 
+     *
      * @covers ::slug()
      * @return void
      */
-    public function testSlug(): void 
+    public function testSlug(): void
     {
         $this->setupApi();
         $parent = $this->createTestFolder();
@@ -380,7 +380,7 @@ class TreeControllerTest extends BaseControllerTest
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'post' => $data
+            'post' => $data,
         ];
         $request = new ServerRequest($config);
         $tree = new TreeController($request);
@@ -398,11 +398,11 @@ class TreeControllerTest extends BaseControllerTest
 
     /**
      * Test `slug` method on exception
-     * 
+     *
      * @covers ::slug()
      * @return void
      */
-    public function testSlugException(): void 
+    public function testSlugException(): void
     {
         $this->setupApi();
         $parent = $this->createTestFolder();
@@ -424,7 +424,7 @@ class TreeControllerTest extends BaseControllerTest
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'post' => $data
+            'post' => $data,
         ];
         $request = new ServerRequest($config);
         $tree = new TreeController($request);
@@ -434,5 +434,4 @@ class TreeControllerTest extends BaseControllerTest
         static::assertEmpty($actualResponse);
         static::assertNotEmpty($actualError);
     }
-    
 }
