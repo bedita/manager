@@ -350,4 +350,89 @@ class TreeControllerTest extends BaseControllerTest
         $actual = $tree->minData([]);
         static::assertEmpty($actual);
     }
+
+    /**
+     * Test `slug` method
+     * 
+     * @covers ::slug()
+     * @return void
+     */
+    public function testSlug(): void 
+    {
+        $this->setupApi();
+        $parent = $this->createTestFolder();
+        $response = $this->client->save('folders', [
+            'title' => 'controller test folder child',
+            'parent_id' => (int)Hash::get($parent, 'id'),
+        ]);
+        $child = $response['data'];
+        $parentId = (string)Hash::get($parent, 'id');
+        $childId = (string)Hash::get($child, 'id');
+        $type = (string)Hash::get($child, 'type');
+        $slug = 'test_slug';
+        $data = [
+            'parent' => $parentId,
+            'slug' => $slug,
+            'type' => $type,
+            'id' => $childId,
+        ];
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => $data
+        ];
+        $request = new ServerRequest($config);
+        $tree = new TreeController($request);
+        $tree->slug();
+        $actualResponse = $tree->viewBuilder()->getVar('response');
+        static::assertNotEmpty($actualResponse);
+        $actualError = $tree->viewBuilder()->getVar('error');
+        static::assertNull($actualError);
+        static::assertArrayHasKey('links', $actualResponse);
+        static::assertArrayHasKey('self', $actualResponse['links']);
+        static::assertArrayHasKey('home', $actualResponse['links']);
+        $this->assertNotEmpty($actualResponse['links']['self']);
+        $this->assertNotEmpty($actualResponse['links']['home']);
+    }
+
+    /**
+     * Test `slug` method on exception
+     * 
+     * @covers ::slug()
+     * @return void
+     */
+    public function testSlugException(): void 
+    {
+        $this->setupApi();
+        $parent = $this->createTestFolder();
+        $response = $this->client->save('folders', [
+            'title' => 'controller test folder child',
+            'parent_id' => (int)Hash::get($parent, 'id'),
+        ]);
+        $child = $response['data'];
+        $childId = (string)Hash::get($child, 'id');
+        $type = (string)Hash::get($child, 'type');
+        $slug = 'test_slug';
+        $data = [
+            'parent' => null,
+            'slug' => $slug,
+            'type' => $type,
+            'id' => $childId,
+        ];
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => $data
+        ];
+        $request = new ServerRequest($config);
+        $tree = new TreeController($request);
+        $tree->slug();
+        $actualResponse = $tree->viewBuilder()->getVar('response');
+        $actualError = $tree->viewBuilder()->getVar('error');
+        static::assertEmpty($actualResponse);
+        static::assertNotEmpty($actualError);
+    }
+    
 }
