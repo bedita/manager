@@ -354,8 +354,9 @@ class TreeControllerTest extends BaseControllerTest
     /**
      * Test `slug` method
      *
-     * @covers ::slug()
      * @return void
+     * @covers ::initialize()
+     * @covers ::slug()
      */
     public function testSlug(): void
     {
@@ -399,8 +400,9 @@ class TreeControllerTest extends BaseControllerTest
     /**
      * Test `slug` method on exception
      *
-     * @covers ::slug()
      * @return void
+     * @covers ::initialize()
+     * @covers ::slug()
      */
     public function testSlugException(): void
     {
