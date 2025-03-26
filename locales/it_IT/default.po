@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-03-24 09:41:00 \n"
+"POT-Creation-Date: 2025-03-26 14:33:15 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -83,6 +83,9 @@ msgstr "Applicazioni"
 
 msgid "Async Jobs"
 msgstr "Processi asincroni"
+
+msgid "Auth Providers"
+msgstr "Provider di autenticazione"
 
 msgid "Auto-translate"
 msgstr "Traduci automaticamente"
@@ -311,6 +314,9 @@ msgstr "Esporta Tutti"
 
 msgid "Export Filtered"
 msgstr "Esporta Filtrati"
+
+msgid "External Auth"
+msgstr "Autenticazioni esterne"
 
 msgid "Failed to write file to disk"
 msgstr "Scrittura file su disco fallita"
@@ -549,6 +555,13 @@ msgstr "No"
 
 msgid "No application"
 msgstr "Nessuna applicazione"
+
+msgid ""
+"No auth providers found: you cannot create external auth entries. Create at "
+"least one auth provider first"
+msgstr ""
+"Nessun provider di autenticazione trovato: non puoi creare voci di "
+"autenticazione esterne. Crea almeno un provider di autenticazione"
 
 msgid "No import filters set"
 msgstr "Nessun filtro di importazione impostato"
@@ -1217,11 +1230,11 @@ msgstr "Errore nella traduzione da \"${ from }\" a \"${ to }\""
 
 #, javascript-format
 msgid ""
-"Could not translate field \"${ field }\" with translation engine \"$"
-"{ engine }\""
+"Could not translate field \"${ field }\" with translation engine "
+"\"${ engine }\""
 msgstr ""
-"Non è stato possibile tradurre il campo \"${ field }\" con il motore \"$"
-"{ engine }\""
+"Non è stato possibile tradurre il campo \"${ field }\" con il motore "
+"\"${ engine }\""
 
 msgid "OOOPS! Something went wrong"
 msgstr "OOOPS! Qualcosa è andato storto"
@@ -1351,8 +1364,8 @@ msgstr ""
 #, javascript-format
 msgid ""
 "Resolution of ${ filename } is too big (${ img.width }x${ img.height }), "
-"please select a file whose resolution is less than or equal to $"
-"{ resolution }"
+"please select a file whose resolution is less than or equal to "
+"${ resolution }"
 msgstr ""
 "Risoluzione di ${ filename } troppo grande (${ img.width }x${ img.height }), "
 "selezionare un file con risoluzione inferiore o uguale a ${ resolution }"

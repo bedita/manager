@@ -57,6 +57,8 @@
 //  __('Subtitle');
 
 // Admin
+// __('Auth Providers');
+// __('External Auth');
 // __('application_id');
 // __('auth_class');
 // __('scheduled_from');

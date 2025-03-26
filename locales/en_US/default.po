@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-03-24 09:41:00 \n"
+"POT-Creation-Date: 2025-03-26 14:33:15 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -80,6 +80,9 @@ msgid "Applications"
 msgstr ""
 
 msgid "Async Jobs"
+msgstr ""
+
+msgid "Auth Providers"
 msgstr ""
 
 msgid "Auto-translate"
@@ -308,6 +311,9 @@ msgid "Export All"
 msgstr ""
 
 msgid "Export Filtered"
+msgstr ""
+
+msgid "External Auth"
 msgstr ""
 
 msgid "Failed to write file to disk"
@@ -545,6 +551,11 @@ msgid "No"
 msgstr ""
 
 msgid "No application"
+msgstr ""
+
+msgid ""
+"No auth providers found: you cannot create external auth entries. Create at "
+"least one auth provider first"
 msgstr ""
 
 msgid "No import filters set"
@@ -1210,8 +1221,8 @@ msgstr ""
 
 #, javascript-format
 msgid ""
-"Could not translate field \"${ field }\" with translation engine \"$"
-"{ engine }\""
+"Could not translate field \"${ field }\" with translation engine "
+"\"${ engine }\""
 msgstr ""
 
 msgid "OOOPS! Something went wrong"
@@ -1338,8 +1349,8 @@ msgstr ""
 #, javascript-format
 msgid ""
 "Resolution of ${ filename } is too big (${ img.width }x${ img.height }), "
-"please select a file whose resolution is less than or equal to $"
-"{ resolution }"
+"please select a file whose resolution is less than or equal to "
+"${ resolution }"
 msgstr ""
 
 msgid "File type forbidden"

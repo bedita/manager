@@ -332,6 +332,8 @@ class LayoutHelper extends Helper
             'SystemInfo' => 'has-background-black',
             'UserAccesses' => 'has-background-black',
             'Statistics' => 'has-background-black',
+            'AuthProviders' => 'has-background-black',
+            'ExternalAuth' => 'has-background-black',
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');

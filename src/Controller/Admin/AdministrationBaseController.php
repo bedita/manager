@@ -247,7 +247,7 @@ abstract class AdministrationBaseController extends AppController
     protected function prepareBody(array $data): array
     {
         foreach ($this->propertiesForceJson as $property) {
-            $data[$property] = json_decode($data[$property], true);
+            $data[$property] = json_decode((string)Hash::get($data, $property), true);
         }
         $attributes = array_filter($data, function ($key) {
             return $key !== 'id';
