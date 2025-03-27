@@ -39,6 +39,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversMethod(LayoutHelper::class, 'commandLinkClass')]
 #[CoversMethod(LayoutHelper::class, 'dashboardModuleLink')]
 #[CoversMethod(LayoutHelper::class, 'getCsrfToken')]
+#[CoversMethod(LayoutHelper::class, 'indexLists')]
 #[CoversMethod(LayoutHelper::class, 'isDashboard')]
 #[CoversMethod(LayoutHelper::class, 'isLogin')]
 #[CoversMethod(LayoutHelper::class, 'messages')]
@@ -937,7 +938,6 @@ class LayoutHelperTest extends TestCase
      * Test `indexLists` method.
      *
      * @return void
-     * @covers ::indexLists()
      */
     public function testIndexLists(): void
     {
