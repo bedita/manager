@@ -568,6 +568,7 @@ class LayoutHelperTest extends TestCase
      */
     public function testMetaConfig(): void
     {
+        Cache::enable();
         $params = ['_csrfToken' => 'my-token'];
         $request = new ServerRequest(compact('params'));
         $viewVars = [
@@ -597,8 +598,10 @@ class LayoutHelperTest extends TestCase
             'relationsSchema' => ['whatever'],
             'richeditorConfig' => (array)Configure::read('Richeditor'),
             'richeditorByPropertyConfig' => (array)Configure::read('RicheditorByProperty'),
+            'indexLists' => (array)$layout->indexLists(),
         ];
         static::assertSame($expected, $conf);
+        Cache::disable();
     }
 
     /**
@@ -909,5 +912,42 @@ class LayoutHelperTest extends TestCase
         $expected = 'media';
         $actual = $layout->propertyGroup('provider_uid');
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `indexLists` method.
+     *
+     * @return void
+     * @covers ::indexLists()
+     */
+    public function testIndexLists(): void
+    {
+        Cache::enable();
+        // read from cache
+        $expected = ['whatever'];
+        $key = CacheTools::cacheKey('properties.indexLists');
+        Cache::write($key, $expected, 'default');
+        $view = new View();
+        $layout = new LayoutHelper($view);
+        $actual = $layout->indexLists();
+        static::assertEquals($expected, $actual);
+
+        // read from config
+        Cache::delete($key, 'default');
+        $actual = $layout->indexLists();
+        static::assertIsArray($actual);
+        static::assertArrayHasKey('audio', $actual);
+        static::assertArrayHasKey('categories', $actual);
+        static::assertArrayHasKey('files', $actual);
+        static::assertArrayHasKey('images', $actual);
+        static::assertArrayHasKey('media', $actual);
+        static::assertArrayHasKey('object_types', $actual);
+        static::assertArrayHasKey('property_types', $actual);
+        static::assertArrayHasKey('relations', $actual);
+        static::assertArrayHasKey('tags', $actual);
+        static::assertArrayHasKey('users', $actual);
+        static::assertArrayHasKey('user_profile', $actual);
+        static::assertArrayHasKey('videos', $actual);
+        Cache::disable();
     }
 }

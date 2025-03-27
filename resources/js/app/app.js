@@ -107,6 +107,7 @@ const _vueInstance = new Vue({
         FieldString: () => import(/* webpackChunkName: "field-string" */'app/components/form/field-string'),
         FieldTextarea: () => import(/* webpackChunkName: "field-textarea" */'app/components/form/field-textarea'),
         FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
+        ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
         AppIcon,
     },
 
@@ -630,3 +631,4 @@ Vue.component('FieldTitle', _vueInstance.$options.components.FieldTitle);
 Vue.component('FileUpload', _vueInstance.$options.components.FileUpload);
 Vue.component('ObjectCategories', _vueInstance.$options.components.ObjectCategories);
 Vue.component('ObjectCaptions', _vueInstance.$options.components.ObjectCaptions);
+Vue.component('ObjectInfo', _vueInstance.$options.components.ObjectInfo);
