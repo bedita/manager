@@ -1005,7 +1005,7 @@ export default {
          */
         propFormat(value, format) {
             if (format === 'bytes') {
-                return this.bytes(value);
+                return this.$helpers.formatBytes(value);
             }
 
             return value;
@@ -1021,18 +1021,6 @@ export default {
             const id = related.relationships?.streams?.data[0]?.id;
 
             return `${BEDITA.base}/download/${id}`;
-        },
-
-        /**
-         * Get bytes representation of size.
-         *
-         * @param {Number} size The size
-         * @returns {String}
-         */
-        bytes(size) {
-            let i = size == 0 ? 0 : Math.floor( Math.log(size) / Math.log(1024) );
-
-            return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
         },
 
         datesInfo(obj) {

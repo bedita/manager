@@ -116,15 +116,23 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Tree', 'action' => 'parents'],
         ['_name' => 'tree:parents', 'pass' => ['type', 'id']]
     );
+    // Slug
+    $routes->connect(
+        '/tree/slug',
+        ['controller' => 'Tree', 'action' => 'slug'],
+        ['_name' => 'tree:slug']
+    );
 
     // Admin.
     $routes->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
         $adminRoutes = [
             'appearance',
             'applications',
+            'auth_providers',
             'async_jobs',
             'config',
             'endpoints',
+            'external_auth',
             'roles',
             'roles_modules',
             'endpoint_permissions',
