@@ -337,13 +337,38 @@ export default {
             formatDate(d) {
                 const locale = BEDITA?.locale?.slice(0, 2) || 'en';
 
-                return d ?  new Date(d).toLocaleDateString(locale) + ' ' + new Date(d).toLocaleTimeString(locale) : '';
+                return d ?  new Date(d).toLocaleDateString(locale) + ' ' + new Date(d).toLocaleTimeString(locale, {hour: '2-digit', minute:'2-digit'}) : '';
             },
 
             formatBytes(size) {
                 let i = size == 0 ? 0 : Math.floor( Math.log(size) / Math.log(1024) );
 
                 return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+            },
+
+            handleIncluded(response) {
+                if (!response?.data || !response?.included) {
+                    return response;
+                }
+
+                for (let i = 0; i < response.data.length; i++) {
+                    let d = response.data[i];
+                    const relationships = Object.keys(d?.relationships || {});
+                    for (let j = 0; j < relationships.length; j++) {
+                        let rel = relationships[j];
+                        let relation = d?.relationships[rel] || {};
+                        if (relation?.data) {
+                            for (let k = 0; k < relation.data.length; k++) {
+                                let included = response.included.find(i => i.id === relation?.data?.[k]?.id && i.type === relation?.data?.[k]?.type);
+                                if (included?.attributes) {
+                                    response.data[i].relationships[rel].data[k].attributes = included.attributes;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return response;
             },
         }
     }

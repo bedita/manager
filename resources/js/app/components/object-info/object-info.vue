@@ -1,9 +1,11 @@
 <template>
-    <div class="object-info mr-05">
+    <div
+        class="object-info mr-05"
+        @click.prevent.stop="showInfo()"
+    >
         <a
             :title="msgShowObjectInfo"
-            class="button button-outlined-white is-small"
-            @click.prevent="showInfo()"
+            class="button button-outlined-white is-small show-info"
         >
             <app-icon icon="carbon:information" />
         </a>
@@ -32,14 +34,18 @@ export default {
         this.$nextTick(() => {
             const source = BEDITA?.indexLists?.[this.objectData?.type] || {};
             this.fields = source || ['title', 'description'];
+            this.fields = this.fields.filter((value, index, array) => {
+                return array.indexOf(value) === index;
+            });
+
             for (const field of this.fields) {
                 this.labelsMap.set(field, BEDITA_I18N?.[field] || field);
                 this.values[field] = this.objectData?.relationships?.streams?.data?.[0]?.attributes?.[field]
                     || this.objectData?.relationships?.streams?.data?.[0]?.meta?.[field]
                     || this.objectData?.attributes?.[field]
                     || '-';
-                if (field === 'file_size') {
-                    this.values[field] = this.$helpers.formatBytes(this.values[field]);
+                if (field === 'file_size' && this.values[field] !== '-') {
+                    this.values[field] = this.values[field] ? this.$helpers.formatBytes(this.values[field]) : '-';
                 }
             }
             this.labelsMap.set('created', t`Created`);
@@ -143,3 +149,11 @@ export default {
     },
 }
 </script>
+<style scoped>
+.object-info .show-info {
+    height: 24px;
+    min-width: 24px;
+    width: 24px;
+    cursor: pointer;
+}
+</style>
