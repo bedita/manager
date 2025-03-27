@@ -49,12 +49,13 @@
                     class="mt-1"
                     relation-name={{ relationName }}
                     relation-label="{{ Layout.tr(relationName) }}"
-                    :object='{{ { id: object.id, type: object.type }|json_encode }}'
+                    :object='{{ { id: object.id, type: object.type, uname: object.attributes.uname }|json_encode }}'
                     :multiple-choice={{ options.multiple }}
                     :user-roles="{{ user.roles|json_encode }}"
                     :has-permissions="{{ hasPermissions|json_encode }}"
                     :search="searchInPosition"
                     :search-in-position-active="searchInPositionActive"
+                    :preview-config="{{ config('TreePreview')|json_encode }}"
                     @changed-parents="updatePositions">
                 </tree-view>
             </div>

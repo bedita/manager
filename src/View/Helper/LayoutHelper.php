@@ -14,6 +14,7 @@ namespace App\View\Helper;
 
 use App\Utility\CacheTools;
 use App\Utility\Translate;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -375,6 +376,7 @@ class LayoutHelper extends Helper
             'relationsSchema' => $this->getView()->get('relationsSchema', []),
             'richeditorConfig' => (array)Configure::read('Richeditor'),
             'richeditorByPropertyConfig' => (array)Configure::read('UI.richeditor', []),
+            'indexLists' => (array)$this->indexLists(),
         ];
     }
 
@@ -446,5 +448,34 @@ class LayoutHelper extends Helper
         }
 
         return null;
+    }
+
+    /**
+     * Return list of properties to display in `index` view per modules
+     *
+     * @return array
+     */
+    public function indexLists(): array
+    {
+        $cacheKey = CacheTools::cacheKey('properties.indexLists');
+        $indexLists = Cache::read($cacheKey, 'default');
+        if (!empty($indexLists)) {
+            return $indexLists;
+        }
+        Configure::load('properties');
+        $properties = (array)Configure::read('Properties');
+        $defaultProperties = (array)Configure::read('DefaultProperties');
+        $keys = array_keys($properties);
+        $keysDefault = array_keys($defaultProperties);
+        $keys = array_unique(array_merge($keys, $keysDefault));
+        $indexLists = [];
+        foreach ($keys as $objectType) {
+            $il = (array)Hash::get($properties, sprintf('%s.index', $objectType));
+            $il = empty($il) ? (array)Hash::get($defaultProperties, sprintf('%s.index', $objectType)) : $il;
+            $indexLists[$objectType] = $il;
+        }
+        Cache::write($cacheKey, $indexLists);
+
+        return $indexLists;
     }
 }
