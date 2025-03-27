@@ -120,7 +120,7 @@ $routes->scope('/', function (RouteBuilder $routes): void {
     $routes->connect(
         '/tree/slug',
         ['controller' => 'Tree', 'action' => 'slug'],
-        ['_name' => 'tree:slug']
+        ['_name' => 'tree:slug'],
     );
 
     // Admin.

@@ -65,7 +65,7 @@ abstract class AdministrationBaseController extends AppController
      *
      * @var array
      */
-    protected $propertiesForceJson = [];
+    protected array $propertiesForceJson = [];
 
     /**
      * Properties that are secrets

@@ -33,7 +33,7 @@ class TreeController extends AppController
     {
         parent::initialize();
 
-        $this->Security->setConfig('unlockedActions', ['slug']);
+        $this->FormProtection->setConfig('unlockedActions', ['slug']);
     }
 
     /**
@@ -127,7 +127,7 @@ class TreeController extends AppController
             ];
             $response = $this->apiClient->post(
                 sprintf('/folders/%s/relationships/children', (string)Hash::get($data, 'parent')),
-                json_encode($body)
+                json_encode($body),
             );
             // Clearing cache after successful save
             Cache::clearGroup('tree', TreeCacheEventHandler::CACHE_CONFIG);

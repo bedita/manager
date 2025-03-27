@@ -297,10 +297,10 @@ class AdministrationBaseControllerTest extends TestCase
      */
     public function testPrepareBody(): void
     {
-        $controller = new class () extends AdministrationBaseController
+        $controller = new class (new ServerRequest()) extends AdministrationBaseController
         {
-            protected $resourceType = 'auth_providers';
-            protected $propertiesForceJson = [
+            protected ?string $resourceType = 'auth_providers';
+            protected array $propertiesForceJson = [
                 'params',
             ];
 
