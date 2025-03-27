@@ -5,52 +5,60 @@
         </template>
         <template v-if="mode === 'edit'">
             <template v-if="!editing && v === slugOriginalContent">
-                <span class="slugPath">{{ slugPathCompact }}/{{ v }}</span>
-                <button
-                    class="button button-outlined ml-05"
-                    @click.stop.prevent="editing = true"
-                >
-                    <app-icon icon="carbon:edit" />
-                </button>
+                <span class="slug-path">{{ slugPathCompact }}/{{ v }}</span>
+                <div class="button-wrapper">
+                    <button
+                        class="button button-outlined mt-05"
+                        @click.stop.prevent="editing = true"
+                    >
+                        <app-icon icon="carbon:edit" />
+                    </button>
+                </div>
             </template>
             <template v-if="!editing && v !== slugOriginalContent">
-                <span class="slugPath">{{ slugPathCompact }}/{{ v }}</span>
-                <button
-                    class="button button-outlined ml-05"
-                    @click.stop.prevent="save"
-                >
-                    <app-icon
-                        :class="saving?'saving':''"
-                        :icon="saving?'carbon:cics-transaction-server-zos':'carbon:save'"
-                    />
-                </button>
-                <template v-if="!saving">
+                <span class="slug-path">{{ slugPathCompact }}/{{ v }}</span>
+                <div class="button-wrapper">
                     <button
-                        class="button button-outlined ml-05"
-                        @click.stop.prevent="v = slugOriginalContent; editing = false"
+                        class="button button-outlined mt-05"
+                        @click.stop.prevent="save"
                     >
-                        <app-icon icon="carbon:reset" />
+                        <app-icon
+                            :class="saving?'saving':''"
+                            :icon="saving?'carbon:cics-transaction-server-zos':'carbon:save'"
+                        />
                     </button>
-                </template>
+                    <template v-if="!saving">
+                        <button
+                            class="button button-outlined mt-05"
+                            @click.stop.prevent="v = slugOriginalContent; editing = false"
+                        >
+                            <app-icon icon="carbon:reset" />
+                        </button>
+                    </template>
+                </div>
             </template>
             <template v-if="editing">
-                <span class="slugPath">{{ slugPathCompact }}/</span>
-                <input
-                    type="text"
-                    v-model="v"
-                >
-                <button
-                    class="button button-outlined ml-05"
-                    @click.stop.prevent="editing = false"
-                >
-                    <app-icon icon="carbon:checkmark" />
-                </button>
-                <button
-                    class="button button-outlined ml-05"
-                    @click.stop.prevent="v = slugOriginalContent; editing = false"
-                >
-                    <app-icon icon="carbon:close" />
-                </button>
+                <div>
+                    <span class="slug-path">{{ slugPathCompact }}/</span>
+                    <input
+                        type="text"
+                        v-model="v"
+                    >
+                </div>
+                <div class="button-wrapper">
+                    <button
+                        class="button button-outlined mt-05"
+                        @click.stop.prevent="editing = false"
+                    >
+                        <app-icon icon="carbon:checkmark" />
+                    </button>
+                    <button
+                        class="button button-outlined mt-05"
+                        @click.stop.prevent="v = slugOriginalContent; editing = false"
+                    >
+                        <app-icon icon="carbon:close" />
+                    </button>
+                </div>
             </template>
         </template>
     </div>
@@ -135,10 +143,10 @@ export default {
     font-family: Arial, sans-serif;
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
-.tree-slug .slugPath {
-    white-space: nowrap;
+.tree-slug .slug-path {
     border-bottom: 1px dotted #ccc;
 }
 .tree-slug input {
@@ -155,6 +163,11 @@ export default {
     padding-top: 0.1rem;
     padding-bottom: 0.1rem;
     height: 1rem;
+}
+.button-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
 }
 @keyframes spin {
     from {
