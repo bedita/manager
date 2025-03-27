@@ -5,6 +5,7 @@ use App\Controller\Admin\AuthProvidersController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * {@see \App\Controller\Admin\AuthProvidersController} Test Case
