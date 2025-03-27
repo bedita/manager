@@ -275,6 +275,7 @@ class AdministrationBaseControllerTest extends TestCase
      * Test `save` method
      *
      * @return void
+     * @covers ::prepareBody()
      * @covers ::save()
      * @dataProvider saveProvider()
      */
@@ -286,6 +287,46 @@ class AdministrationBaseControllerTest extends TestCase
         static::assertEquals('/admin/roles', $response->getHeader('Location')[0]);
         $flash = $this->RlsController->getRequest()->getSession()->read('Flash');
         $actual = $flash['flash'][0]['message'];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `prepareBody` method
+     *
+     * @return void
+     * @covers ::prepareBody()
+     */
+    public function testPrepareBody(): void
+    {
+        $controller = new class () extends AdministrationBaseController
+        {
+            protected $resourceType = 'auth_providers';
+            protected $propertiesForceJson = [
+                'params',
+            ];
+
+            public function prepareBody(array $data): array
+            {
+                return parent::prepareBody($data);
+            }
+        };
+        $data = [
+            'id' => 1,
+            'name' => 'test',
+            'params' => json_encode([
+                'key' => 'value',
+            ]),
+        ];
+        $expected = [
+            'data' => [
+                'type' => 'auth_providers',
+                'attributes' => [
+                    'name' => 'test',
+                    'params' => ['key' => 'value'],
+                ],
+            ],
+        ];
+        $actual = $controller->prepareBody($data);
         static::assertEquals($expected, $actual);
     }
 

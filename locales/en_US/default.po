@@ -82,6 +82,9 @@ msgstr ""
 msgid "Async Jobs"
 msgstr ""
 
+msgid "Auth Providers"
+msgstr ""
+
 msgid "Auto-translate"
 msgstr ""
 
@@ -308,6 +311,9 @@ msgid "Export All"
 msgstr ""
 
 msgid "Export Filtered"
+msgstr ""
+
+msgid "External Auth"
 msgstr ""
 
 msgid "Failed to write file to disk"
@@ -545,6 +551,11 @@ msgid "No"
 msgstr ""
 
 msgid "No application"
+msgstr ""
+
+msgid ""
+"No auth providers found: you cannot create external auth entries. Create at "
+"least one auth provider first"
 msgstr ""
 
 msgid "No import filters set"
@@ -994,6 +1005,12 @@ msgstr ""
 msgid "application_id"
 msgstr ""
 
+msgid "auth_class"
+msgstr ""
+
+msgid "auth_provider_id"
+msgstr ""
+
 msgid "autoplay"
 msgstr ""
 
@@ -1096,6 +1113,9 @@ msgstr ""
 msgid "pitch"
 msgstr ""
 
+msgid "provider_username"
+msgstr ""
+
 msgid "remove"
 msgstr ""
 
@@ -1133,6 +1153,9 @@ msgid "undo remove"
 msgstr ""
 
 msgid "untitled"
+msgstr ""
+
+msgid "user_id"
 msgstr ""
 
 msgid "username"
