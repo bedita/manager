@@ -1,6 +1,7 @@
 <template>
     <div class="object-info mr-05">
         <a
+            :title="msgShowObjectInfo"
             class="button button-outlined-white is-small"
             @click.prevent="showInfo()"
         >
@@ -9,6 +10,8 @@
     </div>
 </template>
 <script>
+import { t } from 'ttag';
+
 export default {
     name: 'ObjectInfo',
     props: {
@@ -21,6 +24,7 @@ export default {
         return {
             fields: ['title', 'description'],
             labelsMap: new Map(),
+            msgShowObjectInfo: t`Show object info`,
             values: {},
         };
     },
