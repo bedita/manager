@@ -181,6 +181,7 @@
             <button class="is-small has-font-weight-bold mr-1"
                 v-html="(selectedObjects.indexOf(related) !== -1)? '{{ __('Discard') }}' : '{{ __('Pick') }}'"
                 :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check button-secondary' : 'button-outlined-white button-text icon-check-empty'"></button>
+            <object-info :object-data="related"></object-info>
             <a class="button button-outlined-white is-small" @click.stop :href="$helpers.buildViewUrl(related.id)" target="_blank">
                 <app-icon icon="carbon:launch"></app-icon>
                 <span class="ml-05">{{ __('Open') }}</span>
@@ -202,6 +203,7 @@
             </a>
 
         {% else %}
+            <object-info :object-data="related"></object-info>
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)">
                 <app-icon icon="carbon:launch"></app-icon>
                 <span class="ml-05">{{ __('Edit') }}</span>

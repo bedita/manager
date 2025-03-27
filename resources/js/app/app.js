@@ -48,6 +48,7 @@ const _vueInstance = new Vue({
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
+        TreeSlug: () => import(/* webpackChunkName: "tree-slug" */'app/components/tree-slug/tree-slug'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
@@ -108,6 +109,7 @@ const _vueInstance = new Vue({
         FieldTextarea: () => import(/* webpackChunkName: "field-textarea" */'app/components/form/field-textarea'),
         FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
         CalendarView: () => import(/* webpackChunkName: "calendar-view" */'app/components/calendar-view/calendar-view'),
+        ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
         AppIcon,
     },
 
@@ -632,3 +634,4 @@ Vue.component('FieldTitle', _vueInstance.$options.components.FieldTitle);
 Vue.component('FileUpload', _vueInstance.$options.components.FileUpload);
 Vue.component('ObjectCategories', _vueInstance.$options.components.ObjectCategories);
 Vue.component('ObjectCaptions', _vueInstance.$options.components.ObjectCaptions);
+Vue.component('ObjectInfo', _vueInstance.$options.components.ObjectInfo);

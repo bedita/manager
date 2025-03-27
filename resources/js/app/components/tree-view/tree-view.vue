@@ -1,13 +1,37 @@
 <template>
-    <div class="tree-view-node" :class="{'is-root': isRoot}" v-show="showNode">
-        <input v-if="originalParents.length > 0" type="hidden" name="_originalParents" :value="originalParents" />
-        <div v-if="isLoading && !parent" class="is-loading-spinner">
-            <div v-if="loadingMainMessage">{{ loadingMainMessage }}</div>
-            <div v-if="loadingSubMessage">{{ loadingSubMessage }}</div>
+    <div
+        class="tree-view-node"
+        :class="{'is-root': isRoot}"
+        v-show="showNode"
+    >
+        <input
+            type="hidden"
+            name="_originalParents"
+            :value="originalParents"
+            v-if="originalParents.length > 0"
+        >
+        <div
+            class="is-loading-spinner"
+            v-if="isLoading && !parent"
+        >
+            <div v-if="loadingMainMessage">
+                {{ loadingMainMessage }}
+            </div>
+            <div v-if="loadingSubMessage">
+                {{ loadingSubMessage }}
+            </div>
         </div>
-        <div v-if="parent" class="node-element py-05" :data-status="node.attributes.status">
-            <label class="node-label" :class="{'icon-folder': !relationName, 'has-text-gray-550 disabled': object && node.id == object.id}" v-on="{ click: relationName ? () => {} : toggle }">
-                <input v-if="relationName"
+        <div
+            class="node-element py-05"
+            :data-status="node?.attributes?.status"
+            v-if="parent"
+        >
+            <label
+                class="node-label"
+                :class="{'icon-folder': !relationName, 'has-text-gray-550 disabled': object && node.id == object.id}"
+                v-on="{ click: relationName ? () => {} : toggle }"
+            >
+                <input
                     :type="multipleChoice ? 'checkbox' : 'radio'"
                     :name="'relations[' + relationName + '][replaceRelated][]'"
                     :value="value"
@@ -15,76 +39,147 @@
                     :class="isLocked ? 'disabled' : ''"
                     :data-folder-id="node.id"
                     @click="isLocked ? $event.preventDefault() : ''"
-                    @change="toggleFolderRelation" />
-                <span v-html=nodeTitle></span>
+                    @change="toggleFolderRelation"
+                    v-if="relationName"
+                >
+                <span v-html="nodeTitle" />
+                <template v-if="isParent && node?.meta?.path && previewConfig?.[node?.meta?.path?.match(/^\/(\d+)/)?.[1]]">
+                    <a
+                        :href="`${preview?.url}${node.meta.path.replace('/' + node.meta.path.match(/^\/(\d+)/)?.[1], '')}`"
+                        target="_blank"
+                        :title="preview?.title"
+                        v-for="(preview, index) in previewConfig?.[node.meta.path.match(/^\/(\d+)/)?.[1]]"
+                        :key="index"
+                    >
+                        <app-icon
+                            icon="carbon:launch"
+                            :color="preview?.color || 'white'"
+                        />
+                    </a>
+                </template>
             </label>
-            <span v-if="hasPermissionRoles" v-title="node.meta.perms.roles.join(', ')">
-                <app-icon icon="carbon:locked" v-if="isLocked"></app-icon>
-                <app-icon icon="carbon:unlocked" v-if="!isLocked"></app-icon>
-                <app-icon icon="carbon:tree-view" v-if="node.meta.perms.inherited"></app-icon>
+            <span
+                v-title="node.meta.perms.roles.join(', ')"
+                v-if="hasPermissionRoles"
+            >
+                <app-icon
+                    icon="carbon:locked"
+                    v-if="isLocked"
+                />
+                <app-icon
+                    icon="carbon:unlocked"
+                    v-if="!isLocked"
+                />
+                <app-icon
+                    icon="carbon:tree-view"
+                    v-if="node.meta.perms.inherited"
+                />
             </span>
             <template v-if="(!node.children || node.children.length !== 0) && (!object || node.id != object.id) && showNode">
                 <button
                     :class="{'is-loading-spinner': isLoading, 'icon-down-open': !isLoading && isOpen, 'icon-right-open': !isLoading && !isOpen}"
-                    @click="toggle">
-                </button>
-                <div v-if="isLoading && loadingMainMessage">{{ loadingMainMessage }}</div>
-                <div v-if="isLoading && loadingSubMessage">{{ loadingSubMessage }}</div>
+                    @click="toggle"
+                />
+                <div v-if="isLoading && loadingMainMessage">
+                    {{ loadingMainMessage }}
+                </div>
+                <div v-if="isLoading && loadingSubMessage">
+                    {{ loadingSubMessage }}
+                </div>
             </template>
-            <a :href="url" v-if="hasPermissionRoles && isLocked">{{ msgView }}</a>
-            <a :href="url" v-else>{{ msgEdit }}</a>
+            <a
+                :href="url"
+                v-if="hasPermissionRoles && isLocked"
+            >
+                {{ msgView }}
+            </a>
+            <a
+                :href="url"
+                v-else
+            >
+                {{ msgEdit }}
+            </a>
             <div class="tree-params">
-                <div v-if="relationName && isParent" class="tree-param">
+                <div
+                    class="tree-param"
+                    v-if="relationName && isParent"
+                >
                     <template v-if="hasPermissionRoles && isLocked">
                         <label>{{ msgMenu }}</label>
                     </template>
                     <template v-else>
-                        <input :id="'tree-menu-' + node.id"
+                        <input
+                            :id="'tree-menu-' + node.id"
                             type="checkbox"
                             :data-folder-id="node.id"
                             :checked="isMenu"
+                            v-model="menu"
                             @change="toggleFolderRelationMenu"
-                            v-model="menu" />
+                        >
                         <label :for="'tree-menu-' + node.id">
                             {{ msgMenu }}
                         </label>
                     </template>
                 </div>
-                <div v-if="relationName && isParent && multipleChoice" class="tree-param">
+                <div
+                    class="tree-param"
+                    v-if="relationName && isParent && multipleChoice"
+                >
                     <template v-if="hasPermissionRoles && isLocked">
                         <label>{{ msgCanonical }}</label>
                     </template>
                     <template v-else>
-                        <input :id="'tree-canonical-' + node.id"
+                        <input
+                            :id="'tree-canonical-' + node.id"
                             type="checkbox"
                             :data-folder-id="node.id"
                             :checked="isCanonical"
+                            v-model="canonical"
                             @change="toggleFolderRelationCanonical"
-                            v-model="canonical" />
+                        >
                         <label :for="'tree-canonical-' + node.id">
                             {{ msgCanonical }}
                         </label>
                     </template>
                 </div>
             </div>
+            <tree-slug
+                :mode="relationName && isParent ? 'edit' : 'view'"
+                :object-id="object.id"
+                :object-type="object.type"
+                :object-uname="object.uname"
+                :parent-id="node?.id"
+                :slug-content="node?.meta?.relation?.slug"
+                :slug-path="node?.meta?.slug_path"
+                :slug-path-compact="node.meta?.slug_path_compact"
+                v-if="relationName && isParent"
+            />
         </div>
-        <div class="node-children" v-show="isOpen || !parent">
-            <tree-view v-for="(child, index) in node.children"
-                :store="store"
-                :parents="parents"
-                :parent="node"
-                :key="index"
-                :node="child"
-                :object="object"
-                :relation-name="relationName"
-                :relation-label="relationLabel"
-                :multiple-choice="multipleChoice"
-                :user-roles="userRoles"
-                :has-permissions="hasPermissions"
-                :show-forbidden="showForbidden"
-                :search="search"
-                :search-in-position-active="searchInPositionActive">
-            </tree-view>
+        <div
+            class="node-children"
+            v-show="isOpen || !parent"
+            v-if="node.children?.length > 0"
+        >
+            <template v-for="child in node.children">
+                <tree-view
+                    :key="child.id"
+                    :store="store"
+                    :parents="parents"
+                    :parent="node"
+                    :node="child"
+                    :object="object"
+                    :relation-name="relationName"
+                    :relation-label="relationLabel"
+                    :multiple-choice="multipleChoice"
+                    :user-roles="userRoles"
+                    :has-permissions="hasPermissions"
+                    :preview-config="previewConfig"
+                    :show-forbidden="showForbidden"
+                    :search="search"
+                    :search-in-position-active="searchInPositionActive"
+                    v-if="child && child.id"
+                />
+            </template>
         </div>
     </div>
 </template>
@@ -117,7 +212,9 @@ const API_OPTIONS = {
 
 export default {
     name: 'TreeView',
-
+    components: {
+        TreeSlug: () => import(/* webpackChunkName: "tree-slug" */'app/components/tree-slug/tree-slug'),
+    },
     props: {
         store: {
             type: Object,
@@ -167,6 +264,10 @@ export default {
         hasPermissions: {
             type: Boolean,
             default: false,
+        },
+        previewConfig: {
+            type: Object,
+            default: () => ({}),
         },
         search: {
             type: String,
@@ -324,6 +425,7 @@ export default {
                     relation: {
                         menu: this.menu,
                         canonical: this.canonical,
+                        slug_path: this.node?.meta?.relation?.slug_path,
                     },
                 },
             });
