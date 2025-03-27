@@ -810,4 +810,26 @@ return [
     //         'default' => 'webvtt',
     //     ],
     // ],
+
+    /**
+     * Configuration for "TreePreview", to enable anchors on specific positions on the tree.
+     * - '123' is the root id
+     * - 'title' is the title for the preview anchor
+     * - 'url' is the href for the preview anchor
+     * - 'color' is the color of the icon for the preview anchor (default is 'white')
+     */
+    // 'TreePreview' => [
+    //     '123' => [
+    //         [
+    //             'title' => 'Staging url',
+    //             'url' => 'https://staging.example.com',
+    //             'color' => 'orange',
+    //         ],
+    //         [
+    //             'title' => 'Production url',
+    //             'url' => 'https://example.com',
+    //             'color' => 'red',
+    //         ],
+    //     ],
+    // ],
 ];
