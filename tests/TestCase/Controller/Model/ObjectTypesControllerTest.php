@@ -187,7 +187,6 @@ class ObjectTypesControllerTest extends TestCase
      * Test `prepareProperties` method
      *
      * @return void
-     * @covers ::prepareProperties()
      */
     public function testPrepareCustomProperties(): void
     {

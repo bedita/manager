@@ -8,9 +8,8 @@ use Cake\TestSuite\TestCase;
 
 /**
  * {@see \App\Controller\Admin\ExternalAuthController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\ExternalAuthController
  */
+#[CoversClass(ExternalAuthController::class)]
 class ExternalAuthControllerTest extends TestCase
 {
     /**
