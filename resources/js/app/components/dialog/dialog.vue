@@ -16,7 +16,7 @@
                 <header class="is-flex space-between align-center is-expanded">
                     <div class="is-flex align-center">
                         <span
-                            class="is-capitalized mr-05"
+                            class="is-capitalized mr-05 has-text-size-larger"
                             v-if="headerText"
                         >
                             {{ t(headerText) }}
@@ -47,11 +47,10 @@
                     </i>
                 </header>
                 <div
-                    class="message mt-1 has-text-size-larger"
+                    class="message mt-1"
+                    v-html="message"
                     v-if="message"
-                >
-                    {{ message }}
-                </div>
+                />
                 <details
                     open
                     v-if="!!dumpMessage"
@@ -253,3 +252,8 @@ export const prompt = (message, defaultValue, confirmCallback, root, options) =>
 
 export default Dialog;
 </script>
+<style scoped>
+.bedita-dialog div.dialog > header {
+    border-bottom: 1px solid #191929;
+}
+</style>

@@ -82,7 +82,7 @@ class PropertyHelper extends Helper
         if ($readonly === true && array_key_exists('v-datepicker', $controlOptions)) {
             unset($controlOptions['v-datepicker']);
         }
-        if (Hash::get($controlOptions, 'class') === 'json' || Hash::get($controlOptions, 'type') === 'json') {
+        if (!$readonly && Hash::get($controlOptions, 'class') === 'json' || Hash::get($controlOptions, 'type') === 'json') {
             $jsonKeys = (array)Configure::read('_jsonKeys');
             Configure::write('_jsonKeys', array_merge($jsonKeys, [$name]));
         }
@@ -210,11 +210,44 @@ class PropertyHelper extends Helper
                 function () {
                     $map = [];
                     $keys = [];
-                    $properties = (array)Configure::read(sprintf('Properties'));
+                    Configure::load('properties');
+                    $properties = (array)Configure::read('DefaultProperties');
                     $removeKeys = ['_element', '_hide', '_keep'];
                     foreach ($properties as $name => $prop) {
-                        $keys[] = $name;
+                        $keys[] = trim($name);
                         $keys = array_merge($keys, (array)Hash::get($prop, 'fastCreate.all', []));
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'index', []));
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'filter', []));
+                        $groups = array_keys((array)Hash::get($prop, 'view', []));
+                        $addKeys = array_reduce($groups, function ($carry, $group) use ($prop, $removeKeys) {
+                            $carry[] = $group;
+                            $groupKeys = (array)Hash::get($prop, sprintf('view.%s', $group), []);
+                            $groupKeys = array_filter(
+                                $groupKeys,
+                                function ($val, $key) use ($removeKeys) {
+                                    return is_string($val) && !in_array($key, $removeKeys);
+                                },
+                                ARRAY_FILTER_USE_BOTH
+                            );
+
+                            return array_merge($carry, $groupKeys);
+                        }, []);
+                        $keys = array_merge($keys, $addKeys);
+                    }
+                    $keys = array_map(function ($key) {
+                        return is_array($key) ? array_key_first($key) : $key;
+                    }, $keys);
+                    $keys = array_diff($keys, $removeKeys);
+                    $keys = array_unique($keys);
+                    $keys = array_map(function ($key) {
+                        return strpos($key, '/') !== false ? substr($key, strrpos($key, '/') + 1) : $key;
+                    }, $keys);
+                    $properties = (array)Configure::read(sprintf('Properties'));
+                    foreach ($properties as $name => $prop) {
+                        $keys[] = trim($name);
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'fastCreate.all', []));
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'index', []));
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'filter', []));
                         $groups = array_keys((array)Hash::get($prop, 'view', []));
                         $addKeys = array_reduce($groups, function ($carry, $group) use ($prop, $removeKeys) {
                             $carry[] = $group;
