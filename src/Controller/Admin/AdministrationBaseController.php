@@ -61,6 +61,13 @@ abstract class AdministrationBaseController extends AppController
     protected array $properties = [];
 
     /**
+     * Properties to json decode before save
+     *
+     * @var array
+     */
+    protected $propertiesForceJson = [];
+
+    /**
      * Properties that are secrets
      *
      * @var array
@@ -149,13 +156,7 @@ abstract class AdministrationBaseController extends AppController
         $this->getRequest()->allowMethod(['post']);
         $data = (array)$this->getRequest()->getData();
         $id = (string)Hash::get($data, 'id');
-        unset($data['id']);
-        $body = [
-            'data' => [
-                'type' => $this->resourceType,
-                'attributes' => $data,
-            ],
-        ];
+        $body = $this->prepareBody($data);
         $endpoint = $this->endpoint();
         try {
             if (empty($id)) {
@@ -235,5 +236,28 @@ abstract class AdministrationBaseController extends AppController
         }
 
         return $resultResponse;
+    }
+
+    /**
+     * Prepare body for request
+     *
+     * @param array $data The data
+     * @return array
+     */
+    protected function prepareBody(array $data): array
+    {
+        foreach ($this->propertiesForceJson as $property) {
+            $data[$property] = json_decode((string)Hash::get($data, $property), true);
+        }
+        $attributes = array_filter($data, function ($key) {
+            return $key !== 'id';
+        }, ARRAY_FILTER_USE_KEY);
+
+        return [
+            'data' => [
+                'type' => $this->resourceType,
+                'attributes' => $attributes,
+            ],
+        ];
     }
 }

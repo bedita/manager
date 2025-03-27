@@ -74,6 +74,12 @@ class AdminHelperTest extends TestCase
                 '{"something":"else"}',
                 '<div class="input textarea"><textarea name="extra" v-jsoneditor="true" class="json" id="extra" rows="5">{&quot;something&quot;:&quot;else&quot;}</textarea></div>',
             ],
+            'json value array' => [
+                'json',
+                'extra',
+                ['something' => 'else'],
+                '<div class="input textarea"><textarea name="extra" v-jsoneditor="true" class="json" id="extra" rows="5">{&quot;something&quot;:&quot;else&quot;}</textarea></div>',
+            ],
             'applications value null' => [
                 'applications',
                 'applications',
