@@ -153,6 +153,8 @@ ul.concurrent-editors {
         .app-module-buttons, .app-module-links {
             display: flex;
             flex-direction: column;
+            overflow: auto;
+            max-height: 400px;
             > *:not(:last-child) { margin-bottom: $gutter; }
         }
 

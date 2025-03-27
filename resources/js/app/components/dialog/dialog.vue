@@ -16,7 +16,7 @@
                 <header class="is-flex space-between align-center is-expanded">
                     <div class="is-flex align-center">
                         <span
-                            class="is-capitalized mr-05"
+                            class="is-capitalized mr-05 has-text-size-larger"
                             v-if="headerText"
                         >
                             {{ t(headerText) }}
@@ -43,18 +43,18 @@
                         />
                     </div>
                     <i @click="hide()">
-                        <app-icon
-                            icon="carbon:close"
-                        />
+                        <app-icon icon="carbon:close" />
                     </i>
                 </header>
                 <div
-                    class="message mt-1 has-text-size-larger"
+                    class="message mt-1 has-text-size-base"
+                    v-html="message"
                     v-if="message"
+                />
+                <details
+                    open
+                    v-if="!!dumpMessage"
                 >
-                    {{ message }}
-                </div>
-                <details v-if="!!dumpMessage">
                     <summary>{{ msgDetails }}</summary>
                     <pre class="dump">{{ dumpMessage }}</pre>
                 </details>
@@ -252,3 +252,8 @@ export const prompt = (message, defaultValue, confirmCallback, root, options) =>
 
 export default Dialog;
 </script>
+<style scoped>
+.bedita-dialog div.dialog > header {
+    border-bottom: 1px solid #191929;
+}
+</style>

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-02-13 09:15:27 \n"
+"POT-Creation-Date: 2025-03-27 07:48:58 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -83,6 +83,9 @@ msgstr "Applicazioni"
 
 msgid "Async Jobs"
 msgstr "Processi asincroni"
+
+msgid "Auth Providers"
+msgstr "Provider di autenticazione"
 
 msgid "Auto-translate"
 msgstr "Traduci automaticamente"
@@ -311,6 +314,9 @@ msgstr "Esporta Tutti"
 
 msgid "Export Filtered"
 msgstr "Esporta Filtrati"
+
+msgid "External Auth"
+msgstr "Autenticazioni esterne"
 
 msgid "Failed to write file to disk"
 msgstr "Scrittura file su disco fallita"
@@ -549,6 +555,13 @@ msgstr "No"
 
 msgid "No application"
 msgstr "Nessuna applicazione"
+
+msgid ""
+"No auth providers found: you cannot create external auth entries. Create at "
+"least one auth provider first"
+msgstr ""
+"Nessun provider di autenticazione trovato: non puoi creare voci di "
+"autenticazione esterne. Crea almeno un provider di autenticazione"
 
 msgid "No import filters set"
 msgstr "Nessun filtro di importazione impostato"
@@ -1000,6 +1013,12 @@ msgstr "id applicazione"
 msgid "application_id"
 msgstr "id applicazione"
 
+msgid "auth_class"
+msgstr "classe di autenticazione"
+
+msgid "auth_provider_id"
+msgstr "provider di autenticazione"
+
 msgid "autoplay"
 msgstr ""
 
@@ -1102,6 +1121,9 @@ msgstr "telefono"
 msgid "pitch"
 msgstr ""
 
+msgid "provider_username"
+msgstr "campo autenticazione provider"
+
 msgid "remove"
 msgstr "rimuovi"
 
@@ -1140,6 +1162,9 @@ msgstr "annulla rimozione"
 
 msgid "untitled"
 msgstr "senza titolo"
+
+msgid "user_id"
+msgstr "id utente"
 
 msgid "username"
 msgstr "nome utente"
@@ -1622,6 +1647,9 @@ msgstr "Traducibile"
 msgid "Error on deleting property"
 msgstr "Errore nella cancellazione della proprietà"
 
+msgid "Show object info"
+msgstr "Mostra informazioni"
+
 msgid "Search on categories"
 msgstr "Cerca tra le categorie"
 
@@ -1760,14 +1788,14 @@ msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
 
-msgid "version by"
-msgstr "versione di"
-
 msgid "date"
 msgstr "data"
 
 msgid "Trashed"
 msgstr "Rimosso"
+
+msgid "version by"
+msgstr "versione di"
 
 msgid "Latitude"
 msgstr "Latitudine"
