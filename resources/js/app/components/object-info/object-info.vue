@@ -42,7 +42,11 @@ export default {
                     this.values[field] = this.$helpers.formatBytes(this.values[field]);
                 }
             }
-
+            this.labelsMap.set('created', t`Created`);
+            this.labelsMap.set('modified', t`Modified`);
+            this.labelsMap.set('media_url', t`Media URL`);
+            this.labelsMap.set('uname', t`Uname`);
+            this.labelsMap.set('id', t`Id`);
         });
     },
     methods: {
@@ -86,20 +90,54 @@ export default {
 
             return `<span>${val}</span>`;
         },
-        showInfo() {
-            let content = '';
-            content += `<div><span class="tag has-background-module-${this.objectData.type}">${this.objectData.type}</span> ${this.objectData.id}</div>`;
-            for (const field of this.fields) {
-                if (field === 'date_ranges') {
-                    content += `<div><label>${this.labelsMap.get(field)}</label><div>${this.dateRanges(this.objectData.attributes.date_ranges)}</div>`;
-                    continue;
-                }
-                if (field === 'categories') {
-                    content += `<div><label>${this.labelsMap.get(field)}</label><div>${this.categories(this.objectData.attributes.categories)}</div>`;
-                    continue;
-                }
-                content += `<div><label>${this.labelsMap.get(field)}</label><div>${this.getFieldVal(this.values[field])}</div></div>`;
+        content(field) {
+            if (field === 'categories') {
+                return this.contentCategories(field);
             }
+            if (field === 'date_ranges') {
+                return this.contentDateRanges(field);
+            }
+            return `<div><label>${this.labelsMap.get(field) || field}</label><div>${this.getFieldVal(this.values[field])}</div></div>`;
+        },
+        contentCategories(field) {
+            return `<div><label>${this.labelsMap.get(field) || field}</label><div>${this.categories(this.objectData.attributes.categories)}</div>`;
+        },
+        contentDateRanges(field) {
+            return `<div><label>${this.labelsMap.get(field) || field}</label><div>${this.dateRanges(this.objectData.attributes.date_ranges)}</div>`;
+        },
+        contentMeta() {
+            const meta = this.objectData?.meta;
+            if (!meta) {
+                return '';
+            }
+            let content = '<hr/><div>';
+            content += `<div><label>${this.labelsMap.get('id')}</label><div>${this.getFieldVal(this.objectData.id)}</div></div>`;
+            content += `<div><label>${this.labelsMap.get('uname')}</label><div>${this.getFieldVal(this.objectData.attributes.uname)}</div></div>`;
+            const allowed = ['created', 'modified', 'media_url']
+            for (const [key, value] of Object.entries(meta)) {
+                if (!allowed.includes(key)) {
+                    continue;
+                }
+                if (key === 'media_url') {
+                    content += `<div><label>${this.labelsMap.get(key) || key}</label><div><a href="${value}" target="_blank">${value}</a></div></div>`;
+                    continue;
+                }
+                const v = this.$helpers.formatDate(value) || value;
+                content += `<div><label>${this.labelsMap.get(key) || key}</label><div>${this.getFieldVal(v)}</div></div>`;
+            }
+            content += '</div>';
+
+            return content;
+        },
+        contentTitle() {
+            return `<div><span class="tag has-background-module-${this.objectData.type}">${this.objectData.type}</span></div>`;
+        },
+        showInfo() {
+            let content = this.contentTitle();
+            for (const field of this.fields) {
+                content += this.content(field);
+            }
+            content += this.contentMeta();
             BEDITA.info(content);
         }
     },
