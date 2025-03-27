@@ -1,11 +1,10 @@
 <template>
-    <div class="object-info">
+    <div class="object-info mr-05">
         <a
             class="button button-outlined-white is-small"
             @click.prevent="showInfo()"
         >
             <app-icon icon="carbon:information" />
-            <span class="ml-05">Info</span>
         </a>
     </div>
 </template>
