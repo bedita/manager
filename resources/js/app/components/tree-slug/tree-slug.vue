@@ -8,7 +8,7 @@
                 <span class="slug-path">{{ slugPathCompact }}/{{ v }}</span>
                 <div class="button-wrapper">
                     <button
-                        class="button button-outlined mt-05"
+                        class="button button-outlined"
                         @click.stop.prevent="editing = true"
                     >
                         <app-icon icon="carbon:edit" />
@@ -19,7 +19,7 @@
                 <span class="slug-path">{{ slugPathCompact }}/{{ v }}</span>
                 <div class="button-wrapper">
                     <button
-                        class="button button-outlined mt-05"
+                        class="button button-outlined"
                         @click.stop.prevent="save"
                     >
                         <app-icon
@@ -29,7 +29,7 @@
                     </button>
                     <template v-if="!saving">
                         <button
-                            class="button button-outlined mt-05"
+                            class="button button-outlined"
                             @click.stop.prevent="v = slugOriginalContent; editing = false"
                         >
                             <app-icon icon="carbon:reset" />
@@ -47,13 +47,13 @@
                 </div>
                 <div class="button-wrapper">
                     <button
-                        class="button button-outlined mt-05"
+                        class="button button-outlined"
                         @click.stop.prevent="editing = false"
                     >
                         <app-icon icon="carbon:checkmark" />
                     </button>
                     <button
-                        class="button button-outlined mt-05"
+                        class="button button-outlined"
                         @click.stop.prevent="v = slugOriginalContent; editing = false"
                     >
                         <app-icon icon="carbon:close" />
@@ -130,7 +130,6 @@ export default {
             }
             this.editing = false;
             setTimeout(() => this.saving = false, 1500);
-
         },
     },
 }
@@ -147,12 +146,12 @@ export default {
     flex-wrap: wrap;
 }
 .tree-slug .slug-path {
+    width: fit-content;
     border-bottom: 1px dotted #ccc;
 }
 .tree-slug input {
     border: 1px solid #ccc;
     background-color: #cccc;
-    margin-left: 0.25em;
     border-radius: 4px;
     height: 1rem;
     width: fit-content !important;
@@ -168,6 +167,7 @@ export default {
     display: flex;
     flex-direction: row;
     gap: 4px;
+    margin-top: 0.5rem;
 }
 @keyframes spin {
     from {
