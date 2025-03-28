@@ -18,12 +18,16 @@ use App\Form\Form;
 use App\Form\Options;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Form\Form} Test Case
- *
- * @coversDefaultClass \App\Form\Form
  */
+#[CoversClass(Form::class)]
+#[CoversMethod(Form::class, 'getMethod')]
 class FormTest extends TestCase
 {
     /**
@@ -31,7 +35,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function getMethodProvider(): array
+    public static function getMethodProvider(): array
     {
         return [
             'name with chars to remove 1' => [
@@ -73,9 +77,8 @@ class FormTest extends TestCase
      * @param array $options The options
      * @param array $expected The expected method array
      * @return void
-     * @dataProvider getMethodProvider()
-     * @covers ::getMethod
      */
+    #[DataProvider('getMethodProvider')]
     public function testGetMethod(array $options, array $expected): void
     {
         $class = (string)Hash::get($options, 'class');
@@ -94,33 +97,13 @@ class FormTest extends TestCase
      * Test `getMethod` method exception 'not callable'
      *
      * @return void
-     * @covers ::getMethod
      */
     public function testGetMethodNotCallable(): void
     {
         $methodName = 'dummy';
-        $expected = new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
+        $expected = new InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
         static::expectException(get_class($expected));
         static::expectExceptionMessage($expected->getMessage());
         Form::getMethod(Form::class, $methodName);
-    }
-
-    /**
-     * Data provider for `testLabel`.
-     *
-     * @return array
-     */
-    public function labelProvider(): array
-    {
-        return [
-            'empty' => [
-                '',
-                '',
-            ],
-            'dummy' => [
-                'dummy',
-                'Dummy',
-            ],
-        ];
     }
 }

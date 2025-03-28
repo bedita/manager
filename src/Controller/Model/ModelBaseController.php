@@ -30,16 +30,16 @@ abstract class ModelBaseController extends AppController
     /**
      * Resource type in use (object_types, properties, property_types)
      *
-     * @var string
+     * @var string|null
      */
-    protected $resourceType = null;
+    protected ?string $resourceType = null;
 
     /**
      * Single resource view existence flag.
      *
      * @var bool
      */
-    protected $singleView = true;
+    protected bool $singleView = true;
 
     /**
      * @inheritDoc
@@ -93,7 +93,7 @@ abstract class ModelBaseController extends AppController
         try {
             $response = $this->apiClient->get(
                 sprintf('/model/%s', $this->resourceType),
-                $this->indexQuery()
+                $this->indexQuery(),
             );
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
@@ -129,7 +129,7 @@ abstract class ModelBaseController extends AppController
      * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
      */
-    public function view($id): ?Response
+    public function view(string|int $id): ?Response
     {
         $endpoint = sprintf('/model/%s/%s', $this->resourceType, $id);
         try {
@@ -178,10 +178,10 @@ abstract class ModelBaseController extends AppController
                     $schema['properties'],
                     function ($schema) {
                         return empty($schema['readOnly']);
-                    }
-                )
+                    },
+                ),
             ),
-            null
+            null,
         );
         $resource = [
             'type' => $this->resourceType,
