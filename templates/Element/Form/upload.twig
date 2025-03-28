@@ -26,7 +26,9 @@
 
                 <div class="h-tabs-contents">
                     <div class="h-tab" v-show="activeIndex == 0">
-                        {{ Form.hidden('MAX_FILE_SIZE', {'value': System.getMaxFileSize()})|raw }}
+                        {% if System.getMaxFileSize() > 0 %}
+                            {{ Form.hidden('MAX_FILE_SIZE', {'value': System.getMaxFileSize()})|raw }}
+                        {% endif %}
                         {{ element('Form/form_file_upload') }}
                         {{ Form.control('model-type', { 'type': 'hidden', 'value': object.type}) | raw }}
                     </div>
