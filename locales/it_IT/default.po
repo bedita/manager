@@ -1827,8 +1827,8 @@ msgstr "Caricamento riuscito"
 msgid "Choose a type"
 msgstr "Selezionare un tipo"
 
-msgid "Click here to start"
-msgstr "Clicca qui per iniziare"
+msgid "Create object"
+msgstr "Crea oggetto"
 
 msgid "Fast create"
 msgstr "Creazione rapida"

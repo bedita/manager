@@ -24,17 +24,6 @@
         {% else %}
 
         <div class="related-list-container">
-            {% if Perms.canSave() and not readonly %}
-                {# FastCreate #}
-                {{ element(
-                    config('UI.fast_create_form._element')|default('Form/fast_create'),
-                    {
-                        'relationSchema': relationSchema,
-                        'schemasByType': schemasByType,
-                    }
-            ) }}
-            {% endif %}
-
             {# FilterBoxView #}
             <div class="mb-1" v-show="showFilter">
                 {% set fbt = filtersByType ? filtersByType : [] %}
@@ -191,6 +180,15 @@
                         <app-icon icon="carbon:add"></app-icon>
                         <span class="ml-05">{{ __('add objects') }}</span>
                     </button>
+
+                    {# FastCreate #}
+                    {{ element(
+                            config('UI.fast_create_form._element')|default('Form/fast_create'),
+                            {
+                                'relationSchema': relationSchema,
+                                'schemasByType': schemasByType,
+                            }
+                    ) }}
                 </template>
             </div>
         </div>

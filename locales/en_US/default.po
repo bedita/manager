@@ -1802,7 +1802,7 @@ msgstr ""
 msgid "Choose a type"
 msgstr ""
 
-msgid "Click here to start"
+msgid "Create object"
 msgstr ""
 
 msgid "Fast create"
