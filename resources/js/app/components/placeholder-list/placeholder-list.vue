@@ -72,6 +72,7 @@
 <script>
 import { EventBus } from 'app/components/event-bus';
 import { t } from 'ttag';
+import { placeholderParamsDecoded } from 'app/helpers/placeholder-encoding';
 
 export default {
     name: 'PlaceholderList',
@@ -123,13 +124,14 @@ export default {
                 }
             });
             for (const m of matches) {
+                console.log('m', m[2]);
                 const o = await this.fetchObject(m[1]);
                 this.items.push({
                     text: m[0],
                     id: m[1],
                     obj: o,
                     params_raw: m[2],
-                    params: atob(m[2]),
+                    params: placeholderParamsDecoded(m[2]),
                 });
             }
         },

@@ -52,6 +52,7 @@
 </template>
 <script>
 import { EventBus } from 'app/components/event-bus';
+import { placeholderParamsDecoded, placeholderParamsEncode } from 'app/helpers/placeholder-encoding';
 
 export default {
     name: 'PlaceholderParams',
@@ -88,9 +89,9 @@ export default {
     mounted() {
         this.$nextTick(() => {
             this.parameters = BEDITA?.placeholdersConfig?.[this.type] || {};
-            const decoded = this.decoded(this.value);
+            const decoded = placeholderParamsDecoded(this.value);
             if (decoded === 'undefined') {
-                this.newValue = btoa('undefined');
+                this.newValue = placeholderParamsEncode('undefined');
 
                 return;
             }
@@ -104,7 +105,7 @@ export default {
     methods: {
         changeParams() {
             this.oldValue = this.newValue || this.value;
-            this.newValue = btoa(JSON.stringify(this.decodedValue));
+            this.newValue = placeholderParamsEncode(JSON.stringify(this.decodedValue));
             EventBus.send('replace-placeholder', {
                 id: this.id,
                 field: this.field,
@@ -120,9 +121,6 @@ export default {
         changeRichText(value, column) {
             this.decodedValue[column] = value;
             this.changeParams();
-        },
-        decoded(item) {
-            return atob(item);
         },
     },
 };
