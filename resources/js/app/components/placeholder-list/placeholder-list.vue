@@ -124,7 +124,6 @@ export default {
                 }
             });
             for (const m of matches) {
-                console.log('m', m[2]);
                 const o = await this.fetchObject(m[1]);
                 this.items.push({
                     text: m[0],
