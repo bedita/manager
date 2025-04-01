@@ -6,6 +6,7 @@
                 :key="index"
                 :compact="compact"
                 :options="options"
+                :readonly="readonly"
                 :source="dateRanges[index]"
                 @remove="remove"
                 @undoRemove="undoRemove"
@@ -15,6 +16,7 @@
         <button
             class="button button-primary"
             @click.prevent="add"
+            v-if="!readonly"
         >
             <app-icon icon="carbon:add" />
             <span class="ml-05">{{ msgAdd }}</span>
@@ -48,6 +50,10 @@ export default {
         options: {
             type: Object,
             default: () => ({}),
+        },
+        readonly: {
+            type: Boolean,
+            default: false,
         },
     },
 
