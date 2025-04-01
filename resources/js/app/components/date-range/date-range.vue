@@ -62,7 +62,7 @@
                 {{ msgEveryDay }}
             </label>
         </div>
-        <div>
+        <div v-if="!readonly">
             <button
                 class="button button-primary"
                 @click.prevent="remove($event)"
@@ -158,6 +158,10 @@ export default {
         options: {
             type: Object,
             default: () => ({}),
+        },
+        readonly: {
+            type: Boolean,
+            default: false,
         },
         source: {
             type: Object,
@@ -370,10 +374,8 @@ export default {
             const input = dateRange || this.range;
             const button = document.querySelector('button[form=form-main]');
             const valid = skip || input?.start_date ? true : this.msdiff(input) > 0;
-            if (input?.start_date && !valid) {
-                button.disabled = 'disabled';
-            } else {
-                button.disabled = false;
+            if (button) {
+                button.disabled = input?.start_date && !valid ? 'disabled' : false;
             }
 
             return valid;
