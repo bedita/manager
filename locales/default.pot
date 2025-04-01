@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-03-27 07:48:58 \n"
+"POT-Creation-Date: 2025-04-01 12:09:55 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1628,6 +1628,9 @@ msgstr ""
 msgid "Show object info"
 msgstr ""
 
+msgid "Media URL"
+msgstr ""
+
 msgid "Search on categories"
 msgstr ""
 
@@ -1799,10 +1802,7 @@ msgstr ""
 msgid "Choose a type"
 msgstr ""
 
-msgid "Create object"
-msgstr ""
-
-msgid "Fast create"
+msgid "Create new for"
 msgstr ""
 
 msgid "Insert date(s)"

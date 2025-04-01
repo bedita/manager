@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-03-27 07:48:58 \n"
+"POT-Creation-Date: 2025-04-01 12:09:55 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1650,6 +1650,9 @@ msgstr "Errore nella cancellazione della proprietà"
 msgid "Show object info"
 msgstr "Mostra informazioni"
 
+msgid "Media URL"
+msgstr "URL Media"
+
 msgid "Search on categories"
 msgstr "Cerca tra le categorie"
 
@@ -1827,11 +1830,8 @@ msgstr "Caricamento riuscito"
 msgid "Choose a type"
 msgstr "Selezionare un tipo"
 
-msgid "Create object"
-msgstr "Crea oggetto"
-
-msgid "Fast create"
-msgstr "Creazione rapida"
+msgid "Create new for"
+msgstr "Crea nuovo per"
 
 msgid "Insert date(s)"
 msgstr "Inserire data(e)"
