@@ -72,7 +72,6 @@
 <script>
 import { EventBus } from 'app/components/event-bus';
 import { t } from 'ttag';
-import { placeholderParamsDecoded } from 'app/helpers/placeholder-encoding';
 
 export default {
     name: 'PlaceholderList',
@@ -130,7 +129,7 @@ export default {
                     id: m[1],
                     obj: o,
                     params_raw: m[2],
-                    params: placeholderParamsDecoded(m[2]),
+                    params: this.$helpers.binaryToAsciiUtf8(m[2]),
                 });
             }
         },
