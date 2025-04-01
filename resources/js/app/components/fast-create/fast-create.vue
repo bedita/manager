@@ -47,7 +47,7 @@
                             :object-type="objectType"
                             :required="required?.includes(fieldKey(field))"
                             :val="schemasByType?.[objectType]?.[fieldKey(field)] || null"
-                            v-model="formFieldProperties[fieldKey(field)]"
+                            v-model="formFieldProperties[objectType][fieldKey(field)]"
                             @error="err"
                             @update="update"
                             @success="success"
@@ -156,11 +156,14 @@ export default {
                     this.payload[this.fieldKey(field)] = this.schemasByType?.[this.objectType]?.[this.fieldKey(field)] || null;
                 }
             }
-            this.formFieldProperties = {[this.objectType]: this.payload};
+            if (this.objectType) {
+                this.formFieldProperties = {[this.objectType]: this.payload};
+            }
         });
     },
     methods: {
         changeType() {
+            this.formFieldProperties[this.objectType] = {};
             this.fields = [];
             this.fieldsMap = {};
             this.forceUploadable = false;
@@ -203,6 +206,12 @@ export default {
                 }
             }
             this.invalidFields = this.required.filter(f => !this.payload[f]);
+            if (this.objectType) {
+                for (const field of this.fields) {
+                    this.payload[this.fieldKey(field)] = this.schemasByType?.[this.objectType]?.[this.fieldKey(field)] || null;
+                }
+                this.formFieldProperties = {[this.objectType]: this.payload};
+            }
         },
         err(val) {
             this.error = val;
