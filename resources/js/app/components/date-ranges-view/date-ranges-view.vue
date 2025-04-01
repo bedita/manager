@@ -4,6 +4,7 @@
             <DateRange
                 v-for="(dateRange, index) in dateRanges"
                 :key="index"
+                :compact="compact"
                 :options="options"
                 :source="dateRanges[index]"
                 @remove="remove"
@@ -36,6 +37,10 @@ export default {
     },
 
     props: {
+        compact: {
+            type: Boolean,
+            default: false,
+        },
         ranges: {
             type: String,
             default: undefined,

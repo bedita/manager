@@ -103,3 +103,12 @@ export default {
     },
 }
 </script>
+<style scoped>
+.field-geo-coordinates {
+    display: flex;
+    flex-direction: column;
+}
+.field-geo-coordinates label {
+    margin-bottom: 0.5rem;
+}
+</style>

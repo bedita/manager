@@ -180,15 +180,6 @@
                         <app-icon icon="carbon:add"></app-icon>
                         <span class="ml-05">{{ __('add objects') }}</span>
                     </button>
-
-                    {# FastCreate #}
-                    {{ element(
-                            config('UI.fast_create_form._element')|default('Form/fast_create'),
-                            {
-                                'relationSchema': relationSchema,
-                                'schemasByType': schemasByType,
-                            }
-                    ) }}
                 </template>
             </div>
         </div>
