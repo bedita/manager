@@ -1,36 +1,76 @@
 <template>
     <fieldset class="fast-create fieldset">
-        <header class="tab" :class="{'open': open}" :open="open" @click="toggle">
+        <header
+            class="tab"
+            :class="{'open': open}"
+            :open="open"
+            @click="toggle"
+        >
             <h2><span>{{ msgFastCreate }} <strong>"{{ relationName }}"</strong></span></h2>
         </header>
-        <div class="fast-create-form-container" :open="open">
+        <div
+            class="fast-create-form-container"
+            :open="open"
+        >
             <div>
-                <div class="mb-1" v-show="!autoType">
+                <div
+                    class="mb-1"
+                    v-show="!autoType"
+                >
                     <label for="objectType">{{ msgChooseType }}</label>
-                    <select v-model="objectType" @change="changeType">
-                        <option v-for="item in items" :value="item" :key="item">
+                    <select
+                        v-model="objectType"
+                        @change="changeType"
+                    >
+                        <option
+                            v-for="item in items"
+                            :value="item"
+                            :key="item"
+                        >
                             {{ t(capitalize(item)) }}
                         </option>
                     </select>
                 </div>
                 <template v-if="objectType">
-                    <div v-for="field in fields" :key="field" class="form-field-container">
-                        <form-field :abstract-type="abstractType" :field="fieldKey(field)" :render-as="fieldType(field)"
+                    <div
+                        v-for="field in fields"
+                        :key="field"
+                        class="form-field-container"
+                    >
+                        <form-field
+                            :abstract-type="abstractType"
+                            :field="fieldKey(field)"
+                            :render-as="fieldType(field)"
                             :json-schema="schemasByType?.[objectType]?.properties?.[fieldKey(field)] || {}"
-                            :is-uploadable="isUploadable" :languages="languages" :object-type="objectType"
+                            :is-uploadable="isUploadable"
+                            :languages="languages"
+                            :object-type="objectType"
                             :required="required?.includes(fieldKey(field))"
                             :val="schemasByType?.[objectType]?.[fieldKey(field)] || null"
-                            v-model="formFieldProperties[fieldKey(field)]" @error="err" @update="update"
-                            @success="success" />
+                            v-model="formFieldProperties[fieldKey(field)]"
+                            @error="err"
+                            @update="update"
+                            @success="success"
+                        />
                     </div>
                 </template>
-                <div class="form-field-container" v-if="objectType">
-                    <button :class="{ 'is-loading-spinner': loading }" :disabled="saveDisabled" @click.prevent="save">
+                <div
+                    class="form-field-container"
+                    v-if="objectType"
+                >
+                    <button
+                        :class="{ 'is-loading-spinner': loading }"
+                        :disabled="saveDisabled"
+                        @click.prevent="save"
+                    >
                         <app-icon icon="carbon:save" />
                         <span class="ml-05">{{ msgSave }}</span>
                     </button>
                 </div>
-                <div class="error" v-if="error">
+                <div
+                    class="error"
+                    v-if="error"
+                >
                     <app-icon icon="carbon:error" />
                     <span class="ml-05">{{ error }}</span>
                 </div>
