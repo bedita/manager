@@ -18,7 +18,7 @@ use Authentication\Identity;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
-use Cake\Controller\Exception\SecurityException;
+use Cake\Controller\Exception\FormProtectionException;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\BadRequestException;
@@ -110,12 +110,12 @@ class AppController extends Controller
      * Handle security blackhole with logs for now
      *
      * @param string $type Exception type
-     * @param \Cake\Controller\Exception\SecurityException $exception Raised exception
+     * @param \Cake\Controller\Exception\FormProtectionException $exception Raised exception
      * @return void
      * @throws \Cake\Http\Exception\BadRequestException
      * @codeCoverageIgnore
      */
-    public function blackhole(string $type, SecurityException $exception): void
+    public function blackhole(string $type, FormProtectionException $exception): void
     {
         // Log original exception
         $this->log($exception->getMessage(), 'error');
