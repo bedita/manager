@@ -6,7 +6,7 @@
             :open="open"
             @click="toggle"
         >
-            <h2><span>{{ msgFastCreate }} <strong>"{{ relationName }}"</strong></span></h2>
+            <h2><span>{{ msgFastCreate }} <strong>"{{ relationLabel }}"</strong></span></h2>
         </header>
         <div
             class="fast-create-form-container"
@@ -107,6 +107,10 @@ export default {
         languages: {
             type: Object,
             default: () => {},
+        },
+        relationLabel: {
+            type: String,
+            required: true,
         },
         relationName: {
             type: String,

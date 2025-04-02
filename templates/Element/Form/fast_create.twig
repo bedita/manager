@@ -5,6 +5,7 @@
         :fields-by-type="{{ Property.fastCreateFieldsMap()|json_encode }}"
         :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}"
         :schemas-by-type="{{ schemasByType|json_encode }}"
+        :relation-label="relationLabel"
         :relation-name="relationName"
         :relations-schema="{{ relationsSchema|json_encode }}"
         @created="addCreated"

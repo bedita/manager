@@ -5,6 +5,7 @@
             :fields-by-type="fieldsByType"
             :items="items"
             :languages="languages"
+            :relation-label="relationLabel"
             :relation-name="relationName"
             :schemas-by-type="schemasByType"
             @created="created"
@@ -30,6 +31,10 @@ export default {
         languages: {
             type: Object,
             default: () => {},
+        },
+        relationLabel: {
+            type: String,
+            required: true,
         },
         relationName: {
             type: String,
