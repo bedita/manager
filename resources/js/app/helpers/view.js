@@ -1,6 +1,6 @@
 import { t } from 'ttag';
 import { warning } from 'app/components/dialog/dialog';
-import { humanizeString } from 'app/helpers/text-helper.js';
+import { humanizeString, asciiToBinaryUtf8, binaryToAsciiUtf8 } from 'app/helpers/text-helper.js';
 
 export default {
     install (Vue) {
@@ -305,6 +305,14 @@ export default {
 
             humanize(str) {
                 return humanizeString(str);
+            },
+
+            asciiToBinaryUtf8(str) {
+                return asciiToBinaryUtf8(str);
+            },
+
+            binaryToAsciiUtf8(str) {
+                return binaryToAsciiUtf8(str);
             },
 
             stripHtml(str) {

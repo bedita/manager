@@ -88,9 +88,9 @@ export default {
     mounted() {
         this.$nextTick(() => {
             this.parameters = BEDITA?.placeholdersConfig?.[this.type] || {};
-            const decoded = this.decoded(this.value);
+            const decoded = this.$helpers.binaryToAsciiUtf8(this.value);
             if (decoded === 'undefined') {
-                this.newValue = btoa('undefined');
+                this.newValue = this.$helpers.asciiToBinaryUtf8('undefined');
 
                 return;
             }
@@ -104,7 +104,7 @@ export default {
     methods: {
         changeParams() {
             this.oldValue = this.newValue || this.value;
-            this.newValue = btoa(JSON.stringify(this.decodedValue));
+            this.newValue = this.$helpers.asciiToBinaryUtf8(JSON.stringify(this.decodedValue));
             EventBus.send('replace-placeholder', {
                 id: this.id,
                 field: this.field,
@@ -120,9 +120,6 @@ export default {
         changeRichText(value, column) {
             this.decodedValue[column] = value;
             this.changeParams();
-        },
-        decoded(item) {
-            return atob(item);
         },
     },
 };
