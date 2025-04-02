@@ -41,3 +41,9 @@ export default {
     },
 }
 </script>
+<style scoped>
+.field-checkbox {
+    width: fit-content;
+    cursor: pointer;
+}
+</style>
