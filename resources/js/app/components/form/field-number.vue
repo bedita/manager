@@ -38,3 +38,8 @@ export default {
     },
 }
 </script>
+<style scoped>
+.field-number {
+    width: 200px;
+}
+</style>
