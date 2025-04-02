@@ -457,6 +457,9 @@ class LayoutHelper extends Helper
      */
     public function indexLists(): array
     {
+        if (!Configure::check('API.apiBaseUrl')) {
+            return [];
+        }
         $cacheKey = CacheTools::cacheKey('properties.indexLists');
         $indexLists = Cache::read($cacheKey, 'default');
         if (!empty($indexLists)) {
