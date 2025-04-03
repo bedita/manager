@@ -77,7 +77,10 @@
     <div class="more-filters" v-show="editFilterRelations">
         <div class="filter-container">
             <related-objects-filter
+                :initial-filter="{{ _view.request.getQuery('filter')|json_encode }}"
                 :relations-schema="{{ schema['relations']|json_encode }}"
+                @edit-filter-relations="editFilterRelations = 1"
+                @update-filter-related="updateFilterRelations"
             >
             </related-objects-filter>
         </div>

@@ -83,6 +83,7 @@ export default {
              */
             editFilterRelations: false,
             filterByDescendants: false,
+            filterRelations: {},
             folder: null,
             moreFilters: this.filterActive,
             pageSize: this.pagination.page_size,
@@ -365,6 +366,10 @@ export default {
 
             const filter = this.prepareFilters();
             const filterObject = { ...this.queryFilter, filter };
+            filterObject.filter = {
+                ...filterObject.filter,
+                ...this.filterRelations,
+            };
             this.availableFilters = this.filtersByType?.[filterObject?.filter?.type] || [];
             this.$emit('filter-objects', filterObject);
         },
@@ -465,6 +470,16 @@ export default {
 
         toggleFilterRelations() {
             this.editFilterRelations = !this.editFilterRelations;
+        },
+
+        updateFilterRelations(filter) {
+            this.filterRelations = {};
+            for (const [key, value] of Object.entries(filter)) {
+                this.filterRelations[key] = [];
+                for (const v of value) {
+                    this.filterRelations[key].push(v);
+                }
+            }
         },
     }
 };

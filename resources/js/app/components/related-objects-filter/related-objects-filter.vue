@@ -103,6 +103,10 @@ import { t } from 'ttag';
 export default {
     name: 'RelatedObjectsFilter',
     props: {
+        initialFilter: {
+            type: Object,
+            default: () => ({}),
+        },
         relationsSchema: {
             type: Object,
             required: true,
@@ -127,6 +131,15 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
+            const relationNames = Object.keys(this.relationsSchema);
+            const relationKeys = Object.keys(this.initialFilter).filter((key) => relationNames.includes(key));
+            this.filter = relationKeys.reduce((acc, key) => {
+                acc[key] = this.initialFilter[key];
+                return acc;
+            }, {});
+            if (Object.keys(this.filter).length) {
+                this.$emit('edit-filter-relations', true);
+            }
             for (const [key, value] of Object.entries(this.relationsSchema)) {
                 this.relations.push({
                     label: value?.label || key,
