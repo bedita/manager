@@ -34,7 +34,6 @@ export default {
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
         SortRelated: () => import(/* webpackChunkName: "sort-related" */'app/components/sort-related/sort-related'),
-        FastCreate: () => import(/* webpackChunkName: "fast-create" */'app/components/fast-create/fast-create'),
     },
 
     mixins: [

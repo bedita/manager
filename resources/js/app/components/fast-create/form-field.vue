@@ -44,6 +44,7 @@
             />
             <!-- date ranges -->
             <date-ranges-view
+                :compact="true"
                 :ranges="value"
                 @update="update"
                 v-if="fieldType === 'calendar'"
@@ -93,6 +94,16 @@
                 :value="value"
                 @change="update"
                 v-if="fieldType === 'textarea'"
+            />
+            <!-- plaintext -->
+            <field-plaintext
+                :id="`fast-create-${field}`"
+                :name="`fast-${objectType}-${field}`"
+                :field="field"
+                :reference="`fast-create-${objectType}`"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'plaintext'"
             />
             <!-- geo-coordinates -->
             <field-geo-coordinates
@@ -198,12 +209,8 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
-            if (this.jsonSchema?.default) {
-                this.value = this.jsonSchema.default;
-                if (this.value) {
-                    this.update(this.value);
-                }
-            }
+            this.value = this.val || this.jsonSchema?.default || null;
+            this.update(this.value);
             this.fieldType = this.resetFieldType();
         });
     },
@@ -277,6 +284,11 @@ export default {
 <style scoped>
 div.form-field {
     margin-bottom: 1em;
+    width: 100%;
+}
+div.form-field > div {
+    display: flex;
+    flex-direction: column;
 }
 div.form-field .file {
     display: block !important;

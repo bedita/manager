@@ -1,16 +1,17 @@
 <template>
-    <input
+    <textarea
         :id="id"
+        :name="name"
         :data-ref="reference"
-        class="field-checkbox"
-        type="checkbox"
-        :checked="!!v"
-        @change="change($event.target.checked)"
-    >
+        :value="value"
+        class="field-plaintext"
+        type="text"
+        @change="change($event.target.value)"
+    />
 </template>
 <script>
 export default {
-    name: 'FieldCheckbox',
+    name: 'FieldPlaintext',
     props: {
         id: {
             type: String,
@@ -29,21 +30,10 @@ export default {
             default: ''
         },
     },
-    data() {
-        return {
-            v: this.value,
-        };
-    },
     methods: {
-        change(val) {
-            this.$emit('change', val);
-        }
+        change(value) {
+            this.$emit('change', value);
+        },
     },
 }
 </script>
-<style scoped>
-.field-checkbox {
-    width: fit-content;
-    cursor: pointer;
-}
-</style>

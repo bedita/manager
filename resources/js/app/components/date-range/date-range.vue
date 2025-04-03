@@ -136,13 +136,13 @@
         </div>
         <div
             class="icon-error"
-            v-show="!start_date"
+            v-show="!compact && !start_date"
         >
             {{ msgEmptyDateRange }}
         </div>
         <div
             class="icon-error"
-            v-show="validate() === false"
+            v-show="!compact && validate() === false"
         >
             {{ msgInvalidDateRange }}
         </div>
@@ -155,6 +155,10 @@ import { t } from 'ttag';
 export default {
     name: 'DateRange',
     props: {
+        compact: {
+            type: Boolean,
+            default: false,
+        },
         options: {
             type: Object,
             default: () => ({}),

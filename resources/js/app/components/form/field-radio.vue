@@ -62,6 +62,8 @@ export default {
 <style scoped>
 .field-radio {
     display: flex;
+    flex-direction: row;
+    width: fit-content;
 }
 .field-radio > label {
     flex: auto !important;
