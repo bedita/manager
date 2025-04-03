@@ -131,12 +131,6 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
-            const relationNames = Object.keys(this.relationsSchema);
-            const relationKeys = Object.keys(this.initialFilter).filter((key) => relationNames.includes(key));
-            this.filter = relationKeys.reduce((acc, key) => {
-                acc[key] = this.initialFilter[key];
-                return acc;
-            }, {});
             if (Object.keys(this.filter).length) {
                 this.$emit('edit-filter-relations', true);
             }
@@ -158,6 +152,14 @@ export default {
                 types: [],
             });
             this.relation = this.relations[0].name;
+            if (this.initialFilter) {
+                const relationNames = Object.keys(this.relationsSchema);
+                const relationKeys = Object.keys(this.initialFilter).filter((key) => relationNames.includes(key));
+                this.filter = relationKeys.reduce((acc, key) => {
+                    acc[key] = this.initialFilter[key];
+                    return acc;
+                }, {});
+            }
         });
     },
     methods: {
