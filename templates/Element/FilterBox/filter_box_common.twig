@@ -58,12 +58,31 @@
                 <span class="ml-05">{{ __('Reset') }}</span>
             </button>
 
+            {% if hideFilterRelations == '' %}
+            <button class="toggle-filters button button-outlined is-width-auto" type="button" @click.prevent="toggleFilterRelations()">
+                <app-icon icon="carbon:filter-edit" v-show="!editFilterRelations"></app-icon><span class="ml-05" v-show="!editFilterRelations">{{ __('Relations') }}</span>
+                <app-icon icon="carbon:filter" v-show="editFilterRelations"></app-icon><span class="ml-05" v-show="editFilterRelations">{{ __('Relations') }}</span>
+            </button>
+            {% endif %}
+
             <button class="toggle-filters button button-outlined is-width-auto" type="button" @click="moreFilters = !moreFilters" v-if="canShowAdvanced">
                 <app-icon icon="carbon:filter-edit" v-if="!moreFilters"></app-icon><span class="ml-05" v-show="!moreFilters">{{ __('More') }}</span>
                 <app-icon icon="carbon:filter" v-if="moreFilters"></app-icon><span class="ml-05" v-show="moreFilters">{{ __('Less') }}</span>
             </button>
+
         </div>
     </div>
+
+    {% if hideFilterRelations == '' %}
+    <div class="more-filters" v-show="editFilterRelations">
+        <div class="filter-container">
+            <related-objects-filter
+                :relations-schema="{{ schema['relations']|json_encode }}"
+            >
+            </related-objects-filter>
+        </div>
+    </div>
+    {% endif %}
 
     <div class="more-filters" v-show="moreFilters">
         {# object type filter #}

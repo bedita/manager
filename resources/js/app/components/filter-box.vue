@@ -81,6 +81,7 @@ export default {
              * When disabled, only direct children are fetched.
              * This will switch the API filter between `parent` and `ancestor`.
              */
+            editFilterRelations: false,
             filterByDescendants: false,
             folder: null,
             moreFilters: this.filterActive,
@@ -460,6 +461,10 @@ export default {
             const oldFilter = newFilter === 'ancestor' ? 'parent' : 'ancestor';
             delete this.queryFilter.filter[oldFilter];
             this.queryFilter.filter[newFilter] = this.folder?.id || null;
+        },
+
+        toggleFilterRelations() {
+            this.editFilterRelations = !this.editFilterRelations;
         },
     }
 };
