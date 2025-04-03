@@ -38,6 +38,7 @@
                         class="form-field-container"
                     >
                         <form-field
+                            :key="reference"
                             :abstract-type="abstractType"
                             :field="fieldKey(field)"
                             :render-as="fieldType(field)"
@@ -68,13 +69,16 @@
                     </button>
                 </div>
                 <div
-                    class="error"
+                    class="error mt-1"
                     v-if="error"
                 >
                     <app-icon icon="carbon:error" />
                     <span class="ml-05">{{ error }}</span>
                 </div>
-                <div v-if="message">
+                <div
+                    class="mt-1"
+                    v-if="message"
+                >
                     <app-icon icon="carbon:checkmark" />
                     <span class="ml-05">{{ message }}</span>
                 </div>
@@ -127,6 +131,7 @@ export default {
             error: '',
             fields: [],
             fieldsMap: {},
+            formFieldProperties: {},
             invalidFields: [],
             isUploadable: false,
             loading: false,
@@ -138,8 +143,8 @@ export default {
             objectType: null,
             open: false,
             payload: {},
-            formFieldProperties: {},
             required: [],
+            reference: null,
         }
     },
     computed: {
@@ -163,6 +168,7 @@ export default {
             if (this.objectType) {
                 this.formFieldProperties = {[this.objectType]: this.payload};
             }
+            this.reference = Math.floor(Math.random() * 1000000);
         });
     },
     methods: {
@@ -247,6 +253,16 @@ export default {
             } else {
                 this.changeType();
             }
+            if (this.objectType) {
+                for (const field of this.fields) {
+                    this.payload[this.fieldKey(field)] = this.schemasByType?.[this.objectType]?.[this.fieldKey(field)] || null;
+                }
+            }
+            if (this.objectType) {
+                this.formFieldProperties = {[this.objectType]: this.payload};
+            }
+            // reset reference, to force re-render
+            this.reference = Math.floor(Math.random() * 1000000);
         },
         async save() {
             try {
