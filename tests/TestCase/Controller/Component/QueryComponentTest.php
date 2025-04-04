@@ -117,10 +117,10 @@ class QueryComponentTest extends TestCase
     }
 
     /**
-     * Test `handleSort` method.
+     * Test `handleInclude` method.
      *
      * @return void
-     * @covers ::handleSort()
+     * @covers ::handleInclude()
      */
     public function testHandleInclude(): void
     {
