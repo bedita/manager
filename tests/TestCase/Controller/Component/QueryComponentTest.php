@@ -90,6 +90,7 @@ class QueryComponentTest extends TestCase
      * @return void
      * @covers ::index()
      * @covers ::handleSort()
+     * @covers ::handleInclude()
      * @dataProvider indexProvider()
      */
     public function testIndex(array $queryParams, array $config, array $expected): void
@@ -111,6 +112,29 @@ class QueryComponentTest extends TestCase
             $Query->setConfig($key, $val);
         }
         $actual = $Query->index();
+        static::assertEquals($expected, $actual);
+    }
+
+    public function testHandleInclude(): void
+    {
+        $query = [
+            'filter' => [
+                'type' => 'documents',
+            ],
+        ];
+        $expected = [
+            'filter' => [
+                'type' => 'documents',
+                'b' => null,
+            ],
+        ];
+        $component = new class () extends QueryComponent {
+            public function handleInclude(array $query): array
+            {
+                return parent::handleInclude($query);
+            }
+        };
+        $actual = $component->handleInclude($query);
         static::assertEquals($expected, $actual);
     }
 

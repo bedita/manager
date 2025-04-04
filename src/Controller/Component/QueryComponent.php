@@ -13,6 +13,7 @@
 namespace App\Controller\Component;
 
 use Cake\Controller\Component;
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 
 /**
@@ -32,11 +33,7 @@ class QueryComponent extends Component
             $sort = (string)Hash::get($query, 'sort');
             $this->handleSort($sort, $query);
         }
-
-        // set include, if set in config
-        if ($this->getConfig('include') != null) {
-            $query['include'] = (string)$this->getConfig('include');
-        }
+        $query = $this->handleInclude($query);
 
         // make sure `filter[history_editor]` is empty in order to use logged user id
         if (isset($query['filter']['history_editor'])) {
@@ -52,6 +49,42 @@ class QueryComponent extends Component
         $module = (array)$this->getController()->viewBuilder()->getVar('currentModule');
         $sort = (string)Hash::get($module, 'sort');
         $this->handleSort($sort, $query);
+
+        return $query;
+    }
+
+    /**
+     * Handle include parameter
+     *
+     * @param array $query Query string
+     * @return array
+     */
+    protected function handleInclude(array $query): array
+    {
+        $decoded = [];
+        $include = array_filter(
+            (array)Configure::read(
+                sprintf(
+                    'Properties.%s.index',
+                    $this->getController()->getRequest()->getParam('object_type')
+                )
+            ),
+            function ($value) {
+                return is_array($value);
+            }
+        );
+        $decoded = empty($include) ? $include : array_keys(reset($include));
+        if ($this->getConfig('include') != null) {
+            $decoded = array_unique(
+                array_merge(
+                    $decoded,
+                    explode(',', (string)$this->getConfig('include'))
+                )
+            );
+        }
+        if (!empty($decoded)) {
+            $query['include'] = implode(',', $decoded);
+        }
 
         return $query;
     }
