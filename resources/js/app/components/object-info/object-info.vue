@@ -39,6 +39,9 @@ export default {
             });
 
             for (const field of this.fields) {
+                if (typeof field !== 'string') {
+                    continue;
+                }
                 this.labelsMap.set(field, BEDITA_I18N?.[field] || field);
                 this.values[field] = this.objectData?.relationships?.streams?.data?.[0]?.attributes?.[field]
                     || this.objectData?.relationships?.streams?.data?.[0]?.meta?.[field]
@@ -141,6 +144,9 @@ export default {
         showInfo() {
             let content = this.contentTitle();
             for (const field of this.fields) {
+                if (typeof field !== 'string') {
+                    continue;
+                }
                 content += this.content(field);
             }
             content += this.contentMeta();

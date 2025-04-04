@@ -21,8 +21,22 @@
                 <div class="{{ prop }}-cell">
                     {{ element('Modules/index_properties_date_ranges', { dateRanges: object.attributes[prop] }) }}
                 </div>
+            {% elseif (prop is iterable) %}
+                {% for relationName,relationFields in prop %}
+                    <div>
+                        {% if object.relationships[relationName]['data'][0] %}
+                            {% for f in relationFields %}
+                                {{ object.relationships[relationName]['data'][0]['attributes'][f] }}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
             {% else %}
-                <index-cell :settings="{{ config('UI.index')|default({'copy2clipboard': false})|json_encode }}" :prop="{{ prop|json_encode }}" :text="{{ Property.value(object, prop)|json_encode }}">
+                <index-cell
+                    :settings="{{ config('UI.index')|default({'copy2clipboard': false})|json_encode }}"
+                    :prop="{{ prop|json_encode }}"
+                    :text="{{ Property.value(object, prop)|json_encode }}"
+                >
                 </index-cell>
             {% endif %}
         {% endfor %}
