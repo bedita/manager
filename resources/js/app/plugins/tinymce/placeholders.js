@@ -45,7 +45,7 @@ function loadPreview(editor, node, id) {
                         content = `<img src="${data.meta.media_url}" alt="${data.attributes.title}" />`;
                         break;
                     default:
-                        if (data.meta.media_url) {
+                        if (data.meta?.media_url) {
                             content = `<iframe src="${data.meta.media_url}" sandbox=""></iframe>`;
                         } else {
                             content = `<div class="embed-card">
