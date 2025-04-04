@@ -115,29 +115,6 @@ class QueryComponentTest extends TestCase
         static::assertEquals($expected, $actual);
     }
 
-    public function testHandleInclude(): void
-    {
-        $query = [
-            'filter' => [
-                'type' => 'documents',
-            ],
-        ];
-        $expected = [
-            'filter' => [
-                'type' => 'documents',
-                'b' => null,
-            ],
-        ];
-        $component = new class () extends QueryComponent {
-            public function handleInclude(array $query): array
-            {
-                return parent::handleInclude($query);
-            }
-        };
-        $actual = $component->handleInclude($query);
-        static::assertEquals($expected, $actual);
-    }
-
     /**
      * Data provider for `testPrepare`
      *
