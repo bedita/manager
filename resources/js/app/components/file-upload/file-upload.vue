@@ -30,7 +30,7 @@
         </div>
         <div>
             <button
-                class="button button-primary"
+                class="button button-primary mt-1"
                 :class="loading ? 'is-loading-spinner' : 'button button-primary'"
                 :disabled="readonly || loading"
                 @click.prevent="upload()"
