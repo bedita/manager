@@ -40,7 +40,6 @@ export default {
         copy() {
             navigator.clipboard.writeText(this.text);
             this.msg = t`Copied!`;
-            console.log(this.msg);
             setTimeout(() => this.reset(), 2000)
         },
 

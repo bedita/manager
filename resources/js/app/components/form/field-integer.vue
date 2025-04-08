@@ -37,3 +37,8 @@ export default {
     },
 }
 </script>
+<style scoped>
+.field-integer {
+    width: 200px;
+}
+</style>
