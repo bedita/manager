@@ -1,25 +1,22 @@
 <template>
-    <div class="fast-create">
-        <div
-            class="start"
-            @click="reset(); clicked = true"
-            v-if="!clicked"
+    <fieldset class="fast-create fieldset">
+        <header
+            class="tab"
+            :class="{'open': open}"
+            :open="open"
+            @click="toggle"
         >
-            {{ msgFastCreate }}. {{ msgClickHereToStart }}
-        </div>
-        <template v-else>
-            <header class="is-flex space-between align-center is-expanded">
-                <span class="mb-1">{{ msgFastCreate }} {{ moduleName() }}</span>
-                <span
-                    class="mb-1 close"
-                    :title="msgClose"
-                    @click.prevent="reset()"
+            <h2><span>{{ msgFastCreate }} <strong>"{{ relationLabel }}"</strong></span></h2>
+        </header>
+        <div
+            class="fast-create-form-container"
+            :open="open"
+        >
+            <div>
+                <div
+                    class="mb-1"
+                    v-show="!autoType"
                 >
-                    <app-icon icon="carbon:close" />
-                </span>
-            </header>
-            <fieldset>
-                <div v-show="!autoType">
                     <label for="objectType">{{ msgChooseType }}</label>
                     <select
                         v-model="objectType"
@@ -38,8 +35,10 @@
                     <div
                         v-for="field in fields"
                         :key="field"
+                        class="form-field-container"
                     >
                         <form-field
+                            :key="reference"
                             :abstract-type="abstractType"
                             :field="fieldKey(field)"
                             :render-as="fieldType(field)"
@@ -49,38 +48,49 @@
                             :object-type="objectType"
                             :required="required?.includes(fieldKey(field))"
                             :val="schemasByType?.[objectType]?.[fieldKey(field)] || null"
-                            v-model="payload[fieldKey(field)]"
+                            v-model="formFieldProperties[objectType][fieldKey(field)]"
                             @error="err"
                             @update="update"
                             @success="success"
                         />
                     </div>
                 </template>
-                <div v-if="objectType">
+                <div
+                    class="form-field-container"
+                    v-if="objectType"
+                >
                     <button
-                        :class="{'is-loading-spinner': loading}"
-                        :disabled="loading || invalidFields?.length > 0"
+                        :class="{ 'is-loading-spinner': loading }"
+                        :disabled="saveDisabled"
                         @click.prevent="save"
                     >
                         <app-icon icon="carbon:save" />
                         <span class="ml-05">{{ msgSave }}</span>
                     </button>
-                    <button @click.prevent="reset()">
-                        <app-icon icon="carbon:close" />
-                        <span class="ml-05">{{ msgClose }}</span>
-                    </button>
                 </div>
-                <div class="error" v-if="error">
+                <div
+                    class="error mt-1"
+                    v-if="error"
+                >
                     <app-icon icon="carbon:error" />
                     <span class="ml-05">{{ error }}</span>
                 </div>
-                <div v-if="message">
-                    <app-icon icon="carbon:checkmark" />
-                    <span class="ml-05">{{ message }}</span>
+                <div
+                    class="mt-1"
+                    v-if="message"
+                >
+                    <app-icon
+                        icon="carbon:checkmark"
+                        color="green"
+                    />
+                    <span
+                        class="ml-05"
+                        v-html="message"
+                    />
                 </div>
-            </fieldset>
-        </template>
-    </div>
+            </div>
+        </div>
+    </fieldset>
 </template>
 <script>
 import { t } from 'ttag';
@@ -108,6 +118,14 @@ export default {
             type: Object,
             default: () => {},
         },
+        relationLabel: {
+            type: String,
+            required: true,
+        },
+        relationName: {
+            type: String,
+            required: true,
+        },
         schemasByType: {
             type: Object,
             required: true
@@ -116,24 +134,29 @@ export default {
     data() {
         return {
             abstractType: 'objects',
-            clicked: false,
             error: '',
             fields: [],
             fieldsMap: {},
+            formFieldProperties: {},
             invalidFields: [],
             isUploadable: false,
             loading: false,
             message: '',
-            msgClose: t`Close`,
             msgChooseType: t`Choose a type`,
-            msgClickHereToStart: t`Click here to start`,
             msgCreated: t`Created`,
-            msgFastCreate: t`Fast create`,
+            msgFastCreate: t`Create new for`,
             msgSave: t`Save`,
             objectType: null,
+            open: false,
             payload: {},
             required: [],
+            reference: null,
         }
+    },
+    computed: {
+        saveDisabled() {
+            return this.invalidFields.length > 0 || this.loading;
+        },
     },
     mounted() {
         this.$nextTick(() => {
@@ -143,17 +166,31 @@ export default {
                 this.objectType = this.autoType;
                 this.changeType();
             }
+            if (this.objectType) {
+                for (const field of this.fields) {
+                    this.payload[this.fieldKey(field)] = this.schemasByType?.[this.objectType]?.[this.fieldKey(field)] || null;
+                }
+            }
+            if (this.objectType) {
+                this.formFieldProperties = {[this.objectType]: this.payload};
+            }
+            this.reference = Math.floor(Math.random() * 1000000);
         });
     },
     methods: {
         changeType() {
+            this.formFieldProperties[this.objectType] = {};
             this.fields = [];
             this.fieldsMap = {};
             this.forceUploadable = false;
             this.required = [];
             this.payload = {};
-            this.message = '';
-            this.error = '';
+            setTimeout(() => {
+                this.$nextTick(() => {
+                    this.message = '';
+                    this.error = '';
+                });
+            }, 5000);
             if (this.fieldsByType?.[this.objectType]?.fields) {
                 const fields = this.fieldsByType[this.objectType].fields || [];
                 let ff = fields;
@@ -176,7 +213,6 @@ export default {
             }
             this.isUploadable = BEDITA.uploadable.includes(this.objectType);
             this.abstractType = this.isUploadable ? 'media' : 'objects';
-            this.invalidFields = this.required.filter(f => !this.payload[f]);
             if (this.fields?.length === 0) {
                 // set defaults
                 this.fields = ['title', 'status'];
@@ -188,6 +224,13 @@ export default {
                     this.fieldsMap = { title: 'string', status: 'radio', name: 'file' };
                     this.required = ['title', 'name'];
                 }
+            }
+            this.invalidFields = this.required.filter(f => !this.payload[f]);
+            if (this.objectType) {
+                for (const field of this.fields) {
+                    this.payload[this.fieldKey(field)] = this.schemasByType?.[this.objectType]?.[this.fieldKey(field)] || null;
+                }
+                this.formFieldProperties = {[this.objectType]: this.payload};
             }
         },
         err(val) {
@@ -210,21 +253,35 @@ export default {
             return this.objectType ? BEDITA_I18N?.[this.objectType] || this.objectType : BEDITA_I18N?.['objects'] || 'objects';
         },
         reset() {
+            setTimeout(() => {
+                this.$nextTick(() => {
+                    this.message = '';
+                    this.error = '';
+                });
+            }, 5000);
             this.fields = [];
             this.required = [];
             this.payload = {};
-            this.message = '';
-            this.error = '';
-            this.clicked = false;
             if (!this.autoType) {
                 this.objectType = null;
             } else {
                 this.changeType();
             }
+            if (this.objectType) {
+                for (const field of this.fields) {
+                    this.payload[this.fieldKey(field)] = this.schemasByType?.[this.objectType]?.[this.fieldKey(field)] || null;
+                }
+            }
+            if (this.objectType) {
+                this.formFieldProperties = {[this.objectType]: this.payload};
+            }
+            // reset reference, to force re-render
+            this.reference = Math.floor(Math.random() * 1000000);
         },
         async save() {
             try {
                 this.loading = true;
+                this.payload = Object.assign({}, this.formFieldProperties[this.objectType]);
                 this.payload.objectType = this.objectType;
                 const url = `/${this.objectType}/save`;
                 const options = {
@@ -242,9 +299,7 @@ export default {
                 if (responseJson?.error) {
                     throw new Error(responseJson.error);
                 }
-                this.reset();
-                this.message = this.msgCreated;
-                this.$emit('created', responseJson.data)
+                this.success(responseJson?.data?.[0]);
             } catch (error) {
                 this.error = error;
             } finally {
@@ -252,63 +307,57 @@ export default {
             }
         },
         success(objectData) {
+            this.message = `${this.msgCreated} <span class="tag has-background-module-${objectData?.type}">${objectData?.attributes?.title}</span>`;
             this.reset();
-            this.message = this.msgCreated;
             this.$emit('created', [objectData]);
         },
         update(k,v) {
-            this.payload[k] = v;
-            this.invalidFields = this.required.filter(f => !this.payload[f]);
+            this.formFieldProperties[this.objectType][k] = v;
+            this.invalidFields = this.required.filter(f => !this.formFieldProperties[this.objectType][f]);
+        },
+        toggle() {
+            this.open = !this.open;
         },
     },
 }
 </script>
 <style scoped>
-div.fast-create {
+fieldset.fast-create {
     display: flex;
     flex-direction: column;
-    margin: 1rem 0;
-    padding: 1rem 0;
-    border: solid 1px white;
+    margin-bottom: 1rem;
 }
-div.fast-create > div {
-    margin: 0.5rem 1rem 0.5rem 1rem;
-    display: inline-block;
-}
-div.fast-create > div.start {
+fieldset.fast-create > header {
     cursor: pointer;
-    text-align: center;
+    font-size: 1rem;
+    margin: 0rem 0.4rem;
+}
+fieldset.fast-create div.fast-create-form-container > div {
+    list-style-type: none;
+    outline: none;
+    font-size: 1rem;
+    margin: 1rem 0.4rem;
+}
+fieldset.fast-create div.fast-create-form-container > div::-webkit-details-marker {
+    display: none;
+}
+fieldset.fast-create div.fast-create-form-container:is([open]) > div {
+    flex-direction: column;
+    /* margin: 1rem 0; */
+}
+fieldset.fast-create div.fast-create-form-container:not([open]) > div {
+    display: none;
+}
+fieldset.fast-create .form-field-container {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
     width: 100%;
 }
-div.fast-create > fieldset {
-    margin: 1rem;
-}
-div.fast-create > fieldset > div {
-    margin: 1rem;
-}
-div.fast-create > fieldset > div > label {
-    display: block;
-}
-div.fast-create > fieldset > div > input {
+fieldset.fast-create input {
     width: 100%;
 }
-div.fast-create > div > button {
-    margin: 1rem;
-}
-div.fast-create div.error {
+fieldset.fast-create .error {
     color: red;
-}
-div.fast-create div.close {
-    position: fixed;
-    right: 0;
-    cursor: pointer;
-}
-div.fast-create span.close {
-    cursor: pointer;
-}
-div.fast-create header {
-    margin: auto;
-    padding: 1rem 4rem 0rem 4rem;
-    font-style: italic;
 }
 </style>
