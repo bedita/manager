@@ -79,8 +79,14 @@
                     class="mt-1"
                     v-if="message"
                 >
-                    <app-icon icon="carbon:checkmark" />
-                    <span class="ml-05">{{ message }}</span>
+                    <app-icon
+                        icon="carbon:checkmark"
+                        color="green"
+                    />
+                    <span
+                        class="ml-05"
+                        v-html="message"
+                    />
                 </div>
             </div>
         </div>
@@ -179,8 +185,12 @@ export default {
             this.forceUploadable = false;
             this.required = [];
             this.payload = {};
-            this.message = '';
-            this.error = '';
+            setTimeout(() => {
+                this.$nextTick(() => {
+                    this.message = '';
+                    this.error = '';
+                });
+            }, 1000);
             if (this.fieldsByType?.[this.objectType]?.fields) {
                 const fields = this.fieldsByType[this.objectType].fields || [];
                 let ff = fields;
@@ -243,11 +253,15 @@ export default {
             return this.objectType ? BEDITA_I18N?.[this.objectType] || this.objectType : BEDITA_I18N?.['objects'] || 'objects';
         },
         reset() {
+            setTimeout(() => {
+                this.$nextTick(() => {
+                    this.message = '';
+                    this.error = '';
+                });
+            }, 5000);
             this.fields = [];
             this.required = [];
             this.payload = {};
-            this.message = '';
-            this.error = '';
             if (!this.autoType) {
                 this.objectType = null;
             } else {
@@ -285,9 +299,7 @@ export default {
                 if (responseJson?.error) {
                     throw new Error(responseJson.error);
                 }
-                this.reset();
-                this.message = this.msgCreated;
-                this.$emit('created', responseJson.data)
+                this.success(responseJson?.data?.[0]);
             } catch (error) {
                 this.error = error;
             } finally {
@@ -295,8 +307,8 @@ export default {
             }
         },
         success(objectData) {
+            this.message = `${this.msgCreated} <span class="tag has-background-module-${objectData?.type}">${objectData?.attributes?.title}</span>`;
             this.reset();
-            this.message = this.msgCreated;
             this.$emit('created', [objectData]);
         },
         update(k,v) {
