@@ -190,7 +190,7 @@ export default {
                     this.message = '';
                     this.error = '';
                 });
-            }, 1000);
+            }, 5000);
             if (this.fieldsByType?.[this.objectType]?.fields) {
                 const fields = this.fieldsByType[this.objectType].fields || [];
                 let ff = fields;
