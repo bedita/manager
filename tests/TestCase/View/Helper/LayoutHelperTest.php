@@ -948,6 +948,15 @@ class LayoutHelperTest extends TestCase
         static::assertArrayHasKey('users', $actual);
         static::assertArrayHasKey('user_profile', $actual);
         static::assertArrayHasKey('videos', $actual);
+
+        // remove API config, return empty array
+        $apiConfig = Configure::read('API');
+        Configure::write('API', []);
+        $actual = $layout->indexLists();
+        static::assertIsArray($actual);
+        static::assertEmpty($actual);
+        Configure::write('API', $apiConfig);
+
         Cache::disable();
     }
 }

@@ -95,6 +95,7 @@ const _vueInstance = new Vue({
         SortRelated: () => import(/* webpackChunkName: "sort-related" */'app/components/sort-related/sort-related'),
         MediaItem: () => import(/* webpackChunkName: "media-item" */'app/components/media-item/media-item'),
         FastCreate: () => import(/* webpackChunkName: "fast-create" */'app/components/fast-create/fast-create'),
+        FastCreateContainer: () => import(/* webpackChunkName: "fast-create-container" */'app/components/fast-create/fast-create-container'),
         FormField: () => import(/* webpackChunkName: "form-field" */'app/components/fast-create/form-field'),
         FileUpload: () => import(/* webpackChunkName: "file-upload" */'app/components/file-upload/file-upload'),
         FieldCheckbox: () => import(/* webpackChunkName: "field-checkbox" */'app/components/form/field-checkbox'),
@@ -103,6 +104,7 @@ const _vueInstance = new Vue({
         FieldInteger: () => import(/* webpackChunkName: "field-integer" */'app/components/form/field-integer'),
         FieldJson: () => import(/* webpackChunkName: "field-json" */'app/components/form/field-json'),
         FieldNumber: () => import(/* webpackChunkName: "field-number" */'app/components/form/field-number'),
+        FieldPlaintext: () => import(/* webpackChunkName: "field-plaintext" */'app/components/form/field-plaintext'),
         FieldRadio: () => import(/* webpackChunkName: "field-radio" */'app/components/form/field-radio'),
         FieldSelect: () => import(/* webpackChunkName: "field-select" */'app/components/form/field-select'),
         FieldString: () => import(/* webpackChunkName: "field-string" */'app/components/form/field-string'),
@@ -626,6 +628,7 @@ Vue.component('FieldDate', _vueInstance.$options.components.FieldDate);
 Vue.component('FieldInteger', _vueInstance.$options.components.FieldInteger);
 Vue.component('FieldJson', _vueInstance.$options.components.FieldJson);
 Vue.component('FieldNumber', _vueInstance.$options.components.FieldNumber);
+Vue.component('FieldPlaintext', _vueInstance.$options.components.FieldPlaintext);
 Vue.component('FieldRadio', _vueInstance.$options.components.FieldRadio);
 Vue.component('FieldSelect', _vueInstance.$options.components.FieldSelect);
 Vue.component('FieldString', _vueInstance.$options.components.FieldString);

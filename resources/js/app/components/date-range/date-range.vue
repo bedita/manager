@@ -62,7 +62,7 @@
                 {{ msgEveryDay }}
             </label>
         </div>
-        <div>
+        <div v-if="!readonly">
             <button
                 class="button button-primary"
                 @click.prevent="remove($event)"
@@ -136,13 +136,13 @@
         </div>
         <div
             class="icon-error"
-            v-show="!start_date"
+            v-show="!compact && !start_date"
         >
             {{ msgEmptyDateRange }}
         </div>
         <div
             class="icon-error"
-            v-show="validate() === false"
+            v-show="!compact && validate() === false"
         >
             {{ msgInvalidDateRange }}
         </div>
@@ -155,9 +155,17 @@ import { t } from 'ttag';
 export default {
     name: 'DateRange',
     props: {
+        compact: {
+            type: Boolean,
+            default: false,
+        },
         options: {
             type: Object,
             default: () => ({}),
+        },
+        readonly: {
+            type: Boolean,
+            default: false,
         },
         source: {
             type: Object,
@@ -370,10 +378,8 @@ export default {
             const input = dateRange || this.range;
             const button = document.querySelector('button[form=form-main]');
             const valid = skip || input?.start_date ? true : this.msdiff(input) > 0;
-            if (input?.start_date && !valid) {
-                button.disabled = 'disabled';
-            } else {
-                button.disabled = false;
+            if (button) {
+                button.disabled = input?.start_date && !valid ? 'disabled' : false;
             }
 
             return valid;
