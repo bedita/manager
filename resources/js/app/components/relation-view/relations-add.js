@@ -37,6 +37,8 @@ export default {
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
+        FastCreate: () => import(/* webpackChunkName: "fast-create" */'app/components/fast-create/fast-create'),
+        FastCreateContainer: () => import(/* webpackChunkName: "fast-create-container" */'app/components/fast-create/fast-create-container'),
     },
 
     props: {
@@ -229,6 +231,12 @@ export default {
          */
         onUpdateCurrentPage(page) {
             this.toPage(page, this.activeFilter);
+        },
+
+        addCreated(object) {
+            let createdObjects = (Array.isArray(object) ? object : [object]) || [];
+            this.objects = createdObjects.concat(this.objects);
+            this.selectedObjects = createdObjects.concat(this.selectedObjects);
         },
 
         /**

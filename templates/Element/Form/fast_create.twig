@@ -1,17 +1,15 @@
 {% set allowed = Perms.canCreateModules() %}
 {% if allowed is not empty %}
-    {% set allItems = relationSchema['right']|default([]) %}
-    {% set items = allItems|filter((item) => item in allowed) %}
-    {% set autoType = allItems|length == 1 ? allItems[0] : null %}
-    {% if items is not empty and (not autoType or (autoType in allowed)) %}
-        <fast-create
-            auto-type="{{ autoType }}"
-            :fields-by-type="{{ Property.fastCreateFieldsMap()|json_encode }}"
-            :items="{{ items|json_encode }}"
-            :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}"
-            :schemas-by-type="{{ schemasByType|json_encode }}"
-            @created="appendRelations"
-        >
-        </fast-create>
-    {% endif %}
+    <fast-create-container
+        :allowed-types="{{ allowed|json_encode }}"
+        :fields-by-type="{{ Property.fastCreateFieldsMap()|json_encode }}"
+        :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}"
+        :schemas-by-type="{{ schemasByType|json_encode }}"
+        :relation-label="relationLabel"
+        :relation-name="relationName"
+        :relations-schema="{{ relationsSchema|json_encode }}"
+        @created="addCreated"
+        v-if="relationName"
+    >
+    </fast-create-container>
 {% endif %}
