@@ -1,6 +1,10 @@
 {% set selectBaseClasses = "has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest" %}
 
 <div class="relations-add">
+
+    {# FastCreate #}
+    {{ element(config('UI.fast_create_form._element')|default('Form/fast_create')) }}
+
     <section class="fieldset shrinks">
         <header class="mx-1 tab tab-static unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
             <h2><span v-show="relationName"><strong>{{ __('add') }}</strong>&nbsp;{{ __('elements to') }}&nbsp;"<strong><: relationLabel :></strong>"</span></h2>

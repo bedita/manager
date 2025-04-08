@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-03-27 07:48:58 \n"
+"POT-Creation-Date: 2025-04-01 12:09:55 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1631,6 +1631,9 @@ msgstr ""
 msgid "Show object info"
 msgstr ""
 
+msgid "Media URL"
+msgstr ""
+
 msgid "Search on categories"
 msgstr ""
 
@@ -1802,10 +1805,7 @@ msgstr ""
 msgid "Choose a type"
 msgstr ""
 
-msgid "Click here to start"
-msgstr ""
-
-msgid "Fast create"
+msgid "Create new for"
 msgstr ""
 
 msgid "Insert date(s)"
