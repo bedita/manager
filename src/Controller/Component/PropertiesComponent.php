@@ -196,9 +196,12 @@ class PropertiesComponent extends Component
      */
     public function indexList(string $type): array
     {
-        $list = $this->getConfig(sprintf('Properties.%s.index', $type), $this->defaultGroups['index']);
-
-        return array_diff($list, ['id', 'status', 'modified']);
+        return array_filter(
+            $this->getConfig(sprintf('Properties.%s.index', $type), $this->defaultGroups['index']),
+            function ($item) {
+                return !in_array($item, ['id', 'status', 'modified']);
+            }
+        );
     }
 
     /**

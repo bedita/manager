@@ -3,6 +3,7 @@ namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\QueryComponent;
 use Cake\Controller\Controller;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -13,6 +14,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * {@see \App\Controller\Component\QueryComponent} Test Case
  */
 #[CoversClass(QueryComponent::class)]
+#[CoversMethod(QueryComponent::class, 'handleInclude')]
 #[CoversMethod(QueryComponent::class, 'handleSort')]
 #[CoversMethod(QueryComponent::class, 'index')]
 #[CoversMethod(QueryComponent::class, 'prepare')]
@@ -114,6 +116,49 @@ class QueryComponentTest extends TestCase
             $Query->setConfig($key, $val);
         }
         $actual = $Query->index();
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `handleInclude` method.
+     *
+     * @return void
+     */
+    public function testHandleInclude(): void
+    {
+        $controller = new Controller(
+            new ServerRequest(
+                [
+                    'query' => [],
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    'params' => [
+                        'object_type' => 'test',
+                    ],
+                ]
+            )
+        );
+        $registry = $controller->components();
+        $component = new class ($registry) extends QueryComponent {
+            public function handleInclude(array $query): array
+            {
+                return parent::handleInclude($query);
+            }
+        };
+        $component->setConfig('include', 'c,d,e');
+        $query = [];
+        Configure::write('Properties.test.index', [
+            'title',
+            'description',
+            [
+                'a' => ['title'],
+                'b' => ['title'],
+                'c' => ['title'],
+            ],
+        ]);
+        $actual = $component->handleInclude($query);
+        $expected = ['include' => 'a,b,c,d,e'];
         static::assertEquals($expected, $actual);
     }
 
