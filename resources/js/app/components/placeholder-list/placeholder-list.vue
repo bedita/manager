@@ -129,7 +129,7 @@ export default {
                     id: m[1],
                     obj: o,
                     params_raw: m[2],
-                    params: this.$helpers.binaryToAsciiUtf8(m[2]),
+                    params: this.$helpers.base64ToUtf8(m[2]),
                 });
             }
         },

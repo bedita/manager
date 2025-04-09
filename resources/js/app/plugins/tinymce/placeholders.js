@@ -3,7 +3,7 @@ import 'tinymce/tinymce';
 import { EventBus } from 'app/components/event-bus';
 import { PanelEvents } from 'app/components/panel-view';
 import tinymce from 'tinymce/tinymce';
-import { asciiToBinaryUtf8, binaryToAsciiUtf8 } from 'app/helpers/text-helper';
+import { utf8ToBase64, base64ToUtf8 } from 'app/helpers/text-helper';
 
 const cache = {};
 const regex = /BE-PLACEHOLDER\.(\d+)(?:\.([a-zA-Z0-9+/]+={0,2}))?/;
@@ -45,7 +45,7 @@ function loadPreview(editor, node, id) {
                         content = `<img src="${data.meta.media_url}" alt="${data.attributes.title}" />`;
                         break;
                     default:
-                        if (data.meta.media_url) {
+                        if (data.meta?.media_url) {
                             content = `<iframe src="${data.meta.media_url}" sandbox=""></iframe>`;
                         } else {
                             content = `<div class="embed-card">
@@ -73,7 +73,7 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
                     return;
                 }
                 let [, id, params] = match;
-                node.attr('data-params', params ? binaryToAsciiUtf8(params) : '');
+                node.attr('data-params', params ? base64ToUtf8(params) : '');
                 node.attr('contenteditable', 'false');
                 loadPreview(editor, node, id);
             });
@@ -84,7 +84,7 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
                 let params = node.attributes.map['data-params'];
                 node.empty();
                 let comment = tinymce.html.Node.create('#comment');
-                comment.value = `BE-PLACEHOLDER.${id}.${asciiToBinaryUtf8(params)}`;
+                comment.value = `BE-PLACEHOLDER.${id}.${utf8ToBase64(params)}`;
                 node.append(comment);
             });
         });
@@ -114,7 +114,7 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
                     let view = editor.dom.create(isEmptyBlock ? 'div' : 'span', {
                         'data-placeholder': data.id,
                         'data-params': data.params,
-                    }, `<!-- BE-PLACEHOLDER.${data.id}.${asciiToBinaryUtf8(data.params)} -->`);
+                    }, `<!-- BE-PLACEHOLDER.${data.id}.${utf8ToBase64(data.params)} -->`);
                     editor.insertContent(view.outerHTML);
                     if (isEmptyBlock) {
                         tinymce.dom.DOMUtils.DOM.remove(node);
