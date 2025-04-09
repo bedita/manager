@@ -200,7 +200,7 @@ class PropertiesComponent extends Component
             $this->getConfig(sprintf('Properties.%s.index', $type), $this->defaultGroups['index']),
             function ($item) {
                 return !in_array($item, ['id', 'status', 'modified']);
-            }
+            },
         );
     }
 

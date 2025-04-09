@@ -136,8 +136,8 @@ class QueryComponentTest extends TestCase
                     'params' => [
                         'object_type' => 'test',
                     ],
-                ]
-            )
+                ],
+            ),
         );
         $registry = $controller->components();
         $component = new class ($registry) extends QueryComponent {
