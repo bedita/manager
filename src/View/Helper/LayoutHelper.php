@@ -278,8 +278,11 @@ class LayoutHelper extends Helper
     {
         $module = (array)$this->getView()->get('currentModule');
         $name = (string)Hash::get($module, 'name');
+        $schema = (array)$this->_View->get('schema');
+        $defaultType = in_array('DateRanges', (array)Hash::get($schema, 'associations')) ? 'calendar' : 'list';
+        $defaultType = $name === 'folders' ? 'tree' : $defaultType;
 
-        return $name === 'folders' ? 'tree' : 'list';
+        return $defaultType;
     }
 
     /**
@@ -302,8 +305,10 @@ class LayoutHelper extends Helper
     public function moduleIndexViewTypes(): array
     {
         $defaultType = $this->moduleIndexDefaultViewType();
+        $defaultList = $defaultType === 'calendar' ? ['calendar', 'list'] : ['list'];
+        $defaultList = $defaultType === 'tree' ? ['tree', 'list'] : $defaultList;
 
-        return $defaultType === 'tree' ? ['tree', 'list'] : ['list'];
+        return $defaultList;
     }
 
     /**
