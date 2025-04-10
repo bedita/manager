@@ -32,6 +32,7 @@
             <div class="related-container">
                 <div class="related-item">
                     <span
+                        class="ml-05"
                         v-for="f in relatedFields"
                         :key="f"
                     >
@@ -71,6 +72,7 @@
                         v-if="index > 0"
                     >
                         <span
+                            class="ml-05"
                             v-for="f in relatedFields"
                             :key="f"
                         >
