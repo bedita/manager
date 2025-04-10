@@ -1,0 +1,19 @@
+{% do _view.assign('bodyViewClass', 'view-module view-model') %}
+
+<div class="module-header">
+	<header>
+		<h1>{{ __('Setup module') }}</h1>
+	</header>
+</div>
+
+<module-setup
+    :module="{{ config('Modules.' ~ objectType)|json_encode }}"
+    :object-type="{{ objectType|json_encode }}"
+>
+</module-setup>
+
+<module-properties
+    :module="{{ config('Properties.' ~ objectType)|json_encode }}"
+    :object-type="{{ objectType|json_encode }}"
+>
+</module-properties>

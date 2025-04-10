@@ -26,6 +26,7 @@ use BEdita\SDK\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
 use Psr\Http\Message\ResponseInterface;
@@ -1126,5 +1127,109 @@ class ModulesControllerTest extends BaseControllerTest
         $keys = array_keys($item['attributes']);
         sort($keys);
         static::assertSame($keys, ['description', 'status', 'title', 'uname']);
+    }
+
+    /**
+     * Test setup method with an unauthorized user
+     *
+     * @return void
+     * @covers ::setup()
+     */
+    public function testSetupUnauthorized(): void
+    {
+        $expected = new UnauthorizedException(__('You are not authorized to access here'));
+        $this->expectException(get_class($expected));
+        $this->expectExceptionCode($expected->getCode());
+        $this->expectExceptionMessage($expected->getMessage());
+        $this->setupController();
+        $this->controller->setup();
+    }
+
+    /**
+     * Test setup method with an authorized user
+     *
+     * @return void
+     * @covers ::setup()
+     */
+    public function testSetupAuthorized(): void
+    {
+        $this->setupController();
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'admin',
+            'roles' => ['admin'],
+        ]);
+        $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->controller->Authentication->setIdentity($user);
+        $actual = $this->controller->setup();
+        static::assertNull($actual);
+    }
+
+    /**
+     * Test setup method with an authorized user and save
+     *
+     * @return void
+     * @covers ::setup()
+     */
+    public function testSetupSave(): void
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'configurationKey' => 'Modules.dummies',
+                'shortLabel' => 'dum',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+        $this->setupController($config);
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'admin',
+            'roles' => ['admin'],
+        ]);
+        $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->controller->Authentication->setIdentity($user);
+        $actual = $this->controller->setup();
+        static::assertNull($actual);
+        $actual = $this->controller->viewBuilder()->getVar('response');
+        static::assertSame('Configuration saved', $actual);
+    }
+
+    /**
+     * Test setup method with an authorized user and save error
+     *
+     * @return void
+     * @covers ::setup()
+     */
+    public function testSetupSaveError(): void
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'configurationKey' => 'WrongKey.dummies',
+                'shortLabel' => 'dum',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+        $this->setupController($config);
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'admin',
+            'roles' => ['admin'],
+        ]);
+        $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->controller->Authentication->setIdentity($user);
+        $actual = $this->controller->setup();
+        static::assertNull($actual);
+        $actual = $this->controller->viewBuilder()->getVar('error');
+        static::assertSame('Bad configuration key "WrongKey"', $actual);
     }
 }
