@@ -23,13 +23,11 @@
                 </div>
             {% elseif (prop is iterable) %}
                 {% for relationName,relationFields in prop %}
-                    <div>
-                        {% if object.relationships[relationName]['data'][0] %}
-                            {% for f in relationFields %}
-                                {{ object.relationships[relationName]['data'][0]['attributes'][f] }}
-                            {% endfor %}
-                        {% endif %}
-                    </div>
+                    <index-cell
+                        :prop="{{ relationName|json_encode }}"
+                        :related="{{ object.relationships[relationName]['data']|json_encode }}"
+                        :related-fields="{{ relationFields|json_encode }}">
+                    </index-cell>
                 {% endfor %}
             {% else %}
                 <index-cell
