@@ -1,5 +1,5 @@
 <template>
-    <form class="tag-form" :class="formClass">
+    <form :class="formClass">
         <div v-if="!editMode">
             {{ name }}
         </div>
@@ -281,28 +281,3 @@ export default {
     },
 }
 </script>
-<style>
-.tag-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    text-align: left;
-    align-items: center;
-    gap: 8px;
-    margin: 4px 0;
-}
-.tag-form > div {
-    display: flex;
-    align-items: center;
-    margin: 4px 0;
-}
-.tag-form > div > button {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-    margin: 4px;
-    cursor: pointer;
-    width: 100%;
-}
-</style>
