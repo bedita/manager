@@ -7,6 +7,13 @@
 
     {% set emptyQuerySearch = (_view.getRequest().getSession().read(currentModule.name ~ '.filter.q')|length == 0) %}
     {% for prop in properties %}
+        {% if prop is iterable %}
+            {% for relationName,relationFields in prop %}
+                <div>
+                    {{ Layout.tr(relationName) }}
+                </div>
+            {% endfor %}
+        {% else %}
         <div class="{{ Link.sortClass(prop) }}">
             {% if emptyQuerySearch and Schema.sortable(prop) %}
                 <a href="{{ Link.sortUrl(prop) }}">{{ Property.fieldLabel(prop) }}</a>
@@ -14,6 +21,7 @@
                 {{ Property.fieldLabel(prop) }}
             {% endif %}
         </div>
+        {% endif %}
     {% endfor %}
 
     {% if currentModule.hints.multiple_types %}

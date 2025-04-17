@@ -108,7 +108,7 @@ export default {
 
             // alreadyInView doesn't get out of pagination objects. We need to "re-add" all objects
             try {
-                if (this.$attrs.object.type && this.$attrs.object.id) {
+                if (this.$attrs.object?.type && this.$attrs.object?.id) {
                     const related = await this.fetchRelated(this.$attrs.object.type, this.$attrs.object.id);
                     for (const obj of related) {
                         if (this.alreadyInView.indexOf(obj.id) === -1) {
