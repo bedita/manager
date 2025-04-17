@@ -333,7 +333,7 @@ $routes->scope('/', function (RouteBuilder $routes): void {
     $routes->connect(
         '/{object_type}/setup',
         ['controller' => 'Modules', 'action' => 'setup'],
-        ['_name' => 'modules:setup']
+        ['_name' => 'modules:setup'],
     );
     $routes->connect(
         '/{object_type}/multiupload',
