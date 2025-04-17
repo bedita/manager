@@ -301,6 +301,128 @@
 .main-panel-container .relations-add {
     @extend %relation-panel-common;
 
+    .columns {
+        &[data-list='true'] {
+            display: table;
+            border-collapse: collapse;
+            min-width: 100%;
+
+            .related-item-column {
+                display: table-row;
+
+                .box {
+                    background-color: transparent;
+                    flex-direction: row;
+                    color: #fff;
+                    box-shadow: none;
+                    padding: 0 0.5rem;
+                    border-bottom: 1px solid #8e959e;
+
+                    .thumbnail {
+                        display: none;
+                    }
+
+                    .tag {
+                        margin-right: 1rem;
+                    }
+
+                    .uname {
+                        display: block;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        max-width: 120px;
+                        background-color: peru;
+                    }
+
+                    .priority {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        top: 0;
+                        left: 0;
+
+                        .badge {
+                            display: flex;
+                            background-color: #fff;
+                            color: #000;
+                            box-shadow: none;
+                            border-radius: 0;
+                        }
+                    }
+
+                    .params .term-container {
+                        display: flex;
+
+                        dt {
+                            margin-right: 0.5rem;
+                        }
+                    }
+
+                    .children-position {
+                        display: none;
+                    }
+
+                    .box-body {
+                        display: flex;
+                        padding: 1rem;
+                        margin-left: 1rem;
+                        padding-left: 0;
+
+                        .status,
+                        .id {
+                            margin-right: 1rem;
+                        }
+
+                        .uname,
+                        .title {
+                            padding: 0;
+                            margin-right: 1rem;
+                            min-width: 4rem;
+                        }
+
+                        header {
+                            width: 100%;
+                            margin: 0 1rem;
+
+                            >h1 {
+                                display: flex;
+                                align-items: center;
+                            }
+
+                            .id {
+                                display: none;
+                            }
+
+                            .modified,
+                            .other {
+                                display: flex;
+                                align-items: center;
+                            }
+                        }
+                    }
+                }
+
+                footer {
+                    display: flex;
+                    align-items: center;
+                    margin-top: 0;
+                    padding-right: 0;
+
+                    a {
+                        border: none;
+                        color: #fff;
+                        margin-right: 0;
+
+                        &::before {
+                            content: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     .related-item-column article {
         cursor: pointer;
 
@@ -329,6 +451,16 @@
                 color: #fff;
                 font-weight: $font-weight-black;
             }
+        }
+    }
+
+    .switch-view {
+        border: none;
+        background-color: transparent;
+        color: #495057;
+
+        &[data-active="true"] {
+            color: #fff;
         }
     }
 }
