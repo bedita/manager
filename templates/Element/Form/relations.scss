@@ -443,8 +443,10 @@
                 justify-content: center;
                 align-items: center;
                 position: absolute;
-                width: $gutter * 2.25; height: $gutter * 2.25;
-                top: $gutter * .5; left: $gutter * .5;
+                width: $gutter * 2.25;
+                height: $gutter * 2.25;
+                top: $gutter * .5;
+                left: $gutter * .5;
                 border: 2px solid white;
                 border-radius: 50%;
                 background-color: $info;
