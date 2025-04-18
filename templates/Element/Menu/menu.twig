@@ -7,7 +7,7 @@
                 {% if name != 'trash' %}
                     {% set label = Layout.tr(module.label|default(name)) %}
                     {% set shortLabel = module.shortLabel|default(label[0:5]) %}
-                    {% if label|length > 5 %}
+                    {% if module.shortLabel or label|length > 5 %}
                         {% set label = shortLabel %}
                     {% endif %}
 

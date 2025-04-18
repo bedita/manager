@@ -26,7 +26,7 @@ export function upperCaseFirst(input) {
  * @param {string|undefined} value
  * @returns {string} base64 encoded string
  */
-export function asciiToBinaryUtf8(value = 'undefined') {
+export function utf8ToBase64(value = 'undefined') {
     const utf8Bytes = new TextEncoder().encode(value);
 
     return btoa(String.fromCharCode(...utf8Bytes));
@@ -37,7 +37,7 @@ export function asciiToBinaryUtf8(value = 'undefined') {
  * @param {string| undefined} value
  * @returns {string} decoded string
  */
-export function binaryToAsciiUtf8(value) {
+export function base64ToUtf8(value) {
     const binaryString = atob(value);
     const bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
 

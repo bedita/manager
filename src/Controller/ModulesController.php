@@ -12,6 +12,7 @@
  */
 namespace App\Controller;
 
+use App\Utility\ApiConfigTrait;
 use App\Utility\CacheTools;
 use App\Utility\Message;
 use App\Utility\PermissionsTrait;
@@ -20,9 +21,11 @@ use BEdita\WebTools\Utility\ApiTools;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\I18n\I18n;
 use Cake\Utility\Hash;
+use Exception;
 use Psr\Log\LogLevel;
 
 /**
@@ -41,6 +44,7 @@ use Psr\Log\LogLevel;
  */
 class ModulesController extends AppController
 {
+    use ApiConfigTrait;
     use PermissionsTrait;
 
     /**
@@ -71,7 +75,7 @@ class ModulesController extends AppController
             $this->Modules->setConfig('currentModuleName', $this->objectType);
             $this->Schema->setConfig('type', $this->objectType);
         }
-        $this->Security->setConfig('unlockedActions', ['save']);
+        $this->Security->setConfig('unlockedActions', ['save', 'setup']);
     }
 
     /**
@@ -655,5 +659,42 @@ class ModulesController extends AppController
         $meta = (array)Hash::get($response, 'meta');
         $this->set(compact('data', 'meta'));
         $this->setSerialize(['data', 'meta']);
+    }
+
+    /**
+     * Setup module.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function setup(): ?Response
+    {
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->Authentication->getIdentity();
+        $roles = (array)$user->get('roles');
+        if (!in_array('admin', $roles)) {
+            throw new UnauthorizedException(__('You are not authorized to access here'));
+        }
+        $this->getRequest()->allowMethod(['get', 'post']);
+        if ($this->getRequest()->is('post')) {
+            try {
+                $requestData = $this->getRequest()->getData();
+                $configurationKey = $requestData['configurationKey'] ?? null;
+                unset($requestData['configurationKey']);
+                $propertyName = explode('.', $configurationKey)[0];
+                $subkey = explode('.', $configurationKey)[1];
+                $propertyValue = (array)Configure::read($propertyName);
+                $propertyValue = (array)Hash::insert($propertyValue, $subkey, $requestData);
+                $this->saveApiConfig($propertyName, $propertyValue);
+                $response = 'Configuration saved';
+                $this->set('response', $response);
+                $this->setSerialize(['response']);
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+                $this->set('error', $error);
+                $this->setSerialize(['error']);
+            }
+        }
+
+        return null;
     }
 }
