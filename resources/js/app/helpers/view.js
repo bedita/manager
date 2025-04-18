@@ -1,6 +1,6 @@
 import { t } from 'ttag';
 import { warning } from 'app/components/dialog/dialog';
-import { humanizeString } from 'app/helpers/text-helper.js';
+import { humanizeString, utf8ToBase64, base64ToUtf8 } from 'app/helpers/text-helper.js';
 
 export default {
     install (Vue) {
@@ -78,8 +78,11 @@ export default {
              * @returns {Boolean}
              */
             checkMaxFileSize(file) {
-                const fileSize = Math.round(file.size);
                 const maxFileSize = BEDITA.maxFileSize;
+                if (maxFileSize < 0) {// no limit
+                    return true;
+                }
+                const fileSize = Math.round(file.size);
                 if (fileSize >= maxFileSize) {
                     const filename = file.name;
                     const fileSizeMb = Math.round(fileSize / 1024 / 1024);
@@ -167,7 +170,7 @@ export default {
             },
 
             acceptMimeTypes(type) {
-                if (!BEDITA.uploadConfig?.accepted?.[type]) {
+                if (['files', 'media'].includes(type) || !BEDITA.uploadConfig?.accepted?.[type]) {
                     return '';
                 }
 
@@ -198,8 +201,9 @@ export default {
 
                 /** accepted mime types check */
                 const mimes = BEDITA.uploadConfig?.accepted;
-                if (mimes?.[objectType] && !this.checkAcceptedMime(mimes[objectType], fileType)) {
-                    const msg = t`File type not accepted` + `: "${fileType}". ` + t`Accepted types` + `: "${mimes[objectType].join('", "')}".`;
+                const ot = objectType === 'media' ? this.getObjectTypeFromMime(fileType) : objectType;
+                if (ot !== 'files' && mimes?.[ot] && !this.checkAcceptedMime(mimes[ot], fileType)) {
+                    const msg = t`File type not accepted` + `: "${fileType}". ` + t`Accepted types` + `: "${mimes[ot].join('", "')}".`;
                     BEDITA.warning(msg);
 
                     return false;
@@ -222,6 +226,17 @@ export default {
                     }
                 }
                 return false;
+            },
+
+            getObjectTypeFromMime(mimeType) {
+                const mimes = BEDITA.uploadConfig?.accepted;
+                for (let type in mimes) {
+                    if (this.checkAcceptedMime(mimes[type], mimeType)) {
+                        return type;
+                    }
+                }
+
+                return null;
             },
 
             titleFromFileName(filename) {
@@ -292,6 +307,14 @@ export default {
                 return humanizeString(str);
             },
 
+            utf8ToBase64(str) {
+                return utf8ToBase64(str);
+            },
+
+            base64ToUtf8(str) {
+                return base64ToUtf8(str);
+            },
+
             stripHtml(str) {
                 return str.replace(/<\/?[^>]+(>|$)/g, '');
             },
@@ -322,7 +345,38 @@ export default {
             formatDate(d) {
                 const locale = BEDITA?.locale?.slice(0, 2) || 'en';
 
-                return d ?  new Date(d).toLocaleDateString(locale) + ' ' + new Date(d).toLocaleTimeString(locale) : '';
+                return d ?  new Date(d).toLocaleDateString(locale) + ' ' + new Date(d).toLocaleTimeString(locale, {hour: '2-digit', minute:'2-digit'}) : '';
+            },
+
+            formatBytes(size) {
+                let i = size == 0 ? 0 : Math.floor( Math.log(size) / Math.log(1024) );
+
+                return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+            },
+
+            handleIncluded(response) {
+                if (!response?.data || !response?.included) {
+                    return response;
+                }
+
+                for (let i = 0; i < response.data.length; i++) {
+                    let d = response.data[i];
+                    const relationships = Object.keys(d?.relationships || {});
+                    for (let j = 0; j < relationships.length; j++) {
+                        let rel = relationships[j];
+                        let relation = d?.relationships[rel] || {};
+                        if (relation?.data) {
+                            for (let k = 0; k < relation.data.length; k++) {
+                                let included = response.included.find(i => i.id === relation?.data?.[k]?.id && i.type === relation?.data?.[k]?.type);
+                                if (included?.attributes) {
+                                    response.data[i].relationships[rel].data[k].attributes = included.attributes;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return response;
             },
         }
     }

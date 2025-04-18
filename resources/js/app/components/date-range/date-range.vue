@@ -14,22 +14,25 @@
                     v-model="start_date"
                     v-datepicker="true"
                     @change="onDateChanged(true, $event)"
+                    v-if="ready"
                 >
             </div>
         </div>
         <div :class="dateRangeClass()">
             <span>{{ msgTo }}</span>
             <div>
-                <input
-                    type="text"
-                    date="true"
-                    :time="!all_day"
-                    daterange="true"
-                    v-model="end_date"
-                    v-datepicker="true"
-                    @change="onDateChanged(false, $event)"
-                    v-if="start_date"
-                >
+                <template v-if="start_date">
+                    <input
+                        type="text"
+                        date="true"
+                        :time="!all_day"
+                        daterange="true"
+                        v-model="end_date"
+                        v-datepicker="true"
+                        @change="onDateChanged(false, $event)"
+                        v-if="ready"
+                    >
+                </template>
                 <input
                     type="text"
                     disabled="disabled"
@@ -59,7 +62,7 @@
                 {{ msgEveryDay }}
             </label>
         </div>
-        <div>
+        <div v-if="!readonly">
             <button
                 class="button button-primary"
                 @click.prevent="remove($event)"
@@ -133,13 +136,13 @@
         </div>
         <div
             class="icon-error"
-            v-show="!start_date"
+            v-show="!compact && !start_date"
         >
             {{ msgEmptyDateRange }}
         </div>
         <div
             class="icon-error"
-            v-show="validate() === false"
+            v-show="!compact && validate() === false"
         >
             {{ msgInvalidDateRange }}
         </div>
@@ -152,9 +155,17 @@ import { t } from 'ttag';
 export default {
     name: 'DateRange',
     props: {
+        compact: {
+            type: Boolean,
+            default: false,
+        },
         options: {
             type: Object,
             default: () => ({}),
+        },
+        readonly: {
+            type: Boolean,
+            default: false,
         },
         source: {
             type: Object,
@@ -164,6 +175,7 @@ export default {
 
     data() {
         return {
+            ready: false,
             every_day: true,
             start_date: '',
             all_day: '',
@@ -190,12 +202,23 @@ export default {
     },
 
     mounted() {
-        this.range = this.source;
-        this.start_date = this.range?.start_date;
-        this.end_date = this.range?.end_date;
-        this.all_day = this.range?.params?.all_day;
-        this.every_day = this.range?.params?.every_day;
-        this.weekdays = this.range?.params?.weekdays;
+        this.$nextTick(() => {
+            this.range = this.source;
+            this.start_date = this.range?.start_date;
+            this.end_date = this.range?.end_date;
+            this.all_day = this.range?.params?.all_day;
+            this.every_day = this.range?.params?.every_day;
+            this.weekdays = this.range?.params?.weekdays || {
+                sunday: false,
+                monday: false,
+                tuesday: false,
+                wednesday: false,
+                thursday: false,
+                friday: false,
+                saturday: false
+            };
+            this.ready = true;
+        });
     },
 
     methods: {
@@ -308,13 +331,13 @@ export default {
             }
             let date = moment(this.start_date);
             date.set({ hour: 0, minute: 0 });
-            this.start_date = date.format('YYYY-MM-DDTHH:mm');
+            this.start_date = date.toISOString();
             if (!this.end_date) {
-                this.end_date = date.endOf('day').format('YYYY-MM-DDTHH:mm');
+                this.end_date = date.endOf('day').toISOString();
             } else {
                 date = moment(this.end_date);
                 date.set({ hour: 23, minute: 59 });
-                this.end_date = date.format('YYYY-MM-DDTHH:mm');
+                this.end_date = date.toISOString();
             }
         },
         setAllWeekdays() {
@@ -355,10 +378,8 @@ export default {
             const input = dateRange || this.range;
             const button = document.querySelector('button[form=form-main]');
             const valid = skip || input?.start_date ? true : this.msdiff(input) > 0;
-            if (input?.start_date && !valid) {
-                button.disabled = 'disabled';
-            } else {
-                button.disabled = false;
+            if (button) {
+                button.disabled = input?.start_date && !valid ? 'disabled' : false;
             }
 
             return valid;

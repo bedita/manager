@@ -2,8 +2,10 @@
 {% set actions = [
     'appearance',
     'applications',
+    'auth_providers',
     'endpoints',
     'endpoint_permissions',
+    'external_auth',
     'roles',
     'roles_modules',
     'config',
@@ -11,6 +13,7 @@
     'objects_history',
     'user_accesses',
     'system_info',
+    'statistics',
 ] %}
 {% set controllerAction = _view.request.getparam('controller')|default('') %}
 {% for action in actions %}

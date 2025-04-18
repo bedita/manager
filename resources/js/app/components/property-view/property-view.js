@@ -44,8 +44,10 @@ export default {
         PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
+        ObjectCaptions: () => import(/* webpackChunkName: "object-captions" */'app/components/object-captions/object-captions'),
         ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
         PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
+        MediaItem: () => import(/* webpackChunkName: "media-item" */'app/components/media-item/media-item'),
     },
 
     props: {
@@ -91,6 +93,8 @@ export default {
             userInfoLoaded: false,
             fileChanged: false,
             searchInPosition: '',
+            searchInPositionActive: false,
+            positions: [],
         }
     },
 
@@ -124,6 +128,7 @@ export default {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
             this.searchInPosition = '';
+            this.searchInPositionActive = this.searchInPositionActive ? true : false;
             this.checkLoadRelated();
             this.updateStorage();
         },
@@ -186,7 +191,7 @@ export default {
                 const creatorId = this.object?.meta?.created_by;
                 const modifierId = this.object?.meta?.modified_by;
                 const usersId = [creatorId, modifierId];
-                const userRes = await fetch(`${API_URL}api/users?filter[id]=${usersId.join(',')}&fields[users]=name,surname,username`, API_OPTIONS);
+                const userRes = await fetch(`${API_URL}users/list?filter[id]=${usersId.join(',')}`, API_OPTIONS);
                 const userJson = await userRes.json();
                 const users = userJson.data;
 
@@ -247,6 +252,15 @@ export default {
             }
 
             return debouncedSearchPosition(e.target.value);
+        },
+
+        onSearchInPositionActive(e) {
+            this.searchInPositionActive = e.target.checked ? true : false;
+        },
+
+        updatePositions(n) {
+            this.positions = n;
+            this.$forceUpdate();
         },
     }
 }

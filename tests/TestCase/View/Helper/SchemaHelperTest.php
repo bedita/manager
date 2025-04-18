@@ -16,6 +16,7 @@ namespace App\Test\TestCase\View\Helper;
 use App\View\Helper\SchemaHelper;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
+use Cake\I18n\FrozenTime;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Cake\View\View;
@@ -409,6 +410,96 @@ class SchemaHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testUpdateRicheditorOptions` test case.
+     *
+     * @return array
+     */
+    public function updateRicheditorOptionsProvider(): array
+    {
+        return [
+            'empty UI.richeditor.title.toolbar' => [
+                [],
+                'title',
+                false,
+                [],
+                [],
+            ],
+            'empty UI.richeditor.title.toolbar and placeholders' => [
+                [],
+                'title',
+                true,
+                [],
+                [],
+            ],
+            'not empty UI.richeditor.title.toolbar' => [
+                [
+                    'italic',
+                    'subscript',
+                    'superscript',
+                ],
+                'title',
+                false,
+                [],
+                [
+                    'type' => 'textarea',
+                    'v-richeditor' => '["italic","subscript","superscript"]',
+                ],
+            ],
+            'not empty UI.richeditor.title.toolbar and placeholders' => [
+                [
+                    'italic',
+                    'subscript',
+                    'superscript',
+                ],
+                'title',
+                true,
+                [],
+                [
+                    'type' => 'textarea',
+                    'v-richeditor.placeholders' => '["italic","subscript","superscript"]',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test `updateRicheditorOptions` method.
+     *
+     * @param array $uiConf The UI configuration
+     * @param string $name The field name
+     * @param bool $placeholders Use placeholders
+     * @param array $options The options
+     * @param array $expected The expected result
+     * @return void
+     * @dataProvider updateRicheditorOptionsProvider()
+     * @covers ::updateRicheditorOptions()
+     */
+    public function testUpdateRicheditorOptions(array $uiConf, string $name, bool $placeholders, array $options, array $expected): void
+    {
+        Configure::write('UI.richeditor.title.toolbar', $uiConf);
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ]);
+        $view = new View($request, null, null, []);
+        $view->set('objectType', 'dummies');
+        $helper = new class ($view) extends SchemaHelper {
+            public function updateREopts(string $name, bool $placeholders, array &$options): array
+            {
+                $this->updateRicheditorOptions($name, $placeholders, $options);
+
+                return $options;
+            }
+        };
+        $actual = $helper->updateREopts($name, $placeholders, $options);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `lang` property
      *
      * @return void
@@ -558,6 +649,11 @@ class SchemaHelperTest extends TestCase
      */
     public function formatProvider(): array
     {
+        $d = new FrozenTime('2019-09-08');
+        $dateExpected = $d->i18nFormat();
+        $d = new FrozenTime('2019-09-08T16:35:15+00');
+        $dateTimeExpected = $d->i18nFormat();
+
         return [
             'dummy' => [
                 'dummy',
@@ -589,7 +685,7 @@ class SchemaHelperTest extends TestCase
                 ],
             ],
             'date' => [
-                '9/8/19, 12:00 AM',
+                $dateExpected,
                 '2019-09-08',
                 [
                     'type' => 'string',
@@ -605,7 +701,7 @@ class SchemaHelperTest extends TestCase
                 ],
             ],
             'date time' => [
-                '9/8/19, 4:35 PM',
+                $dateTimeExpected,
                 '2019-09-08T16:35:15+00',
                 [
                     'type' => 'string',
@@ -759,6 +855,11 @@ class SchemaHelperTest extends TestCase
                 [],
                 true,
             ],
+            'custom_prop' => [
+                'custom_prop',
+                [],
+                false,
+            ],
         ];
     }
 
@@ -780,69 +881,8 @@ class SchemaHelperTest extends TestCase
                 $field => $schema,
             ],
         ]);
+        $view->set('custom_props', ['custom_prop']);
         $actual = $this->Schema->sortable($field);
-        static::assertSame($expected, $actual);
-    }
-
-    /**
-     * Data provider for `rightTypes`
-     *
-     * @return array
-     */
-    public function rightTypesProvider(): array
-    {
-        return [
-            'empty relationsSchema' => [
-                [],
-                [],
-            ],
-            'some right types' => [
-                [
-                    'dummyRelation1' => [
-                        'left' => [
-                            'l1dummies',
-                        ],
-                        'right' => [
-                            'r1dummies',
-                            'r2dummies',
-                            'r3dummies',
-                        ],
-                    ],
-                    'dummyRelation2' => [
-                        'left' => [
-                            'l2dummies',
-                        ],
-                        'right' => [
-                            'r1dummies',
-                            'r4dummies',
-                            'r5dummies',
-                        ],
-                    ],
-                ],
-                [
-                    'r1dummies',
-                    'r2dummies',
-                    'r3dummies',
-                    'r4dummies',
-                    'r5dummies',
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Test `rightTypes`
-     *
-     * @return void
-     * @dataProvider rightTypesProvider()
-     * @covers ::rightTypes()
-     */
-    public function testRightTypes($relationsSchema, $expected): void
-    {
-        $view = $this->Schema->getView();
-        $view->set('relationsSchema', $relationsSchema);
-        /** @phpstan-ignore-next-line */
-        $actual = $this->Schema->rightTypes();
         static::assertSame($expected, $actual);
     }
 

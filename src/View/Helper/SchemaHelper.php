@@ -66,6 +66,8 @@ class SchemaHelper extends Helper
         $ctrlOptions = (array)Configure::read($ctrlOptionsPath);
 
         if (!empty($options)) {
+            $this->updateRicheditorOptions($name, !empty($schema['placeholders']), $options);
+
             return array_merge($options, [
                 'label' => Hash::get($ctrlOptions, 'label'),
                 'readonly' => Hash::get($ctrlOptions, 'readonly', false),
@@ -98,8 +100,28 @@ class SchemaHelper extends Helper
         if (!empty($ctrlOptions['step'])) {
             $opts['step'] = $ctrlOptions['step'];
         }
+        $this->updateRicheditorOptions($name, !empty($schema['placeholders']), $opts);
 
         return Control::control($opts);
+    }
+
+    /**
+     * Update richeditor options if a toolbar config is defined in UI.richeditor for the property.
+     *
+     * @param string $name Property name
+     * @param bool $placeholders True if property has placeholders in schema
+     * @param array $options Control options
+     * @return void
+     */
+    protected function updateRicheditorOptions(string $name, bool $placeholders, array &$options)
+    {
+        $uiRichtext = (array)Configure::read(sprintf('UI.richeditor.%s.toolbar', $name));
+        if (empty($uiRichtext)) {
+            return;
+        }
+        $options['type'] = 'textarea';
+        $richeditorKey = $placeholders ? 'v-richeditor.placeholders' : 'v-richeditor';
+        $options[$richeditorKey] = json_encode($uiRichtext);
     }
 
     /**
@@ -290,15 +312,15 @@ class SchemaHelper extends Helper
      */
     public function sortable(string $field): bool
     {
-        // exception 'date_ranges' default sortable
-        if ($field === 'date_ranges') {
+        // default sortable fields
+        if (in_array($field, ['date_ranges', 'modified', 'id', 'title'])) {
             return true;
         }
         $schema = (array)$this->_View->get('schema');
+        $customProps = (array)$this->_View->get('customProps');
         $schema = Hash::get($schema, sprintf('properties.%s', $field), []);
-
-        // empty schema, then not sortable
-        if (empty($schema)) {
+        // empty schema or field is a custom prop, then not sortable
+        if (empty($schema) || in_array($field, $customProps)) {
             return false;
         }
         $type = self::typeFromSchema($schema);
@@ -307,19 +329,6 @@ class SchemaHelper extends Helper
         // other types are sortable: 'string', 'number', 'integer', 'boolean', 'date-time', 'date'
 
         return !in_array($type, ['array', 'object']);
-    }
-
-    /**
-     * Return unique right types from schema "relationsSchema".
-     *
-     * @return array
-     * @deprecated It will be removed in version 5.x.
-     */
-    public function rightTypes(): array
-    {
-        $relationsSchema = (array)$this->_View->get('relationsSchema');
-
-        return \App\Utility\Schema::rightTypes($relationsSchema);
     }
 
     /**
@@ -359,6 +368,7 @@ class SchemaHelper extends Helper
         foreach ($filtersByType as $type => $filters) {
             $noSchema = empty($schemasByType) || !array_key_exists($type, $schemasByType);
             $schemaProperties = $noSchema ? null : Hash::get($schemasByType, $type);
+            $schemaProperties = array_key_exists('properties', (array)$schemaProperties) ? $schemaProperties['properties'] : $schemaProperties;
             $schemaProperties = $schemaProperties !== false ? $schemaProperties : null;
             $list[$type] = self::filterList($filters, $schemaProperties);
         }

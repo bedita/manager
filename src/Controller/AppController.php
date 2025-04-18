@@ -68,6 +68,12 @@ class AppController extends Controller
         ]);
         $this->loadComponent('Schema');
         $this->loadComponent('Categories');
+
+        /** @var \Authentication\Identity|null $identity */
+        $identity = $this->Authentication->getIdentity();
+        if ($identity && $identity->get('tokens')) {
+            $this->apiClient->setupTokens($identity->get('tokens'));
+        }
     }
 
     /**
@@ -77,9 +83,7 @@ class AppController extends Controller
     {
         /** @var \Authentication\Identity|null $identity */
         $identity = $this->Authentication->getIdentity();
-        if ($identity && $identity->get('tokens')) {
-            $this->apiClient->setupTokens($identity->get('tokens'));
-        } elseif (!in_array(rtrim($this->getRequest()->getPath(), '/'), ['/login'])) {
+        if (!($identity && $identity->get('tokens')) && !in_array(rtrim($this->getRequest()->getPath(), '/'), ['/login'])) {
             $route = $this->loginRedirectRoute();
             $this->Flash->error(__('Login required'));
 

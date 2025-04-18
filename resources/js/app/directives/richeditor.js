@@ -4,7 +4,6 @@ import 'tinymce/tinymce';
 import 'tinymce/icons/default';
 import 'tinymce/themes/silver';
 import 'tinymce/plugins/paste';
-import 'tinymce/plugins/autoresize';
 import 'tinymce/plugins/charmap';
 import 'tinymce/plugins/link';
 import 'tinymce/plugins/lists';
@@ -68,8 +67,8 @@ export default {
                 });
             },
 
-            unbind() {
-                tinymce.remove();
+            unbind(element) {
+                tinymce.remove(element.editor);
             },
 
             /**
@@ -78,31 +77,59 @@ export default {
              * @param {Object} element DOM object
              */
             async inserted(element, binding) {
+                let elementName = element?.name || '';
+                if (elementName.indexOf('fast-') === 0) {
+                    const lastPos = elementName.lastIndexOf('-');
+                    elementName = elementName.substring(lastPos + 1);
+                }
+
                 let changing = false;
-                let items = JSON.parse(binding.expression || '');
-                if (!items) {
-                    items = DEFAULT_TOOLBAR;
+                let toolbar = DEFAULT_TOOLBAR;
+                if (binding?.value?.toolbar) {
+                    toolbar = binding.value.toolbar.join(' ');
+                } else if (binding?.expression) {
+                    try {
+                        const exp = JSON.parse(binding.expression);
+                        toolbar = exp ? exp.join(' ') : toolbar;
+                    } catch (e) {
+                        // do nothing
+                    }
                 }
-
                 if (!binding.modifiers?.placeholders) {
-                    items = items.replace(/\bplaceholders\b/, '');
+                    toolbar = toolbar.replace(/\bplaceholders\b/, '');
                 }
-
+                const sizes = {};
+                if (binding?.value?.config) {
+                    const c = binding.value.config;
+                    if (c?.height) {
+                        sizes.height = c.height;
+                    }
+                    if (c?.min_height) {
+                        sizes.min_height = c.min_height;
+                    }
+                }
+                if (BEDITA?.richeditorByPropertyConfig?.[elementName]?.config?.height) {
+                    sizes.height = BEDITA?.richeditorByPropertyConfig?.[elementName]?.config?.height;
+                }
+                sizes.min_height = BEDITA?.richeditorByPropertyConfig?.[elementName]?.config?.min_height || sizes.height || 300;
+                if (BEDITA?.richeditorByPropertyConfig?.[elementName]?.config?.max_height) {
+                    sizes.max_height = BEDITA?.richeditorByPropertyConfig?.[elementName]?.config?.max_height;
+                }
+                sizes.max_height = sizes.min_height > 500 ? sizes.min_height + 500 : 500;
                 const { default: contentCSS } = await import('../../../richeditor.lazy.scss');
                 const [editor] = await tinymce.init({
                     target: element,
                     skin: false,
                     content_css: contentCSS,
                     menubar: false,
-                    branding: false,
-                    max_height: 500,
-                    toolbar: items,
+                    branding: true,
+                    ... sizes,
+                    toolbar,
                     toolbar_mode: 'wrap',
                     block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3',
                     entity_encoding: 'raw',
                     plugins: [
                         'paste',
-                        'autoresize',
                         'code',
                         'charmap',
                         'link',
@@ -114,13 +141,14 @@ export default {
                         'typos',
                         'visualblocks',
                     ].join(' '),
-                    autoresize_bottom_margin: 50,
+                    resize: true,
                     convert_urls: false,
                     relative_urls: false,
                     paste_block_drop: true,
                     add_unload_trigger: false, // fix populating textarea elements with garbage when the user initiates a navigation with unsaved changes, but cancels it when the alert is shown
                     readonly: element.getAttribute('readonly') === 'readonly' ? 1 : 0,
                     ... BEDITA?.richeditorConfig,
+                    ... BEDITA?.richeditorByPropertyConfig?.[elementName]?.config || {},
                     setup: (editor) => {
                         editor.on('change', () => {
                             EventBus.send('refresh-placeholders', {id: editor.id, content: editor.getContent()});
@@ -135,7 +163,7 @@ export default {
                     }
                 });
 
-                editor.on('change', () => {
+                editor?.on('change', () => {
                     let isChanged = element.value !== element.dataset.originalValue;
 
                     changing = true;

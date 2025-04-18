@@ -1,5 +1,5 @@
-{# Remaining properties groups: 'other' and custom groups not in 'core', '_keep', 'publish', 'advanced' #}
-{% set otherProperties = Array.removeKeys(properties, ['core', '_keep', 'publish', 'advanced']) %}
+{# Remaining properties groups: 'other' and custom groups not in 'core', '_keep', 'publish', 'advanced', 'media' #}
+{% set otherProperties = Array.removeKeys(properties, ['core', '_keep', 'publish', 'advanced', 'media']) %}
 {% for group, props in otherProperties %}
 
     {% set customElement = Element.custom(group, 'group') %}

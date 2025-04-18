@@ -33,6 +33,7 @@ export default {
         LocationsView: () => import(/* webpackChunkName: "locations-view" */'app/components/locations-view/locations-view'),
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
+        SortRelated: () => import(/* webpackChunkName: "sort-related" */'app/components/sort-related/sort-related'),
     },
 
     mixins: [
@@ -80,12 +81,14 @@ export default {
         return {
             method: 'related',      // define AppController method to be used
             loading: false,
+            resettingRelated: false,
+            savingRelated: false,
             objectsLoaded: false,       // objects loaded flag
             positions: {},              // used in children relations
             priorities: {},              // used in children relations
 
-            removedRelationsData: [],   // hidden field containing serialized json passed on form submit
-            addedRelationsData: [],     // array of serialized new relations
+            removedRelationsData: '[]',   // hidden field containing serialized json passed on form submit
+            addedRelationsData: '[]',     // array of serialized new relations
 
             requesterId: null,          // panel requerster id
             removedRelated: [],         // staged removed related objects
@@ -96,6 +99,9 @@ export default {
             activeFilter: {},           // current active filter for objects list
 
             exportFormat: 'csv',        // default csv
+
+            originalData: '',           // original data for comparison
+            changedOriginalData: false,
         }
     },
 
@@ -209,6 +215,8 @@ export default {
             }
         });
 
+        this.updateOriginalData();
+
         // enable related objects drop
         this.$on('sort-end', this.onSort);
     },
@@ -243,12 +251,12 @@ export default {
          *
          * @return {void}
          */
-        onUpdatePageSize(pageSize) {
+        async onUpdatePageSize(pageSize) {
             // remember pagination.page_size (use localStorage)
             const key = `relation-view:${this.relationName}:page_size`;
             localStorage.setItem(key, pageSize);
             this.setPageSize(pageSize);
-            this.loadRelatedObjects(this.activeFilter, true);
+            await this.loadRelatedObjects(this.activeFilter, true);
         },
 
         /**
@@ -310,6 +318,7 @@ export default {
 
                 priority = this.objects[i].meta.relation.priority;
             }
+            this.updateOriginalData();
         },
 
         /**
@@ -361,6 +370,7 @@ export default {
 
                 return object;
             });
+            this.updateOriginalData();
         },
 
         /**
@@ -429,6 +439,7 @@ export default {
                 }
             }
             this.prepareRelationsToSave();
+            this.updateOriginalData();
         },
 
         /**
@@ -444,16 +455,10 @@ export default {
             this.enableDrop();
         },
 
-        /**
-         * request panel for edit relation params
-         * data object has to match edit-relation-params component property
-         *
-         * @param {Object} data
-         */
-        editRelationParams(data) {
+        editRelationParams(data, action = 'edit-relation-params') {
             this.requesterId = data.related.id;
             PanelEvents.requestPanel({
-                action: 'edit-relation-params',
+                action,
                 from: this,
                 data,
             });
@@ -525,26 +530,63 @@ export default {
          *
          * @return {Array} objs objects retrieved
          */
-        async loadRelatedObjects(filter = {}, force = false) {
-            if (this.preCount === 0 || (this.objectsLoaded && !force)) {
-                return [];
+        async loadRelatedObjects(filter = {}, force = false, reset = false) {
+            if (!force) {
+                if (this.preCount === 0 || this.objectsLoaded) {
+                    if (reset) {
+                        this.addedRelations = [];
+                        this.modifiedRelations = [];
+                        this.removedRelated = [];
+                    }
+
+                    return [];
+                }
             }
             this.loading = true;
+            if (reset) {
+                this.resettingRelated = true;
+            }
 
             return this.getPaginatedObjects(true, filter)
                 .then((objs) => {
                     this.$emit('count', this.pagination.count);
                     this.loading = false;
                     this.objectsLoaded = true;
+                    if (reset) {
+                        this.addedRelations = [];
+                        this.modifiedRelations = [];
+                        this.removedRelated = [];
+                    }
+                    this.updateOriginalData();
+
                     return objs;
                 })
                 .catch((error) => {
                     // code 20 is user aborted fetch which is ok
                     if (error.code !== 20) {
-                        this.loading = false;
                         console.error(error);
                     }
+                })
+                .finally(() => {
+                    this.loading = false;
+                    if (reset) {
+                        this.resettingRelated = false;
+                    }
                 });
+        },
+
+        updateOriginalData() {
+            const data = this.objects.map(o => o.id);
+            if (!this.originalData) {
+                this.originalData = {};
+            }
+            const originalData = JSON.stringify(data);
+            const p = {...this.pagination};
+            const k = `${this.relationName}-count_${p.count}-pagecount_${p.page_count}-pageitems_${p.page_items || 0}-pagesize_${p.page_size}`;
+            this.originalData[k] = originalData;
+            const changedIds = originalData !== JSON.stringify(this.alreadyInView || []);
+            const changedAny = (this.addedRelations.length + this.modifiedRelations.length + this.removedRelated.length) > 0;
+            this.changedOriginalData = changedAny || changedIds;
         },
 
         /**
@@ -552,9 +594,16 @@ export default {
          *
          * @return {Array} objs objects retrieved
          */
-        reloadObjects() {
+        async reloadObjects() {
             this.activeFilter = {};
-            return this.loadRelatedObjects({}, true);
+
+            return await this.loadRelatedObjects({}, true);
+        },
+
+        async resetObjects() {
+            this.activeFilter = {};
+
+            return await this.loadRelatedObjects({}, true, true);
         },
 
         /**
@@ -593,6 +642,7 @@ export default {
                 // if yes we unstage it
                 this.prepareRelationsToSave();
             }
+            this.updateOriginalData();
         },
 
         /**
@@ -612,6 +662,7 @@ export default {
                 // if yes we stage it for saving
                 this.prepareRelationsToSave();
             }
+            this.updateOriginalData();
         },
 
         /**
@@ -632,6 +683,79 @@ export default {
                     isChanged,
                 }
             }));
+        },
+
+        parseStringArray(inputString) {
+            let result = [];
+            try {
+                if (inputString !== '[]') {
+                    result = JSON.parse(inputString);
+                }
+            } catch (error) {
+                console.error(`Error parsing JSON string "${inputString}": ${error}`);
+            }
+
+            return result;
+        },
+
+        async saveRelated(data) {
+            try {
+                this.savingRelated = true;
+                const relationName = data.relationName;
+                const objectType = data.object.type;
+                const url = `${BEDITA.base}/api/${objectType}/${data.object.id}/relationships/${relationName}`;
+                const toRemove = this.parseStringArray(this.removedRelationsData);
+                if (toRemove.length > 0) {
+                    // save removed relations
+                    const response = await fetch(url, {
+                        method: 'DELETE',
+                        credentials: 'same-origin',
+                        headers: {
+                            'accept': 'application/json',
+                            'content-type': 'application/json',
+                            'X-CSRF-Token': BEDITA.csrfToken,
+                        },
+                        body: JSON.stringify({ data: toRemove }),
+                    });
+                    if (response?.error) {
+                        BEDITA.error(response.error?.title || response?.error);
+                    } else {
+                        this.removedRelated = [];
+                        this.prepareRelationsToRemove(this.removedRelated);
+                    }
+                }
+                const toAdd = this.parseStringArray(this.addedRelationsData);
+                if (toAdd.length > 0) {
+                    // save added relations
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                            'accept': 'application/json',
+                            'content-type': 'application/json',
+                            'X-CSRF-Token': BEDITA.csrfToken,
+                        },
+                        body: JSON.stringify({ data: toAdd }),
+                    });
+                    const json = await response.json();
+                    if (json?.error) {
+                        BEDITA.error(json.error?.title);
+                    } else {
+                        this.addedRelations = [];
+                        this.modifiedRelations = [];
+                        this.prepareRelationsToSave();
+                    }
+                }
+                await this.reloadObjects();
+            } catch (error) {
+                if (typeof error === 'string') {
+                    BEDITA.error(error);
+                } else {
+                    BEDITA.error(error?.title);
+                }
+            } finally {
+                this.savingRelated = false;
+            }
         },
 
         /**
@@ -663,7 +787,7 @@ export default {
             }
             this.addedRelations = this.addedRelations.filter((rel) => rel.id !== id);
             PanelEvents.send('relations-view:remove-already-in-view', null, { id } );
-
+            this.updateOriginalData();
 
             this.prepareRelationsToSave();
         },
@@ -689,6 +813,7 @@ export default {
                 this.modifiedRelations.push(related);
             }
             this.prepareRelationsToSave();
+            this.updateOriginalData();
         },
 
         /**
@@ -705,6 +830,7 @@ export default {
             }
             this.modifiedRelations = this.modifiedRelations.filter((rel) => rel.id !== id);
             this.prepareRelationsToSave();
+            this.updateOriginalData();
         },
 
         /**
@@ -781,6 +907,7 @@ export default {
                     });
                     // sort by restored priorities
                     this.objects.sort((a, b) => a.meta.relation.priority - b.meta.relation.priority);
+                    this.updateOriginalData();
                 })
                 .catch((error) => {
                     // code 20 is user aborted fetch which is ok
@@ -877,7 +1004,7 @@ export default {
          */
         propFormat(value, format) {
             if (format === 'bytes') {
-                return this.bytes(value);
+                return this.$helpers.formatBytes(value);
             }
 
             return value;
@@ -893,18 +1020,6 @@ export default {
             const id = related.relationships?.streams?.data[0]?.id;
 
             return `${BEDITA.base}/download/${id}`;
-        },
-
-        /**
-         * Get bytes representation of size.
-         *
-         * @param {Number} size The size
-         * @returns {String}
-         */
-        bytes(size) {
-            let i = size == 0 ? 0 : Math.floor( Math.log(size) / Math.log(1024) );
-
-            return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
         },
 
         datesInfo(obj) {

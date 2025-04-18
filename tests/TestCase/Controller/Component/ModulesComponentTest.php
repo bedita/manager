@@ -28,6 +28,7 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\TestSuite\TestCase;
@@ -276,6 +277,7 @@ class ModulesComponentTest extends TestCase
         // Mock Authentication component
         $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
+        $this->Modules->beforeFilter(new Event('Module.beforeFilter'));
         $this->Modules->startup();
         $actual = $this->Modules->isAbstract($data);
 
@@ -348,6 +350,7 @@ class ModulesComponentTest extends TestCase
         $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
 
         if (!empty($expected)) {
+            $this->Modules->beforeFilter(new Event('Module.beforeFilter'));
             $this->Modules->startup();
         }
         $actual = $this->Modules->objectTypes($data);
@@ -767,6 +770,7 @@ class ModulesComponentTest extends TestCase
      * @return void
      * @dataProvider startupProvider()
      * @covers ::startup()
+     * @covers ::beforeFilter()
      */
     public function testBeforeRender($userId, $modules, ?string $currentModule, array $project, array $meta, array $config = [], ?string $currentModuleName = null): void
     {
@@ -800,6 +804,7 @@ class ModulesComponentTest extends TestCase
 
         $clearHomeCache = true;
         $this->Modules->setConfig(compact('apiClient', 'currentModuleName', 'clearHomeCache'));
+        $this->Modules->beforeFilter(new Event('Module.beforeFilter'));
         $this->Modules->startup();
 
         $viewVars = $controller->viewBuilder()->getVars();
@@ -1071,65 +1076,6 @@ class ModulesComponentTest extends TestCase
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
-    }
-
-    /**
-     * Test `setDataFromFailedSave`.
-     *
-     * @covers ::setDataFromFailedSave()
-     * @return void
-     */
-    public function testSetDataFromFailedSave(): void
-    {
-        // empty case
-        $this->Modules->setDataFromFailedSave('', ['id' => 123]);
-        $actual = $this->Modules->getController()->getRequest()->getSession()->read('failedSave.123');
-        static::assertEmpty($actual);
-
-        // data and expected
-        $expected = [ 'id' => 999, 'name' => 'gustavo' ];
-        $type = 'documents';
-
-        $this->Modules->setDataFromFailedSave($type, $expected);
-
-        // verify data
-        $key = sprintf('failedSave.%s.%s', $type, $expected['id']);
-        $actual = $this->Modules->getController()->getRequest()->getSession()->read($key);
-        unset($expected['id']);
-        static::assertEquals($expected, $actual);
-    }
-
-    /**
-     * Test `updateFromFailedSave` method.
-     *
-     * @return void
-     * @covers ::setupAttributes()
-     * @covers ::updateFromFailedSave()
-     */
-    public function testUpdateFromFailedSave(): void
-    {
-        // empty case
-        $this->Modules->setDataFromFailedSave('', ['id' => 123]); // wrong data, missing type
-        $object = ['id' => 123, 'type' => 'documents'];
-        $this->Modules->setupAttributes($object);
-        static::assertArrayNotHasKey('attributes', $object);
-
-        // write to session data, to simulate recover from session.
-        $object = [
-            'id' => 999,
-            'type' => 'documents',
-            'attributes' => [
-                'name' => 'john doe',
-            ],
-        ];
-        $recover = [ 'name' => 'gustavo' ];
-        $this->Modules->setDataFromFailedSave('documents', $recover + ['id' => 999]);
-
-        // verify data
-        $this->Modules->setupAttributes($object);
-        $expected = $object;
-        $expected['attributes'] = array_merge($object['attributes'], $recover);
-        static::assertEquals($expected, $object);
     }
 
     /**
@@ -1752,5 +1698,20 @@ class ModulesComponentTest extends TestCase
         $titles = Hash::extract($objs, '{n}.data.attributes.title');
         $expected = ['a dummy doc one', 'a dummy doc two', 'a dummy doc three'];
         static::assertSame($expected, $titles);
+    }
+
+    /**
+     * Test `setupAttributes` method
+     *
+     * @return void
+     * @covers ::setupAttributes()
+     */
+    public function testSetupAttributes(): void
+    {
+        // check that object attributes is set into controller currentAttributes var as json string
+        $obj = ['attributes' => ['title' => 'test']];
+        $this->Modules->setupAttributes($obj);
+        $viewVars = $this->Modules->getController()->viewBuilder()->getVars();
+        static::assertEquals(json_encode(['title' => 'test']), $viewVars['currentAttributes']);
     }
 }

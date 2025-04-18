@@ -142,8 +142,8 @@ class AppControllerTest extends TestCase
     /**
      * test `initialize` function
      *
-     * @covers ::initialize()
      * @return void
+     * @covers ::initialize()
      */
     public function testInitialize(): void
     {
@@ -181,24 +181,34 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * test 'beforeFilter' for correct apiClient token setup
+     * test 'initialize' and 'beforeFilter' for correct apiClient token setup
      *
-     * @covers ::beforeFilter()
      * @return void
+     * @covers ::beforeFilter()
+     * @covers ::initialize()
      */
-    public function testBeforeFilterCorrectTokens(): void
+    public function testCorrectTokens(): void
     {
-        $expectedtokens = [];
-
+        // no auth
         $this->setupControllerAndLogin();
-
-        /** @var \Authentication\Identity|null $user */
-        $user = $this->AppController->Authentication->getIdentity();
-        $expectedtokens = $user->get('tokens');
+        $expected = ['jwt', 'renew'];
+        $emptyUser = new Identity([]);
+        $this->AppController->Authentication->setIdentity($emptyUser);
         $this->AppController->dispatchEvent('Controller.initialize');
         $apiClient = $this->accessProperty($this->AppController, 'apiClient');
         $apiClientTokens = $apiClient->getTokens();
+        $actual = array_keys($apiClientTokens);
+        static::assertEquals($expected, $actual);
 
+        // auth
+        $this->setupControllerAndLogin();
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->AppController->Authentication->getIdentity();
+        $expectedtokens = $user->get('tokens');
+        $this->AppController->initialize();
+        $this->AppController->dispatchEvent('Controller.initialize');
+        $apiClient = $this->accessProperty($this->AppController, 'apiClient');
+        $apiClientTokens = $apiClient->getTokens();
         static::assertEquals($expectedtokens, $apiClientTokens);
     }
 

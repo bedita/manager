@@ -180,6 +180,50 @@ class ObjectTypesControllerTest extends TestCase
     }
 
     /**
+     * Test `prepareProperties` method
+     *
+     * @return void
+     * @covers ::prepareProperties()
+     */
+    public function testPrepareCustomProperties(): void
+    {
+        $controller = new class (new ServerRequest()) extends ObjectTypesController {
+            public function prepareProperties(array $data, string $name): array
+            {
+                return parent::prepareProperties($data, $name);
+            }
+        };
+        $data = [
+            [
+                'id' => '123',
+                'name' => 'my_prop',
+                'type' => 'datetime',
+                'description' => 'My custom property',
+                'default' => null,
+                'required' => false,
+                'multiple' => false,
+            ],
+        ];
+        $expected = [
+            'core' => [],
+            'inherited' => [],
+            'custom' => [
+                [
+                    'id' => '123',
+                    'name' => 'my_prop',
+                    'type' => 'datetime',
+                    'description' => 'My custom property',
+                    'default' => null,
+                    'required' => false,
+                    'multiple' => false,
+                ],
+            ],
+        ];
+        $actual = $controller->prepareProperties($data, 'test');
+        static::assertSame($expected, $actual);
+    }
+
+    /**
      * Test `updateSchema`
      *
      * @return void

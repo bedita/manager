@@ -485,5 +485,59 @@ class PermsHelperTest extends TestCase
         static::assertTrue($actual);
 
         ApiClientProvider::setApiClient($safeApiClient);
+
+        // user is not admin, has parents, all with perms => false
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->withAnyParameters()
+            ->willReturn([
+                'included' => [
+                    [
+                        'id' => '123451',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['a', 'b', 'c', 'guest'],
+                            ],
+                        ],
+                    ],
+                    [
+                        'id' => '123452',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['d', 'guest', 'e', 'f'],
+                            ],
+                        ],
+                    ],
+                    [
+                        'id' => '123452',
+                        'type' => 'folders',
+                        'meta' => [
+                            'perms' => [
+                                'roles' => ['g', 'h', 'guest', 'i'],
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        $actual = $this->Perms->isLockedByParents('123');
+        static::assertFalse($actual);
+    }
+
+    /**
+     * Test `canCreateModules` method
+     *
+     * @return void
+     * @covers ::canCreateModules()
+     */
+    public function testCanCreateModules(): void
+    {
+        $expected = ['documents'];
+        $actual = $this->Perms->canCreateModules();
+        static::assertSame($expected, $actual);
     }
 }

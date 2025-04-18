@@ -4,15 +4,17 @@
     <div class="modules-view">
         <header>
             {% if object.id %}
-                <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}
-                {% for obj in included %}
-                    {% if obj.type == 'streams' %}
-                        <a class="button button-outlined mx-1" href="{{ obj.meta.url }}" target="_blank">
-                            <app-icon icon="carbon:launch"></app-icon>
-                            <span class="ml-05">{{ __('Open File') }}</span>
-                        </a>
-                    {% endif %}
-                {% endfor %}</h1>
+                <h1 untitled-label="{{ __('Untitled') }}">
+                    <b v-html="{{ object.attributes.title|json_encode }}"></b>
+                    {% for obj in included %}
+                        {% if obj.type == 'streams' %}
+                            <a class="button button-outlined mx-1" href="{{ obj.meta.url }}" target="_blank">
+                                <app-icon icon="carbon:launch"></app-icon>
+                                <span class="ml-05">{{ __('Open File') }}</span>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </h1>
             {% else %}
                 <h1 class="has-text-gray-600">{{ __('New object in') }} {{ Layout.tr(object.type) }}</h1>
             {% endif %}
@@ -60,6 +62,8 @@
 
                 {{ element('Form/media') }}
 
+                {{ element('Form/captions') }}
+
                 {{ element('Form/map') }}
 
                 {{ element('Form/other_properties') }}
@@ -75,7 +79,7 @@
                 {{ element('Form/custom_right') }}
 
                 {# if `roles` in relationships (`users` only) display custom roles element #}
-                {% if object.relationships.roles %}
+                {% if 'roles' in object.relationships|keys or object.type == 'users' %}
                     {{ element('Form/roles') }}
                 {% endif %}
 

@@ -41,6 +41,7 @@ class ObjectTypesController extends ModelBaseController
         'BEdita/Core.Publications',
         'BEdita/Core.Users',
     ];
+
     /**
      * Resource type currently used
      *

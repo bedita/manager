@@ -20,6 +20,8 @@ use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Event\EventInterface;
+use Cake\Http\Client\Response;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\I18n\I18n;
@@ -85,6 +87,20 @@ class ModulesComponent extends Component
     ];
 
     /**
+     * @inheritDoc
+     */
+    public function beforeFilter(EventInterface $event): ?Response
+    {
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->Authentication->getIdentity();
+        if (!empty($user)) {
+            $this->getController()->set('modules', $this->getModules());
+        }
+
+        return null;
+    }
+
+    /**
      * Read modules and project info from `/home' endpoint.
      *
      * @return void
@@ -103,12 +119,12 @@ class ModulesComponent extends Component
             Cache::delete(sprintf('home_%d', $user->get('id')));
         }
 
-        $modules = $this->getModules();
         $project = $this->getProject();
         $uploadable = (array)Hash::get($this->Schema->objectTypesFeatures(), 'uploadable');
-        $this->getController()->set(compact('modules', 'project', 'uploadable'));
+        $this->getController()->set(compact('project', 'uploadable'));
 
         $currentModuleName = $this->getConfig('currentModuleName');
+        $modules = (array)$this->getController()->viewBuilder()->getVar('modules');
         if (!empty($currentModuleName)) {
             $currentModule = Hash::get($modules, $currentModuleName);
         }
@@ -170,8 +186,7 @@ class ModulesComponent extends Component
         if (empty($user) || empty($user->getOriginalData())) {
             return;
         }
-
-        $roles = (array)$user->get('roles');
+        $roles = array_intersect(array_keys($accessControl), (array)$user->get('roles'));
         $modules = (array)array_keys($this->modules);
         $hidden = [];
         $readonly = [];
@@ -432,27 +447,7 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Set session data for `failedSave.{type}.{id}` and `failedSave.{type}.{id}__timestamp`.
-     *
-     * @param string $type The object type.
-     * @param array $data The data to store into session.
-     * @return void
-     */
-    public function setDataFromFailedSave(string $type, array $data): void
-    {
-        if (empty($data) || empty($data['id']) || empty($type)) {
-            return;
-        }
-        $key = sprintf('failedSave.%s.%s', $type, $data['id']);
-        $session = $this->getController()->getRequest()->getSession();
-        unset($data['id']); // remove 'id', avoid future merged with attributes
-        $session->write($key, $data);
-        $session->write(sprintf('%s__timestamp', $key), time());
-    }
-
-    /**
      * Set current attributes from loaded $object data in `currentAttributes`.
-     * Load session failure data if available.
      *
      * @param array $object The object.
      * @return void
@@ -461,45 +456,6 @@ class ModulesComponent extends Component
     {
         $currentAttributes = json_encode((array)Hash::get($object, 'attributes'));
         $this->getController()->set(compact('currentAttributes'));
-
-        $this->updateFromFailedSave($object);
-    }
-
-    /**
-     * Update object, when failed save occurred.
-     * Check session data by `failedSave.{type}.{id}` key and `failedSave.{type}.{id}__timestamp`.
-     * If data is set and timestamp is not older than 5 minutes.
-     *
-     * @param array $object The object.
-     * @return void
-     */
-    protected function updateFromFailedSave(array &$object): void
-    {
-        // check session data for object id => use `failedSave.{type}.{id}` as key
-        $session = $this->getController()->getRequest()->getSession();
-        $key = sprintf(
-            'failedSave.%s.%s',
-            Hash::get($object, 'type'),
-            Hash::get($object, 'id')
-        );
-        $data = $session->read($key);
-        if (empty($data)) {
-            return;
-        }
-
-        // read timestamp session key
-        $timestampKey = sprintf('%s__timestamp', $key);
-        $timestamp = $session->read($timestampKey);
-
-        // if data exist for {type} and {id} and `__timestamp` not too old (<= 5 minutes)
-        if ($timestamp > strtotime('-5 minutes')) {
-            //  => merge with $object['attributes']
-            $object['attributes'] = array_merge($object['attributes'], (array)$data);
-        }
-
-        // remove session data
-        $session->delete($key);
-        $session->delete($timestampKey);
     }
 
     /**

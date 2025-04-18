@@ -1,17 +1,36 @@
 <template>
     <div class="roles-list-view">
         <div>
-            <div v-for="groupName in Object.keys(objectsByGroups)">
-                <h4 class="is-small has-font-weight-bold has-text-transform-upper">{{ groupName }}</h4>
-                <label v-for="role in objectsByGroups[groupName]" class="cursor-pointer">
-                    <input type="checkbox" :value="role" :disabled="userRolePriority > role.meta.priority" v-model="checkedRelations"/>
+            <div
+                v-for="groupName in Object.keys(objectsByGroups)"
+                :key="groupName"
+            >
+                <h4 class="is-small has-font-weight-bold has-text-transform-upper">
+                    {{ groupName }}
+                </h4>
+                <label
+                    v-for="role in objectsByGroups[groupName]"
+                    class="cursor-pointer"
+                    :key="role.attributes.name"
+                >
+                    <input
+                        type="checkbox"
+                        :value="role"
+                        :disabled="userRolePriority > role.meta.priority"
+                        v-model="checkedRelations"
+                    >
                     <span>{{ getRoleLabel(role.attributes.name, role.attributes.description) }}</span>
                 </label>
             </div>
         </div>
 
         <div class="save-relations">
-            <input type="hidden" :id="`${relationName}addRelated`" :name="`relations[${relationName}][addRelated]`" v-model="relationsData" />
+            <input
+                :id="`${relationName}addRelated`"
+                :name="`relations[${relationName}][addRelated]`"
+                type="hidden"
+                v-model="relationsData"
+            >
         </div>
     </div>
 </template>
@@ -20,9 +39,9 @@
 import RelationshipsView from 'app/components/relation-view/relationships-view/relationships-view';
 
 export default {
-    name: 'roles-list-view',
-
     extends: RelationshipsView,
+
+    name: 'RolesListView',
 
     props: {
         groups: {
@@ -32,10 +51,6 @@ export default {
         relatedObjects: {
             type: Array,
             default: () => [],
-        },
-        userRolePriority: {
-            type: Number,
-            default: () => 500,
         },
         userRoles: {
             type: Array,
@@ -47,7 +62,9 @@ export default {
         return {
             method: 'resources',
             objectsByGroups: {},
+            prioritiesMap: {},
             removedRelations: [],
+            userRolePriority: 500,
         }
     },
 
@@ -68,8 +85,12 @@ export default {
                 for (let roleName of groups[groupName]) {
                     const role = this.objects.filter((v) => v.attributes.name === roleName)[0];
                     this.objectsByGroups[groupName].push(role);
+                    this.prioritiesMap[role.attributes.name] = role.meta.priority;
                 }
             }
+            this.userRolePriority = this.userRoles.reduce((acc, role) => {
+                return Math.min(acc, this.prioritiesMap[role]);
+            }, 500);
             this.objectsByGroups = {...this.objectsByGroups};
         });
     },

@@ -70,6 +70,12 @@ class SystemHelperTest extends TestCase
         $expected = min($pms, $umf) * 1024 * 1024;
         $actual = $this->System->getMaxFileSize();
         static::assertSame($expected, $actual);
+        // test with forced max file size
+        $forcedMaxFileSize = -1;
+        Configure::write('Upload.uploadMaxSize', $forcedMaxFileSize);
+        $actual = $this->System->getMaxFileSize();
+        static::assertSame($forcedMaxFileSize, $actual);
+        Configure::delete('Upload.uploadMaxSize');
     }
 
     /**
@@ -92,12 +98,52 @@ class SystemHelperTest extends TestCase
         // project version 4.13.0
         $this->System->getView()->set('project', ['version' => '4.13.0']);
         $actual = $this->System->checkBeditaApiVersion();
-        static::assertTrue($actual);
+        static::assertFalse($actual);
 
         // project version 5.13.0
         $this->System->getView()->set('project', ['version' => '5.13.0']);
         $actual = $this->System->checkBeditaApiVersion();
+        static::assertFalse($actual);
+
+        // project version 5.36.0
+        $this->System->getView()->set('project', ['version' => '5.36.0']);
+        $actual = $this->System->checkBeditaApiVersion();
         static::assertTrue($actual);
+
+        // project version 5.38.0
+        $this->System->getView()->set('project', ['version' => '5.38.0']);
+        $actual = $this->System->checkBeditaApiVersion();
+        static::assertTrue($actual);
+    }
+
+    /**
+     * Test `isBEditaApiVersionGte`
+     *
+     * @return void
+     * @covers ::isBEditaApiVersionGte()
+     */
+    public function testIsBEditaApiVersionGte(): void
+    {
+        // no project
+        static::assertFalse($this->System->isBEditaApiVersionGte('4.7.1'));
+
+        // project version 4.5.0
+        $this->System->getView()->set('project', ['version' => '4.5.0']);
+        static::assertTrue($this->System->isBEditaApiVersionGte('4.1.2'));
+        static::assertTrue($this->System->isBEditaApiVersionGte('4.5.0'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('4.5.1'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('4.7.1'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('4.13.0'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('5.12.3'));
+
+        // project version 5.12.4
+        $this->System->getView()->set('project', ['version' => '5.12.4']);
+        static::assertTrue($this->System->isBEditaApiVersionGte('4.7.1'));
+        static::assertTrue($this->System->isBEditaApiVersionGte('4.13.0'));
+        static::assertTrue($this->System->isBEditaApiVersionGte('5.12.3'));
+        static::assertTrue($this->System->isBEditaApiVersionGte('5.12.4'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('5.12.5'));
+        static::assertFalse($this->System->isBEditaApiVersionGte('5.21.1'));
     }
 
     /**

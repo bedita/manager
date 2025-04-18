@@ -45,6 +45,13 @@ class PropertiesComponent extends Component
                 'title',
                 'description',
             ],
+            'media' => [
+                'provider',
+                'provider_uid',
+                'provider_url',
+                'provider_thumbnail',
+                'provider_extra',
+            ],
             // publishing related
             'publish' => [
                 'uname',
@@ -89,6 +96,8 @@ class PropertiesComponent extends Component
         'tags',
         'lang',
         'children_order',
+        'captions',
+        'roles',
     ];
 
     /**
@@ -187,9 +196,12 @@ class PropertiesComponent extends Component
      */
     public function indexList(string $type): array
     {
-        $list = $this->getConfig(sprintf('Properties.%s.index', $type), $this->defaultGroups['index']);
-
-        return array_diff($list, ['id', 'status', 'modified']);
+        return array_filter(
+            $this->getConfig(sprintf('Properties.%s.index', $type), $this->defaultGroups['index']),
+            function ($item) {
+                return !in_array($item, ['id', 'status', 'modified']);
+            }
+        );
     }
 
     /**
@@ -313,6 +325,8 @@ class PropertiesComponent extends Component
             'Tags',
             'Permissions',
         ];
+        $config = (array)Configure::read('Schema.associations');
+        $fields = array_unique(array_merge($fields, $config));
         $fields = array_unique(array_merge($fields, $value));
         foreach ($fields as $text) {
             $value = $text;

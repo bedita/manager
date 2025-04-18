@@ -14,7 +14,9 @@ namespace App\View\Helper;
 
 use App\Form\Control;
 use App\Form\Form;
+use App\Utility\CacheTools;
 use App\Utility\Translate;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -80,7 +82,7 @@ class PropertyHelper extends Helper
         if ($readonly === true && array_key_exists('v-datepicker', $controlOptions)) {
             unset($controlOptions['v-datepicker']);
         }
-        if (Hash::get($controlOptions, 'class') === 'json' || Hash::get($controlOptions, 'type') === 'json') {
+        if (!$readonly && Hash::get($controlOptions, 'class') === 'json' || Hash::get($controlOptions, 'type') === 'json') {
             $jsonKeys = (array)Configure::read('_jsonKeys');
             Configure::write('_jsonKeys', array_merge($jsonKeys, [$name]));
         }
@@ -192,6 +194,129 @@ class PropertyHelper extends Helper
         }
 
         return $this->Schema->format($value, $this->schema($property));
+    }
+
+    /**
+     * Return translations for object fields and more.
+     *
+     * @return array
+     */
+    public function translationsMap(): array
+    {
+        try {
+            $key = CacheTools::cacheKey('translationsMap');
+            $map = Cache::remember(
+                $key,
+                function () {
+                    $map = [];
+                    $keys = [];
+                    Configure::load('properties');
+                    $properties = (array)Configure::read('DefaultProperties');
+                    $removeKeys = ['_element', '_hide', '_keep'];
+                    foreach ($properties as $name => $prop) {
+                        $keys[] = trim($name);
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'fastCreate.all', []));
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'index', []));
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'filter', []));
+                        $groups = array_keys((array)Hash::get($prop, 'view', []));
+                        $addKeys = array_reduce($groups, function ($carry, $group) use ($prop, $removeKeys) {
+                            $carry[] = $group;
+                            $groupKeys = (array)Hash::get($prop, sprintf('view.%s', $group), []);
+                            $groupKeys = array_filter(
+                                $groupKeys,
+                                function ($val, $key) use ($removeKeys) {
+                                    return is_string($val) && !in_array($key, $removeKeys);
+                                },
+                                ARRAY_FILTER_USE_BOTH
+                            );
+
+                            return array_merge($carry, $groupKeys);
+                        }, []);
+                        $keys = array_merge($keys, $addKeys);
+                    }
+                    $keys = array_map(function ($key) {
+                        return is_array($key) ? array_key_first($key) : $key;
+                    }, $keys);
+                    $keys = array_diff($keys, $removeKeys);
+                    $keys = array_unique($keys);
+                    $keys = array_map(function ($key) {
+                        return strpos($key, '/') !== false ? substr($key, strrpos($key, '/') + 1) : $key;
+                    }, $keys);
+                    $properties = (array)Configure::read(sprintf('Properties'));
+                    foreach ($properties as $name => $prop) {
+                        $keys[] = trim($name);
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'fastCreate.all', []));
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'index', []));
+                        $keys = array_merge($keys, (array)Hash::get($prop, 'filter', []));
+                        $groups = array_keys((array)Hash::get($prop, 'view', []));
+                        $addKeys = array_reduce($groups, function ($carry, $group) use ($prop, $removeKeys) {
+                            $carry[] = $group;
+                            $groupKeys = (array)Hash::get($prop, sprintf('view.%s', $group), []);
+                            $groupKeys = array_filter(
+                                $groupKeys,
+                                function ($val, $key) use ($removeKeys) {
+                                    return is_string($val) && !in_array($key, $removeKeys);
+                                },
+                                ARRAY_FILTER_USE_BOTH
+                            );
+
+                            return array_merge($carry, $groupKeys);
+                        }, []);
+                        $keys = array_merge($keys, $addKeys);
+                    }
+                    $keys = array_map(function ($key) {
+                        return is_array($key) ? array_key_first($key) : $key;
+                    }, $keys);
+                    $keys = array_diff($keys, $removeKeys);
+                    $keys = array_unique($keys);
+                    $keys = array_map(function ($key) {
+                        return strpos($key, '/') !== false ? substr($key, strrpos($key, '/') + 1) : $key;
+                    }, $keys);
+                    sort($keys);
+                    foreach ($keys as $key) {
+                        $map[$key] = (string)Translate::get($key);
+                    }
+
+                    return $map;
+                }
+            );
+        } catch (\Throwable $e) {
+            $map = [];
+        }
+
+        return $map;
+    }
+
+    /**
+     * Return fast create fields per module map.
+     *
+     * @return array
+     */
+    public function fastCreateFieldsMap(): array
+    {
+        $defaultTitleType = Configure::read('UI.richeditor.title', []) ? 'textarea' : 'string';
+        $map = [];
+        $properties = (array)Configure::read(sprintf('Properties'));
+        $uploadable = $this->getView()->get('uploadable', []);
+        $defaults = [
+            'objects' => [
+                'all' => [['title' => $defaultTitleType], 'status', 'description'],
+                'required' => ['status', 'title'],
+            ],
+            'media' => [
+                'all' => [['title' => $defaultTitleType], 'status', 'name'],
+                'required' => ['name', 'status', 'title'],
+            ],
+        ];
+        foreach ($properties as $name => $prop) {
+            $cfg = (array)Hash::get($prop, 'fastCreate', []);
+            $defaultFieldMap = in_array($name, $uploadable) ? $defaults['media'] : $defaults['objects'];
+            $fields = (array)Hash::get($cfg, 'all', $defaultFieldMap['all']);
+            $required = (array)Hash::get($cfg, 'required', $defaultFieldMap['required']);
+            $map[$name] = compact('fields', 'required');
+        }
+
+        return $map;
     }
 
     /**

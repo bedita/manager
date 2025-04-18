@@ -14,6 +14,7 @@ namespace App\View\Helper;
 
 use App\Utility\CacheTools;
 use App\Utility\Translate;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
@@ -109,6 +110,7 @@ class LayoutHelper extends Helper
         $name = (string)Hash::get($module, 'name');
         $object = (array)$this->getView()->get('object');
         $title = (string)Hash::get($object, 'attributes.title');
+        $title = strip_tags($title);
 
         return empty($title) ? $name : sprintf('%s | %s', $title, $name);
     }
@@ -330,6 +332,9 @@ class LayoutHelper extends Helper
             'ObjectsHistory' => 'has-background-black',
             'SystemInfo' => 'has-background-black',
             'UserAccesses' => 'has-background-black',
+            'Statistics' => 'has-background-black',
+            'AuthProviders' => 'has-background-black',
+            'ExternalAuth' => 'has-background-black',
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');
@@ -370,6 +375,8 @@ class LayoutHelper extends Helper
             'uploadConfig' => $this->System->uploadConfig(),
             'relationsSchema' => $this->getView()->get('relationsSchema', []),
             'richeditorConfig' => (array)Configure::read('Richeditor'),
+            'richeditorByPropertyConfig' => (array)Configure::read('UI.richeditor', []),
+            'indexLists' => (array)$this->indexLists(),
         ];
     }
 
@@ -422,5 +429,56 @@ class LayoutHelper extends Helper
             ['_name' => 'trash:list', '?' => compact('filter')],
             ['class' => $classes, 'title' => $title, 'escape' => false]
         );
+    }
+
+    /**
+     * Return properties group for given property
+     *
+     * @param string $needle The property to search
+     * @return ?string
+     */
+    public function propertyGroup(string $needle): ?string
+    {
+        $properties = (array)$this->getView()->get('properties');
+        foreach ($properties as $group => $props) {
+            $keys = array_keys($props);
+            if (in_array($needle, $keys)) {
+                return $group;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return list of properties to display in `index` view per modules
+     *
+     * @return array
+     */
+    public function indexLists(): array
+    {
+        if (!Configure::check('API.apiBaseUrl')) {
+            return [];
+        }
+        $cacheKey = CacheTools::cacheKey('properties.indexLists');
+        $indexLists = Cache::read($cacheKey, 'default');
+        if (!empty($indexLists)) {
+            return $indexLists;
+        }
+        Configure::load('properties');
+        $properties = (array)Configure::read('Properties');
+        $defaultProperties = (array)Configure::read('DefaultProperties');
+        $keys = array_keys($properties);
+        $keysDefault = array_keys($defaultProperties);
+        $keys = array_unique(array_merge($keys, $keysDefault));
+        $indexLists = [];
+        foreach ($keys as $objectType) {
+            $il = (array)Hash::get($properties, sprintf('%s.index', $objectType));
+            $il = empty($il) ? (array)Hash::get($defaultProperties, sprintf('%s.index', $objectType)) : $il;
+            $indexLists[$objectType] = $il;
+        }
+        Cache::write($cacheKey, $indexLists);
+
+        return $indexLists;
     }
 }

@@ -21,7 +21,12 @@ use App\Utility\CacheTools;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
+use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
 use Cake\Cache\Cache;
+use Cake\Core\Configure;
+use Cake\Event\Event;
+use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
 use Psr\Http\Message\ResponseInterface;
@@ -75,6 +80,7 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
         // Mock GET /config using cache
         Cache::write(CacheTools::cacheKey('config.Modules'), []);
+        $this->controller->Modules->beforeFilter(new Event('Module.beforeFilter'));
         $this->controller->Modules->startup();
         $this->setupApi();
         $this->createTestObject();
@@ -351,7 +357,10 @@ class ModulesControllerTest extends BaseControllerTest
     public function testClone(): void
     {
         // Setup controller for test
-        $this->setupController();
+        $this->setupController([
+            'query' => ['relationships' => 'true', 'translations' => 'true'],
+        ]);
+        Configure::write('Clone.documents.reset', ['body']);
 
         // get object ID for test
         $id = $this->getTestId();
@@ -448,6 +457,46 @@ class ModulesControllerTest extends BaseControllerTest
         // verify response status code and type
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('text/html', $response->getType());
+    }
+
+    /**
+     * Test `save` method when uname is numeric
+     *
+     * @return void
+     * @covers ::save()
+     */
+    public function testSaveUnameNumeric(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        $o = $this->getTestObject();
+        $id = (string)Hash::get($o, 'id');
+        $type = (string)Hash::get($o, 'type');
+
+        // get object for test
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => $id,
+                'uname' => '123456789',
+            ],
+            'params' => [
+                'object_type' => $type,
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // do controller call
+        $this->controller->save();
+
+        // verify page has data, meta and links keys
+        $vars = $this->controller->viewBuilder()->getVars();
+        static::assertArrayHasKey('error', $vars);
+        static::assertEquals('Invalid numeric uname. Change it to a valid string', $vars['error']);
     }
 
     /**
@@ -725,6 +774,13 @@ class ModulesControllerTest extends BaseControllerTest
         ];
         $request = new ServerRequest($config);
         $this->controller = new ModulesControllerSample($request);
+        $apiClient = new class ('https://api.example.com') extends BEditaClient {
+            public function delete(string $path, ?string $body = null, ?array $headers = null): ?array
+            {
+                throw new BEditaClientException('Error');
+            }
+        };
+        $this->controller->setApiClient($apiClient);
 
         // do controller call
         $result = $this->controller->delete();
@@ -977,7 +1033,7 @@ class ModulesControllerTest extends BaseControllerTest
             ->willReturn(['documents']);
 
         $url = $this->controller->availableRelationshipsUrl('test_relation');
-        static::assertEquals('/objects?filter[type][]=documents', $url);
+        static::assertEquals('/documents', $url);
 
         $this->controller->Modules = $this->createMock(ModulesComponent::class);
         $this->controller->Modules->method('relatedTypes')
@@ -1023,5 +1079,157 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->setObjectType($expected);
         $actual = $this->controller->getObjectType();
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test list users
+     *
+     * @return void
+     * @covers ::users()
+     */
+    public function testListUsers(): void
+    {
+        $this->setupController();
+        // Get list of users / no email, no relationships, no links, no schema, no included.
+        $this->controller->users();
+        $actual = $this->controller->viewBuilder()->getVars();
+        // check data has only id,title,username,name,surname
+        $data = $actual['data'];
+        foreach ($data as $item) {
+            $itemKeys = array_keys($item);
+            sort($itemKeys);
+            static::assertSame(['attributes', 'id', 'meta', 'type'], $itemKeys);
+            $keys = array_keys($item['attributes']);
+            sort($keys);
+            static::assertSame($keys, ['name', 'surname', 'title', 'username']);
+        }
+    }
+
+    /**
+     * Test get single resource minimal data
+     *
+     * @return void
+     * @covers ::get()
+     */
+    public function testResourceGet(): void
+    {
+        $this->setupController();
+        // get object ID for test
+        $id = $this->getTestId();
+        // Get single resource, minimal data / no relationships, no links, no schema, no included.
+        $this->controller->get($id);
+        $actual = $this->controller->viewBuilder()->getVars();
+        // check data has only id,title,description,uname,status
+        $item = $actual['data'];
+        $itemKeys = array_keys($item);
+        sort($itemKeys);
+        static::assertSame(['attributes', 'id', 'type'], $itemKeys);
+        $keys = array_keys($item['attributes']);
+        sort($keys);
+        static::assertSame($keys, ['description', 'status', 'title', 'uname']);
+    }
+
+    /**
+     * Test setup method with an unauthorized user
+     *
+     * @return void
+     * @covers ::setup()
+     */
+    public function testSetupUnauthorized(): void
+    {
+        $expected = new UnauthorizedException(__('You are not authorized to access here'));
+        $this->expectException(get_class($expected));
+        $this->expectExceptionCode($expected->getCode());
+        $this->expectExceptionMessage($expected->getMessage());
+        $this->setupController();
+        $this->controller->setup();
+    }
+
+    /**
+     * Test setup method with an authorized user
+     *
+     * @return void
+     * @covers ::setup()
+     */
+    public function testSetupAuthorized(): void
+    {
+        $this->setupController();
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'admin',
+            'roles' => ['admin'],
+        ]);
+        $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->controller->Authentication->setIdentity($user);
+        $actual = $this->controller->setup();
+        static::assertNull($actual);
+    }
+
+    /**
+     * Test setup method with an authorized user and save
+     *
+     * @return void
+     * @covers ::setup()
+     */
+    public function testSetupSave(): void
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'configurationKey' => 'Modules.dummies',
+                'shortLabel' => 'dum',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+        $this->setupController($config);
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'admin',
+            'roles' => ['admin'],
+        ]);
+        $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->controller->Authentication->setIdentity($user);
+        $actual = $this->controller->setup();
+        static::assertNull($actual);
+        $actual = $this->controller->viewBuilder()->getVar('response');
+        static::assertSame('Configuration saved', $actual);
+    }
+
+    /**
+     * Test setup method with an authorized user and save error
+     *
+     * @return void
+     * @covers ::setup()
+     */
+    public function testSetupSaveError(): void
+    {
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'configurationKey' => 'WrongKey.dummies',
+                'shortLabel' => 'dum',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+        $this->setupController($config);
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'admin',
+            'roles' => ['admin'],
+        ]);
+        $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->controller->Authentication->setIdentity($user);
+        $actual = $this->controller->setup();
+        static::assertNull($actual);
+        $actual = $this->controller->viewBuilder()->getVar('error');
+        static::assertSame('Bad configuration key "WrongKey"', $actual);
     }
 }

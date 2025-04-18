@@ -462,6 +462,36 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
+     * Test `fastCreateFieldsMap`.
+
+     * @return void
+     * @covers ::fastCreateFieldsMap()
+     */
+    public function testFastCreateFieldsMap(): void
+    {
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        Configure::write('Properties.documents.fastCreate', [
+            'required' => ['status'],
+            'all' => ['status', 'title', 'description' => 'plaintext', 'body' => 'richtext', 'extra' => 'json', 'date_ranges'],
+        ]);
+        $map = $helper->fastCreateFieldsMap();
+        $actual = $map['documents'];
+        $expected = [
+            'required' => ['status'],
+            'fields' => [
+                'status',
+                'title',
+                'date_ranges',
+                'description' => 'plaintext',
+                'body' => 'richtext',
+                'extra' => 'json',
+            ],
+        ];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `prepareFieldOptions`.
 
      * @return void
@@ -498,5 +528,62 @@ class PropertyHelperTest extends TestCase
         $expected = '<div class="date-ranges-item mb-1"><div><div class="input text"><label for="start_date_0">From</label><input type="text" name="date_ranges[0][start_date]" id="start_date_0" v-datepicker="true" date="true" time="true" daterange="true" value=""></div><div class="input text"><label for="end_date_0">To</label><input type="text" name="date_ranges[0][end_date]" id="end_date_0" v-datepicker="true" date="true" time="true" daterange="true" value=""></div><div class="input checkbox"><input type="hidden" name="date_ranges[0][params][all_day]" value="0"><label for="all_day_0"><input type="checkbox" name="date_ranges[0][params][all_day]" value="" id="all_day_0" checked="checked">All Day</label></div></div></div>';
         $expected = str_replace("\n", '', $expected);
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `translationsMap`.
+     *
+     * @return void
+     * @covers ::translationsMap()
+     */
+    public function testTranslationsMap(): void
+    {
+        Configure::write('Properties.dummies.fastCreate.all', [
+            ['title' => 'string'],
+            'description',
+            'body',
+        ]);
+        Configure::write('Properties.dummies.view', [
+            'core' => [
+                'title',
+                'description',
+                'body',
+            ],
+            'custom' => [
+                'status',
+                '_element' => 'MyPlugin.Form/custom-element',
+                '_hide' => ['status'],
+                '_keep' => ['title'],
+            ],
+        ]);
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->translationsMap();
+        $expected = [
+            'title' => 'Title',
+            'description' => 'Description',
+            'body' => 'Body',
+            'status' => 'Status',
+        ];
+        foreach ($expected as $key => $value) {
+            static::assertSame($value, $actual[$key]);
+        }
+    }
+
+    /**
+     * Test `translationsMap` with exception.
+     *
+     * @return void
+     * @covers ::translationsMap()
+     */
+    public function testTranslationsMapExpection(): void
+    {
+        $properties = Configure::read('Properties');
+        Configure::write('Properties', 123);
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->translationsMap();
+        static::assertEquals([], $actual);
+        Configure::write('Properties', $properties);
     }
 }

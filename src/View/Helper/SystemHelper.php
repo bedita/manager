@@ -52,12 +52,6 @@ class SystemHelper extends Helper
             'application/x-mpegURL',
             'video/*',
         ],
-        'media' => [
-            'application/x-mpegURL',
-            'audio/*',
-            'image/*',
-            'video/*',
-        ],
     ];
 
     /**
@@ -106,6 +100,10 @@ class SystemHelper extends Helper
      */
     public function getMaxFileSize(): int
     {
+        $forcedMaxFileSize = Configure::read('Upload.uploadMaxSize');
+        if ($forcedMaxFileSize) {
+            return $forcedMaxFileSize;
+        }
         $postMaxSize = intVal(substr(ini_get('post_max_size'), 0, -1));
         $uploadMaxFilesize = intVal(substr(ini_get('upload_max_filesize'), 0, -1));
 
@@ -132,6 +130,20 @@ class SystemHelper extends Helper
         }
 
         return false;
+    }
+
+    /**
+     * Check if BEdita API version is greater or equal to required version.
+     *
+     * @param string $requiredApiVersion Required API version
+     * @return bool
+     */
+    public function isBEditaApiVersionGte(string $requiredApiVersion): bool
+    {
+        $project = (array)$this->getView()->get('project');
+        $apiVersion = Hash::get($project, 'version');
+
+        return empty($apiVersion) ? false : version_compare($apiVersion, $requiredApiVersion) >= 0;
     }
 
     /**

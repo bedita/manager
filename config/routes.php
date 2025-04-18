@@ -116,21 +116,30 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Tree', 'action' => 'parents'],
         ['_name' => 'tree:parents', 'pass' => ['type', 'id']]
     );
+    // Slug
+    $routes->connect(
+        '/tree/slug',
+        ['controller' => 'Tree', 'action' => 'slug'],
+        ['_name' => 'tree:slug']
+    );
 
     // Admin.
     $routes->prefix('admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $routes) {
         $adminRoutes = [
             'appearance',
             'applications',
+            'auth_providers',
             'async_jobs',
             'config',
             'endpoints',
+            'external_auth',
             'roles',
             'roles_modules',
             'endpoint_permissions',
             'objects_history',
             'user_accesses',
             'system_info',
+            'statistics',
         ];
 
         foreach ($adminRoutes as $controller) {
@@ -274,6 +283,26 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Tags', 'action' => 'index'],
         ['_name' => 'tags:index']
     );
+    $routes->connect(
+        '/tags/delete/{id}',
+        ['controller' => 'Tags', 'action' => 'delete'],
+        ['pass' => ['id'], '_name' => 'tags:delete']
+    );
+    $routes->connect(
+        '/tags/create',
+        ['controller' => 'Tags', 'action' => 'create'],
+        ['_name' => 'tags:create']
+    );
+    $routes->connect(
+        '/tags/patch/{id}',
+        ['controller' => 'Tags', 'action' => 'patch'],
+        ['pass' => ['id'], '_name' => 'tags:patch']
+    );
+    $routes->connect(
+        '/tags/search',
+        ['controller' => 'Tags', 'action' => 'search'],
+        ['_name' => 'tags:search']
+    );
 
     // view resource by id / uname
     $routes->connect(
@@ -300,6 +329,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
         '/{object_type}/view',
         ['controller' => 'Modules', 'action' => 'create'],
         ['_name' => 'modules:create']
+    );
+    $routes->connect(
+        '/{object_type}/setup',
+        ['controller' => 'Modules', 'action' => 'setup'],
+        ['_name' => 'modules:setup']
     );
     $routes->connect(
         '/{object_type}/multiupload',
@@ -420,6 +454,23 @@ $routes->scope('/', function (RouteBuilder $routes) {
         '/{object_type}/exportFiltered/{id}/{relation}/{format}/{query}',
         ['controller' => 'Export', 'action' => 'relatedFiltered'],
         ['pass' => ['id', 'relation', 'format', 'query'], '_name' => 'export:related:filtered']
+    );
+
+    $routes->get(
+        '/history/objects',
+        ['controller' => 'History', 'action' => 'objects'],
+        'history:objects',
+    );
+
+    $routes->get(
+        '/users/list',
+        ['controller' => 'Modules', 'action' => 'users'],
+        'users:list',
+    );
+    $routes->connect(
+        '/resources/get/{id}',
+        ['controller' => 'Modules', 'action' => 'get'],
+        ['pass' => ['id'], '_name' => 'resource:get'],
     );
 
     // Download stream

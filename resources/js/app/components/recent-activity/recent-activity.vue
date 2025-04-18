@@ -153,7 +153,7 @@ export default {
                 this.currentPage = json.meta.pagination.page;
                 this.activities = [...(json.data || [])];
                 const ids = this.activities.filter(item => item.meta.resource_id).map(item => item.meta.resource_id).filter((v, i, a) => a.indexOf(v) === i).map(i=>Number(i));
-                const objectResponse = await fetch(`${API_URL}api/objects?filter[id]=${ids.join(',')}&page_size=${pageSize}`, API_OPTIONS);
+                const objectResponse = await fetch(`${API_URL}history/objects?filter[id]=${ids.join(',')}&page_size=${pageSize}`, API_OPTIONS);
                 const objectJson = await objectResponse.json();
                 for (const item of this.activities) {
                     const object = objectJson.data.find(obj => obj.id === item.meta.resource_id);
@@ -171,12 +171,20 @@ export default {
                 this.loading = false;
             }
         },
+        getTextFromHtml(s) {
+            const e = document.createElement('div');
+            e.innerHTML = s;
+
+            return e.textContent || e.innerText || '';
+        },
         pageButtonClass() {
             return 'has-text-size-smallest button is-width-auto button-outlined';
         },
         title(item) {
             if (item.object_title) {
-                return this.$helpers.truncate(item.object_title, 100);
+                const text = this.getTextFromHtml(item.object_title);
+
+                return this.$helpers.truncate(text, 100);
             }
             const id = `#${item.meta.resource_id}`;
             const uname = item.object_uname ? this.$helpers.truncate(item.object_uname, 100) : t`(deleted)`;

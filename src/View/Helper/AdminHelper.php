@@ -13,6 +13,7 @@
 namespace App\View\Helper;
 
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 use Cake\View\Helper;
 
 /**
@@ -30,6 +31,13 @@ class AdminHelper extends Helper
      * @var array
      */
     public $helpers = ['Form', 'Property', 'Schema'];
+
+    /**
+     * Object containing i18n strings
+     *
+     * @var array
+     */
+    protected $dictionary = [];
 
     /**
      * Options
@@ -68,6 +76,9 @@ class AdminHelper extends Helper
                 'label' => false,
             ],
         ];
+        if (empty($this->dictionary)) {
+            $this->setDictionary();
+        }
     }
 
     /**
@@ -90,10 +101,14 @@ class AdminHelper extends Helper
         }
 
         if (in_array($type, ['bool', 'json', 'text'])) {
+            if ($type === 'json' && is_array($value)) {
+                $value = json_encode($value);
+            }
+
             return $this->Form->control($property, $this->options[$type] + compact('value'));
         }
 
-        if (in_array($type, ['applications', 'endpoints', 'roles'])) {
+        if (in_array($type, ['applications', 'auth_providers', 'endpoints', 'roles'])) {
             $options = (array)$this->_View->get($type);
             $value = $value ?? '-';
 
@@ -101,5 +116,29 @@ class AdminHelper extends Helper
         }
 
         return $this->Property->control($property, $value, $this->options['text']);
+    }
+
+    /**
+     * Get dictionary object as json string
+     *
+     * @return string
+     */
+    public function getDictionary(): string
+    {
+        return json_encode($this->dictionary);
+    }
+
+    /**
+     * Set dictionary object
+     *
+     * @return void
+     */
+    protected function setDictionary(): void
+    {
+        $modules = (array)$this->_View->get('modules');
+        foreach ($modules as $name => $module) {
+            $moduleName = Inflector::humanize((string)Hash::get($module, 'name', $name));
+            $this->dictionary[$name] = Hash::get($module, 'label', __($moduleName));
+        }
     }
 }

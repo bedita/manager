@@ -82,12 +82,10 @@
 
                 <h3 class="title m-0 has-text-size-small" style="padding-bottom: 7px;">
                     {% if translation %}
-                        <span :title="related.attributes.translated_fields.title" v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
-                            <: truncate(related.attributes.translated_fields.title, 50) :>
+                        <span v-html="truncate(related.attributes.translated_fields.title, 50)" :title=" related.attributes.translated_fields.title" v-if=" related.attributes.translated_fields && related.attributes.translated_fields.title ">
                         </span>
                     {% else %}
-                        <span :title="related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-'">
-                            <: truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 50) :>
+                        <span v-html="truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 50)" :title=" related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-' ">
                         </span>
                     {% endif %}
                 </h3>
@@ -147,6 +145,22 @@
         {% endif %}
     </div>
     {% endif %}
+    {% if not readonly and children and config('ChildrenParams') %}
+    <div class="params p-05 has-text-size-smaller">
+        <button
+            class="is-small icon-th-list-1"
+            :disabled="isPanelOpen()"
+            @click.prevent.stop="editRelationParams({
+                object: {{ object|json_encode }},
+                related: related,
+                relationName: relationName,
+                relationLabel: relationLabel,
+                schema: {{ foldersSchema|json_encode }},
+            }, 'edit-children-params')">
+            {{ __('Edit params') }}
+        </button>
+    </div>
+    {% endif %}
 
     {# BUTTONS #}
     {% if Perms.canSave() %}
@@ -167,6 +181,7 @@
             <button class="is-small has-font-weight-bold mr-1"
                 v-html="(selectedObjects.indexOf(related) !== -1)? '{{ __('Discard') }}' : '{{ __('Pick') }}'"
                 :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check button-secondary' : 'button-outlined-white button-text icon-check-empty'"></button>
+            <object-info :object-data="related"></object-info>
             <a class="button button-outlined-white is-small" @click.stop :href="$helpers.buildViewUrl(related.id)" target="_blank">
                 <app-icon icon="carbon:launch"></app-icon>
                 <span class="ml-05">{{ __('Open') }}</span>
@@ -188,6 +203,7 @@
             </a>
 
         {% else %}
+            <object-info :object-data="related"></object-info>
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)">
                 <app-icon icon="carbon:launch"></app-icon>
                 <span class="ml-05">{{ __('Edit') }}</span>

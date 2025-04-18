@@ -67,33 +67,42 @@ return [
     // ],
 
     /**
+     * Api Proxy configuration, for ApiController.
+     * This refers to `/api/{endpoint}` calls.
+     * Contains an array of setting to use for API proxy configuration.
+     *
+     * ## Options
+     *
+     * - `blocked` - Array of blocked methods per endpoint.
+     */
+    // 'ApiProxy' => [
+    //     'blocked' => [
+    //         'objects' => ['GET', 'POST', 'PATCH', 'DELETE'],
+    //         'users' => ['GET', 'POST', 'PATCH', 'DELETE'],
+    //     ],
+    // ],
+
+    /**
      * Clone configuration.
      * This adds custom rules to clone objects.
      * Rules are defined as `object type name` => ['reset' => [], 'unique' => []]
      * where:
      * - `reset` is an array of fields to reset => unset
-     * - `unique` is an array of fields that must be unique => add `-<timestamp>` to val
      * Example:
      * 'users' => [
      *     'reset' => [
      *         'name', 'surname', 'address',
      *     ],
-     *     'unique' => [
-     *         'email',
-     *     ],
      * ],
      * will reset `name`, `surname` and `address` fields and add `-<timestamp>` to `email` field
      * when cloning a user object.
-     * Note: `reset` and `unique` are optional.
+     * Note: `reset` is optional.
      */
     // 'Clone' => [
     //     // ...
     //     'users' => [
     //         'reset' => [
     //             'name', 'surname', 'address',
-    //         ],
-    //         'unique' => [
-    //             'email',
     //         ],
     //     ],
     //     // ...
@@ -276,6 +285,8 @@ return [
      *          for a complete list of icons
      *  'sidebar' - additional custom sidebar links added in modules index and single item view,
      *     defined as associative array with 'index' and 'view' keys
+     *  'dropupload' - custom dropupload element to use for this module, f.i. 'MyPlugin.Form/dropupload'
+     *  'multiupload' - custom multiupload element to use for this module, f.i. 'MyPlugin.Form/multiupload'
      */
     // 'Modules' => [
     //     'objects' => [
@@ -290,6 +301,12 @@ return [
     //     ],
     //     'documents' => [
     //         'color' => '#cc4700',
+    //         'dropupload' => [
+    //             '_element' => 'MyPlugin.Form/dropupload',
+    //         ],
+    //         'multiupload' => [
+    //             '_element' => 'MyPlugin.Form/multiupload',
+    //         ],
     //     ],
     //     'events' => [
     //         'color' => '#09c',
@@ -565,16 +582,6 @@ return [
     // ],
 
     /**
-     * UI settings.
-     * index.copy2clipboard => enable "onmouseover" of index general cells showing copy to clipboard button
-     */
-    // 'UI' => [
-    //     'index' => [
-    //         'copy2clipboard' => true,
-    //     ],
-    // ],
-
-    /**
      * Richeditor configuration.
      */
     // 'Richeditor' => [
@@ -607,10 +614,12 @@ return [
     //         'bearing' => 'integer',
     //         'pitch' => 'integer',
     //         'zoom' => 'integer',
+    //         'caption' => 'richtext'
     //     ],
     //     'videos' => [
     //         'controls' => 'boolean',
     //         'autoplay' => 'boolean',
+    //         'caption' => 'richtext',
     //     ],
     // ],
 
@@ -618,6 +627,8 @@ return [
      * UI settings.
      * - index: index settings. 'copy2clipboard' enables "onmouseover" of index general cells showing copy to clipboard button
      * - modules: modules settings. 'counters' to show counters in modules; 'all', 'none', <list of modules> to show all, none or custom modules. Default is ['trash']
+     * - richeditor: richeditor settings per field: you can set 'config' and 'toolbar' per single field.
+     * - fast_create_form: custom element to use for fast create form
      */
     // 'UI' => [
     //     'index' => [
@@ -626,56 +637,53 @@ return [
     //     'modules' => [
     //         'counters' => ['objects', 'media', 'images', 'videos', 'audio', 'files', 'trash', 'users'],
     //     ],
+    //     'richeditor' => [
+    //         'title' => [
+    //             'config' => [
+    //                 'forced_root_block' => 'div',
+    //                 'forced_root_block_attrs' => ['class' => 'titleContainer'],
+    //             ],
+    //             'toolbar' => [
+    //                 'italic',
+    //                 'subscript',
+    //                 'superscript',
+    //             ],
+    //         ],
+    //         'description' => [
+    //             'config' => [
+    //                 'forced_root_block' => 'div',
+    //                 'forced_root_block_attrs' => ['class' => 'descriptionContainer'],
+    //             ],
+    //             'toolbar' => [
+    //                 'bold',
+    //                 'italic',
+    //                 'subscript',
+    //                 'superscript',
+    //                 'link',
+    //                 'unlink',
+    //                 'code',
+    //             ],
+    //         ],
+    //     ],
+    //     'fast_create_form' => [
+    //         '_element' => 'MyPlugin.Form/fast_create',
+    //     ],
     // ],
 
     /**
      * Upload configurations.
+     *
+     * 'files' and 'media' accept all mimes, so no configuration needed.
      */
     // 'uploadAccepted' => [
     //     'audio' => [
     //         'audio/*',
-    //     ],
-    //     'files' => [
-    //         'application/msword', // .doc, .dot
-    //         'application/pdf', // .pdf
-    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
-    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
-    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
-    //         'application/x-mpegURL',
-    //         'audio/*',
-    //         'text/csv',
-    //         'text/html',
-    //         'text/plain',
-    //         'text/rtf',
-    //         'text/xml',
-    //         'image/*',
-    //         'video/*',
     //     ],
     //     'images' => [
     //         'image/*',
     //     ],
     //     'videos' => [
     //         'application/x-mpegURL',
-    //         'video/*',
-    //     ],
-    //     'media' => [
-    //         'application/msword', // .doc, .dot
-    //         'application/pdf', // .pdf
-    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
-    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
-    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
-    //         'application/x-mpegURL',
-    //         'audio/*',
-    //         'image/*',
-    //         'text/csv',
-    //         'text/html',
-    //         'text/plain',
-    //         'text/rtf',
-    //         'text/xml',
     //         'video/*',
     //     ],
     // ],
@@ -706,4 +714,122 @@ return [
     //     ],
     // ],
     // 'uploadMaxResolution' => '1920x1080',
+    // 'uploadMaxSize' => -1, // -1 means no limit, otherwise set a limit in bytes
+
+    /**
+     * Configuration for "Children" association parameters.
+     *
+     * This allows to define a set of parameters that can be used in children association between a folder and an object.
+     * The configuration is an associative array where keys are the parameter names and values are
+     * arrays with the following keys:
+     *
+     * - `description` - The description of the parameter.
+     * - `type` - The type of the parameter. Supported types are: `string`, `text`, `date`, `date-time`, `integer`, `boolean`, `enum`.
+     * - `format` - The format of the parameter. Supported formats are: `date`, `date-time`.
+     * - `value` - The default value of the parameter.
+     * - `enum` - The list of possible values for the parameter. Required if the type is `enum`.
+     *
+     *  An example follows. Note: "author", "summary" etc. are examples, you can define your own parameters. They will be saved in `meta.relation.params`.
+     */
+    // 'ChildrenParams' => [
+    //     'author' => [
+    //         'description' => 'The author',
+    //         'type' => 'string',
+    //         'value' => 'john doe',
+    //     ],
+    //     'summary' => [
+    //         'description' => 'The summary',
+    //         'type' => 'text',
+    //         'value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    //     ],
+    //     'validation_date"' => [
+    //         'description' => 'The validation date',
+    //         'type' => 'string',
+    //         'format' => 'date',
+    //         'value' => '2024-06-30',
+    //     ],
+    //     'validation_date_time' => [
+    //         'description' => 'The validation date time',
+    //         'type' => 'string',
+    //         'format' => 'date-time',
+    //         'value' => '2020-01-01T00:00:00Z',
+    //     ],
+    //     'score' => [
+    //         'description' => 'The score',
+    //         'type' => 'integer',
+    //         'value' => 8,
+    //     ],
+    //     'visible' => [
+    //         'description' => 'The visible flag',
+    //         'type' => 'boolean',
+    //         'value' => true,
+    //     ],
+    //     'status' => [
+    //         'description' => 'The status',
+    //         'enum' => ['draft', 'ready', 'done'],
+    //         'type' => 'string',
+    //         'value' => 'draft',
+    //     ],
+    // ],
+
+    /**
+     * Relations sort fields.
+     * Define sortable fields per relation.
+     */
+    // 'RelationsSortFields' => [
+    //     'composed_by' => [
+    //         ['label' => 'Short title', 'value' => 'short_title'],
+    //         ['label' => 'Title', 'value' => 'title'],
+    //     ],
+    //     'composed_by_default' => 'short_title',
+    //     'part_of' => [
+    //         ['label' => 'Short title', 'value' => 'short_title'],
+    //         ['label' => 'Title', 'value' => 'title'],
+    //     ],
+    //     'part_of_default' => 'short_title',
+
+    /**
+     * Configuration for "Schema" associations provided by the API instance.
+     *
+     *  An example follows. Note: "author", "summary" etc. are examples, you can define your own parameters. They will be saved in `meta.relation.params`.
+     */
+    // 'Schema' => [
+    //     'associations' => [
+    //         'Captions',
+    //     ],
+    // ],
+
+    /**
+     * Configuration for "Captions".
+     * - formats.allowed: allowed formats for captions
+     * - formats.default: default format for captions
+     */
+    // 'Captions' => [
+    //     'formats' => [
+    //         'allowed' => ['srt', 'sub', 'webvtt'],
+    //         'default' => 'webvtt',
+    //     ],
+    // ],
+
+    /**
+     * Configuration for "TreePreview", to enable anchors on specific positions on the tree.
+     * - '123' is the root id
+     * - 'title' is the title for the preview anchor
+     * - 'url' is the href for the preview anchor
+     * - 'color' is the color of the icon for the preview anchor (default is 'white')
+     */
+    // 'TreePreview' => [
+    //     '123' => [
+    //         [
+    //             'title' => 'Staging url',
+    //             'url' => 'https://staging.example.com',
+    //             'color' => 'orange',
+    //         ],
+    //         [
+    //             'title' => 'Production url',
+    //             'url' => 'https://example.com',
+    //             'color' => 'red',
+    //         ],
+    //     ],
+    // ],
 ];

@@ -15,19 +15,19 @@
             >
         </div>
 
-        <!-- String (date, enum, text) --->
+        <!-- String (date, enum, string, text) --->
         <div
-            :class="{ datepicker: propertyFormat == 'date-time' }"
+            :class="{ datepicker: ['date', 'date-time'].includes(propertyFormat) }"
             v-if="propertyType == 'string'"
         >
             <input
-                time="true"
+                date="true"
+                :time="propertyFormat == 'date-time'"
                 :value="value"
                 v-datepicker
                 @change="update($event.target.value)"
-                v-if="propertyFormat == 'date-time'"
+                v-if="['date', 'date-time'].includes(propertyFormat)"
             >
-
             <select
                 :value="value"
                 @change="update($event.target.value)"
@@ -41,13 +41,18 @@
                     {{ item }}
                 </option>
             </select>
-
             <input
                 type="text"
                 :value="value"
                 @change="update($event.target.value)"
                 v-else
             >
+        </div>
+        <div v-if="propertyType == 'text'">
+            <textarea
+                :value="value"
+                @change="update($event.target.value)"
+            ></textarea>
         </div>
 
         <!-- Number --->

@@ -67,12 +67,25 @@
                 {% else %}
                     {{ Form.hidden('children_order', {'id': 'children-order'})|raw }}
                 {% endif %}
+            {% else %}
+                {% if System.isBEditaApiVersionGte('5.31.0') and Perms.canSave() and not readonly %}
+                <sort-related
+                    :object-id="{{ mainObject.id|json_encode }}"
+                    :object-type="{{ mainObject.type|json_encode }}"
+                    :relation-name="{{ relationName|json_encode }}"
+                    :default-field="{{ config('RelationsSortFields.' ~ relationName ~ '_default')|default('title')|json_encode }}"
+                    :sort-fields="{{ config('RelationsSortFields.' ~ relationName)|default([{'label':__('Title'),'value':'title'}])|json_encode }}"
+                    @reload-related="reloadObjects"
+                    v-if="objects?.length > 1"
+                >
+                </sort-related>
+                {% endif %}
             {% endif %}
 
             {% set dragAndDrop = relationName != 'children' or (relationName == 'children' and mainObject.attributes.children_order in [null, 'position', '-position']) %}
             {# RELATED OBJECTS #}
             <div class="ml-05 mb-1" v-if="loading">{{ __('Loading ...') }}</div>
-            <div class="ml-05 mb-1" v-if="!loading && objects.length === 0">{{ __('No items found') }}</div>
+            <div class="ml-05 mb-1" v-if="!loading && objects.length === 0" v-if="addedRelations.length == 0">{{ __('No items found') }}</div>
             <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
                 <div :data-list="dataList" class="columns" {%- if dragAndDrop %}droppable sortable{%- endif %}>
                     <div
@@ -85,12 +98,11 @@
                         :drag-data="JSON.stringify(related)"
                         {%- endif %}
                         >
-
-                        {% if relationName == 'children' %}
-                            {{ element('Form/related_item', { 'children': true }) }}
-                        {% else %}
-                            {{ element('Form/related_item', { 'common': true, 'readonly': readonly }) }}
-                        {% endif %}
+                            {% if relationName == 'children' %}
+                                {{ element('Form/related_item', { 'children': true, 'foldersSchema': relationsSchema[relationName] }) }}
+                            {% else %}
+                                {{ element('Form/related_item', { 'common': true, 'readonly': readonly }) }}
+                            {% endif %}
                     </div>
 
                     {% if not readonly %}
@@ -105,38 +117,70 @@
                     {% endif %}
                 </div>
             </div>
-
         </div>
 
         {% if Perms.canSave() and not readonly %}
+        <div v-if="changedOriginalData">
+            <p class="is-expanded tag mt-1">
+                <app-icon icon="carbon:filter"></app-icon>
+                <span class="ml-05">{{ __('Form data has been modified. Save it to persist the changes') }}</span>
+            </p>
+        </div>
         <div class="mt-5">
-            {# DROP FILES #}
             {% if uploadableNum %}
-                {# :accepted-drop="[`.from-relation-${relationName}`,isRelationWithMedia && 'from-files']"> #}
-
-                <drop-upload
-                    placeholder="{{ __('Click or drop new files here') }}"
-                    @new-relations="appendRelations"
-                    ></drop-upload>
+                {{ element(Element.dropupload(relationsSchema[relationName]['right']), {
+                    'objectTypes': relationsSchema[relationName]['right']
+                }) }}
             {% endif %}
-
             <div>
                 <button v-if="isPanelOpen({{object.id|json_encode}})" @click.prevent.stop="closePanel()">
                     <app-icon icon="carbon:close"></app-icon>
                     <span class="ml-05">{{ __('cancel') }}</span>
                 </button>
 
-                <button v-else
-                    @click.prevent.stop="addRelatedObjects({
-                        object: {{object|json_encode}},
-                        relationName: relationName,
-                        relationLabel: relationLabel,
-                        alreadyInView: alreadyInView,
-                        relationTypes: relationTypes,
-                    })">
+                <template v-else>
+                    {% if object.id %}
+                    <button
+                        class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto"
+                        :class="{'is-loading-spinner': resettingRelated}"
+                        :disabled="!changedOriginalData"
+                        @click.prevent.stop="resetObjects"
+                        v-if="relationName != 'children'"
+                    >
+                        <app-icon icon="carbon:filter-reset"></app-icon>
+                        <span class="ml-05">{{ __('Reset') }}</span>
+                    </button>
+                    <button
+                        class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto"
+                        :class="{'is-loading-spinner': savingRelated}"
+                        :disabled="!changedOriginalData"
+                        @click.prevent.stop="saveRelated({
+                            object: {{object|json_encode}},
+                            relationName: relationName,
+                            relationLabel: relationLabel,
+                            alreadyInView: alreadyInView,
+                            relationTypes: relationTypes,
+                        })"
+                        v-if="relationName != 'children'"
+                    >
+                        <app-icon icon="carbon:save"></app-icon>
+                        <span class="ml-05">{{ __('Save') }}</span>
+                    </button>
+                    {% endif %}
+
+                    <button
+                        class="button button-primary button-primary-hover-module-{{ currentModule.name }} is-width-auto"
+                        @click.prevent.stop="addRelatedObjects({
+                            object: {{object|json_encode}},
+                            relationName: relationName,
+                            relationLabel: relationLabel,
+                            alreadyInView: alreadyInView,
+                            relationTypes: relationTypes,
+                        })">
                         <app-icon icon="carbon:add"></app-icon>
                         <span class="ml-05">{{ __('add objects') }}</span>
                     </button>
+                </template>
             </div>
         </div>
         {% endif %} {# Perms #}

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-09-25 14:27:54 \n"
+"POT-Creation-Date: 2025-04-01 12:09:55 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -82,6 +82,9 @@ msgstr ""
 msgid "Async Jobs"
 msgstr ""
 
+msgid "Auth Providers"
+msgstr ""
+
 msgid "Auto-translate"
 msgstr ""
 
@@ -115,7 +118,7 @@ msgstr ""
 msgid "Cannot create abstract objects or objects without schema"
 msgstr ""
 
-msgid "Cannot produce a thumbnail for this file"
+msgid "Captions"
 msgstr ""
 
 msgid "Categories"
@@ -134,9 +137,6 @@ msgid "Children order"
 msgstr ""
 
 msgid "Choose a file"
-msgstr ""
-
-msgid "Choose a type"
 msgstr ""
 
 msgid "City"
@@ -313,10 +313,10 @@ msgstr ""
 msgid "Export Filtered"
 msgstr ""
 
-msgid "Failed to write file to disk"
+msgid "External Auth"
 msgstr ""
 
-msgid "File"
+msgid "Failed to write file to disk"
 msgstr ""
 
 msgid "File Name"
@@ -347,6 +347,9 @@ msgid "Forbidden"
 msgstr ""
 
 msgid "Forgot your password?"
+msgstr ""
+
+msgid "Form data has been modified. Save it to persist the changes"
 msgstr ""
 
 msgid "Format choosen is not available"
@@ -410,6 +413,9 @@ msgid "Internal Server Error"
 msgstr ""
 
 msgid "Invalid data"
+msgstr ""
+
+msgid "Invalid numeric uname. Change it to a valid string"
 msgstr ""
 
 msgid "Invalid username or password"
@@ -547,6 +553,11 @@ msgstr ""
 msgid "No application"
 msgstr ""
 
+msgid ""
+"No auth providers found: you cannot create external auth entries. Create at "
+"least one auth provider first"
+msgstr ""
+
 msgid "No import filters set"
 msgstr ""
 
@@ -605,9 +616,6 @@ msgid "Open"
 msgstr ""
 
 msgid "Open File"
-msgstr ""
-
-msgid "Open image"
 msgstr ""
 
 msgid "Open module"
@@ -793,6 +801,9 @@ msgstr ""
 msgid "Select a project"
 msgstr ""
 
+msgid "Show active positions"
+msgstr ""
+
 msgid "Sign in"
 msgstr ""
 
@@ -802,10 +813,10 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-msgid "Sorry, your browser does not support embedded {0} element"
+msgid "State Name"
 msgstr ""
 
-msgid "State Name"
+msgid "Statistics"
 msgstr ""
 
 msgid "Status"
@@ -835,9 +846,6 @@ msgstr ""
 msgid "Temporary folder missing"
 msgstr ""
 
-msgid "The thumbnail is not available"
-msgstr ""
-
 msgid "There were errors creating the thumbnail(s)"
 msgstr ""
 
@@ -847,7 +855,7 @@ msgstr ""
 msgid "Thumb not ready: coming soon"
 msgstr ""
 
-msgid "Thumbnail is not ready"
+msgid "Title"
 msgstr ""
 
 msgid "Title ↑"
@@ -922,9 +930,6 @@ msgstr ""
 msgid "Upload multiple"
 msgstr ""
 
-msgid "Url"
-msgstr ""
-
 msgid "User Accesses"
 msgstr ""
 
@@ -958,9 +963,6 @@ msgstr ""
 msgid "View file"
 msgstr ""
 
-msgid "View original"
-msgstr ""
-
 msgid "Website"
 msgstr ""
 
@@ -974,6 +976,9 @@ msgid "Yes"
 msgstr ""
 
 msgid "You are not authorized to access that location."
+msgstr ""
+
+msgid "You are not authorized to access this resource"
 msgstr ""
 
 msgid "You do not have the required permissions to view this page."
@@ -1000,6 +1005,12 @@ msgstr ""
 msgid "application_id"
 msgstr ""
 
+msgid "auth_class"
+msgstr ""
+
+msgid "auth_provider_id"
+msgstr ""
+
 msgid "autoplay"
 msgstr ""
 
@@ -1022,12 +1033,6 @@ msgid "context"
 msgstr ""
 
 msgid "controls"
-msgstr ""
-
-msgid "create"
-msgstr ""
-
-msgid "create new for"
 msgstr ""
 
 msgid "created"
@@ -1108,10 +1113,10 @@ msgstr ""
 msgid "pitch"
 msgstr ""
 
-msgid "remove"
+msgid "provider_username"
 msgstr ""
 
-msgid "reset"
+msgid "remove"
 msgstr ""
 
 msgid "scheduled_from"
@@ -1148,6 +1153,9 @@ msgid "undo remove"
 msgstr ""
 
 msgid "untitled"
+msgstr ""
+
+msgid "user_id"
 msgstr ""
 
 msgid "username"
@@ -1245,6 +1253,87 @@ msgstr ""
 msgid "Remove item. Are you sure?"
 msgstr ""
 
+msgid "All days"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Monday"
+msgstr ""
+
+msgid "Tuesday"
+msgstr ""
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Thursday"
+msgstr ""
+
+msgid "Friday"
+msgstr ""
+
+msgid "Saturday"
+msgstr ""
+
+msgid "Week"
+msgstr ""
+
+msgid "January"
+msgstr ""
+
+msgid "February"
+msgstr ""
+
+msgid "March"
+msgstr ""
+
+msgid "April"
+msgstr ""
+
+msgid "May"
+msgstr ""
+
+msgid "June"
+msgstr ""
+
+msgid "July"
+msgstr ""
+
+msgid "August"
+msgstr ""
+
+msgid "September"
+msgstr ""
+
+msgid "October"
+msgstr ""
+
+msgid "November"
+msgstr ""
+
+msgid "December"
+msgstr ""
+
+msgid "Contents creation"
+msgstr ""
+
+msgid "All contents"
+msgstr ""
+
+msgid "All object types"
+msgstr ""
+
+msgid "Loading stats data for"
+msgstr ""
+
+msgid "All months"
+msgstr ""
+
+msgid "All weeks"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
@@ -1307,13 +1396,25 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+msgid "Canonical"
+msgstr ""
+
 msgid "In relation with"
 msgstr ""
 
-msgid "Priority"
+msgid "Menu"
 msgstr ""
 
 msgid "Relation parameters"
+msgstr ""
+
+msgid "(empty)"
+msgstr ""
+
+msgid "(not available)"
+msgstr ""
+
+msgid "Priority"
 msgstr ""
 
 msgid "Mail to"
@@ -1362,9 +1463,6 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-msgid "Canonical"
-msgstr ""
-
 msgid "Loading branches for position"
 msgstr ""
 
@@ -1381,9 +1479,6 @@ msgid "Loading positions for object"
 msgstr ""
 
 msgid "Loading root folders"
-msgstr ""
-
-msgid "Menu"
 msgstr ""
 
 msgid "page"
@@ -1406,6 +1501,21 @@ msgid "Error while saving tag"
 msgstr ""
 
 msgid "Error on deleting tag"
+msgstr ""
+
+msgid "Ascending"
+msgstr ""
+
+msgid "Descending"
+msgstr ""
+
+msgid "Sort by"
+msgstr ""
+
+msgid "Related items order will be changed."
+msgstr ""
+
+msgid "OK"
 msgstr ""
 
 msgid "Hide"
@@ -1518,7 +1628,60 @@ msgstr ""
 msgid "Error on deleting property"
 msgstr ""
 
+msgid "Show object info"
+msgstr ""
+
+msgid "Media URL"
+msgstr ""
+
 msgid "Search on categories"
+msgstr ""
+
+msgid "Caption"
+msgstr ""
+
+msgid "Format"
+msgstr ""
+
+msgid "New caption"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "No captions"
+msgstr ""
+
+msgid "Not valid"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Valid"
+msgstr ""
+
+msgid ""
+"Sorry, your browser does not support embedded <code>audio</code> element"
+msgstr ""
+
+msgid "Cannot produce a thumbnail for this file"
+msgstr ""
+
+msgid "The thumbnail is not available"
+msgstr ""
+
+msgid "The thumbnail is not ready"
+msgstr ""
+
+msgid "Open image"
+msgstr ""
+
+msgid ""
+"Sorry, your browser does not support embedded <code>video</code> element"
+msgstr ""
+
+msgid "View original"
 msgstr ""
 
 msgid "Password"
@@ -1534,9 +1697,6 @@ msgid "edit"
 msgstr ""
 
 msgid "Pitch"
-msgstr ""
-
-msgid "Title"
 msgstr ""
 
 msgid "Zoom"
@@ -1606,13 +1766,46 @@ msgid ""
 "saving). Are you sure?"
 msgstr ""
 
-msgid "version by"
-msgstr ""
-
 msgid "date"
 msgstr ""
 
 msgid "Trashed"
+msgstr ""
+
+msgid "version by"
+msgstr ""
+
+msgid "Latitude"
+msgstr ""
+
+msgid "Longitude"
+msgstr ""
+
+msgid "Canceled"
+msgstr ""
+
+msgid "Choose file"
+msgstr ""
+
+msgid "File upload"
+msgstr ""
+
+msgid "No file selected"
+msgstr ""
+
+msgid "Replace media"
+msgstr ""
+
+msgid "Uploading..."
+msgstr ""
+
+msgid "Upload succeeded"
+msgstr ""
+
+msgid "Choose a type"
+msgstr ""
+
+msgid "Create new for"
 msgstr ""
 
 msgid "Insert date(s)"
@@ -1621,31 +1814,10 @@ msgstr ""
 msgid "Every day"
 msgstr ""
 
-msgid "Friday"
-msgstr ""
-
 msgid "Invalid date range"
 msgstr ""
 
-msgid "Monday"
-msgstr ""
-
-msgid "Saturday"
-msgstr ""
-
-msgid "Sunday"
-msgstr ""
-
-msgid "Thursday"
-msgstr ""
-
-msgid "Tuesday"
-msgstr ""
-
 msgid "Undo"
-msgstr ""
-
-msgid "Wednesday"
 msgstr ""
 
 msgid "Copied!"

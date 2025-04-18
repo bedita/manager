@@ -87,6 +87,25 @@ class PermsHelper extends Helper
     }
 
     /**
+     * Return modules that can be created by the authenticated user.
+     *
+     * @return array
+     */
+    public function canCreateModules(): array
+    {
+        $modules = array_keys((array)$this->_View->get('modules'));
+
+        return array_values(
+            array_filter(
+                $modules,
+                function ($module) {
+                    return $this->canCreate($module);
+                }
+            )
+        );
+    }
+
+    /**
      * Check delete permission.
      *
      * @param array $object The object

@@ -12,16 +12,20 @@
  */
 namespace App\Controller;
 
+use App\Utility\ApiConfigTrait;
 use App\Utility\CacheTools;
 use App\Utility\Message;
 use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\Utility\ApiTools;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventInterface;
+use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\I18n\I18n;
 use Cake\Utility\Hash;
+use Exception;
 use Psr\Log\LogLevel;
 
 /**
@@ -29,7 +33,6 @@ use Psr\Log\LogLevel;
  *
  * @property \App\Controller\Component\CategoriesComponent $Categories
  * @property \App\Controller\Component\ChildrenComponent $Children
- * @property \App\Controller\Component\CloneComponent $Clone
  * @property \App\Controller\Component\HistoryComponent $History
  * @property \App\Controller\Component\ObjectsEditorsComponent $ObjectsEditors
  * @property \App\Controller\Component\ParentsComponent $Parents
@@ -41,6 +44,7 @@ use Psr\Log\LogLevel;
  */
 class ModulesController extends AppController
 {
+    use ApiConfigTrait;
     use PermissionsTrait;
 
     /**
@@ -58,7 +62,6 @@ class ModulesController extends AppController
         parent::initialize();
 
         $this->loadComponent('Children');
-        $this->loadComponent('Clone');
         $this->loadComponent('History');
         $this->loadComponent('ObjectsEditors');
         $this->loadComponent('Parents');
@@ -72,7 +75,7 @@ class ModulesController extends AppController
             $this->Modules->setConfig('currentModuleName', $this->objectType);
             $this->Schema->setConfig('type', $this->objectType);
         }
-        $this->Security->setConfig('unlockedActions', ['save']);
+        $this->Security->setConfig('unlockedActions', ['save', 'setup']);
     }
 
     /**
@@ -137,6 +140,8 @@ class ModulesController extends AppController
 
         // objectTypes schema
         $this->set('schema', $this->getSchemaForIndex($this->objectType));
+        // custom properties
+        $this->set('customProps', $this->Schema->customProps($this->objectType));
 
         // set prevNext for views navigations
         $this->setObjectNav($objects);
@@ -215,9 +220,9 @@ class ModulesController extends AppController
             $response = $this->apiClient->get(sprintf('/objects/%s', $id));
         } catch (BEditaClientException $e) {
             $msg = $e->getMessage();
-            $error = $e->getCode() === 404 ?
-                sprintf(__('Resource "%s" not found', true), $id) :
-                sprintf(__('Resource "%s" not available. Error: %s', true), $id, $msg);
+            $msgNotFound = sprintf(__('Resource "%s" not found', true), $id);
+            $msgNotAvailable = sprintf(__('Resource "%s" not available. Error: %s', true), $id, $msg);
+            $error = $e->getCode() === 404 ? $msgNotFound : $msgNotAvailable;
             $this->Flash->error($error);
 
             return $this->redirect($this->referer());
@@ -286,6 +291,13 @@ class ModulesController extends AppController
         unset($requestData['_api']);
 
         try {
+            $uname = Hash::get($requestData, 'uname');
+            if (!empty($uname) && is_numeric($uname)) {
+                $this->set(['error' => __('Invalid numeric uname. Change it to a valid string')]);
+                $this->setSerialize(['error']);
+
+                return;
+            }
             $id = Hash::get($requestData, 'id');
             // skip save if no data changed
             if (empty($relatedData) && count($requestData) === 1 && !empty($id)) {
@@ -318,16 +330,12 @@ class ModulesController extends AppController
             ];
             $event = new Event('Controller.afterSave', $this, $options);
             $this->getEventManager()->dispatch($event);
-            $this->getRequest()->getSession()->delete(sprintf('failedSave.%s.%s', $this->objectType, $id));
         } catch (BEditaClientException $error) {
             $message = new Message($error);
             $this->log($message->get(), LogLevel::ERROR);
             $this->Flash->error($message->get(), ['params' => $error]);
             $this->set(['error' => $message->get()]);
             $this->setSerialize(['error']);
-
-            // set session data to recover form
-            $this->Modules->setDataFromFailedSave($this->objectType, $requestData);
 
             return;
         }
@@ -350,7 +358,6 @@ class ModulesController extends AppController
     public function clone($id): ?Response
     {
         $this->viewBuilder()->setTemplate('view');
-
         $schema = $this->Schema->getSchema();
         if (!is_array($schema)) {
             $this->Flash->error(__('Cannot create abstract objects or objects without schema'));
@@ -358,14 +365,22 @@ class ModulesController extends AppController
             return $this->redirect(['_name' => 'modules:list', 'object_type' => $this->objectType]);
         }
         try {
-            $source = $this->apiClient->getObject($id, $this->objectType);
-            $attributes = $this->Clone->prepareData($this->objectType, $source);
-            $this->Clone->stream($schema, $source, $attributes);
-            $save = $this->apiClient->save($this->objectType, $attributes);
-            $destination = (string)Hash::get($save, 'data.id');
-            $this->Clone->relations($source, $destination);
-            $this->Clone->translations($source, $destination);
-            $id = $destination;
+            $modified = [
+                'title' => $this->getRequest()->getQuery('title'),
+                'status' => 'draft',
+            ];
+            $reset = (array)Configure::read(sprintf('Clone.%s.reset', $this->objectType));
+            foreach ($reset as $field) {
+                $modified[$field] = null;
+            }
+            $included = [];
+            foreach (['relationships', 'translations'] as $attribute) {
+                if ($this->getRequest()->getQuery($attribute) === 'true') {
+                    $included[] = $attribute;
+                }
+            }
+            $clone = $this->apiClient->clone($this->objectType, $id, $modified, $included);
+            $id = (string)Hash::get($clone, 'data.id');
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -396,11 +411,10 @@ class ModulesController extends AppController
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
-            if (!empty($this->getRequest()->getData('id'))) {
-                return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $this->getRequest()->getData('id')]);
-            }
+            $id = $this->getRequest()->getData('id');
+            $options = empty($id) ? $this->referer() : ['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id];
 
-            return $this->redirect($this->referer());
+            return $this->redirect($options);
         }
         $this->Flash->success(__('Object(s) deleted'));
 
@@ -474,7 +488,7 @@ class ModulesController extends AppController
     }
 
     /**
-     * Relation data load callig api `GET /:object_type/:id/relationships/:relation`
+     * Relation data load calling api `GET /:object_type/:id/relationships/:relation`
      * Json response
      *
      * @param string|int $id The object ID.
@@ -525,7 +539,7 @@ class ModulesController extends AppController
         $relationsSchema = $this->Schema->getRelationsSchema();
         $types = $this->Modules->relatedTypes($relationsSchema, $relation);
 
-        return '/objects?filter[type][]=' . implode('&filter[type][]=', $types);
+        return count($types) === 1 ? sprintf('/%s', $types[0]) : '/objects?filter[type][]=' . implode('&filter[type][]=', $types);
     }
 
     /**
@@ -579,9 +593,13 @@ class ModulesController extends AppController
      */
     private function setupViewRelations(array $relations): void
     {
+        // setup relations schema
+        $relationsSchema = $this->Schema->getRelationsSchema();
+        $this->set('relationsSchema', $relationsSchema);
+
         // setup relations metadata
         $this->Modules->setupRelationsMeta(
-            $this->Schema->getRelationsSchema(),
+            $relationsSchema,
             $relations,
             $this->Properties->relationsList($this->objectType),
             $this->Properties->hiddenRelationsList($this->objectType),
@@ -597,5 +615,86 @@ class ModulesController extends AppController
         $schemasByType = $this->Schema->getSchemasByType($rightTypes);
         $this->set('schemasByType', $schemasByType);
         $this->set('filtersByType', $this->Properties->filtersByType($rightTypes));
+    }
+
+    /**
+     * Get list of users / no email, no relationships, no links, no schema, no included.
+     *
+     * @return void
+     */
+    public function users(): void
+    {
+        $this->viewBuilder()->setClassName('Json');
+        $this->getRequest()->allowMethod('get');
+        $query = array_merge(
+            $this->getRequest()->getQueryParams(),
+            ['fields' => 'id,title,username,name,surname']
+        );
+        $response = (array)$this->apiClient->get('users', $query);
+        $response = ApiTools::cleanResponse($response);
+        $data = (array)Hash::get($response, 'data');
+        $meta = (array)Hash::get($response, 'meta');
+        $this->set(compact('data', 'meta'));
+        $this->setSerialize(['data', 'meta']);
+    }
+
+    /**
+     * Get single resource, minimal data / no relationships, no links, no schema, no included.
+     *
+     * @param string $id The object ID
+     * @return void
+     */
+    public function get(string $id): void
+    {
+        $this->viewBuilder()->setClassName('Json');
+        $this->getRequest()->allowMethod('get');
+        $response = (array)$this->apiClient->getObject($id, 'objects');
+        $query = array_merge(
+            $this->getRequest()->getQueryParams(),
+            ['fields' => 'id,title,description,uname,status,media_url']
+        );
+        $response = (array)$this->apiClient->getObject($id, $response['data']['type'], $query);
+        $response = ApiTools::cleanResponse($response);
+        $data = (array)Hash::get($response, 'data');
+        $meta = (array)Hash::get($response, 'meta');
+        $this->set(compact('data', 'meta'));
+        $this->setSerialize(['data', 'meta']);
+    }
+
+    /**
+     * Setup module.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function setup(): ?Response
+    {
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->Authentication->getIdentity();
+        $roles = (array)$user->get('roles');
+        if (!in_array('admin', $roles)) {
+            throw new UnauthorizedException(__('You are not authorized to access here'));
+        }
+        $this->getRequest()->allowMethod(['get', 'post']);
+        if ($this->getRequest()->is('post')) {
+            try {
+                $requestData = $this->getRequest()->getData();
+                $configurationKey = $requestData['configurationKey'] ?? null;
+                unset($requestData['configurationKey']);
+                $propertyName = explode('.', $configurationKey)[0];
+                $subkey = explode('.', $configurationKey)[1];
+                $propertyValue = (array)Configure::read($propertyName);
+                $propertyValue = (array)Hash::insert($propertyValue, $subkey, $requestData);
+                $this->saveApiConfig($propertyName, $propertyValue);
+                $response = 'Configuration saved';
+                $this->set('response', $response);
+                $this->setSerialize(['response']);
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+                $this->set('error', $error);
+                $this->setSerialize(['error']);
+            }
+        }
+
+        return null;
     }
 }

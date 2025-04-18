@@ -122,7 +122,7 @@ export default {
             return fetch(`/api/history?${query}`).then((r) => r.json());
         },
         async getObjects(ids) {
-            return fetch(`/api/objects?filter[id]=${ids.join(',')}`).then((r) => r.json());
+            return fetch(`/history/objects?filter[id]=${ids.join(',')}`).then((r) => r.json());
         },
         loadHistory(pageSize = 20, page = 1) {
             this.loading = true;
