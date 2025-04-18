@@ -380,18 +380,21 @@ export default {
             },
 
             handleApiError(response) {
+                let message = '';
+                let detail = false;
                 if (typeof response === 'string') {
-                    BEDITA.error(response);
-
-                    return;
+                    message = response;
+                } else if (response?.error && typeof response.error === 'string') {
+                    message = response.error;
+                } else if (response?.message && typeof response.message === 'string') {
+                    message = response.message;
+                } else {
+                    if (response?.error?.status) {
+                        message += `[${response.error.status}] `;
+                    }
+                    message += response?.error?.title || t`An error occurred`;
+                    detail = response?.error?.detail || false;
                 }
-                if (response?.error && typeof response.error === 'string') {
-                    BEDITA.error(response.error);
-
-                    return;
-                }
-                const message = response?.error?.title || 'An error occurred';
-                const detail = response?.error?.detail || false;
                 BEDITA.error(message, document.body, detail);
             },
         }
