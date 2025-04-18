@@ -112,6 +112,8 @@ const _vueInstance = new Vue({
         FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
         RelatedObjectsFilter: () => import(/* webpackChunkName: "related-objects-filter" */'app/components/related-objects-filter/related-objects-filter'),
+        ModuleProperties: () => import(/* webpackChunkName: "module-properties" */'app/components/module/module-properties'),
+        ModuleSetup: () => import(/* webpackChunkName: "module-setup" */'app/components/module/module-setup'),
         AppIcon,
     },
 
@@ -634,6 +636,8 @@ Vue.component('FieldString', _vueInstance.$options.components.FieldString);
 Vue.component('FieldTextarea', _vueInstance.$options.components.FieldTextarea);
 Vue.component('FieldTitle', _vueInstance.$options.components.FieldTitle);
 Vue.component('FileUpload', _vueInstance.$options.components.FileUpload);
+Vue.component('ModuleProperties', _vueInstance.$options.components.ModuleProperties);
+Vue.component('ModuleSetup', _vueInstance.$options.components.ModuleSetup);
 Vue.component('ObjectCategories', _vueInstance.$options.components.ObjectCategories);
 Vue.component('ObjectCaptions', _vueInstance.$options.components.ObjectCaptions);
 Vue.component('ObjectInfo', _vueInstance.$options.components.ObjectInfo);
