@@ -61,3 +61,9 @@
 	{% endfor %}
 {% endif %}
 
+{% if in_array('admin', user.roles) %}
+    {% do _view.append(
+        'app-module-buttons',
+        '<a href="' ~ Url.build({'_name': 'modules:setup', 'object_type': objectType}) ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><app-icon icon="carbon:settings"></app-icon><span class="ml-05">' ~ __('Setup module') ~ '</span></a>'
+    ) %}
+{% endif %}
