@@ -595,6 +595,7 @@ return [
     //     ],
     //     'style_formats_merge' => true,
     //     'content_style' => '.be-highlight { background-color: #F6F6F6; }',
+    //     'cleanup_regex' => '\s\w+="[^"]*"', // remove attributes from tags
     // ],
 
     /**

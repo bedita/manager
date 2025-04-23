@@ -64,6 +64,14 @@ export default {
             bind(element, binding, vnode) {
                 element.addEventListener('change', (event) => {
                     emit(vnode, 'input', event);
+                    if (BEDITA?.richeditorConfig?.cleanup_regex) {
+                        const regex = new RegExp(BEDITA.richeditorConfig.cleanup_regex, 'g');
+                        const content = event?.target?.editor?.getContent() || '';
+                        const cleanContent = content.replace(regex, '');
+                        if (cleanContent !== content) {
+                            event.target.editor.setContent(cleanContent);
+                        }
+                    }
                 });
             },
 
