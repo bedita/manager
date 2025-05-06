@@ -124,29 +124,12 @@ export default {
                 }
             }
             this.selectedTags.push({
-                'id': this.validatedName(this.text),
+                'id': this.$helpers.slugify(this.text, 50),
                 'label': this.text,
                 'originalLabel': this.text
             });
             this.text = '';
             this.parseBeforeSave();
-        },
-        validatedName(name) {
-            // no spaces
-            name = name.trim();
-            name = name.replaceAll(' ', '-');
-
-            // starts with a lowercase letter or number
-            if (name.charAt(0).match(/[A-Z]/)) {
-                name = name.charAt(0).toLowerCase() + name.slice(1);
-            }
-
-            // length between 2 and 50 characters
-            if (name.length > 50) {
-                return name.substring(0, 50);
-            }
-
-            return name;
         },
         async fetchTags({ action, searchQuery, callback }) {
             if (action !== ASYNC_SEARCH || searchQuery?.length < QUERY_MIN_LENGTH) {

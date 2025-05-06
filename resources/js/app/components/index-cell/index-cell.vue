@@ -36,7 +36,12 @@
                         v-for="f in relatedFields"
                         :key="f"
                     >
-                        {{ related?.[0]?.attributes?.[f] }}
+                        <template v-if="f == 'media_url'">
+                            <img :src="thumb(0)">
+                        </template>
+                        <template v-else>
+                            {{ related?.[0]?.attributes?.[f] || related?.[0]?.meta?.[f] }}
+                        </template>
                     </span>
                 </div>
                 <div
@@ -76,7 +81,12 @@
                             v-for="f in relatedFields"
                             :key="f"
                         >
-                            {{ relatedItem?.attributes?.[f] }}
+                            <template v-if="f == 'media_url'">
+                                <img :src="thumb(index)">
+                            </template>
+                            <template v-else>
+                                {{ relatedItem?.attributes?.[f] || relatedItem?.meta?.[f] }}
+                            </template>
                         </span>
                     </div>
                 </template>
@@ -106,6 +116,10 @@ export default {
             default: () => [],
         },
         relatedFields: {
+            type: Array,
+            default: () => [],
+        },
+        relatedThumbs: {
             type: Array,
             default: () => [],
         },
@@ -158,6 +172,12 @@ export default {
             }
             return !this.msg && this.showCopy;
         },
+        thumb(index) {
+            const thumb = this.relatedThumbs?.[index] || false;
+            const thumbError = !isNaN(thumb) && Number(thumb) < 0;
+
+            return !thumbError ? thumb : this.related?.[index]?.meta?.media_url;
+        },
     },
 };
 </script>
@@ -184,5 +204,14 @@ div.index-cell div.related-toggle > button {
     line-height: 1;
     height: 20px;
     cursor: cell;
+}
+div.index-cell img {
+    margin-bottom: 0.2rem;
+    padding: 1px;
+    display: inline-block;
+    max-height: 32px;
+    max-width: 40px;
+    vertical-align: middle;
+    background-color: #e9ecef;
 }
 </style>
