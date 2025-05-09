@@ -70,20 +70,22 @@
         >
             <template #eventContent="arg">
                 <div class="eventContainer">
-                    <object-info
-                        border-color="transparent"
-                        color="white"
-                        :object-data="arg?.event?.extendedProps?.obj"
-                        v-if="arg?.event?.extendedProps?.obj"
-                    />
                     <div>
-                        <b>{{ arg.timeText }}</b>
-                        <i
-                            class="ml-05 wrap"
+                        <span>{{ ftime(arg.event.start) }}<template v-if="arg.event.end"> - {{ ftime(arg.event.end) }}</template></span>
+                        <object-info
+                            border-color="transparent"
+                            color="white"
+                            :object-data="arg?.event?.extendedProps?.obj"
+                            v-if="arg?.event?.extendedProps?.obj"
+                        />
+                    </div>
+                    <div>
+                        <span
+                            class="event-title"
                             v-title="arg?.event?.extendedProps?.obj?.attributes?.title || arg.event.title"
                         >
                             {{ arg.event.title }}
-                        </i>
+                        </span>
                     </div>
                 </div>
             </template>
@@ -131,6 +133,10 @@ export default {
                 },
                 contentHeight: 'auto',
                 eventDisplay: 'block',
+                eventColor: '#378006',
+                eventTextColor: '#fff',
+                eventBackgroundColor: BEDITA?.currentModule?.color || '#378006',
+                eventBorderColor: '#378006',
                 displayEventTime: true,
                 displayEventEnd: true,
                 slotMinTime: '08:00:00',
@@ -184,6 +190,9 @@ export default {
             this.createNew = false;
             this.createNewDateRanges = [];
             this.createNewTitle = '';
+        },
+        ftime(d) {
+            return this.$helpers.formatTime(d);
         },
         refetchEvents() {
             const calendarApi = this.$refs.fullCal.getApi();
@@ -270,6 +279,7 @@ export default {
                             url: `/view/${item.id}`,
                             title: this.$helpers.truncate(item?.attributes?.title || item?.attributes?.uname, 50),
                             start: new Date(subItem?.start_date),
+                            end: subItem?.end_date ? new Date(subItem?.end_date) : null,
                             obj: item,
                         });
                     }
@@ -336,7 +346,7 @@ export default {
 }
 .calendar-view .eventContainer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     border: solid 1px gray;
 }
 .calendar-view .eventContainer > div {
@@ -346,11 +356,8 @@ export default {
     padding: 0.1rem;
     margin: 0.1rem;
 }
-.calendar-view .eventContainer > div > b {
-    font-weight: bold;
-}
-.calendar-view .eventContainer > div > i {
-    font-style: italic;
+.calendar-view .eventContainer > div > span.event-title {
     text-wrap: wrap;
+    font-weight: 700;
 }
 </style>
