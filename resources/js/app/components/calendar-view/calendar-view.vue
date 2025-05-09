@@ -1,5 +1,57 @@
 <template>
     <div class="calendar-view">
+        <aside
+            class="main-panel-container on"
+            custom-footer="true"
+            custom-header="true"
+            v-if="createNew"
+        >
+            <div class="main-panel fieldset">
+                <header class="mx-1 mt-1 tab tab-static unselectable">
+                    <h2>Create new</h2>
+                </header>
+                <div class="container">
+                    <div>
+                        <label for="title">{{ msgTitle }}</label>
+                        <input
+                            id="title"
+                            class="title"
+                            type="text"
+                            v-model="createNewTitle"
+                        >
+                    </div>
+                    <div>
+                        <date-ranges-view
+                            :compact="true"
+                            :ranges="createNewDateRanges"
+                            @update="updateNewDateRanges"
+                        />
+                    </div>
+                    <div class="buttons">
+                        <button
+                            class="button button-primary"
+                            :class="{'is-loading-spinner': saving}"
+                            :disabled="saving"
+                            @click="save"
+                        >
+                            <app-icon icon="carbon:save" />
+                            <span class="ml-05">
+                                {{ msgSave }}
+                            </span>
+                        </button>
+                        <button
+                            class="button button-primary"
+                            @click="cancel"
+                        >
+                            <app-icon icon="carbon:reset" />
+                            <span class="ml-05">
+                                {{ msgCancel }}
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
         <div
             class="loading"
             v-if="loading"
@@ -31,8 +83,10 @@ import { t } from 'ttag';
 export default {
     name: 'CalendarView',
     components: {
+        DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         FullCalendar,
     },
+    inject: ['getCSFRToken'],
     props: {
         objectType: {
             type: String,
@@ -72,13 +126,68 @@ export default {
 
                     return [...items];
                 },
+                dateClick: async (info) => {
+                    this.createNew = {
+                        title: '',
+                        date_ranges: [{start_date: info.dateStr}],
+                    };
+                    this.createNewDateRanges = JSON.stringify([{start_date: info.dateStr}]);
+                    this.createNewTitle = '';
+                },
             },
+            createNew: false,
+            createNewDateRanges: [],
+            createNewTitle: '',
             loading: false,
+            msgCancel: t`Cancel`,
             msgLoading: t`Loading`,
+            msgSave: t`Save`,
+            msgTitle: t`Title`,
             pageSize: 100,
+            saving: false,
         }
     },
     methods: {
+        cancel() {
+            this.createNew = false;
+            this.createNewDateRanges = [];
+            this.createNewTitle = '';
+        },
+        refetchEvents() {
+            const calendarApi = this.$refs.fullCal.getApi();
+            calendarApi.refetchEvents();
+        },
+        async save() {
+            try {
+                this.saving = true;
+                this.payload = Object.assign({}, this.createNew);
+                this.payload.title = this.createNewTitle;
+                const url = `/${this.objectType}/save`;
+                const options = {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': this.getCSFRToken(),
+                    },
+                    body: JSON.stringify(this.payload),
+                };
+                const response = await fetch(url, options);
+                const responseJson = await response.json();
+                if (responseJson?.error) {
+                    throw new Error(responseJson.error);
+                }
+                this.createNew = false;
+                this.createNewDateRanges = [];
+                this.createNewTitle = '';
+                this.refetchEvents();
+            } catch (error) {
+                this.error = error;
+            } finally {
+                this.saving = false;
+            }
+        },
         async search() {
             const items = [];
             try {
@@ -127,7 +236,7 @@ export default {
                     if (subItem.start_date) {
                         items.push({
                             url: `/view/${item.id}`,
-                            title: item?.attributes?.title || item?.attributes?.uname,
+                            title: this.$helpers.truncate(item?.attributes?.title || item?.attributes?.uname, 50),
                             start: new Date(subItem?.start_date),
                         });
                     }
@@ -138,6 +247,9 @@ export default {
                     end_date: new Date(dateRange.end_date),
                 }));
             }
+        },
+        updateNewDateRanges(ranges) {
+            this.createNew.date_ranges = ranges;
         },
     },
 }
@@ -165,5 +277,28 @@ export default {
 	width:100%;
     background-color: rgba(255,255,255,0.1);
     z-index:9999;
+}
+.calendar-view aside.main-panel-container {
+    z-index: 9999;
+}
+.calendar-view aside.main-panel {
+    margin: 1rem;
+    padding: 1rem;
+}
+.calendar-view .container {
+    padding: 1rem;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.calendar-view .container > div {
+    display: flex;
+    flex-direction: column;
+}
+.calendar-view .container > div.buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
 }
 </style>
