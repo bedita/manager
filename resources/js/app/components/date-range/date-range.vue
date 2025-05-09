@@ -395,5 +395,6 @@ div.dateRange div.removed {
 }
 div.dateRange input.date-range-input {
     min-width: 200px;
+    font-size: 11px;
 }
 </style>
