@@ -67,7 +67,27 @@
             id="full-calendar"
             :options="calendarOptions"
             ref="fullCal"
-        />
+        >
+            <template #eventContent="arg">
+                <div class="eventContainer">
+                    <object-info
+                        border-color="transparent"
+                        color="white"
+                        :object-data="arg?.event?.extendedProps?.obj"
+                        v-if="arg?.event?.extendedProps?.obj"
+                    />
+                    <div>
+                        <b>{{ arg.timeText }}</b>
+                        <i
+                            class="ml-05 wrap"
+                            v-title="arg?.event?.extendedProps?.obj?.attributes?.title || arg.event.title"
+                        >
+                            {{ arg.event.title }}
+                        </i>
+                    </div>
+                </div>
+            </template>
+        </FullCalendar>
     </div>
 </template>
 <script>
@@ -85,6 +105,7 @@ export default {
     components: {
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         FullCalendar,
+        ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
     },
     inject: ['getCSFRToken'],
     props: {
@@ -138,6 +159,7 @@ export default {
             createNew: false,
             createNewDateRanges: [],
             createNewTitle: '',
+            fields: [],
             loading: false,
             msgCancel: t`Cancel`,
             msgLoading: t`Loading`,
@@ -146,6 +168,16 @@ export default {
             pageSize: 100,
             saving: false,
         }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            const moduleFields = BEDITA?.indexLists?.[this.objectType] || [];
+            const defaultFields = ['id', 'title', 'date_ranges'];
+            const allFields = [...defaultFields, ...moduleFields];
+            this.fields = allFields.filter((value, index, array) => {
+                return typeof value === 'string' && array.indexOf(value) === index;
+            });
+        });
     },
     methods: {
         cancel() {
@@ -202,7 +234,7 @@ export default {
                     headers,
                     method: 'GET',
                 };
-                let query = '?fields=id,title,date_ranges';
+                let query = `?fields=${this.fields.join(',')}&page=1`;
                 query += `&filter[date_ranges][from_date]=${this.startDate}&filter[date_ranges][to_date]=${this.endDate}`;
                 query += `&lang=${BEDITA?.locale?.slice(0,2) || 'it'}&sort=date_ranges_min_start_date&page_size=${this.pageSize}`;
                 let response = await fetch(`${BEDITA.base}/api/${this.objectType}${query}`, options);
@@ -212,7 +244,7 @@ export default {
                 this.searchItemsConcat(items, responseJson);
                 while (count < pageCount) {
                     count++;
-                    query = `?fields=id,title,date_ranges&page=${count}`;
+                    query = `?fields=${this.fields.join(',')}&page=${count}`;
                     query += `&filter[date_ranges][from_date]=${this.startDate}&filter[date_ranges][to_date]=${this.endDate}`;
                     query += `&lang=${this.calendarOptions.locale}&sort=date_ranges_min_start_date&page_size=${this.pageSize}`;
                     response = await fetch(`${BEDITA.base}/api/${this.objectType}${query}`, options);
@@ -238,6 +270,7 @@ export default {
                             url: `/view/${item.id}`,
                             title: this.$helpers.truncate(item?.attributes?.title || item?.attributes?.uname, 50),
                             start: new Date(subItem?.start_date),
+                            obj: item,
                         });
                     }
                 }
@@ -300,5 +333,24 @@ export default {
     display: flex;
     flex-direction: row;
     gap: 1rem;
+}
+.calendar-view .eventContainer {
+    display: flex;
+    flex-direction: row;
+    border: solid 1px gray;
+}
+.calendar-view .eventContainer > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.1rem;
+    margin: 0.1rem;
+}
+.calendar-view .eventContainer > div > b {
+    font-weight: bold;
+}
+.calendar-view .eventContainer > div > i {
+    font-style: italic;
+    text-wrap: wrap;
 }
 </style>
