@@ -8,7 +8,7 @@
         >
             <div class="main-panel fieldset">
                 <header class="mx-1 mt-1 tab tab-static unselectable">
-                    <h2>Create new</h2>
+                    <h2>{{ msgCreateNew }}</h2>
                 </header>
                 <div class="container">
                     <div>
@@ -168,6 +168,7 @@ export default {
             fields: [],
             loading: false,
             msgCancel: t`Cancel`,
+            msgCreateNew: t`Create new`,
             msgLoading: t`Loading`,
             msgSave: t`Save`,
             msgTitle: t`Title`,
