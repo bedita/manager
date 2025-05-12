@@ -71,8 +71,8 @@
                             <button
                                 class="button button-primary"
                                 :class="{'is-loading-spinner': saving}"
-                                :disabled="saving"
-                                @click="save"
+                                :disabled="saveDisabled"
+                                @click.prevent="save"
                             >
                                 <app-icon icon="carbon:save" />
                                 <span class="ml-05">
@@ -83,9 +83,9 @@
                                 class="button button-primary"
                                 @click="closePanel()"
                             >
-                                <app-icon icon="carbon:reset" />
+                                <app-icon icon="carbon:close" />
                                 <span class="ml-05">
-                                    {{ msgCancel }}
+                                    {{ msgClose }}
                                 </span>
                             </button>
                         </div>
@@ -213,8 +213,10 @@ export default {
             },
             createNew: false,
             createNewDateRanges: [],
+            error: {},
             fieldsMap: {},
             fieldsAll: [],
+            fieldsInvalid: [],
             fieldsOther: [],
             fieldsRequired: [],
             formFieldProperties: {},
@@ -224,7 +226,6 @@ export default {
             },
             loaded: false,
             loading: false,
-            msgCancel: t`Cancel`,
             msgClose: t`Close`,
             msgCreateNew: t`Create new`,
             msgLoading: t`Loading`,
@@ -232,7 +233,13 @@ export default {
             msgTitle: t`Title`,
             pageSize: 100,
             saving: false,
+            success: {},
         }
+    },
+    computed: {
+        saveDisabled() {
+            return this.fieldsInvalid.length > 0 || this.saving;
+        },
     },
     mounted() {
         this.$nextTick(() => {
@@ -258,6 +265,7 @@ export default {
                     this.fieldsMap[itemKey] = item[itemKey];
                 }
             }
+            this.fieldsInvalid = this.fieldsRequired.filter(f => !this.formFieldProperties[this.objectType][f]);
         });
     },
     methods: {
@@ -266,18 +274,14 @@ export default {
             this.createNewDateRanges = [];
         },
         fieldError(field, val) {
-            console.error('Error:', field, val);
+            this.error[field] = val;
         },
         fieldUpdate(field, val) {
-            if (field === 'date_ranges' && val != '') {
-                this.formFieldProperties[this.objectType].date_ranges = val;
-            } else {
-                this.formFieldProperties[this.objectType][field] = val;
-            }
-            console.log('Update:', val);
+            this.formFieldProperties[this.objectType][field] = val;
+            this.fieldsInvalid = this.fieldsRequired.filter(f => !this.formFieldProperties[this.objectType][f]);
         },
         fieldSuccess(field, val) {
-            console.log('Success:', val);
+            this.success[field] = val;
         },
         fieldKey(field) {
             return this.isNumeric(field) ? this.fieldsMap[field] : field;
