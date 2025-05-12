@@ -1,57 +1,70 @@
 <template>
     <div class="calendar-view">
-        <aside
-            class="main-panel-container on"
-            custom-footer="true"
-            custom-header="true"
-            v-if="createNew"
-        >
-            <div class="main-panel fieldset">
-                <header class="mx-1 mt-1 tab tab-static unselectable">
-                    <h2>{{ msgCreateNew }}</h2>
-                </header>
-                <div class="container">
-                    <div>
-                        <label for="title">{{ msgTitle }}</label>
-                        <input
-                            id="title"
-                            class="title"
-                            type="text"
-                            v-model="createNewTitle"
-                        >
-                    </div>
-                    <div>
-                        <date-ranges-view
-                            :compact="true"
-                            :ranges="createNewDateRanges"
-                            @update="updateNewDateRanges"
-                        />
-                    </div>
-                    <div class="buttons">
+        <template v-if="createNew">
+            <div
+                class="backdrop"
+                style="display: block; z-index: 9998;"
+                @click="closePanel()"
+            />
+            <aside
+                class="main-panel-container on"
+                custom-footer="true"
+                custom-header="true"
+            >
+                <div class="main-panel fieldset">
+                    <header class="mx-1 mt-1 tab tab-static unselectable">
+                        <h2>{{ msgCreateNew }}</h2>
                         <button
-                            class="button button-primary"
-                            :class="{'is-loading-spinner': saving}"
-                            :disabled="saving"
-                            @click="save"
+                            class="button button-outlined close"
+                            v-title="msgClose"
+                            @click="closePanel()"
                         >
-                            <app-icon icon="carbon:save" />
-                            <span class="ml-05">
-                                {{ msgSave }}
-                            </span>
+                            <app-icon icon="carbon:close" />
                         </button>
-                        <button
-                            class="button button-primary"
-                            @click="cancel"
-                        >
-                            <app-icon icon="carbon:reset" />
-                            <span class="ml-05">
-                                {{ msgCancel }}
-                            </span>
-                        </button>
+                    </header>
+                    <div class="container">
+                        <div>
+                            <label for="title">{{ msgTitle }}</label>
+                            <input
+                                id="title"
+                                class="title"
+                                type="text"
+                                v-model="createNewTitle"
+                            >
+                        </div>
+                        <div>
+                            <date-ranges-view
+                                :compact="true"
+                                :ranges="createNewDateRanges"
+                                @update="updateNewDateRanges"
+                            />
+                        </div>
+                        <div class="buttons">
+                            <button
+                                class="button button-primary"
+                                :class="{'is-loading-spinner': saving}"
+                                :disabled="saving"
+                                @click="save"
+                            >
+                                <app-icon icon="carbon:save" />
+                                <span class="ml-05">
+                                    {{ msgSave }}
+                                </span>
+                            </button>
+                            <button
+                                class="button button-primary"
+                                @click="closePanel()"
+                            >
+                                <app-icon icon="carbon:reset" />
+                                <span class="ml-05">
+                                    {{ msgCancel }}
+                                </span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </aside>
+            </aside>
+        </template>
         <div
             class="loading"
             v-if="loading"
@@ -127,9 +140,17 @@ export default {
                     timeGridPlugin,
                 ],
                 headerToolbar: {
-                    left: 'prev,next,today',
+                    left: 'prev,next,today,addButton',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                },
+                customButtons: {
+                    addButton: {
+                        text: `+ ${t`Create`}`,
+                        click: () => {
+                            this.prepareNew('', new Date().toISOString().split('T')[0]);
+                        }
+                    }
                 },
                 contentHeight: 'auto',
                 eventDisplay: 'block',
@@ -154,12 +175,7 @@ export default {
                     return [...items];
                 },
                 dateClick: async (info) => {
-                    this.createNew = {
-                        title: '',
-                        date_ranges: [{start_date: info.dateStr}],
-                    };
-                    this.createNewDateRanges = JSON.stringify([{start_date: info.dateStr}]);
-                    this.createNewTitle = '';
+                    this.prepareNew('', info.dateStr);
                 },
             },
             createNew: false,
@@ -168,6 +184,7 @@ export default {
             fields: [],
             loading: false,
             msgCancel: t`Cancel`,
+            msgClose: t`Close`,
             msgCreateNew: t`Create new`,
             msgLoading: t`Loading`,
             msgSave: t`Save`,
@@ -187,13 +204,21 @@ export default {
         });
     },
     methods: {
-        cancel() {
+        closePanel() {
             this.createNew = false;
             this.createNewDateRanges = [];
             this.createNewTitle = '';
         },
         ftime(d) {
             return this.$helpers.formatTime(d);
+        },
+        prepareNew(title, startDate) {
+            this.createNew = {
+                title: title,
+                date_ranges: [{start_date: startDate}],
+            };
+            this.createNewDateRanges = JSON.stringify([{start_date: startDate}]);
+            this.createNewTitle = title;
         },
         refetchEvents() {
             const calendarApi = this.$refs.fullCal.getApi();
@@ -328,6 +353,11 @@ export default {
 .calendar-view aside.main-panel {
     margin: 1rem;
     padding: 1rem;
+}
+.calendar-view button.close {
+    border: solid transparent 0px;
+    min-width: 36px;
+    max-width: 36px;
 }
 .calendar-view .container {
     padding: 1rem;
