@@ -23,23 +23,22 @@
                         </button>
                     </header>
                     <div class="container">
-                        <template v-for="field in fieldsRequired">
-                            <form-field
-                                :key="reference"
-                                :field="fieldKey(field)"
-                                :render-as="fieldType(field)"
-                                :json-schema="schema?.properties?.[fieldKey(field)] || {}"
-                                :is-uploadable="false"
-                                :languages="languages"
-                                :object-type="objectType"
-                                :required="fieldsRequired?.includes(fieldKey(field))"
-                                :val="schema?.[fieldKey(field)] || null"
-                                v-model="formFieldProperties[objectType][fieldKey(field)]"
-                                @error="fieldError"
-                                @update="fieldUpdate"
-                                @success="fieldSuccess"
-                            />
-                        </template>
+                        <form-field
+                            v-for="field in fieldsRequired"
+                            :key="field"
+                            :field="fieldKey(field)"
+                            :render-as="fieldType(field)"
+                            :json-schema="schema?.properties?.[fieldKey(field)] || {}"
+                            :is-uploadable="false"
+                            :languages="languages"
+                            :object-type="objectType"
+                            :required="fieldsRequired?.includes(fieldKey(field))"
+                            :val="schema?.[fieldKey(field)] || null"
+                            v-model="formFieldProperties[objectType][fieldKey(field)]"
+                            @error="fieldError"
+                            @update="fieldUpdate"
+                            @success="fieldSuccess"
+                        />
                         <template v-for="field in fieldsOther">
                             <div
                                 :key="field"
@@ -52,7 +51,7 @@
                                 />
                             </div>
                             <form-field
-                                :key="reference"
+                                :key="field"
                                 :field="fieldKey(field)"
                                 :render-as="fieldType(field)"
                                 :json-schema="schema?.properties?.[fieldKey(field)] || {}"
@@ -232,14 +231,12 @@ export default {
             msgSave: t`Save`,
             msgTitle: t`Title`,
             pageSize: 100,
-            reference: null,
             saving: false,
         }
     },
     mounted() {
         this.$nextTick(() => {
             this.formFieldProperties[this.objectType] = {};
-            this.reference = Math.floor(Math.random() * 1000000);
             this.fieldsRequired = BEDITA?.fastCreateFields?.[this.objectType]?.required || [];
             this.fieldsAll = BEDITA?.fastCreateFields?.[this.objectType]?.fields || ['id', 'title', 'date_ranges'];
             this.fieldsAll = this.fieldsAll.map(field => {
@@ -302,7 +299,6 @@ export default {
             this.createNew = true;
             this.createNewDateRanges = JSON.stringify([{start_date: startDate}]);
             this.formFieldProperties[this.objectType].date_ranges = [{start_date: startDate}];
-            this.reference = Math.floor(Math.random() * 1000000);
         },
         refetchEvents() {
             const calendarApi = this.$refs.fullCal.getApi();
