@@ -23,22 +23,51 @@
                         </button>
                     </header>
                     <div class="container">
-                        <div>
-                            <label for="title">{{ msgTitle }}</label>
-                            <input
-                                id="title"
-                                class="title"
-                                type="text"
-                                v-model="createNewTitle"
-                            >
-                        </div>
-                        <div>
-                            <date-ranges-view
-                                :compact="true"
-                                :ranges="createNewDateRanges"
-                                @update="updateNewDateRanges"
+                        <template v-for="field in fieldsRequired">
+                            <form-field
+                                :key="reference"
+                                :field="fieldKey(field)"
+                                :render-as="fieldType(field)"
+                                :json-schema="schema?.properties?.[fieldKey(field)] || {}"
+                                :is-uploadable="false"
+                                :languages="languages"
+                                :object-type="objectType"
+                                :required="fieldsRequired?.includes(fieldKey(field))"
+                                :val="schema?.[fieldKey(field)] || null"
+                                v-model="formFieldProperties[objectType][fieldKey(field)]"
+                                @error="fieldError"
+                                @update="fieldUpdate"
+                                @success="fieldSuccess"
                             />
-                        </div>
+                        </template>
+                        <template v-for="field in fieldsOther">
+                            <div
+                                :key="field"
+                                v-if="fieldKey(field) === 'date_ranges'"
+                            >
+                                <date-ranges-view
+                                    :compact="true"
+                                    :ranges="createNewDateRanges"
+                                    @update="updateNewDateRanges"
+                                />
+                            </div>
+                            <form-field
+                                :key="reference"
+                                :field="fieldKey(field)"
+                                :render-as="fieldType(field)"
+                                :json-schema="schema?.properties?.[fieldKey(field)] || {}"
+                                :is-uploadable="false"
+                                :languages="languages"
+                                :object-type="objectType"
+                                :required="fieldsRequired?.includes(fieldKey(field))"
+                                :val="schema?.[fieldKey(field)] || null"
+                                v-model="formFieldProperties[objectType][fieldKey(field)]"
+                                @error="fieldError"
+                                @update="fieldUpdate"
+                                @success="fieldSuccess"
+                                v-else
+                            />
+                        </template>
                         <div class="buttons">
                             <button
                                 class="button button-primary"
@@ -119,6 +148,7 @@ export default {
     name: 'CalendarView',
     components: {
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
+        FormField: () => import(/* webpackChunkName: "form-field" */'app/components/fast-create/form-field'),
         FullCalendar,
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
     },
@@ -127,6 +157,10 @@ export default {
         objectType: {
             type: String,
             required: true,
+        },
+        schema: {
+            type: Object,
+            default: () => ({}),
         },
     },
     data() {
@@ -180,8 +214,16 @@ export default {
             },
             createNew: false,
             createNewDateRanges: [],
-            createNewTitle: '',
-            fields: [],
+            fieldsMap: {},
+            fieldsAll: [],
+            fieldsOther: [],
+            fieldsRequired: [],
+            formFieldProperties: {},
+            languages: {
+                type: Object,
+                default: () => {},
+            },
+            loaded: false,
             loading: false,
             msgCancel: t`Cancel`,
             msgClose: t`Close`,
@@ -190,35 +232,77 @@ export default {
             msgSave: t`Save`,
             msgTitle: t`Title`,
             pageSize: 100,
+            reference: null,
             saving: false,
         }
     },
     mounted() {
         this.$nextTick(() => {
-            const moduleFields = BEDITA?.indexLists?.[this.objectType] || [];
-            const defaultFields = ['id', 'title', 'date_ranges'];
-            const allFields = [...defaultFields, ...moduleFields];
-            this.fields = allFields.filter((value, index, array) => {
-                return typeof value === 'string' && array.indexOf(value) === index;
+            this.formFieldProperties[this.objectType] = {};
+            this.reference = Math.floor(Math.random() * 1000000);
+            this.fieldsRequired = BEDITA?.fastCreateFields?.[this.objectType]?.required || [];
+            this.fieldsAll = BEDITA?.fastCreateFields?.[this.objectType]?.fields || ['id', 'title', 'date_ranges'];
+            this.fieldsAll = this.fieldsAll.map(field => {
+                if (typeof field === 'object') {
+                    return Object.keys(field)[0];
+                }
+                return field;
             });
+            this.fieldsOther = this.fieldsAll.filter(field => !this.fieldsRequired.includes(field));
+            const fields = BEDITA?.fastCreateFields?.[this.objectType]?.fields || [];
+            let ff = fields;
+            if (fields.constructor === Object) {
+                ff = Object.keys(fields);
+                this.fieldsMap = fields;
+            }
+            for (const item of ff) {
+                if (item.constructor === Object) {
+                    const itemKey = Object.keys(item)[0];
+                    this.fieldsMap[itemKey] = item[itemKey];
+                }
+            }
         });
     },
     methods: {
         closePanel() {
             this.createNew = false;
             this.createNewDateRanges = [];
-            this.createNewTitle = '';
+        },
+        fieldError(field, val) {
+            console.error('Error:', field, val);
+        },
+        fieldUpdate(field, val) {
+            if (field === 'date_ranges' && val != '') {
+                this.formFieldProperties[this.objectType].date_ranges = val;
+            } else {
+                this.formFieldProperties[this.objectType][field] = val;
+            }
+            console.log('Update:', val);
+        },
+        fieldSuccess(field, val) {
+            console.log('Success:', val);
+        },
+        fieldKey(field) {
+            return this.isNumeric(field) ? this.fieldsMap[field] : field;
+        },
+        fieldType(field) {
+            return !this.isNumeric(field) ? this.fieldsMap[field] : null;
         },
         ftime(d) {
             return this.$helpers.formatTime(d);
         },
+        isNumeric(str) {
+            if (typeof str != 'string') {
+                return false;
+            }
+
+            return !isNaN(str) && !isNaN(parseFloat(str));
+        },
         prepareNew(title, startDate) {
-            this.createNew = {
-                title: title,
-                date_ranges: [{start_date: startDate}],
-            };
+            this.createNew = true;
             this.createNewDateRanges = JSON.stringify([{start_date: startDate}]);
-            this.createNewTitle = title;
+            this.formFieldProperties[this.objectType].date_ranges = [{start_date: startDate}];
+            this.reference = Math.floor(Math.random() * 1000000);
         },
         refetchEvents() {
             const calendarApi = this.$refs.fullCal.getApi();
@@ -227,8 +311,8 @@ export default {
         async save() {
             try {
                 this.saving = true;
-                this.payload = Object.assign({}, this.createNew);
-                this.payload.title = this.createNewTitle;
+                this.payload = Object.assign({}, this.formFieldProperties[this.objectType]);
+                this.payload.date_ranges = JSON.parse(this.createNewDateRanges);
                 const url = `/${this.objectType}/save`;
                 const options = {
                     method: 'POST',
@@ -247,7 +331,6 @@ export default {
                 }
                 this.createNew = false;
                 this.createNewDateRanges = [];
-                this.createNewTitle = '';
                 this.refetchEvents();
             } catch (error) {
                 this.error = error;
@@ -269,7 +352,7 @@ export default {
                     headers,
                     method: 'GET',
                 };
-                let query = `?fields=${this.fields.join(',')}&page=1`;
+                let query = `?fields=${this.fieldsAll.join(',')}&page=1`;
                 query += `&filter[date_ranges][from_date]=${this.startDate}&filter[date_ranges][to_date]=${this.endDate}`;
                 query += `&lang=${BEDITA?.locale?.slice(0,2) || 'it'}&sort=date_ranges_min_start_date&page_size=${this.pageSize}`;
                 let response = await fetch(`${BEDITA.base}/api/${this.objectType}${query}`, options);
@@ -279,7 +362,7 @@ export default {
                 this.searchItemsConcat(items, responseJson);
                 while (count < pageCount) {
                     count++;
-                    query = `?fields=${this.fields.join(',')}&page=${count}`;
+                    query = `?fields=${this.fieldsAll.join(',')}&page=${count}`;
                     query += `&filter[date_ranges][from_date]=${this.startDate}&filter[date_ranges][to_date]=${this.endDate}`;
                     query += `&lang=${this.calendarOptions.locale}&sort=date_ranges_min_start_date&page_size=${this.pageSize}`;
                     response = await fetch(`${BEDITA.base}/api/${this.objectType}${query}`, options);
