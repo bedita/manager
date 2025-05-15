@@ -101,7 +101,8 @@
                                     </div>
                                 </section>
                             </property-view>
-                        {% else %}
+                        {% endif %}
+                        {% if object.meta.password_modified %}
                             <property-view inline-template :tab-open="tabsOpen" tab-name="password-info">
                                 <section class="fieldset">
                                     <header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
