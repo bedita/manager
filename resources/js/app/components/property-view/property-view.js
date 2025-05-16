@@ -203,11 +203,21 @@ export default {
 
                     // using == because user.id String and creatorById Number
                     if(user.id == creatorId && userInfo!= undefined) {
-                        document.querySelector('td[name=\'created_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        if (document.querySelector('span[name=\'created_by\']')) {
+                            document.querySelector('span[name=\'created_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        }
+                        if (document.querySelector('td[name=\'created_by\']')) {
+                            document.querySelector('td[name=\'created_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        }
                     }
-
+                    // using == because user.id String and modifierId Number
                     if (user.id == modifierId && userInfo!= undefined) {
-                        document.querySelector('td[name=\'modified_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        if (document.querySelector('span[name=\'modified_by\']')) {
+                            document.querySelector('span[name=\'modified_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        }
+                        if (document.querySelector('td[name=\'modified_by\']')) {
+                            document.querySelector('td[name=\'modified_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        }
                     }
                 });
             }
