@@ -15,49 +15,60 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\ImportController;
 use App\Core\Result\ImportResult;
-use Authentication\AuthenticationService;
-use Authentication\Identifier\IdentifierInterface;
+use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
+use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
-use BEdita\WebTools\Identifier\ApiIdentifier;
 use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Laminas\Diactoros\UploadedFile;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use ReflectionClass;
 
 /**
  * {@see \App\Controller\ImportController} Test Case
- *
- * @coversDefaultClass \App\Controller\ImportController
  */
+#[CoversClass(ImportController::class)]
+#[CoversMethod(ImportController::class, 'beforeRender')]
+#[CoversMethod(ImportController::class, 'file')]
+#[CoversMethod(ImportController::class, 'index')]
+#[CoversMethod(ImportController::class, 'jobs')]
+#[CoversMethod(ImportController::class, 'loadAsyncJobs')]
+#[CoversMethod(ImportController::class, 'loadFilters')]
+#[CoversMethod(ImportController::class, 'uploadErrorMessage')]
+#[CoversMethod(ImportController::class, 'updateServiceList')]
 class ImportControllerTest extends TestCase
 {
-    public $Import;
+    public ServerRequest $request;
 
     /**
      * Test file name
      *
      * @var string
      */
-    protected $filename = 'test.png';
+    protected string $filename = 'test.png';
 
     /**
      * Test file error
      *
      * @var int
      */
-    protected $fileError = 0;
+    protected int $fileError = 0;
 
     /**
      * The original API client (not mocked).
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    protected $apiClient = null;
+    protected ?BEditaClient $apiClient = null;
 
     /**
      * @inheritDoc
@@ -96,30 +107,27 @@ class ImportControllerTest extends TestCase
                 'filter' => $filter,
             ],
         ];
-        $request = new ServerRequest($config);
-        $this->Import = new class ($request) extends ImportController
-        {
-            public function render($view = null, $layout = null): Response
-            {
-                return $this->getResponse();
-            }
-        };
+        $this->request = new ServerRequest($config);
     }
 
     /**
      * Test `file` method
      *
-     * @covers ::file()
-     * @covers ::loadFilters()
      * @return void
      */
     public function testFile(): void
     {
         $this->setupController('App\Test\Utils\ImportFilterSample');
-
-        $response = $this->Import->file();
+        $import = new class ($this->request) extends ImportController
+        {
+            public function render($template = null, $layout = null): Response
+            {
+                return $this->getResponse();
+            }
+        };
+        $response = $import->file();
         static::assertEquals(302, $response->getStatusCode());
-        $result = $this->Import->getRequest()->getSession()->read('Import.result');
+        $result = $import->getRequest()->getSession()->read('Import.result');
         $expected = new ImportResult($this->filename, 10, 0, 0, 'ok', '', ''); // ($created, $updated, $errors, $info, $warn, $error)
         static::assertEquals($result, $expected);
     }
@@ -128,7 +136,6 @@ class ImportControllerTest extends TestCase
      * Test `loadFilters`
      *
      * @return void
-     * @covers ::loadFilters()
      */
     public function testLoadFilters(): void
     {
@@ -142,11 +149,18 @@ class ImportControllerTest extends TestCase
         ];
         Configure::write('Filters.import', $filters);
         $this->setupController('App\Test\Utils\ImportFilterSample');
-        $reflectionClass = new \ReflectionClass($this->Import);
+        $import = new class ($this->request) extends ImportController
+        {
+            public function render($template = null, $layout = null): Response
+            {
+                return $this->getResponse();
+            }
+        };
+        $reflectionClass = new ReflectionClass($import);
         $method = $reflectionClass->getMethod('loadFilters');
         $method->setAccessible(true);
-        $method->invokeArgs($this->Import, []);
-        static::assertTrue(is_array($this->Import->viewBuilder()->getVar('filters')));
+        $method->invokeArgs($import, []);
+        static::assertTrue(is_array($import->viewBuilder()->getVar('filters')));
         $expected = [
             [
                 'accept' => ['text/xml', 'text/csv'],
@@ -156,9 +170,9 @@ class ImportControllerTest extends TestCase
                 'options' => [],
             ],
         ];
-        static::assertEquals($expected, $this->Import->viewBuilder()->getVar('filters'));
-        static::assertTrue(is_array($this->Import->viewBuilder()->getVar('services')));
-        static::assertSame(['ImportFilterSampleService'], $this->Import->viewBuilder()->getVar('services'));
+        static::assertEquals($expected, $import->viewBuilder()->getVar('filters'));
+        static::assertTrue(is_array($import->viewBuilder()->getVar('services')));
+        static::assertSame(['ImportFilterSampleService'], $import->viewBuilder()->getVar('services'));
         Configure::write('Filters.import', []);
     }
 
@@ -166,18 +180,24 @@ class ImportControllerTest extends TestCase
      * Test `updateServiceList`
      *
      * @return void
-     * @covers ::updateServiceList()
      */
     public function testUpdateServiceList(): void
     {
         $this->setupController('App\Test\Utils\ImportFilterSample');
-        $reflectionClass = new \ReflectionClass($this->Import);
+        $import = new class ($this->request) extends ImportController
+        {
+            public function render($template = null, $layout = null): Response
+            {
+                return $this->getResponse();
+            }
+        };
+        $reflectionClass = new ReflectionClass($import);
         $method = $reflectionClass->getMethod('updateServiceList');
         $method->setAccessible(true);
-        $method->invokeArgs($this->Import, ['App\Test\Utils\ImportFilterSample']);
+        $method->invokeArgs($import, ['App\Test\Utils\ImportFilterSample']);
         $property = $reflectionClass->getProperty('services');
         $property->setAccessible(true);
-        $actual = $property->getValue($this->Import);
+        $actual = $property->getValue($import);
         $expected = ['ImportFilterSampleService'];
         static::assertEquals($expected, $actual);
     }
@@ -186,36 +206,43 @@ class ImportControllerTest extends TestCase
      * Test `loadAsyncJobs`
      *
      * @return void
-     * @covers ::loadAsyncJobs()
      */
     public function testLoadAsyncJobs(): void
     {
         // empty jobs
         $this->setupController('App\Test\Utils\ImportFilterSample');
-        $reflectionClass = new \ReflectionClass($this->Import);
+        $import = new class ($this->request) extends ImportController
+        {
+            public ?BEditaClient $apiClient;
+            public function render($template = null, $layout = null): Response
+            {
+                return $this->getResponse();
+            }
+        };
+        $reflectionClass = new ReflectionClass($import);
         $method = $reflectionClass->getMethod('loadAsyncJobs');
         $method->setAccessible(true);
-        $method->invokeArgs($this->Import, []);
-        $actual = $this->Import->viewBuilder()->getVar('jobs');
+        $method->invokeArgs($import, []);
+        $actual = $import->viewBuilder()->getVar('jobs');
         $expected = [];
         static::assertEquals($expected, $actual);
 
         // api call with exception
         $property = $reflectionClass->getProperty('services');
         $property->setAccessible(true);
-        $property->setValue($this->Import, ['dummy']);
+        $property->setValue($import, ['dummy']);
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.com'])
             ->getMock();
         $apiClient->method('get')
             ->with('/async_jobs')
             ->willThrowException(new BEditaClientException('My test exception'));
-        $this->Import->apiClient = $apiClient;
-        $method->invokeArgs($this->Import, []);
-        $actual = $this->Import->viewBuilder()->getVar('jobs');
+        $import->apiClient = $apiClient;
+        $method->invokeArgs($import, []);
+        $actual = $import->viewBuilder()->getVar('jobs');
         $expected = [];
         static::assertEquals($expected, $actual);
-        $flash = $this->Import->getRequest()->getSession()->read('Flash.flash');
+        $flash = $import->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('My test exception', Hash::get($flash, '0.message'));
 
         // mock api get /async_jobs
@@ -226,24 +253,31 @@ class ImportControllerTest extends TestCase
         $apiClient->method('get')
             ->with('/async_jobs')
             ->willReturn(['data' => $expected]);
-        $this->Import->apiClient = $apiClient;
-        $method->invokeArgs($this->Import, []);
-        $actual = $this->Import->viewBuilder()->getVar('jobs');
+        $import->apiClient = $apiClient;
+        $method->invokeArgs($import, []);
+        $actual = $import->viewBuilder()->getVar('jobs');
         static::assertEquals($expected, $actual);
     }
 
     /**
      * Test `file` fail method, missing filter
      *
-     * @covers ::file()
      * @return void
      */
     public function testFileBadRequestFilter(): void
     {
         $this->setupController();
-        $response = $this->Import->file();
+        $import = new class ($this->request) extends ImportController
+        {
+            public ?BEditaClient $apiClient;
+            public function render($template = null, $layout = null): Response
+            {
+                return $this->getResponse();
+            }
+        };
+        $response = $import->file();
         static::assertEquals(302, $response->getStatusCode());
-        $flash = $this->Import->getRequest()->getSession()->read('Flash.flash');
+        $flash = $import->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('Import filter not selected', Hash::get($flash, '0.message'));
         static::assertEquals(400, Hash::get($flash, '0.params.status'));
     }
@@ -251,18 +285,24 @@ class ImportControllerTest extends TestCase
     /**
      * Test `file` fail method, missing files
      *
-     * @covers ::file()
-     * @covers:: uploadErrorMessage()
      * @return void
      */
     public function testFileBadRequestFile(): void
     {
         $this->fileError = 4;
         $this->setupController('App\Test\Utils\ImportFilterSample');
+        $import = new class ($this->request) extends ImportController
+        {
+            public ?BEditaClient $apiClient;
+            public function render($template = null, $layout = null): Response
+            {
+                return $this->getResponse();
+            }
+        };
 
-        $response = $this->Import->file();
+        $response = $import->file();
         static::assertEquals(302, $response->getStatusCode());
-        $flash = $this->Import->getRequest()->getSession()->read('Flash.flash');
+        $flash = $import->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('Missing import file', Hash::get($flash, '0.message'));
         static::assertEquals(400, Hash::get($flash, '0.params.status'));
     }
@@ -270,13 +310,20 @@ class ImportControllerTest extends TestCase
     /**
      * Test `uploadErrorMessage`.
      *
-     * @covers:: uploadErrorMessage()
      * @return void
      */
     public function testUploadErrorMessage(): void
     {
         $this->setupController();
-        $reflectionClass = new \ReflectionClass($this->Import);
+        $import = new class ($this->request) extends ImportController
+        {
+            public ?BEditaClient $apiClient;
+            public function render($template = null, $layout = null): Response
+            {
+                return $this->getResponse();
+            }
+        };
+        $reflectionClass = new ReflectionClass($import);
         $method = $reflectionClass->getMethod('uploadErrorMessage');
         $method->setAccessible(true);
         $errors = [
@@ -289,26 +336,33 @@ class ImportControllerTest extends TestCase
             UPLOAD_ERR_EXTENSION => __('An extension stopped the file upload'),
         ];
         foreach ($errors as $code => $expected) {
-            $actual = $method->invokeArgs($this->Import, [$code]);
+            $actual = $method->invokeArgs($import, [$code]);
             static::assertEquals($expected, $actual);
         }
         $expected = __('Unknown upload error');
-        $actual = $method->invokeArgs($this->Import, [123456789]);
+        $actual = $method->invokeArgs($import, [123456789]);
         static::assertEquals($expected, $actual);
     }
 
     /**
      * Test `file` fail method, internal error
      *
-     * @covers ::file()
      * @return void
      */
     public function testFileError(): void
     {
         $this->setupController('App\Test\Utils\ImportFilterSampleError');
-        $response = $this->Import->file();
+        $import = new class ($this->request) extends ImportController
+        {
+            public ?BEditaClient $apiClient;
+            public function render($template = null, $layout = null): Response
+            {
+                return $this->getResponse();
+            }
+        };
+        $response = $import->file();
         static::assertEquals(302, $response->getStatusCode());
-        $flash = $this->Import->getRequest()->getSession()->read('Flash.flash');
+        $flash = $import->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('An expected exception', Hash::get($flash, '0.message'));
         static::assertEquals(500, Hash::get($flash, '0.params.status'));
     }
@@ -317,85 +371,82 @@ class ImportControllerTest extends TestCase
      * Test `index`
      *
      * @return void
-     * @covers ::index()
-     * @covers ::beforeRender()
      */
     public function testIndex(): void
     {
-        $this->setupControllerAndLogin();
-        $this->Import->index();
-        static::assertEmpty($this->Import->viewBuilder()->getVar('jobs'));
-        static::assertEmpty($this->Import->viewBuilder()->getVar('services'));
-        static::assertEmpty($this->Import->viewBuilder()->getVar('filters'));
-        static::assertEmpty($this->Import->viewBuilder()->getVar('result'));
-        static::assertArrayHasKey('jobsAllow', $this->Import->viewBuilder()->getVars());
-        $this->Import->dispatchEvent('Controller.beforeRender');
-        static::assertEquals(['_name' => 'import:index'], $this->Import->viewBuilder()->getVar('moduleLink'));
+        $this->setupController();
+        $import = new class ($this->request) extends ImportController
+        {
+            public ?BEditaClient $apiClient;
+            public function render($template = null, $layout = null): Response
+            {
+                return $this->getResponse();
+            }
+        };
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'dummy',
+            'roles' => ['readers'],
+        ]);
+        $import->setRequest($import->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $import->Authentication->setIdentity($user);
+        $import->index();
+        static::assertEmpty($import->viewBuilder()->getVar('jobs'));
+        static::assertEmpty($import->viewBuilder()->getVar('services'));
+        static::assertEmpty($import->viewBuilder()->getVar('filters'));
+        static::assertEmpty($import->viewBuilder()->getVar('result'));
+        static::assertArrayHasKey('jobsAllow', $import->viewBuilder()->getVars());
+        $import->dispatchEvent('Controller.beforeRender');
+        static::assertEquals(['_name' => 'import:index'], $import->viewBuilder()->getVar('moduleLink'));
     }
 
     /**
      * Test `jobs`
      *
      * @return void
-     * @covers ::jobs()
      */
     public function testJobs(): void
     {
         $this->setupController();
-        $this->Import->jobs();
-        static::assertNotEmpty($this->Import->viewBuilder()->getOption('serialize'));
-        static::assertEmpty($this->Import->viewBuilder()->getVar('jobs'));
-        static::assertEmpty($this->Import->viewBuilder()->getVar('services'));
-        static::assertEmpty($this->Import->viewBuilder()->getVar('filters'));
-    }
-
-    /**
-     * Setup controller and manually login user
-     *
-     * @return array|null
-     */
-    protected function setupControllerAndLogin(): ?array
-    {
-        $filename = sprintf('%s/tests/files/%s', getcwd(), $this->filename);
-        $file = new UploadedFile($filename, filesize($filename), $this->fileError, $this->filename);
-        $config = [
-            'environment' => [
-                'REQUEST_METHOD' => 'GET',
-            ],
-            'post' => [
-                'username' => env('BEDITA_ADMIN_USR'),
-                'password' => env('BEDITA_ADMIN_PWD'),
-                'file' => $file,
-                'filter' => 'App\Test\Utils\ImportFilterSample',
-            ],
-        ];
-        $request = new ServerRequest($config);
-        $this->Import = new class ($request) extends ImportController
+        $import = new class ($this->request) extends ImportController
         {
-            public function render($view = null, $layout = null): Response
+            public ?BEditaClient $apiClient;
+            public function render($template = null, $layout = null): Response
             {
                 return $this->getResponse();
             }
         };
+        $import->jobs();
+        static::assertNotEmpty($import->viewBuilder()->getOption('serialize'));
+        static::assertEmpty($import->viewBuilder()->getVar('jobs'));
+        static::assertEmpty($import->viewBuilder()->getVar('services'));
+        static::assertEmpty($import->viewBuilder()->getVar('filters'));
+    }
 
-        // Mock Authentication component
-        ApiClientProvider::getApiClient()->setupTokens([]); // reset client
-        $service = new AuthenticationService();
-        $service->loadIdentifier(ApiIdentifier::class);
-        $service->loadAuthenticator('Authentication.Form', [
-            'fields' => [
-                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
-            ],
-        ]);
-        $this->Import->setRequest($this->Import->getRequest()->withAttribute('authentication', $service));
-        $result = $this->Import->Authentication->getAuthenticationService()->authenticate($this->Import->getRequest());
-        $identity = new Identity($result->getData());
-        $request = $this->Import->getRequest()->withAttribute('identity', $identity);
-        $this->Import->setRequest($request);
-        $user = $this->Import->Authentication->getIdentity() ?: new Identity([]);
-        $this->Import->Authentication->setIdentity($user);
+    /**
+     * Get mocked AuthenticationService.
+     *
+     * @return AuthenticationServiceInterface
+     */
+    protected function getAuthenticationServiceMock(): AuthenticationServiceInterface
+    {
+        $authenticationService = $this->getMockBuilder(AuthenticationServiceInterface::class)
+            ->getMock();
+        $authenticationService->method('clearIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response): array {
+                return [
+                    'request' => $request->withoutAttribute('identity'),
+                    'response' => $response,
+                ];
+            });
+        $authenticationService->method('persistIdentity')
+            ->willReturnCallback(function (ServerRequestInterface $request, ResponseInterface $response, IdentityInterface $identity): array {
+                return [
+                    'request' => $request->withAttribute('identity', $identity),
+                    'response' => $response,
+                ];
+            });
 
-        return $user->getOriginalData();
+        return $authenticationService;
     }
 }

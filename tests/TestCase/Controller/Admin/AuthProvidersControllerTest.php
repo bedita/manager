@@ -5,12 +5,12 @@ use App\Controller\Admin\AuthProvidersController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * {@see \App\Controller\Admin\AuthProvidersController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\AuthProvidersController
  */
+#[CoversClass(AuthProvidersController::class)]
 class AuthProvidersControllerTest extends TestCase
 {
     /**
@@ -52,8 +52,8 @@ class AuthProvidersControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->AuthProvidersController = new class ($request) extends AuthProvidersController
         {
-            protected $resourceType = 'auth_providers';
-            protected $properties = ['name'];
+            protected ?string $resourceType = 'auth_providers';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');

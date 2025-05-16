@@ -23,5 +23,5 @@ interface CustomHandlerInterface
      * @param array $options Options array from configuration
      * @return array
      */
-    public function control(string $name, $value, array $options): array;
+    public function control(string $name, mixed $value, array $options): array;
 }
