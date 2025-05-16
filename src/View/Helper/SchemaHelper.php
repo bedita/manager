@@ -172,7 +172,7 @@ class SchemaHelper extends Helper
      * @param mixed $value Property value.
      * @return string
      */
-    protected function formatByte(mixed $value): string
+    public function formatByte(mixed $value): string
     {
         return Number::toReadableSize((int)$value);
     }
@@ -183,7 +183,7 @@ class SchemaHelper extends Helper
      * @param mixed $value Property value.
      * @return string
      */
-    protected function formatBoolean(mixed $value): string
+    public function formatBoolean(mixed $value): string
     {
         $res = filter_var($value, FILTER_VALIDATE_BOOLEAN);
 
@@ -196,7 +196,7 @@ class SchemaHelper extends Helper
      * @param mixed $value Property value.
      * @return string
      */
-    protected function formatDate(mixed $value): string
+    public function formatDate(mixed $value): string
     {
         if (empty($value)) {
             return '';
@@ -211,7 +211,7 @@ class SchemaHelper extends Helper
      * @param mixed $value Property value.
      * @return string
      */
-    protected function formatDateTime(mixed $value): string
+    public function formatDateTime(mixed $value): string
     {
         return $this->formatDate($value);
     }
