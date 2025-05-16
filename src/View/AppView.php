@@ -21,6 +21,7 @@ use Cake\Utility\Hash;
  *
  * @property \App\View\Helper\AdminHelper $Admin
  * @property \App\View\Helper\CalendarHelper $Calendar
+ * @property \App\View\Helper\DatesHelper $Dates
  * @property \App\View\Helper\EditorsHelper $Editors
  * @property \App\View\Helper\LayoutHelper $Layout
  * @property \App\View\Helper\ArrayHelper $Array
@@ -65,6 +66,7 @@ class AppView extends TwigView
         ]);
         $this->addHelper('Admin');
         $this->addHelper('Calendar');
+        $this->addHelper('Dates');
         $this->addHelper('Editors');
         $this->addHelper('Element');
         $this->addHelper('Layout');
