@@ -38,18 +38,19 @@ export default {
     methods: {
         async add() {
             try {
-                const obj = await this.fetchObject(this.searchId);
+                const obj = await this.fetchObject(this.searchId, this.objectTypes.join(','));
                 this.$emit('found', obj);
             } catch (error) {
                 BEDITA.error(`${this.msgNotFound}. ${this.msgAllowedTypes}: ${this.objectTypes.join(', ')}`);
             }
         },
-        async fetchObject(id) {
-            if (this.cache[id]) {
-                return this.cache[id];
+        async fetchObject(id, types) {
+            const cacheKey = `${id}-${types}`;
+            if (this.cache[cacheKey]) {
+                return this.cache[cacheKey];
             }
             const baseUrl = new URL(BEDITA.base).pathname;
-            const response = await fetch(`${baseUrl}resources/get/${id}?filter[type]=${this.objectTypes.join(',')}`, {
+            const response = await fetch(`${baseUrl}resources/get/${id}?filter[type]=${types}`, {
                 credentials: 'same-origin',
                 headers: {
                     accept: 'application/json',
@@ -63,9 +64,9 @@ export default {
             if (!this.objectTypes.includes(data?.type)) {
                 throw new Error('Invalid object type');
             }
-            this.cache[id] = data;
+            this.cache[cacheKey] = data;
 
-            return this.cache[id];
+            return this.cache[cacheKey];
         },
     },
 };
