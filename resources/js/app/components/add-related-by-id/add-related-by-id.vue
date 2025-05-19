@@ -49,7 +49,7 @@ export default {
                 return this.cache[id];
             }
             const baseUrl = new URL(BEDITA.base).pathname;
-            const response = await fetch(`${baseUrl}resources/get/${id}`, {
+            const response = await fetch(`${baseUrl}resources/get/${id}?filter[type]=${this.objectTypes.join(',')}`, {
                 credentials: 'same-origin',
                 headers: {
                     accept: 'application/json',
