@@ -648,16 +648,18 @@ class ModulesController extends AppController
     {
         $this->viewBuilder()->setClassName('Json');
         $this->getRequest()->allowMethod('get');
-        $response = (array)$this->apiClient->getObject($id, 'objects', $this->getRequest()->getQueryParams());
-        $filter = $this->getRequest()->getQuery('filter');
-        $filterType = explode(',', (string)Hash::get($filter, 'type'));
         $data = $meta = [];
-        if (empty($filterType) || in_array($response['data']['type'], $filterType)) {
+        $response = (array)$this->apiClient->getObject($id, 'objects', $this->getRequest()->getQueryParams());
+        $type = (string)Hash::get($response, 'data.type');
+        $filter = (array)$this->getRequest()->getQuery('filter');
+        $types = (string)Hash::get($filter, 'type');
+        $filterType = !empty($types) ? explode(',', (string)Hash::get($filter, 'type')) : [];
+        if (count($filterType) === 0 || in_array($type, $filterType)) {
             $query = array_merge(
                 $this->getRequest()->getQueryParams(),
                 ['fields' => 'id,title,description,uname,status,media_url']
             );
-            $response = (array)$this->apiClient->getObject($id, $response['data']['type'], $query);
+            $response = (array)$this->apiClient->getObject($id, $type, $query);
             $response = ApiTools::cleanResponse($response);
             $data = (array)Hash::get($response, 'data');
             $meta = (array)Hash::get($response, 'meta');
