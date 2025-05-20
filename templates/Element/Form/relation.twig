@@ -132,7 +132,7 @@
                     'objectTypes': relationsSchema[relationName]['right']
                 }) }}
             {% endif %}
-            <div>
+            <div class="buttons-container">
                 <button v-if="isPanelOpen({{object.id|json_encode}})" @click.prevent.stop="closePanel()">
                     <app-icon icon="carbon:close"></app-icon>
                     <span class="ml-05">{{ __('cancel') }}</span>
@@ -180,6 +180,13 @@
                         <app-icon icon="carbon:add"></app-icon>
                         <span class="ml-05">{{ __('add objects') }}</span>
                     </button>
+
+                    {% if Perms.userIsAdmin() %}
+                    <add-related-by-id
+                        :object-types="{{ relationsSchema[relationName]['right']|json_encode }}"
+                        @found="addRelated"
+                    />
+                    {% endif %}
                 </template>
             </div>
         </div>
