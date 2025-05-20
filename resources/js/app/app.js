@@ -113,6 +113,7 @@ const _vueInstance = new Vue({
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
         ModuleProperties: () => import(/* webpackChunkName: "module-properties" */'app/components/module/module-properties'),
         ModuleSetup: () => import(/* webpackChunkName: "module-setup" */'app/components/module/module-setup'),
+        AddRelatedById: () => import(/* webpackChunkName: "add-related-by-id" */'app/components/add-related-by-id/add-related-by-id'),
         AppIcon,
     },
 
