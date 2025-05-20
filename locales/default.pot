@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-05-15 10:01:27 \n"
+"POT-Creation-Date: 2025-05-19 09:08:13 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1875,4 +1875,10 @@ msgid "Error while saving category"
 msgstr ""
 
 msgid "Error on deleting category"
+msgstr ""
+
+msgid "Allowed types"
+msgstr ""
+
+msgid "Not found"
 msgstr ""

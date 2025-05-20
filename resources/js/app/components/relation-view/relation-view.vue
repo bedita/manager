@@ -34,6 +34,7 @@ export default {
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
         SortRelated: () => import(/* webpackChunkName: "sort-related" */'app/components/sort-related/sort-related'),
+        AddRelatedById: () => import(/* webpackChunkName: "add-related-by-id" */'app/components/add-related-by-id/add-related-by-id'),
     },
 
     mixins: [
@@ -230,6 +231,10 @@ export default {
     },
 
     methods: {
+        addRelated(related) {
+            this.appendRelations([related]);
+        },
+
         // Events Listeners
 
         /**
@@ -1019,6 +1024,9 @@ export default {
         },
 
         datesInfo(obj) {
+            if (obj?.meta?.created === undefined || obj?.meta?.modified === undefined) {
+                return '';
+            }
             const created = new Date(obj.meta.created).toLocaleDateString() + ' ' + new Date(obj.meta.created).toLocaleTimeString();
             const modified = new Date(obj.meta.modified).toLocaleDateString() + ' ' + new Date(obj.meta.modified).toLocaleTimeString();
             if (!obj?.attributes?.publish_start) {
@@ -1056,3 +1064,10 @@ export default {
     },
 }
 </script>
+<style scoped>
+div.buttons-container {
+    display:flex;
+    flex-direction: row;
+    gap: 0.2rem;
+}
+</style>
