@@ -114,6 +114,7 @@ const _vueInstance = new Vue({
         RelatedObjectsFilter: () => import(/* webpackChunkName: "related-objects-filter" */'app/components/related-objects-filter/related-objects-filter'),
         ModuleProperties: () => import(/* webpackChunkName: "module-properties" */'app/components/module/module-properties'),
         ModuleSetup: () => import(/* webpackChunkName: "module-setup" */'app/components/module/module-setup'),
+        AddRelatedById: () => import(/* webpackChunkName: "add-related-by-id" */'app/components/add-related-by-id/add-related-by-id'),
         AppIcon,
     },
 
