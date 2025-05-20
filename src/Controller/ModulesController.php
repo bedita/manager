@@ -658,7 +658,7 @@ class ModulesController extends AppController
         if (count($filterType) === 0 || in_array($type, $filterType)) {
             $query = array_merge(
                 $this->getRequest()->getQueryParams(),
-                ['fields' => 'id,title,description,uname,status,media_url']
+                ['fields' => 'id,title,description,uname,status,media_url'],
             );
             $response = (array)$this->apiClient->getObject($id, $type, $query);
             $response = ApiTools::cleanResponse($response);
