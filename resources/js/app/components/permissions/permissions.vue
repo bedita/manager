@@ -66,7 +66,7 @@ export default {
             headers,
             method: 'GET',
         };
-        const response = await fetch(`${BEDITA.base}/api/roles`, options);
+        const response = await fetch(`${BEDITA.base}/roles/list`, options);
         const responseJson = await response.json();
         this.roles = responseJson.data || [];
         this.canModify = this.userRoles.includes('admin') || this.roles?.length === 0 || this.objectRoles?.length === 0 || this.objectRoles.some(item => this.userRoles.includes(item));
