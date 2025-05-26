@@ -19,10 +19,13 @@ use App\Controller\RolesController;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
+use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use ComuneBo\Provider\Bedita;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -194,6 +197,20 @@ class RolesControllerTest extends TestCase
         $roles = (array)Hash::extract($data, 'data.{n}.attributes.name');
         static::assertNotEmpty($roles);
         static::assertTrue(in_array('admin', $roles), 'Admin role should be present in the list of roles');
+
+        // test exception when API client fails
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->withAnyParameters()
+            ->willThrowException(new BEditaClientException('API error'));
+        $this->RolesController->apiClient = $apiClient;
+        $response = $this->RolesController->list();
+        $data = $this->RolesController->viewBuilder()->getVars();
+        $error = Hash::get($data, 'error');
+        static::assertNotEmpty($error);
+        static::assertEquals('API error', $error->getMessage(), 'Error message should match the exception thrown by the API client');
     }
 
     /**
