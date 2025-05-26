@@ -102,6 +102,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['_name' => 'tree:get']
     );
     $routes->connect(
+        '/tree/loadAll',
+        ['controller' => 'Tree', 'action' => 'loadAll'],
+        ['_name' => 'tree:load:all']
+    );
+    $routes->connect(
         '/tree/node/{id}',
         ['controller' => 'Tree', 'action' => 'node'],
         ['_name' => 'tree:node', 'pass' => ['id']]
