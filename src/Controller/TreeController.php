@@ -459,6 +459,7 @@ class TreeController extends AppController
                 'status' => (string)Hash::get($fullData, 'attributes.status'),
             ],
             'meta' => [
+                'modified' => (string)Hash::get($fullData, 'meta.modified'),
                 'path' => (string)Hash::get($fullData, 'meta.path'),
                 'slug_path' => (array)Hash::get($fullData, 'meta.slug_path'),
                 'slug_path_compact' => $this->slugPathCompact((array)Hash::get($fullData, 'meta.slug_path')),
