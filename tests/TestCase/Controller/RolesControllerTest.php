@@ -190,7 +190,7 @@ class RolesControllerTest extends TestCase
         static::assertEquals($expected, $actual);
         $response = $this->RolesController->list();
         static::assertNull($response);
-        $data = $this->RolesController->viewBuilder()->getVars('roles');
+        $data = $this->RolesController->viewBuilder()->getVars();
         $roles = (array)Hash::extract($data, 'data.{n}.attributes.name');
         static::assertNotEmpty($roles);
         static::assertTrue(in_array('admin', $roles), 'Admin role should be present in the list of roles');
