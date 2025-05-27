@@ -71,6 +71,7 @@ export default {
             selectedObjects: [],
             addedObjects: [],
             activeFilter: {},
+            dataList: false,
 
             // create object form data
             saving: false,
