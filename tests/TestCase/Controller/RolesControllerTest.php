@@ -82,7 +82,7 @@ class RolesControllerTest extends TestCase
      *
      * @return array
      */
-    public function unauthorizedExceptionProvider(): array
+    public static function unauthorizedExceptionProvider(): array
     {
         return [
             'no same origin' => [
@@ -203,7 +203,7 @@ class RolesControllerTest extends TestCase
         $apiClient->method('get')
             ->withAnyParameters()
             ->willThrowException(new BEditaClientException('API error'));
-        $controller = new class () extends RolesController {
+        $controller = new class (new ServerRequest()) extends RolesController {
             public function setApiClient($client): void
             {
                 $this->apiClient = $client;
@@ -216,7 +216,7 @@ class RolesControllerTest extends TestCase
             }
         };
         $controller->setApiClient($apiClient);
-        $response = $controller->list();
+        $controller->list();
         $data = $controller->viewBuilder()->getVars();
         $error = Hash::get($data, 'error');
         static::assertNotEmpty($error);
