@@ -472,6 +472,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
         ['controller' => 'Modules', 'action' => 'get'],
         ['pass' => ['id'], '_name' => 'resource:get'],
     );
+    $routes->get(
+        '/roles/list',
+        ['controller' => 'Roles', 'action' => 'list'],
+        'roles:list',
+    );
 
     // Download stream
     $routes->get(

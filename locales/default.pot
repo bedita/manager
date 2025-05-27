@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-05-19 09:08:13 \n"
+"POT-Creation-Date: 2025-05-27 06:53:32 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1613,6 +1613,9 @@ msgid "(deleted)"
 msgstr ""
 
 msgid "placeholders"
+msgstr ""
+
+msgid "Roles that cannot modify permissions"
 msgstr ""
 
 msgid "You can modify the permissions"
