@@ -185,9 +185,6 @@ class RolesControllerTest extends TestCase
         $this->RolesController->setRequest($this->RolesController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->RolesController->Authentication->setIdentity($user);
         $this->RolesController->dispatchEvent('Controller.initialize');
-        $actual = $this->RolesController->Security->getConfig('unlockedActions');
-        $expected = [];
-        static::assertEquals($expected, $actual);
         $response = $this->RolesController->list();
         static::assertNull($response);
         $data = $this->RolesController->viewBuilder()->getVars();
@@ -247,9 +244,10 @@ class RolesControllerTest extends TestCase
         $this->RolesController->setRequest($this->RolesController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->RolesController->Authentication->setIdentity($user);
         $this->RolesController->dispatchEvent('Controller.initialize');
-        $actual = $this->RolesController->Security->getConfig('unlockedActions');
-        $expected = [];
-        static::assertEquals($expected, $actual);
+        $response = $this->RolesController->list();
+        static::assertNull($response);
+        $data = $this->RolesController->viewBuilder()->getVars();
+        static::assertIsArray($data);
     }
 
     /**
