@@ -153,6 +153,10 @@ export default {
     },
     inject: ['getCSFRToken'],
     props: {
+        languages: {
+            type: Object,
+            default: () => {},
+        },
         objectType: {
             type: String,
             required: true,
@@ -220,10 +224,6 @@ export default {
             fieldsOther: [],
             fieldsRequired: [],
             formFieldProperties: {},
-            languages: {
-                type: Object,
-                default: () => {},
-            },
             loaded: false,
             loading: false,
             msgClose: t`Close`,
