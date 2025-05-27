@@ -26,7 +26,7 @@ class TranslatorComponent extends Component
     /**
      * @inheritDoc
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'Translators' => [],
     ];
 
@@ -35,7 +35,7 @@ class TranslatorComponent extends Component
      *
      * @var array
      */
-    protected $registry = [];
+    protected array $registry = [];
 
     /**
      * Translate a text $text from language source $from to language target $to

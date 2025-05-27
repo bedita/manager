@@ -4,16 +4,25 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\TagsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\TagsController} Test Case
- *
- * @coversDefaultClass \App\Controller\TagsController
  */
+#[CoversClass(TagsController::class)]
+#[CoversMethod(TagsController::class, 'beforeRender')]
+#[CoversMethod(TagsController::class, 'create')]
+#[CoversMethod(TagsController::class, 'delete')]
+#[CoversMethod(TagsController::class, 'index')]
+#[CoversMethod(TagsController::class, 'initialize')]
+#[CoversMethod(TagsController::class, 'patch')]
+#[CoversMethod(TagsController::class, 'search')]
 class TagsControllerTest extends TestCase
 {
     /**
@@ -21,21 +30,21 @@ class TagsControllerTest extends TestCase
      *
      * @var \App\Controller\TagsController
      */
-    public $controller;
+    public TagsController $controller;
 
     /**
      * Client API
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -76,20 +85,21 @@ class TagsControllerTest extends TestCase
      * Test `initialize` method
      *
      * @return void
-     * @covers ::initialize()
      */
     public function testInitialize(): void
     {
         $this->setupController();
         $this->controller->index();
         static::assertInstanceOf('App\Controller\Component\ProjectConfigurationComponent', $this->controller->ProjectConfiguration);
+        $actual = $this->controller->FormProtection->getConfig('unlockedActions');
+        $expected = ['create', 'patch', 'delete'];
+        static::assertEquals($expected, $actual);
     }
 
     /**
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {
@@ -103,7 +113,6 @@ class TagsControllerTest extends TestCase
      * Test `beforeRender` method
      *
      * @return void
-     * @covers ::beforeRender()
      */
     public function testBeforeRender(): void
     {
@@ -116,10 +125,6 @@ class TagsControllerTest extends TestCase
      * Test `create`, `patch`, `delete`, `search` methods
      *
      * @return void
-     * @covers ::create()
-     * @covers ::patch()
-     * @covers ::delete()
-     * @covers ::search()
      */
     public function testMulti(): void
     {

@@ -19,14 +19,31 @@ use App\View\Helper\LinkHelper;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
-use Cake\View\Helper\HtmlHelper;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\LinkHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\LinkHelper
  */
+#[CoversClass(LinkHelper::class)]
+#[CoversMethod(LinkHelper::class, 'baseUrl')]
+#[CoversMethod(LinkHelper::class, 'cssBundle')]
+#[CoversMethod(LinkHelper::class, 'findFiles')]
+#[CoversMethod(LinkHelper::class, 'fromAPI')]
+#[CoversMethod(LinkHelper::class, 'here')]
+#[CoversMethod(LinkHelper::class, 'initialize')]
+#[CoversMethod(LinkHelper::class, 'jsBundle')]
+#[CoversMethod(LinkHelper::class, 'page')]
+#[CoversMethod(LinkHelper::class, 'pageSize')]
+#[CoversMethod(LinkHelper::class, 'pluginsBundle')]
+#[CoversMethod(LinkHelper::class, 'pluginAsset')]
+#[CoversMethod(LinkHelper::class, 'replaceQueryParams')]
+#[CoversMethod(LinkHelper::class, 'sortClass')]
+#[CoversMethod(LinkHelper::class, 'sortField')]
+#[CoversMethod(LinkHelper::class, 'sortUrl')]
+#[CoversMethod(LinkHelper::class, 'sortValue')]
 class LinkHelperTest extends TestCase
 {
     /**
@@ -52,7 +69,6 @@ class LinkHelperTest extends TestCase
      * Test `baseUrl`
      *
      * @return void
-     * @covers ::baseUrl()
      */
     public function testBaseUrl(): void
     {
@@ -73,7 +89,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function fromAPIProvider(): array
+    public static function fromAPIProvider(): array
     {
         return [
             'empty url' => [
@@ -99,9 +115,8 @@ class LinkHelperTest extends TestCase
      * @param string $apiUrl The api url
      * @param string $expected The url expected
      * @return void
-     * @dataProvider fromAPIProvider()
-     * @covers ::fromAPI()
      */
+    #[DataProvider('fromAPIProvider')]
     public function testFromAPI($apiBaseUrl, $webBaseUrl, $apiUrl, $expected): void
     {
         $link = new LinkHelper(new View(null, null, null, []));
@@ -116,7 +131,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function sortUrlProvider(): array
+    public static function sortUrlProvider(): array
     {
         $request = new ServerRequest([
             'environment' => [
@@ -169,12 +184,8 @@ class LinkHelperTest extends TestCase
      * @param bool $resetPage The reset page flag
      * @param string $expected The expected output
      * @return void
-     * @dataProvider sortUrlProvider()
-     * @covers ::sortUrl
-     * @covers ::sortValue
-     * @covers ::sortField
-     * @covers ::replaceQueryParams
      */
+    #[DataProvider('sortUrlProvider')]
     public function testSortUrl(ServerRequest $request, string $field, bool $resetPage, string $expected): void
     {
         $link = new LinkHelper(new View($request, null, null, []));
@@ -187,7 +198,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function sortClassProvider(): array
+    public static function sortClassProvider(): array
     {
         $request = new ServerRequest([
             'environment' => [
@@ -229,9 +240,8 @@ class LinkHelperTest extends TestCase
      * @param string $field The field to sort by
      * @param string $expected The expected output
      * @return void
-     * @dataProvider sortClassProvider()
-     * @covers ::sortClass
      */
+    #[DataProvider('sortClassProvider')]
     public function testSortClass(ServerRequest $request, string $field, string $expected): void
     {
         $link = new LinkHelper(new View($request, null, null, []));
@@ -244,7 +254,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function pageProvider(): array
+    public static function pageProvider(): array
     {
         return [
             'zero' => [0],
@@ -257,10 +267,8 @@ class LinkHelperTest extends TestCase
      *
      * @param int $page The page number
      * @return void
-     * @dataProvider pageProvider()
-     * @covers ::page
-     * @covers ::replaceQueryParams
      */
+    #[DataProvider('pageProvider')]
     public function testPage(int $page): void
     {
         $request = new ServerRequest([
@@ -273,7 +281,7 @@ class LinkHelperTest extends TestCase
         ]);
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
+        $test = new AppControllerTest('test');
         $expected = $test->invokeMethod($link, 'replaceQueryParams', [compact('page')]);
         $this->expectOutputString($expected);
         // call page method
@@ -285,7 +293,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function pageSizeProvider(): array
+    public static function pageSizeProvider(): array
     {
         return [
             '1' => [1],
@@ -300,10 +308,8 @@ class LinkHelperTest extends TestCase
      *
      * @param int $pageSize The page size
      * @return void
-     * @dataProvider pageSizeProvider()
-     * @covers ::pageSize
-     * @covers ::replaceQueryParams
      */
+    #[DataProvider('pageSizeProvider')]
     public function testPageSize(int $pageSize): void
     {
         $request = new ServerRequest([
@@ -316,7 +322,7 @@ class LinkHelperTest extends TestCase
         ]);
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
+        $test = new AppControllerTest('test');
         $expected = $test->invokeMethod($link, 'replaceQueryParams', [['page_size' => $pageSize]]);
         $this->expectOutputString($expected);
         // call page method
@@ -328,7 +334,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function hereProvider(): array
+    public static function hereProvider(): array
     {
         $request = new ServerRequest([
             'environment' => [
@@ -370,9 +376,8 @@ class LinkHelperTest extends TestCase
      * @param array $options The options
      * @param string $expected The expected url string
      * @return void
-     * @dataProvider hereProvider()
-     * @covers ::here
      */
+    #[DataProvider('hereProvider')]
     public function testHere(ServerRequest $request, array $options, string $expected): void
     {
         $link = new LinkHelper(new View($request, null, null, []));
@@ -385,7 +390,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function replaceQueryParamsProvider(): array
+    public static function replaceQueryParamsProvider(): array
     {
         $request = new ServerRequest([
             'environment' => [
@@ -417,14 +422,13 @@ class LinkHelperTest extends TestCase
      * @param array $queryParams The query params
      * @param string $expected The expected url string
      * @return void
-     * @dataProvider replaceQueryParamsProvider()
-     * @covers ::replaceQueryParams
      */
+    #[DataProvider('replaceQueryParamsProvider')]
     public function testReplaceQueryParams(ServerRequest $request, array $queryParams, string $expected): void
     {
         $link = new LinkHelper(new View($request, null, null, []));
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
+        $test = new AppControllerTest('test');
         $actual = $test->invokeMethod($link, 'replaceQueryParams', [$queryParams]);
         static::assertEquals($expected, $actual);
     }
@@ -433,14 +437,12 @@ class LinkHelperTest extends TestCase
      * Test `pluginsBundle`
      *
      * @return void
-     * @covers ::pluginsBundle
      */
     public function testPluginsBundle(): void
     {
         // load plugins from config for test
         $app = new Application(CONFIG);
         $app->bootstrap();
-        $debug = Configure::read('debug');
         $pluginsConfig = [
             'DebugKit' => ['debugOnly' => true],
             'Bake' => ['debugOnly' => false],
@@ -457,7 +459,6 @@ class LinkHelperTest extends TestCase
      * Test `pluginAsset`
      *
      * @return void
-     * @covers ::pluginAsset
      */
     public function testPluginAsset(): void
     {
@@ -499,7 +500,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function jsBundleProvider(): array
+    public static function jsBundleProvider(): array
     {
         return [
             'non existing js' => [
@@ -515,15 +516,13 @@ class LinkHelperTest extends TestCase
      * @param array $filter The filter param
      * @param string $expected The expected string
      * @return void
-     * @dataProvider jsBundleProvider()
-     * @covers ::jsBundle
-     * @covers ::findFiles
      */
+    #[DataProvider('jsBundleProvider')]
     public function testJsBundle(array $filter, string $expected): void
     {
         $link = new LinkHelper(new View(new ServerRequest(), null, null, []));
         $link->jsBundle($filter);
-        $actual = $this->getActualOutput();
+        $actual = $this->output();
         static::assertEquals($expected, $actual);
     }
 
@@ -531,19 +530,26 @@ class LinkHelperTest extends TestCase
      * Test `jsBundle`, `cssBundle`
      *
      * @return void
-     * @covers ::jsBundle()
-     * @covers ::cssBundle()
      */
     public function testBundlesWithMockFindFiles(): void
     {
-        $mock = $this->createPartialMock(LinkHelper::class, ['findFiles']);
-        $mock->method('findFiles')->willReturn(['app.bundle.js']);
-        $mock->Html = new HtmlHelper(new View(new ServerRequest(), null, null, []));
+        $view = new View(new ServerRequest(), null, null, []);
+        $mock = new class ($view) extends LinkHelper {
+            public function findFiles(array $filter, string $type): array
+            {
+                return ['app.bundle.js'];
+            }
+        };
         $mock->jsBundle(['timezone']);
-        $mock->method('findFiles')->willReturn(['app.css']);
+        $mock = new class ($view) extends LinkHelper {
+            public function findFiles(array $filter, string $type): array
+            {
+                return ['app.bundle.css'];
+            }
+        };
         $mock->cssBundle(['timezone']);
-        $actual = $this->getActualOutput();
-        static::assertEquals('<script src="/js/app.bundle.js"></script><link rel="stylesheet" href="/css/app.bundle.js.css">', $actual);
+        $actual = $this->output();
+        static::assertEquals('<script src="/js/app.bundle.js"></script><link rel="stylesheet" href="/css/app.bundle.css">', $actual);
     }
 
     /**
@@ -551,7 +557,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function cssBundleProvider(): array
+    public static function cssBundleProvider(): array
     {
         return [
             'non existing css' => [
@@ -567,15 +573,13 @@ class LinkHelperTest extends TestCase
      * @param array $filter The filter param
      * @param string $expected The expected string
      * @return void
-     * @dataProvider cssBundleProvider()
-     * @covers ::cssBundle
-     * @covers ::findFiles
      */
+    #[DataProvider('cssBundleProvider')]
     public function testCssBundle(array $filter, string $expected): void
     {
         $link = new LinkHelper(new View(new ServerRequest(), null, null, []));
         $link->cssBundle($filter);
-        $actual = $this->getActualOutput();
+        $actual = $this->output();
         static::assertEquals($expected, $actual);
     }
 
@@ -584,7 +588,7 @@ class LinkHelperTest extends TestCase
      *
      * @return array
      */
-    public function findFilesProvider(): array
+    public static function findFilesProvider(): array
     {
         return [
             'non existing file' => [
@@ -613,11 +617,12 @@ class LinkHelperTest extends TestCase
     /**
      * Test `findFiles`
      *
+     * @param array $filter The filter param
+     * @param string $extension The extension param
+     * @param string $expected The expected string
      * @return void
-     * @dataProvider findFilesProvider()
-     * @covers ::findFiles
-     * @covers ::initialize
      */
+    #[DataProvider('findFilesProvider')]
     public function testFindFiles(array $filter, string $extension, string $expected): void
     {
         $config = ['manifestPath' => TESTS . 'files' . DS . 'manifest.json'];

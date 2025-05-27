@@ -11,23 +11,25 @@
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 
-namespace App\Test\TestCase\Core\Filter;
+namespace App\Test\TestCase\Core\Result;
 
 use App\Core\Result\ImportResult;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Core\Result\ImportResult} Test Case
- *
- * @coversDefaultClass \App\Core\Result\ImportResult
  */
+#[CoversClass(ImportResult::class)]
+#[CoversMethod(ImportResult::class, '__construct')]
+#[CoversMethod(ImportResult::class, 'reset')]
 class ImportResultTest extends TestCase
 {
     /**
      * Test `__construct` method
      *
      * @return void
-     * @covers ::__construct()
      */
     public function testConstruct(): void
     {
@@ -45,7 +47,6 @@ class ImportResultTest extends TestCase
      * Test `reset` method
      *
      * @return void
-     * @covers ::reset()
      */
     public function testReset(): void
     {
