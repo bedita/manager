@@ -32,20 +32,32 @@
                 :key="role.id"
                 v-if="role.attributes.name != 'admin'"
             >
-                <input
-                    type="checkbox"
-                    name="permissions[]"
-                    :value="role.id"
-                    :checked="objectRoles.includes(role.attributes.name)"
-                    :disabled="!canModify"
-                >
-                {{ role.attributes.name }}
-                <permission
-                    :inherited="objectPerms?.inherited || false"
-                    :role="role.attributes.name"
-                    :object-roles="objectRoles"
-                    :user-roles="userRoles"
-                />
+                <template v-if="!canModify">
+                    <input
+                        type="hidden"
+                        name="permissions[]"
+                        :value="role.id"
+                        v-if="objectRoles.includes(role.attributes.name)"
+                    >
+                    <app-icon icon="carbon:checkmark" v-if="objectRoles.includes(role.attributes.name)" />
+                    <app-icon icon="carbon:close" v-else />
+                    {{ role.attributes.name }}
+                </template>
+                <template v-else>
+                    <input
+                        type="checkbox"
+                        name="permissions[]"
+                        :value="role.id"
+                        :checked="objectRoles.includes(role.attributes.name)"
+                    >
+                    {{ role.attributes.name }}
+                    <permission
+                        :inherited="objectPerms?.inherited || false"
+                        :role="role.attributes.name"
+                        :object-roles="objectRoles"
+                        :user-roles="userRoles"
+                    />
+                </template>
             </label>
         </template>
     </div>
