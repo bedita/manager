@@ -54,10 +54,16 @@
         <header>
             <h2>
                 <span><app-icon icon="carbon:document" /></span>
-                <span class="tag is-smallest mx-05" :class="`has-background-module-${obj?.type}`">{{ obj?.type }}</span>
+                <span
+                    class="tag is-smallest mx-05"
+                    :class="`has-background-module-${obj?.type}`"
+                >
+                    {{ obj?.type }}
+                </span>
                 <template v-if="canSave()">
                     <span
-                        class="editable"
+                        class="editable content"
+                        :class="obj?.attributes?.status"
                         @click.prevent.stop="editMode = true"
                         @mouseover="hoverTitle=true"
                         @mouseleave="hoverTitle=false"
@@ -72,7 +78,13 @@
                     </span>
                 </template>
                 <template v-else>
-                    <span class="not-editable">{{ truncate(obj?.attributes?.title, 80) }}</span>
+                    <span
+                        class="content"
+                        :class="obj?.attributes?.status"
+                        v-title="obj?.attributes?.title"
+                    >
+                        {{ truncate(obj?.attributes?.title, 80) }}
+                    </span>
                 </template>
                 <div class="object-info-container">
                     <object-info
@@ -180,7 +192,10 @@ div.tree-content > header > h2 {
     justify-content: start;
     border-bottom: dotted 0.1px silver;
 }
-div.tree-content > header > h2 > span.editable, div.tree-content > header > h2 > span.not-editable {
+div.tree-content > header > h2 > span.off, div.tree-content > header > h2 > span.draft {
+    color: #737c81;
+}
+div.tree-content > header > h2 > span.content {
     font-size: 0.875rem;
 }
 div.tree-content > header > h2 > span.modified, div.tree-content > header > h2 > a {

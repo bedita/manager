@@ -24,7 +24,50 @@
                         </button>
                     </header>
                     <div class="container">
-                        TODO: form fields required + non required
+                        <form-field
+                            v-for="field in fieldsRequired"
+                            :key="field"
+                            :field="fieldKey(field)"
+                            :render-as="fieldType(field)"
+                            :json-schema="schema?.properties?.[fieldKey(field)] || {}"
+                            :is-uploadable="false"
+                            :languages="languages"
+                            :object-type="objectType"
+                            :required="fieldsRequired?.includes(fieldKey(field))"
+                            :val="schema?.[fieldKey(field)] || null"
+                            v-model="formFieldProperties[objectType][fieldKey(field)]"
+                            @error="fieldError"
+                            @update="fieldUpdate"
+                            @success="fieldSuccess"
+                        />
+                        <template v-for="field in fieldsOther">
+                            <div
+                                :key="field"
+                                v-if="fieldKey(field) === 'date_ranges'"
+                            >
+                                <date-ranges-view
+                                    :compact="true"
+                                    :ranges="createNewDateRanges"
+                                    @update="updateNewDateRanges"
+                                />
+                            </div>
+                            <form-field
+                                :key="field"
+                                :field="fieldKey(field)"
+                                :render-as="fieldType(field)"
+                                :json-schema="schema?.properties?.[fieldKey(field)] || {}"
+                                :is-uploadable="false"
+                                :languages="languages"
+                                :object-type="objectType"
+                                :required="fieldsRequired?.includes(fieldKey(field))"
+                                :val="schema?.[fieldKey(field)] || null"
+                                v-model="formFieldProperties[objectType][fieldKey(field)]"
+                                @error="fieldError"
+                                @update="fieldUpdate"
+                                @success="fieldSuccess"
+                                v-else
+                            />
+                        </template>
                         <div class="buttons">
                             <button
                                 class="button button-primary"
@@ -72,7 +115,8 @@
                 </span>
                 <template v-if="canSave()">
                     <span
-                        class="editable"
+                        class="editable folder"
+                        :class="folder?.attributes?.status"
                         @click.prevent.stop="editMode = true"
                         @mouseover="hoverTitle=true"
                         @mouseleave="hoverTitle=false"
@@ -87,7 +131,13 @@
                     </span>
                 </template>
                 <template v-else>
-                    <span class="not-editable">{{ truncate(folder?.attributes?.title, 80) }}</span>
+                    <span
+                        class="folder"
+                        :class="folder?.attributes?.status"
+                        v-title="folder?.attributes?.title"
+                    >
+                        {{ truncate(folder?.attributes?.title, 80) }}
+                    </span>
                 </template>
                 <span
                     class="loader is-loading-spinner"
@@ -107,10 +157,11 @@
                     />
                 </div>
                 <a
-                    :href="`/view/${obj?.id}`"
+                    :href="`/view/${folder?.id}`"
                     target="_blank"
                     class="mr-05"
                     v-title="msgOpenInNewTab"
+                    @click.prevent.stop="openNewTab(`/view/${folder?.id}`)"
                 >
                     <app-icon icon="carbon:launch" />
                 </a>
@@ -158,6 +209,7 @@ import { t } from 'ttag';
 export default {
     name: 'TreeFolder',
     components: {
+        FormField: () => import(/* webpackChunkName: "form-field" */'app/components/fast-create/form-field'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
         TreeContent: () => import('./tree-content.vue'),
     },
@@ -174,6 +226,14 @@ export default {
             type: Object,
             required: true
         },
+        languages: {
+            type: Object,
+            default: () => {},
+        },
+        schema: {
+            type: Object,
+            default: () => ({}),
+        },
         subfolders: {
             type: Object,
             default: () => ({})
@@ -184,6 +244,13 @@ export default {
             children: [],
             createNew: false,
             editMode: false,
+            error: {},
+            fieldsMap: {},
+            fieldsAll: [],
+            fieldsInvalid: [],
+            fieldsOther: [],
+            fieldsRequired: [],
+            formFieldProperties: {},
             hoverTitle: false,
             loading: false,
             msgClose: t`Close`,
@@ -193,17 +260,46 @@ export default {
             msgEdit: t`Edit`,
             msgFolders: t`Folders`,
             msgObjects: t`objects`,
+            msgOpenInNewTab: t`Open in new tab`,
             msgSave: t`Save`,
             msgUndo: t`Undo`,
+            objectType: 'folders',
             open: false,
-            show: 'subfolders',
-            title: '',
+            saving: false,
+            success: {},
             totalChildren: 0,
         }
     },
+    computed: {
+        saveDisabled() {
+            return this.fieldsInvalid.length > 0 || this.saving;
+        },
+    },
     mounted() {
         this.$nextTick(async () => {
-            this.title = this.folder?.attributes?.title || '';
+            this.formFieldProperties[this.objectType] = {};
+            this.fieldsRequired = BEDITA?.fastCreateFields?.[this.objectType]?.required || [];
+            this.fieldsAll = BEDITA?.fastCreateFields?.[this.objectType]?.fields || ['id', 'title'];
+            this.fieldsAll = this.fieldsAll.map(field => {
+                if (typeof field === 'object') {
+                    return Object.keys(field)[0];
+                }
+                return field;
+            });
+            this.fieldsOther = this.fieldsAll.filter(field => !this.fieldsRequired.includes(field));
+            const fields = BEDITA?.fastCreateFields?.[this.objectType]?.fields || [];
+            let ff = fields;
+            if (fields.constructor === Object) {
+                ff = Object.keys(fields);
+                this.fieldsMap = fields;
+            }
+            for (const item of ff) {
+                if (item.constructor === Object) {
+                    const itemKey = Object.keys(item)[0];
+                    this.fieldsMap[itemKey] = item[itemKey];
+                }
+            }
+            this.fieldsInvalid = this.fieldsRequired.filter(f => !this.formFieldProperties[this.objectType][f]);
             await this.loadChildren();
         });
     },
@@ -214,6 +310,28 @@ export default {
         closePanel() {
             this.createNew = false;
             this.editMode = false;
+        },
+        fieldError(field, val) {
+            this.error[field] = val;
+        },
+        fieldUpdate(field, val) {
+            this.formFieldProperties[this.objectType][field] = val;
+            this.fieldsInvalid = this.fieldsRequired.filter(f => !this.formFieldProperties[this.objectType][f]);
+        },
+        fieldSuccess(field, val) {
+            this.success[field] = val;
+        },
+        fieldKey(field) {
+            return this.isNumeric(field) ? this.fieldsMap[field] : field;
+        },
+        fieldType(field) {
+            return !this.isNumeric(field) ? this.fieldsMap[field] : null;
+        },
+        isNumeric(str) {
+            if (typeof str != 'string') {
+                return false;
+            }
+            return !isNaN(str) && !isNaN(parseFloat(str));
         },
         async loadChildren() {
             try {
@@ -238,6 +356,9 @@ export default {
             } finally {
                 this.loading = false;
             }
+        },
+        openNewTab(url) {
+            window.open(url, '_blank');
         },
         toggle() {
             this.open = !this.open;
@@ -289,7 +410,10 @@ div.tree-folder > header > h2 {
     justify-content: start;
     border-bottom: dotted 0.1px silver;
 }
-div.tree-folder > header > h2 > span.editable {
+div.tree-folder > header > h2 > span.off, div.tree-folder > header > h2 > span.draft {
+    color: #737c81;
+}
+div.tree-folder > header > h2 > span.folder {
     font-size: 0.875rem;
 }
 div.tree-folder > header > h2 > span.modified, div.tree-folder > header > h2 > a {

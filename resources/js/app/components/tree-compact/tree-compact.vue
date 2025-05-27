@@ -8,6 +8,8 @@
                 :can-save-map="canSaveMap"
                 :folder="folders?.[rootId] || {}"
                 :folders="folders || {}"
+                :languages="languages"
+                :schema="schema"
                 :subfolders="tree[rootId]?.subfolders || {}"
             />
         </div>
@@ -33,6 +35,14 @@ export default {
         canSaveMap: {
             type: Object,
             required: true
+        },
+        languages: {
+            type: Object,
+            default: () => {},
+        },
+        schema: {
+            type: Object,
+            default: () => ({}),
         },
     },
     data() {

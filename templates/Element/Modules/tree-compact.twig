@@ -1,4 +1,6 @@
 <tree-compact
     :can-save-map="{{ Perms.canSaveMap()|json_encode }}"
+    :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}"
+    :schema="{{ schema|json_encode }}"
 >
 </tree-compact>
