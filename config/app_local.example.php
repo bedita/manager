@@ -32,6 +32,17 @@ return [
     // ],
 
     /**
+     * Permissions per roles: force configuration.
+     * This is used to define which roles cannot edit permissions, even though they are allowed to modify the folder and its descendants.
+     */
+    // 'Permissions' => [
+    //     'readonly' => [
+    //         'publisher',
+    //         'editor',
+    //     ],
+    // ],
+
+    /**
      * Display an alert message in a top bar.
      * Useful to announce mainteinance or to specify a non-production environment
      *
