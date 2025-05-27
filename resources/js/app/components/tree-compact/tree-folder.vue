@@ -13,13 +13,29 @@
                 <span class="folder-closed" v-else>
                     <app-icon icon="material-symbols:folder" />
                 </span>
-                <span class="title-edit" v-if="editField === 'title'">
+                <span
+                    class="title-edit"
+                    v-if="editField === 'title'"
+                >
                     <input
                         type="text"
                         v-model="title"
                         @click.prevent.stop="editField = 'title'"
                     >
-                    <button @click.prevent.stop="saveTitle()">{{ msgSave }}</button>
+                    <button
+                        class="button button-primary"
+                        @click.prevent.stop="saveTitle()"
+                    >
+                        <app-icon icon="carbon:save" />
+                        <span class="ml-05">{{ msgSave }}</span>
+                    </button>
+                    <button
+                        class="button button-primary"
+                        @click.prevent.stop="undoTitle()"
+                    >
+                        <app-icon icon="carbon:reset" />
+                        <span class="ml-05">{{ msgUndo }}</span>
+                    </button>
                 </span>
                 <span
                     class="editable"
@@ -33,16 +49,22 @@
                         <app-icon icon="ph:pencil-fill" color="#00aaff" />
                     </template>
                 </span>
-                <span class="loader is-loading-spinner" v-if="loading"></span>
-                <span class="tag is-smallest is-black ml-2" v-if="!loading">
+                <span
+                    class="loader is-loading-spinner"
+                    v-if="loading"
+                />
+                <span
+                    class="tag is-smallest is-black ml-2"
+                    v-if="!loading"
+                >
                     {{ totalChildren }} {{ msgObjects }}
                 </span>
                 <span class="modified">{{ $helpers.formatDate(folder?.meta?.modified) }}</span>
             </h2>
         </header>
         <template v-if="open">
-            <template v-if="Object.keys(subfolders)?.length">
-                <div class="subfolders">
+            <div class="contents">
+                <template v-if="Object.keys(subfolders)?.length">
                     <tree-folder
                         v-for="(childId, index) in Object.keys(subfolders)"
                         :key="index"
@@ -50,17 +72,15 @@
                         :folders="folders || {}"
                         :subfolders="subfolders[childId]?.subfolders || {}"
                     />
-                </div>
-            </template>
-            <template v-if="children?.length">
-                <div class="children">
+                </template>
+                <template v-if="children?.length">
                     <tree-content
                         v-for="(child, index) in children"
                         :key="index"
                         :obj="child"
                     />
-                </div>
-            </template>
+                </template>
+            </div>
         </template>
     </div>
 </template>
@@ -109,6 +129,7 @@ export default {
             msgFolders: t`Folders`,
             msgObjects: t`objects`,
             msgSave: t`Save`,
+            msgUndo: t`Undo`,
             open: false,
             show: 'subfolders',
             title: '',
@@ -151,6 +172,11 @@ export default {
             this.hoverTitle = false;
             this.folder.attributes.title = this.title;
         },
+        async undoTitle() {
+            this.editField = null;
+            this.hoverTitle = false;
+            this.title = this.folder?.attributes?.title || '';
+        },
         toggle() {
             this.open = !this.open;
         },
@@ -179,20 +205,9 @@ div.tree-folder > header > h2 > span.editable {
 div.tree-folder > header > h2 > span.modified {
     font-size: 0.7rem;
 }
-div.tree-folder div.children, div.tree-folder div.subfolders {
-    background-color: #121c21;
-}
-div.tree-folder div.children {
-    border: solid blue 1px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    gap: 0.2rem;
-}
-div.tree-folder div.children > div {
-    padding: 0.2rem;
-    margin: 0.2rem;
-    border-bottom: dotted 1px orange;
+div.tree-folder div.contents {
+    border-bottom: dashed aqua 0.5px;
+    margin-bottom: 1rem;
 }
 div.tree-folder .editable:hover {
     cursor: pointer;
