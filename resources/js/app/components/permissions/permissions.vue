@@ -24,7 +24,7 @@
             <span class="ml-05 has-text-danger">
                 {{ msgYouCannotModify }}.
                 {{ msgYourRoles }}: {{ userRoles.join(',') }}.
-                <template v-if="readonlyRoles">{{ msgReadonlyRoles }}: {{ readonlyRoles.join(',') }}.</template>
+                <template v-if="readonlyRoles">{{ msgReadonlyRoles }}: {{ readonlyRoles.join(', ') }}.</template>
             </span>
         </div>
         <template v-for="role in roles">
