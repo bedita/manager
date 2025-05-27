@@ -1,6 +1,6 @@
 <template>
     <div class="tree-content">
-        <template v-if="createNew || editMode">
+        <template v-if="obj && (createNew || editMode)">
             <div
                 class="backdrop"
                 style="display: block; z-index: 9998;"
@@ -24,7 +24,50 @@
                         </button>
                     </header>
                     <div class="container">
-                        TODO: form fields required + non required
+                        <form-field
+                            v-for="field in fieldsRequired"
+                            :key="field"
+                            :field="fieldKey(field)"
+                            :render-as="fieldType(field)"
+                            :json-schema="schema?.properties?.[fieldKey(field)] || {}"
+                            :is-uploadable="false"
+                            :languages="languages"
+                            :object-type="objectType"
+                            :required="fieldsRequired?.includes(fieldKey(field))"
+                            :val="obj?.attributes?.[fieldKey(field)] || schema?.[fieldKey(field)] || null"
+                            v-model="formFieldProperties[objectType][fieldKey(field)]"
+                            @error="fieldError"
+                            @update="fieldUpdate"
+                            @success="fieldSuccess"
+                        />
+                        <template v-for="field in fieldsOther">
+                            <div
+                                :key="field"
+                                v-if="fieldKey(field) === 'date_ranges'"
+                            >
+                                <date-ranges-view
+                                    :compact="true"
+                                    :ranges="createNewDateRanges"
+                                    @update="updateNewDateRanges"
+                                />
+                            </div>
+                            <form-field
+                                :key="field"
+                                :field="fieldKey(field)"
+                                :render-as="fieldType(field)"
+                                :json-schema="schema?.properties?.[fieldKey(field)] || {}"
+                                :is-uploadable="false"
+                                :languages="languages"
+                                :object-type="objectType"
+                                :required="fieldsRequired?.includes(fieldKey(field))"
+                                :val="obj?.attributes?.[fieldKey(field)] || schema?.[fieldKey(field)] || null"
+                                v-model="formFieldProperties[objectType][fieldKey(field)]"
+                                @error="fieldError"
+                                @update="fieldUpdate"
+                                @success="fieldSuccess"
+                                v-else
+                            />
+                        </template>
                         <div class="buttons">
                             <button
                                 class="button button-primary"
@@ -68,7 +111,7 @@
                         @mouseover="hoverTitle=true"
                         @mouseleave="hoverTitle=false"
                     >
-                        {{ truncate(title, 80) }}
+                        {{ truncate(obj?.attributes?.title, 80) }}
                         <template v-if="hoverTitle">
                             <app-icon
                                 icon="ph:pencil-fill"
@@ -112,6 +155,7 @@ import { t } from 'ttag';
 export default {
     name: 'TreeContent',
     components: {
+        FormField: () => import(/* webpackChunkName: "form-field" */'app/components/fast-create/form-field'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
     },
     props: {
@@ -119,24 +163,73 @@ export default {
             type: Object,
             required: true
         },
+        languages: {
+            type: Object,
+            default: () => {},
+        },
         obj: {
             type: Object,
             required: true
+        },
+        schema: {
+            type: Object,
+            default: () => ({}),
         },
     },
     data() {
         return {
             createNew: false,
             editMode: false,
+            error: {},
+            fieldsMap: {},
+            fieldsAll: [],
+            fieldsInvalid: [],
+            fieldsOther: [],
+            fieldsRequired: [],
+            formFieldProperties: {},
             hoverTitle: false,
-            title: this.obj?.attributes?.title || '',
             msgClose: t`Close`,
             msgCreateNew: t`Create new`,
             msgEdit: t`Edit`,
             msgOpenInNewTab: t`Open in new tab`,
             msgSave: t`Save`,
             msgUndo: t`Undo`,
+            objectType: this.obj?.type || '',
+            saving: false,
+            success: {},
         }
+    },
+    computed: {
+        saveDisabled() {
+            return this.fieldsInvalid.length > 0 || this.saving;
+        },
+    },
+    mounted() {
+        this.$nextTick(async () => {
+            this.formFieldProperties[this.objectType] = {};
+            this.fieldsRequired = BEDITA?.fastCreateFields?.[this.objectType]?.required || [];
+            this.fieldsAll = BEDITA?.fastCreateFields?.[this.objectType]?.fields || ['title'];
+            this.fieldsAll = this.fieldsAll.map(field => {
+                if (typeof field === 'object') {
+                    return Object.keys(field)[0];
+                }
+                return field;
+            });
+            this.fieldsOther = this.fieldsAll.filter(field => !this.fieldsRequired.includes(field));
+            const fields = BEDITA?.fastCreateFields?.[this.objectType]?.fields || [];
+            let ff = fields;
+            if (fields.constructor === Object) {
+                ff = Object.keys(fields);
+                this.fieldsMap = fields;
+            }
+            for (const item of ff) {
+                if (item.constructor === Object) {
+                    const itemKey = Object.keys(item)[0];
+                    this.fieldsMap[itemKey] = item[itemKey];
+                }
+            }
+            this.fieldsInvalid = this.fieldsRequired.filter(f => !this.formFieldProperties[this.objectType][f]);
+        });
     },
     methods: {
         canSave() {
@@ -145,6 +238,28 @@ export default {
         closePanel() {
             this.createNew = false;
             this.editMode = false;
+        },
+        fieldError(field, val) {
+            this.error[field] = val;
+        },
+        fieldUpdate(field, val) {
+            this.formFieldProperties[this.objectType][field] = val;
+            this.fieldsInvalid = this.fieldsRequired.filter(f => !this.formFieldProperties[this.objectType][f]);
+        },
+        fieldSuccess(field, val) {
+            this.success[field] = val;
+        },
+        fieldKey(field) {
+            return this.isNumeric(field) ? this.fieldsMap[field] : field;
+        },
+        fieldType(field) {
+            return !this.isNumeric(field) ? this.fieldsMap[field] : null;
+        },
+        isNumeric(str) {
+            if (typeof str != 'string') {
+                return false;
+            }
+            return !isNaN(str) && !isNaN(parseFloat(str));
         },
         truncate(str, len) {
             return this.$helpers.truncate(str, len);

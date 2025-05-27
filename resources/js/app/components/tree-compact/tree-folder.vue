@@ -34,7 +34,7 @@
                             :languages="languages"
                             :object-type="objectType"
                             :required="fieldsRequired?.includes(fieldKey(field))"
-                            :val="schema?.[fieldKey(field)] || null"
+                            :val="folders?.attributes?.[fieldKey(field)] || schema?.[fieldKey(field)] || null"
                             v-model="formFieldProperties[objectType][fieldKey(field)]"
                             @error="fieldError"
                             @update="fieldUpdate"
@@ -60,7 +60,7 @@
                                 :languages="languages"
                                 :object-type="objectType"
                                 :required="fieldsRequired?.includes(fieldKey(field))"
-                                :val="schema?.[fieldKey(field)] || null"
+                                :val="folder?.attributes?.[fieldKey(field)] || schema?.[fieldKey(field)] || null"
                                 v-model="formFieldProperties[objectType][fieldKey(field)]"
                                 @error="fieldError"
                                 @update="fieldUpdate"
@@ -177,6 +177,8 @@
                         :key="index"
                         :folder="folders[childId]"
                         :folders="folders || {}"
+                        :languages="languages"
+                        :schema="schema"
                         :subfolders="subfolders[childId]?.subfolders || {}"
                     />
                 </template>
@@ -185,7 +187,9 @@
                         v-for="(child, index) in children"
                         :can-save-map="canSaveMap"
                         :key="index"
+                        :languages="languages"
                         :obj="child"
+                        :schema="schema"
                     />
                 </template>
             </div>
@@ -279,7 +283,7 @@ export default {
         this.$nextTick(async () => {
             this.formFieldProperties[this.objectType] = {};
             this.fieldsRequired = BEDITA?.fastCreateFields?.[this.objectType]?.required || [];
-            this.fieldsAll = BEDITA?.fastCreateFields?.[this.objectType]?.fields || ['id', 'title'];
+            this.fieldsAll = BEDITA?.fastCreateFields?.[this.objectType]?.fields || ['title'];
             this.fieldsAll = this.fieldsAll.map(field => {
                 if (typeof field === 'object') {
                     return Object.keys(field)[0];
