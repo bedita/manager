@@ -68,6 +68,27 @@ class TreeController extends AppController
         $this->setSerialize(['data']);
     }
 
+    public function children(string $id): void
+    {
+        $this->getRequest()->allowMethod(['get']);
+        $this->viewBuilder()->setClassName('Json');
+        $data = $meta = [];
+        try {
+            $query = $this->getRequest()->getQueryParams();
+            $response = $this->apiClient->get(sprintf('/folders/%s/children', $id), $query);
+            $data = (array)Hash::get($response, 'data');
+            foreach ($data as &$item) {
+                $item = $this->minimalDataWithMeta((array)$item);
+            }
+            $meta = (array)Hash::get($response, 'meta');
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), LogLevel::ERROR);
+        }
+        $this->set('data', $data);
+        $this->set('meta', $meta);
+        $this->setSerialize(['data', 'meta']);
+    }
+
     /**
      * Get node by ID.
      * Use cache to store data.
@@ -456,6 +477,8 @@ class TreeController extends AppController
             'type' => (string)Hash::get($fullData, 'type'),
             'attributes' => [
                 'title' => (string)Hash::get($fullData, 'attributes.title'),
+                'uname' => (string)Hash::get($fullData, 'attributes.uname'),
+                'lang' => (string)Hash::get($fullData, 'attributes.lang'),
                 'status' => (string)Hash::get($fullData, 'attributes.status'),
             ],
             'meta' => [

@@ -5,6 +5,7 @@
             :key="rootId"
         >
             <TreeFolder
+                :can-save-map="canSaveMap"
                 :folder="folders?.[rootId] || {}"
                 :folders="folders || {}"
                 :subfolders="tree[rootId]?.subfolders || {}"
@@ -29,8 +30,8 @@ export default {
         TreeFolder: () => import('./tree-folder.vue'),
     },
     props: {
-        objectType: {
-            type: String,
+        canSaveMap: {
+            type: Object,
             required: true
         },
     },
@@ -51,7 +52,7 @@ export default {
             try {
                 this.loading = true;
                 this.tree = [];
-                const response = await fetch(`${API_URL}tree/loadAll?objectType=${this.objectType}`, API_OPTIONS);
+                const response = await fetch(`${API_URL}tree/loadAll?objectType=folders`, API_OPTIONS);
                 const json = await response.json();
                 if (json.error) {
                     throw new Error(json.error);

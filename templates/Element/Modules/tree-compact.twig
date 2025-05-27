@@ -1,2 +1,4 @@
-<tree-compact :object-type="{{ objectType|json_encode }}">
+<tree-compact
+    :can-save-map="{{ Perms.canSaveMap()|json_encode }}"
+>
 </tree-compact>
