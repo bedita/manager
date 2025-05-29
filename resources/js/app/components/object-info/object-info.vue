@@ -45,9 +45,9 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
-            const source = BEDITA?.indexLists?.[this.objectData?.type] || {};
+            const source = BEDITA?.indexLists?.[this.objectData?.type] || [];
             this.fields = source || ['title', 'description'];
-            this.fields = this.fields.filter((value, index, array) => {
+            this.fields = this.fields?.filter((value, index, array) => {
                 return array.indexOf(value) === index;
             });
 
