@@ -1,99 +1,16 @@
 <template>
     <div class="tree-folder">
-        <template v-if="createNew || editMode">
-            <div
-                class="backdrop"
-                style="display: block; z-index: 9998;"
-                @click="closePanel()"
-            />
-            <aside
-                class="main-panel-container on"
-                custom-footer="true"
-                custom-header="true"
-            >
-                <div class="main-panel fieldset">
-                    <header class="mx-1 mt-1 tab tab-static unselectable">
-                        <h2 v-if="createNew">{{ msgCreateNew }}</h2>
-                        <h2 v-if="editMode">{{ msgEdit }}</h2>
-                        <button
-                            class="button button-outlined close"
-                            v-title="msgClose"
-                            @click="closePanel()"
-                        >
-                            <app-icon icon="carbon:close" />
-                        </button>
-                    </header>
-                    <div class="container">
-                        <form-field
-                            v-for="field in fieldsRequired"
-                            :key="field"
-                            :field="fieldKey(field)"
-                            :render-as="fieldType(field)"
-                            :json-schema="schema?.properties?.[fieldKey(field)] || {}"
-                            :is-uploadable="false"
-                            :languages="languages"
-                            :object-type="objectType"
-                            :required="fieldsRequired?.includes(fieldKey(field))"
-                            :val="folders?.attributes?.[fieldKey(field)] || schema?.[fieldKey(field)] || null"
-                            v-model="formFieldProperties[objectType][fieldKey(field)]"
-                            @error="fieldError"
-                            @update="fieldUpdate"
-                            @success="fieldSuccess"
-                        />
-                        <template v-for="field in fieldsOther">
-                            <div
-                                :key="field"
-                                v-if="fieldKey(field) === 'date_ranges'"
-                            >
-                                <date-ranges-view
-                                    :compact="true"
-                                    :ranges="createNewDateRanges"
-                                    @update="updateNewDateRanges"
-                                />
-                            </div>
-                            <form-field
-                                :key="field"
-                                :field="fieldKey(field)"
-                                :render-as="fieldType(field)"
-                                :json-schema="schema?.properties?.[fieldKey(field)] || {}"
-                                :is-uploadable="false"
-                                :languages="languages"
-                                :object-type="objectType"
-                                :required="fieldsRequired?.includes(fieldKey(field))"
-                                :val="folder?.attributes?.[fieldKey(field)] || schema?.[fieldKey(field)] || null"
-                                v-model="formFieldProperties[objectType][fieldKey(field)]"
-                                @error="fieldError"
-                                @update="fieldUpdate"
-                                @success="fieldSuccess"
-                                v-else
-                            />
-                        </template>
-                        <div class="buttons">
-                            <button
-                                class="button button-primary"
-                                :class="{'is-loading-spinner': saving}"
-                                :disabled="saveDisabled"
-                                @click.prevent="save"
-                            >
-                                <app-icon icon="carbon:save" />
-                                <span class="ml-05">
-                                    {{ msgSave }}
-                                </span>
-                            </button>
-                            <button
-                                class="button button-primary"
-                                @click="closePanel()"
-                            >
-                                <app-icon icon="carbon:close" />
-                                <span class="ml-05">
-                                    {{ msgClose }}
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-        </template>
+        <tree-panel
+            :folders="folders || {}"
+            :languages="languages"
+            :obj="folder"
+            :object-type="'folders'"
+            :schema="schema"
+            :show-panel="editMode"
+            :tree="tree"
+            @update:showPanel="editMode = $event"
+            @success="$emit('forceReload')"
+        />
         <header
             class="tab"
             :class="{'open': open}"
@@ -149,6 +66,15 @@
                 >
                     {{ totalChildren }} {{ msgObjects }}
                 </span>
+                <button
+                    class="button button-outlined"
+                    @click.prevent.stop="remove"
+                >
+                    <app-icon icon="carbon:trash-can" />
+                    <span class="ml-05">
+                        {{ msgDelete }}
+                    </span>
+                </button>
                 <div class="object-info-container">
                     <object-info
                         border-color="transparent"
@@ -172,24 +98,27 @@
             <div class="contents">
                 <template v-if="Object.keys(subfolders)?.length">
                     <tree-folder
-                        v-for="(childId, index) in Object.keys(subfolders)"
+                        v-for="childId in Object.keys(subfolders)"
                         :can-save-map="canSaveMap"
-                        :key="index"
+                        :key="childId"
                         :folder="folders[childId]"
                         :folders="folders || {}"
                         :languages="languages"
                         :schema="schema"
                         :subfolders="subfolders[childId]?.subfolders || {}"
+                        :tree="tree"
+                        @force-reload="$emit('forceReload')"
                     />
                 </template>
                 <template v-if="children?.length">
                     <tree-content
-                        v-for="(child, index) in children"
+                        v-for="child in children"
                         :can-save-map="canSaveMap"
-                        :key="index"
+                        :key="child.id"
                         :languages="languages"
                         :obj="child"
                         :schema="schema"
+                        @success="reloadContent"
                     />
                 </template>
             </div>
@@ -213,10 +142,11 @@ import { t } from 'ttag';
 export default {
     name: 'TreeFolder',
     components: {
-        FormField: () => import(/* webpackChunkName: "form-field" */'app/components/fast-create/form-field'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
         TreeContent: () => import('./tree-content.vue'),
+        TreePanel: () => import('./tree-panel.vue'),
     },
+    inject: ['getCSFRToken'],
     props: {
         canSaveMap: {
             type: Object,
@@ -241,12 +171,16 @@ export default {
         subfolders: {
             type: Object,
             default: () => ({})
-        }
+        },
+        tree: {
+            type: Object,
+            default: () => ({})
+        },
     },
     data() {
         return {
             children: [],
-            createNew: false,
+            confirm: null,
             editMode: false,
             error: {},
             fieldsMap: {},
@@ -261,6 +195,7 @@ export default {
             msgContents: t`Contents`,
             msgCreateContent: t`Create content`,
             msgCreateFolder: t`Create folder`,
+            msgDelete: t`Delete`,
             msgEdit: t`Edit`,
             msgFolders: t`Folders`,
             msgObjects: t`objects`,
@@ -312,8 +247,25 @@ export default {
             return this.canSaveMap?.['folders'] || false;
         },
         closePanel() {
-            this.createNew = false;
             this.editMode = false;
+        },
+        async delete() {
+            try {
+                const options = {
+                    method: 'DELETE',
+                    credentials: 'same-origin',
+                    headers: {
+                        'accept': 'application/json',
+                        'X-CSRF-Token': BEDITA.csrfToken,
+                    },
+                };
+                await fetch(`${BEDITA.base}/api/folders/${this.folder.id}`, options);
+                this.$emit('forceReload');
+            } catch (error) {
+                BEDITA.error(error);
+            } finally {
+                this.confirm.hide();
+            }
         },
         fieldError(field, val) {
             this.error[field] = val;
@@ -363,6 +315,21 @@ export default {
         },
         openNewTab(url) {
             window.open(url, '_blank');
+        },
+        reloadContent(item) {
+            const index = this.children.findIndex(child => child.id === item.id);
+            if (index !== -1) {
+                this.children.splice(index, 1, item);
+            }
+        },
+        remove() {
+            this.confirm = BEDITA.confirm(
+                t`If you confirm, this resource will be gone forever. Are you sure?`,
+                t`yes, proceed`,
+                () => {
+                    this.delete();
+                }
+            );
         },
         toggle() {
             this.open = !this.open;
@@ -441,5 +408,8 @@ div.tree-folder span.tag {
 }
 div.tree-folder span.folder-open, div.tree-folder span.folder-closed {
     cursor: pointer;
+}
+div.tree-folder button {
+    border: solid transparent 0px;
 }
 </style>

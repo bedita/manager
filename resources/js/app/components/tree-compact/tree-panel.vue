@@ -1,6 +1,6 @@
 <template>
-    <div class="tree-content">
-        <template v-if="obj && editMode">
+    <div class="tree-panel">
+        <template v-if="showPanel">
             <div
                 class="backdrop"
                 style="display: block; z-index: 9998;"
@@ -13,7 +13,7 @@
             >
                 <div class="main-panel fieldset">
                     <header class="mx-1 mt-1 tab tab-static unselectable">
-                        <h2>{{ msgEdit }}</h2>
+                        <h2>{{ msgNew }} {{ objectType }}</h2>
                         <button
                             class="button button-outlined close"
                             v-title="msgClose"
@@ -39,17 +39,35 @@
                             @update="fieldUpdate"
                             @success="fieldSuccess"
                         />
-                        <template v-for="field in fieldsOther">
-                            <div
-                                :key="field"
-                                v-if="fieldKey(field) === 'date_ranges'"
-                            >
-                                <date-ranges-view
-                                    :compact="true"
-                                    :ranges="createNewDateRanges"
-                                    @update="updateNewDateRanges"
-                                />
+                        <div>
+                            <label>{{ msgParentFolder }} <span class="required">*</span> {{ parentId }}</label>
+                            <div class="root">
+                                <label>
+                                    <span>
+                                        <input
+                                            type="radio"
+                                            name="position"
+                                            v-model="parentId"
+                                            @click="updateParent(null)"
+                                        >
+                                    </span>
+                                    <span class="ml-05">
+                                        {{ msgRoot }}
+                                    </span>
+                                </label>
                             </div>
+                            <tree-node
+                                v-for="(node, id) in tree"
+                                :key="id"
+                                :folders="folders"
+                                :node="node"
+                                :object-type="objectType"
+                                :parent-folder-id="parentId"
+                                :reference-object="obj"
+                                @update-parent="updateParent"
+                            />
+                        </div>
+                        <template v-for="field in fieldsOther">
                             <form-field
                                 :key="field"
                                 :field="fieldKey(field)"
@@ -64,7 +82,6 @@
                                 @error="fieldError"
                                 @update="fieldUpdate"
                                 @success="fieldSuccess"
-                                v-else
                             />
                         </template>
                         <div class="buttons">
@@ -72,7 +89,7 @@
                                 class="button button-primary"
                                 :class="{'is-loading-spinner': saving}"
                                 :disabled="saveDisabled"
-                                @click.prevent="save"
+                                @click="save"
                             >
                                 <app-icon icon="carbon:save" />
                                 <span class="ml-05">
@@ -98,75 +115,22 @@
                 </div>
             </aside>
         </template>
-        <header>
-            <h2>
-                <span><app-icon icon="carbon:document" /></span>
-                <span
-                    class="tag is-smallest mx-05"
-                    :class="`has-background-module-${obj?.type}`"
-                >
-                    {{ obj?.type }}
-                </span>
-                <template v-if="canSave()">
-                    <span
-                        class="editable content"
-                        :class="obj?.attributes?.status"
-                        @click.prevent.stop="editMode = true"
-                        @mouseover="hoverTitle=true"
-                        @mouseleave="hoverTitle=false"
-                    >
-                        {{ truncate(obj?.attributes?.title, 80) }}
-                        <template v-if="hoverTitle">
-                            <app-icon
-                                icon="ph:pencil-fill"
-                                color="#00aaff"
-                            />
-                        </template>
-                    </span>
-                </template>
-                <template v-else>
-                    <span
-                        class="content"
-                        :class="obj?.attributes?.status"
-                        v-title="obj?.attributes?.title"
-                    >
-                        {{ truncate(obj?.attributes?.title, 80) }}
-                    </span>
-                </template>
-                <div class="object-info-container">
-                    <object-info
-                        border-color="transparent"
-                        color="white"
-                        :object-data="obj"
-                    />
-                </div>
-                <a
-                    :href="`/view/${obj?.id}`"
-                    target="_blank"
-                    class="mr-05"
-                    v-title="msgOpenInNewTab"
-                >
-                    <app-icon icon="carbon:launch" />
-                </a>
-                <span class="modified">{{ $helpers.formatDate(obj?.meta?.modified) }}</span>
-            </h2>
-        </header>
     </div>
 </template>
 <script>
 import { t } from 'ttag';
 
 export default {
-    name: 'TreeContent',
+    name: 'TreePanel',
     components: {
         FormField: () => import(/* webpackChunkName: "form-field" */'app/components/fast-create/form-field'),
-        ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
+        TreeNode: () => import('./tree-node.vue'),
     },
     inject: ['getCSFRToken'],
     props: {
-        canSaveMap: {
+        folders: {
             type: Object,
-            required: true
+            default: () => ({}),
         },
         languages: {
             type: Object,
@@ -176,14 +140,25 @@ export default {
             type: Object,
             required: true
         },
+        objectType: {
+            type: String,
+            required: true
+        },
         schema: {
             type: Object,
-            default: () => ({}),
+            required: true
+        },
+        showPanel: {
+            type: Boolean,
+            default: false
+        },
+        tree: {
+            type: Object,
+            default: () => ({})
         },
     },
     data() {
         return {
-            editMode: false,
             error: {},
             fieldsMap: {},
             fieldsAll: [],
@@ -191,13 +166,12 @@ export default {
             fieldsOther: [],
             fieldsRequired: [],
             formFieldProperties: {},
-            hoverTitle: false,
             msgClose: t`Close`,
-            msgEdit: t`Edit`,
-            msgOpenInNewTab: t`Open in new tab`,
+            msgNew: t`New object in`,
+            msgParentFolder: t`Parent folder`,
+            msgRoot: t`/ (root)`,
             msgSave: t`Save`,
-            msgUndo: t`Undo`,
-            objectType: this.obj?.type || '',
+            parentId: null,
             saving: false,
             success: {},
         }
@@ -232,14 +206,15 @@ export default {
                 }
             }
             this.fieldsInvalid = this.fieldsRequired.filter(f => !this.formFieldProperties[this.objectType][f]);
+            if (this.obj?.meta?.path) {
+                const tmp = this.obj.meta.path.split('/').reverse();
+                this.parentId = tmp[1] || null;
+            }
         });
     },
     methods: {
-        canSave() {
-            return this.canSaveMap?.[this.obj?.type] || false;
-        },
         closePanel() {
-            this.editMode = false;
+            this.$emit('update:showPanel', false);
         },
         fieldError(field, val) {
             this.error[field] = val;
@@ -263,7 +238,11 @@ export default {
             }
             return !isNaN(str) && !isNaN(parseFloat(str));
         },
+        updateParent(id) {
+            this.parentId = id;
+        },
         async save() {
+            console.log('saving...');
             try {
                 this.saving = true;
                 this.payload = Object.assign({}, this.formFieldProperties[this.objectType]);
@@ -271,6 +250,27 @@ export default {
                 if (this.obj?.id) {
                     this.payload.id = this.obj.id;
                 }
+                this.payload._changedParents = this.parentId;
+                if (this.obj?.meta?.path) {
+                    const tmp = this.obj.meta.path.split('/').reverse();
+                    this.payload._originalParents = tmp[1] || null;
+                }
+                this.payload.relations = {
+                    parent: {
+                        replaceRelated: [
+                            JSON.stringify({
+                                id: this.parentId,
+                                type: this.objectType,
+                                meta: {
+                                    relation: {
+                                        menu: false,
+                                        canonical: false
+                                    }
+                                }
+                            })
+                        ]
+                    }
+                };
                 const url = `/${this.objectType}/save`;
                 const options = {
                     method: 'POST',
@@ -295,67 +295,51 @@ export default {
                 this.saving = false;
             }
         },
-        truncate(str, len) {
-            return this.$helpers.truncate(str, len);
-        },
     },
 }
 </script>
 <style scoped>
-div.tree-content {
-    padding-left: 0.5rem;
-}
-div.tree-content aside.main-panel-container {
+div.tree-panel aside.main-panel-container {
     z-index: 9999;
 }
-div.tree-content aside.main-panel {
+div.tree-panel aside.main-panel {
     margin: 1rem;
     padding: 1rem;
 }
-div.tree-content button.close {
+div.tree-panel button.close {
     border: solid transparent 0px;
     min-width: 36px;
     max-width: 36px;
 }
-div.tree-content .container {
+div.tree-panel .container {
     padding: 1rem;
     margin: auto;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
-div.tree-content .container > div {
+div.tree-panel .container > div {
     display: flex;
     flex-direction: column;
 }
-div.tree-content div.buttons {
+div.tree-panel div.buttons {
     display: flex;
     flex-direction: row;
     gap: 1rem;
 }
-div.tree-content > header > h2 {
-    display: flex;
-    flex-direction: row;
-    gap: 0.2rem;
-    align-items: center;
-    justify-content: start;
-    border-bottom: dotted 0.1px silver;
+div.tree-panel span.required {
+    color: red;
 }
-div.tree-content > header > h2 > span.off, div.tree-content > header > h2 > span.draft {
-    color: #737c81;
-}
-div.tree-content > header > h2 > span.content {
-    font-size: 0.875rem;
-}
-div.tree-content > header > h2 > span.modified, div.tree-content > header > h2 > a {
-    font-size: 0.7rem;
-}
-div.tree-content .editable:hover {
+
+div.tree-panel div.root > label {
+    display:flex;
+    align-items:center;
+    direction:column;
     cursor: pointer;
-    color: #00aaff;
-    text-decoration: underline;
 }
-div.tree-content div.object-info-container {
-    margin-left: auto;
+div.tree-panel div.root > label > span {
+    display: flex;
+    align-self: center;
+    cursor: pointer;
 }
 </style>

@@ -185,6 +185,10 @@ class TreeController extends AppController
     {
         $objectType = $this->getRequest()->getParam('object_type');
         $key = CacheTools::cacheKey(sprintf('compact-tree-%s', $objectType));
+        $noCache = (bool)$this->getRequest()->getQuery('no_cache');
+        if ($noCache === true) {
+            Cache::clearGroup('tree', TreeCacheEventHandler::CACHE_CONFIG);
+        }
         $data = [];
         try {
             $data = Cache::remember(

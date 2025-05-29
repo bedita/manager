@@ -26,6 +26,7 @@ use Cake\View\Helper;
  * @property \Cake\View\Helper\HtmlHelper $Html
  * @property \App\View\Helper\LinkHelper $Link
  * @property \App\View\Helper\PermsHelper $Perms
+ * @property \App\View\Helper\PropertyHelper $Property
  * @property \App\View\Helper\SystemHelper $System
  * @property \Cake\View\Helper\UrlHelper $Url
  */
@@ -36,7 +37,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Editors', 'Html', 'Link', 'Perms', 'System', 'Url'];
+    public $helpers = ['Editors', 'Html', 'Link', 'Perms', 'Property', 'System', 'Url'];
 
     /**
      * Is Dashboard
@@ -430,6 +431,7 @@ class LayoutHelper extends Helper
             'richeditorConfig' => (array)Configure::read('Richeditor'),
             'richeditorByPropertyConfig' => (array)Configure::read('UI.richeditor', []),
             'indexLists' => (array)$this->indexLists(),
+            'fastCreateFields' => (array)$this->Property->fastCreateFieldsMap(),
         ];
     }
 
