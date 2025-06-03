@@ -356,6 +356,14 @@ class TreeController extends AppController
         return $data;
     }
 
+    /**
+     * Fetch compact tree data from API.
+     * Retrieve minimal data for folders: id, status, title, meta.
+     * Return tree and folders.
+     * Return an array with 'tree' and 'folders' keys.
+     *
+     * @return array
+     */
     protected function fetchCompactTreeData(): array
     {
         $done = false;
