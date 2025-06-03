@@ -99,6 +99,39 @@ class TreeControllerTest extends BaseControllerTest
     }
 
     /**
+     * Test `children` method
+     *
+     * @return void
+     * @covers ::children()
+     * @covers ::minimalDataWithMeta()
+     */
+    public function testChildren(): void
+    {
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+        ];
+        $request = new ServerRequest($config);
+        $tree = new TreeController($request);
+        $folder = $this->createTestFolder();
+        $child = $this->createTestObject();
+        $this->client->addRelated($folder['id'], 'folders', 'children', [
+            [
+                'id' => (string)Hash::get($child, 'id'),
+                'type' => (string)Hash::get($child, 'type'),
+            ],
+        ]);
+        $tree->children($folder['id']);
+        $actual = $tree->viewBuilder()->getVar('data');
+        static::assertNotEmpty($actual);
+        $actual = $tree->viewBuilder()->getVar('meta');
+        static::assertNotEmpty($actual);
+    }
+
+    /**
      * Test `compactTreeData` method with query parameter `no_cache` set to true
      *
      * @return void
@@ -262,6 +295,61 @@ class TreeControllerTest extends BaseControllerTest
         ];
         static::assertEquals($expectedTree, $data['tree']);
         ApiClientProvider::setApiClient($safeClient);
+    }
+
+    /**
+     * Test `pushIntoTree` method
+     *
+     * @return void
+     * @covers ::pushIntoTree()
+     */
+    public function testPushIntoTree(): void
+    {
+        $this->setupApi();
+        $tree = new TreeController(new ServerRequest());
+        $treeData = [
+            '1' => [
+                'id' => '1',
+                'subfolders' => [
+                    '3' => [
+                        'id' => '3',
+                        'subfolders' => [
+                            '4' => [
+                                'id' => '4',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $actual = $tree->pushIntoTree($treeData, '1', '2', 'subfolders');
+        static::assertTrue($actual);
+        $actual = $tree->pushIntoTree($treeData, '3', '5', 'subfolders');
+        static::assertTrue($actual);
+        $actual = $tree->pushIntoTree($treeData, '7', '6', 'subfolders');
+        static::assertFalse($actual);
+        $expected = [
+            '1' => [
+                'id' => '1',
+                'subfolders' => [
+                    '2' => [
+                        'id' => '2',
+                    ],
+                    '3' => [
+                        'id' => '3',
+                        'subfolders' => [
+                            '4' => [
+                                'id' => '4',
+                            ],
+                            '5' => [
+                                'id' => '5',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        static::assertEquals($expected, $treeData);
     }
 
     /**

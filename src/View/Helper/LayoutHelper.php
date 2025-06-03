@@ -331,7 +331,7 @@ class LayoutHelper extends Helper
                         case 'tree-compact':
                             $icon = 'carbon:tree-view';
                             $label = __('Tree compact');
-                            $meta = $this->getView()->get('meta');
+                            $meta = (array)$this->getView()->get('meta');
                             $count = (int)Hash::get($meta, 'pagination.count');
                             $append = $count <= Configure::read('UI.tree_compact_view_limit', 100);
                             break;

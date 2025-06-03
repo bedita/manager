@@ -415,6 +415,25 @@ class LayoutHelperTest extends TestCase
     }
 
     /**
+     * Test `appendViewTypeButtons` method.
+     *
+     * @return void
+     * @covers ::appendViewTypeButtons()
+     */
+    public function testAppendViewTypeButtons(): void
+    {
+        $response = $events = null;
+        $request = new ServerRequest(['query' => ['view_type' => 'other']]);
+        $view = new View($request, $response, $events);
+        $layout = new LayoutHelper($view);
+        $view->set('currentModule', ['name' => 'folders']);
+        $layout->appendViewTypeButtons();
+        $actual = $view->fetch('app-module-buttons');
+        $expected = '<a href="/?view_type=tree" class="button button-outlined button-outlined-module-"><app-icon icon="carbon:tree-view"></app-icon><span class="ml-05">Tree view</span></a><a href="/?view_type=tree-compact" class="button button-outlined button-outlined-module-"><app-icon icon="carbon:tree-view"></app-icon><span class="ml-05">Tree compact</span></a><a href="/?view_type=list" class="button button-outlined button-outlined-module-"><app-icon icon="carbon:list"></app-icon><span class="ml-05">List view</span></a>';
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Data provider for `testTitle` test case.
      *
      * @return array
