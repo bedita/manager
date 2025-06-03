@@ -68,6 +68,13 @@ class TreeController extends AppController
         $this->setSerialize(['data']);
     }
 
+    /**
+     * Get children of a folder by ID.
+     * Use cache to store data.
+     *
+     * @param string $id The ID.
+     * @return void
+     */
     public function children(string $id): void
     {
         $this->getRequest()->allowMethod(['get']);
@@ -181,6 +188,12 @@ class TreeController extends AppController
         return null;
     }
 
+    /**
+     * Get compact tree data.
+     * Use cache to store data.
+     *
+     * @return array
+     */
     public function compactTreeData(): array
     {
         $objectType = $this->getRequest()->getParam('object_type');
