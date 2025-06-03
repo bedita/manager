@@ -16,6 +16,7 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\Component\ModulesComponent;
 use App\Controller\Component\SchemaComponent;
+use App\Controller\ModulesController;
 use App\Test\Utils\ModulesControllerSample;
 use App\Utility\CacheTools;
 use Authentication\AuthenticationServiceInterface;
@@ -24,19 +25,41 @@ use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use Cake\Cache\Cache;
+use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\ModulesController} Test Case
- *
- * @coversDefaultClass \App\Controller\ModulesController
  */
+#[CoversClass(ModulesController::class)]
+#[CoversMethod(ModulesController::class, 'availableRelationshipsUrl')]
+#[CoversMethod(ModulesController::class, 'clone')]
+#[CoversMethod(ModulesController::class, 'create')]
+#[CoversMethod(ModulesController::class, 'delete')]
+#[CoversMethod(ModulesController::class, 'get')]
+#[CoversMethod(ModulesController::class, 'getObjectType')]
+#[CoversMethod(ModulesController::class, 'getSchemaForIndex')]
+#[CoversMethod(ModulesController::class, 'index')]
+#[CoversMethod(ModulesController::class, 'initialize')]
+#[CoversMethod(ModulesController::class, 'relationships')]
+#[CoversMethod(ModulesController::class, 'related')]
+#[CoversMethod(ModulesController::class, 'resources')]
+#[CoversMethod(ModulesController::class, 'save')]
+#[CoversMethod(ModulesController::class, 'setObjectType')]
+#[CoversMethod(ModulesController::class, 'setup')]
+#[CoversMethod(ModulesController::class, 'setupViewRelations')]
+#[CoversMethod(ModulesController::class, 'uname')]
+#[CoversMethod(ModulesController::class, 'users')]
+#[CoversMethod(ModulesController::class, 'view')]
 class ModulesControllerTest extends BaseControllerTest
 {
     /**
@@ -62,7 +85,7 @@ class ModulesControllerTest extends BaseControllerTest
      *
      * @var \App\Test\Utils\ModulesControllerSample
      */
-    public $controller;
+    public ModulesControllerSample $controller;
 
     /**
      * Setup controller to test with request config
@@ -116,7 +139,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `initialize` method
      *
-     * @covers ::initialize()
      * @return void
      */
     public function testInitialize(): void
@@ -137,7 +159,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {
@@ -160,7 +181,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndexResetRequest(): void
     {
@@ -190,7 +210,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `index` method with query string error
      * Session filter data must be empty
      *
-     * @covers ::index()
      * @return void
      */
     public function testQueryErrorSession(): void
@@ -215,8 +234,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `view` method
      *
-     * @covers ::view()
-     * @covers ::setupViewRelations()
      * @return void
      */
     public function testView(): void
@@ -242,7 +259,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `view` method on error
      *
-     * @covers ::view()
      * @return void
      */
     public function testViewError(): void
@@ -261,7 +277,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `uname` method
      *
-     * @covers ::uname()
      * @return void
      */
     public function testUname(): void
@@ -285,7 +300,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `uname` method, case 404 Not Found
      *
-     * @covers ::uname()
      * @return void
      */
     public function testUname404(): void
@@ -305,8 +319,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `create` method
      *
-     * @covers ::create()
-     * @covers ::setupViewRelations()
      * @return void
      */
     public function testCreate(): void
@@ -324,7 +336,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `create` method
      *
-     * @covers ::create()
      * @return void
      */
     public function testCreate302(): void
@@ -351,7 +362,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `clone` method
      *
-     * @covers ::clone()
      * @return void
      */
     public function testClone(): void
@@ -377,7 +387,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `clone` method
      *
-     * @covers ::clone()
      * @return void
      */
     public function testCloneMedia(): void
@@ -401,7 +410,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `clone` method
      *
-     * @covers ::clone()
      * @return void
      */
     public function testClone302(): void
@@ -443,7 +451,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `clone` method, on error
      *
-     * @covers ::clone()
      * @return void
      */
     public function testCloneError(): void
@@ -463,7 +470,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `save` method when uname is numeric
      *
      * @return void
-     * @covers ::save()
      */
     public function testSaveUnameNumeric(): void
     {
@@ -503,7 +509,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `save` method when there's only 'id' in post data
      *
      * @return void
-     * @covers ::save()
      */
     public function testSkipSave(): void
     {
@@ -542,7 +547,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `save` method, on error
      *
-     * @covers ::save()
      * @return void
      */
     public function testSaveErrorNoPost(): void
@@ -572,7 +576,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `save` method, on error
      *
-     * @covers ::save()
      * @return void
      */
     public function testSaveErrorPostId(): void
@@ -607,7 +610,7 @@ class ModulesControllerTest extends BaseControllerTest
      *
      * @return array
      */
-    public function saveProvider(): array
+    public static function saveProvider(): array
     {
         return [
             'save' => [
@@ -644,10 +647,9 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `save` method
      *
-     * @dataProvider saveProvider()
-     * @covers ::save()
      * @return void
      */
+    #[DataProvider('saveProvider')]
     public function testSave($expected, $data): void
     {
         // Setup controller for test
@@ -668,7 +670,7 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller->save();
 
         // verify response status code and type
-        $result = $this->controller->getApiClient();
+        $result = $this->controller->apiClient;
         static::assertEquals($expected['code'], $result->getStatusCode());
         static::assertEquals($expected['message'], $result->getStatusMessage());
     }
@@ -676,7 +678,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `delete` method
      *
-     * @covers ::delete()
      * @return void
      */
     public function testDelete(): void
@@ -714,7 +715,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `delete` method, ids
      *
-     * @covers ::delete()
      * @return void
      */
     public function testDeleteIds(): void
@@ -752,7 +752,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `delete` method, on error
      *
-     * @covers ::delete()
      * @return void
      */
     public function testDeleteError(): void
@@ -774,13 +773,13 @@ class ModulesControllerTest extends BaseControllerTest
         ];
         $request = new ServerRequest($config);
         $this->controller = new ModulesControllerSample($request);
-        $apiClient = new class ('https://api.example.com') extends BEditaClient {
+
+        $this->controller->apiClient = new class ('https://api.example.com') extends BEditaClient {
             public function delete(string $path, ?string $body = null, ?array $headers = null): ?array
             {
                 throw new BEditaClientException('Error');
             }
         };
-        $this->controller->setApiClient($apiClient);
 
         // do controller call
         $result = $this->controller->delete();
@@ -815,7 +814,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `related` method
      *
-     * @covers ::related()
      * @return void
      */
     public function testRelated(): void
@@ -837,7 +835,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `related` method on `new` object
      *
-     * @covers ::related()
      * @return void
      */
     public function testRelatedNew(): void
@@ -854,7 +851,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `related` method, on error
      *
-     * @covers ::related()
      * @return void
      */
     public function testRelatedError(): void
@@ -873,7 +869,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `resources` method
      *
-     * @covers ::resources()
      * @return void
      */
     public function testResources(): void
@@ -895,7 +890,6 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `resources` method
      *
-     * @covers ::resources()
      * @return void
      */
     public function testResourcesError(): void
@@ -916,7 +910,7 @@ class ModulesControllerTest extends BaseControllerTest
      *
      * @return array
      */
-    public function relationshipsProvider(): array
+    public static function relationshipsProvider(): array
     {
         return [
             'children' => [
@@ -943,10 +937,9 @@ class ModulesControllerTest extends BaseControllerTest
      *
      * @param string $relation The relation to test
      * @param string $objectType The object type / endpoint
-     * @covers ::relationships()
-     * @dataProvider relationshipsProvider()
      * @return void
      */
+    #[DataProvider('relationshipsProvider')]
     public function testRelationships(string $relation, string $objectType): void
     {
         // Setup controller for test
@@ -973,24 +966,10 @@ class ModulesControllerTest extends BaseControllerTest
     /**
      * Test `getSchemaForIndex` method with errors
      *
-     * @covers ::getSchemaForIndex()
      * @return void
      */
     public function testGetSchemaForIndex(): void
     {
-        $type = 'documents';
-        $mockResponse = [
-            'properties' => [
-                'enum_prop' => [
-                    'type' => 'string',
-                    'enum' => [
-                        'enum1',
-                        'enum2',
-                        'enum3',
-                    ],
-                ],
-            ],
-        ];
         $expected = [
             'properties' => [
                 'enum_prop' => [
@@ -1006,20 +985,37 @@ class ModulesControllerTest extends BaseControllerTest
         ];
 
         $this->setupController();
-        $this->controller->Schema = $this->createMock(SchemaComponent::class);
-        $this->controller->Schema->method('getSchema')
-            ->with($type)
-            ->willReturn($mockResponse);
-
-        $actual = $this->controller->getSchemaForIndex($type);
-
+        $controller = new class ($this->controller->getRequest()) extends ModulesController {
+            public object $Schema;
+            public function initialize(): void
+            {
+                $this->Schema = new class (new ComponentRegistry($this)) extends SchemaComponent {
+                    public function getSchema(?string $type = null, ?string $revision = null): array|bool
+                    {
+                        return [
+                            'properties' => [
+                                'enum_prop' => [
+                                    'type' => 'string',
+                                    'enum' => [
+                                        'enum1',
+                                        'enum2',
+                                        'enum3',
+                                    ],
+                                ],
+                            ],
+                        ];
+                    }
+                };
+                parent::initialize();
+            }
+        };
+        $actual = $controller->getSchemaForIndex('documents');
         static::assertEquals($expected, $actual);
     }
 
     /**
      * Test `availableRelationshipsUrl` method
      *
-     * @covers ::availableRelationshipsUrl()
      * @return void
      */
     public function testAvailableRelationshipsUrl(): void
@@ -1027,19 +1023,58 @@ class ModulesControllerTest extends BaseControllerTest
         $this->setupController();
         $url = $this->controller->availableRelationshipsUrl('children');
         static::assertEquals('/objects', $url);
+        $controller = new class ($this->controller->getRequest()) extends ModulesController {
+            public object $Modules;
 
-        $this->controller->Modules = $this->createMock(ModulesComponent::class);
-        $this->controller->Modules->method('relatedTypes')
-            ->willReturn(['documents']);
+            public function initialize(): void
+            {
+                $this->Modules = new class (new ComponentRegistry($this)) extends ModulesComponent {
+                    public function relatedTypes(array $schema, string $relation): array
+                    {
+                        return ['documents'];
+                    }
+                };
+                parent::initialize();
+            }
 
-        $url = $this->controller->availableRelationshipsUrl('test_relation');
+            public function availableRelationshipsUrl(string $relation): string
+            {
+                return parent::availableRelationshipsUrl($relation);
+            }
+        };
+
+        $url = $controller->availableRelationshipsUrl('test_relation');
         static::assertEquals('/documents', $url);
+    }
 
-        $this->controller->Modules = $this->createMock(ModulesComponent::class);
-        $this->controller->Modules->method('relatedTypes')
-            ->willReturn(['images', 'profiles']);
+    /**
+     * Test `availableRelationshipsUrl` method
+     *
+     * @return void
+     */
+    public function testAvailableRelationshipsUrlMulti(): void
+    {
+        $this->setupController();
+        $controller = new class ($this->controller->getRequest()) extends ModulesController {
+            public object $Modules;
 
-        $url = $this->controller->availableRelationshipsUrl('test_relation');
+            public function initialize(): void
+            {
+                $this->Modules = new class (new ComponentRegistry($this)) extends ModulesComponent {
+                    public function relatedTypes(array $schema, string $relation): array
+                    {
+                        return ['images', 'profiles'];
+                    }
+                };
+                parent::initialize();
+            }
+
+            public function availableRelationshipsUrl(string $relation): string
+            {
+                return parent::availableRelationshipsUrl($relation);
+            }
+        };
+        $url = $controller->availableRelationshipsUrl('test_relation');
         static::assertEquals('/objects?filter[type][]=images&filter[type][]=profiles', $url);
     }
 
@@ -1060,8 +1095,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test `getObjectType` and `setObjectType`.
      *
      * @return void
-     * @covers ::getObjectType()
-     * @covers ::setObjectType()
      */
     public function testGetSetObjectType(): void
     {
@@ -1085,7 +1118,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test list users
      *
      * @return void
-     * @covers ::users()
      */
     public function testListUsers(): void
     {
@@ -1109,7 +1141,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test get single resource minimal data
      *
      * @return void
-     * @covers ::get()
      */
     public function testResourceGet(): void
     {
@@ -1133,7 +1164,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test setup method with an unauthorized user
      *
      * @return void
-     * @covers ::setup()
      */
     public function testSetupUnauthorized(): void
     {
@@ -1149,7 +1179,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test setup method with an authorized user
      *
      * @return void
-     * @covers ::setup()
      */
     public function testSetupAuthorized(): void
     {
@@ -1169,7 +1198,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test setup method with an authorized user and save
      *
      * @return void
-     * @covers ::setup()
      */
     public function testSetupSave(): void
     {
@@ -1203,7 +1231,6 @@ class ModulesControllerTest extends BaseControllerTest
      * Test setup method with an authorized user and save error
      *
      * @return void
-     * @covers ::setup()
      */
     public function testSetupSaveError(): void
     {
