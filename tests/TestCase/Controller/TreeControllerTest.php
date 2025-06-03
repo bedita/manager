@@ -132,6 +132,29 @@ class TreeControllerTest extends BaseControllerTest
     }
 
     /**
+     * Test `children` method on exception
+     *
+     * @return void
+     * @covers ::children()
+     */
+    public function testChildrenException(): void
+    {
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+        ];
+        $request = new ServerRequest($config);
+        $tree = new TreeController($request);
+        $id = '99999999';
+        $tree->children($id);
+        $actual = $tree->viewBuilder()->getVar('data');
+        static::assertEmpty($actual);
+    }
+
+    /**
      * Test `compactTreeData` method with query parameter `no_cache` set to true
      *
      * @return void
