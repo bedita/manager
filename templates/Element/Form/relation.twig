@@ -73,8 +73,8 @@
                     :object-id="{{ mainObject.id|json_encode }}"
                     :object-type="{{ mainObject.type|json_encode }}"
                     :relation-name="{{ relationName|json_encode }}"
-                    :default-field="{{ config('RelationsSortFields.' ~ relationName ~ '_default')|default('title')|json_encode }}"
-                    :sort-fields="{{ config('RelationsSortFields.' ~ relationName)|default([{'label':__('Title'),'value':'title'},{'label':__('Creation date'),'value':'created'}])|json_encode }}"
+                    :default-field="{{ config('RelationsSortFields.' ~ relationName ~ '_default')|default('')|json_encode }}"
+                    :sort-fields="{{ config('RelationsSortFields.' ~ relationName)|default([{'label': '-', 'value': ''}, {'label':__('Title'),'value':'title'},{'label':__('Creation date'),'value':'created'}])|json_encode }}"
                     @reload-related="reloadObjects"
                     v-if="objects?.length > 1"
                 >
