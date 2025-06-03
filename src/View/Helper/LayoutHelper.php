@@ -319,6 +319,9 @@ class LayoutHelper extends Helper
             $indexViewType = $this->moduleIndexViewType();
             foreach ($indexViewTypes as $t) {
                 if ($t !== $indexViewType) {
+                    $append = false;
+                    $icon = '';
+                    $label = '';
                     switch ($t) {
                         case 'tree':
                             $icon = 'carbon:tree-view';
