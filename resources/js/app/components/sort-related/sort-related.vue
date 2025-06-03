@@ -2,19 +2,33 @@
     <div class="mb-05">
         <span class="mr-05">{{ msgSortBy }}</span>
         <select v-model="field">
-            <option v-for="item in sortFields" :value="item.value" :key="item.value">{{ item.label }}</option>
+            <option
+                v-for="item in sortFields"
+                :value="item.value"
+                :key="item.value"
+            >
+                {{ item.label }}
+            </option>
         </select>
         <select v-model="direction">
-            <option value="asc">{{ msgAsc }}</option>
-            <option value="desc">{{ msgDesc }}</option>
+            <option value="asc">
+                {{ msgAsc }}
+            </option>
+            <option value="desc">
+                {{ msgDesc }}
+            </option>
         </select>
-        <span v-if="loading" class="is-loading-spinner"></span>
+        <span
+            class="is-loading-spinner"
+            v-if="loading"
+        />
         <button
             class="button button-primary"
+            :disabled="loading || !field"
             @click.prevent="save()"
             v-else
         >
-            <app-icon icon="carbon:save"></app-icon>
+            <app-icon icon="carbon:save" />
             <span class="ml-05">{{ msgSave }}</span>
         </button>
     </div>
@@ -43,7 +57,7 @@ export default {
         },
         sortFields: {
             type: Array,
-            default: () => [{label: t`Title`, value: 'title'}],
+            default: () => [{label: '-', value: ''}, {label: t`Title`, value: 'title'}],
         },
     },
     data() {
@@ -55,7 +69,7 @@ export default {
             msgAsc: t`Ascending`,
             msgSave: t`Save`,
             msgDesc: t`Descending`,
-            msgSortBy: t`Sort by`,
+            msgSortBy: t`Reorder by`,
         };
     },
     mounted() {
