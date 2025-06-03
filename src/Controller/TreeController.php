@@ -399,10 +399,9 @@ class TreeController extends AppController
 
             $parentPath = substr($path, 0, strrpos($path, '/'));
             $parentId = $paths[$parentPath];
-            if (empty($parentId)) {
-                continue;
+            if (!empty($parentId)) {
+                $this->pushIntoTree($tree, $parentId, $id, 'subfolders');
             }
-            $this->pushIntoTree($tree, $parentId, $id, 'subfolders');
         }
 
         return compact('tree', 'folders');

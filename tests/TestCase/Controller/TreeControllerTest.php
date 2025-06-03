@@ -17,7 +17,9 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\TreeController;
 use App\Event\TreeCacheEventHandler;
 use App\Utility\CacheTools;
+use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
@@ -66,6 +68,200 @@ class TreeControllerTest extends BaseControllerTest
         foreach ($vars as $var) {
             static::assertArrayHasKey($var, $actual);
         }
+    }
+
+    /**
+     * Test `loadAll` method
+     *
+     * @return void
+     * @covers ::loadAll()
+     * @covers ::compactTreeData()
+     * @covers ::fetchCompactTreeData()
+     */
+    public function testLoadAll(): void
+    {
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+        ];
+        $request = new ServerRequest($config);
+        $tree = new TreeController($request);
+        $tree->loadAll();
+        $actual = $tree->viewBuilder()->getVar('data');
+        static::assertNotEmpty($actual);
+        $vars = ['tree', 'folders'];
+        foreach ($vars as $var) {
+            static::assertArrayHasKey($var, $actual);
+        }
+    }
+
+    /**
+     * Test `compactTreeData` method with query parameter `no_cache` set to true
+     *
+     * @return void
+     * @covers ::compactTreeData()
+     * @covers ::fetchCompactTreeData()
+     */
+    public function testCompactTreeDataNoCache(): void
+    {
+        Cache::enable();
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'query' => ['no_cache' => true],
+        ];
+        $request = new ServerRequest($config);
+        $tree = new class ($request) extends TreeController {
+            public bool $usingCache = true;
+            public function fetchCompactTreeData(): array
+            {
+                $this->usingCache = false;
+
+                return parent::fetchCompactTreeData();
+            }
+        };
+        $tree->loadAll();
+        static::assertFalse($tree->usingCache);
+        Cache::disable();
+    }
+
+    /**
+     * Test `compactTreeData` method on exception
+     *
+     * @return void
+     * @covers ::compactTreeData()
+     * @covers ::fetchCompactTreeData()
+     */
+    public function testCompactTreeDataException(): void
+    {
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+        ];
+        $request = new ServerRequest($config);
+        $tree = new class ($request) extends TreeController {
+            public function fetchCompactTreeData(): array
+            {
+                throw new BEditaClientException('test exception');
+            }
+        };
+        $tree->loadAll();
+        $actual = $tree->viewBuilder()->getVar('data');
+        static::assertEmpty($actual);
+    }
+
+    /**
+     * Test `fetchCompactTreeData` method
+     *
+     * @return void
+     * @covers ::fetchCompactTreeData()
+     * @covers ::pushIntoTree()
+     * @covers ::minimalDataWithMeta()
+     */
+    public function testFetchCompactTreeData(): void
+    {
+        $this->setupApi();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'get' => [],
+        ];
+        $request = new ServerRequest($config);
+        $tree = new TreeController($request);
+        $tree = new class ($request) extends TreeController {
+            public function fetchCompactTreeData(): array
+            {
+                return parent::fetchCompactTreeData();
+            }
+        };
+        $mockResponse = [
+            'data' => [
+                [
+                    'id' => '1',
+                    'type' => 'folders',
+                    'attributes' => [
+                        'title' => 'Folder 1',
+                        'status' => 'published',
+                        'description' => 'This is folder 1',
+                        'body' => 'This is the body of folder 1',
+                    ],
+                    'meta' => [
+                        'path' => '/1',
+                    ],
+                ],
+                [
+                    'id' => '2',
+                    'type' => 'folders',
+                    'attributes' => [
+                        'title' => 'Folder 2',
+                        'status' => 'draft',
+                        'description' => 'This is folder 2',
+                        'body' => 'This is the body of folder 2',
+                    ],
+                    'meta' => [
+                        'path' => '/1/2',
+                    ],
+                ],
+                [
+                    'id' => '3',
+                    'type' => 'folders',
+                    'attributes' => [
+                        'title' => 'Folder 3',
+                        'status' => 'draft',
+                        'description' => 'This is folder 3',
+                        'body' => 'This is the body of folder 3',
+                    ],
+                    'meta' => [
+                        'path' => '/3',
+                    ],
+                ],
+            ],
+            'meta' => [
+                'pagination' => [
+                    'page' => 1,
+                    'page_size' => 10,
+                    'page_count' => 1,
+                    'total' => 2,
+                    'count' => 2,
+                ],
+            ],
+        ];
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('get')
+            ->with('/folders')
+            ->willReturn($mockResponse);
+        $safeClient = ApiClientProvider::getApiClient();
+        ApiClientProvider::setApiClient($apiClient);
+        $data = $tree->fetchCompactTreeData();
+        static::assertNotEmpty($data);
+        static::assertArrayHasKey('tree', $data);
+        static::assertArrayHasKey('folders', $data);
+        $expectedTree = [
+            '1' => [
+                'id' => '1',
+                'subfolders' => [
+                    '2' => [
+                        'id' => '2',
+                    ],
+                ],
+            ],
+            '3' => [
+                'id' => '3',
+            ],
+        ];
+        static::assertEquals($expectedTree, $data['tree']);
+        ApiClientProvider::setApiClient($safeClient);
     }
 
     /**
