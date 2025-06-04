@@ -13,19 +13,34 @@
                 @update="update"
             />
         </div>
-        <button
-            class="button button-primary"
-            @click.prevent="add"
-            v-if="!readonly"
-        >
-            <app-icon icon="carbon:add" />
-            <span class="ml-05">{{ msgAdd }}</span>
-        </button>
+        <template v-if="!readonly">
+            <button
+                class="button button-primary"
+                @click.prevent="add"
+            >
+                <app-icon icon="carbon:add" />
+                <span class="ml-05">{{ msgAdd }}</span>
+            </button>
+            <button
+                class="button button-primary"
+                @click.prevent="addMulti"
+            >
+                <app-icon icon="carbon:add" />
+                <span class="ml-05">{{ msgAddMulti }}</span>
+            </button>
+        </template>
         <input
             type="hidden"
             name="date_ranges"
             v-model="dateRangesJson"
         >
+        <template v-if="addMultiple">
+            <date-range-panel
+                :show-panel="addMultiple"
+                @add-range="addRange"
+                @update:showPanel="addMultiple = $event"
+            />
+        </template>
     </div>
 </template>
 <script>
@@ -36,6 +51,7 @@ export default {
 
     components: {
         DateRange: () => import(/* webpackChunkName: "date-range" */ '../date-range/date-range.vue'),
+        DateRangePanel: () => import('./date-range-panel.vue'),
     },
 
     props: {
@@ -59,9 +75,11 @@ export default {
 
     data() {
         return {
+            addMultiple: false,
             dateRanges: [],
             dateRangesJson: '',
             msgAdd: t`Add`,
+            msgAddMulti: t`Add multiple`,
         }
     },
 
@@ -109,6 +127,26 @@ export default {
                 },
             };
             newRange.uuid = this.uuid();
+            this.dateRanges.push(newRange);
+            this.dateRangesJson = JSON.stringify(this.dateRanges);
+        },
+        addMulti() {
+            this.addMultiple = true;
+        },
+        addRange(range) {
+            if (!range) {
+                return;
+            }
+            const newRange = {
+                uuid: this.uuid(),
+                start_date: range.start,
+                end_date: range.end,
+                params: {
+                    all_day: range?.all_day || false,
+                    every_day: range?.every_day || true,
+                    weekdays: this.formatWeekdays(range?.weekdays),
+                },
+            };
             this.dateRanges.push(newRange);
             this.dateRangesJson = JSON.stringify(this.dateRanges);
         },
