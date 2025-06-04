@@ -24,36 +24,24 @@
                     </header>
                     <div class="pcontainer">
                         <div class="form-field">
-                            <div class="dateRange date-ranges-item mb-1">
-                                <span>{{ msgFrom }}</span><span class="required">*</span>
-                                <div>
-                                    <input
-                                        type="text"
-                                        date="true"
-                                        time="true"
-                                        daterange="true"
-                                        v-model="from"
-                                        v-datepicker="true"
-                                    >
-                                </div>
-                            </div>
-                            <div class="dateRange date-ranges-item mb-1">
-                                <span>{{ msgTo }}</span><span class="required">*</span>
-                                <div>
-                                    <input
-                                        type="text"
-                                        date="true"
-                                        time="true"
-                                        daterange="true"
-                                        v-model="to"
-                                        v-datepicker="true"
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-field">
-                            <div class="input select">
+                            <div class="fields">
+                                <label><span>{{ msgDate }}</span> <span class="required">*</span></label>
+                                <label><span>{{ msgFrom }}</span> <span class="required">*</span></label>
+                                <label><span>{{ msgTo }}</span> <span class="required">*</span></label>
                                 <label>{{ msgRepeatType }} <span class="required">*</span></label>
+                                <label>{{ msgRepeatTimes }} <span class="required">*</span></label>
+                                <input
+                                    type="date"
+                                    v-model="start"
+                                >
+                                <input
+                                    type="time"
+                                    v-model="from"
+                                >
+                                <input
+                                    type="time"
+                                    v-model="to"
+                                >
                                 <select
                                     required
                                     v-model="rangeType"
@@ -62,11 +50,6 @@
                                     <option value="weekly">{{ msgWeek }}</option>
                                     <option value="monthly">{{ msgMonth }}</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-field">
-                            <div class="input text">
-                                <label>{{ msgRepeatTimes }} <span class="required">*</span> [1-100]</label>
                                 <input
                                     type="number"
                                     min="1"
@@ -121,6 +104,7 @@ export default {
             msgAdd: t`Add`,
             msgAddMultipleDateRanges: t`Add multiple date ranges`,
             msgClose: t`Close`,
+            msgDate: t`Date`,
             msgDay: t`Day`,
             msgFrom: t`From`,
             msgMonth: t`Month`,
@@ -131,18 +115,19 @@ export default {
             msgWeek: t`Week`,
             numberOfRanges: 1,
             rangeType: 'daily', // default to daily
+            start: '', // Start date for the range
         }
     },
     computed: {
         addDisabled() {
-            return !this.from || !this.to || !this.rangeType || this.numberOfRanges < 1 || this.numberOfRanges > 100;
+            return !this.start || !this.from || !this.to || !this.rangeType || this.numberOfRanges < 1 || this.numberOfRanges > 100;
         },
     },
     methods: {
         add() {
             for (let i = 0; i < this.numberOfRanges; i++) {
-                let startDate = new Date(this.from);
-                let endDate = new Date(this.to);
+                const startDate = new Date(this.start + 'T' + this.from);
+                const endDate = new Date(this.start + 'T' + this.to);
                 if (this.rangeType === 'daily') {
                     startDate.setDate(startDate.getDate() + i);
                     endDate.setDate(endDate.getDate() + i);
@@ -208,5 +193,10 @@ div.date-range-panel div.root > label > span {
 }
 div.date-range-panel input.input-range-number {
     max-width: 120px;
+}
+div.date-range-panel .fields {
+    display: grid;
+    grid-template-columns: 150px 100px 100px 200px 200px;
+    column-gap: 0.5rem;
 }
 </style>
