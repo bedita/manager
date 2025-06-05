@@ -37,7 +37,7 @@ export function insertAndSelectParagraphAfter (editor, target) {
     editor.selection.setCursorLocation(paragraph, 0);
 };
 
-/** Add the deafult content to the accordion if the only child is a summary. */
+/** Add the default content to the accordion if the only child is a summary. */
 export const normalizeContent = function (editor, accordion) {
     if (accordion?.lastChild?.nodeName === 'SUMMARY') {
         var bodyNode = createDefaultBody();
