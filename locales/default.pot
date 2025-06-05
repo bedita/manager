@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-06-03 07:31:05 \n"
+"POT-Creation-Date: 2025-06-05 09:34:36 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1250,6 +1250,15 @@ msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
 msgid "Add placeholder"
+msgstr ""
+
+msgid "Remove accordion"
+msgstr ""
+
+msgid "Accordion title"
+msgstr ""
+
+msgid "Accordion content"
 msgstr ""
 
 #, javascript-format
