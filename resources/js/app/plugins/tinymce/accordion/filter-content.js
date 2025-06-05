@@ -18,24 +18,16 @@ const addClasses = function (node, classes) {
 };
 
 const removeClasses = function (node, classes) {
-    const newClassList = getClassList(node).filter(
-        (clazz) => !classes.has(clazz)
-    );
+    const newClassList = getClassList(node).filter((clazz) => !classes.has(clazz));
     node.attr('class', newClassList.length > 0 ? newClassList.join(' ') : null);
 };
 
 const isAccordionDetailsNode = function (node) {
-    return (
-        node.name === accordionTag &&
-        getClassList(node).includes(accordionDetailsClass)
-    );
+    return node.name === accordionTag && getClassList(node).includes(accordionDetailsClass);
 };
 
 const isAccordionBodyWrapperNode = function (node) {
-    return (
-        node.name === accordionBodyWrapperTag &&
-        getClassList(node).includes(accordionBodyWrapperClass)
-    );
+    return node.name === accordionBodyWrapperTag && getClassList(node).includes(accordionBodyWrapperClass);
 };
 
 const getAccordionChildren = function (accordionNode) {
@@ -56,18 +48,15 @@ const getAccordionChildren = function (accordionNode) {
         }
     }
 
-    return {
-        summaryNode,
-        wrapperNode,
-        otherNodes,
-    };
+    return { summaryNode, wrapperNode, otherNodes };
 };
 
-const padInputNode = function (node) {
-    // Add br to node to ensure the cursor can be placed inside the node
-    // Mark as bogus so that it is converted to an nbsp on serialization
-    const br = tinymce.html.Node.create('br');
-    br.attr('data-mce-bogus', '1');
+/**
+ * Add br to node to ensure the cursor can be placed inside the node.
+ * Mark as bogus so that it is converted to an nbsp on serialization.
+ */
+const padNode = function (node) {
+    const br = tinymce.html.Node.create('br', { 'data-mce-bogus': '1' });
     node.empty();
     node.append(br);
 };
@@ -85,31 +74,23 @@ const setup = function (editor) {
                 const node = nodes[i];
                 if (isAccordionDetailsNode(node)) {
                     const accordionNode = node;
-                    const { summaryNode, wrapperNode, otherNodes } =
-                        getAccordionChildren(accordionNode);
-                    const newSummaryNode =
-                        summaryNode ?? tinymce.html.Node.create('summary');
+                    const { summaryNode, wrapperNode, otherNodes } = getAccordionChildren(accordionNode);
+                    const newSummaryNode = summaryNode ?? tinymce.html.Node.create('summary');
                     // If there is nothing in the summary, pad it with a br
                     // so the cursor can be put inside the accordion summary
                     if (!newSummaryNode.firstChild) {
-                        padInputNode(newSummaryNode);
+                        padNode(newSummaryNode);
                     }
                     addClasses(newSummaryNode, [accordionSummaryClass]);
                     if (!summaryNode) {
                         if (accordionNode.firstChild) {
-                            accordionNode.insert(
-                                newSummaryNode,
-                                accordionNode.firstChild,
-                                true
-                            );
+                            accordionNode.insert(newSummaryNode, accordionNode.firstChild, true);
                         } else {
                             accordionNode.append(newSummaryNode);
                         }
                     }
 
-                    const newWrapperNode =
-                        wrapperNode ??
-                        tinymce.html.Node.create(accordionBodyWrapperTag);
+                    const newWrapperNode = wrapperNode ?? tinymce.html.Node.create(accordionBodyWrapperTag);
                     newWrapperNode.attr('data-mce-bogus', '1');
                     addClasses(newWrapperNode, [accordionBodyWrapperClass]);
                     if (otherNodes.length > 0) {
@@ -122,11 +103,15 @@ const setup = function (editor) {
                     // so the cursor can be put inside the accordion body
                     if (!newWrapperNode.firstChild) {
                         const pNode = tinymce.html.Node.create('p');
-                        padInputNode(pNode);
+                        padNode(pNode);
                         newWrapperNode.append(pNode);
                     }
                     if (!wrapperNode) {
                         accordionNode.append(newWrapperNode);
+                    }
+
+                    if (editor.getBody().lastChild === accordionNode) {
+                        accordionNode.insertAdjacentElement('afterend', tinymce.DOM.create('br', { 'data-mce-bogus': '1'}));
                     }
                 }
             }
@@ -142,8 +127,7 @@ const setup = function (editor) {
                 const node = nodes[i];
                 if (isAccordionDetailsNode(node)) {
                     const accordionNode = node;
-                    const { summaryNode, wrapperNode } =
-                        getAccordionChildren(accordionNode);
+                    const { summaryNode, wrapperNode } = getAccordionChildren(accordionNode);
 
                     if (summaryNode) {
                         removeClasses(summaryNode, summaryClassRemoveSet);

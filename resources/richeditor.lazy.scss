@@ -90,12 +90,12 @@ div[data-placeholder] {
     }
 }
 
-details.mce-accordion {
+details {
     border: 1px solid $gray-700;
     border-radius: 2px;
     padding: 0 4px;
 }
 
-summary.mce-accordion-summary {
+summary {
     border-bottom: 1px solid $gray-700;
 }

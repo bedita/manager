@@ -1,24 +1,24 @@
 import 'tinymce/tinymce';
 import tinymce from 'tinymce/tinymce';
+import { t } from 'ttag';
 import * as FilterContent from './filter-content.js';
 import {
-    createDefaultBody,
     createDefaultSummary,
     getSelectedDetails,
     insertAndSelectParagraphAfter,
     isInsertAllowed,
-    normalizeDetails,
+    normalizeDetails
 } from './utils.js';
-import { t } from 'ttag';
 
 tinymce.util.Tools.resolve('tinymce.PluginManager').add(
     'accordion',
     function (editor) {
-        const accordionHtml = `<details class="mce-accordion">
-            ${tinymce.DOM.getOuterHTML(createDefaultSummary())}
-            ${tinymce.DOM.getOuterHTML(createDefaultBody())}
-        </details>
-        <br />`;
+        const accordionHtml = [
+            '<details class="mce-accordion">',
+            tinymce.DOM.getOuterHTML(createDefaultSummary()),
+            `<div class="mce-accordion-body"><p>${t`Accordion content`}...</p></div>`,
+            '</details>',
+        ].join('');
 
         editor.addCommand('RemoveAccordion', function () {
             if (!editor.mode.isReadOnly()) {
