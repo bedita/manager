@@ -621,6 +621,7 @@ class LayoutHelperTest extends TestCase
             'richeditorByPropertyConfig' => (array)Configure::read('RicheditorByProperty'),
             'indexLists' => (array)$layout->indexLists(),
             'fastCreateFields' => (array)$property->fastCreateFieldsMap(),
+            'concreteTypes' => (array)$view->get('allConcreteTypes', []),
         ];
         static::assertSame($expected, $conf);
         Cache::disable();
