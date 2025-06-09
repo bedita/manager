@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-06-03 07:31:05 \n"
+"POT-Creation-Date: 2025-06-09 12:35:39 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -457,6 +457,9 @@ msgstr ""
 msgid "Less"
 msgstr ""
 
+msgid "Limit"
+msgstr ""
+
 msgid "List"
 msgstr ""
 
@@ -589,6 +592,9 @@ msgid "Not Found"
 msgstr ""
 
 msgid "Number of created objects"
+msgstr ""
+
+msgid "Number of folders"
 msgstr ""
 
 msgid "Number of login errors"
@@ -879,6 +885,9 @@ msgstr ""
 msgid "Temporary folder missing"
 msgstr ""
 
+msgid "The number of folders is too high to be displayed in tree-compact view"
+msgstr ""
+
 msgid "There were errors creating the thumbnail(s)"
 msgstr ""
 
@@ -928,6 +937,9 @@ msgid "Trashcan"
 msgstr ""
 
 msgid "Trashd"
+msgstr ""
+
+msgid "Tree compact"
 msgstr ""
 
 msgid "Tree view"
@@ -1018,6 +1030,9 @@ msgid "You are not authorized to access that location."
 msgstr ""
 
 msgid "You are not authorized to access this resource"
+msgstr ""
+
+msgid "You cannot see folders in tree-compact view"
 msgstr ""
 
 msgid "You do not have the required permissions to view this page."
@@ -1532,6 +1547,30 @@ msgstr ""
 msgid "View"
 msgstr ""
 
+msgid "New content"
+msgstr ""
+
+msgid "New folder"
+msgstr ""
+
+msgid "Open in new tab"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Choose object type"
+msgstr ""
+
+msgid "Object type"
+msgstr ""
+
+msgid "Parent folder"
+msgstr ""
+
+msgid "/ (root)"
+msgstr ""
+
 msgid "Add new tag"
 msgstr ""
 
@@ -1863,9 +1902,6 @@ msgid "Every day"
 msgstr ""
 
 msgid "Invalid date range"
-msgstr ""
-
-msgid "Undo"
 msgstr ""
 
 msgid "Copied!"
