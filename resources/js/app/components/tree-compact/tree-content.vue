@@ -39,6 +39,21 @@
                             @update="fieldUpdate"
                             @success="fieldSuccess"
                         />
+                        <div>
+                            <label>{{ msgPosition }} <span class="required">*</span></label>
+                            <tree-node
+                                v-for="(node, id) in tree"
+                                :key="id"
+                                :folders="folders"
+                                :node="node"
+                                :object-type="objectType"
+                                :original-parents="parents"
+                                :parent-folder-id="parentId"
+                                :reference-object="obj"
+                                @remove-parent="removeParent"
+                                @update-parent="updateParent"
+                            />
+                        </div>
                         <template v-for="field in fieldsOther">
                             <div
                                 :key="field"
@@ -156,17 +171,30 @@
 <script>
 import { t } from 'ttag';
 
+const API_URL = new URL(BEDITA.base).pathname;
+const API_OPTIONS = {
+    credentials: 'same-origin',
+    headers: {
+        'accept': 'application/json',
+    }
+};
+
 export default {
     name: 'TreeContent',
     components: {
         FormField: () => import(/* webpackChunkName: "form-field" */'app/components/fast-create/form-field'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
+        TreeNode: () => import('./tree-node.vue'),
     },
     inject: ['getCSFRToken'],
     props: {
         canSaveMap: {
             type: Object,
             required: true
+        },
+        folders: {
+            type: Object,
+            default: () => ({}),
         },
         languages: {
             type: Object,
@@ -179,6 +207,10 @@ export default {
         schema: {
             type: Object,
             default: () => ({}),
+        },
+        tree: {
+            type: Object,
+            default: () => ({})
         },
     },
     data() {
@@ -195,9 +227,13 @@ export default {
             msgClose: t`Close`,
             msgEdit: t`Edit`,
             msgOpenInNewTab: t`Open in new tab`,
+            msgPosition: t`Position`,
             msgSave: t`Save`,
             msgUndo: t`Undo`,
             objectType: this.obj?.type || '',
+            originalParents: [],
+            parentId: null,
+            parents: [],
             saving: false,
             success: {},
         }
@@ -209,29 +245,32 @@ export default {
     },
     mounted() {
         this.$nextTick(async () => {
-            this.formFieldProperties[this.objectType] = {};
-            this.fieldsRequired = BEDITA?.fastCreateFields?.[this.objectType]?.required || [];
-            this.fieldsAll = BEDITA?.fastCreateFields?.[this.objectType]?.fields || ['title'];
-            this.fieldsAll = this.fieldsAll.map(field => {
-                if (typeof field === 'object') {
-                    return Object.keys(field)[0];
+            if (this.objectType) {
+                this.formFieldProperties[this.objectType] = {};
+                this.fieldsRequired = BEDITA?.fastCreateFields?.[this.objectType]?.required || [];
+                this.fieldsAll = BEDITA?.fastCreateFields?.[this.objectType]?.fields || ['title'];
+                this.fieldsAll = this.fieldsAll.map(field => {
+                    if (typeof field === 'object') {
+                        return Object.keys(field)[0];
+                    }
+                    return field;
+                });
+                this.fieldsOther = this.fieldsAll.filter(field => !this.fieldsRequired.includes(field));
+                const fields = BEDITA?.fastCreateFields?.[this.objectType]?.fields || [];
+                let ff = fields;
+                if (fields.constructor === Object) {
+                    ff = Object.keys(fields);
+                    this.fieldsMap = fields;
                 }
-                return field;
-            });
-            this.fieldsOther = this.fieldsAll.filter(field => !this.fieldsRequired.includes(field));
-            const fields = BEDITA?.fastCreateFields?.[this.objectType]?.fields || [];
-            let ff = fields;
-            if (fields.constructor === Object) {
-                ff = Object.keys(fields);
-                this.fieldsMap = fields;
-            }
-            for (const item of ff) {
-                if (item.constructor === Object) {
-                    const itemKey = Object.keys(item)[0];
-                    this.fieldsMap[itemKey] = item[itemKey];
+                for (const item of ff) {
+                    if (item.constructor === Object) {
+                        const itemKey = Object.keys(item)[0];
+                        this.fieldsMap[itemKey] = item[itemKey];
+                    }
                 }
+                this.fieldsInvalid = this.fieldsRequired.filter(f => !this.formFieldProperties[this.objectType][f]);
             }
-            this.fieldsInvalid = this.fieldsRequired.filter(f => !this.formFieldProperties[this.objectType][f]);
+            await this.loadParents();
         });
     },
     methods: {
@@ -263,6 +302,24 @@ export default {
             }
             return !isNaN(str) && !isNaN(parseFloat(str));
         },
+        async loadParents() {
+            if (!this.obj?.id) {
+                this.originalParents = [];
+                this.parents = [];
+                return;
+            }
+            try {
+                const response = await fetch(
+                    `${API_URL}tree/parents/${this.objectType}/${this.obj?.id}`,
+                    API_OPTIONS
+                );
+                const json = await response.json();
+                this.originalParents = json.parents ? json?.parents?.map(p => p.id) : [];
+                this.parents = Object.assign([], this.originalParents);
+            } catch (error) {
+                console.error('Error loading parents:', error);
+            }
+        },
         async save() {
             try {
                 this.saving = true;
@@ -271,7 +328,25 @@ export default {
                 if (this.obj?.id) {
                     this.payload.id = this.obj.id;
                 }
-                const url = `/${this.objectType}/save`;
+                this.payload._originalParents = this.originalParents?.join(',') || null;
+                this.payload._changedParents = this.parents?.join(',') || null;
+                this.payload.relations = {
+                    parents: {
+                        replaceRelated: this.parents.map(
+                            id => JSON.stringify({
+                                id,
+                                type: 'folders',
+                                meta: {
+                                    relation: {
+                                        menu: false,
+                                        canonical: false
+                                    }
+                                }
+                            })
+                        ),
+                    },
+                };
+                const url = `${API_URL}${this.objectType}/save`;
                 const options = {
                     method: 'POST',
                     credentials: 'same-origin',
@@ -297,6 +372,16 @@ export default {
         },
         truncate(str, len) {
             return this.$helpers.truncate(str, len);
+        },
+        removeParent(parentId) {
+            console.log('removeParent', parentId);
+            this.parents = this.parents.filter(id => id !== parentId);
+        },
+        updateParent(parentId) {
+            console.log('updateParent', parentId);
+            if (!this.parents.includes(parentId)) {
+                this.parents.push(parentId);
+            }
         },
     },
 }
@@ -357,5 +442,8 @@ div.tree-content .editable:hover {
 }
 div.tree-content div.object-info-container {
     margin-left: auto;
+}
+div.tree-content span.required {
+    color: red;
 }
 </style>

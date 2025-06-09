@@ -435,6 +435,7 @@ class LayoutHelper extends Helper
             'richeditorByPropertyConfig' => (array)Configure::read('UI.richeditor', []),
             'indexLists' => (array)$this->indexLists(),
             'fastCreateFields' => (array)$this->Property->fastCreateFieldsMap(),
+            'concreteTypes' => (array)$this->getView()->get('allConcreteTypes', []),
         ];
     }
 

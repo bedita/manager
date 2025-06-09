@@ -1,6 +1,7 @@
 <template>
     <div class="tree-compact">
         <tree-panel
+            :can-save-map="canSaveMap"
             :folders="folders || {}"
             :languages="languages"
             :obj="{}"
@@ -8,18 +9,41 @@
             :schema="schema"
             :show-panel="newFolder"
             :tree="tree"
-            @update:showPanel="newFolder = $event"
+            @update:showPanel="newFolder = $event; newContent = false"
             @success="loadTree"
+            v-if="newFolder"
         />
-        <div class="buttons">
-            <button
-                class="button button-outlined"
-                @click.prevent="newFolder = true"
-            >
-                <app-icon icon="carbon:folder-add" />
-                <span class="ml-05">{{ msgNewFolder }}</span>
-            </button>
-        </div>
+        <tree-panel
+            :can-save-map="canSaveMap"
+            :folders="folders || {}"
+            :languages="languages"
+            :obj="{}"
+            :object-type="'choose'"
+            :schema="schema"
+            :show-panel="newContent"
+            :tree="tree"
+            @update:showPanel="newContent = $event; newFolder = false"
+            @success="loadTree"
+            v-if="newContent"
+        />
+        <template v-if="canSave()">
+            <div class="buttons">
+                <button
+                    class="button button-outlined"
+                    @click.prevent="newFolder = true"
+                >
+                    <app-icon icon="carbon:folder-add" />
+                    <span class="ml-05">{{ msgNewFolder }}</span>
+                </button>
+                <button
+                    class="button button-outlined"
+                    @click.prevent="newContent = true"
+                >
+                    <app-icon icon="carbon:document-add" />
+                    <span class="ml-05">{{ msgNewContent }}</span>
+                </button>
+            </div>
+        </template>
         <div
             v-for="rootId in Object.keys(tree)"
             :key="rootId"
@@ -32,7 +56,7 @@
                 :schema="schema"
                 :subfolders="tree[rootId]?.subfolders || {}"
                 :tree="tree"
-                @force-reload="loadTree(1)"
+                @force-reload="forceReload"
             />
         </div>
     </div>
@@ -73,7 +97,9 @@ export default {
         return {
             loading: false,
             folders: {},
+            msgNewContent: t`New content`,
             msgNewFolder: t`New folder`,
+            newContent: false,
             newFolder: false,
             tree: {},
         }
@@ -84,12 +110,17 @@ export default {
         });
     },
     methods: {
+        canSave() {
+            return this.canSaveMap?.['folders'] || false;
+        },
+        forceReload() {
+            this.loadTree(true);
+        },
         async loadTree(noCache) {
             try {
                 this.loading = true;
                 this.tree = {};
-                const query = noCache ? 'no_cache=true&objectType=folders' : 'objectType=folders';
-                const response = await fetch(`${API_URL}tree/loadAll?${query}`, API_OPTIONS);
+                const response = await fetch(`${API_URL}tree/loadAll?objectType=folders${noCache ? '&no_cache=true' : ''}`, API_OPTIONS);
                 const json = await response.json();
                 if (json.error) {
                     throw new Error(json.error);

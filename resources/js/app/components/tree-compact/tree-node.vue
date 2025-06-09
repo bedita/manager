@@ -1,15 +1,28 @@
 <template>
     <div class="tree-node">
         <label>
-            <span>
-                <input
-                    :type="inputType"
-                    name="position"
-                    :checked="parentFolderId === node.id"
-                    :disabled="branchDisabled || referenceObject?.id === node?.id"
-                    @click="setParent($event)"
-                >
-            </span>
+            <template v-if="objectType === 'folders'">
+                <span>
+                    <input
+                        type="radio"
+                        name="position"
+                        :checked="parentFolderId === node.id"
+                        :disabled="branchDisabled || referenceObject?.id === node?.id"
+                        @click="setParent($event)"
+                    >
+                </span>
+            </template>
+            <template v-else>
+                <span>
+                    <input
+                        type="checkbox"
+                        name="position[]"
+                        :checked="originalParents.includes(node.id)"
+                        :disabled="branchDisabled || referenceObject?.id === node?.id"
+                        @click="setParent($event)"
+                    >
+                </span>
+            </template>
             <span class="ml-05">
                 {{ folders[node?.id]?.attributes?.title || node?.id }}
             </span>
@@ -25,8 +38,10 @@
                 :folders="folders"
                 :node="child"
                 :object-type="objectType"
+                :original-parents="originalParents"
                 :parent-folder-id="parentFolderId"
                 :reference-object="referenceObject"
+                @remove-parent="removeParent"
                 @update-parent="updateParent"
             />
         </div>
@@ -56,6 +71,10 @@ export default {
             type: String,
             required: true
         },
+        originalParents: {
+            type: Array,
+            default: () => []
+        },
         parentFolderId: {
             type: String,
             default: null
@@ -79,15 +98,20 @@ export default {
         });
     },
     methods: {
+        removeParent(id) {
+            this.$emit('remove-parent', id);
+        },
         setParent(ev) {
             if (ev?.target?.checked) {
                 this.$emit('update-parent', this.node.id);
+            } else {
+                this.$emit('remove-parent', this.node.id);
             }
         },
         updateParent(id) {
             this.parentId = id;
             this.$emit('update-parent', id);
-        }
+        },
     },
 };
 </script>

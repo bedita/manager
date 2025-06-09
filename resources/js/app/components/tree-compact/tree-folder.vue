@@ -10,6 +10,7 @@
             :tree="tree"
             @update:showPanel="editMode = $event"
             @success="$emit('forceReload')"
+            v-if="editMode && folder"
         />
         <header
             class="tab"
@@ -66,15 +67,17 @@
                 >
                     {{ totalChildren }} {{ msgObjects }}
                 </span>
-                <button
-                    class="button button-outlined"
-                    @click.prevent.stop="remove"
-                >
-                    <app-icon icon="carbon:trash-can" />
-                    <span class="ml-05">
-                        {{ msgDelete }}
-                    </span>
-                </button>
+                <template v-if="canSave()">
+                    <button
+                        class="button button-outlined"
+                        @click.prevent.stop="remove"
+                    >
+                        <app-icon icon="carbon:trash-can" />
+                        <span class="ml-05">
+                            {{ msgDelete }}
+                        </span>
+                    </button>
+                </template>
                 <div class="object-info-container">
                     <object-info
                         border-color="transparent"
@@ -107,18 +110,20 @@
                         :schema="schema"
                         :subfolders="subfolders[childId]?.subfolders || {}"
                         :tree="tree"
-                        @force-reload="$emit('forceReload')"
+                        @force-reload="$emit('force-reload', childId)"
                     />
                 </template>
                 <template v-if="children?.length">
                     <tree-content
                         v-for="child in children"
                         :can-save-map="canSaveMap"
+                        :folders="folders || {}"
                         :key="child.id"
                         :languages="languages"
                         :obj="child"
                         :schema="schema"
-                        @success="reloadContent"
+                        :tree="tree"
+                        @success="$emit('force-reload', child.id)"
                     />
                 </template>
             </div>
@@ -191,17 +196,9 @@ export default {
             formFieldProperties: {},
             hoverTitle: false,
             loading: false,
-            msgClose: t`Close`,
-            msgContents: t`Contents`,
-            msgCreateContent: t`Create content`,
-            msgCreateFolder: t`Create folder`,
             msgDelete: t`Delete`,
-            msgEdit: t`Edit`,
-            msgFolders: t`Folders`,
             msgObjects: t`objects`,
             msgOpenInNewTab: t`Open in new tab`,
-            msgSave: t`Save`,
-            msgUndo: t`Undo`,
             objectType: 'folders',
             open: false,
             saving: false,
@@ -260,7 +257,7 @@ export default {
                     },
                 };
                 await fetch(`${BEDITA.base}/api/folders/${this.folder.id}`, options);
-                this.$emit('forceReload');
+                this.$emit('force-reload', this.folder.id);
             } catch (error) {
                 BEDITA.error(error);
             } finally {
@@ -282,6 +279,9 @@ export default {
         },
         fieldType(field) {
             return !this.isNumeric(field) ? this.fieldsMap[field] : null;
+        },
+        forceReload() {
+            this.$emit('forceReload');
         },
         isNumeric(str) {
             if (typeof str != 'string') {
