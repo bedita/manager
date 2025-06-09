@@ -1,5 +1,8 @@
 <template>
     <div class="tree-compact">
+        <header>
+            <h2>{{ msgTreeCompactView }}</h2>
+        </header>
         <tree-panel
             :can-save-map="canSaveMap"
             :folders="folders || {}"
@@ -42,6 +45,7 @@
                     <app-icon icon="carbon:document-add" />
                     <span class="ml-05">{{ msgNewContent }}</span>
                 </button>
+                <span class="tag has-background-module-folders">{{ count }} {{ msgFolders }}</span>
             </div>
         </template>
         <div
@@ -84,6 +88,10 @@ export default {
             type: Object,
             required: true
         },
+        count: {
+            type: Number,
+            default: 0,
+        },
         languages: {
             type: Object,
             default: () => {},
@@ -95,10 +103,12 @@ export default {
     },
     data() {
         return {
-            loading: false,
             folders: {},
+            loading: false,
+            msgFolders: t`Folders`,
             msgNewContent: t`New content`,
             msgNewFolder: t`New folder`,
+            msgTreeCompactView: t`Tree compact view`,
             newContent: false,
             newFolder: false,
             tree: {},
@@ -137,18 +147,27 @@ export default {
 }
 </script>
 <style scoped>
-.tree-compact {
+div.tree-compact {
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
 }
-.tree-compact > div.buttons {
+div.tree-compact > div.buttons {
     margin-left: 0.5rem;
 }
-.tree-compact > div.buttons {
+div.tree-compact > div.buttons {
     margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.2rem;
+    align-items: center;
+    justify-content: start;
+    border-bottom: dotted 0.1px silver;
 }
-.tree-compact > div.buttons > button > span {
+div.tree-compact > div.buttons > button > span {
     font-size: 0.7rem;
+}
+div.tree-compact span.tag {
+    margin-left: auto;
 }
 </style>
