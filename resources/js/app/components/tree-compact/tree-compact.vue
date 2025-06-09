@@ -1,8 +1,5 @@
 <template>
     <div class="tree-compact">
-        <header>
-            <h2>{{ msgTreeCompactView }}</h2>
-        </header>
         <tree-panel
             :can-save-map="canSaveMap"
             :folders="folders || {}"
@@ -108,7 +105,6 @@ export default {
             msgFolders: t`Folders`,
             msgNewContent: t`New content`,
             msgNewFolder: t`New folder`,
-            msgTreeCompactView: t`Tree compact view`,
             newContent: false,
             newFolder: false,
             tree: {},
