@@ -3,7 +3,7 @@
         <div class="date-ranges-list">
             <DateRange
                 v-for="(dateRange, index) in dateRanges"
-                :key="index"
+                :key="dateRange.uuid"
                 :compact="compact"
                 :options="options"
                 :readonly="readonly"
@@ -136,6 +136,9 @@ export default {
         addRange(range) {
             if (!range) {
                 return;
+            }
+            if (this.dateRanges.length === 1 && !this.dateRanges[0].start_date) {
+                this.dateRanges = [];
             }
             const newRange = {
                 uuid: this.uuid(),

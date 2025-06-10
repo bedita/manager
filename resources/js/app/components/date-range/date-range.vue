@@ -22,17 +22,31 @@
             <span>{{ msgTo }}</span>
             <div>
                 <template v-if="start_date">
-                    <input
-                        type="text"
-                        date="true"
-                        :time="!all_day"
-                        :data-min-date="start_date"
-                        daterange="true"
-                        v-model="end_date"
-                        v-datepicker="true"
-                        @change="onDateChanged(false, $event)"
-                        v-if="ready"
-                    >
+                    <template v-if="!end_date">
+                        <input
+                            type="text"
+                            date="true"
+                            :time="!all_day"
+                            :data-min-date="end_date"
+                            daterange="true"
+                            v-model="end_date"
+                            v-datepicker="true"
+                            @change="onDateChanged(false, $event)"
+                            v-if="ready"
+                        >
+                    </template>
+                    <template v-else>
+                        <input
+                            type="text"
+                            date="true"
+                            :time="!all_day"
+                            daterange="true"
+                            v-model="end_date"
+                            v-datepicker="true"
+                            @change="onDateChanged(false, $event)"
+                            v-if="ready"
+                        >
+                    </template>
                 </template>
                 <input
                     type="text"
