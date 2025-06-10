@@ -447,6 +447,43 @@ class ModulesComponent extends Component
     }
 
     /**
+     * Check if save can be skipped.
+     * This is used to avoid saving object with no changes.
+     *
+     * @param string $id The object ID
+     * @param array $requestData The request data
+     * @param array $relatedData The related data
+     * @return bool True if save can be skipped, false otherwise
+     */
+    public function skipSave(string $id, array $requestData, array $relatedData): bool
+    {
+        if (empty($id) || !empty($relatedData)) {
+            return false;
+        }
+        $data = $requestData;
+        unset($data['id']);
+        $requestPermissions = (array)Hash::get($data, 'permissions', []);
+        if (!empty($requestPermissions)) {
+            $requestPermissions = array_map(
+                function ($role) {
+                    return (int)$role;
+                },
+                $requestPermissions
+            );
+            sort($requestPermissions);
+            $query = ['filter' => ['object_id' => $id], 'page_size' => 100];
+            $objectPermissions = (array)ApiClientProvider::getApiClient()->getObjects('object_permissions', $query);
+            $actualPermissions = (array)Hash::extract($objectPermissions, 'data.{n}.attributes.role_id');
+            sort($actualPermissions);
+            if ($actualPermissions === $requestPermissions) {
+                unset($data['permissions']);
+            }
+        }
+
+        return empty($data);
+    }
+
+    /**
      * Set current attributes from loaded $object data in `currentAttributes`.
      *
      * @param array $object The object.

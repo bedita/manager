@@ -300,7 +300,7 @@ class ModulesController extends AppController
             }
             $id = Hash::get($requestData, 'id');
             // skip save if no data changed
-            if (empty($relatedData) && count($requestData) === 1 && !empty($id)) {
+            if ($this->Modules->skipSave($id, $requestData, $relatedData)) {
                 $response = $this->apiClient->getObject($id, $this->objectType, ['count' => 'all']);
                 $this->Thumbs->urls($response);
                 $this->set((array)$response);
