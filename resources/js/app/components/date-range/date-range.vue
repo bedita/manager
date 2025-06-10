@@ -26,6 +26,7 @@
                         type="text"
                         date="true"
                         :time="!all_day"
+                        :data-min-date="start_date"
                         daterange="true"
                         v-model="end_date"
                         v-datepicker="true"
@@ -142,7 +143,7 @@
         </div>
         <div
             class="icon-error"
-            v-show="!compact && validate() === false"
+            v-show="!compact && start_date && validate() === false"
         >
             {{ msgInvalidDateRange }}
         </div>
