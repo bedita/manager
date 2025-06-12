@@ -1299,6 +1299,82 @@ class ModulesControllerTest extends BaseControllerTest
     }
 
     /**
+     * Test `save` method when permissions are provided
+     *
+     * @return void
+     * @covers ::save()
+     */
+    public function testSavePermissions(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => 123456789,
+                'permissions' => ['1','2','3'],
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+
+        $request = new ServerRequest($config);
+        $this->controller = new class ($request) extends ModulesControllerSample
+        {
+            public bool $savePerms = false;
+            public function savePermissions(array $response, array $schema, array $newPermissions): bool
+            {
+                $this->savePerms = true;
+
+                return true;
+            }
+        };
+
+        // mock api client save... and check it's not called
+        $apiClient = new class ('https://api.example.com') extends BEditaClient {
+
+            protected bool $load = false;
+            protected bool $save = false;
+
+            public function getLoad(): bool
+            {
+                return $this->load;
+            }
+
+            public function getSave(): bool
+            {
+                return $this->save;
+            }
+
+            public function getObject(string|int $id, string $type = 'objects', ?array $query = null, ?array $headers = null): ?array
+            {
+                $this->load = true;
+
+                return ['data' => ['id' => 123456789]];
+            }
+
+            public function save(string $type, array $data, ?array $headers = null): ?array
+            {
+                $this->save = true;
+
+                return [];
+            }
+        };
+        $this->controller->setApiClient($apiClient);
+
+        // do controller call
+        $this->controller->save();
+
+        static::assertTrue($this->controller->savePerms, 'Controller save permissions should be called');
+        static::assertFalse($apiClient->getSave(), 'ApiClient save method should not be called when no post data is provided');
+        static::assertTrue($apiClient->getLoad(), 'ApiClient load method should be called to load object');
+    }
+
+    /**
      * Test `save` method, skip save when no post 'permissions' data is provided
      *
      * @return void
