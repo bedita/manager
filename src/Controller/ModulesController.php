@@ -317,7 +317,11 @@ class ModulesController extends AppController
             // save data
             $lang = I18n::getLocale();
             $headers = ['Accept-Language' => $lang];
-            $response = $this->apiClient->save($this->objectType, $requestData, $headers);
+            if (!$skipSaveObject) {
+                $response = $this->apiClient->save($this->objectType, $requestData, $headers);
+            } else {
+                $response = $this->apiClient->getObject($id, $this->objectType);
+            }
             if (!$skipSavePermissions) {
                 $this->savePermissions(
                     (array)$response,
