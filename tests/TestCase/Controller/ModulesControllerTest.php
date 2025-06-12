@@ -1232,4 +1232,146 @@ class ModulesControllerTest extends BaseControllerTest
         $actual = $this->controller->viewBuilder()->getVar('error');
         static::assertSame('Bad configuration key "WrongKey"', $actual);
     }
+
+    /**
+     * Test `save` method, skip save when no post data is provided
+     *
+     * @return void
+     * @covers ::save()
+     */
+    public function testSkipSaveObject(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => 123456789,
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+
+        $request = new ServerRequest($config);
+        $this->controller = new ModulesControllerSample($request);
+
+        // mock api client save... and check it's not called
+        $apiClient = new class ('https://api.example.com') extends BEditaClient {
+
+            protected bool $load = false;
+            protected bool $save = false;
+
+            public function getLoad(): bool
+            {
+                return $this->load;
+            }
+
+            public function getSave(): bool
+            {
+                return $this->save;
+            }
+
+            public function getObject(string|int $id, string $type = 'objects', ?array $query = null, ?array $headers = null): ?array
+            {
+                $this->load = true;
+
+                return [];
+            }
+
+            public function save(string $type, array $data, ?array $headers = null): ?array
+            {
+                $this->save = true;
+
+                return null;
+            }
+        };
+        $this->controller->setApiClient($apiClient);
+
+        // do controller call
+        $this->controller->save();
+
+        static::assertFalse($apiClient->getSave(), 'ApiClient save method should not be called when no post data is provided');
+        static::assertTrue($apiClient->getLoad(), 'ApiClient load method should be called to load object');
+    }
+
+    /**
+     * Test `save` method, skip save when no post 'permissions' data is provided
+     *
+     * @return void
+     * @covers ::save()
+     */
+    public function testSkipSavePermissions(): void
+    {
+        // Modules component savePermissions method should not be called when no post 'permissions' data is provided
+        // Setup controller for test
+        $this->setupController();
+
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => 123456789,
+                'title' => 'Test Dummy',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ];
+
+        $request = new ServerRequest($config);
+        $this->controller = new class ($request) extends ModulesControllerSample
+        {
+            public bool $savePerms = false;
+            public function savePermissions(array $response, array $schema, array $newPermissions): bool
+            {
+                $this->savePerms = true;
+
+                return true;
+            }
+        };
+
+        // mock api client save... and check it's not called
+        $apiClient = new class ('https://api.example.com') extends BEditaClient {
+
+            protected bool $load = false;
+            protected bool $save = false;
+
+            public function getLoad(): bool
+            {
+                return $this->load;
+            }
+
+            public function getSave(): bool
+            {
+                return $this->save;
+            }
+
+            public function getObject(string|int $id, string $type = 'objects', ?array $query = null, ?array $headers = null): ?array
+            {
+                $this->load = true;
+
+                return [];
+            }
+
+            public function save(string $type, array $data, ?array $headers = null): ?array
+            {
+                $this->save = true;
+
+                return ['data' => ['id' => 123456789]];
+            }
+        };
+        $this->controller->setApiClient($apiClient);
+
+        // do controller call
+        $this->controller->save();
+
+        static::assertFalse($this->controller->savePerms, 'Controller save permissions should not be called');
+        static::assertTrue($apiClient->getSave(), 'ApiClient save method should be called when no post data is provided');
+        static::assertFalse($apiClient->getLoad(), 'ApiClient load method should not be called to load object');
+    }
 }
