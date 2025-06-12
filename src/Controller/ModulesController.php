@@ -300,7 +300,9 @@ class ModulesController extends AppController
             }
             $id = (string)Hash::get($requestData, 'id');
             // skip save if no data changed
-            if ($this->Modules->skipSave($id, $requestData, $relatedData)) {
+            $skipSaveObject = $this->Modules->skipSaveObject($id, $requestData, $relatedData);
+            $skipSavePermissions = $this->Modules->skipSavePermissions($id, $requestData);
+            if ($skipSaveObject && $skipSavePermissions) {
                 $response = $this->apiClient->getObject($id, $this->objectType, ['count' => 'all']);
                 $this->Thumbs->urls($response);
                 $this->set((array)$response);
@@ -316,11 +318,13 @@ class ModulesController extends AppController
             $lang = I18n::getLocale();
             $headers = ['Accept-Language' => $lang];
             $response = $this->apiClient->save($this->objectType, $requestData, $headers);
-            $this->savePermissions(
-                (array)$response,
-                (array)$this->Schema->getSchema($this->objectType),
-                (array)Hash::get($requestData, 'permissions')
-            );
+            if (!$skipSavePermissions) {
+                $this->savePermissions(
+                    (array)$response,
+                    (array)$this->Schema->getSchema($this->objectType),
+                    (array)Hash::get($requestData, 'permissions')
+                );
+            }
             $id = (string)Hash::get($response, 'data.id');
             $this->Modules->saveRelated($id, $this->objectType, $relatedData);
             $options = [
