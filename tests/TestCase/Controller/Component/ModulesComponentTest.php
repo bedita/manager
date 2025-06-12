@@ -1714,4 +1714,65 @@ class ModulesComponentTest extends TestCase
         $viewVars = $this->Modules->getController()->viewBuilder()->getVars();
         static::assertEquals(json_encode(['title' => 'test']), $viewVars['currentAttributes']);
     }
+
+    /**
+     * Test `skipSaveObject` method
+     *
+     * @return void
+     * @covers ::skipSaveObject()
+     */
+    public function testSkipSaveObject(): void
+    {
+        // empty id and empty related data
+        $actual = $this->Modules->skipSaveObject('', [], []);
+        static::assertFalse($actual);
+
+        // not empty id and not empty related data
+        $actual = $this->Modules->skipSaveObject('123', [], ['some' => 'thing']);
+        static::assertFalse($actual);
+
+        // not empty id and empty related data, not empty request data
+        $actual = $this->Modules->skipSaveObject('123', ['id' => '123', 'title' => 'test', 'permissions' => []], []);
+        static::assertFalse($actual);
+
+        // not empty id and empty related data, empty request data
+        $actual = $this->Modules->skipSaveObject('123', ['id' => '123', 'permissions' => []], []);
+        static::assertTrue($actual);
+    }
+
+    /**
+     * Test `skipSavePermissions` method
+     *
+     * @return void
+     * @covers ::skipSavePermissions()
+     */
+    public function testSkipSavePermissions(): void
+    {
+        $requestData = [
+            'id' => '123',
+            'permissions' => ['1', '2'],
+        ];
+        $apiClient = new class ('https://api.example.com') extends BEditaClient {
+            public function getObjects(string $type = 'objects', ?array $query = null, ?array $headers = null): ?array
+            {
+                return [
+                    'data' => [
+                        ['id' => '1', 'attributes' => ['role_id' => 1]],
+                        ['id' => '2', 'attributes' => ['role_id' => 2]],
+                    ],
+                ];
+            }
+        };
+        $safeClient = ApiClientProvider::getApiClient();
+        ApiClientProvider::setApiClient($apiClient);
+        $controller = new AppController();
+        $registry = $controller->components();
+        $registry->load('Authentication.Authentication');
+        /** @var \App\Controller\Component\ModulesComponent $modulesComponent */
+        $modulesComponent = $registry->load(ModulesComponent::class);
+        $this->Modules = $modulesComponent;
+        $actual = $this->Modules->skipSavePermissions('123', $requestData['permissions']);
+        ApiClientProvider::setApiClient($safeClient);
+        static::assertTrue($actual);
+    }
 }
