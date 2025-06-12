@@ -301,7 +301,7 @@ class ModulesController extends AppController
             $id = (string)Hash::get($requestData, 'id');
             // skip save if no data changed
             $skipSaveObject = $this->Modules->skipSaveObject($id, $requestData, $relatedData);
-            $skipSavePermissions = $this->Modules->skipSavePermissions($id, $requestData);
+            $skipSavePermissions = $this->Modules->skipSavePermissions($id, (array)Hash::get($requestData, 'permissions'));
             if ($skipSaveObject && $skipSavePermissions) {
                 $response = $this->apiClient->getObject($id, $this->objectType, ['count' => 'all']);
                 $this->Thumbs->urls($response);
