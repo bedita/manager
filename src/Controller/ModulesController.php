@@ -298,7 +298,7 @@ class ModulesController extends AppController
 
                 return;
             }
-            $id = Hash::get($requestData, 'id');
+            $id = (string)Hash::get($requestData, 'id');
             // skip save if no data changed
             if ($this->Modules->skipSave($id, $requestData, $relatedData)) {
                 $response = $this->apiClient->getObject($id, $this->objectType, ['count' => 'all']);
