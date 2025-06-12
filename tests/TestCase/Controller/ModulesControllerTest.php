@@ -1260,8 +1260,8 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller = new ModulesControllerSample($request);
 
         // mock api client save... and check it's not called
-        $apiClient = new class ('https://api.example.com') extends BEditaClient {
-
+        $apiClient = new class ('https://api.example.com') extends BEditaClient
+        {
             protected bool $load = false;
             protected bool $save = false;
 
@@ -1335,8 +1335,8 @@ class ModulesControllerTest extends BaseControllerTest
         };
 
         // mock api client save... and check it's not called
-        $apiClient = new class ('https://api.example.com') extends BEditaClient {
-
+        $apiClient = new class ('https://api.example.com') extends BEditaClient
+        {
             protected bool $load = false;
             protected bool $save = false;
 
@@ -1412,8 +1412,8 @@ class ModulesControllerTest extends BaseControllerTest
         };
 
         // mock api client save... and check it's not called
-        $apiClient = new class ('https://api.example.com') extends BEditaClient {
-
+        $apiClient = new class ('https://api.example.com') extends BEditaClient
+        {
             protected bool $load = false;
             protected bool $save = false;
 
