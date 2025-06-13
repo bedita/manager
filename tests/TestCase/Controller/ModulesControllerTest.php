@@ -1395,7 +1395,7 @@ class ModulesControllerTest extends BaseControllerTest
         $registry = $this->controller->components();
         $schemaComponent = new class ($registry) extends SchemaComponent
         {
-            public function getSchema(?string $type = null, ?string $revision = null)
+            public function getSchema(?string $type = null, ?string $revision = null): array|bool
             {
                 return ['associations' => ['Permissions']];
             }

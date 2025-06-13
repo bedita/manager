@@ -1914,7 +1914,7 @@ class ModulesComponentTest extends TestCase
         };
         $safeClient = ApiClientProvider::getApiClient();
         ApiClientProvider::setApiClient($apiClient);
-        $controller = new AppController();
+        $controller = new AppController(new ServerRequest());
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');
         /** @var \App\Controller\Component\ModulesComponent $modulesComponent */
