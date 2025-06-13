@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-05-27 06:53:32 \n"
+"POT-Creation-Date: 2025-06-03 07:31:05 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -209,6 +209,9 @@ msgid "Created ↑ Oldest on top"
 msgstr ""
 
 msgid "Created ↓ Newest on top"
+msgstr ""
+
+msgid "Creation date"
 msgstr ""
 
 msgid "Current password"
@@ -1554,7 +1557,7 @@ msgstr ""
 msgid "Descending"
 msgstr ""
 
-msgid "Sort by"
+msgid "Reorder by"
 msgstr ""
 
 msgid "Related items order will be changed."

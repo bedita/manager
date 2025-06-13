@@ -13,7 +13,9 @@
 namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
+use App\Utility\DateRangesTools;
 use App\Utility\OEmbed;
+use App\Utility\RelationsTools;
 use App\Utility\SchemaTrait;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
@@ -444,6 +446,106 @@ class ModulesComponent extends Component
         }
 
         return true;
+    }
+
+    /**
+     * Check if save can be skipped.
+     * This is used to avoid saving object with no changes.
+     *
+     * @param string $id The object ID
+     * @param array $requestData The request data
+     * @return bool True if save can be skipped, false otherwise
+     */
+    public function skipSaveObject(string $id, array &$requestData): bool
+    {
+        if (empty($id)) {
+            return false;
+        }
+        if (isset($requestData['date_ranges'])) {
+            // check if date_ranges has changed
+            $type = $this->getController()->getRequest()->getParam('object_type');
+            $response = ApiClientProvider::getApiClient()->getObject($id, $type, ['fields' => 'date_ranges']);
+            $actualDateRanges = (array)Hash::get($response, 'data.attributes.date_ranges');
+            $dr1 = DateRangesTools::toString($actualDateRanges);
+            $requestDateRanges = (array)Hash::get($requestData, 'date_ranges');
+            $dr2 = DateRangesTools::toString($requestDateRanges);
+            if ($dr1 === $dr2) {
+                unset($requestData['date_ranges']);
+            } else {
+                return false;
+            }
+        }
+        $data = array_filter($requestData, function ($key) {
+            return !in_array($key, ['id', 'date_ranges', 'permissions']);
+        }, ARRAY_FILTER_USE_KEY);
+
+        return empty($data);
+    }
+
+    /**
+     * Check if save related can be skipped.
+     * This is used to avoid saving object relations with no changes.
+     *
+     * @param string $id The object ID
+     * @param array $relatedData The related data
+     * @return bool True if save related can be skipped, false otherwise
+     */
+    public function skipSaveRelated(string $id, array &$relatedData): bool
+    {
+        if (empty($relatedData)) {
+            return true;
+        }
+        $methods = (array)Hash::extract($relatedData, '{n}.method');
+        if (in_array('addRelated', $methods) || in_array('removeRelated', $methods)) {
+            return false;
+        }
+        // check replaceRelated
+        $type = $this->getController()->getRequest()->getParam('object_type');
+        $rr = $relatedData;
+        foreach ($rr as $method => $data) {
+            $actualRelated = (array)ApiClientProvider::getApiClient()->getRelated($id, $type, $data['relation']);
+            $actualRelated = (array)Hash::get($actualRelated, 'data');
+            $actualRelated = RelationsTools::toString($actualRelated);
+            $requestRelated = (array)Hash::get($data, 'relatedIds', []);
+            $requestRelated = RelationsTools::toString($requestRelated);
+            if ($actualRelated === $requestRelated) {
+                unset($relatedData[$method]);
+                continue;
+            }
+
+            return false;
+        }
+
+        return empty($relatedData);
+    }
+
+    /**
+     * Check if save permissions can be skipped.
+     * This is used to avoid saving object permissions with no changes.
+     *
+     * @param string $id The object ID
+     * @param array $requestPermissions The request permissions
+     * @param array $schema The object type schema
+     * @return bool True if save permissions can be skipped, false otherwise
+     */
+    public function skipSavePermissions(string $id, array $requestPermissions, array $schema): bool
+    {
+        if (!in_array('Permissions', (array)Hash::get($schema, 'associations'))) {
+            return true;
+        }
+        $requestPermissions = array_map(
+            function ($role) {
+                return (int)$role;
+            },
+            $requestPermissions
+        );
+        sort($requestPermissions);
+        $query = ['filter' => ['object_id' => $id], 'page_size' => 100];
+        $objectPermissions = (array)ApiClientProvider::getApiClient()->getObjects('object_permissions', $query);
+        $actualPermissions = (array)Hash::extract($objectPermissions, 'data.{n}.attributes.role_id');
+        sort($actualPermissions);
+
+        return $actualPermissions === $requestPermissions;
     }
 
     /**

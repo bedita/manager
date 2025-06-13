@@ -12,8 +12,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * App\View\Helper\DatesHelper Test Case
- *
- * @coversDefaultClass \App\View\Helper\DatesHelper
  */
 #[CoversClass(DatesHelper::class)]
 #[CoversMethod(DatesHelper::class, 'daysAgo')]
