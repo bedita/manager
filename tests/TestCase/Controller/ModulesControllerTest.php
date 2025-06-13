@@ -1417,6 +1417,12 @@ class ModulesControllerTest extends BaseControllerTest
         $component = new class ($registry) extends ModulesComponent
         {
             public bool $saveRelated = false;
+
+            public function getSaveRelated(): bool
+            {
+                return $this->saveRelated;
+            }
+
             public function saveRelated(string $id, string $type, array $relatedData): void
             {
                 $this->saveRelated = true;
@@ -1459,7 +1465,7 @@ class ModulesControllerTest extends BaseControllerTest
         // do controller call
         $this->controller->save();
 
-        static::assertTrue($this->controller->Modules->saveRelated, 'Component save related should be called');
+        static::assertTrue($component->getSaveRelated(), 'Component save related should be called');
         static::assertFalse($apiClient->getSave(), 'ApiClient save method should not be called when no post data is provided');
         static::assertTrue($apiClient->getLoad(), 'ApiClient load method should be called to load object');
     }
