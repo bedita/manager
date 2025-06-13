@@ -1318,7 +1318,7 @@ class ModulesControllerTest extends BaseControllerTest
                 'permissions' => ['1','2','3'],
             ],
             'params' => [
-                'object_type' => 'dummies',
+                'object_type' => 'folders',
             ],
         ];
 
@@ -1365,6 +1365,17 @@ class ModulesControllerTest extends BaseControllerTest
             }
         };
         $this->controller->setApiClient($apiClient);
+
+        // mock schema getSchema to return ['associations' => ['Permissions']]
+        $registry = $this->controller->components();
+        $schemaComponent = new class ($registry) extends SchemaComponent
+        {
+            public function getSchema(?string $type = null, ?string $revision = null)
+            {
+                return ['associations' => ['Permissions']];
+            }
+        };
+        $this->controller->Schema = $schemaComponent;
 
         // do controller call
         $this->controller->save();
