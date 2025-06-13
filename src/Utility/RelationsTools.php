@@ -44,6 +44,6 @@ class RelationsTools
             );
         }
 
-        return implode(',', $rrs ?? []);
+        return implode(',', $rrs);
     }
 }

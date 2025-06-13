@@ -165,6 +165,6 @@ class DateRangesTools
             );
         }
 
-        return implode(',', $drs ?? []);
+        return implode(',', $drs);
     }
 }
