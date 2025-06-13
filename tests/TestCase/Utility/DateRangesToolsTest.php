@@ -269,4 +269,24 @@ class DateRangesToolsTest extends TestCase
         $actual = DateRangesTools::prepare($dateRanges);
         static::assertEquals($expected, $actual);
     }
+
+    /**
+     * Test `toString` method.
+     *
+     * @return void
+     * @covers ::toString()
+     */
+    public function testToString(): void
+    {
+        $dateRanges = [
+            [
+                'start_date' => '2021-01-01 00:00:00',
+                'end_date' => '2021-01-02 00:00:00',
+                'params' => ['every_day' => true, 'all_day' => true],
+            ],
+        ];
+        $expected = '2021-01-01 00:00:00-2021-01-02 00:00:00-{"every_day":true,"all_day":true}';
+        $actual = DateRangesTools::toString($dateRanges);
+        static::assertEquals($expected, $actual);
+    }
 }
