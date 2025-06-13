@@ -301,9 +301,14 @@ class ModulesController extends AppController
 
                 return;
             }
-            $id = Hash::get($requestData, 'id');
+            $id = (string)Hash::get($requestData, 'id');
             // skip save if no data changed
-            if (empty($relatedData) && count($requestData) === 1 && !empty($id)) {
+            $schema = (array)$this->Schema->getSchema($this->objectType);
+            $permissions = (array)Hash::get($requestData, 'permissions');
+            $skipSaveObject = $this->Modules->skipSaveObject($id, $requestData);
+            $skipSaveRelated = $this->Modules->skipSaveRelated($id, $relatedData);
+            $skipSavePermissions = $this->Modules->skipSavePermissions($id, $permissions, $schema);
+            if ($skipSaveObject && $skipSaveRelated && $skipSavePermissions) {
                 $response = $this->apiClient->getObject($id, $this->objectType, ['count' => 'all']);
                 $this->Thumbs->urls($response);
                 $this->set((array)$response);
@@ -318,14 +323,22 @@ class ModulesController extends AppController
             // save data
             $lang = I18n::getLocale();
             $headers = ['Accept-Language' => $lang];
-            $response = $this->apiClient->save($this->objectType, $requestData, $headers);
-            $this->savePermissions(
-                (array)$response,
-                (array)$this->Schema->getSchema($this->objectType),
-                (array)Hash::get($requestData, 'permissions')
-            );
+            if (!$skipSaveObject) {
+                $response = $this->apiClient->save($this->objectType, $requestData, $headers);
+            } else {
+                $response = $this->apiClient->getObject($id, $this->objectType);
+            }
+            if (!$skipSavePermissions) {
+                $this->savePermissions(
+                    (array)$response,
+                    $schema,
+                    $permissions
+                );
+            }
             $id = (string)Hash::get($response, 'data.id');
-            $this->Modules->saveRelated($id, $this->objectType, $relatedData);
+            if (!$skipSaveRelated) {
+                $this->Modules->saveRelated($id, $this->objectType, $relatedData);
+            }
             $options = [
                 'id' => Hash::get($response, 'data.id'),
                 'type' => $this->objectType,
