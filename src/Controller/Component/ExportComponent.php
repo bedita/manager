@@ -45,7 +45,7 @@ class ExportComponent extends Component
      *
      * @var array
      */
-    protected $defaultSpreadheetProperties = [
+    protected array $defaultSpreadheetProperties = [
         'creator' => 'BEdita Manager',
         'lastModifiedBy' => 'BEdita Manager',
         'title' => '',

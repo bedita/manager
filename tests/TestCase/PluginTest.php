@@ -15,19 +15,20 @@ namespace App\Test\TestCase;
 use App\Plugin;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
- * \App\Plugin Test Case
- *
- * @coversDefaultClass \App\Plugin
+ * {@see \App\Plugin} Test Case
  */
+#[CoversClass(Plugin::class)]
+#[CoversMethod(Plugin::class, 'loadedAppPlugins')]
 class PluginTest extends TestCase
 {
     /**
      * Test loaded app plugins
      *
      * @return void
-     * @covers ::loadedAppPlugins()
      */
     public function testLoadedAppPlugins(): void
     {
