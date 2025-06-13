@@ -30,6 +30,10 @@ export default {
                 if (!el.vm) {
                     return;
                 }
+                if (JSON.stringify(el.vm.attrs) === JSON.stringify(vnode.data.attrs)) {
+                    // no change in attributes, nothing to do
+                    return;
+                }
                 el.vm.attrs = vnode.data.attrs;
                 if (vnode.data && vnode.data.attrs && vnode.data.attrs.value) {
                     el.vm.setDate(new Date(vnode.data.attrs.value));
