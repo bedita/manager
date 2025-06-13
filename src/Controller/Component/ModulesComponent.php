@@ -473,10 +473,14 @@ class ModulesComponent extends Component
      *
      * @param string $id The object ID
      * @param array $requestPermissions The request permissions
+     * @param array $schema The object type schema
      * @return bool True if save permissions can be skipped, false otherwise
      */
-    public function skipSavePermissions(string $id, array $requestPermissions): bool
+    public function skipSavePermissions(string $id, array $requestPermissions, array $schema): bool
     {
+        if (!in_array('Permissions', (array)Hash::get($schema, 'associations'))) {
+            return true;
+        }
         $requestPermissions = array_map(
             function ($role) {
                 return (int)$role;

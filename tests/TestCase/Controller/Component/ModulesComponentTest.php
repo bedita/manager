@@ -1771,8 +1771,12 @@ class ModulesComponentTest extends TestCase
         /** @var \App\Controller\Component\ModulesComponent $modulesComponent */
         $modulesComponent = $registry->load(ModulesComponent::class);
         $this->Modules = $modulesComponent;
-        $actual = $this->Modules->skipSavePermissions('123', $requestData['permissions']);
-        ApiClientProvider::setApiClient($safeClient);
+        $schema = ['associations' => []];
+        $actual = $this->Modules->skipSavePermissions('123', $requestData['permissions'], $schema);
         static::assertTrue($actual);
+        $schema = ['associations' => ['Permissions']];
+        $actual = $this->Modules->skipSavePermissions('123', $requestData['permissions'], $schema);
+        static::assertTrue($actual);
+        ApiClientProvider::setApiClient($safeClient);
     }
 }
