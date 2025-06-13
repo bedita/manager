@@ -391,7 +391,8 @@ div.tree-folder > header > h2 > span.modified, div.tree-folder > header > h2 > a
     font-size: 0.7rem;
 }
 div.tree-folder div.contents {
-    border-bottom: dashed aqua 0.5px;
+    border-left: dashed white 0.5px;
+    border-bottom: dashed white 0.5px;
     margin-bottom: 1rem;
 }
 div.tree-folder .editable:hover {

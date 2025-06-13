@@ -150,6 +150,7 @@ div.tree-compact {
 }
 div.tree-compact > div.buttons {
     margin-left: 0.5rem;
+    max-width: 1000px;
 }
 div.tree-compact > div.buttons {
     margin-bottom: 0.5rem;

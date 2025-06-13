@@ -116,6 +116,11 @@ export default {
 };
 </script>
 <style scoped>
+div.tree-node {
+    padding-left: 0.5rem;
+    border-left: dotted white 1px;
+    font-size: 0.7rem;
+}
 div.tree-node > label {
     display:flex;
     align-items:center;
@@ -127,7 +132,7 @@ div.tree-node > label > span {
     align-self: center;
     cursor: pointer;
 }
-div.tree-node, div.tree-node div.tree-node-children {
-    margin-left: 1rem;
+div.tree-node div.tree-node-children {
+    margin-left: 0.4rem;
 }
 </style>
