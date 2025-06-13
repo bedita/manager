@@ -97,7 +97,13 @@ class ModulesControllerTest extends BaseControllerTest
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
-        $this->controller = new ModulesControllerSample($request);
+        $this->controller = new class ($request) extends ModulesControllerSample
+        {
+            public function setApiClient($client): void
+            {
+                $this->apiClient = $client;
+            }
+        };
         // Mock Authentication component
         $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
@@ -1283,7 +1289,13 @@ class ModulesControllerTest extends BaseControllerTest
         ];
 
         $request = new ServerRequest($config);
-        $this->controller = new ModulesControllerSample($request);
+        $this->controller = new class ($request) extends ModulesControllerSample
+        {
+            public function setApiClient($client): void
+            {
+                $this->apiClient = $client;
+            }
+        };
 
         // mock api client save... and check it's not called
         $apiClient = new class ('https://api.example.com') extends BEditaClient
@@ -1351,6 +1363,12 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller = new class ($request) extends ModulesControllerSample
         {
             public bool $savePerms = false;
+
+            public function setApiClient($client): void
+            {
+                $this->apiClient = $client;
+            }
+
             public function savePermissions(array $response, array $schema, array $newPermissions): bool
             {
                 $this->savePerms = true;
@@ -1435,6 +1453,10 @@ class ModulesControllerTest extends BaseControllerTest
         $request = new ServerRequest($config);
         $this->controller = new class ($request) extends ModulesControllerSample
         {
+            public function setApiClient($client): void
+            {
+                $this->apiClient = $client;
+            }
         };
 
         $registry = $this->controller->components();
@@ -1522,6 +1544,12 @@ class ModulesControllerTest extends BaseControllerTest
         $this->controller = new class ($request) extends ModulesControllerSample
         {
             public bool $savePerms = false;
+
+            public function setApiClient($client): void
+            {
+                $this->apiClient = $client;
+            }
+
             public function savePermissions(array $response, array $schema, array $newPermissions): bool
             {
                 $this->savePerms = true;
