@@ -1386,6 +1386,85 @@ class ModulesControllerTest extends BaseControllerTest
     }
 
     /**
+     * Test `save` method, when related data is provided
+     *
+     * @return void
+     * @covers ::save()
+     */
+    public function testSaveRelated(): void
+    {
+        // Setup controller for test
+        $this->setupController();
+
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'id' => 123456789,
+                '_api' => [['method' => 'addRelated', 'type' => 'dummies', 'relatedIds' => [['id' => 1, 'type' => 'dummies'], ['id' => 2, 'type' => 'dummies']]]],
+            ],
+            'params' => [
+                'object_type' => 'folders',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new class ($request) extends ModulesControllerSample
+        {
+        };
+
+        $registry = $this->controller->components();
+        $component = new class ($registry) extends ModulesComponent
+        {
+            public bool $saveRelated = false;
+            public function saveRelated(string $id, string $type, array $relatedData): void
+            {
+                $this->saveRelated = true;
+            }
+        };
+        $this->controller->Modules = $component;
+
+        // mock api client save... and check it's not called
+        $apiClient = new class ('https://api.example.com') extends BEditaClient
+        {
+            protected bool $load = false;
+            protected bool $save = false;
+
+            public function getLoad(): bool
+            {
+                return $this->load;
+            }
+
+            public function getSave(): bool
+            {
+                return $this->save;
+            }
+
+            public function getObject(string|int $id, string $type = 'objects', ?array $query = null, ?array $headers = null): ?array
+            {
+                $this->load = true;
+
+                return ['data' => ['id' => 123456789]];
+            }
+
+            public function save(string $type, array $data, ?array $headers = null): ?array
+            {
+                $this->save = true;
+
+                return [];
+            }
+        };
+        $this->controller->setApiClient($apiClient);
+
+        // do controller call
+        $this->controller->save();
+
+        static::assertTrue($this->controller->Modules->saveRelated, 'Component save related should be called');
+        static::assertFalse($apiClient->getSave(), 'ApiClient save method should not be called when no post data is provided');
+        static::assertTrue($apiClient->getLoad(), 'ApiClient load method should be called to load object');
+    }
+
+    /**
      * Test `save` method, skip save when no post 'permissions' data is provided
      *
      * @return void
