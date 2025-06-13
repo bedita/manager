@@ -951,7 +951,7 @@ msgid "Trashd"
 msgstr "Cancellato"
 
 msgid "Tree compact"
-msgstr "Vista compatta ad albero"
+msgstr "Albero compatto"
 
 msgid "Tree view"
 msgstr "Vista ad albero"
