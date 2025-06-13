@@ -13,7 +13,9 @@
 namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
+use App\Utility\DateRangesTools;
 use App\Utility\OEmbed;
+use App\Utility\RelationsTools;
 use App\Utility\SchemaTrait;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
@@ -452,19 +454,69 @@ class ModulesComponent extends Component
      *
      * @param string $id The object ID
      * @param array $requestData The request data
-     * @param array $relatedData The related data
      * @return bool True if save can be skipped, false otherwise
      */
-    public function skipSaveObject(string $id, array $requestData, array $relatedData): bool
+    public function skipSaveObject(string $id, array &$requestData): bool
     {
-        if (empty($id) || !empty($relatedData)) {
+        if (empty($id)) {
             return false;
         }
+        if (isset($requestData['date_ranges'])) {
+            // check if date_ranges has changed
+            $type = $this->getController()->getRequest()->getParam('object_type');
+            $response = ApiClientProvider::getApiClient()->getObject($id, $type, ['fields' => 'date_ranges']);
+            $actualDateRanges = (array)Hash::get($response, 'data.attributes.date_ranges');
+            $dr1 = DateRangesTools::toString($actualDateRanges);
+            $requestDateRanges = (array)Hash::get($requestData, 'date_ranges');
+            $dr2 = DateRangesTools::toString($requestDateRanges);
+            if ($dr1 === $dr2) {
+                unset($requestData['date_ranges']);
+            } else {
+                return false;
+            }
+        }
         $data = array_filter($requestData, function ($key) {
-            return !in_array($key, ['id', 'permissions']);
+            return !in_array($key, ['id', 'date_ranges', 'permissions']);
         }, ARRAY_FILTER_USE_KEY);
 
         return empty($data);
+    }
+
+    /**
+     * Check if save related can be skipped.
+     * This is used to avoid saving object relations with no changes.
+     *
+     * @param string $id The object ID
+     * @param array $relatedData The related data
+     * @return bool True if save related can be skipped, false otherwise
+     */
+    public function skipSaveRelated(string $id, array &$relatedData): bool
+    {
+        if (empty($relatedData)) {
+            return true;
+        }
+        $methods = (array)Hash::extract($relatedData, '{n}.method');
+        if (in_array('addRelated', $methods) || in_array('removeRelated', $methods)) {
+            return false;
+        }
+        // check replaceRelated
+        $type = $this->getController()->getRequest()->getParam('object_type');
+        $rr = $relatedData;
+        foreach ($rr as $method => $data) {
+            $actualRelated = (array)ApiClientProvider::getApiClient()->getRelated($id, $type, $data['relation']);
+            $actualRelated = (array)Hash::get($actualRelated, 'data');
+            $actualRelated = RelationsTools::toString($actualRelated);
+            $requestRelated = (array)Hash::get($data, 'relatedIds', []);
+            $requestRelated = RelationsTools::toString($requestRelated);
+            if ($actualRelated === $requestRelated) {
+                unset($relatedData[$method]);
+                continue;
+            }
+
+            return false;
+        }
+
+        return empty($relatedData);
     }
 
     /**

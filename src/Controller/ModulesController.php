@@ -302,9 +302,10 @@ class ModulesController extends AppController
             // skip save if no data changed
             $schema = (array)$this->Schema->getSchema($this->objectType);
             $permissions = (array)Hash::get($requestData, 'permissions');
-            $skipSaveObject = $this->Modules->skipSaveObject($id, $requestData, $relatedData);
+            $skipSaveObject = $this->Modules->skipSaveObject($id, $requestData);
+            $skipSaveRelated = $this->Modules->skipSaveRelated($id, $relatedData);
             $skipSavePermissions = $this->Modules->skipSavePermissions($id, $permissions, $schema);
-            if ($skipSaveObject && $skipSavePermissions) {
+            if ($skipSaveObject && $skipSaveRelated && $skipSavePermissions) {
                 $response = $this->apiClient->getObject($id, $this->objectType, ['count' => 'all']);
                 $this->Thumbs->urls($response);
                 $this->set((array)$response);
@@ -332,7 +333,9 @@ class ModulesController extends AppController
                 );
             }
             $id = (string)Hash::get($response, 'data.id');
-            $this->Modules->saveRelated($id, $this->objectType, $relatedData);
+            if (!$skipSaveRelated) {
+                $this->Modules->saveRelated($id, $this->objectType, $relatedData);
+            }
             $options = [
                 'id' => Hash::get($response, 'data.id'),
                 'type' => $this->objectType,

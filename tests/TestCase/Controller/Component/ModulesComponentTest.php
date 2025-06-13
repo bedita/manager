@@ -1723,21 +1723,169 @@ class ModulesComponentTest extends TestCase
      */
     public function testSkipSaveObject(): void
     {
-        // empty id and empty related data
-        $actual = $this->Modules->skipSaveObject('', [], []);
+        // empty id
+        $requestData = [];
+        $actual = $this->Modules->skipSaveObject('', $requestData);
         static::assertFalse($actual);
 
-        // not empty id and not empty related data
-        $actual = $this->Modules->skipSaveObject('123', [], ['some' => 'thing']);
-        static::assertFalse($actual);
-
-        // not empty id and empty related data, not empty request data
-        $actual = $this->Modules->skipSaveObject('123', ['id' => '123', 'title' => 'test', 'permissions' => []], []);
-        static::assertFalse($actual);
-
-        // not empty id and empty related data, empty request data
-        $actual = $this->Modules->skipSaveObject('123', ['id' => '123', 'permissions' => []], []);
+        // not empty id, empty request data
+        $requestData = [];
+        $actual = $this->Modules->skipSaveObject('123', $requestData);
         static::assertTrue($actual);
+
+        // not empty id, not empty request data
+        $requestData = ['id' => '123', 'title' => 'test', 'permissions' => []];
+        $actual = $this->Modules->skipSaveObject('123', $requestData);
+        static::assertFalse($actual);
+
+        // not empty id, empty request data
+        $requestData = ['id' => '123', 'permissions' => []];
+        $actual = $this->Modules->skipSaveObject('123', $requestData);
+        static::assertTrue($actual);
+
+        // not empty id, date ranges unchanged
+        $request = $this->Modules->getController()->getRequest()->withParam('object_type', 'events');
+        $this->Modules->getController()->setRequest($request);
+        // mock apiClient getObject
+        $apiClient = new class ('https://api.example.com') extends BEditaClient {
+            public function getObject(string|int $id, string $type = 'objects', ?array $query = null, ?array $headers = null): ?array
+            {
+                return [
+                    'data' => [
+                        'id' => '123',
+                        'type' => 'events',
+                        'attributes' => [
+                            'date_ranges' => [],
+                        ],
+                    ],
+                ];
+            }
+        };
+        $safeClient = ApiClientProvider::getApiClient();
+        ApiClientProvider::setApiClient($apiClient);
+        $requestData = ['id' => '123', 'date_ranges' => []];
+        $actual = $this->Modules->skipSaveObject('123', $requestData);
+        static::assertTrue($actual);
+
+        // not empty id, date ranges changed
+        $request = $this->Modules->getController()->getRequest()->withParam('object_type', 'events');
+        $this->Modules->getController()->setRequest($request);
+        // mock apiClient getObject
+        $apiClient = new class ('https://api.example.com') extends BEditaClient {
+            public function getObject(string|int $id, string $type = 'objects', ?array $query = null, ?array $headers = null): ?array
+            {
+                return [
+                    'data' => [
+                        'id' => '123',
+                        'type' => 'events',
+                        'attributes' => [
+                            'date_ranges' => [
+                                [
+                                    'start' => '2023-01-01',
+                                    'end' => '2023-01-31',
+                                ],
+                            ],
+                        ],
+                    ],
+                ];
+            }
+        };
+        ApiClientProvider::setApiClient($apiClient);
+        $requestData = [
+            'id' => '123',
+            'date_ranges' => [
+                [
+                    'start' => '2023-01-01',
+                    'end' => '2023-01-31',
+                ],
+                [
+                    'start' => '2023-02-01',
+                    'end' => '2023-02-28',
+                ],
+            ],
+        ];
+        $actual = $this->Modules->skipSaveObject('123', $requestData);
+        static::assertFalse($actual);
+
+        ApiClientProvider::setApiClient($safeClient);
+    }
+
+    /**
+     * Test `skipSaveRelated` method
+     *
+     * @return void
+     * @covers ::skipSaveRelated()
+     */
+    public function testSkipSaveRelated(): void
+    {
+        $request = $this->Modules->getController()->getRequest()->withParam('object_type', 'dummies');
+        $this->Modules->getController()->setRequest($request);
+
+        // empty related data => true
+        $relatedData = [];
+        $actual = $this->Modules->skipSaveRelated('123', $relatedData);
+        static::assertTrue($actual);
+
+        // addRelated or removeRelated => false
+        $relatedData = [
+            [
+                'method' => 'addRelated',
+                'relation' => 'see_also',
+                'relatedIds' => [['id' => '456', 'type' => 'dummies']],
+            ],
+        ];
+        $actual = $this->Modules->skipSaveRelated('123', $relatedData);
+        static::assertFalse($actual);
+        $relatedData = [
+            [
+                'method' => 'removeRelated',
+                'relation' => 'see_also',
+                'relatedIds' => [['id' => '456', 'type' => 'dummies']],
+            ],
+        ];
+        $actual = $this->Modules->skipSaveRelated('123', $relatedData);
+        static::assertFalse($actual);
+
+        // replaceRelated with a change => false
+        $relatedData = [
+            [
+                'method' => 'replaceRelated',
+                'relation' => 'see_also',
+                'relatedIds' => [['id' => '1001', 'type' => 'dummies', 'meta' => ['relation' => ['priority' => 1]]]],
+            ],
+        ];
+        // mock apiClient getRelated
+        $apiClient = new class ('https://api.example.com') extends BEditaClient {
+            public function getRelated(string|int $id, string $type, string $relation, ?array $query = null, ?array $headers = null): ?array
+            {
+                return [
+                    'data' => [
+                        ['id' => '1001', 'type' => 'dummies', 'meta' => ['relation' => ['priority' => 1]]],
+                        ['id' => '1002', 'type' => 'dummies', 'meta' => ['relation' => ['priority' => 2]]],
+                    ],
+                ];
+            }
+        };
+        $safeClient = ApiClientProvider::getApiClient();
+        ApiClientProvider::setApiClient($apiClient);
+        $actual = $this->Modules->skipSaveRelated('123', $relatedData);
+        static::assertFalse($actual);
+
+        // replaceRelated without a change => true
+        $relatedData = [
+            [
+                'method' => 'replaceRelated',
+                'relation' => 'see_also',
+                'relatedIds' => [
+                    ['id' => '1001', 'type' => 'dummies', 'meta' => ['relation' => ['priority' => 1]]],
+                    ['id' => '1002', 'type' => 'dummies', 'meta' => ['relation' => ['priority' => 2]]],
+                ],
+            ],
+        ];
+        $actual = $this->Modules->skipSaveRelated('123', $relatedData);
+        static::assertTrue($actual);
+
+        ApiClientProvider::setApiClient($safeClient);
     }
 
     /**
