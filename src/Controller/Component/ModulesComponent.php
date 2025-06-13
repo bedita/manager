@@ -537,7 +537,7 @@ class ModulesComponent extends Component
             function ($role) {
                 return (int)$role;
             },
-            $requestPermissions
+            $requestPermissions,
         );
         sort($requestPermissions);
         $query = ['filter' => ['object_id' => $id], 'page_size' => 100];

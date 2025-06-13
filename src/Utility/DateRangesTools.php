@@ -161,7 +161,7 @@ class DateRangesTools
                 '%s-%s-%s',
                 $startDate,
                 $endDate,
-                $params
+                $params,
             );
         }
 

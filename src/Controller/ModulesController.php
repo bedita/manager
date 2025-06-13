@@ -330,7 +330,7 @@ class ModulesController extends AppController
                 $this->savePermissions(
                     (array)$response,
                     $schema,
-                    $permissions
+                    $permissions,
                 );
             }
             $id = (string)Hash::get($response, 'data.id');
