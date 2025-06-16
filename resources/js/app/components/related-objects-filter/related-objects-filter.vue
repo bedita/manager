@@ -85,6 +85,8 @@ export default {
                     acc[key] = this.initialFilter[key];
                     return acc;
                 }, {});
+            } else {
+                this.openPanel = true;
             }
         });
     },
