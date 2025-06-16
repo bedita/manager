@@ -81,7 +81,7 @@ export default {
              * When disabled, only direct children are fetched.
              * This will switch the API filter between `parent` and `ancestor`.
              */
-            editFilterRelations: false,
+            editFilterRelations: this.filterActive,
             filterByDescendants: false,
             filterRelations: {},
             folder: null,

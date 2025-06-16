@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-06-03 07:31:05 \n"
+"POT-Creation-Date: 2025-06-16 08:08:55 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1592,6 +1592,21 @@ msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
 msgid "Error while creating new object."
+msgstr ""
+
+msgid "Edit related objects"
+msgstr ""
+
+msgid "Choose object type"
+msgstr ""
+
+msgid "Choose relation"
+msgstr ""
+
+msgid "Filter to apply"
+msgstr ""
+
+msgid "Search related objects"
 msgstr ""
 
 msgid "Action"
