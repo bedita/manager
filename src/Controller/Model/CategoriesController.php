@@ -26,16 +26,16 @@ class CategoriesController extends ModelBaseController
     /**
      * Resource type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected $resourceType = 'categories';
+    protected ?string $resourceType = 'categories';
 
     /**
      * Single resource view exists
      *
      * @var bool
      */
-    protected $singleView = false;
+    protected bool $singleView = false;
 
     /**
      * @inheritDoc

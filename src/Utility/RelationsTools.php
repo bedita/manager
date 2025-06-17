@@ -40,7 +40,7 @@ class RelationsTools
                 '%s-%s-%s',
                 $id,
                 $type,
-                $meta
+                $meta,
             );
         }
 

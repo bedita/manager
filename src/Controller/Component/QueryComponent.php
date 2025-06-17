@@ -66,20 +66,20 @@ class QueryComponent extends Component
             (array)Configure::read(
                 sprintf(
                     'Properties.%s.index',
-                    $this->getController()->getRequest()->getParam('object_type')
-                )
+                    $this->getController()->getRequest()->getParam('object_type'),
+                ),
             ),
             function ($value) {
                 return is_array($value);
-            }
+            },
         );
         $decoded = empty($include) ? $include : array_keys(reset($include));
         if ($this->getConfig('include') != null) {
             $decoded = array_unique(
                 array_merge(
                     $decoded,
-                    explode(',', (string)$this->getConfig('include'))
-                )
+                    explode(',', (string)$this->getConfig('include')),
+                ),
             );
         }
         if (!empty($decoded)) {
