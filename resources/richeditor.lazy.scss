@@ -89,3 +89,13 @@ div[data-placeholder] {
         height: auto;
     }
 }
+
+details {
+    border: 1px solid $gray-700;
+    border-radius: 2px;
+    padding: 0 4px;
+}
+
+summary {
+    border-bottom: 1px solid $gray-700;
+}
