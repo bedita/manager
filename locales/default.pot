@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-04-01 12:09:55 \n"
+"POT-Creation-Date: 2025-06-05 09:34:36 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -38,6 +38,9 @@ msgid "Advanced"
 msgstr ""
 
 msgid "Advanced Data"
+msgstr ""
+
+msgid "Age"
 msgstr ""
 
 msgid "Alert Message"
@@ -169,6 +172,9 @@ msgstr ""
 msgid "Confirm new password"
 msgstr ""
 
+msgid "Confirm-password"
+msgstr ""
+
 msgid "Conflict"
 msgstr ""
 
@@ -200,6 +206,9 @@ msgid "Created ↑ Oldest on top"
 msgstr ""
 
 msgid "Created ↓ Newest on top"
+msgstr ""
+
+msgid "Creation date"
 msgstr ""
 
 msgid "Current password"
@@ -436,6 +445,12 @@ msgstr ""
 msgid "Language and translations"
 msgstr ""
 
+msgid "Last login"
+msgstr ""
+
+msgid "Last login error"
+msgstr ""
+
 msgid "Left types"
 msgstr ""
 
@@ -457,6 +472,9 @@ msgstr ""
 msgid "Lock"
 msgstr ""
 
+msgid "Locked"
+msgstr ""
+
 msgid "Locked_until"
 msgstr ""
 
@@ -464,6 +482,9 @@ msgid "Log out"
 msgstr ""
 
 msgid "Login"
+msgstr ""
+
+msgid "Login informations"
 msgstr ""
 
 msgid "Login required"
@@ -570,6 +591,9 @@ msgstr ""
 msgid "Number of created objects"
 msgstr ""
 
+msgid "Number of login errors"
+msgstr ""
+
 msgid "Number of updated objects"
 msgstr ""
 
@@ -603,6 +627,9 @@ msgstr ""
 msgid "Ok"
 msgstr ""
 
+msgid "Old Password"
+msgstr ""
+
 msgid "On"
 msgstr ""
 
@@ -633,7 +660,13 @@ msgstr ""
 msgid "Parent"
 msgstr ""
 
+msgid "Password"
+msgstr ""
+
 msgid "Password Modified"
+msgstr ""
+
+msgid "Password informations"
 msgstr ""
 
 msgid "Password reset"
@@ -798,6 +831,9 @@ msgstr ""
 msgid "Select a project"
 msgstr ""
 
+msgid "Setup module"
+msgstr ""
+
 msgid "Show active positions"
 msgstr ""
 
@@ -951,6 +987,9 @@ msgstr ""
 msgid "Vat Number"
 msgstr ""
 
+msgid "Verified"
+msgstr ""
+
 msgid "Version"
 msgstr ""
 
@@ -970,6 +1009,9 @@ msgid "Write"
 msgstr ""
 
 msgid "Yes"
+msgstr ""
+
+msgid "You are not authorized to access here"
 msgstr ""
 
 msgid "You are not authorized to access that location."
@@ -1014,6 +1056,9 @@ msgstr ""
 msgid "bearing"
 msgstr ""
 
+msgid "by"
+msgstr ""
+
 msgid "cancel"
 msgstr ""
 
@@ -1036,6 +1081,9 @@ msgid "created"
 msgstr ""
 
 msgid "current password"
+msgstr ""
+
+msgid "day(s)"
 msgstr ""
 
 msgid "description"
@@ -1202,6 +1250,15 @@ msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
 msgid "Add placeholder"
+msgstr ""
+
+msgid "Remove accordion"
+msgstr ""
+
+msgid "Accordion title"
+msgstr ""
+
+msgid "Accordion content"
 msgstr ""
 
 #, javascript-format
@@ -1506,7 +1563,7 @@ msgstr ""
 msgid "Descending"
 msgstr ""
 
-msgid "Sort by"
+msgid "Reorder by"
 msgstr ""
 
 msgid "Related items order will be changed."
@@ -1568,6 +1625,9 @@ msgid "(deleted)"
 msgstr ""
 
 msgid "placeholders"
+msgstr ""
+
+msgid "Roles that cannot modify permissions"
 msgstr ""
 
 msgid "You can modify the permissions"
@@ -1658,6 +1718,9 @@ msgstr ""
 msgid "Valid"
 msgstr ""
 
+msgid "Module"
+msgstr ""
+
 msgid ""
 "Sorry, your browser does not support embedded <code>audio</code> element"
 msgstr ""
@@ -1679,9 +1742,6 @@ msgid ""
 msgstr ""
 
 msgid "View original"
-msgstr ""
-
-msgid "Password"
 msgstr ""
 
 msgid "Address"
@@ -1830,4 +1890,10 @@ msgid "Error while saving category"
 msgstr ""
 
 msgid "Error on deleting category"
+msgstr ""
+
+msgid "Allowed types"
+msgstr ""
+
+msgid "Not found"
 msgstr ""

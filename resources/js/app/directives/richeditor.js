@@ -11,6 +11,7 @@ import 'tinymce/plugins/table';
 import 'tinymce/plugins/hr';
 import 'tinymce/plugins/visualblocks';
 import '../plugins/tinymce/placeholders.js';
+import '../plugins/tinymce/accordion/plugin.js';
 import { tinymcePlugin } from '@chialab/typos';
 
 tinymcePlugin(tinymce);
@@ -30,6 +31,7 @@ const DEFAULT_TOOLBAR = [
     'numlist',
     '|',
     'placeholders',
+    'accordion',
     'link',
     'blockquote',
     'charmap',
@@ -135,7 +137,7 @@ export default {
                     content_css: contentCSS,
                     menubar: false,
                     branding: true,
-                    ... sizes,
+                    ...sizes,
                     toolbar,
                     toolbar_mode: 'wrap',
                     block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3',
@@ -150,9 +152,11 @@ export default {
                         'hr',
                         'code',
                         'placeholders',
+                        'accordion',
                         'typos',
                         'visualblocks',
                     ].join(' '),
+                    extended_valid_elements: 'details,summary',
                     resize: true,
                     convert_urls: false,
                     relative_urls: false,

@@ -55,6 +55,7 @@
 //  __('completed');
 //  __('uname');
 //  __('Subtitle');
+//  __('Locked');
 
 // Admin
 // __('Auth Providers');
@@ -95,6 +96,9 @@
 //  __('Zipcode');
 //  __('Country');
 //  __('State Name');
+//  __('Old Password');
+//  __('Password');
+//  __('Confirm-password');
 
 // Users
 //  __('username');

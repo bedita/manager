@@ -10,9 +10,12 @@
         {% set objectPerms = object.meta.perms|default({})|json_encode %}
         {% if objectPerms == '[]' %}{% set objectPerms = '{}' %}{% endif %}
 
+        {% set readonlyRoles = config('Permissions.readonly')|default([]) %}
+
         <div v-show="isOpen" class="tab-container">
             <permissions
                 :object-perms="{{ objectPerms }}"
+                :readonly-roles="{{ readonlyRoles|json_encode }}"
                 :user-roles="{{ user.roles|default([])|json_encode }}">
             </permissions>
         </div>

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-04-01 12:09:55 \n"
+"POT-Creation-Date: 2025-06-05 09:34:36 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -44,6 +44,9 @@ msgstr "Avanzate"
 
 msgid "Advanced Data"
 msgstr "Dati Avanzati"
+
+msgid "Age"
+msgstr "Età"
 
 msgid "Alert Message"
 msgstr "Messaggio di Attenzione"
@@ -174,6 +177,9 @@ msgstr "Configurazioni"
 msgid "Confirm new password"
 msgstr "Conferma nuova password"
 
+msgid "Confirm-password"
+msgstr "Conferma password"
+
 msgid "Conflict"
 msgstr "Conflitto"
 
@@ -206,6 +212,9 @@ msgstr "Creazione ↑ Meno recenti in testa"
 
 msgid "Created ↓ Newest on top"
 msgstr "Creazione ↓ Più recenti in testa"
+
+msgid "Creation date"
+msgstr "Data di creazione"
 
 msgid "Current password"
 msgstr "Password corrente"
@@ -442,6 +451,12 @@ msgstr "Lingua"
 msgid "Language and translations"
 msgstr "Lingua e traduzioni"
 
+msgid "Last login"
+msgstr "Ultimo accesso"
+
+msgid "Last login error"
+msgstr "Ultimo errore di accesso"
+
 msgid "Left types"
 msgstr "Tipi di sinistra"
 
@@ -463,6 +478,9 @@ msgstr "Posizioni"
 msgid "Lock"
 msgstr "Blocca"
 
+msgid "Locked"
+msgstr "Bloccato"
+
 msgid "Locked_until"
 msgstr "Termine blocco"
 
@@ -471,6 +489,9 @@ msgstr "Esci"
 
 msgid "Login"
 msgstr "Accedi"
+
+msgid "Login informations"
+msgstr "Informazioni di accesso"
 
 msgid "Login required"
 msgstr "È richiesto il login"
@@ -578,6 +599,9 @@ msgstr "Non trovato"
 msgid "Number of created objects"
 msgstr "Numero di oggetti creati"
 
+msgid "Number of login errors"
+msgstr "Numero di errori di accesso"
+
 msgid "Number of updated objects"
 msgstr "Numero di oggetti aggiornati"
 
@@ -609,7 +633,10 @@ msgid "Off"
 msgstr ""
 
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
+
+msgid "Old Password"
+msgstr "Vecchia Password"
 
 msgid "On"
 msgstr ""
@@ -641,8 +668,14 @@ msgstr "Paginazione"
 msgid "Parent"
 msgstr "Genitore"
 
+msgid "Password"
+msgstr "Password"
+
 msgid "Password Modified"
 msgstr "Password modificata il"
+
+msgid "Password informations"
+msgstr "Informazioni password"
 
 msgid "Password reset"
 msgstr "Reimposta password"
@@ -808,6 +841,9 @@ msgstr "Cerca"
 msgid "Select a project"
 msgstr "Seleziona un progetto"
 
+msgid "Setup module"
+msgstr "Configura modulo"
+
 msgid "Show active positions"
 msgstr "Mostra posizioni attive"
 
@@ -962,6 +998,9 @@ msgstr "Utenti"
 msgid "Vat Number"
 msgstr "Partita Iva"
 
+msgid "Verified"
+msgstr "Verificato"
+
 msgid "Version"
 msgstr "Versione"
 
@@ -982,6 +1021,9 @@ msgstr "Scrittura"
 
 msgid "Yes"
 msgstr "Sì"
+
+msgid "You are not authorized to access here"
+msgstr "Non sei autorizzato ad accedere qui."
 
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
@@ -1025,6 +1067,9 @@ msgstr ""
 msgid "bearing"
 msgstr ""
 
+msgid "by"
+msgstr "da"
+
 msgid "cancel"
 msgstr "annulla"
 
@@ -1048,6 +1093,9 @@ msgstr "creato"
 
 msgid "current password"
 msgstr "password corrente"
+
+msgid "day(s)"
+msgstr "giorno/i"
 
 msgid "description"
 msgstr "descrizione"
@@ -1215,6 +1263,15 @@ msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
 msgid "Add placeholder"
 msgstr "Aggiungi placeholder"
+
+msgid "Remove accordion"
+msgstr "Cancella accordion"
+
+msgid "Accordion title"
+msgstr "Titolo accordion"
+
+msgid "Accordion content"
+msgstr "Contenuto accordion"
 
 #, javascript-format
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
@@ -1528,8 +1585,8 @@ msgstr "Ascendente"
 msgid "Descending"
 msgstr "Discendente"
 
-msgid "Sort by"
-msgstr "Ordina per"
+msgid "Reorder by"
+msgstr "Riordina per"
 
 msgid "Related items order will be changed."
 msgstr "L'ordine degli elementi correlati verrà modificato."
@@ -1591,6 +1648,9 @@ msgstr "(eliminato)"
 
 msgid "placeholders"
 msgstr "segnaposto"
+
+msgid "Roles that cannot modify permissions"
+msgstr "Ruoli che non possono modificare i permessi"
 
 msgid "You can modify the permissions"
 msgstr "Puoi modificare i permessi"
@@ -1680,6 +1740,9 @@ msgstr "Parametri"
 msgid "Valid"
 msgstr "Valido"
 
+msgid "Module"
+msgstr ""
+
 msgid ""
 "Sorry, your browser does not support embedded <code>audio</code> element"
 msgstr ""
@@ -1706,9 +1769,6 @@ msgstr ""
 
 msgid "View original"
 msgstr "Vedi originale"
-
-msgid "Password"
-msgstr "Password"
 
 msgid "Address"
 msgstr "Indirizzo"
@@ -1859,3 +1919,9 @@ msgstr "Errore durante il salvataggio della categoria"
 
 msgid "Error on deleting category"
 msgstr "Errore durante l'eliminazione della categoria"
+
+msgid "Allowed types"
+msgstr "Tipi consentiti"
+
+msgid "Not found"
+msgstr "Non trovato"

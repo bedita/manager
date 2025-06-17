@@ -1,6 +1,7 @@
 {% do _view.assign('bodyViewClass', 'userprofiles-view') %}
 {% do _view.assign('title', 'User Profile') %}
 
+<modules-view inline-template ref="moduleView" :user-roles="{{ user.roles|json_encode }}"  :object="{{ object|json_encode }}">
 <div class="modules-view">
 
     <div class="module-form">
@@ -16,60 +17,155 @@
                 {% set jsonKeys = [] %}
                 {% for group, attributes in properties %}
                     {% if group != 'other' and group != 'password_change' and attributes %}
-                        <section class="fieldset">
-                            <header>
-                                {% if group|trim  %}
-                                    <h2>{{ __(group|humanize) }}</h2>
-                                {% else %}
-                                    <h2>{{ __('General') }}</h2>
-                                {% endif %}
-                            </header>
-                            <div class="tab-container">
-                                {% for key, value in attributes %}
-                                    {% set options = {} %}
-                                    {% if key == 'email' or key == 'username' %}
-                                        {% set options = options|merge({'readonly': 'true'}) %}
+                        <property-view inline-template :tab-open="tabsOpen" tab-name="{{ __(group|default('general')) }}">
+                            <section class="fieldset">
+                                <header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                                    {% if group|trim  %}
+                                        <h2>{{ __(group|humanize) }}</h2>
+                                    {% else %}
+                                        <h2>{{ __('General') }}</h2>
                                     {% endif %}
-                                    {% if key != 'title' %}
-                                        {{ Property.control(key, value, options)|raw }}
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </section>
+                                </header>
+                                <div v-show="isOpen" class="tab-container">
+                                    {% for key, value in attributes %}
+                                        {% set options = {} %}
+                                        {% if key == 'email' or key == 'username' %}
+                                            {% set options = options|merge({'readonly': 'true'}) %}
+                                        {% endif %}
+                                        {% if key != 'title' %}
+                                            {{ Property.control(key, value, options)|raw }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </section>
+                        </property-view>
                     {% endif %}
                 {% endfor %}
-                <section class="fieldset">
-                    <header>
-                        <h2>{{ __('Roles') }}</h2>
-                    </header>
-                    <div class="tab-container">
-                        <div>
-                            {% for role in user.roles %}
-                            <span class="tag is-black mx-05">
-                                {{ role }}
-                            </span>
-                            {% endfor %}
+                <property-view inline-template :tab-open="tabsOpen" tab-name="roles">
+                    <section class="fieldset">
+                        <header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                            <h2>{{ __('Roles') }}</h2>
+                        </header>
+                        <div v-show="isOpen" class="tab-container">
+                            <div>
+                                {% for role in user.roles %}
+                                <span class="tag is-black mx-05">
+                                    {{ role }}
+                                </span>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </property-view>
             </div>
 
             <div class="side-view-column">
                 {% for group, attributes in properties %}
                     {% if group == 'password_change' and attributes %}
-                        <section class="fieldset">
-                            <header>
-                                <h2>{{ __('Change password') }}</h2>
-                            </header>
+                        <property-view inline-template :tab-open="tabsOpen" tab-name="login-info">
+                            <section class="fieldset">
+                                <header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                                    <h2>{{ __('Login informations') }}</h2>
+                                </header>
+                                <div v-show="isOpen" class="tab-container">
+                                    <div class="input text">
+                                        <label>{{ __('Last login') }}</label>
+                                        <span>{{ Schema.formatDateTime(object.meta.last_login)|default('-') }}</span>
+                                    </div>
+                                    <div class="input text">
+                                        <label>{{ __('Last login error') }}</label>
+                                        <span>{{ Schema.formatDateTime(object.meta.last_login_err)|default('-') }}</span>
+                                    </div>
+                                    <div class="input text">
+                                        <label>{{ __('Number of login errors') }}</label>
+                                        <span>{{ object.meta.num_login_err }}</span>
+                                    </div>
+                                </div>
+                            </section>
+                        </property-view>
 
-                            <div class="tab-container">
-                                {% for key, value in attributes %}
-                                    {{ Property.control(key, value)|raw }}
-                                {% endfor %}
-                            </div>
-                        </section>
+
+                        {% if object.meta.external_auth|length > 0 %}
+                            <property-view inline-template :tab-open="tabsOpen" tab-name="external-auth">
+                                <section class="fieldset">
+                                    <header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                                        <h2>{{ __('External Auth') }}</h2>
+                                    </header>
+                                    <div v-show="isOpen" class="tab-container">
+                                        {% for auth in object.meta.external_auth %}
+                                            <div class="input text">
+                                                <label>{{ __('Username') }} {{ auth.provider }}</label>
+                                                <span>{{ auth.username }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </section>
+                            </property-view>
+                        {% endif %}
+                        {% if object.meta.password_modified %}
+                            <property-view inline-template :tab-open="tabsOpen" tab-name="password-info">
+                                <section class="fieldset">
+                                    <header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                                        <h2>{{ __('Password informations') }}</h2>
+                                    </header>
+                                    <div v-show="isOpen" class="tab-container">
+                                        <div class="input text">
+                                            <label>{{ __('Age') }}</label>
+                                            <span>{{ Dates.daysAgo(object.meta.password_modified) }} {{ __('day(s)') }}</span>
+                                        </div>
+                                        <div class="input text">
+                                            <label>{{ __('Modified') }}</label>
+                                            <span>{{ Schema.formatDateTime(object.meta.password_modified) }}</span>
+                                        </div>
+                                        <div class="input text">
+                                            <label>{{ __('Verified') }}</label>
+                                            <span>{{ Schema.formatDateTime(object.meta.verified) }}</span>
+                                        </div>
+                                    </div>
+                                </section>
+                            </property-view>
+                            <property-view inline-template :tab-open="tabsOpen" tab-name="password-info">
+                                <section class="fieldset">
+                                    <header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                                        <h2>{{ __('Change password') }}</h2>
+                                    </header>
+                                    <div v-show="isOpen" class="tab-container">
+                                        {% for key, value in attributes %}
+                                            {{ Property.control(key, value)|raw }}
+                                        {% endfor %}
+                                    </div>
+                                </section>
+                            </property-view>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
+                <property-view inline-template :tab-open="tabsOpen" tab-name="meta" :object="object">
+                    <section class="fieldset">
+                        <header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+                            <h2>{{ __('Metadata') }}</h2>
+                        </header>
+                        <div v-show="isOpen" class="tab-container">
+                            <div class="input text">
+                                <label>{{ __('Created') }}</label>
+                                <span>
+                                    {{ Schema.formatDateTime(object.meta.created) }}
+                                </span>
+                                {{ __('by') }}
+                                <span name="created_by">{{ Schema.format(object.meta.created_by, schema.properties.created_by) }}</span>
+                            </div>
+                            <div class="input text">
+                                <label>{{ __('Modified') }}</label>
+                                <span>{{ Schema.formatDateTime(object.meta.modified) }}</span>
+                                {{ __('by') }}
+                                <span name="modified_by">{{ Schema.format(object.meta.modified_by, schema.properties.modified_by) }}</span>
+                            </div>
+                            <div class="input text">
+                                <label>{{ __('Locked') }}</label>
+                                <span>{{ object.meta.locked == 1 ? __('Yes') : __('No') }}</span>
+                            </div>
+                        </div>
+                    </section>
+                </property-view>
             </div>
 
             {% if jsonKeys %}
@@ -86,3 +182,4 @@
     </div>
 
 </div>
+</modules-view>

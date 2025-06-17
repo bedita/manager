@@ -31,7 +31,7 @@
                     <a href="{{ Url.build({'_name': 'modules:list', 'object_type': 'users'}) }}" title="{{ __('System users') }}" class="dashboard-item has-background-black">
                         <span>{{ __('System users') }}</span>
                         {% if Layout.showCounter('users') %}{{ Layout.moduleCount('users', 'has-background-black')|raw }}{% endif %}
-                        <app-icon icon="carbon:user-admin" :style="{ width: '28px', height: '28px' }"></app-icon>
+                        <app-icon icon="carbon:events-alt" :style="{ width: '28px', height: '28px' }"></app-icon>
                     </a>
                 {% endif %}
 
