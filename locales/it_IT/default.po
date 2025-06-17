@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-06-04 12:20:05 \n"
+"POT-Creation-Date: 2025-06-05 09:34:36 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1263,6 +1263,15 @@ msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
 msgid "Add placeholder"
 msgstr "Aggiungi placeholder"
+
+msgid "Remove accordion"
+msgstr "Cancella accordion"
+
+msgid "Accordion title"
+msgstr "Titolo accordion"
+
+msgid "Accordion content"
+msgstr "Contenuto accordion"
 
 #, javascript-format
 msgid "Do you confirm the deletion of ${ number } item from the trash?"

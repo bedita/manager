@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-06-04 12:20:05 \n"
+"POT-Creation-Date: 2025-06-04 14:48:27 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1253,6 +1253,12 @@ msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
 msgid "Add placeholder"
+msgstr ""
+
+msgid "Accordion content"
+msgstr ""
+
+msgid "Accordion title"
 msgstr ""
 
 #, javascript-format
