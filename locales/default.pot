@@ -1267,6 +1267,15 @@ msgstr ""
 msgid "Add placeholder"
 msgstr ""
 
+msgid "Remove accordion"
+msgstr ""
+
+msgid "Accordion title"
+msgstr ""
+
+msgid "Accordion content"
+msgstr ""
+
 #, javascript-format
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr ""
