@@ -64,7 +64,12 @@
             {% if translation %}
                 <span class="tag is-dark"><: related.attributes.lang :></span>
             {% else %}
-                <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                <template v-if="dataList">
+                    <span class="tag ml-2" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                </template>
+                <template v-else>
+                    <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                </template>
 
                 <span class="icon-calendar-check-o" v-title="datesInfo(related)"></span>
             {% endif %}
