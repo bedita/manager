@@ -597,7 +597,7 @@ class LayoutHelperTest extends TestCase
             'uploadConfig' => $system->uploadConfig(),
             'relationsSchema' => ['whatever'],
             'richeditorConfig' => (array)Configure::read('Richeditor'),
-            'richeditorByPropertyConfig' => $layout->richeditorByPropertyConfig(),
+            'richeditorByPropertyConfig' => $layout->uiRicheditorConfig(),
             'indexLists' => (array)$layout->indexLists(),
         ];
         static::assertSame($expected, $conf);
