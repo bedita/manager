@@ -78,12 +78,13 @@ export default {
                             event.target.editor.setContent(cleanContent);
                         }
                     }
-                    // if field is title, cleanup html content
-                    if (element.name === 'title' && element.editor) {
-                        const content = element.editor.getContent();
-                        const cleanContent = content.replace(/<[^>]+>/g, '');
+                    if (BEDITA?.richeditorConfig?.fields_regex_map?.[element?.name]) {
+                        const { cleanup_regex_pattern, cleanup_regex_argument, cleanup_regex_replacement } = BEDITA.richeditorConfig.fields_regex_map[element.name];
+                        const regex = new RegExp(cleanup_regex_pattern, cleanup_regex_argument || 'gs');
+                        const content = event?.target?.editor?.getContent() || '';
+                        const cleanContent = content.replace(regex, cleanup_regex_replacement || '');
                         if (cleanContent !== content) {
-                            element.editor.setContent(cleanContent);
+                            event.target.editor.setContent(cleanContent);
                         }
                     }
                 });
@@ -220,7 +221,6 @@ export default {
                 }
 
                 if (element.value !== editor.getContent()) {
-                    console.log('update', element.value);
                     editor.setContent(element.value);
                 }
             },
