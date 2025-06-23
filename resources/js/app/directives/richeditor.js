@@ -78,6 +78,14 @@ export default {
                             event.target.editor.setContent(cleanContent);
                         }
                     }
+                    // if field is title, cleanup html content
+                    if (element.name === 'title' && element.editor) {
+                        const content = element.editor.getContent();
+                        const cleanContent = content.replace(/<[^>]+>/g, '');
+                        if (cleanContent !== content) {
+                            element.editor.setContent(cleanContent);
+                        }
+                    }
                 });
             },
 
@@ -212,6 +220,7 @@ export default {
                 }
 
                 if (element.value !== editor.getContent()) {
+                    console.log('update', element.value);
                     editor.setContent(element.value);
                 }
             },

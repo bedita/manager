@@ -375,9 +375,32 @@ class LayoutHelper extends Helper
             'uploadConfig' => $this->System->uploadConfig(),
             'relationsSchema' => $this->getView()->get('relationsSchema', []),
             'richeditorConfig' => (array)Configure::read('Richeditor'),
-            'richeditorByPropertyConfig' => (array)Configure::read('UI.richeditor', []),
+            'richeditorByPropertyConfig' => $this->uiRicheditorConfig(),
             'indexLists' => (array)$this->indexLists(),
         ];
+    }
+
+    /**
+     * Return configuration for UI rich editor.
+     * For admin users, add 'code' to the toolbar if not present.
+     *
+     * @return array
+     */
+    public function uiRicheditorConfig(): array
+    {
+        $cfg = (array)Configure::read('UI.richeditor', []);
+        if (!$this->Perms->userIsAdmin()) {
+            return $cfg;
+        }
+        foreach ($cfg as $key => $value) {
+            foreach ($value as $subKey => $subValue) {
+                if ($subKey === 'toolbar' && is_array($subValue) && !in_array('code', $subValue)) {
+                    $cfg[$key][$subKey][] = 'code';
+                }
+            }
+        }
+
+        return $cfg;
     }
 
     /**
