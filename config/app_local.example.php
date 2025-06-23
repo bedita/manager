@@ -611,7 +611,7 @@ return [
     //     'cleanup_regex_replace' => '', // replace with empty string
     //     'fields_regex_map' => [
     //         'title' => [ // cleanup title field from unwanted tags
-    //             'cleanup_regex_pattern' => '<(?!/?(i|sub|sup)\\b)[^>]+>',
+    //             'cleanup_regex_pattern' => '<(?!/?(em|sub|sup)\\b)[^>]+>',
     //             'cleanup_regex_argument' => 'gi',
     //             'cleanup_regex_replacement' => '',
     //         ],
