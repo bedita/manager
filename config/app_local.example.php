@@ -609,6 +609,13 @@ return [
     //     'cleanup_regex_pattern' => '\\sstyle="[^"]*"', // remove style attributes from tags
     //     'cleanup_regex_argument' => 'gs', // global and match new lines
     //     'cleanup_regex_replace' => '', // replace with empty string
+    //     'fields_regex_map' => [
+    //         'title' => [ // cleanup title field from unwanted tags
+    //             'cleanup_regex_pattern' => '<(?!/?(em|sub|sup)\\b)[^>]+>',
+    //             'cleanup_regex_argument' => 'gi',
+    //             'cleanup_regex_replacement' => '',
+    //         ],
+    //     ],
     // ],
 
     /**
