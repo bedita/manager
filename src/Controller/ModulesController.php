@@ -642,7 +642,7 @@ class ModulesController extends AppController
         $this->getRequest()->allowMethod('get');
         $query = array_merge(
             $this->getRequest()->getQueryParams(),
-            ['fields' => 'id,title,username,name,surname'],
+            ['fields' => 'id,title,username,name,surname,last_login']
         );
         $response = (array)$this->apiClient->get('users', $query);
         $response = ApiTools::cleanResponse($response);

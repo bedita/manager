@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\View\Helper;
 
+use App\View\Helper\PermsHelper;
 use App\View\Helper\SchemaHelper;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
@@ -509,6 +510,52 @@ class SchemaHelperTest extends TestCase
             }
         };
         $actual = $helper->updateREopts($name, $placeholders, $options);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `updateRicheditorOptions` method for admin users.
+     *
+     * @return void
+     */
+    public function testUpdateRicheditorOptionsAdmin(): void
+    {
+        Configure::write('UI.richeditor.title.toolbar', [
+            'italic',
+            'subscript',
+            'superscript',
+        ]);
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'dummies',
+            ],
+        ]);
+        $view = new View($request, null, null, []);
+        $view->set('objectType', 'dummies');
+        $helper = new class ($view) extends SchemaHelper {
+            public function updateREopts(string $name, bool $placeholders, array &$options): array
+            {
+                $this->updateRicheditorOptions($name, $placeholders, $options);
+
+                return $options;
+            }
+        };
+        $perms = new class ($view) extends PermsHelper {
+            public function userIsAdmin(): bool
+            {
+                return true;
+            }
+        };
+        $helper->Perms = $perms;
+        $options = [];
+        $actual = $helper->updateREopts('title', false, $options);
+        $expected = [
+            'type' => 'textarea',
+            'v-richeditor' => '["italic","subscript","superscript","code"]',
+        ];
         static::assertEquals($expected, $actual);
     }
 
