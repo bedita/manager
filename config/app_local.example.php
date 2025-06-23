@@ -549,8 +549,8 @@ return [
     ],
 
     /**
-     * Configuration for thumbnails component.
-     */
+ * Configuration for thumbnails component.
+ */
     // 'Thumbs' => [
     //     // Query parameters used for calling API to generate the thumbnail
     //     'queryParams' => ['preset' => 'default'],
@@ -559,8 +559,8 @@ return [
     // ],
 
     /**
-     * Translators engine configuration
-     */
+ * Translators engine configuration
+ */
     // 'Translators' => [
     //     [
     //         'name' => 'AWS',
@@ -593,8 +593,8 @@ return [
     // ],
 
     /**
-     * Richeditor configuration.
-     */
+ * Richeditor configuration.
+ */
     // 'Richeditor' => [
     //     'style_formats' => [
     //         [
@@ -609,11 +609,18 @@ return [
     //     'cleanup_regex_pattern' => '\\sstyle="[^"]*"', // remove style attributes from tags
     //     'cleanup_regex_argument' => 'gs', // global and match new lines
     //     'cleanup_regex_replace' => '', // replace with empty string
+    //     'fields_regex_map' => [
+    //         'title' => [ // cleanup title field from unwanted tags
+    //             'cleanup_regex_pattern' => '<(?!/?(i|sub|sup)\\b)[^>]+>',
+    //             'cleanup_regex_argument' => 'gi',
+    //             'cleanup_regex_replacement' => '',
+    //         ],
+    //     ],
     // ],
 
     /**
-     * Placeholders configuration.
-     */
+ * Placeholders configuration.
+ */
     // 'Placeholders' => [
     //     'audio' => [
     //         'controls' => 'boolean',
@@ -638,12 +645,12 @@ return [
     // ],
 
     /**
-     * UI settings.
-     * - index: index settings. 'copy2clipboard' enables "onmouseover" of index general cells showing copy to clipboard button
-     * - modules: modules settings. 'counters' to show counters in modules; 'all', 'none', <list of modules> to show all, none or custom modules. Default is ['trash']
-     * - richeditor: richeditor settings per field: you can set 'config' and 'toolbar' per single field.
-     * - fast_create_form: custom element to use for fast create form
-     */
+ * UI settings.
+ * - index: index settings. 'copy2clipboard' enables "onmouseover" of index general cells showing copy to clipboard button
+ * - modules: modules settings. 'counters' to show counters in modules; 'all', 'none', <list of modules> to show all, none or custom modules. Default is ['trash']
+ * - richeditor: richeditor settings per field: you can set 'config' and 'toolbar' per single field.
+ * - fast_create_form: custom element to use for fast create form
+ */
     // 'UI' => [
     //     'index' => [
     //         'copy2clipboard' => true,
@@ -685,10 +692,10 @@ return [
     // ],
 
     /**
-     * Upload configurations.
-     *
-     * 'files' and 'media' accept all mimes, so no configuration needed.
-     */
+ * Upload configurations.
+ *
+ * 'files' and 'media' accept all mimes, so no configuration needed.
+ */
     // 'uploadAccepted' => [
     //     'audio' => [
     //         'audio/*',
@@ -731,20 +738,20 @@ return [
     // 'uploadMaxSize' => -1, // -1 means no limit, otherwise set a limit in bytes
 
     /**
-     * Configuration for "Children" association parameters.
-     *
-     * This allows to define a set of parameters that can be used in children association between a folder and an object.
-     * The configuration is an associative array where keys are the parameter names and values are
-     * arrays with the following keys:
-     *
-     * - `description` - The description of the parameter.
-     * - `type` - The type of the parameter. Supported types are: `string`, `text`, `date`, `date-time`, `integer`, `boolean`, `enum`.
-     * - `format` - The format of the parameter. Supported formats are: `date`, `date-time`.
-     * - `value` - The default value of the parameter.
-     * - `enum` - The list of possible values for the parameter. Required if the type is `enum`.
-     *
-     *  An example follows. Note: "author", "summary" etc. are examples, you can define your own parameters. They will be saved in `meta.relation.params`.
-     */
+ * Configuration for "Children" association parameters.
+ *
+ * This allows to define a set of parameters that can be used in children association between a folder and an object.
+ * The configuration is an associative array where keys are the parameter names and values are
+ * arrays with the following keys:
+ *
+ * - `description` - The description of the parameter.
+ * - `type` - The type of the parameter. Supported types are: `string`, `text`, `date`, `date-time`, `integer`, `boolean`, `enum`.
+ * - `format` - The format of the parameter. Supported formats are: `date`, `date-time`.
+ * - `value` - The default value of the parameter.
+ * - `enum` - The list of possible values for the parameter. Required if the type is `enum`.
+ *
+ *  An example follows. Note: "author", "summary" etc. are examples, you can define your own parameters. They will be saved in `meta.relation.params`.
+ */
     // 'ChildrenParams' => [
     //     'author' => [
     //         'description' => 'The author',
@@ -787,9 +794,9 @@ return [
     // ],
 
     /**
-     * Relations sort fields.
-     * Define sortable fields per relation.
-     */
+ * Relations sort fields.
+ * Define sortable fields per relation.
+ */
     // 'RelationsSortFields' => [
     //     'composed_by' => [
     //         ['label' => 'Short title', 'value' => 'short_title'],
@@ -803,10 +810,10 @@ return [
     //     'part_of_default' => 'short_title',
 
     /**
-     * Configuration for "Schema" associations provided by the API instance.
-     *
-     *  An example follows. Note: "author", "summary" etc. are examples, you can define your own parameters. They will be saved in `meta.relation.params`.
-     */
+ * Configuration for "Schema" associations provided by the API instance.
+ *
+ *  An example follows. Note: "author", "summary" etc. are examples, you can define your own parameters. They will be saved in `meta.relation.params`.
+ */
     // 'Schema' => [
     //     'associations' => [
     //         'Captions',
@@ -814,10 +821,10 @@ return [
     // ],
 
     /**
-     * Configuration for "Captions".
-     * - formats.allowed: allowed formats for captions
-     * - formats.default: default format for captions
-     */
+ * Configuration for "Captions".
+ * - formats.allowed: allowed formats for captions
+ * - formats.default: default format for captions
+ */
     // 'Captions' => [
     //     'formats' => [
     //         'allowed' => ['srt', 'sub', 'webvtt'],
@@ -826,12 +833,12 @@ return [
     // ],
 
     /**
-     * Configuration for "TreePreview", to enable anchors on specific positions on the tree.
-     * - '123' is the root id
-     * - 'title' is the title for the preview anchor
-     * - 'url' is the href for the preview anchor
-     * - 'color' is the color of the icon for the preview anchor (default is 'white')
-     */
+ * Configuration for "TreePreview", to enable anchors on specific positions on the tree.
+ * - '123' is the root id
+ * - 'title' is the title for the preview anchor
+ * - 'url' is the href for the preview anchor
+ * - 'color' is the color of the icon for the preview anchor (default is 'white')
+ */
     // 'TreePreview' => [
     //     '123' => [
     //         [
