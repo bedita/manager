@@ -392,11 +392,9 @@ class LayoutHelper extends Helper
         if (!$this->Perms->userIsAdmin()) {
             return $cfg;
         }
-        foreach ($cfg as $key => $value) {
-            foreach ($value as $subKey => $subValue) {
-                if ($subKey === 'toolbar' && is_array($subValue) && !in_array('code', $subValue)) {
-                    $cfg[$key][$subKey][] = 'code';
-                }
+        foreach ($cfg as &$value) {
+            if (isset($value['toolbar']) && is_array($value['toolbar']) && !in_array('code', $value['toolbar'], true)) {
+                $value['toolbar'][] = 'code';
             }
         }
 
