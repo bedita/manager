@@ -228,7 +228,7 @@ class PermsHelper extends Helper
      */
     public function userRoles(): array
     {
-        /** @var \Authentication\Identity $identity */
+        /** @var \Authentication\Identity|null $identity */
         $identity = $this->_View->get('user');
 
         return empty($identity) ? [] : (array)$identity->get('roles');
