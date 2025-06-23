@@ -593,8 +593,8 @@ return [
     // ],
 
     /**
- * Richeditor configuration.
- */
+     * Richeditor configuration.
+     */
     // 'Richeditor' => [
     //     'style_formats' => [
     //         [
