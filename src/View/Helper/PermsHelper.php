@@ -231,7 +231,7 @@ class PermsHelper extends Helper
         /** @var \Authentication\Identity $identity */
         $identity = $this->_View->get('user');
 
-        return (array)$identity->get('roles');
+        return empty($identity) ? [] : (array)$identity->get('roles');
     }
 
     /**
