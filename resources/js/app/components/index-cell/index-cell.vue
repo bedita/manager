@@ -153,15 +153,14 @@ export default {
         this.$nextTick(() => {
             if (Object.keys(this.schema)?.length) {
                 const oneOf = this.schema?.['oneOf'] || null;
+                let isObject = false;
                 if (oneOf && oneOf?.length > 1) {
-                    console.log(oneOf);
                     const index = oneOf?.length > 1 ? 1 : 0;
-                    const isObject = JSON.stringify(oneOf[index]) === '{}' || JSON.stringify(oneOf[index]) === 'true' || oneOf[index]?.['type'] === 'object';
-                    this.renderAs = isObject ? 'object' : 'string';
+                    isObject = JSON.stringify(oneOf[index]) === '{}' || JSON.stringify(oneOf[index]) === 'true' || oneOf[index]?.['type'] === 'object';
                 } else {
-                    const isObject = JSON.stringify(this.schema) === '{}' || JSON.stringify(this.schema) === 'true' || this.schema?.['type'] === 'object';
-                    this.renderAs = isObject ? 'object' : 'string';
+                    isObject = JSON.stringify(this.schema) === '{}' || JSON.stringify(this.schema) === 'true' || this.schema?.['type'] === 'object';
                 }
+                this.renderAs = isObject ? 'object' : 'string';
             }
             this.truncated = (this.text?.length <= 100 || this.renderAs === 'object') ? this.text : this.text?.substring(0, 100);
         });
