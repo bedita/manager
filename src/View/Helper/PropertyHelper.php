@@ -189,7 +189,7 @@ class PropertyHelper extends Helper
         $value = '';
         foreach ($paths as $path) {
             if (Hash::check($resource, $path)) {
-                $value = (string)Hash::get($resource, $path);
+                $value = Hash::get($resource, $path);
                 break;
             }
         }
