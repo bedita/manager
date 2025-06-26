@@ -7,8 +7,12 @@
     >
         <div
             v-html="truncated"
-            v-if="!msg && truncated"
+            v-if="!msg && truncated && renderAs === 'string'"
         />
+        <div
+            class="json-code"
+            v-if="!msg && renderAs === 'object'"
+        >{{ JSON.stringify(text ? JSON.parse(text) : null, null, 2) }}</div>
 
         <div
             class="ml-05"
@@ -99,15 +103,7 @@ import { t } from 'ttag';
 export default {
     name: 'IndexCell',
     props: {
-        settings: {
-            type: Object,
-            default: () => ({}),
-        },
         prop: {
-            type: String,
-            default: '',
-        },
-        text: {
             type: String,
             default: '',
         },
@@ -123,6 +119,18 @@ export default {
             type: Array,
             default: () => [],
         },
+        schema: {
+            type: Object,
+            default: () => ({}),
+        },
+        settings: {
+            type: Object,
+            default: () => ({}),
+        },
+        text: {
+            type: String,
+            default: '',
+        },
         untitledlabel: {
             type: String,
             default: '',
@@ -132,6 +140,7 @@ export default {
         return {
             msg: '',
             msgMore: t`More`,
+            renderAs: 'string',
             relatedOpen: false,
             showCopy: false,
             truncated: '',
@@ -140,6 +149,17 @@ export default {
     async mounted() {
         this.$nextTick(() => {
             this.truncated = this.text?.length <= 100 ? this.text : this.text?.substring(0, 100);
+            if (Object.keys(this.schema).length) {
+                const oneOf = this.schema?.['oneOf'] || null;
+                if (oneOf && oneOf?.length > 1) {
+                    const index = oneOf?.length > 1 ? 1 : 0;
+                    const isObject = JSON.stringify(oneOf[index]) === '{}' || JSON.stringify(oneOf[index]) === 'true' || oneOf[index]?.['type'] === 'object';
+                    this.renderAs = isObject ? 'object' : 'string';
+                    return;
+                }
+                const isObject = JSON.stringify(this.schema) === '{}' || JSON.stringify(this.schema) === 'true' || this.schema?.['type'] === 'object';
+                this.renderAs = isObject ? 'object' : 'string'
+            }
         });
     },
     methods: {
@@ -167,6 +187,9 @@ export default {
             this.msg = '';
         },
         showCopyIcon() {
+            if (this.renderAs === 'object') {
+                return false;
+            }
             if (this.settings?.copy2clipboard !== true) {
                 return false;
             }
@@ -213,5 +236,14 @@ div.index-cell img {
     max-width: 40px;
     vertical-align: middle;
     background-color: #e9ecef;
+}
+div.index-cell div.json-code {
+    white-space: pre;
+    font-family: monospace;
+    font-size: x-small;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 200px;
+    max-width: 400px;
 }
 </style>
