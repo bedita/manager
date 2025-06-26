@@ -5,14 +5,17 @@
         @mouseover="onMouseover()"
         @mouseleave="onMouseleave()"
     >
-        <div
-            v-html="truncated"
-            v-if="!msg && truncated && renderAs === 'string'"
-        />
-        <div
-            class="json-code"
-            v-if="!msg && renderAs === 'object'"
-        >{{ JSON.stringify(text ? JSON.parse(text) : null, null, 2) }}</div>
+        <template v-if="!msg && truncated">
+            <div
+                v-html="truncated"
+                v-if="renderAs === 'string'"
+            />
+            <div
+                class="json-code"
+                v-html="JSON.stringify(truncated ? JSON.parse(truncated) : null, null, 2)"
+                v-if="renderAs === 'object'"
+            />
+        </template>
 
         <div
             class="ml-05"
@@ -148,7 +151,6 @@ export default {
     },
     async mounted() {
         this.$nextTick(() => {
-            this.truncated = this.text?.length <= 100 ? this.text : this.text?.substring(0, 100);
             if (Object.keys(this.schema).length) {
                 const oneOf = this.schema?.['oneOf'] || null;
                 if (oneOf && oneOf?.length > 1) {
@@ -160,6 +162,7 @@ export default {
                 const isObject = JSON.stringify(this.schema) === '{}' || JSON.stringify(this.schema) === 'true' || this.schema?.['type'] === 'object';
                 this.renderAs = isObject ? 'object' : 'string'
             }
+            this.truncated = this.text?.length <= 100 || this.renderAs === 'object' ? this.text : this.text?.substring(0, 100);
         });
     },
     methods: {
@@ -187,9 +190,6 @@ export default {
             this.msg = '';
         },
         showCopyIcon() {
-            if (this.renderAs === 'object') {
-                return false;
-            }
             if (this.settings?.copy2clipboard !== true) {
                 return false;
             }
