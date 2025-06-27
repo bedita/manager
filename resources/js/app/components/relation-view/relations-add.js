@@ -463,13 +463,14 @@ export default {
             }
         },
 
+        /**
+         * Select/deselect all objects
+         *
+         * @param {Event} event The event object
+         * @return {void}
+         */
         toggleAll(event) {
-            console.log('toggleAll', event.target.checked);
-            if (event.target.checked) {
-                this.selectedObjects = [...this.objects];
-            } else {
-                this.selectedObjects = [];
-            }
+            this.selectedObjects = event.target.checked ? [...this.objects] : [];
         },
 
         /**
