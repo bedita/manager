@@ -49,6 +49,13 @@
             </filter-box-view>
         </div>
 
+        <div class="px-1 mb-1 shrinks" v-if="!loading && objects.length > 0">
+            <div>
+                <input type="checkbox" id="pick-all" :checked="!!selectAll" @change="toggleAll($event)"/>
+                <label class="ml-05 cursor-pointer" for="pick-all">{{ __('Pick all') }}</label>
+            </div>
+        </div>
+
         <div class="px-1 shrinks">
             <div class="columns" :data-list="dataList">
                 <div class="ml-05 mb-1" v-if="loading">{{ __('Loading ...') }}</div>

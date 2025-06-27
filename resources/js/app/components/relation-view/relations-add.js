@@ -72,6 +72,7 @@ export default {
             addedObjects: [],
             activeFilter: {},
             dataList: false,
+            selectAll: false,
 
             // create object form data
             saving: false,
@@ -459,6 +460,15 @@ export default {
                 this.selectedObjects.splice(position, 1);
             } else {
                 this.selectedObjects.push(object);
+            }
+        },
+
+        toggleAll(event) {
+            console.log('toggleAll', event.target.checked);
+            if (event.target.checked) {
+                this.selectedObjects = [...this.objects];
+            } else {
+                this.selectedObjects = [];
             }
         },
 
