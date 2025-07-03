@@ -2,6 +2,7 @@
 
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\I18n\I18n;
 use josegonzalez\Dotenv\Loader;
 
 /**
