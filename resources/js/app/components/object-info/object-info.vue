@@ -6,6 +6,7 @@
         <a
             :title="msgShowObjectInfo"
             class="button button-outlined-white is-small show-info"
+            :style="styles"
         >
             <app-icon icon="carbon:information" />
         </a>
@@ -17,6 +18,14 @@ import { t } from 'ttag';
 export default {
     name: 'ObjectInfo',
     props: {
+        borderColor: {
+            type: String,
+            default: 'black',
+        },
+        color: {
+            type: String,
+            default: 'white',
+        },
         objectData: {
             type: Object,
             required: true
@@ -27,14 +36,18 @@ export default {
             fields: ['title', 'description'],
             labelsMap: new Map(),
             msgShowObjectInfo: t`Show object info`,
+            styles: {
+                borderColor: this.borderColor,
+                color: this.color,
+            },
             values: {},
         };
     },
     mounted() {
         this.$nextTick(() => {
-            const source = BEDITA?.indexLists?.[this.objectData?.type] || {};
+            const source = BEDITA?.indexLists?.[this.objectData?.type] || [];
             this.fields = source || ['title', 'description'];
-            this.fields = this.fields.filter((value, index, array) => {
+            this.fields = this.fields?.filter((value, index, array) => {
                 return array.indexOf(value) === index;
             });
 
