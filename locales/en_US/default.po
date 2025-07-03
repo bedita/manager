@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-06-04 14:48:27 \n"
+"POT-Creation-Date: 2025-06-27 12:35:10 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -699,6 +699,9 @@ msgstr ""
 msgid "Pick"
 msgstr ""
 
+msgid "Pick all"
+msgstr ""
+
 msgid "Please check your mailbox and follow the instructions"
 msgstr ""
 
@@ -1271,6 +1274,9 @@ msgid "Add placeholder"
 msgstr ""
 
 msgid "Accordion content"
+msgstr ""
+
+msgid "Remove accordion"
 msgstr ""
 
 msgid "Accordion title"

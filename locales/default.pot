@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-06-09 12:35:39 \n"
+"POT-Creation-Date: 2025-06-27 12:35:10 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -696,6 +696,9 @@ msgstr ""
 msgid "Pick"
 msgstr ""
 
+msgid "Pick all"
+msgstr ""
+
 msgid "Please check your mailbox and follow the instructions"
 msgstr ""
 
@@ -1267,13 +1270,13 @@ msgstr ""
 msgid "Add placeholder"
 msgstr ""
 
+msgid "Accordion content"
+msgstr ""
+
 msgid "Remove accordion"
 msgstr ""
 
 msgid "Accordion title"
-msgstr ""
-
-msgid "Accordion content"
 msgstr ""
 
 #, javascript-format
