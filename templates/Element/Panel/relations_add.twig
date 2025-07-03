@@ -7,7 +7,23 @@
 
     <section class="fieldset shrinks">
         <header class="mx-1 tab tab-static unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
-            <h2><span v-show="relationName"><strong>{{ __('add') }}</strong>&nbsp;{{ __('elements to') }}&nbsp;"<strong><: relationLabel :></strong>"</span></h2>
+            <h2>
+                <span v-show="relationName">
+                    <strong>{{ __('add') }}</strong>
+                    &nbsp;
+                    {{ __('elements to') }}
+                    &nbsp;
+                    "<strong><: relationLabel :></strong>"
+                </span>
+            </h2>
+            <div class="buttons">
+                <button @click.prevent @click.stop="dataList=false" :data-active="!dataList" class="switch-view">
+                    <app-icon icon="carbon:grid"></app-icon>
+                </button>
+                <button @click.prevent @click.stop="dataList=true" :data-active="dataList" class="switch-view">
+                    <app-icon icon="carbon:list-bulleted"></app-icon>
+                </button>
+            </div>
         </header>
 
         <div class="px-1 my-1">
@@ -33,8 +49,15 @@
             </filter-box-view>
         </div>
 
+        <div class="px-1 mb-1 shrinks" v-if="!loading && objects.length > 0">
+            <div>
+                <input type="checkbox" id="pick-all" :checked="!!selectAll" @change="toggleAll($event)"/>
+                <label class="ml-05 cursor-pointer" for="pick-all">{{ __('Pick all') }}</label>
+            </div>
+        </div>
+
         <div class="px-1 shrinks">
-            <div class="columns">
+            <div class="columns" :data-list="dataList">
                 <div class="ml-05 mb-1" v-if="loading">{{ __('Loading ...') }}</div>
                 <div class="ml-05 mb-1" v-if="!loading && objects.length === 0">{{ __('No items found') }}</div>
                 <template v-else>

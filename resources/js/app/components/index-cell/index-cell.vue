@@ -5,10 +5,17 @@
         @mouseover="onMouseover()"
         @mouseleave="onMouseleave()"
     >
-        <div
-            v-html="truncated"
-            v-if="!msg && truncated"
-        />
+        <template v-if="!msg && truncated">
+            <div
+                v-html="truncated"
+                v-if="renderAs === 'string'"
+            />
+            <div
+                class="json-code"
+                v-html="JSON.stringify(truncated ? JSON.parse(truncated) : null, null, 2)"
+                v-if="renderAs === 'object'"
+            />
+        </template>
 
         <div
             class="ml-05"
@@ -99,15 +106,7 @@ import { t } from 'ttag';
 export default {
     name: 'IndexCell',
     props: {
-        settings: {
-            type: Object,
-            default: () => ({}),
-        },
         prop: {
-            type: String,
-            default: '',
-        },
-        text: {
             type: String,
             default: '',
         },
@@ -123,6 +122,18 @@ export default {
             type: Array,
             default: () => [],
         },
+        schema: {
+            type: Object,
+            default: () => ({}),
+        },
+        settings: {
+            type: Object,
+            default: () => ({}),
+        },
+        text: {
+            type: String,
+            default: '',
+        },
         untitledlabel: {
             type: String,
             default: '',
@@ -132,6 +143,7 @@ export default {
         return {
             msg: '',
             msgMore: t`More`,
+            renderAs: 'string',
             relatedOpen: false,
             showCopy: false,
             truncated: '',
@@ -139,7 +151,18 @@ export default {
     },
     async mounted() {
         this.$nextTick(() => {
-            this.truncated = this.text?.length <= 100 ? this.text : this.text?.substring(0, 100);
+            if (Object.keys(this.schema)?.length) {
+                const oneOf = this.schema?.['oneOf'] || null;
+                let isObject = false;
+                if (oneOf && oneOf?.length > 1) {
+                    const index = oneOf?.length > 1 ? 1 : 0;
+                    isObject = JSON.stringify(oneOf[index]) === '{}' || JSON.stringify(oneOf[index]) === 'true' || oneOf[index]?.['type'] === 'object';
+                } else {
+                    isObject = JSON.stringify(this.schema) === '{}' || JSON.stringify(this.schema) === 'true' || this.schema?.['type'] === 'object';
+                }
+                this.renderAs = isObject ? 'object' : 'string';
+            }
+            this.truncated = (this.text?.length <= 100 || this.renderAs === 'object') ? this.text : this.text?.substring(0, 100);
         });
     },
     methods: {
@@ -213,5 +236,14 @@ div.index-cell img {
     max-width: 40px;
     vertical-align: middle;
     background-color: #e9ecef;
+}
+div.index-cell div.json-code {
+    white-space: pre;
+    font-family: monospace;
+    font-size: x-small;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 200px;
+    max-width: 400px;
 }
 </style>
