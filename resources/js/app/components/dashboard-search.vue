@@ -1,9 +1,31 @@
-export default {
-    name: 'DashboardIndex',
+<template>
+    <section class="dashboard-section">
+        <header>
+            <h2>{{ msgSearch }}</h2>
+        </header>
 
-    components: {
-        RecentActivity:() => import(/* webpackChunkName: "recent-activity" */'app/components/recent-activity/recent-activity'),
-    },
+        <div role="search">
+            <div role="textsearch">
+                <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
+                <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">
+                    <app-icon icon="carbon:search"></app-icon>
+                    {{ msgSearch }}
+                </button>
+            </div>
+            <div role="idsearch">
+                <input type="text" :placeholder="msgIdOrUname" v-model="searchId">
+                <button @click.prevent="goToID()" :disabled="!searchId">
+                    {{ msgId }}
+                </button>
+            </div>
+        </div>
+    </section>
+</template>
+<script>
+import { t } from 'ttag';
+
+export default {
+    name: 'DashboardSearch',
 
     props: {
         q: {
@@ -14,6 +36,9 @@ export default {
 
     data() {
         return {
+            msgId: t`Go to ID`,
+            msgIdOrUname: t`ID or uname`,
+            msgSearch: t`Search`,
             searchId: '',
             searchString: '',
         };
@@ -53,3 +78,4 @@ export default {
         },
     }
 }
+</script>
