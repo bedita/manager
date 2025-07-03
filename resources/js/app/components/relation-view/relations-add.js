@@ -71,6 +71,8 @@ export default {
             selectedObjects: [],
             addedObjects: [],
             activeFilter: {},
+            dataList: false,
+            selectAll: false,
 
             // create object form data
             saving: false,
@@ -459,6 +461,16 @@ export default {
             } else {
                 this.selectedObjects.push(object);
             }
+        },
+
+        /**
+         * Select/deselect all objects
+         *
+         * @param {Event} event The event object
+         * @return {void}
+         */
+        toggleAll(event) {
+            this.selectedObjects = event.target.checked ? [...this.objects] : [];
         },
 
         /**
