@@ -25,6 +25,7 @@ use Cake\View\Helper;
 /**
  * Schema helper
  *
+ * @property \App\View\Helper\PermsHelper $Perms
  * @property \Cake\View\Helper\TimeHelper $Time
  */
 class SchemaHelper extends Helper
@@ -34,7 +35,7 @@ class SchemaHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Time'];
+    public $helpers = ['Perms', 'Time'];
 
     /**
      * Default translatable fields to be prepended in translations
@@ -118,6 +119,9 @@ class SchemaHelper extends Helper
         $uiRichtext = (array)Configure::read(sprintf('UI.richeditor.%s.toolbar', $name));
         if (empty($uiRichtext)) {
             return;
+        }
+        if ($this->Perms->userIsAdmin() && !in_array('code', $uiRichtext)) {
+            $uiRichtext[] = 'code';
         }
         $options['type'] = 'textarea';
         $richeditorKey = $placeholders ? 'v-richeditor.placeholders' : 'v-richeditor';
