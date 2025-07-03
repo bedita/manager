@@ -11,6 +11,9 @@ use josegonzalez\Dotenv\Loader;
  * unit tests in this file.
  */
 
+use Cake\Core\Configure;
+use Cake\I18n\I18n;
+
 // set `APP_NAME` env to avoid config/.env load
 putenv('APP_NAME=TESTAPP');
 
@@ -47,3 +50,8 @@ if (empty(Configure::read('API'))) {
 }
 
 $_SERVER['PHP_SELF'] = '/';
+
+// ensure default locale is set to English
+Configure::write('I18n.default', 'en');
+Configure::write('I18n.lang', 'en');
+I18n::setLocale('en_US');
