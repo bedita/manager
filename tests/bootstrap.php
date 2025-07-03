@@ -11,9 +11,6 @@ use josegonzalez\Dotenv\Loader;
  * unit tests in this file.
  */
 
-use Cake\Core\Configure;
-use Cake\I18n\I18n;
-
 // set `APP_NAME` env to avoid config/.env load
 putenv('APP_NAME=TESTAPP');
 
