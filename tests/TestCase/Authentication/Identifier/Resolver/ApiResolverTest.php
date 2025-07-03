@@ -17,15 +17,18 @@ use App\Identifier\Resolver\ApiResolver;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Identifier\Resolver\ApiResolver} Test Case
- *
- * @coversDefaultClass \App\Identifier\Resolver\ApiResolver
  */
+#[CoversClass(ApiResolver::class)]
+#[CoversMethod(ApiResolver::class, 'find')]
 class ApiResolverTest extends TestCase
 {
-    public function findProvider(): array
+    public static function findProvider(): array
     {
         return [
             'missing-credentials' => [
@@ -96,9 +99,8 @@ class ApiResolverTest extends TestCase
      * @param array $credentials Test credentials
      * @param array|null $expected Expected result
      * @return void
-     * @covers ::find()
-     * @dataProvider findProvider()
      */
+    #[DataProvider('findProvider')]
     public function testFind(array $credentials, ?array $expected): void
     {
         ApiClientProvider::getApiClient()->setupTokens([]); // reset client
@@ -128,7 +130,6 @@ class ApiResolverTest extends TestCase
      * Test missing meta from authentication response.
      *
      * @return void
-     * @covers ::find()
      */
     public function testMissingMetaFromAuthenticationResponse(): void
     {

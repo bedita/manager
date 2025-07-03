@@ -17,29 +17,40 @@ use App\Controller\Model\ModelBaseController;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\Model\ModelBaseController} Test Case
- *
- * @coversDefaultClass \App\Controller\Model\ModelBaseController
  */
+#[CoversClass(ModelBaseController::class)]
+#[CoversMethod(ModelBaseController::class, 'beforeFilter')]
+#[CoversMethod(ModelBaseController::class, 'beforeRender')]
+#[CoversMethod(ModelBaseController::class, 'create')]
+#[CoversMethod(ModelBaseController::class, 'doSave')]
+#[CoversMethod(ModelBaseController::class, 'index')]
+#[CoversMethod(ModelBaseController::class, 'indexQuery')]
+#[CoversMethod(ModelBaseController::class, 'remove')]
+#[CoversMethod(ModelBaseController::class, 'save')]
+#[CoversMethod(ModelBaseController::class, 'view')]
 class ModelBaseControllerTest extends TestCase
 {
-    public $ModelController;
-
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -53,7 +64,7 @@ class ModelBaseControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc
@@ -62,23 +73,6 @@ class ModelBaseControllerTest extends TestCase
     {
         parent::setUp();
         $this->loadRoutes();
-
-        $config = array_merge($this->defaultRequestConfig, []);
-        $request = new ServerRequest($config);
-        $this->ModelController = new class ($request) extends ModelBaseController
-        {
-            protected $resourceType = 'object_types';
-
-            public function setResourceType(string $type): void
-            {
-                $this->resourceType = $type;
-            }
-
-            public function setSingleView(bool $view): void
-            {
-                $this->singleView = $view;
-            }
-        };
 
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -119,7 +113,7 @@ class ModelBaseControllerTest extends TestCase
      *
      * @return array
      */
-    public function beforeFilterProvider(): array
+    public static function beforeFilterProvider(): array
     {
         return [
             'not authorized' => [
@@ -153,26 +147,41 @@ class ModelBaseControllerTest extends TestCase
      *
      * @param \Exception|string|null $expected Expected result
      * @param array $data setup data for test
-     * @covers ::beforeFilter()
-     * @dataProvider beforeFilterProvider()
      * @return void
      */
+    #[DataProvider('beforeFilterProvider')]
     public function testBeforeFilter($expected, array $data): void
     {
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
         // Mock Authentication component
-        $this->ModelController->setRequest($this->ModelController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
 
         if (isset($data['tokens'])) {
             $data['tokens'] = $this->client->getTokens();
         }
-        $this->ModelController->Authentication->setIdentity(new Identity($data));
+        $controller->Authentication->setIdentity(new Identity($data));
 
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
         }
 
-        $event = $this->ModelController->dispatchEvent('Controller.beforeFilter');
-        $result = $this->ModelController->beforeFilter($event);
+        $event = $controller->dispatchEvent('Controller.beforeFilter');
+        $result = $controller->beforeFilter($event);
 
         if (is_string($expected)) {
             static::assertInstanceOf($expected, $result);
@@ -184,72 +193,143 @@ class ModelBaseControllerTest extends TestCase
     /**
      * Test `beforeRender` method
      *
-     * @covers ::beforeRender()
      * @return void
      */
     public function testBeforeRender(): void
     {
-        $this->ModelController->dispatchEvent('Controller.beforeRender');
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
 
-        static::assertNotEmpty($this->ModelController->viewBuilder()->getVar('resourceType'));
-        static::assertNotEmpty($this->ModelController->viewBuilder()->getVar('moduleLink'));
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
+        $controller->dispatchEvent('Controller.beforeRender');
+        static::assertNotEmpty($controller->viewBuilder()->getVar('resourceType'));
+        static::assertNotEmpty($controller->viewBuilder()->getVar('moduleLink'));
     }
 
     /**
      * Test `index` method
      *
-     * @covers ::index()
-     * @covers ::indexQuery()
-     * @covers ::initialize()
-     * @covers ::beforeFilter()
      * @return void
      */
     public function testIndex(): void
     {
-        $this->ModelController->index();
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
+        $controller->index();
         $vars = ['resources', 'meta', 'links', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
+            static::assertNotEmpty($controller->viewBuilder()->getVar($var));
         }
     }
 
     /**
      * Test `index` failure method
      *
-     * @covers ::index()
      * @return void
      */
     public function testIndexFail(): void
     {
-        $this->ModelController->setResourceType('elements');
-        $result = $this->ModelController->index();
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
+        $controller->setResourceType('elements');
+        $result = $controller->index();
         static::assertTrue(($result instanceof Response));
     }
 
     /**
      * Test `view` method
      *
-     * @covers ::view()
      * @return void
      */
     public function testView(): void
     {
-        $this->ModelController->view(1);
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
+        $controller->view(1);
         $vars = ['resource', 'schema', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
+            static::assertNotEmpty($controller->viewBuilder()->getVar($var));
         }
     }
 
     /**
      * Test `view` failure method
      *
-     * @covers ::view()
      * @return void
      */
     public function testViewFail(): void
     {
-        $result = $this->ModelController->view(0);
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
+        $result = $controller->view(0);
         static::assertTrue(($result instanceof Response));
     }
 
@@ -258,7 +338,7 @@ class ModelBaseControllerTest extends TestCase
      *
      * @return array
      */
-    public function saveProvider(): array
+    public static function saveProvider(): array
     {
         return [
             'post' => [
@@ -286,18 +366,32 @@ class ModelBaseControllerTest extends TestCase
      * @param string $expected Expected result
      * @param array $data Request data
      * @param bool $singleView Single view
-     * @covers ::save()
-     * @covers ::doSave()
-     * @dataProvider saveProvider()
      * @return void
      */
+    #[DataProvider('saveProvider')]
     public function testSave(string $expected, array $data, bool $singleView): void
     {
-        $this->ModelController->setSingleView($singleView);
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
+        $controller->setSingleView($singleView);
         foreach ($data as $name => $value) {
-            $this->ModelController->setRequest($this->ModelController->getRequest()->withData($name, $value));
+            $controller->setRequest($controller->getRequest()->withData($name, $value));
         }
-        $result = $this->ModelController->save();
+        $result = $controller->save();
 
         static::assertInstanceOf(Response::class, $result);
         $location = $result->getHeaderLine('Location');
@@ -307,8 +401,6 @@ class ModelBaseControllerTest extends TestCase
     /**
      * Test `save` failure method
      *
-     * @covers ::save()
-     * @covers ::doSave()
      * @return void
      */
     public function testSaveFail(): void
@@ -316,29 +408,59 @@ class ModelBaseControllerTest extends TestCase
         $data = [
             'id' => 99999,
         ];
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
         foreach ($data as $name => $value) {
-            $this->ModelController->setRequest($this->ModelController->getRequest()->withData($name, $value));
+            $controller->setRequest($controller->getRequest()->withData($name, $value));
         }
-        $result = $this->ModelController->save();
+        $result = $controller->save();
         static::assertInstanceOf(Response::class, $result);
-        $flash = $this->ModelController->getRequest()->getSession()->read('Flash.flash.0.message');
+        $flash = $controller->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $flash);
     }
 
     /**
      * Test `save` method, on redir
      *
-     * @covers ::save()
-     * @covers ::doSave()
      * @return void
      */
     public function testSaveRedir(): void
     {
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
         $redirTo = ['_name' => 'model:create:object_types'];
-        $this->ModelController->setRequest($this->ModelController->getRequest()->withData('id', 1));
-        $this->ModelController->setRequest($this->ModelController->getRequest()->withData('description', 'whatever'));
-        $this->ModelController->setRequest($this->ModelController->getRequest()->withData('redirTo', $redirTo));
-        $result = $this->ModelController->save();
+        $controller->setRequest($controller->getRequest()->withData('id', 1));
+        $controller->setRequest($controller->getRequest()->withData('description', 'whatever'));
+        $controller->setRequest($controller->getRequest()->withData('redirTo', $redirTo));
+        $result = $controller->save();
         static::assertInstanceOf(Response::class, $result);
         $location = $result->getHeaderLine('Location');
         $expected = '/view';
@@ -348,7 +470,6 @@ class ModelBaseControllerTest extends TestCase
     /**
      * Test `remove` method
      *
-     * @covers ::remove()
      * @return void
      */
     public function testRemove(): void
@@ -357,42 +478,88 @@ class ModelBaseControllerTest extends TestCase
             'name' => 'foos',
             'singular' => 'foo',
         ];
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
         foreach ($data as $name => $value) {
-            $this->ModelController->setRequest($this->ModelController->getRequest()->withData($name, $value));
+            $controller->setRequest($controller->getRequest()->withData($name, $value));
         }
-        $result = $this->ModelController->save();
+        $result = $controller->save();
         static::assertInstanceOf(Response::class, $result);
 
-        $result = $this->ModelController->remove('foos');
+        $result = $controller->remove('foos');
         static::assertInstanceOf(Response::class, $result);
     }
 
     /**
      * Test `remove` failure method
      *
-     * @covers ::remove()
      * @return void
      */
     public function testRemoveFail(): void
     {
-        $result = $this->ModelController->remove(99999);
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
+        $result = $controller->remove('99999');
         static::assertInstanceOf(Response::class, $result);
-        $flash = $this->ModelController->getRequest()->getSession()->read('Flash.flash.0.message');
+        $flash = $controller->getRequest()->getSession()->read('Flash.flash.0.message');
         static::assertEquals('[404] Not Found', $flash);
     }
 
     /**
      * Test `create` method
      *
-     * @covers ::create()
      * @return void
      */
     public function testCreate(): void
     {
-        $this->ModelController->create();
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends ModelBaseController
+        {
+            protected ?string $resourceType = 'object_types';
+
+            public function setResourceType(string $type): void
+            {
+                $this->resourceType = $type;
+            }
+
+            public function setSingleView(bool $view): void
+            {
+                $this->singleView = $view;
+            }
+        };
+        $controller->create();
         $vars = ['resource', 'schema', 'properties'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->ModelController->viewBuilder()->getVar($var));
+            static::assertNotEmpty($controller->viewBuilder()->getVar($var));
         }
     }
 }

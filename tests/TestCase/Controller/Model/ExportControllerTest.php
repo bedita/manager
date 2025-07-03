@@ -19,13 +19,14 @@ use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Model\ExportController} Test Case
- *
- * @coversDefaultClass \App\Controller\Model\ExportController
- * @uses \App\Controller\Model\ExportController
  */
+#[CoversClass(ExportController::class)]
+#[CoversMethod(ExportController::class, 'model')]
 class ExportControllerTest extends TestCase
 {
     /**
@@ -33,14 +34,14 @@ class ExportControllerTest extends TestCase
      *
      * @var \App\Controller\Model\ExportController
      */
-    public $Export;
+    public ExportController $Export;
 
     /**
      * Client API
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $apiClient;
+    public BEditaClient $apiClient;
 
     /**
      * @inheritDoc
@@ -61,7 +62,6 @@ class ExportControllerTest extends TestCase
     /**
      * Test `model` method
      *
-     * @covers ::model()
      * @return void
      */
     public function testModel(): void
@@ -87,7 +87,7 @@ class ExportControllerTest extends TestCase
                 'environment' => [
                     'REQUEST_METHOD' => 'GET',
                 ],
-            ])
+            ]),
         );
 
         $result = $this->Export->model();

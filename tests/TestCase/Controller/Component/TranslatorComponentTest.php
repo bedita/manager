@@ -17,13 +17,17 @@ use App\Test\TestCase\Core\I18n\DummyTranslator;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Http\Exception\InternalErrorException;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Component\TranslatorComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\TranslatorComponent
  */
+#[CoversClass(TranslatorComponent::class)]
+#[CoversMethod(TranslatorComponent::class, 'initialize')]
+#[CoversMethod(TranslatorComponent::class, 'translate')]
 class TranslatorComponentTest extends TestCase
 {
     /**
@@ -31,7 +35,7 @@ class TranslatorComponentTest extends TestCase
      *
      * @var \App\Controller\Component\TranslatorComponent
      */
-    public $Translator;
+    public TranslatorComponent $Translator;
 
     /**
      * @inheritDoc
@@ -50,7 +54,7 @@ class TranslatorComponentTest extends TestCase
      */
     protected function createComponent(): void
     {
-        $controller = new Controller();
+        $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
         /** @var \App\Controller\Component\TranslatorComponent $translatorComponent */
         $translatorComponent = $registry->load(TranslatorComponent::class);
@@ -61,8 +65,6 @@ class TranslatorComponentTest extends TestCase
      * Test `translate()` method.
      *
      * @return void
-     * @covers ::translate()
-     * @covers ::initialize()
      */
     public function testTranslateInternalErrorException(): void
     {
@@ -75,8 +77,6 @@ class TranslatorComponentTest extends TestCase
      * Test `translate()` method.
      *
      * @return void
-     * @covers ::translate()
-     * @covers ::initialize()
      */
     public function testTranslate(): void
     {
