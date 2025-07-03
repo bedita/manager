@@ -597,7 +597,7 @@ class LayoutHelperTest extends TestCase
             'uploadConfig' => $system->uploadConfig(),
             'relationsSchema' => ['whatever'],
             'richeditorConfig' => (array)Configure::read('Richeditor'),
-            'richeditorByPropertyConfig' => (array)Configure::read('RicheditorByProperty'),
+            'richeditorByPropertyConfig' => $layout->uiRicheditorConfig(),
             'indexLists' => (array)$layout->indexLists(),
         ];
         static::assertSame($expected, $conf);
@@ -958,5 +958,54 @@ class LayoutHelperTest extends TestCase
         Configure::write('API', $apiConfig);
 
         Cache::disable();
+    }
+
+    /**
+     * Test `uiRicheditorConfig` method.
+     *
+     * @return void
+     * @covers ::uiRicheditorConfig()
+     */
+    public function testUiRicheditorConfig(): void
+    {
+        // non admin user
+        $view = new View();
+        $layout = new LayoutHelper($view);
+        $actual = $layout->uiRicheditorConfig();
+        static::assertIsArray($actual);
+        static::assertEmpty($actual);
+
+        // admin user
+        $safe = Configure::read('UI.richeditor');
+        Configure::delete('UI.richeditor');
+        Configure::write('UI.richeditor', [
+            'title' => [
+                'config' => [
+                    'forced_root_block' => false,
+                    'height' => 132,
+                ],
+                'toolbar' => [
+                    'italic',
+                    'subscript',
+                    'superscript',
+                ],
+            ],
+        ]);
+        $perms = new class ($view) extends PermsHelper {
+            public function userIsAdmin(): bool
+            {
+                return true;
+            }
+        };
+        $layout->Perms = $perms;
+        $actual = $layout->uiRicheditorConfig();
+        static::assertIsArray($actual);
+        static::assertArrayHasKey('toolbar', $actual['title']);
+        static::assertCount(4, $actual['title']['toolbar']);
+        static::assertContains('italic', $actual['title']['toolbar']);
+        static::assertContains('subscript', $actual['title']['toolbar']);
+        static::assertContains('superscript', $actual['title']['toolbar']);
+        static::assertContains('code', $actual['title']['toolbar']);
+        Configure::write('UI.richeditor', $safe);
     }
 }

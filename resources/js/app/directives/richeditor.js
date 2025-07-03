@@ -78,6 +78,15 @@ export default {
                             event.target.editor.setContent(cleanContent);
                         }
                     }
+                    if (BEDITA?.richeditorConfig?.fields_regex_map?.[element?.name]) {
+                        const { cleanup_regex_pattern, cleanup_regex_argument, cleanup_regex_replacement } = BEDITA.richeditorConfig.fields_regex_map[element.name];
+                        const regex = new RegExp(cleanup_regex_pattern, cleanup_regex_argument || 'gs');
+                        const content = event?.target?.editor?.getContent() || '';
+                        const cleanContent = content.replace(regex, cleanup_regex_replacement || '');
+                        if (cleanContent !== content) {
+                            event.target.editor.setContent(cleanContent);
+                        }
+                    }
                 });
             },
 
