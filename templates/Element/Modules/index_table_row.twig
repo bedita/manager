@@ -45,6 +45,7 @@
                     :settings="{{ config('UI.index')|default({'copy2clipboard': false})|json_encode }}"
                     :prop="{{ prop|json_encode }}"
                     :text="{{ Property.value(object, prop)|json_encode }}"
+                    :schema="{{ schema['properties'][prop]|default({})|json_encode }}"
                 >
                 </index-cell>
             {% endif %}
