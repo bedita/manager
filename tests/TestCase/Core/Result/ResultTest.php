@@ -60,6 +60,7 @@ class ResultTest extends TestCase
         if (property_exists($result, $name)) {
             static::assertEquals($expected, $result->{$name});
         }
+        static::assertTrue(true); // dummy line to force a php workflow run
     }
 
     /**
