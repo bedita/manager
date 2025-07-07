@@ -623,6 +623,7 @@ window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
 Vue.component('AppIcon', AppIcon);
+Vue.component('ClipboardItem', _vueInstance.$options.components.ClipboardItem);
 Vue.component('DateRangesView', _vueInstance.$options.components.DateRangesView);
 Vue.component('FieldCheckbox', _vueInstance.$options.components.FieldCheckbox);
 Vue.component('FieldGeoCoordinates', _vueInstance.$options.components.FieldGeoCoordinates);
@@ -643,3 +644,4 @@ Vue.component('ObjectCategories', _vueInstance.$options.components.ObjectCategor
 Vue.component('ObjectCaptions', _vueInstance.$options.components.ObjectCaptions);
 Vue.component('ObjectInfo', _vueInstance.$options.components.ObjectInfo);
 Vue.component('RelatedObjectsFilter', _vueInstance.$options.components.RelatedObjectsFilter);
+Vue.component('Thumbnail', _vueInstance.$options.components.Thumbnail);

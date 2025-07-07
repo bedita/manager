@@ -3,7 +3,7 @@
         <template v-if="showPanel">
             <div
                 class="backdrop"
-                style="display: block; z-index: 9998;"
+                style="display: block; z-index: 1001;"
                 @click="closePanel()"
             />
             <aside
@@ -30,25 +30,31 @@
                             >
                                 <template v-if="filter?.[relationName]?.length">
                                     <span class="tag relation">{{ tr(relationName) }}</span>
-                                    <template v-for="relatedId in filter[relationName]">
-                                        <div
-                                            class="tag"
-                                            :class="moduleClass(relatedId)"
+                                    <div
+                                        class="tag"
+                                        :class="moduleClass(relatedId)"
+                                        v-for="relatedId in filter[relationName]"
+                                        :key="relatedId"
+                                    >
+                                        [{{ relatedId }}] {{ objectsMap?.[relatedId]?.title }}
+                                        <a
+                                            class="unpick"
+                                            @click.prevent="pickout(relationName, relatedId)"
                                         >
-                                            [{{ relatedId }}] {{ objectsMap?.[relatedId]?.title }}
-                                            <a
-                                                class="unpick"
-                                                @click.prevent="pickout(relationName, relatedId)"
-                                            >
-                                                <app-icon
-                                                    icon="carbon:close"
-                                                    width="18"
-                                                    height="18"
-                                                />
-                                            </a>
-                                        </div>
-                                    </template>
+                                            <app-icon
+                                                icon="carbon:close"
+                                                width="18"
+                                                height="18"
+                                            />
+                                        </a>
+                                    </div>
                                 </template>
+                            </div>
+                            <div v-if="Object.keys(filter).length">
+                                <button @click.prevent="closePanel()">
+                                    <app-icon icon="carbon:checkmark" />
+                                    <span class="ml-05">Ok</span>
+                                </button>
                             </div>
                         </div>
                         <div class="selection-container">
@@ -114,10 +120,21 @@
                             />
                         </div>
                         <div
-                            class="search-results"
+                            class="columns"
                             v-if="!loading && searchResults?.length"
                         >
                             <div
+                                class="column is-3"
+                                v-for="item in searchResults"
+                                :key="item.id"
+                            >
+                                <search-result
+                                    :item="item"
+                                    @select="select"
+                                    @discard="discard"
+                                />
+                            </div>
+                            <!-- <div
                                 v-for="item in searchResults"
                                 :key="item.id"
                             >
@@ -131,7 +148,7 @@
                                         [{{ item.id }}] {{ item?.attributes?.title }}
                                     </span>
                                 </button>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="buttons">
                             <button
@@ -156,6 +173,7 @@ export default {
     name: 'RelatedObjectsPanel',
     components: {
         'ResultsPagination': () => import('./results-pagination.vue'),
+        'SearchResult': () => import('./search-result.vue'),
     },
     props: {
         initialFilter: {
@@ -249,6 +267,12 @@ export default {
             this.$emit('update:objectsMap', this.objectsMap);
             this.$emit('update:showPanel', false);
         },
+        discard(id) {
+            if (this.filter?.[this.relation]) {
+                this.filter[this.relation] = this.filter[this.relation].filter((item) => item !== id);
+            }
+            this.updateFilter();
+        },
         moduleClass(item) {
             const objectType = this.objectsMap?.[item]?.type || null;
             if (!objectType) {
@@ -256,16 +280,6 @@ export default {
             }
 
             return `has-background-module-${objectType}`;
-        },
-        pickin(item) {
-            if (!this.filter[this.relation]) {
-                this.filter[this.relation] = [];
-            }
-            if (this.filter?.[this.relation]?.includes(item?.id)) {
-                return;
-            }
-            this.filter[this.relation].push(item.id);
-            this.updateFilter();
         },
         pickout(relationName, relatedId) {
             if (this.filter?.[relationName]) {
@@ -314,6 +328,16 @@ export default {
                 this.loading = false;
             }
         },
+        select(id) {
+            if (!this.filter[this.relation]) {
+                this.filter[this.relation] = [];
+            }
+            if (this.filter?.[this.relation]?.includes(id)) {
+                return;
+            }
+            this.filter[this.relation].push(id);
+            this.updateFilter();
+        },
         tr(item) {
             return BEDITA_I18N?.[item] || this.t(item) || item;
         },
@@ -329,7 +353,7 @@ export default {
 </script>
 <style scoped>
 div.related-objects-panel aside.main-panel-container {
-    z-index: 9999;
+    z-index: 1002;
 }
 div.related-objects-panel aside.main-panel {
     margin: 1rem;
@@ -347,10 +371,6 @@ div.related-objects-panel .pcontainer {
     flex-direction: column;
     gap: 1rem;
 }
-div.related-objects-panel .pcontainer > div {
-    display: flex;
-    flex-direction: column;
-}
 div.related-objects-panel div.buttons {
     display: flex;
     flex-direction: row;
@@ -359,12 +379,6 @@ div.related-objects-panel div.buttons {
 div.related-objects-panel div.selection-container {
     display: grid;
     grid-template-columns: 1fr 1fr 50%;
-    grid-gap: 0.5em;
-    width: 100%;
-}
-div.related-objects-panel div.search-results {
-    display: grid;
-    grid-template-columns: 1fr;
     grid-gap: 0.5em;
     width: 100%;
 }
@@ -390,5 +404,12 @@ div.related-objects-panel .unpick > svg {
 div.related-objects-panel .relation {
     background-color: darkslategrey;
     color: white;
+}
+div.related-objects-panel .search-results {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
 }
 </style>
