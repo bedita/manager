@@ -94,13 +94,24 @@
                                 >
                                 <button
                                     :class="{ 'is-loading-spinner': loading }"
-                                    :disabled="loading || !searchText || searchText?.length < 3"
+                                    :disabled="loading"
                                     @click.prevent="search"
                                 >
                                     <app-icon icon="carbon:search" />
                                     <span class="ml-05">{{ msgSearch }}</span>
                                 </button>
                             </div>
+                        </div>
+                        <div
+                            class="pagination"
+                            v-if="!loading && searchResults?.length"
+                        >
+                            <results-pagination
+                                :count="paginationCount"
+                                :filter="paginationFilter"
+                                :options="paginationOptions"
+                                @update="updatePagination"
+                            />
                         </div>
                         <div
                             class="search-results"
@@ -143,10 +154,17 @@
 import { t } from 'ttag';
 export default {
     name: 'RelatedObjectsPanel',
+    components: {
+        'ResultsPagination': () => import('./results-pagination.vue'),
+    },
     props: {
         initialFilter: {
             type: Object,
             default: () => ({}),
+        },
+        paginationOptions: {
+            type: Object,
+            default: () => ({ page: 1, pageSize: 10, sizes: [10, 20, 50, 100] }),
         },
         relationsSchema: {
             type: Object,
@@ -159,6 +177,7 @@ export default {
     },
     data() {
         return {
+            currentPage: 1,
             filter: {},
             loading: false,
             msgChooseObjectType: t`Choose object type`,
@@ -171,6 +190,9 @@ export default {
             objectType: null,
             objectTypes: [],
             openPanel: false,
+            pageSize: 10,
+            paginationCount: 0,
+            paginationFilter: {page: 1, pageSize: 10},
             relation: null,
             relations: [],
             searchResults: [],
@@ -251,7 +273,7 @@ export default {
                 this.updateFilter();
             }
         },
-        async search() {
+        async search(filter = {page: 1, pageSize: 10}) {
             try {
                 this.loading = true;
                 const headers = new Headers({
@@ -264,14 +286,20 @@ export default {
                     headers,
                     method: 'GET',
                 };
-                const url = `/api/${this.objectType}?q=${this.searchText}&page=1&page_size=10`;
+                let query = this.searchText?.trim().length >= 3 ? `q=${this.searchText.trim()}&` : '';
+                query += `page=${filter?.page || 1}&page_size=${filter?.pageSize || 10}`;
+                const url = `/api/${this.objectType}?${query}`;
                 const response = await fetch(url, options);
                 const responseJson = await response.json();
                 if (responseJson?.error) {
                     throw new Error(responseJson.error);
                 }
+                if (filter?.page || filter?.pageSize) {
+                    this.paginationFilter = filter;
+                }
                 if (responseJson?.data) {
                     this.searchResults = responseJson.data;
+                    this.paginationCount = responseJson?.meta?.pagination?.count || 0;
                 } else {
                     this.searchResults = [];
                 }
@@ -292,6 +320,9 @@ export default {
         updateFilter() {
             this.$forceUpdate();
             this.$emit('update-filter-related', this.filter);
+        },
+        async updatePagination(pagination) {
+            await this.search(pagination);
         },
     },
 }
