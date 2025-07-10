@@ -5,12 +5,12 @@ use App\Controller\Admin\ExternalAuthController;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * {@see \App\Controller\Admin\ExternalAuthController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\ExternalAuthController
  */
+#[CoversClass(ExternalAuthController::class)]
 class ExternalAuthControllerTest extends TestCase
 {
     /**
@@ -52,8 +52,8 @@ class ExternalAuthControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->ExternalAuthController = new class ($request) extends ExternalAuthController
         {
-            protected $resourceType = 'external_auth';
-            protected $properties = ['name'];
+            protected ?string $resourceType = 'external_auth';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
