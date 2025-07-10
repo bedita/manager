@@ -683,14 +683,10 @@ class ModulesController extends AppController
             $response = ApiTools::cleanResponse($response);
             $data = (array)Hash::get($response, 'data');
             $data['attributes'] = array_merge($data['attributes'], (array)Hash::get($stream, 'attributes', []));
-            $data['attributes'] = array_filter($data['attributes'], function ($key) use ($fields) {
-                return in_array($key, $fields);
-            }, ARRAY_FILTER_USE_KEY);
+            $data['attributes'] = array_filter($data['attributes'], fn($key) => in_array($key, $fields), ARRAY_FILTER_USE_KEY);
             $meta = (array)Hash::get($response, 'meta');
             $meta = array_merge($meta, (array)Hash::get($stream, 'meta', []));
-            $meta = array_filter($meta, function ($key) use ($fields) {
-                return in_array($key, $fields);
-            }, ARRAY_FILTER_USE_KEY);
+            $meta = array_filter($meta, fn($key) => in_array($key, $fields), ARRAY_FILTER_USE_KEY);
         }
         $this->set(compact('data', 'meta'));
         $this->setSerialize(['data', 'meta']);
