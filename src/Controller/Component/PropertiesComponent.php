@@ -168,6 +168,7 @@ class PropertiesComponent extends Component
         $attributes = array_diff_key($attributes, array_flip($this->excluded));
         $attributes = array_diff_key($attributes, array_flip($hide));
         $defaults = array_merge($this->getConfig(sprintf('Properties.%s.view', $type), []), $this->defaultGroups['view']);
+        $defaults = array_filter($defaults, fn($group) => $group !== 'history', ARRAY_FILTER_USE_KEY);
         unset($defaults['_keep']);
 
         foreach ($defaults as $group => $items) {
