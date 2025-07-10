@@ -4,10 +4,10 @@
             <nav class="pagination has-text-size-smallest">
                 <div class="count-items">
                     <span class="has-font-weight-bold">{{ count }}</span>
-                    <span>Items</span>
+                    <span>{{ msgItems }}</span>
                 </div>
                 <div class="page-size">
-                    <span>Size</span>
+                    <span>{{ msgSize }}</span>
                     <select
                         class="page-size-selector has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest"
                         v-model="changeSize"
@@ -63,6 +63,8 @@
     </div>
 </template>
 <script>
+import { t } from 'ttag';
+
 export default {
     name: 'ResultsPagination',
     props: {
@@ -74,6 +76,10 @@ export default {
             type: Object,
             default: null,
         },
+        objectType: {
+            type: String,
+            default: null,
+        },
         options: {
             type: Object,
             default: () => ({ page: 1, pageSize: 10, sizes: [10, 20, 50, 100] }),
@@ -83,6 +89,8 @@ export default {
         return {
             changePage: null,
             changeSize: null,
+            msgItems: BEDITA_I18N?.[this.objectType] || t`Items`,
+            msgSize: t`Size`,
             pages: 1,
             visiblePages: [],
         };

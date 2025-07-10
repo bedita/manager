@@ -115,6 +115,7 @@
                             <results-pagination
                                 :count="paginationCount"
                                 :filter="paginationFilter"
+                                :object-type="objectType"
                                 :options="paginationOptions"
                                 @update="updatePagination"
                             />
