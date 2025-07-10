@@ -667,7 +667,7 @@ class ModulesController extends AppController
         $type = (string)Hash::get($query, 'type');
         $fields = array_unique(array_merge(
             explode(',', 'id,title,description,uname,status,media_url'),
-            explode(',', (string)Hash::get($query, 'fields', ''))
+            explode(',', (string)Hash::get($query, 'fields', '')),
         ));
         $query['fields'] = implode(',', $fields);
         if ($type == null) {
