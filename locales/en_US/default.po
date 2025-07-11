@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-06-27 12:35:10 \n"
+"POT-Creation-Date: 2025-07-11 09:52:52 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1887,6 +1887,9 @@ msgid "Repeat type"
 msgstr ""
 
 msgid "Required"
+msgstr ""
+
+msgid "Year"
 msgstr ""
 
 msgid "Add multiple"

@@ -49,6 +49,7 @@
                                     <option value="daily">{{ msgDay }}</option>
                                     <option value="weekly">{{ msgWeek }}</option>
                                     <option value="monthly">{{ msgMonth }}</option>
+                                    <option value="yearly">{{ msgYear }}</option>
                                 </select>
                                 <input
                                     type="number"
@@ -113,6 +114,7 @@ export default {
             msgRepeatType: t`Repeat type`,
             msgRequired: t`Required`,
             msgWeek: t`Week`,
+            msgYear: t`Year`,
             numberOfRanges: 1,
             rangeType: 'daily', // default to daily
             start: '', // Start date for the range
@@ -128,15 +130,23 @@ export default {
             for (let i = 0; i < this.numberOfRanges; i++) {
                 const startDate = new Date(this.start + 'T' + this.from);
                 const endDate = new Date(this.start + 'T' + this.to);
-                if (this.rangeType === 'daily') {
-                    startDate.setDate(startDate.getDate() + i);
-                    endDate.setDate(endDate.getDate() + i);
-                } else if (this.rangeType === 'weekly') {
-                    startDate.setDate(startDate.getDate() + (i * 7));
-                    endDate.setDate(endDate.getDate() + (i * 7));
-                } else if (this.rangeType === 'monthly') {
-                    startDate.setMonth(startDate.getMonth() + i);
-                    endDate.setMonth(endDate.getMonth() + i);
+                switch (this.rangeType) {
+                    case 'daily':
+                        startDate.setDate(startDate.getDate() + i);
+                        endDate.setDate(endDate.getDate() + i);
+                        break;
+                    case 'weekly':
+                        startDate.setDate(startDate.getDate() + (i * 7));
+                        endDate.setDate(endDate.getDate() + (i * 7));
+                        break;
+                    case 'monthly':
+                        startDate.setMonth(startDate.getMonth() + i);
+                        endDate.setMonth(endDate.getMonth() + i);
+                        break;
+                    case 'yearly':
+                        startDate.setFullYear(startDate.getFullYear() + i);
+                        endDate.setFullYear(endDate.getFullYear() + i);
+                        break;
                 }
                 this.$emit('add-range', { start: startDate, end: endDate });
             }
