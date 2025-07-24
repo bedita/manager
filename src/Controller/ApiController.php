@@ -79,19 +79,13 @@ class ApiController extends AppController
         $blocked = in_array($method, $blockedMethods[$action] ?? []);
         $modules = $this->viewBuilder()->getVar('modules');
         $modules = array_values($modules);
-        $modules = (array)Hash::combine($modules, '{n}.name', '{n}.hints.allow');
         $modules = array_merge(
-            $modules,
-            [
-                'history' => ['GET'],
-                'model' => ['GET'],
-            ],
+            (array)Hash::combine($modules, '{n}.name', '{n}.hints.allow'),
+            ['history' => ['GET'], 'model' => ['GET']],
         );
-        $allowedMethods = (array)Hash::get($modules, $action, []);
-        $allowedConfig = (array)Configure::read('ApiProxy.allowed', []);
         $allowedMethods = array_merge(
-            $allowedMethods,
-            (array)Hash::get($allowedConfig, $action, [])
+            (array)Hash::get($modules, $action, []),
+            (array)Hash::get((array)Configure::read('ApiProxy.allowed'), $action, []),
         );
         $allowed = in_array($method, $allowedMethods);
 
