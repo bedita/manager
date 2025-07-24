@@ -88,6 +88,11 @@ class ApiController extends AppController
             ],
         );
         $allowedMethods = (array)Hash::get($modules, $action, []);
+        $allowedConfig = (array)Configure::read('ApiProxy.allowed', []);
+        $allowedMethods = array_merge(
+            $allowedMethods,
+            (array)Hash::get($allowedConfig, $action, [])
+        );
         $allowed = in_array($method, $allowedMethods);
 
         return $allowed && !$blocked;
