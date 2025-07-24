@@ -84,9 +84,13 @@ return [
      *
      * ## Options
      *
+     * - `allowed` - Array of allowed methods per endpoint.
      * - `blocked` - Array of blocked methods per endpoint.
      */
     // 'ApiProxy' => [
+    //     'allowed' => [
+    //         'products' => ['GET', 'POST', 'PATCH', 'DELETE'],
+    //     ],
     //     'blocked' => [
     //         'objects' => ['GET', 'POST', 'PATCH', 'DELETE'],
     //         'users' => ['GET', 'POST', 'PATCH', 'DELETE'],
