@@ -22,17 +22,17 @@ class AuthProvidersController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $resourceType = 'auth_providers';
+    protected ?string $resourceType = 'auth_providers';
 
     /**
      * @inheritDoc
      */
-    protected $readonly = false;
+    protected bool $readonly = false;
 
     /**
      * @inheritDoc
      */
-    protected $properties = [
+    protected array $properties = [
         'name' => 'string',
         'auth_class' => 'string',
         'url' => 'string',
@@ -43,12 +43,12 @@ class AuthProvidersController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $propertiesForceJson = [
+    protected array $propertiesForceJson = [
         'params',
     ];
 
     /**
      * @inheritDoc
      */
-    protected $meta = [];
+    protected array $meta = [];
 }

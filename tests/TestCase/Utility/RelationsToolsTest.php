@@ -5,19 +5,20 @@ namespace App\Test\TestCase;
 
 use App\Utility\RelationsTools;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * App\Utility\RelationsTools Test Case
- *
- * @coversDefaultClass App\Utility\RelationsTools
  */
+#[CoversClass(RelationsTools::class)]
+#[CoversMethod(RelationsTools::class, 'toString')]
 class RelationsToolsTest extends TestCase
 {
     /**
      * Test `toString` method.
      *
      * @return void
-     * @covers ::toString()
      */
     public function testToString(): void
     {

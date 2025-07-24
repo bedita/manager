@@ -17,16 +17,32 @@ use App\View\Helper\PermsHelper;
 use App\View\Helper\SchemaHelper;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\SchemaHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\SchemaHelper
  */
+#[CoversClass(SchemaHelper::class)]
+#[CoversMethod(SchemaHelper::class, 'controlOptions')]
+#[CoversMethod(SchemaHelper::class, 'customControl')]
+#[CoversMethod(SchemaHelper::class, 'format')]
+#[CoversMethod(SchemaHelper::class, 'formatByte')]
+#[CoversMethod(SchemaHelper::class, 'formatBoolean')]
+#[CoversMethod(SchemaHelper::class, 'formatDate')]
+#[CoversMethod(SchemaHelper::class, 'formatDateTime')]
+#[CoversMethod(SchemaHelper::class, 'filterList')]
+#[CoversMethod(SchemaHelper::class, 'filterListByType')]
+#[CoversMethod(SchemaHelper::class, 'sortable')]
+#[CoversMethod(SchemaHelper::class, 'translatableFields')]
+#[CoversMethod(SchemaHelper::class, 'translatableType')]
+#[CoversMethod(SchemaHelper::class, 'typeFromSchema')]
+#[CoversMethod(SchemaHelper::class, 'updateRicheditorOptions')]
 class SchemaHelperTest extends TestCase
 {
     /**
@@ -34,7 +50,7 @@ class SchemaHelperTest extends TestCase
      *
      * @var \App\View\Helper\SchemaHelper
      */
-    public $Schema;
+    public SchemaHelper $Schema;
 
     /**
      * @inheritDoc
@@ -82,7 +98,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function controlOptionsSchemaProvider(): array
+    public static function controlOptionsSchemaProvider(): array
     {
         return [
             'text' => [
@@ -399,10 +415,8 @@ class SchemaHelperTest extends TestCase
      * @param string $name The field name.
      * @param mixed $value The field value.
      * @return void
-     * @dataProvider controlOptionsSchemaProvider()
-     * @covers ::controlOptions()
-     * @covers ::customControl()
      */
+    #[DataProvider('controlOptionsSchemaProvider')]
     public function testControlOptions(array $expected, array $schema, string $name, $value): void
     {
         $actual = $this->Schema->controlOptions($name, $value, $schema);
@@ -415,7 +429,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function updateRicheditorOptionsProvider(): array
+    public static function updateRicheditorOptionsProvider(): array
     {
         return [
             'empty UI.richeditor.title.toolbar' => [
@@ -472,9 +486,8 @@ class SchemaHelperTest extends TestCase
      * @param array $options The options
      * @param array $expected The expected result
      * @return void
-     * @dataProvider updateRicheditorOptionsProvider()
-     * @covers ::updateRicheditorOptions()
      */
+    #[DataProvider('updateRicheditorOptionsProvider')]
     public function testUpdateRicheditorOptions(array $uiConf, string $name, bool $placeholders, array $options, array $expected): void
     {
         Configure::write('UI.richeditor.title.toolbar', $uiConf);
@@ -504,7 +517,6 @@ class SchemaHelperTest extends TestCase
      * Test `updateRicheditorOptions` method for admin users.
      *
      * @return void
-     * @covers ::updateRicheditorOptions()
      */
     public function testUpdateRicheditorOptionsAdmin(): void
     {
@@ -551,7 +563,6 @@ class SchemaHelperTest extends TestCase
      * Test `lang` property
      *
      * @return void
-     * @covers ::controlOptions()
      */
     public function testLang(): void
     {
@@ -598,7 +609,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function translatableFieldsProvider(): array
+    public static function translatableFieldsProvider(): array
     {
         return [
             'empty translatable' => [
@@ -680,10 +691,8 @@ class SchemaHelperTest extends TestCase
      * @param array $schema The object schema
      * @param array $expected Expected result
      * @return void
-     * @dataProvider translatableFieldsProvider()
-     * @covers ::translatableFields()
-     * @covers ::translatableType()
      */
+    #[DataProvider('translatableFieldsProvider')]
     public function testTranslatableFields(array $schema, array $expected): void
     {
         $actual = $this->Schema->translatableFields($schema);
@@ -695,11 +704,11 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function formatProvider(): array
+    public static function formatProvider(): array
     {
-        $d = new FrozenTime('2019-09-08');
+        $d = new DateTime('2019-09-08');
         $dateExpected = $d->i18nFormat();
-        $d = new FrozenTime('2019-09-08T16:35:15+00');
+        $d = new DateTime('2019-09-08T16:35:15+00');
         $dateTimeExpected = $d->i18nFormat();
 
         return [
@@ -791,14 +800,8 @@ class SchemaHelperTest extends TestCase
      * @param mixed $value The value
      * @param array $schema The schema
      * @return void
-     * @dataProvider formatProvider()
-     * @covers ::format()
-     * @covers ::formatByte()
-     * @covers ::formatBoolean()
-     * @covers ::formatDate()
-     * @covers ::formatDateTime()
-     * @covers ::typeFromSchema()
      */
+    #[DataProvider('formatProvider')]
     public function testFormat($expected, $value, array $schema): void
     {
         $actual = $this->Schema->format($value, $schema);
@@ -810,7 +813,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function sortableProvider(): array
+    public static function sortableProvider(): array
     {
         return [
             'no schema, default not sortable' => [
@@ -918,9 +921,8 @@ class SchemaHelperTest extends TestCase
      * @param array $schema The property schema
      * @param bool $expected Expected result
      * @return void
-     * @dataProvider sortableProvider()
-     * @covers ::sortable()
      */
+    #[DataProvider('sortableProvider')]
     public function testSortable(string $field, array $schema, bool $expected): void
     {
         $view = $this->Schema->getView();
@@ -939,7 +941,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function filterListProvider(): array
+    public static function filterListProvider(): array
     {
         return [
             'parent string' => [
@@ -982,10 +984,8 @@ class SchemaHelperTest extends TestCase
      * @param array|null $properties The properties
      * @param array $expected The expected result
      * @return void
-     * @dataProvider filterListProvider()
-     * @covers ::filterList()
-     * @covers ::controlOptions()
      */
+    #[DataProvider('filterListProvider')]
     public function testFilterList(array $filters, ?array $properties, array $expected): void
     {
         $view = $this->Schema->getView();
@@ -1003,7 +1003,7 @@ class SchemaHelperTest extends TestCase
      *
      * @return array
      */
-    public function filterListByTypeProvider(): array
+    public static function filterListByTypeProvider(): array
     {
         return [
             'schema null' => [
@@ -1100,11 +1100,8 @@ class SchemaHelperTest extends TestCase
      * Test `filterListByType`.
      *
      * @return void
-     * @dataProvider filterListByTypeProvider()
-     * @covers ::filterListByType()
-     * @covers ::filterList()
-     * @covers ::controlOptions()
      */
+    #[DataProvider('filterListByTypeProvider')]
     public function testfilterListByType(array $filtersByType, ?array $schemasByType, array $expected): void
     {
         $view = $this->Schema->getView();
