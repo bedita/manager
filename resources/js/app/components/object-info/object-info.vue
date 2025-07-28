@@ -70,10 +70,6 @@ export default {
                     || this.reloadedData?.attributes?.[field]
                     || this.reloadedData?.meta?.[field]
                     || '-';
-                console.log('field', field, this.values[field]);
-                if (this.values[field] === '-') {
-                    console.log(JSON.stringify(this.reloadedData, null, 2));
-                }
                 if (field === 'file_size' && this.values[field] !== '-') {
                     this.values[field] = this.values[field] ? this.$helpers.formatBytes(this.values[field]) : '-';
                 }
