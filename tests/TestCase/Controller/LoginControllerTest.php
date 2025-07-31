@@ -86,8 +86,8 @@ class LoginControllerTest extends TestCase
 
         // Mock Authentication component and prepare for "real" login
         $service = new AuthenticationService();
-        $service->loadIdentifier(ApiIdentifier::class);
         $service->loadAuthenticator('Authentication.Form', [
+            'identifier' => ApiIdentifier::class,
             'fields' => [
                 AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
                 AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',

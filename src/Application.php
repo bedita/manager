@@ -224,8 +224,13 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $query = $request->getQueryParams();
         if (strpos($path, '/ext/login') === 0) {
             $providers = (array)Configure::read('OAuth2Providers');
-            $service->loadIdentifier('BEdita/WebTools.OAuth2', compact('providers'));
-            $service->loadAuthenticator('BEdita/WebTools.OAuth2', compact('providers') + [
+            $service->loadAuthenticator('BEdita/WebTools.OAuth2', [
+                'identifier' => [
+                    'BEdita/WebTools.OAuth2' => [
+                        'providers' => $providers,
+                    ],
+                ],
+                'providers' => $providers,
                 'redirect' => ['_name' => 'login:oauth2'],
             ]);
 
@@ -235,14 +240,15 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         }
 
         $service->loadAuthenticator('Authentication.Session', [
+            'identifier' => [
+                ApiIdentifier::class => [
+                    'timezoneField' => 'timezone',
+                ],
+            ],
             'sessionKey' => 'BEditaManagerAuth',
             'fields' => [
                 TokenIdentifier::CREDENTIAL_TOKEN => 'token',
             ],
-        ]);
-
-        $service->loadIdentifier(ApiIdentifier::class, [
-                'timezoneField' => 'timezone',
         ]);
 
         if ($path === '/login') {

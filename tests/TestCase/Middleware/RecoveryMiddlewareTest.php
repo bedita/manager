@@ -102,8 +102,8 @@ class RecoveryMiddlewareTest extends TestCase
 
         ApiClientProvider::getApiClient()->setupTokens([]); // reset client
         $service = new AuthenticationService();
-        $service->loadIdentifier(ApiIdentifier::class);
         $service->loadAuthenticator('Authentication.Form', [
+            'identifier' => ApiIdentifier::class,
             'fields' => [
                 AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
                 AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
