@@ -6,8 +6,9 @@
             <ul class="history-items">
                 <li class="history-item is-expanded py-05 has-border-gray-600" v-for="item in history[date]">
                     <div class="change-time">{{ getFormattedTime(item.meta.created) }} </div>
-                    <div class="is-flex">
+                    <div class="is-flex wrap">
                         {{ getAuthor(item.meta) }}
+                        <slot name="info" :item="item" />
                     </div>
                     <div class="is-flex">
                         <button class="button button-text-white is-width-auto" @click.stop.prevent="showChanges(item, canSave)">info</button>
