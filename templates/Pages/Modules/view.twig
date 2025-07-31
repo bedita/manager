@@ -99,7 +99,8 @@
             {{ element('Form/relations', {'relations': objectRelations.main, 'mainObject': object}) }}
 
             {% if object.id %}
-                {{ element('Form/history') }}
+                {% set historyPath = config('Properties.' ~ objectType ~ '.view.history._element', 'Form/history') %}
+                {{ element(historyPath) }}
             {% endif %}
 
             {# Set `_jsonKeys` hidden input from config #}
