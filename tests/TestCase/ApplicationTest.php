@@ -197,7 +197,7 @@ class ApplicationTest extends TestCase
         /** @var \Authentication\AuthenticationService $authService */
         $authService = $app->getAuthenticationService(new ServerRequest());
         /** @var \App\Identifier\ApiIdentifier $identifier */
-        $identifier = $authService->identifiers()->get(ApiIdentifier::class);
+        $identifier = $authService->authenticators()->get('Session')->getIdentifier()->get('App\Identifier\ApiIdentifier');
         static::assertInstanceOf(AuthenticationService::class, $authService);
         static::assertInstanceOf(IdentifierInterface::class, $identifier);
         static::assertInstanceOf(ResolverInterface::class, $identifier->getResolver());
@@ -235,8 +235,10 @@ class ApplicationTest extends TestCase
 
         static::assertFalse($authService->authenticators()->has('Form'));
         static::assertTrue($authService->authenticators()->has('OAuth2'));
-        static::assertInstanceOf(AuthenticatorInterface::class, $authService->authenticators()->get('OAuth2'));
-        static::assertTrue($authService->identifiers()->has('OAuth2'));
-        static::assertInstanceOf(IdentifierInterface::class, $authService->identifiers()->get('OAuth2'));
+        $oauth2Authenticator = $authService->authenticators()->get('OAuth2');
+        static::assertInstanceOf(AuthenticatorInterface::class, $oauth2Authenticator);
+        static::assertTrue($oauth2Authenticator->getIdentifier()->has('OAuth2'));
+        $oauth2Identifier = $oauth2Authenticator->getIdentifier()->get('OAuth2');
+        static::assertInstanceOf(IdentifierInterface::class, $oauth2Identifier);
     }
 }
