@@ -39,17 +39,21 @@
 
     {# RIBBON (new items) #}
     {% if stage %}
-        <div class="ribbon" :class="'has-background-module-' + related.type">
+        <div :class="`ribbon ${related?.type ? 'has-background-module-' + related?.type : ''} ${dataList ? 'in-data-list' : ''}`">
             {{ __('NEW') }}
         </div>
     {% endif %}
 
-    <div v-if="Date.parse(related.attributes.publish_start) > Date.now()" class="ribbon" :class="'has-background-module-' + related.type">
+    <div v-if="Date.parse(related.attributes.publish_start) > Date.now()" :class="`ribbon ${related?.type ? 'has-background-module-' + related?.type : ''} ${dataList ? 'in-data-list' : ''}`">
          {{ __('Future') }}
     </div>
-    <div v-if="Date.parse(related.attributes.publish_end) < Date.now()" class="ribbon" :class="'has-background-module-' + related.type">
+    <div v-if="Date.parse(related.attributes.publish_end) < Date.now()" :class="`ribbon ${related?.type ? 'has-background-module-' + related?.type : ''} ${dataList ? 'in-data-list' : ''}`">
          {{ __('Expired') }}
     </div>
+    <div v-if="Date.parse(related.attributes.publish_end) < Date.now()" :class="`ribbon ${related?.type ? 'has-background-module-' + related?.type : ''} ${dataList ? 'in-data-list' : ''}`">
+        {{ __('Expired') }}
+    </div>
+
 
     {# THUMBNAIL #}
     {% if not translation %}
