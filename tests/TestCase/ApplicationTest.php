@@ -13,7 +13,6 @@
 namespace App\Test\TestCase;
 
 use App\Application;
-use App\Identifier\ApiIdentifier;
 use App\Middleware\ConfigurationMiddleware;
 use App\Middleware\ProjectMiddleware;
 use App\Middleware\StatusMiddleware;
@@ -196,12 +195,16 @@ class ApplicationTest extends TestCase
         $app = new Application(CONFIG);
         /** @var \Authentication\AuthenticationService $authService */
         $authService = $app->getAuthenticationService(new ServerRequest());
+        /** @var \Authentication\Authenticator\SessionAuthenticator $sessionAuthenticator */
+        $sessionAuthenticator = $authService->authenticators()->get('Session');
+        /** @var \Authentication\Identifier\IdentifierCollection $identifierCollection */
+        $identifierCollection = $sessionAuthenticator->getIdentifier();
         /** @var \App\Identifier\ApiIdentifier $identifier */
-        $identifier = $authService->authenticators()->get('Session')->getIdentifier()->get('App\Identifier\ApiIdentifier');
+        $identifier = $identifierCollection->get('App\Identifier\ApiIdentifier');
         static::assertInstanceOf(AuthenticationService::class, $authService);
         static::assertInstanceOf(IdentifierInterface::class, $identifier);
         static::assertInstanceOf(ResolverInterface::class, $identifier->getResolver());
-        static::assertInstanceOf(AuthenticatorInterface::class, $authService->authenticators()->get('Session'));
+        static::assertInstanceOf(AuthenticatorInterface::class, $sessionAuthenticator);
     }
 
     /**
@@ -236,9 +239,12 @@ class ApplicationTest extends TestCase
         static::assertFalse($authService->authenticators()->has('Form'));
         static::assertTrue($authService->authenticators()->has('OAuth2'));
         $oauth2Authenticator = $authService->authenticators()->get('OAuth2');
+        /** @var \BEdita\WebTools\Authenticator\OAuth2Authenticator $oauth2Authenticator */
         static::assertInstanceOf(AuthenticatorInterface::class, $oauth2Authenticator);
-        static::assertTrue($oauth2Authenticator->getIdentifier()->has('OAuth2'));
-        $oauth2Identifier = $oauth2Authenticator->getIdentifier()->get('OAuth2');
+        /** @var \Authentication\Identifier\IdentifierCollection $identifierCollection */
+        $identifierCollection = $oauth2Authenticator->getIdentifier();
+        static::assertTrue($identifierCollection->has('OAuth2'));
+        $oauth2Identifier = $identifierCollection->get('OAuth2');
         static::assertInstanceOf(IdentifierInterface::class, $oauth2Identifier);
     }
 }
