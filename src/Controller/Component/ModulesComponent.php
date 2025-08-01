@@ -252,11 +252,21 @@ class ModulesComponent extends Component
         /** @var \Authentication\Identity $user */
         $user = $this->Authentication->getIdentity();
         $api = $this->getMeta($user);
-        $project = (array)Configure::read('Project');
-        $name = (string)Hash::get($project, 'name', Hash::get($api, 'project.name'));
-        $version = Hash::get($api, 'version', '');
+        $apiName = (string)Hash::get($api, 'project.name');
+        $apiName = str_replace('API', '', $apiName);
+        $api['project']['name'] = $apiName;
 
-        return compact('api', 'name', 'version');
+        return [
+            'api' => (array)Hash::get($api, 'project'),
+            'beditaApi' => [
+                'name' => (string)Hash::get(
+                    (array)Configure::read('Project'),
+                    'name',
+                    (string)Hash::get($api, 'project.name')
+                ),
+                'version' => (string)Hash::get($api, 'version'),
+            ],
+        ];
     }
 
     /**
