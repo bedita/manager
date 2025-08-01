@@ -151,6 +151,12 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
+                    'api' => [
+                        'project' => [
+                            'name' => 'BEdita',
+                        ],
+                        'version' => 'v4.0.0-gustavo',
+                    ],
                 ],
                 [
                     'project' => [
@@ -163,6 +169,7 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => '',
                     'version' => '',
+                    'api' => [],
                 ],
                 [],
             ],
@@ -170,6 +177,7 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => '',
                     'version' => '',
+                    'api' => [],
                 ],
                 new BEditaClientException('I am a client exception'),
             ],
@@ -181,6 +189,9 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'Gustavo',
                     'version' => '4.1.2',
+                    'api' => [
+                        'version' => '4.1.2',
+                    ],
                 ],
                 [
                     'version' => '4.1.2',
@@ -684,6 +695,26 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
+                    'api' => [
+                        'project' => [
+                            'name' => 'BEdita',
+                        ],
+                        'version' => 'v4.0.0-gustavo',
+                        'resources' => [
+                            [
+                                'name' => 'supporto',
+                                'hints' => [
+                                    'object_type' => true,
+                                ],
+                            ],
+                            [
+                                'name' => 'gustavo',
+                                'hints' => [
+                                    'object_type' => true,
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     'resources' => [
@@ -719,6 +750,26 @@ class ModulesComponentTest extends TestCase
                 [
                     'name' => 'BEdita',
                     'version' => 'v4.0.0-gustavo',
+                    'api' => [
+                        'project' => [
+                            'name' => 'BEdita',
+                        ],
+                        'version' => 'v4.0.0-gustavo',
+                        'resources' => [
+                            [
+                                'name' => 'supporto',
+                                'hints' => [
+                                    'object_type' => true,
+                                ],
+                            ],
+                            [
+                                'name' => 'gustavo',
+                                'hints' => [
+                                    'object_type' => true,
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     'resources' => [
