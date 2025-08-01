@@ -25,5 +25,3 @@
     <span>©{{ 'now'|date('Y') }} {{ authors|shuffle|toList(__('&'))|raw }}</span>
     <span>LGPL {{ Html.link('www.bedita.com', 'https://www.bedita.com', {'title': __('BEdita Web site'), 'target': '_blank'})|raw }}</span>
 </div>
-
-{{ project.api|json_encode|raw }}
