@@ -1,8 +1,28 @@
 <template>
-    <div>
-        <p v-for="item,key of infos">
-            <span class="key">{{ key }}</span>:
-            <span class="version">{{ item }}</span>
+    <div class="system-info">
+        <p
+            v-for="item,key of infos"
+            :key="key"
+        >
+            <template v-if="jsonKeys.includes(key)">
+                <details>
+                    <summary>{{ key }}</summary>
+                    <div
+                        :id="`container-${hash}-${key}`"
+                        class="jsoneditor-container"
+                    />
+                    <json-editor
+                        :name="`${hash}-${key}`"
+                        :options="jsonEditorOptions"
+                        :target="`container-${hash}-${key}`"
+                        :text="JSON.stringify(item, null, 2)"
+                    />
+                </details>
+            </template>
+            <template v-else>
+                <span class="key">{{ key }}</span>:
+                <span class="version">{{ item }}</span>
+            </template>
         </p>
     </div>
 </template>
@@ -11,6 +31,9 @@ import Vue from 'vue';
 
 export default {
     name: 'SystemInfo',
+    components: {
+        JsonEditor: () => import(/* webpackChunkName: "json-editor" */'app/components/json-editor/json-editor'),
+    },
     props: {
         data: {
             type: String,
@@ -20,7 +43,20 @@ export default {
 
     data() {
         return {
+            hash: '',
             infos: {},
+            jsonEditorOptions: {
+                mainMenuBar: true,
+                mode: 'text',
+                navigationBar: false,
+                statusBar: false,
+                readOnly: false,
+            },
+            jsonKeys: [
+                'Extensions',
+                'Extensions info',
+                'GET /home',
+            ],
         }
     },
 
@@ -30,6 +66,7 @@ export default {
             if (this.infos['Vuejs'] !== undefined) {
                 this.infos['Vuejs'] = Vue.version;
             }
+            this.hash = Math.random().toString(36).substring(2, 15);
         });
     },
 }

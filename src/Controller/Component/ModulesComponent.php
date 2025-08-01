@@ -251,12 +251,12 @@ class ModulesComponent extends Component
     {
         /** @var \Authentication\Identity $user */
         $user = $this->Authentication->getIdentity();
-        $meta = $this->getMeta($user);
+        $api = $this->getMeta($user);
         $project = (array)Configure::read('Project');
-        $name = (string)Hash::get($project, 'name', Hash::get($meta, 'project.name'));
-        $version = Hash::get($meta, 'version', '');
+        $name = (string)Hash::get($project, 'name', Hash::get($api, 'project.name'));
+        $version = Hash::get($api, 'version', '');
 
-        return compact('name', 'version');
+        return compact('api', 'name', 'version');
     }
 
     /**

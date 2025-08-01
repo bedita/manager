@@ -8,11 +8,18 @@
         <app-icon icon="carbon:checkmark"></app-icon>
         {{ Html.link('Manager', 'https://github.com/bedita/manager', {'target': '_blank'})|raw }} {{ config('Manager.version') }}
     </span>
+    {% if project.api.project.name %}
+    <span class="{{ apiClass }}">
+        <app-icon icon="carbon:checkmark"></app-icon>
+        {{ project.api.project.name }} API
+        {% if project.api.project.version %}{{ project.api.project.version }}{% endif %}
+    </span>
+    {% endif %}
     {% if project.version %}
     <span class="{{ apiClass }}" title="{{ warn }}">
         {% if apiCheck == 1 %}<app-icon icon="carbon:checkmark"></app-icon>{% endif %}
         {% if apiCheck != 1 %}<app-icon icon="carbon:error"></app-icon>{% endif %}
-        {{ Html.link('API', 'https://github.com/bedita/bedita', {'target': '_blank'})|raw }} {{ project.version }}
+        {{ Html.link('BEdita API', 'https://github.com/bedita/bedita', {'target': '_blank'})|raw }} {{ project.version }}
     </span>
     {% endif %}
     <span>©{{ 'now'|date('Y') }} {{ authors|shuffle|toList(__('&'))|raw }}</span>
