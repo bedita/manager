@@ -50,7 +50,7 @@ export default {
                 mode: 'text',
                 navigationBar: false,
                 statusBar: false,
-                readOnly: false,
+                readOnly: true,
             },
             jsonKeys: [
                 'Extensions',
