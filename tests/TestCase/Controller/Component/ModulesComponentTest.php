@@ -702,27 +702,12 @@ class ModulesComponentTest extends TestCase
                 ],
                 null,
                 [
-                    'name' => 'BEdita',
-                    'version' => 'v4.0.0-gustavo',
                     'api' => [
-                        'project' => [
-                            'name' => 'BEdita',
-                        ],
+                        'name' => 'BEdita',
+                    ],
+                    'beditaApi' => [
+                        'name' => 'BEdita',
                         'version' => 'v4.0.0-gustavo',
-                        'resources' => [
-                            [
-                                'name' => 'supporto',
-                                'hints' => [
-                                    'object_type' => true,
-                                ],
-                            ],
-                            [
-                                'name' => 'gustavo',
-                                'hints' => [
-                                    'object_type' => true,
-                                ],
-                            ],
-                        ],
                     ],
                 ],
                 [
@@ -757,27 +742,12 @@ class ModulesComponentTest extends TestCase
                 ],
                 'supporto',
                 [
-                    'name' => 'BEdita',
-                    'version' => 'v4.0.0-gustavo',
                     'api' => [
-                        'project' => [
-                            'name' => 'BEdita',
-                        ],
+                        'name' => 'BEdita',
+                    ],
+                    'beditaApi' => [
+                        'name' => 'BEdita',
                         'version' => 'v4.0.0-gustavo',
-                        'resources' => [
-                            [
-                                'name' => 'supporto',
-                                'hints' => [
-                                    'object_type' => true,
-                                ],
-                            ],
-                            [
-                                'name' => 'gustavo',
-                                'hints' => [
-                                    'object_type' => true,
-                                ],
-                            ],
-                        ],
                     ],
                 ],
                 [
