@@ -2,12 +2,12 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\SystemInfoController;
+use App\Test\TestCase\Controller\AppControllerTest;
 use Authentication\Identity;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
-use Cake\TestSuite\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(SystemInfoController::class, 'getApiInfo')]
 #[CoversMethod(SystemInfoController::class, 'getSystemInfo')]
 #[CoversMethod(SystemInfoController::class, 'index')]
-class SystemInfoControllerTest extends TestCase
+class SystemInfoControllerTest extends AppControllerTest
 {
     public SystemInfoController $SystemInfoController;
 

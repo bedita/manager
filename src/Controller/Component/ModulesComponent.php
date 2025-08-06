@@ -262,7 +262,7 @@ class ModulesComponent extends Component
                 'name' => (string)Hash::get(
                     (array)Configure::read('Project'),
                     'name',
-                    (string)Hash::get($api, 'project.name')
+                    (string)Hash::get($api, 'project.name'),
                 ),
                 'version' => (string)Hash::get($api, 'version'),
             ],

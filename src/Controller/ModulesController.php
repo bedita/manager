@@ -331,7 +331,7 @@ class ModulesController extends AppController
                     $this->savePermissions(
                         (array)$response,
                         $schema,
-                        $permissions
+                        $permissions,
                     );
                 } catch (BEditaClientException $error) {
                     $this->handleError($error);
