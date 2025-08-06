@@ -377,7 +377,9 @@ class ModulesController extends AppController
         $message = new Message($exception);
         $this->log($message->get(), LogLevel::ERROR);
         $this->Flash->error($message->get(), ['params' => $exception]);
-        $this->set(['error' => $message->get()]);
+        $error = $this->viewBuilder()->getVar('error') ?? [];
+        $error = is_array($error) ? array_merge($error, [$message->get()]) : [$error, $message->get()];
+        $this->set(['error' => $error]);
         $this->setSerialize(['error']);
     }
 
