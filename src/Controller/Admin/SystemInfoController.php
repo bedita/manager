@@ -12,6 +12,7 @@
  */
 namespace App\Controller\Admin;
 
+use App\Utility\SchemaTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
 use Cake\Http\Response;
@@ -23,6 +24,8 @@ use Twig\Environment;
  */
 class SystemInfoController extends AdministrationBaseController
 {
+    use SchemaTrait;
+
     /**
      * @inheritDoc
      */
@@ -73,6 +76,10 @@ class SystemInfoController extends AdministrationBaseController
                 $this->apiClient->get('/admin/sysinfo'),
                 'meta.info',
             );
+            /** @var \Authentication\Identity $user */
+            $user = $this->Authentication->getIdentity();
+            $meta = $this->getMeta($user);
+            $info = array_merge($info, ['GET /home' => $meta]);
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');
         }
