@@ -149,8 +149,13 @@ class ModulesComponentTest extends TestCase
         return [
             'ok' => [
                 [
-                    'name' => 'BEdita',
-                    'version' => 'v4.0.0-gustavo',
+                    'api' => [
+                        'name' => 'BEdita',
+                    ],
+                    'beditaApi' => [
+                        'name' => 'BEdita',
+                        'version' => 'v4.0.0-gustavo',
+                    ],
                 ],
                 [
                     'project' => [
@@ -161,15 +166,25 @@ class ModulesComponentTest extends TestCase
             ],
             'empty' => [
                 [
-                    'name' => '',
-                    'version' => '',
+                    'api' => [
+                        'name' => '',
+                    ],
+                    'beditaApi' => [
+                        'name' => '',
+                        'version' => '',
+                    ],
                 ],
                 [],
             ],
             'client exception' => [
                 [
-                    'name' => '',
-                    'version' => '',
+                    'api' => [
+                        'name' => '',
+                    ],
+                    'beditaApi' => [
+                        'name' => '',
+                        'version' => '',
+                    ],
                 ],
                 new BEditaClientException('I am a client exception'),
             ],
@@ -179,8 +194,13 @@ class ModulesComponentTest extends TestCase
             ],
             'config' => [
                 [
-                    'name' => 'Gustavo',
-                    'version' => '4.1.2',
+                    'api' => [
+                        'name' => '',
+                    ],
+                    'beditaApi' => [
+                        'name' => 'Gustavo',
+                        'version' => '4.1.2',
+                    ],
                 ],
                 [
                     'version' => '4.1.2',
@@ -682,8 +702,13 @@ class ModulesComponentTest extends TestCase
                 ],
                 null,
                 [
-                    'name' => 'BEdita',
-                    'version' => 'v4.0.0-gustavo',
+                    'api' => [
+                        'name' => 'BEdita',
+                    ],
+                    'beditaApi' => [
+                        'name' => 'BEdita',
+                        'version' => 'v4.0.0-gustavo',
+                    ],
                 ],
                 [
                     'resources' => [
@@ -717,8 +742,13 @@ class ModulesComponentTest extends TestCase
                 ],
                 'supporto',
                 [
-                    'name' => 'BEdita',
-                    'version' => 'v4.0.0-gustavo',
+                    'api' => [
+                        'name' => 'BEdita',
+                    ],
+                    'beditaApi' => [
+                        'name' => 'BEdita',
+                        'version' => 'v4.0.0-gustavo',
+                    ],
                 ],
                 [
                     'resources' => [
