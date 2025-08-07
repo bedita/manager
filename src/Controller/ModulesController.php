@@ -326,15 +326,23 @@ class ModulesController extends AppController
                 $response = $this->apiClient->getObject($id, $this->objectType);
             }
             if (!$skipSavePermissions) {
-                $this->savePermissions(
-                    (array)$response,
-                    $schema,
-                    $permissions
-                );
+                try {
+                    $this->savePermissions(
+                        (array)$response,
+                        $schema,
+                        $permissions
+                    );
+                } catch (BEditaClientException $error) {
+                    $this->handleError($error);
+                }
             }
             $id = (string)Hash::get($response, 'data.id');
             if (!$skipSaveRelated) {
-                $this->Modules->saveRelated($id, $this->objectType, $relatedData);
+                try {
+                    $this->Modules->saveRelated($id, $this->objectType, $relatedData);
+                } catch (BEditaClientException $error) {
+                    $this->handleError($error);
+                }
             }
             $options = [
                 'id' => Hash::get($response, 'data.id'),
@@ -344,11 +352,7 @@ class ModulesController extends AppController
             $event = new Event('Controller.afterSave', $this, $options);
             $this->getEventManager()->dispatch($event);
         } catch (BEditaClientException $error) {
-            $message = new Message($error);
-            $this->log($message->get(), LogLevel::ERROR);
-            $this->Flash->error($message->get(), ['params' => $error]);
-            $this->set(['error' => $message->get()]);
-            $this->setSerialize(['error']);
+            $this->handleError($error);
 
             return;
         }
@@ -360,6 +364,23 @@ class ModulesController extends AppController
 
         $this->set((array)$response);
         $this->setSerialize(array_keys($response));
+    }
+
+    /**
+     * Handle exception error: log, flash and set.
+     *
+     * @param \BEdita\SDK\BEditaClientException $exception The exception
+     * @return void
+     */
+    protected function handleError(BEditaClientException $exception): void
+    {
+        $message = new Message($exception);
+        $this->log($message->get(), LogLevel::ERROR);
+        $this->Flash->error($message->get(), ['params' => $exception]);
+        $error = $this->viewBuilder()->getVar('error') ?? [];
+        $error = is_array($error) ? array_merge($error, [$message->get()]) : [$error, $message->get()];
+        $this->set(['error' => $error]);
+        $this->setSerialize(['error']);
     }
 
     /**
@@ -459,10 +480,7 @@ class ModulesController extends AppController
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
             $response = $this->ApiFormatter->embedIncluded((array)$response);
         } catch (BEditaClientException $error) {
-            $this->log($error->getMessage(), LogLevel::ERROR);
-
-            $this->set(compact('error'));
-            $this->setSerialize(['error']);
+            $this->handleError($error);
 
             return;
         }
@@ -488,10 +506,7 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->get($type, $query);
         } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
-
-            $this->set(compact('error'));
-            $this->setSerialize(['error']);
+            $this->handleError($error);
 
             return;
         }

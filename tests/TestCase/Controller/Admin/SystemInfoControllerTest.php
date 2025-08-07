@@ -2,18 +2,19 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\SystemInfoController;
+use App\Test\TestCase\Controller\AppControllerTest;
+use Authentication\Identity;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
-use Cake\TestSuite\TestCase;
 
 /**
  * {@see \App\Controller\Admin\SystemInfoController} Test Case
  *
  * @coversDefaultClass \App\Controller\Admin\SystemInfoController
  */
-class SystemInfoControllerTest extends TestCase
+class SystemInfoControllerTest extends AppControllerTest
 {
     public $SystemInfoController;
 
@@ -63,6 +64,13 @@ class SystemInfoControllerTest extends TestCase
      */
     public function testIndex(): void
     {
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'dummy',
+            'roles' => ['readers'],
+        ]);
+        $this->SystemInfoController->setRequest($this->SystemInfoController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->SystemInfoController->Authentication->setIdentity($user);
         $this->SystemInfoController->index();
         $keys = [
             'system_info',
@@ -113,7 +121,15 @@ class SystemInfoControllerTest extends TestCase
         $expectedKeys = [
             'Url',
             'Version',
+            'GET /home',
         ];
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'dummy',
+            'roles' => ['readers'],
+        ]);
+        $this->SystemInfoController->setRequest($this->SystemInfoController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->SystemInfoController->Authentication->setIdentity($user);
         $actual = $this->SystemInfoController->getApiInfo();
         foreach ($expectedKeys as $expectedKey) {
             static::assertArrayHasKey($expectedKey, $actual);
@@ -144,6 +160,14 @@ class SystemInfoControllerTest extends TestCase
             }
         };
         $controller->setApiClient($apiClient);
+
+        $user = new Identity([
+            'id' => 1,
+            'username' => 'dummy',
+            'roles' => ['readers'],
+        ]);
+        $controller->setRequest($controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $controller->Authentication->setIdentity($user);
         $actual = $controller->getApiInfo();
         static::assertEquals($expected, $actual);
     }
