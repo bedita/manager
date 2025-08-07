@@ -1315,7 +1315,7 @@ class ModulesControllerTest extends BaseControllerTest
             ],
             'post' => [
                 'id' => 123456789,
-                'permissions' => ['1','2','3'],
+                'permissions' => ['1', '2', '3'],
             ],
             'params' => [
                 'object_type' => 'folders',
@@ -1545,5 +1545,63 @@ class ModulesControllerTest extends BaseControllerTest
         static::assertFalse($this->controller->savePerms, 'Controller save permissions should not be called');
         static::assertTrue($apiClient->getSave(), 'ApiClient save method should be called when no post data is provided');
         static::assertFalse($apiClient->getLoad(), 'ApiClient load method should not be called to load object');
+    }
+
+    /**
+     * Test errors when saving permissions and related data
+     *
+     * @return void
+     * @covers ::save()
+     * @covers ::handleError()
+     */
+    public function testSaveErrorPermissionsAndRelatedData(): void
+    {
+        $this->setupController();
+        $config = [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'title' => 'Test Dummy',
+                '_api' => [['method' => 'addRelated', 'type' => 'dummies', 'relatedIds' => [['id' => 1, 'type' => 'dummies'], ['id' => 2, 'type' => 'dummies']]]],
+                'permissions' => ['1', '2', '3'],
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ];
+        $request = new ServerRequest($config);
+        $this->controller = new class ($request) extends ModulesControllerSample
+        {
+            public function savePermissions(array $response, array $schema, array $newPermissions): bool
+            {
+                throw new BEditaClientException('save permission debug error');
+            }
+        };
+        $registry = $this->controller->components();
+        $component = new class ($registry) extends ModulesComponent
+        {
+            public function skipSavePermissions(string $id, array $requestPermissions, array $schema): bool
+            {
+                return false; // do not skip save permissions
+            }
+
+            public function skipSaveRelated(string $id, array &$relatedData): bool
+            {
+                return false; // do not skip save related
+            }
+
+            public function saveRelated(string $id, string $type, array $relatedData): void
+            {
+                throw new BEditaClientException('save related debug error');
+            }
+        };
+        $this->controller->Modules = $component;
+        $this->controller->save();
+        $actual = $this->controller->viewBuilder()->getVar('error');
+        static::assertIsArray($actual);
+        static::assertCount(2, $actual);
+        static::assertStringContainsString('save permission debug error', $actual[0]);
+        static::assertStringContainsString('save related debug error', $actual[1]);
     }
 }
