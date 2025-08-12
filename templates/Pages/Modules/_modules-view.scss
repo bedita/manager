@@ -1,12 +1,14 @@
+@use "../../../resources/styles/variables";
+
 body.view-module, body.userprofiles-view {
 
     .modules-view {
         >header {
-            min-height: 3 * $gutter;
+            min-height: 3 * variables.$gutter;
             h1:empty {
                 &:before {
                     content: attr(untitled-label);
-                    color: $gray-600;
+                    color: variables.$gray-600;
                     font-style: italic;
                 }
             }
@@ -16,7 +18,7 @@ body.view-module, body.userprofiles-view {
     // view
     .module-form {
         form {
-            @extend .object-form;
+            @extend .object-form !optional;
         }
     }
 }
@@ -24,14 +26,14 @@ body.view-module, body.userprofiles-view {
 // tabs layout
 .fieldset {
     ~ .fieldset {
-        margin-top: $gutter * 1.5;
+        margin-top: variables.$gutter * 1.5;
     }
     .tab {
         display: flex;
         align-items: center;
-        padding-left: $gutter * .5;
-        padding-right: $gutter * .5;
-        border-bottom: 1px solid $gray-100;
+        padding-left: variables.$gutter * .5;
+        padding-right: variables.$gutter * .5;
+        border-bottom: 1px solid variables.$gray-100;
         // background-color: $gray-800;
 
         &.is-loading-spinner {
@@ -42,8 +44,8 @@ body.view-module, body.userprofiles-view {
 
         h2 {
             flex-grow: 1;
-            margin: 0; padding: 0 $gutter 0 0;
-            font-size: $font-size-base;
+            margin: 0; padding: 0 variables.$gutter 0 0;
+            font-size: variables.$font-size-base;
             &:first-letter {
                 text-transform: capitalize;
             }
@@ -53,8 +55,8 @@ body.view-module, body.userprofiles-view {
             cursor: pointer;
             &:before {
                 content: '+';
-                margin-right: $gutter;
-                font-size: $font-size-2;
+                margin-right: variables.$gutter;
+                font-size: variables.$font-size-2;
             }
             &.open {
                 &:before {
@@ -77,7 +79,7 @@ body.view-module, body.translation-module, body.userprofiles-view {
     .module-form form {
         @media screen and (min-width: 768px) {
             display: grid;
-            grid-gap: 0 $gutter;
+            grid-gap: 0 variables.$gutter;
             grid-template-areas: "header-view header-view"
                                     "main-view side-view"
                                     "submain-view side-view"
@@ -94,7 +96,7 @@ body.view-module, body.translation-module, body.userprofiles-view {
         }
 
         @media screen and (min-width: 1024px) {
-            grid-gap: 0 $gutter * 1.5;
+            grid-gap: 0 variables.$gutter * 1.5;
             grid-template-columns: 2fr 1fr;
             section.relations { grid-area: submain-view; }
             section.history { grid-area: submain-view-1; }
