@@ -1,10 +1,13 @@
-$file-border-color: $gray-600;
+@use "sass:color";
+@use "variables";
+
+$file-border-color: variables.$gray-600;
 $file-radius: 2px;
-$file-cta-background-color: $gray-100;
-$file-cta-color: $gray-600;
-$file-cta-hover-color: $black;
-$file-cta-active-color: $black;
-$file-name-border-color: $gray-600;
+$file-cta-background-color: variables.$gray-100;
+$file-cta-color: variables.$gray-600;
+$file-cta-hover-color: variables.$black;
+$file-cta-active-color: variables.$black;
+$file-name-border-color: variables.$gray-600;
 $file-name-border-style: solid;
 $file-name-border-width: 1px 1px 1px 0;
 $file-name-max-width: 24em;
@@ -47,21 +50,21 @@ $file-name-max-width: 24em;
 
         &:hover {
             .file-cta {
-                background-color: darken($file-cta-background-color, 2.5%);
+                background-color: color.adjust($file-cta-background-color, $lightness: -2.5%);
                 color: $file-cta-hover-color;
             }
             .file-name {
-                border-color: darken($file-name-border-color, 2.5%);
+                border-color: color.adjust($file-name-border-color, $lightness: -2.5%);
             }
         }
 
         &:active {
             .file-cta {
-                background-color: darken($file-cta-background-color, 5%);
+                background-color: color.adjust($file-cta-background-color, $lightness: -5%);
                 color: $file-cta-active-color;
             }
             .file-name {
-                border-color: darken($file-name-border-color, 5%);
+                border-color: color.adjust($file-name-border-color, $lightness: -5%);
             }
         }
     }
@@ -83,10 +86,10 @@ $file-name-max-width: 24em;
         position: relative;
         padding-left: 1em;
         padding-right: 1em;
-        height: $gutter * 2;
+        height: variables.$gutter * 2;
         border-color: $file-border-color;
         border-radius: $file-radius;
-        font-size: $font-size-sm;
+        font-size: variables.$font-size-sm;
         text-align: left;
         white-space: nowrap;
     }
@@ -113,8 +116,8 @@ $file-name-max-width: 24em;
                 &:before {
                     content: "-";
                     content: attr(data-empty-label);
-                    font-size: $font-size-sssm;
-                    color: $gray-600;
+                    font-size: variables.$font-size-sssm;
+                    color: variables.$gray-600;
                 }
             }
         }
@@ -139,9 +142,9 @@ $file-name-max-width: 24em;
         display: inline-block;
         flex-grow: 0;
         flex-shrink: 0;
-        width: $gutter * 2;
-        height: $gutter * 2;
-        margin-left: $gutter * .25;
+        width: variables.$gutter * 2;
+        height: variables.$gutter * 2;
+        margin-left: variables.$gutter * .25;
         font-size: 0;
 
         outline: 0;
@@ -151,7 +154,7 @@ $file-name-max-width: 24em;
         &:after, &:before {
             content: "";
             display: block;
-            background-color: $gray-300;
+            background-color: variables.$gray-300;
             position: absolute;
             left: 50%;
             top: 50%;

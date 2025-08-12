@@ -1,7 +1,9 @@
+@use "variables";
+
 // generic full size backdrop
 .backdrop {
     display: none;
-    @extend .full-size-absolute;
+    @extend .full-size-absolute !optional;
     background-color: #000;
     opacity: .75;
 }
@@ -13,14 +15,14 @@
     justify-content: center;
     align-items: center;
     height: 2em;
-    margin-right: $gutter * .25;
-    margin-bottom: $gutter * .25;
+    margin-right: variables.$gutter * .25;
+    margin-bottom: variables.$gutter * .25;
     padding-left: .75em;
     padding-right: .75em;
-    background-color: $gray-600;
+    background-color: variables.$gray-600;
     border-radius: 4px;
-    color: $white;
-    font-size: $font-size-sssm;
+    color: variables.$white;
+    font-size: variables.$font-size-sssm;
     line-height: 1.5;
     white-space: nowrap;
     user-select: none;
@@ -34,13 +36,13 @@
     }
 
     &.is-black {
-        background-color: $black;
-        color: $gray-100;
+        background-color: variables.$black;
+        color: variables.$gray-100;
     }
 
     &.is-dark {
-        background-color: $gray-900;
-        color: $gray-100;
+        background-color: variables.$gray-900;
+        color: variables.$gray-100;
     }
 
     &.empty {
@@ -56,7 +58,7 @@
         &:not(:first-child) {
             border-bottom-left-radius: 0;
             border-top-left-radius: 0;
-            margin-left: $gutter * .25;
+            margin-left: variables.$gutter * .25;
         }
         &:not(:last-child) {
             border-bottom-right-radius: 0;
@@ -73,11 +75,11 @@
     justify-content: center;
     align-items: center;
     line-height: 0;
-    background-color: $white;
+    background-color: variables.$white;
     border-radius: 50%;
-    padding: $gutter * .75;
-    font-size: $font-size-sssm;
-    font-weight: $font-weight-black;
+    padding: variables.$gutter * .75;
+    font-size: variables.$font-size-sssm;
+    font-weight: variables.$font-weight-black;
     box-shadow: 0 0 2px #000;
     &:after {
         content: '';
@@ -92,8 +94,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: $white;
-    color: $black;
+    background-color: variables.$white;
+    color: variables.$black;
     box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
     .box-body {
         flex-grow: 1;
@@ -108,11 +110,11 @@ nav.pagination {
     white-space: nowrap;
     > div {
         &:not(:first-child) {
-            margin-left: $gutter;
+            margin-left: variables.$gutter;
         }
 
         &.page-size {
-            select { margin-left : $gutter * .5; }
+            select { margin-left : variables.$gutter * .5; }
         }
 
         &.pagination-buttons {
@@ -122,7 +124,7 @@ nav.pagination {
             button {
                 min-width: 2.5em;
                 border-radius: 4px;
-                margin-left: $gutter * .5;
+                margin-left: variables.$gutter * .5;
                 &:first-of-type { margin-left: 0; }
 
                 &.current-page {
@@ -140,8 +142,8 @@ nav.pagination {
                 &:after {
                     content: '…';
                 }
-                margin-left: $gutter * .5;
-                font-size: $font-size-llg;
+                margin-left: variables.$gutter * .5;
+                font-size: variables.$font-size-llg;
             }
         }
     }
@@ -154,13 +156,13 @@ nav.pagination {
     position: relative;
     top: 2px;
     left: 8px;
-    background-color: $black;
+    background-color: variables.$black;
     border-radius: 50%;
-    width: $gutter;
+    width: variables.$gutter;
     text-align: center;
-    height: $gutter;
-    font-size: $font-size-sssm;
-    line-height: $gutter;
+    height: variables.$gutter;
+    font-size: variables.$font-size-sssm;
+    line-height: variables.$gutter;
     overflow: hidden;
     &.empty {
         opacity: .3;
@@ -213,7 +215,7 @@ nav.pagination {
         flex-shrink: 0;
         justify-content: flex-start;
         align-items: center;
-        border-bottom-color: $gray-700;
+        border-bottom-color: variables.$gray-700;
         border-bottom-style: solid;
         border-bottom-width: 1px;
     }
@@ -227,27 +229,27 @@ nav.pagination {
             vertical-align: top;
             margin-bottom: -1px;
             padding: .5em 1em;
-            border-bottom-color: $gray-700;
+            border-bottom-color: variables.$gray-700;
             border-bottom-style: solid;
             border-bottom-width: 1px;
-            color: $gray-500;
+            color: variables.$gray-500;
         }
 
         &.is-active a {
-            border-bottom-color: $gray-100;
-            color: $gray-100;
+            border-bottom-color: variables.$gray-100;
+            color: variables.$gray-100;
         }
     }
 }
 
 
 .h-tabs ~ .h-tabs-contents {
-    margin-top: $gutter * 1.5;
+    margin-top: variables.$gutter * 1.5;
 }
 
 
 .hr {
-    background-color: $gray-700;
+    background-color: variables.$gray-700;
     border: none;
     display: block;
     height: 1px;
@@ -264,22 +266,22 @@ nav.pagination {
 .drop-area {
     position: relative;
     width: 100%;
-    min-height: $gutter * 5;
+    min-height: variables.$gutter * 5;
     background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='white' stroke-width='3' stroke-dasharray='6' stroke-dashoffset='29' stroke-linecap='butt'/%3e%3c/svg%3e");
 
     &.dragover {
         color: #fff;
-        background-color: $black;
+        background-color: variables.$black;
         font-size: 1.5em;
     }
 
     .upload-placeholder {
-        color: $gray-550;
+        color: variables.$gray-550;
         margin: auto;
     }
 
     .file-input {
-        @extend .full-size-absolute;
+        @extend .full-size-absolute !optional;
         opacity: 0;
         outline: 0;
         cursor: pointer;
@@ -289,7 +291,7 @@ nav.pagination {
         .upload-item {
             width: 100%;
             & ~ .upload-item {
-                margin-top: $gutter;
+                margin-top: variables.$gutter;
             }
 
             .upload-item-header {
@@ -301,7 +303,7 @@ nav.pagination {
                     word-break: break-word;
                 }
                 button {
-                    margin-left: $gutter * .5;
+                    margin-left: variables.$gutter * .5;
                 }
             }
 
@@ -312,30 +314,30 @@ nav.pagination {
 
             .progress-bar {
                 width: 100%;
-                margin: $gutter * .75 0 $gutter * .75;
+                margin: variables.$gutter * .75 0 variables.$gutter * .75;
 
                 .progress-bar-status {
-                    min-width: $gutter;
+                    min-width: variables.$gutter;
                     height: 2px;
                 }
                 .progress-bar-status.in-progress {
-                    background-color: $gray-400;
+                    background-color: variables.$gray-400;
                 }
                 .progress-bar-status.done {
-                    background-color: $info;
+                    background-color: variables.$info;
                 }
                 .progress-bar-status.error {
-                    background-color: $error;
+                    background-color: variables.$error;
                 }
                 .progress-bar-status.cancelled {
-                    background-color: $gray-700;
+                    background-color: variables.$gray-700;
                 }
             }
         }
     }
 }
 .drop-area-double {
-    min-height: $gutter * 16;
+    min-height: variables.$gutter * 16;
 }
 
 .module-items-counter {
