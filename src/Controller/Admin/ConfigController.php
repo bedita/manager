@@ -48,6 +48,11 @@ class ConfigController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
+    protected $sortBy = 'name';
+
+    /**
+     * @inheritDoc
+     */
     public function beforeFilter(EventInterface $event): ?Response
     {
         parent::beforeFilter($event);

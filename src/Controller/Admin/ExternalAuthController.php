@@ -55,6 +55,11 @@ class ExternalAuthController extends AdministrationBaseController
     protected array $meta = [];
 
     /**
+     * @inheritDoc
+     */
+    protected string $sortBy = 'auth_provider_id';
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null

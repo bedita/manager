@@ -42,4 +42,9 @@ class ApplicationsController extends AdministrationBaseController
      * @inheritDoc
      */
     protected array $propertiesSecrets = ['api_key', 'client_secret'];
+
+    /**
+     * @inheritDoc
+     */
+    protected string $sortBy = 'name';
 }

@@ -50,6 +50,11 @@ class RolesController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
+    protected $sortBy = 'name';
+
+    /**
+     * @inheritDoc
+     */
     public function save(): ?Response
     {
         Cache::delete(self::CACHE_KEY_ROLES);

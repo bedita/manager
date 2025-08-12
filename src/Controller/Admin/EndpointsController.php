@@ -38,4 +38,9 @@ class EndpointsController extends AdministrationBaseController
         'name' => 'string',
         'description' => 'text',
     ];
+
+    /**
+     * @inheritDoc
+     */
+    protected $sortBy = 'name';
 }
