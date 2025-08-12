@@ -38,7 +38,28 @@ if (devMode) {
 // Print env infos
 bundler.printMessage(message, separator);
 
-let sassOptions = { quietDeps: true, silenceDeprecations: ['mixed-decls'] };
+// loaders options
+const cssFileLoaderOptions = {
+    loader: 'file-loader',
+    options: {
+        name: `${BUNDLE.cssDir}/[name].css`,
+    },
+};
+const cssLoaderOptions = {
+    loader: 'css-loader',
+    options: {
+        sourceMap: devMode,
+        url: false,
+    }
+};
+const sassLoaderOptions = {
+    loader: 'sass-loader',
+    options: {
+        api: 'modern',
+        sassOptions: { quietDeps: true, silenceDeprecations: ['mixed-decls'] },
+        sourceMap: devMode,
+    }
+};
 
 // Create webpack plugins list
 // Common Plugins
@@ -280,20 +301,8 @@ module.exports = {
                 ],
 
                 use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: `${BUNDLE.cssDir}/[name].css`,
-                        },
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: devMode,
-                            api: 'modern',
-                            sassOptions: sassOptions,
-                        }
-                    },
+                    cssFileLoaderOptions,
+                    sassLoaderOptions,
                 ]
             },
             {
@@ -303,20 +312,8 @@ module.exports = {
                 ],
 
                 use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: `${BUNDLE.cssDir}/[name].css`,
-                        },
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: devMode,
-                            api: 'modern',
-                            sassOptions: sassOptions,
-                        }
-                    },
+                    cssFileLoaderOptions,
+                    sassLoaderOptions,
                 ]
             },
             {
@@ -330,21 +327,8 @@ module.exports = {
 
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: devMode,
-                            url:false,
-                        }
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: devMode,
-                            api: 'modern',
-                            sassOptions: sassOptions,
-                        }
-                    }
+                    cssLoaderOptions,
+                    sassLoaderOptions
                 ]
             },
             {
@@ -358,21 +342,8 @@ module.exports = {
 
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: devMode,
-                            url:false,
-                        }
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: devMode,
-                            api: 'modern',
-                            sassOptions: sassOptions,
-                        }
-                    }
+                    cssLoaderOptions,
+                    sassLoaderOptions
                 ]
             },
             {
@@ -382,21 +353,8 @@ module.exports = {
                 ],
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: devMode,
-                            url:false,
-                        }
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: devMode,
-                            api: 'modern',
-                            sassOptions: sassOptions,
-                        }
-                    }
+                    cssLoaderOptions,
+                    sassLoaderOptions
                 ],
             },
             {
