@@ -244,16 +244,15 @@ abstract class AdministrationBaseController extends AppController
         if ($this->sortBy != null && !empty($resultResponse['data'])) {
             $attributesKeys = array_keys($resultResponse['data'][0]['attributes'] ?? []);
             $metaKeys = array_keys($resultResponse['data'][0]['meta'] ?? []);
-            if (!in_array($this->sortBy, $attributesKeys) && !in_array($this->sortBy, $metaKeys)) {
-                return $resultResponse;
+            if (in_array($this->sortBy, $attributesKeys) || in_array($this->sortBy, $metaKeys)) {
+                $key = in_array($this->sortBy, $attributesKeys) ? 'attributes' : 'meta';
+                usort($resultResponse['data'], function ($a, $b) use ($key) {
+                    return strcmp(
+                        (string)Hash::get($a, sprintf('%s.%s', $key, $this->sortBy)),
+                        (string)Hash::get($b, sprintf('%s.%s', $key, $this->sortBy))
+                    );
+                });
             }
-            $key = in_array($this->sortBy, $attributesKeys) ? 'attributes' : 'meta';
-            usort($resultResponse['data'], function ($a, $b) use ($key) {
-                return strcmp(
-                    (string)Hash::get($a, sprintf('%s.%s', $key, $this->sortBy)),
-                    (string)Hash::get($b, sprintf('%s.%s', $key, $this->sortBy))
-                );
-            });
         }
 
         return $resultResponse;
