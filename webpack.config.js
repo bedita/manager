@@ -38,6 +38,8 @@ if (devMode) {
 // Print env infos
 bundler.printMessage(message, separator);
 
+let sassOptions = { quietDeps: true, silenceDeprecations: ['mixed-decls'] };
+
 // Create webpack plugins list
 // Common Plugins
 let webpackPlugins = [
@@ -288,6 +290,8 @@ module.exports = {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: devMode,
+                            api: 'modern',
+                            sassOptions: sassOptions,
                         }
                     },
                 ]
@@ -309,6 +313,8 @@ module.exports = {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: devMode,
+                            api: 'modern',
+                            sassOptions: sassOptions,
                         }
                     },
                 ]
@@ -335,6 +341,8 @@ module.exports = {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: devMode,
+                            api: 'modern',
+                            sassOptions: sassOptions,
                         }
                     }
                 ]
@@ -361,6 +369,8 @@ module.exports = {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: devMode,
+                            api: 'modern',
+                            sassOptions: sassOptions,
                         }
                     }
                 ]
@@ -382,7 +392,9 @@ module.exports = {
                     {
                         loader: 'sass-loader',
                         options: {
-                            sourceMap: devMode
+                            sourceMap: devMode,
+                            api: 'modern',
+                            sassOptions: sassOptions,
                         }
                     }
                 ],
