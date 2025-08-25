@@ -1065,6 +1065,25 @@ export default {
 
             return `${url}${query}`;
         },
+
+        relatedClass(type, dataList) {
+            return `ribbon ${type ? 'has-background-module-' + type : ''} ${dataList ? 'in-data-list' : ''}`;
+        },
+
+        relatedNewLabel(related) {
+            if (!related?.meta?.fromUpload) {
+                return t`NEW`;
+            }
+            const uploadDate = new Date(related.meta.created);
+            const now = new Date();
+            const diffTime = Math.abs(now - uploadDate);
+            const diffMinutes = Math.ceil(diffTime / (1000 * 60));
+            if (diffMinutes <= 60) {
+                return t`NEW`;
+            }
+
+            return `#${related?.id}`;
+        },
     },
 }
 </script>

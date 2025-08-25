@@ -256,6 +256,7 @@ export default {
         },
 
         uploadSuccessful(file, object) {
+            object.meta.fromUpload = true;
             this.$emit('new-relations', [object]);
             this.removeProgressItem(file);
         },
