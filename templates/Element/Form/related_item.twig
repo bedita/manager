@@ -39,19 +39,16 @@
 
     {# RIBBON (new items) #}
     {% if stage %}
-        <div :class="relatedClass(related?.type, dataList)">
+        <div :class="relatedClass(related, dataList)">
             <: relatedNewLabel(related) :>
         </div>
     {% endif %}
 
-    <div v-if="Date.parse(related.attributes.publish_start) > Date.now()" :class="relatedClass(related?.type, dataList)">
+    <div v-if="Date.parse(related.attributes.publish_start) > Date.now()" :class="relatedClass(related, dataList)">
          {{ __('Future') }}
     </div>
-    <div v-if="Date.parse(related.attributes.publish_end) < Date.now()" :class="relatedClass(related?.type, dataList)">
+    <div v-if="Date.parse(related.attributes.publish_end) < Date.now()" :class="relatedClass(related, dataList)">
          {{ __('Expired') }}
-    </div>
-    <div v-if="Date.parse(related.attributes.publish_end) < Date.now()" :class="relatedClass(related?.type, dataList)">
-        {{ __('Expired') }}
     </div>
 
     {# THUMBNAIL #}
