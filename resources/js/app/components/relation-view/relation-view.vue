@@ -1065,27 +1065,6 @@ export default {
 
             return `${url}${query}`;
         },
-
-        relatedClass(related, dataList) {
-            const type = related?.type;
-            if (related?.meta?.fromUpload) {
-                const uploadDate = new Date(related.meta.created);
-                const now = new Date();
-                const diffTime = Math.abs(now - uploadDate);
-                const diffMinutes = Math.ceil(diffTime / (1000 * 60));
-                if (diffMinutes > 5) {
-                    return `ribbon has-background-info ${dataList ? 'in-data-list' : ''}`;
-                } else {
-                    return `ribbon ${type ? 'has-background-module-' + type : ''} ${dataList ? 'in-data-list' : ''}`;
-                }
-            }
-
-            return `ribbon ${type ? 'has-background-module-' + type : ''} ${dataList ? 'in-data-list' : ''}`;
-        },
-
-        relatedNewLabel(related) {
-            return `#${related?.id}`;
-        },
     },
 }
 </script>

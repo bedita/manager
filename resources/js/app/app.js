@@ -115,6 +115,7 @@ const _vueInstance = new Vue({
         ModuleSetup: () => import(/* webpackChunkName: "module-setup" */'app/components/module/module-setup'),
         AddRelatedById: () => import(/* webpackChunkName: "add-related-by-id" */'app/components/add-related-by-id/add-related-by-id'),
         UploadedObject: () => import(/* webpackChunkName: "uploaded-object" */'app/components/uploaded-object/uploaded-object.vue'),
+        RibbonItem: () => import(/* webpackChunkName: "ribbon-item" */'./components/ribbon-item/ribbon-item.vue'),
         AppIcon,
     },
 
@@ -642,4 +643,5 @@ Vue.component('ModuleSetup', _vueInstance.$options.components.ModuleSetup);
 Vue.component('ObjectCategories', _vueInstance.$options.components.ObjectCategories);
 Vue.component('ObjectCaptions', _vueInstance.$options.components.ObjectCaptions);
 Vue.component('ObjectInfo', _vueInstance.$options.components.ObjectInfo);
+Vue.component('RibbonItem', _vueInstance.$options.components.RibbonItem);
 Vue.component('UploadedObject', _vueInstance.$options.components.UploadedObject);
