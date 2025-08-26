@@ -5,11 +5,6 @@
         v-if="visible"
     >
         <span v-if="itemLabel(item)">{{ itemLabel(item) }}</span>
-        <app-icon
-            icon="carbon:save"
-            color="white"
-            class="hw-24"
-        />
     </div>
 </template>
 <script>
@@ -37,6 +32,7 @@ export default {
             msgExpired: t`Expired`,
             msgFuture: t`Future`,
             msgNew: t`New`,
+            msgUploaded: t`Uploaded`,
         };
     },
     computed: {
@@ -53,7 +49,7 @@ export default {
 
         itemLabel(item) {
             if (this.stage) {
-                return this.itemNew(item) ? this.msgNew : '';
+                return this.itemNew(item) && item?.meta?.fromUpload ? this.msgUploaded : this.msgNew;
             }
             if (!item.attributes.publish_start) {
                 return '';
@@ -81,9 +77,5 @@ div.ribbon-item {
 }
 div.ribbon-item span {
     margin-right: 0.5rem;
-}
-div.ribbon-item .hw-24 {
-    height: 24px;
-    width: 24px;
 }
 </style>
