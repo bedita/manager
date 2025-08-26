@@ -223,11 +223,9 @@ export default {
 };
 </script>
 <style scoped>
-div.index-cell {
-    line-clamp: 1;
-}
 div.index-cell > div {
-    display: inline-block;;
+    display: inline-block;
+    line-clamp: 1;
 }
 div.index-cell > div.msg {
     color: forestgreen;
