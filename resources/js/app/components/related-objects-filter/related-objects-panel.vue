@@ -135,21 +135,6 @@
                                     @discard="discard"
                                 />
                             </div>
-                            <!-- <div
-                                v-for="item in searchResults"
-                                :key="item.id"
-                            >
-                                <button
-                                    class="picker button button-outlined is-width-auto"
-                                    @click.prevent="pickin(item)"
-                                    v-if="!filter?.[relation]?.includes(item?.id)"
-                                >
-                                    <app-icon icon="carbon:add" />
-                                    <span class="ml-05">
-                                        [{{ item.id }}] {{ item?.attributes?.title }}
-                                    </span>
-                                </button>
-                            </div> -->
                         </div>
                         <div class="buttons">
                             <button
@@ -223,7 +208,7 @@ export default {
         this.$nextTick(() => {
             for (const [key, value] of Object.entries(this.relationsSchema)) {
                 this.relations.push({
-                    label: value?.label || key,
+                    label: this.$helpers.humanize(value?.label || key),
                     name: key,
                     types: value?.types || [],
                 });
