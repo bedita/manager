@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-06-27 12:35:10 \n"
+"POT-Creation-Date: 2025-08-26 08:17:45 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -312,9 +312,6 @@ msgstr "Errore: %s"
 msgid "Events"
 msgstr "Eventi"
 
-msgid "Expired"
-msgstr "Scaduto"
-
 msgid "Export"
 msgstr "Esporta"
 
@@ -368,9 +365,6 @@ msgstr "Il formato selezionato non è disponibile"
 
 msgid "From"
 msgstr "Da"
-
-msgid "Future"
-msgstr "Futuro"
 
 msgid "Gender"
 msgstr "Genere"
@@ -1542,6 +1536,18 @@ msgstr "Data di inizio"
 msgid "User"
 msgstr "Utente"
 
+#, javascript-format
+msgid "Created on ${ created }."
+msgstr "Creato il ${ created }."
+
+#, javascript-format
+msgid "Modified on ${ modified }."
+msgstr "Modificato il ${ modified }."
+
+#, javascript-format
+msgid "Publish start on ${ published }."
+msgstr "Pubblicato il ${ published }."
+
 msgid "Loading branches for position"
 msgstr "Caricamento rami per posizione"
 
@@ -1606,17 +1612,17 @@ msgstr "Mostra"
 msgid "copied in the clipboard"
 msgstr "copiato negli appunti"
 
-#, javascript-format
-msgid "Created on ${ created }."
-msgstr "Creato il ${ created }."
+msgid "Expired"
+msgstr "Scaduto"
 
-#, javascript-format
-msgid "Modified on ${ modified }."
-msgstr "Modificato il ${ modified }."
+msgid "Future"
+msgstr "Futuro"
 
-#, javascript-format
-msgid "Publish start on ${ published }."
-msgstr "Pubblicato il ${ published }."
+msgid "New"
+msgstr "Nuovo"
+
+msgid "Uploaded"
+msgstr "Caricato"
 
 #, javascript-format
 msgid "Missing required data \"${ required }\". Retry"
@@ -1742,9 +1748,6 @@ msgstr "Formato"
 
 msgid "New caption"
 msgstr "Nuovo sottotitolo"
-
-msgid "New"
-msgstr "Nuovo"
 
 msgid "No captions"
 msgstr "Nessun sottotitolo"
