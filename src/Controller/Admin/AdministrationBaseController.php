@@ -84,9 +84,9 @@ abstract class AdministrationBaseController extends AppController
     /**
      * Sort field
      *
-     * @var string
+     * @var string|null
      */
-    protected $sortBy = null;
+    protected ?string $sortBy = null;
 
     /**
      * @inheritDoc
@@ -247,7 +247,7 @@ abstract class AdministrationBaseController extends AppController
                 usort($resultResponse['data'], function ($a, $b) use ($key) {
                     return strcmp(
                         (string)Hash::get($a, sprintf('%s.%s', $key, $this->sortBy)),
-                        (string)Hash::get($b, sprintf('%s.%s', $key, $this->sortBy))
+                        (string)Hash::get($b, sprintf('%s.%s', $key, $this->sortBy)),
                     );
                 });
             }
