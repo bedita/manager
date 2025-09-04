@@ -38,6 +38,10 @@ export default {
             default: '[10]'
         },
         filterActive: Boolean,
+        filterRelationsActive: {
+            type: Boolean,
+            default: false
+        },
         filterList: {
             type: Array,
             default: () => [],
@@ -81,7 +85,7 @@ export default {
              * When disabled, only direct children are fetched.
              * This will switch the API filter between `parent` and `ancestor`.
              */
-            editFilterRelations: this.filterActive,
+            editFilterRelations: this.filterRelationsActive,
             filterByDescendants: false,
             filterRelations: {},
             folder: null,

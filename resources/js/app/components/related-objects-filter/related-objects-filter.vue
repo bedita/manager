@@ -22,6 +22,7 @@
                             <div
                                 class="tag"
                                 :class="moduleClass(relatedId)"
+                                :key="relatedId"
                             >
                                 [{{ relatedId }}] {{ objectsMap?.[relatedId]?.title }}
                                 <a
