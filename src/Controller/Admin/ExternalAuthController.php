@@ -57,7 +57,7 @@ class ExternalAuthController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected string $sortBy = 'auth_provider_id';
+    protected ?string $sortBy = 'auth_provider_id';
 
     /**
      * Index method

@@ -46,5 +46,5 @@ class ApplicationsController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected string $sortBy = 'name';
+    protected ?string $sortBy = 'name';
 }

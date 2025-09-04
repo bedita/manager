@@ -50,7 +50,7 @@ class RolesController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $sortBy = 'name';
+    protected ?string $sortBy = 'name';
 
     /**
      * @inheritDoc

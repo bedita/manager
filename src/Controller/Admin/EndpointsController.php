@@ -42,5 +42,5 @@ class EndpointsController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $sortBy = 'name';
+    protected ?string $sortBy = 'name';
 }
