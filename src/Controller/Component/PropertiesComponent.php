@@ -165,6 +165,7 @@ class PropertiesComponent extends Component
         $keep = (array)$this->getConfig(sprintf('Properties.%s.view._keep', $type), []);
         $hide = (array)$this->getConfig(sprintf('Properties.%s.view._hide', $type), []);
         $attributes = array_merge(array_fill_keys($keep, ''), (array)Hash::get($object, 'attributes'));
+        $attributes = array_merge($attributes, (array)Hash::get($object, 'meta', []));
         $attributes = array_diff_key($attributes, array_flip($this->excluded));
         $attributes = array_diff_key($attributes, array_flip($hide));
         $defaults = array_merge($this->getConfig(sprintf('Properties.%s.view', $type), []), $this->defaultGroups['view']);
