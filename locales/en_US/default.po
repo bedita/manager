@@ -1612,6 +1612,21 @@ msgstr ""
 msgid "Error while creating new object."
 msgstr ""
 
+msgid "Edit related objects"
+msgstr ""
+
+msgid "Choose object type"
+msgstr ""
+
+msgid "Choose relation"
+msgstr ""
+
+msgid "Filter to apply"
+msgstr ""
+
+msgid "Search related objects"
+msgstr ""
+
 msgid "Action"
 msgstr ""
 

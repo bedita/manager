@@ -1,12 +1,14 @@
 <div class="module-header">
     {% set filterActive = (_view.request.getQuery('filter') or _view.request.getQuery('q')) %}
     {% set list = Schema.filterList(filter | default([]), schema.properties) %}
+    {% set relationsFilter = Array.intersect(_view.request.getQuery('filter')|keys|default([]), schema.relations|keys|default([])) %}
     <filter-box-view
         :pagination="{{ meta.pagination|json_encode|escape('html_attr') }}"
         :init-filter="urlFilterQuery"
         :selected-types='selectedTypes'
         :filter-list="{{ list|json_encode|escape('html_attr') }}"
         :filter-active="{{ filterActive|json_encode|escape('html_attr') }}"
+        :filter-relations-active="{{ relationsFilter|length > 0 ? 'true' : 'false' }}"
 
         config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
         placeholder="{{ __('Search') }}"
