@@ -350,3 +350,19 @@ nav.pagination {
     right: 6px;
     font-size: 11px;
 }
+
+// fullcalendar
+.fc {
+    .fc-list-day-cushion {
+        background-color: #154362 !important;
+    }
+    .fc-list-event:hover td {
+        background-color: #5389ae !important;
+    }
+}
+:root {
+    --fc-small-font-size: .75em;
+    --fc-highlight-color: #bcd6f14d;
+    --fc-today-bg-color: #002732;
+    --fc-event-bg-color: #4871ed;
+}
