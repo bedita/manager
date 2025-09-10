@@ -103,7 +103,9 @@ const _vueInstance = new Vue({
         FieldGeoCoordinates: () => import(/* webpackChunkName: "field-geo-coordinates" */'app/components/form/field-geo-coordinates'),
         FieldInteger: () => import(/* webpackChunkName: "field-integer" */'app/components/form/field-integer'),
         FieldJson: () => import(/* webpackChunkName: "field-json" */'app/components/form/field-json'),
+        FieldMultipleCheckboxes: () => import(/* webpackChunkName: "field-multiple-checkboxes" */'app/components/form/field-multiple-checkboxes'),
         FieldNumber: () => import(/* webpackChunkName: "field-number" */'app/components/form/field-number'),
+        FieldPassword: () => import(/* webpackChunkName: "field-password" */'app/components/form/field-password'),
         FieldPlaintext: () => import(/* webpackChunkName: "field-plaintext" */'app/components/form/field-plaintext'),
         FieldRadio: () => import(/* webpackChunkName: "field-radio" */'app/components/form/field-radio'),
         FieldSelect: () => import(/* webpackChunkName: "field-select" */'app/components/form/field-select'),
@@ -630,7 +632,9 @@ Vue.component('FieldGeoCoordinates', _vueInstance.$options.components.FieldGeoCo
 Vue.component('FieldDate', _vueInstance.$options.components.FieldDate);
 Vue.component('FieldInteger', _vueInstance.$options.components.FieldInteger);
 Vue.component('FieldJson', _vueInstance.$options.components.FieldJson);
+Vue.component('FieldMultipleCheckboxes', _vueInstance.$options.components.FieldMultipleCheckboxes);
 Vue.component('FieldNumber', _vueInstance.$options.components.FieldNumber);
+Vue.component('FieldPassword', _vueInstance.$options.components.FieldPassword);
 Vue.component('FieldPlaintext', _vueInstance.$options.components.FieldPlaintext);
 Vue.component('FieldRadio', _vueInstance.$options.components.FieldRadio);
 Vue.component('FieldSelect', _vueInstance.$options.components.FieldSelect);

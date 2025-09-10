@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Form\Form;
 use App\Utility\DateRangesTools;
+use App\Utility\PermissionsTrait;
 use Authentication\Identity;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
@@ -36,6 +37,8 @@ use Cake\Utility\Hash;
  */
 class AppController extends Controller
 {
+    use PermissionsTrait;
+
     /**
      * BEdita4 API client
      *
@@ -234,7 +237,7 @@ class AppController extends Controller
         }
 
         $this->decodeJsonAttributes($data);
-
+        $this->prepareRoles($data);
         $this->prepareDateRanges($data);
 
         // prepare categories
@@ -300,6 +303,25 @@ class AppController extends Controller
     }
 
     /**
+     * Transform roles data into relations format.
+     *
+     * @param array $data The data to prepare
+     * @return void
+     */
+    protected function prepareRoles(array &$data): void
+    {
+        $roles = (string)Hash::get($data, 'roles');
+        $roles = empty($roles) ? [] : (array)json_decode($roles, true);
+        $data = array_filter($data, fn($key) => $key !== 'roles', ARRAY_FILTER_USE_KEY);
+        if (!empty($roles)) {
+            $data['relations']['roles']['replaceRelated'] = array_map(
+                fn($id) => ['id' => $id, 'type' => 'roles'],
+                array_keys($this->rolesByNames($roles))
+            );
+        }
+    }
+
+    /**
      * Prepare request relation data.
      *
      * @param array $data Request data
@@ -311,7 +333,8 @@ class AppController extends Controller
         if (!empty($data['relations'])) {
             $api = [];
             foreach ($data['relations'] as $relation => $relationData) {
-                $id = $data['id'];
+                $id = (string)Hash::get($data, 'id');
+                $id = empty($id) ? null : $id;
                 foreach ($relationData as $method => $ids) {
                     $relatedIds = $this->relatedIds($ids);
                     if ($method === 'replaceRelated' || !empty($relatedIds)) {

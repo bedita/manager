@@ -513,7 +513,7 @@ class ModulesComponent extends Component
         $type = $this->getController()->getRequest()->getParam('object_type');
         $rr = $relatedData;
         foreach ($rr as $method => $data) {
-            $actualRelated = (array)ApiClientProvider::getApiClient()->getRelated($id, $type, $data['relation']);
+            $actualRelated = empty($id) ? [] : (array)ApiClientProvider::getApiClient()->getRelated($id, $type, $data['relation']);
             $actualRelated = (array)Hash::get($actualRelated, 'data');
             $actualRelated = RelationsTools::toString($actualRelated);
             $requestRelated = (array)Hash::get($data, 'relatedIds', []);
