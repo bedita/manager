@@ -333,8 +333,7 @@ class AppController extends Controller
         if (!empty($data['relations'])) {
             $api = [];
             foreach ($data['relations'] as $relation => $relationData) {
-                $id = (string)Hash::get($data, 'id');
-                $id = empty($id) ? null : $id;
+                $id = Hash::get($data, 'id', null);
                 foreach ($relationData as $method => $ids) {
                     $relatedIds = $this->relatedIds($ids);
                     if ($method === 'replaceRelated' || !empty($relatedIds)) {
@@ -344,7 +343,7 @@ class AppController extends Controller
             }
             $data['_api'] = $api;
         }
-        unset($data['relations']);
+        $data = array_filter($data, fn($key) => $key !== 'relations', ARRAY_FILTER_USE_KEY);
     }
 
     /**

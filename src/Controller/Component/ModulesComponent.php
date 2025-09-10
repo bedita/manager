@@ -506,14 +506,14 @@ class ModulesComponent extends Component
             return true;
         }
         $methods = (array)Hash::extract($relatedData, '{n}.method');
-        if (in_array('addRelated', $methods) || in_array('removeRelated', $methods)) {
+        if (in_array('addRelated', $methods) || in_array('removeRelated', $methods) || empty($id)) {
             return false;
         }
         // check replaceRelated
         $type = $this->getController()->getRequest()->getParam('object_type');
         $rr = $relatedData;
         foreach ($rr as $method => $data) {
-            $actualRelated = empty($id) ? [] : (array)ApiClientProvider::getApiClient()->getRelated($id, $type, $data['relation']);
+            $actualRelated = (array)ApiClientProvider::getApiClient()->getRelated($id, $type, $data['relation']);
             $actualRelated = (array)Hash::get($actualRelated, 'data');
             $actualRelated = RelationsTools::toString($actualRelated);
             $requestRelated = (array)Hash::get($data, 'relatedIds', []);
