@@ -26,6 +26,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversClass(ArrayHelper::class)]
 #[CoversMethod(ArrayHelper::class, 'combine')]
 #[CoversMethod(ArrayHelper::class, 'extract')]
+#[CoversMethod(ArrayHelper::class, 'intersect')]
 #[CoversMethod(ArrayHelper::class, 'onlyKeys')]
 #[CoversMethod(ArrayHelper::class, 'removeKeys')]
 class ArrayHelperTest extends TestCase
@@ -204,7 +205,6 @@ class ArrayHelperTest extends TestCase
      * Test `intersect()` method.
      *
      * @return void
-     * @covers ::intersect()
      */
     public function testIntersect(): void
     {
