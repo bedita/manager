@@ -192,7 +192,7 @@ class PropertiesComponent extends Component
             function ($key) use ($metaKeys) {
                 return !in_array($key, $metaKeys);
             },
-            ARRAY_FILTER_USE_KEY
+            ARRAY_FILTER_USE_KEY,
         );
 
         return $properties;
