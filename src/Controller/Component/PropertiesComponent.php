@@ -186,6 +186,14 @@ class PropertiesComponent extends Component
         }
         // add remaining properties to 'other' group
         $properties['other'] += array_diff_key($attributes, array_flip($used));
+        $metaKeys = array_keys((array)Hash::get($object, 'meta', []));
+        $properties['other'] = array_filter(
+            $properties['other'],
+            function ($key) use ($metaKeys) {
+                return !in_array($key, $metaKeys);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
 
         return $properties;
     }

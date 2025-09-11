@@ -199,4 +199,19 @@ class ArrayHelperTest extends TestCase
         $actual = $this->Array->extract($data, $pattern);
         static::assertSame($expected, $actual);
     }
+
+    /**
+     * Test `intersect()` method.
+     *
+     * @return void
+     * @covers ::intersect()
+     */
+    public function testIntersect(): void
+    {
+        $a = ['a', 'b', 'c', 'd'];
+        $b = ['c', 'd', 'e', 'f'];
+        $expected = ['c', 'd'];
+        $actual = $this->Array->intersect($a, $b);
+        static::assertSame($expected, $actual);
+    }
 }
