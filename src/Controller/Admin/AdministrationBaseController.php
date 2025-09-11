@@ -82,6 +82,13 @@ abstract class AdministrationBaseController extends AppController
     protected $meta = ['created', 'modified'];
 
     /**
+     * Sort field
+     *
+     * @var string
+     */
+    protected $sortBy = null;
+
+    /**
      * @inheritDoc
      */
     public function initialize(): void
@@ -233,6 +240,19 @@ abstract class AdministrationBaseController extends AppController
             $count = (int)Hash::get($response, 'meta.pagination.page_items');
             $total += $count;
             $page++;
+        }
+        if ($this->sortBy != null && !empty($resultResponse['data'])) {
+            $attributesKeys = array_keys($resultResponse['data'][0]['attributes'] ?? []);
+            $metaKeys = array_keys($resultResponse['data'][0]['meta'] ?? []);
+            if (in_array($this->sortBy, $attributesKeys) || in_array($this->sortBy, $metaKeys)) {
+                $key = in_array($this->sortBy, $attributesKeys) ? 'attributes' : 'meta';
+                usort($resultResponse['data'], function ($a, $b) use ($key) {
+                    return strcmp(
+                        (string)Hash::get($a, sprintf('%s.%s', $key, $this->sortBy)),
+                        (string)Hash::get($b, sprintf('%s.%s', $key, $this->sortBy))
+                    );
+                });
+            }
         }
 
         return $resultResponse;

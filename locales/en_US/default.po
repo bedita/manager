@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-07-11 09:52:52 \n"
+"POT-Creation-Date: 2025-08-26 08:17:45 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -310,9 +310,6 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
-msgid "Expired"
-msgstr ""
-
 msgid "Export"
 msgstr ""
 
@@ -365,9 +362,6 @@ msgid "Format choosen is not available"
 msgstr ""
 
 msgid "From"
-msgstr ""
-
-msgid "Future"
 msgstr ""
 
 msgid "Gender"
@@ -1523,6 +1517,18 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+#, javascript-format
+msgid "Created on ${ created }."
+msgstr ""
+
+#, javascript-format
+msgid "Modified on ${ modified }."
+msgstr ""
+
+#, javascript-format
+msgid "Publish start on ${ published }."
+msgstr ""
+
 msgid "Loading branches for position"
 msgstr ""
 
@@ -1587,16 +1593,16 @@ msgstr ""
 msgid "copied in the clipboard"
 msgstr ""
 
-#, javascript-format
-msgid "Created on ${ created }."
+msgid "Expired"
 msgstr ""
 
-#, javascript-format
-msgid "Modified on ${ modified }."
+msgid "Future"
 msgstr ""
 
-#, javascript-format
-msgid "Publish start on ${ published }."
+msgid "New"
+msgstr ""
+
+msgid "Uploaded"
 msgstr ""
 
 #, javascript-format
@@ -1707,9 +1713,6 @@ msgid "Format"
 msgstr ""
 
 msgid "New caption"
-msgstr ""
-
-msgid "New"
 msgstr ""
 
 msgid "No captions"
