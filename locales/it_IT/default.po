@@ -1631,6 +1631,21 @@ msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 
+msgid "Edit related objects"
+msgstr "Modifica oggetti correlati"
+
+msgid "Choose object type"
+msgstr "Scegli il tipo di oggetto"
+
+msgid "Choose relation"
+msgstr "Scegli la relazione"
+
+msgid "Filter to apply"
+msgstr "Filtro da applicare"
+
+msgid "Search related objects"
+msgstr "Cerca oggetti correlati"
+
 msgid "Action"
 msgstr "Azione"
 
@@ -1898,6 +1913,30 @@ msgstr "Selezionare un tipo"
 
 msgid "Create new for"
 msgstr "Crea nuovo per"
+
+msgid "Add multiple date ranges"
+msgstr "Aggiungi intervalli multipli di date"
+
+msgid "Day"
+msgstr "Giorno"
+
+msgid "Month"
+msgstr "Mese"
+
+msgid "Repeat times"
+msgstr "Numero di ripetizioni"
+
+msgid "Repeat type"
+msgstr "Tipo di ripetizione"
+
+msgid "Required"
+msgstr "Obbligatorio"
+
+msgid "Year"
+msgstr "Anno"
+
+msgid "Add multiple"
+msgstr "Aggiungi multiplo"
 
 msgid "Insert date(s)"
 msgstr "Inserire data(e)"

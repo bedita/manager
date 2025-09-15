@@ -185,10 +185,11 @@ class ModulesComponent extends Component
         }
         /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
-        if (empty($user) || empty($user->getOriginalData())) {
+        $userRoles = (array)$user->get('roles');
+        if (empty($user) || empty($user->getOriginalData()) || in_array('admin', $userRoles)) {
             return;
         }
-        $roles = array_intersect(array_keys($accessControl), (array)$user->get('roles'));
+        $roles = array_intersect(array_keys($accessControl), $userRoles);
         $modules = (array)array_keys($this->modules);
         $hidden = [];
         $readonly = [];
