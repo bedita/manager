@@ -45,7 +45,7 @@ export default {
     },
     watch: {
         attrs: function(val) {
-            if (val.time != this.instance.config.enableTime) {
+            if (val?.['data-min-date'] || val.time != this.instance.config.enableTime) {
                 // flatpickr doesn't allow dynamic config change. we must destroy and re-create it.
                 /// see https://github.com/flatpickr/flatpickr/issues/1546
                 const date = this.instance.latestSelectedDateObj;

@@ -1914,6 +1914,30 @@ msgstr "Selezionare un tipo"
 msgid "Create new for"
 msgstr "Crea nuovo per"
 
+msgid "Add multiple date ranges"
+msgstr "Aggiungi intervalli multipli di date"
+
+msgid "Day"
+msgstr "Giorno"
+
+msgid "Month"
+msgstr "Mese"
+
+msgid "Repeat times"
+msgstr "Numero di ripetizioni"
+
+msgid "Repeat type"
+msgstr "Tipo di ripetizione"
+
+msgid "Required"
+msgstr "Obbligatorio"
+
+msgid "Year"
+msgstr "Anno"
+
+msgid "Add multiple"
+msgstr "Aggiungi multiplo"
+
 msgid "Insert date(s)"
 msgstr "Inserire data(e)"
 
