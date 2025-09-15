@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-06-27 12:35:10 \n"
+"POT-Creation-Date: 2025-08-26 08:17:45 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -310,9 +310,6 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
-msgid "Expired"
-msgstr ""
-
 msgid "Export"
 msgstr ""
 
@@ -365,9 +362,6 @@ msgid "Format choosen is not available"
 msgstr ""
 
 msgid "From"
-msgstr ""
-
-msgid "Future"
 msgstr ""
 
 msgid "Gender"
@@ -1538,6 +1532,18 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+#, javascript-format
+msgid "Created on ${ created }."
+msgstr ""
+
+#, javascript-format
+msgid "Modified on ${ modified }."
+msgstr ""
+
+#, javascript-format
+msgid "Publish start on ${ published }."
+msgstr ""
+
 msgid "Loading branches for position"
 msgstr ""
 
@@ -1626,16 +1632,16 @@ msgstr ""
 msgid "copied in the clipboard"
 msgstr ""
 
-#, javascript-format
-msgid "Created on ${ created }."
+msgid "Expired"
 msgstr ""
 
-#, javascript-format
-msgid "Modified on ${ modified }."
+msgid "Future"
 msgstr ""
 
-#, javascript-format
-msgid "Publish start on ${ published }."
+msgid "New"
+msgstr ""
+
+msgid "Uploaded"
 msgstr ""
 
 #, javascript-format
@@ -1643,6 +1649,21 @@ msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
 msgid "Error while creating new object."
+msgstr ""
+
+msgid "Edit related objects"
+msgstr ""
+
+msgid "Choose object type"
+msgstr ""
+
+msgid "Choose relation"
+msgstr ""
+
+msgid "Filter to apply"
+msgstr ""
+
+msgid "Search related objects"
 msgstr ""
 
 msgid "Action"
@@ -1746,9 +1767,6 @@ msgid "Format"
 msgstr ""
 
 msgid "New caption"
-msgstr ""
-
-msgid "New"
 msgstr ""
 
 msgid "No captions"
@@ -1908,6 +1926,30 @@ msgid "Choose a type"
 msgstr ""
 
 msgid "Create new for"
+msgstr ""
+
+msgid "Add multiple date ranges"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Repeat times"
+msgstr ""
+
+msgid "Repeat type"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Add multiple"
 msgstr ""
 
 msgid "Insert date(s)"

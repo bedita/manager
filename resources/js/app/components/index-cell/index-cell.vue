@@ -16,7 +16,6 @@
                 v-if="renderAs === 'object'"
             />
         </template>
-
         <div
             class="ml-05"
             @click.stop.prevent="copy()"
@@ -24,7 +23,6 @@
         >
             <app-icon icon="carbon:copy" />
         </div>
-
         <div
             class="msg"
             v-if="msg"
@@ -162,12 +160,32 @@ export default {
                 }
                 this.renderAs = isObject ? 'object' : 'string';
             }
-            this.truncated = (this.text?.length <= 100 || this.renderAs === 'object') ? this.text : this.text?.substring(0, 100);
+            let text = this.text || '';
+            const isHtml = this.contentMediaTypeHtml();
+            if (this.schema && this.schema?.['$id'] != '/properties/title' && isHtml && this.renderAs === 'string') {
+                // strip HTML tags if contentMediaType is text/html
+                const div = document.createElement('div');
+                div.innerHTML = text;
+                text = div.textContent || div.innerText || '';
+            }
+            this.truncated = (text?.length <= 100 || this.renderAs === 'object') ? text : text?.substring(0, 100);
         });
     },
     methods: {
         className() {
             return this.related?.length ? 'index-cell related-cell' : `index-cell ${this.prop}-cell`;
+        },
+        contentMediaTypeHtml() {
+            if (!this.schema) {
+                return false;
+            }
+            const oneOf = this.schema?.['oneOf'] || null;
+            if (!oneOf) {
+                return false;
+            }
+            const contentMediaType = oneOf.find((o) => o?.type === 'string' && o?.contentMediaType === 'text/html');
+
+            return !!contentMediaType;
         },
         copy() {
             navigator.clipboard.writeText(this.text.replace(/<[^>]*>/g, ''));
@@ -206,7 +224,8 @@ export default {
 </script>
 <style scoped>
 div.index-cell > div {
-    display: inline-block;;
+    display: inline-block;
+    line-clamp: 1;
 }
 div.index-cell > div.msg {
     color: forestgreen;
