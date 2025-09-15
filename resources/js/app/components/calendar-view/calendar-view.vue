@@ -366,15 +366,13 @@ export default {
                 return;
             }
             if (this.currentView === 'timeGridDay' || this.currentView === 'listDay') {
-                // Show the default title (e.g., "15 settembre 2025")
-                const date = this.$refs.fullCal.getApi().getDate();
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                const locale = (BEDITA?.locale?.slice(0,2) || 'it') === 'it' ? 'it-IT' : 'en-GB';
-                const title = date.toLocaleDateString(locale, options);
-                const span = document.createElement('span');
-                span.textContent = title;
-                span.style.fontWeight = 'bold';
-                toolbar.appendChild(span);
+                input = document.createElement('input');
+                input.type = 'date';
+                input.value = this.formatDate(this.$refs.fullCal.getApi().getDate());
+                input.onchange = (e) => {
+                    this.$refs.fullCal.getApi().gotoDate(new Date(e.target.value));
+                };
+                toolbar.appendChild(input);
 
                 return;
             }
