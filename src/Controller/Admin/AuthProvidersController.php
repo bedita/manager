@@ -51,4 +51,9 @@ class AuthProvidersController extends AdministrationBaseController
      * @inheritDoc
      */
     protected $meta = [];
+
+    /**
+     * @inheritDoc
+     */
+    protected $sortBy = 'name';
 }
