@@ -326,15 +326,23 @@ class ModulesController extends AppController
                 $response = $this->apiClient->getObject($id, $this->objectType);
             }
             if (!$skipSavePermissions) {
-                $this->savePermissions(
-                    (array)$response,
-                    $schema,
-                    $permissions
-                );
+                try {
+                    $this->savePermissions(
+                        (array)$response,
+                        $schema,
+                        $permissions
+                    );
+                } catch (BEditaClientException $error) {
+                    $this->handleError($error);
+                }
             }
             $id = (string)Hash::get($response, 'data.id');
             if (!$skipSaveRelated) {
-                $this->Modules->saveRelated($id, $this->objectType, $relatedData);
+                try {
+                    $this->Modules->saveRelated($id, $this->objectType, $relatedData);
+                } catch (BEditaClientException $error) {
+                    $this->handleError($error);
+                }
             }
             $options = [
                 'id' => Hash::get($response, 'data.id'),
@@ -344,11 +352,7 @@ class ModulesController extends AppController
             $event = new Event('Controller.afterSave', $this, $options);
             $this->getEventManager()->dispatch($event);
         } catch (BEditaClientException $error) {
-            $message = new Message($error);
-            $this->log($message->get(), LogLevel::ERROR);
-            $this->Flash->error($message->get(), ['params' => $error]);
-            $this->set(['error' => $message->get()]);
-            $this->setSerialize(['error']);
+            $this->handleError($error);
 
             return;
         }
@@ -360,6 +364,23 @@ class ModulesController extends AppController
 
         $this->set((array)$response);
         $this->setSerialize(array_keys($response));
+    }
+
+    /**
+     * Handle exception error: log, flash and set.
+     *
+     * @param \BEdita\SDK\BEditaClientException $exception The exception
+     * @return void
+     */
+    protected function handleError(BEditaClientException $exception): void
+    {
+        $message = new Message($exception);
+        $this->log($message->get(), LogLevel::ERROR);
+        $this->Flash->error($message->get(), ['params' => $exception]);
+        $error = $this->viewBuilder()->getVar('error') ?? [];
+        $error = is_array($error) ? array_merge($error, [$message->get()]) : [$error, $message->get()];
+        $this->set(['error' => $error]);
+        $this->setSerialize(['error']);
     }
 
     /**
@@ -459,10 +480,7 @@ class ModulesController extends AppController
             $response = $this->apiClient->getRelated($id, $this->objectType, $relation, $query);
             $response = $this->ApiFormatter->embedIncluded((array)$response);
         } catch (BEditaClientException $error) {
-            $this->log($error->getMessage(), LogLevel::ERROR);
-
-            $this->set(compact('error'));
-            $this->setSerialize(['error']);
+            $this->handleError($error);
 
             return;
         }
@@ -488,10 +506,7 @@ class ModulesController extends AppController
         try {
             $response = $this->apiClient->get($type, $query);
         } catch (BEditaClientException $error) {
-            $this->log($error, LogLevel::ERROR);
-
-            $this->set(compact('error'));
-            $this->setSerialize(['error']);
+            $this->handleError($error);
 
             return;
         }
@@ -662,20 +677,31 @@ class ModulesController extends AppController
         $this->viewBuilder()->setClassName('Json');
         $this->getRequest()->allowMethod('get');
         $data = $meta = [];
-        $response = (array)$this->apiClient->getObject($id, 'objects', $this->getRequest()->getQueryParams());
-        $type = (string)Hash::get($response, 'data.type');
+        $query = $this->getRequest()->getQueryParams();
+        $type = (string)Hash::get($query, 'type');
+        $fields = array_unique(array_merge(
+            explode(',', 'id,title,description,uname,status,media_url'),
+            explode(',', (string)Hash::get($query, 'fields', ''))
+        ));
+        $query['fields'] = implode(',', $fields);
+        if ($type == null) {
+            $response = (array)$this->apiClient->getObject($id, 'objects', $query);
+            $type = (string)Hash::get($response, 'data.type');
+        }
         $filter = (array)$this->getRequest()->getQuery('filter');
         $types = (string)Hash::get($filter, 'type');
         $filterType = !empty($types) ? explode(',', (string)Hash::get($filter, 'type')) : [];
         if (count($filterType) === 0 || in_array($type, $filterType)) {
-            $query = array_merge(
-                $this->getRequest()->getQueryParams(),
-                ['fields' => 'id,title,description,uname,status,media_url']
-            );
             $response = (array)$this->apiClient->getObject($id, $type, $query);
+            $response = $this->ApiFormatter->embedIncluded($response);
+            $stream = (array)Hash::get($response, 'data.relationships.streams.data.0', []);
             $response = ApiTools::cleanResponse($response);
             $data = (array)Hash::get($response, 'data');
+            $data['attributes'] = array_merge($data['attributes'], (array)Hash::get($stream, 'attributes', []));
+            $data['attributes'] = array_filter($data['attributes'], fn($key) => in_array($key, $fields), ARRAY_FILTER_USE_KEY);
             $meta = (array)Hash::get($response, 'meta');
+            $meta = array_merge($meta, (array)Hash::get($stream, 'meta', []));
+            $meta = array_filter($meta, fn($key) => in_array($key, $fields), ARRAY_FILTER_USE_KEY);
         }
         $this->set(compact('data', 'meta'));
         $this->setSerialize(['data', 'meta']);

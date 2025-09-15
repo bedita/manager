@@ -36,26 +36,18 @@
         </div>
     {% endif %}
 
-
     {# RIBBON (new items) #}
-    {% if stage %}
-        <div class="ribbon" :class="'has-background-module-' + related.type">
-            {{ __('NEW') }}
-        </div>
-    {% endif %}
-
-    <div v-if="Date.parse(related.attributes.publish_start) > Date.now()" class="ribbon" :class="'has-background-module-' + related.type">
-         {{ __('Future') }}
-    </div>
-    <div v-if="Date.parse(related.attributes.publish_end) < Date.now()" class="ribbon" :class="'has-background-module-' + related.type">
-         {{ __('Expired') }}
-    </div>
+    <ribbon-item
+        :stage={{ stage|json_encode }}
+        :item="related"
+        :data-list="dataList"
+    >
+    </ribbon-item>
 
     {# THUMBNAIL #}
     {% if not translation %}
         <thumbnail :related="related"></thumbnail>
     {% endif %}
-
 
     {# BODY #}
     <div class="box-body p-05">

@@ -9,6 +9,8 @@
         {% elseif locked and key == 'status' %}
             {{ Property.control(key, value, {'disabled': 'disabled'})|raw }}
             <input type="hidden" name="status" id="status" value="{{ value }}" />
+        {% elseif key in object.meta|keys %}
+            {{ Property.control(key, value, {'disabled': true, 'readonly': true})|raw }}
         {% else %}
             {{ Property.control(key, value)|raw }}
             {% if schema.properties[key].placeholders %}

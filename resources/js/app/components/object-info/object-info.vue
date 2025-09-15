@@ -24,38 +24,17 @@ export default {
     },
     data() {
         return {
+            cache: {},
             fields: ['title', 'description'],
             labelsMap: new Map(),
             msgShowObjectInfo: t`Show object info`,
+            reloadedData: this.objectData || {},
             values: {},
         };
     },
     mounted() {
         this.$nextTick(() => {
-            const source = BEDITA?.indexLists?.[this.objectData?.type] || {};
-            this.fields = source || ['title', 'description'];
-            this.fields = this.fields.filter((value, index, array) => {
-                return array.indexOf(value) === index;
-            });
-
-            for (const field of this.fields) {
-                if (typeof field !== 'string') {
-                    continue;
-                }
-                this.labelsMap.set(field, BEDITA_I18N?.[field] || field);
-                this.values[field] = this.objectData?.relationships?.streams?.data?.[0]?.attributes?.[field]
-                    || this.objectData?.relationships?.streams?.data?.[0]?.meta?.[field]
-                    || this.objectData?.attributes?.[field]
-                    || '-';
-                if (field === 'file_size' && this.values[field] !== '-') {
-                    this.values[field] = this.values[field] ? this.$helpers.formatBytes(this.values[field]) : '-';
-                }
-            }
-            this.labelsMap.set('created', t`Created`);
-            this.labelsMap.set('modified', t`Modified`);
-            this.labelsMap.set('media_url', t`Media URL`);
-            this.labelsMap.set('uname', t`Uname`);
-            this.labelsMap.set('id', t`Id`);
+            this.fillData();
         });
     },
     methods: {
@@ -74,6 +53,32 @@ export default {
             return data.map((dateRange) => {
                 return dateRange.end_date ? `<div>${this.$helpers.formatDate(dateRange.start_date)} - ${this.$helpers.formatDate(dateRange.end_date)}</div>` : `<div>${this.$helpers.formatDate(dateRange.start_date)}</div>`;
             }).join(' ');
+        },
+        fillData() {
+            const source = BEDITA?.indexLists?.[this.reloadedData?.type] || {};
+            this.fields = source || ['title', 'description'];
+            this.fields = this.fields?.filter((value, index, array) => {
+                return array.indexOf(value) === index;
+            });
+            for (const field of this.fields) {
+                if (typeof field !== 'string') {
+                    continue;
+                }
+                this.labelsMap.set(field, BEDITA_I18N?.[field] || field);
+                this.values[field] = this.reloadedData?.relationships?.streams?.data?.[0]?.attributes?.[field]
+                    || this.reloadedData?.relationships?.streams?.data?.[0]?.meta?.[field]
+                    || this.reloadedData?.attributes?.[field]
+                    || this.reloadedData?.meta?.[field]
+                    || '-';
+                if (field === 'file_size' && this.values[field] !== '-') {
+                    this.values[field] = this.values[field] ? this.$helpers.formatBytes(this.values[field]) : '-';
+                }
+            }
+            this.labelsMap.set('created', t`Created`);
+            this.labelsMap.set('modified', t`Modified`);
+            this.labelsMap.set('media_url', t`Media URL`);
+            this.labelsMap.set('uname', t`Uname`);
+            this.labelsMap.set('id', t`Id`);
         },
         getFieldVal(val) {
             if (!val) {
@@ -109,19 +114,19 @@ export default {
             return `<div><label>${this.labelsMap.get(field) || field}</label><div>${this.getFieldVal(this.values[field])}</div></div>`;
         },
         contentCategories(field) {
-            return `<div><label>${this.labelsMap.get(field) || field}</label><div>${this.categories(this.objectData.attributes.categories)}</div>`;
+            return `<div><label>${this.labelsMap.get(field) || field}</label><div>${this.categories(this.reloadedData.attributes.categories)}</div>`;
         },
         contentDateRanges(field) {
-            return `<div><label>${this.labelsMap.get(field) || field}</label><div>${this.dateRanges(this.objectData.attributes.date_ranges)}</div>`;
+            return `<div><label>${this.labelsMap.get(field) || field}</label><div>${this.dateRanges(this.reloadedData.attributes.date_ranges)}</div>`;
         },
         contentMeta() {
-            const meta = this.objectData?.meta;
+            const meta = this.reloadedData?.meta;
             if (!meta) {
                 return '';
             }
             let content = '<hr/><div>';
-            content += `<div><label>${this.labelsMap.get('id')}</label><div>${this.getFieldVal(this.objectData.id)}</div></div>`;
-            content += `<div><label>${this.labelsMap.get('uname')}</label><div>${this.getFieldVal(this.objectData.attributes.uname)}</div></div>`;
+            content += `<div><label>${this.labelsMap.get('id')}</label><div>${this.getFieldVal(this.reloadedData.id)}</div></div>`;
+            content += `<div><label>${this.labelsMap.get('uname')}</label><div>${this.getFieldVal(this.reloadedData.attributes.uname)}</div></div>`;
             const allowed = ['created', 'modified', 'media_url']
             for (const [key, value] of Object.entries(meta)) {
                 if (!allowed.includes(key)) {
@@ -139,9 +144,35 @@ export default {
             return content;
         },
         contentTitle() {
-            return `<div><span class="tag has-background-module-${this.objectData.type}">${this.objectData.type}</span></div>`;
+            return `<div><span class="tag has-background-module-${this.reloadedData.type}">${this.reloadedData.type}</span></div>`;
         },
-        showInfo() {
+        async fetchObject(id, types) {
+            const cacheKey = `${id}-${types}`;
+            if (this.cache[cacheKey]) {
+                return this.cache[cacheKey];
+            }
+            const baseUrl = new URL(BEDITA.base).pathname;
+            const stringFields = this.fields.filter((field) => typeof field === 'string');
+            const response = await fetch(`${baseUrl}resources/get/${id}?type=${types}&fields=${stringFields.join(',')}`, {
+                credentials: 'same-origin',
+                headers: {
+                    accept: 'application/json',
+                }
+            });
+            const responseJson = await response.json();
+            const data = responseJson?.data || {};
+            if (!data) {
+                throw new Error('Object not found');
+            }
+            this.cache[cacheKey] = responseJson;
+
+            return this.cache[cacheKey];
+        },
+        async showInfo() {
+            const response = await this.fetchObject(this.objectData?.id, this.objectData?.type);
+            this.reloadedData = response?.data || {};
+            this.reloadedData.meta = response?.meta || {};
+            this.fillData();
             let content = this.contentTitle();
             for (const field of this.fields) {
                 if (typeof field !== 'string') {
