@@ -1889,6 +1889,30 @@ msgstr ""
 msgid "Create new for"
 msgstr ""
 
+msgid "Add multiple date ranges"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Repeat times"
+msgstr ""
+
+msgid "Repeat type"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Add multiple"
+msgstr ""
+
 msgid "Insert date(s)"
 msgstr ""
 
