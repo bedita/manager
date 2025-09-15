@@ -338,52 +338,30 @@ export default {
         },
         renderCustomPicker() {
             const toolbar = document.querySelector('.fc-toolbar-chunk .fc-datePicker-button');
-            if (!toolbar) return;
-            toolbar.innerHTML = ''; // Clear previous picker
-
-            let input;
-            if (this.currentView === 'dayGridMonth' || this.currentView === 'listMonth') {
-                input = document.createElement('input');
-                input.type = 'month';
-                input.value = this.formatMonth(this.$refs.fullCal.getApi().getDate());
-                input.onchange = (e) => {
-                    const [year, month] = e.target.value.split('-');
-                    this.$refs.fullCal.getApi().gotoDate(new Date(year, month - 1, 1));
-                };
-                toolbar.appendChild(input);
-
+            if (!toolbar) {
                 return;
             }
-            if (this.currentView === 'timeGridWeek' || this.currentView === 'listWeek') {
-                input = document.createElement('input');
-                input.type = 'date';
-                input.value = this.formatDate(this.$refs.fullCal.getApi().getDate());
-                input.onchange = (e) => {
-                    this.$refs.fullCal.getApi().gotoDate(new Date(e.target.value));
-                };
-                toolbar.appendChild(input);
-
-                return;
-            }
-            if (this.currentView === 'timeGridDay' || this.currentView === 'listDay') {
-                input = document.createElement('input');
-                input.type = 'date';
-                input.value = this.formatDate(this.$refs.fullCal.getApi().getDate());
-                input.onchange = (e) => {
-                    this.$refs.fullCal.getApi().gotoDate(new Date(e.target.value));
-                };
-                toolbar.appendChild(input);
-
-                return;
-            }
-            // fallback: month picker
-            input = document.createElement('input');
+            toolbar.innerHTML = '';
+            const input = document.createElement('input');
+            // default month picker
             input.type = 'month';
             input.value = this.formatMonth(this.$refs.fullCal.getApi().getDate());
             input.onchange = (e) => {
                 const [year, month] = e.target.value.split('-');
                 this.$refs.fullCal.getApi().gotoDate(new Date(year, month - 1, 1));
             };
+            const dateViews = [
+                'timeGridWeek',
+                'listWeek',
+                'timeGridDay',
+                'listDay',
+            ];
+            if (dateViews.includes(this.currentView)) {
+                input.type = 'date';
+                input.value = this.formatDate(this.$refs.fullCal.getApi().getDate());
+                input.onchange = (e) => this.$refs.fullCal.getApi().gotoDate(new Date(e.target.value));
+            }
+            // dayGridMonth or listMonth or default
             toolbar.appendChild(input);
         },
         async save() {
