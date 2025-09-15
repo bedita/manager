@@ -112,9 +112,12 @@ const _vueInstance = new Vue({
         FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
         CalendarView: () => import(/* webpackChunkName: "calendar-view" */'app/components/calendar-view/calendar-view'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
+        RelatedObjectsFilter: () => import(/* webpackChunkName: "related-objects-filter" */'app/components/related-objects-filter/related-objects-filter'),
         ModuleProperties: () => import(/* webpackChunkName: "module-properties" */'app/components/module/module-properties'),
         ModuleSetup: () => import(/* webpackChunkName: "module-setup" */'app/components/module/module-setup'),
         AddRelatedById: () => import(/* webpackChunkName: "add-related-by-id" */'app/components/add-related-by-id/add-related-by-id'),
+        UploadedObject: () => import(/* webpackChunkName: "uploaded-object" */'app/components/uploaded-object/uploaded-object.vue'),
+        RibbonItem: () => import(/* webpackChunkName: "ribbon-item" */'./components/ribbon-item/ribbon-item.vue'),
         AppIcon,
     },
 
@@ -624,6 +627,7 @@ window._vueInstance = _vueInstance;
 // use component everywhere in Manager
 Vue.component('AppIcon', AppIcon);
 Vue.component('CalendarView', _vueInstance.$options.components.CalendarView);
+Vue.component('ClipboardItem', _vueInstance.$options.components.ClipboardItem);
 Vue.component('DateRangesView', _vueInstance.$options.components.DateRangesView);
 Vue.component('FieldCheckbox', _vueInstance.$options.components.FieldCheckbox);
 Vue.component('FieldGeoCoordinates', _vueInstance.$options.components.FieldGeoCoordinates);
@@ -643,3 +647,7 @@ Vue.component('ModuleSetup', _vueInstance.$options.components.ModuleSetup);
 Vue.component('ObjectCategories', _vueInstance.$options.components.ObjectCategories);
 Vue.component('ObjectCaptions', _vueInstance.$options.components.ObjectCaptions);
 Vue.component('ObjectInfo', _vueInstance.$options.components.ObjectInfo);
+Vue.component('RelatedObjectsFilter', _vueInstance.$options.components.RelatedObjectsFilter);
+Vue.component('Thumbnail', _vueInstance.$options.components.Thumbnail);
+Vue.component('RibbonItem', _vueInstance.$options.components.RibbonItem);
+Vue.component('UploadedObject', _vueInstance.$options.components.UploadedObject);

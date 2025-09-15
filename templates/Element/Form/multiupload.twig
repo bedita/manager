@@ -10,20 +10,7 @@
         >
         </drop-upload>
         <div v-for="item in uploaded" :key="item.id">
-            <a :href="`/view/${item.id}`">
-                <div style="display: grid; grid-template-columns: 50px 1fr; border-bottom: dashed gray 1px;">
-                    <figure class="center-icon icon-opaque" v-if="item?.meta?.thumb_url">
-                        <img :src="item?.meta?.thumb_url" :alt="item.attributes.title" style="height: 50px; width: 50px; object-fit: cover;"/>
-                    </figure>
-                    <span style="padding: 0.5rem" v-else>
-                        <app-icon icon="carbon:document"></app-icon>
-                        <: extension(item?.meta?.media_url) :>
-                    </span>
-                    <span style="padding: 1rem">
-                        <: item.attributes.title :>
-                    </span>
-                </div>
-            </a>
+            <uploaded-object :item="item"/>
         </div>
     </div>
 </modules-index>

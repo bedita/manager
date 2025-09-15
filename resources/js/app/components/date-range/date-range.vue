@@ -22,24 +22,25 @@
         <div :class="dateRangeClass()">
             <span>{{ msgTo }}</span>
             <div>
-                <template v-if="start_date">
+                <template v-if="start_date && ready">
                     <input
                         class="date-range-input"
                         type="text"
                         date="true"
                         :time="!all_day"
+                        :data-min-date="end_date ? false : start_date"
                         daterange="true"
                         v-model="end_date"
                         v-datepicker="true"
                         @change="onDateChanged(false, $event)"
-                        v-if="ready"
                     >
                 </template>
-                <input
-                    type="text"
-                    disabled="disabled"
-                    v-else
-                >
+                <template v-else>
+                    <input
+                        type="text"
+                        disabled="disabled"
+                    >
+                </template>
             </div>
         </div>
         <div v-show="!optionIsSet('all_day')">
@@ -144,7 +145,7 @@
         </div>
         <div
             class="icon-error"
-            v-show="!compact && validate() === false"
+            v-show="!compact && start_date && validate() === false"
         >
             {{ msgInvalidDateRange }}
         </div>
