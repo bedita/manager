@@ -81,4 +81,16 @@ class ArrayHelper extends Helper
     {
         return (array)Hash::extract($data, $path);
     }
+
+    /**
+     * Return intersection of two arrays reindexing values.
+     *
+     * @param array $arr1 First array.
+     * @param array $arr2 Second array.
+     * @return array The intersection of two arrays.
+     */
+    public function intersect(array $arr1, array $arr2): array
+    {
+        return array_values(array_intersect($arr1, $arr2));
+    }
 }
