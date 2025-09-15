@@ -178,7 +178,7 @@ export default {
                 ],
                 headerToolbar: {
                     left: 'prev,next,today,addButton',
-                    center: 'title',
+                    center: 'datePicker',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
                 },
                 customButtons: {
@@ -187,6 +187,10 @@ export default {
                         click: () => {
                             this.prepareNew('', new Date().toISOString().split('T')[0]);
                         }
+                    },
+                    datePicker: {
+                        text: '',
+                        click: () => {}
                     }
                 },
                 contentHeight: 'auto',
@@ -214,9 +218,14 @@ export default {
                 dateClick: async (info) => {
                     this.prepareNew('', info.dateStr);
                 },
+                datesSet: (info) => {
+                    this.currentView = info.view.type;
+                    this.$nextTick(() => this.renderCustomPicker());
+                },
             },
             createNew: false,
             createNewDateRanges: [],
+            currentView: 'dayGridMonth',
             error: {},
             fieldsMap: {},
             fieldsAll: [],
@@ -266,6 +275,10 @@ export default {
                 }
             }
             this.fieldsInvalid = this.fieldsRequired.filter(f => !this.formFieldProperties[this.objectType][f]);
+
+            setTimeout(() => {
+                this.renderCustomPicker();
+            }, 0);
         });
     },
     methods: {
@@ -289,6 +302,21 @@ export default {
         fieldType(field) {
             return !this.isNumeric(field) ? this.fieldsMap[field] : null;
         },
+        formatDate(date) {
+            const d = new Date(date);
+
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        },
+        formatMonth(date) {
+            const d = new Date(date);
+
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        },
+        formatTime(date) {
+            const d = new Date(date);
+
+            return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+        },
         ftime(d) {
             return this.$helpers.formatTime(d);
         },
@@ -307,6 +335,58 @@ export default {
         refetchEvents() {
             const calendarApi = this.$refs.fullCal.getApi();
             calendarApi.refetchEvents();
+        },
+        renderCustomPicker() {
+            const toolbar = document.querySelector('.fc-toolbar-chunk .fc-datePicker-button');
+            if (!toolbar) return;
+            toolbar.innerHTML = ''; // Clear previous picker
+
+            let input;
+            if (this.currentView === 'dayGridMonth' || this.currentView === 'listMonth') {
+                input = document.createElement('input');
+                input.type = 'month';
+                input.value = this.formatMonth(this.$refs.fullCal.getApi().getDate());
+                input.onchange = (e) => {
+                    const [year, month] = e.target.value.split('-');
+                    this.$refs.fullCal.getApi().gotoDate(new Date(year, month - 1, 1));
+                };
+                toolbar.appendChild(input);
+
+                return;
+            }
+            if (this.currentView === 'timeGridWeek' || this.currentView === 'listWeek') {
+                input = document.createElement('input');
+                input.type = 'date';
+                input.value = this.formatDate(this.$refs.fullCal.getApi().getDate());
+                input.onchange = (e) => {
+                    this.$refs.fullCal.getApi().gotoDate(new Date(e.target.value));
+                };
+                toolbar.appendChild(input);
+
+                return;
+            }
+            if (this.currentView === 'timeGridDay' || this.currentView === 'listDay') {
+                // Show the default title (e.g., "15 settembre 2025")
+                const date = this.$refs.fullCal.getApi().getDate();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const locale = (BEDITA?.locale?.slice(0,2) || 'it') === 'it' ? 'it-IT' : 'en-GB';
+                const title = date.toLocaleDateString(locale, options);
+                const span = document.createElement('span');
+                span.textContent = title;
+                span.style.fontWeight = 'bold';
+                toolbar.appendChild(span);
+
+                return;
+            }
+            // fallback: month picker
+            input = document.createElement('input');
+            input.type = 'month';
+            input.value = this.formatMonth(this.$refs.fullCal.getApi().getDate());
+            input.onchange = (e) => {
+                const [year, month] = e.target.value.split('-');
+                this.$refs.fullCal.getApi().gotoDate(new Date(year, month - 1, 1));
+            };
+            toolbar.appendChild(input);
         },
         async save() {
             try {
