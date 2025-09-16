@@ -26,7 +26,7 @@
                         type="text"
                         date="true"
                         :time="!all_day"
-                        :data-min-date="end_date ? false : start_date"
+                        :data-min-date="start_date"
                         daterange="true"
                         v-model="end_date"
                         v-datepicker="true"
