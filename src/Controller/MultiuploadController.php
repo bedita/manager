@@ -22,9 +22,9 @@ class MultiuploadController extends AppController
     /**
      * Object type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected $objectType = null;
+    protected ?string $objectType = null;
 
     /**
      * @inheritDoc

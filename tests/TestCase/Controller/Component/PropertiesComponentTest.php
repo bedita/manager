@@ -17,13 +17,28 @@ use App\Controller\ModulesController;
 use App\Utility\CacheTools;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\Component\PropertiesComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\PropertiesComponent
  */
+#[CoversClass(PropertiesComponent::class)]
+#[CoversMethod(PropertiesComponent::class, 'associationsOptions')]
+#[CoversMethod(PropertiesComponent::class, 'bulkList')]
+#[CoversMethod(PropertiesComponent::class, 'filterList')]
+#[CoversMethod(PropertiesComponent::class, 'filtersByType')]
+#[CoversMethod(PropertiesComponent::class, 'hiddenRelationsList')]
+#[CoversMethod(PropertiesComponent::class, 'indexList')]
+#[CoversMethod(PropertiesComponent::class, 'initialize')]
+#[CoversMethod(PropertiesComponent::class, 'readonlyRelationsList')]
+#[CoversMethod(PropertiesComponent::class, 'relationsList')]
+#[CoversMethod(PropertiesComponent::class, 'startup')]
+#[CoversMethod(PropertiesComponent::class, 'typesOptions')]
+#[CoversMethod(PropertiesComponent::class, 'viewGroups')]
 class PropertiesComponentTest extends TestCase
 {
     /**
@@ -31,7 +46,7 @@ class PropertiesComponentTest extends TestCase
      *
      * @var \App\Controller\Component\PropertiesComponent
      */
-    public $Properties;
+    public PropertiesComponent $Properties;
 
     /**
      * @inheritDoc
@@ -61,7 +76,7 @@ class PropertiesComponentTest extends TestCase
      */
     protected function createComponent(): void
     {
-        $controller = new ModulesController();
+        $controller = new ModulesController(new ServerRequest());
         $registry = $controller->components();
         // Mock GET /config using cache
         Cache::write(CacheTools::cacheKey('config.Modules'), []);
@@ -76,7 +91,6 @@ class PropertiesComponentTest extends TestCase
      * Test `startup()` method.
      *
      * @return void
-     * @covers ::startup()
      */
     public function testStartup(): void
     {
@@ -108,7 +122,6 @@ class PropertiesComponentTest extends TestCase
      * Test `indexList()` method.
      *
      * @return void
-     * @covers ::indexList()
      */
     public function testIndexList(): void
     {
@@ -127,7 +140,6 @@ class PropertiesComponentTest extends TestCase
      * Test `filterList()` method.
      *
      * @return void
-     * @covers ::filterList()
      */
     public function testFilterList(): void
     {
@@ -148,7 +160,6 @@ class PropertiesComponentTest extends TestCase
      * Test `filtersByType()` method.
      *
      * @return void
-     * @covers ::filtersByType()
      */
     public function testFiltersByType(): void
     {
@@ -177,7 +188,6 @@ class PropertiesComponentTest extends TestCase
      * Test `bulkList()` method.
      *
      * @return void
-     * @covers ::bulkList()
      */
     public function testBulkList(): void
     {
@@ -193,7 +203,6 @@ class PropertiesComponentTest extends TestCase
      * Test `relationsList()` method.
      *
      * @return void
-     * @covers ::relationsList()
      */
     public function testRelationsList(): void
     {
@@ -212,7 +221,6 @@ class PropertiesComponentTest extends TestCase
      * Test `hiddenRelationsList()` method.
      *
      * @return void
-     * @covers ::hiddenRelationsList()
      */
     public function testHiddenRelationsList(): void
     {
@@ -231,7 +239,6 @@ class PropertiesComponentTest extends TestCase
      * Test `readonlyRelationsList()` method.
      *
      * @return void
-     * @covers ::readonlyRelationsList()
      */
     public function testReadonlyRelationsList(): void
     {
@@ -251,7 +258,7 @@ class PropertiesComponentTest extends TestCase
      *
      * @return array
      */
-    public function viewGroupsProvider(): array
+    public static function viewGroupsProvider(): array
     {
         return [
             'minimal' => [
@@ -490,10 +497,8 @@ class PropertiesComponentTest extends TestCase
      * @param string $type Object type.
      * @param array $config Properties configuration to write for $type
      * @return void
-     * @dataProvider viewGroupsProvider()
-     * @covers ::viewGroups()
-     * @covers ::initialize()
      */
+    #[DataProvider('viewGroupsProvider')]
     public function testViewGroups($expected, $object, string $type, array $config = []): void
     {
         Cache::clear();
@@ -518,7 +523,6 @@ class PropertiesComponentTest extends TestCase
      * Test `typesOptions`.
      *
      * @return void
-     * @covers ::typesOptions()
      */
     public function testTypesOptions(): void
     {
@@ -534,7 +538,6 @@ class PropertiesComponentTest extends TestCase
      * Test `associationsOptions`
      *
      * @return void
-     * @covers ::associationsOptions()
      */
     public function testAssociationsOptions(): void
     {

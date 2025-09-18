@@ -14,18 +14,26 @@
 namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\PropertyTypesController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\BadRequestException;
+use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Model\PropertyTypesController} Test Case
- *
- * @coversDefaultClass \App\Controller\Model\PropertyTypesController
- * @uses \App\Controller\Model\PropertyTypesController
  */
+#[CoversClass(PropertyTypesController::class)]
+#[CoversMethod(PropertyTypesController::class, 'addPropertyTypes')]
+#[CoversMethod(PropertyTypesController::class, 'editPropertyTypes')]
+#[CoversMethod(PropertyTypesController::class, 'getResourceType')]
+#[CoversMethod(PropertyTypesController::class, 'removePropertyTypes')]
+#[CoversMethod(PropertyTypesController::class, 'save')]
+#[CoversMethod(PropertyTypesController::class, 'setResourceType')]
 class PropertyTypesControllerTest extends TestCase
 {
     /**
@@ -33,21 +41,21 @@ class PropertyTypesControllerTest extends TestCase
      *
      * @var \App\Controller\Model\PropertyTypesController
      */
-    public $ModelController;
+    public PropertyTypesController $ModelController;
 
     /**
      * Client API
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -78,162 +86,190 @@ class PropertyTypesControllerTest extends TestCase
      */
     protected function setupController(array $requestConfig = []): void
     {
+        $this->setupApi();
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
         $this->ModelController = new PropertyTypesController($request);
-        $this->setupApi();
     }
 
     /**
-     * Data provider for `testSave` test case.
+     * Test `save` method on method not allowed
      *
-     * @return array
+     * @return void
      */
-    public function saveProvider(): array
+    public function testSaveMethodNotAllowed(): void
     {
-        $nextId = $this->nextId();
+        $this->setupApi();
+        $config = array_merge($this->defaultRequestConfig, []);
+        $request = new ServerRequest($config);
+        $this->ModelController = new PropertyTypesController($request);
+        $this->expectException(MethodNotAllowedException::class);
+        $this->ModelController->save();
+    }
 
-        return [
-            // test with empty object
-            'emptyRequest' => [
-                new BadRequestException('empty request'),
-                [],
-                '',
+    /**
+     * Test `save` method on request error
+     *
+     * @return void
+     */
+    public function testSaveRequestError(): void
+    {
+        $this->setupApi();
+        $config = array_merge($this->defaultRequestConfig, [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
             ],
-            'addPropertyTypesRequest' => [
-                [
-                    [
-                        // 'id' => $nextId,
-                        'type' => 'property_types',
-                        'attributes' => [
-                                'name' => 'dummyone',
-                                'params' => [
-                                        'type' => 'string',
-                                ],
-                        ],
-                    ],
-                ],
-                [
-                    'addPropertyTypes' => [
-                        [
-                            'name' => 'dummyone',
-                            'params' => json_encode([
-                                'type' => 'string',
-                            ]),
-                        ],
-                    ],
-                ],
-                'saved',
+            'params' => [
+                'resource_type' => 'property_types',
             ],
-            'editPropertyTypesRequest' => [
-                [
-                    [
-                        'id' => $nextId,
-                        'type' => 'property_types',
-                        'attributes' => [
-                            'name' => 'dummytwo',
-                            'params' => [
-                                'type' => 'object',
-                            ],
-                        ],
-                    ],
+            'post' => [
+                'removePropertyTypes' => [
+                    '12345',
                 ],
-                [
-                    'editPropertyTypes' => [
-                        [
-                            'id' => $nextId,
-                            'attributes' => [
-                                'name' => 'dummytwo',
-                                'params' => [
-                                    'type' => 'object',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                'edited',
             ],
-            'removePropertyTypesRequest' => [
-                [ $nextId ],
-                [
-                    'removePropertyTypes' => [
-                        $nextId,
-                    ],
-                ],
-                'removed',
-            ],
-            'request error' => [
-                [
-                  'error' => '[404] Not Found',
-                ],
-                [
-                    'removePropertyTypes' => [
-                        '12345',
-                    ],
-                ],
-                'removed',
-            ],
+        ]);
+        $request = new ServerRequest($config);
+        $this->ModelController = new PropertyTypesController($request);
+        $this->ModelController->save();
+        $actual = (string)Hash::get($this->ModelController->viewBuilder()->getVars(), 'error');
+        $expected = '[404] Not Found';
+        static::assertEquals($expected, $actual);
+    }
 
-        ];
+    /**
+     * Test `save` method on empty request
+     *
+     * @return void
+     */
+    public function testSaveEmptyRequest(): void
+    {
+        $exception = new BadRequestException('empty request');
+        $this->expectException(get_class($exception));
+        $this->expectExceptionCode($exception->getCode());
+        $this->expectExceptionMessage($exception->getMessage());
+        $this->setupApi();
+        $config = array_merge($this->defaultRequestConfig, [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'params' => [
+                'resource_type' => 'property_types',
+            ],
+        ]);
+        $request = new ServerRequest($config);
+        $this->ModelController = new PropertyTypesController($request);
+        $this->ModelController->save();
     }
 
     /**
      * Test `save` method
      *
-     * @param array|\Exception $expectedResponse expected results from test
-     * @param bool|null $data setup data for test
-     * @param string $action tested action
-     * @dataProvider saveProvider()
-     * @covers ::save()
-     * @covers ::addPropertyTypes()
-     * @covers ::editPropertyTypes()
-     * @covers ::removePropertyTypes()
      * @return void
      */
-    public function testSave($expectedResponse, $data, $action): void
+    public function testSaveAddEditRemovePropertyTypes(): void
     {
-        $config = [
+        $this->setupApi();
+        $propertyName = 'mynewpropertytype';
+        $config = array_merge($this->defaultRequestConfig, [
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
-            'post' => $data,
-        ];
-
-        $this->setupController($config);
-        $this->ModelController->setResourceType('property_types');
-
-        if ($expectedResponse instanceof \Exception) {
-            $this->expectException(get_class($expectedResponse));
-            $this->expectExceptionCode($expectedResponse->getCode());
-            $this->expectExceptionMessage($expectedResponse->getMessage());
-        }
-
+            'params' => [
+                'resource_type' => 'property_types',
+            ],
+            'post' => [
+                'addPropertyTypes' => [
+                    [
+                        'name' => $propertyName,
+                        'params' => json_encode(['type' => 'string']),
+                    ],
+                ],
+            ],
+        ]);
+        $request = new ServerRequest($config);
+        $this->ModelController = new PropertyTypesController($request);
         $this->ModelController->save();
+        $actual = (array)Hash::get($this->ModelController->viewBuilder()->getVars(), 'saved');
+        $expected = [
+            [
+                'id' => $actual[0]['id'],
+                'type' => 'property_types',
+                'attributes' => [
+                    'name' => $propertyName,
+                    'params' => [
+                        'type' => 'string',
+                    ],
+                ],
+                'meta' => $actual[0]['meta'],
+            ],
+        ];
+        static::assertEquals($expected, $actual);
 
-        $actualResponse = (array)Hash::get($this->ModelController->viewBuilder()->getVars(), $action);
+        // edit property
+        $config = array_merge($this->defaultRequestConfig, [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'params' => [
+                'resource_type' => 'property_types',
+            ],
+            'post' => [
+                'editPropertyTypes' => [
+                    [
+                        'id' => $actual[0]['id'],
+                        'attributes' => [
+                            'name' => $propertyName,
+                            'params' => ['type' => 'integer'],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+        $request = new ServerRequest($config);
+        $this->ModelController = new PropertyTypesController($request);
+        $this->ModelController->save();
+        $actual = (array)Hash::get($this->ModelController->viewBuilder()->getVars(), 'edited');
+        $expected = [
+            [
+                'id' => $actual[0]['id'],
+                'type' => 'property_types',
+                'attributes' => [
+                    'name' => $propertyName,
+                    'params' => [
+                        'type' => 'integer',
+                    ],
+                ],
+                'meta' => $actual[0]['meta'],
+            ],
+        ];
+        static::assertEquals($expected, $actual);
 
-        if ($action == 'saved') {
-            foreach ($actualResponse as &$element) {
-                unset($element['id']);
-            }
-        }
-        if (is_array($expectedResponse)) {
-            $actualResponse = Hash::remove($actualResponse, '{n}.meta');
-            if (!empty($expectedResponse['error'])) {
-                $actualResponse = Hash::get($this->ModelController->viewBuilder()->getVars(), 'error');
-                $expectedResponse = $expectedResponse['error'];
-            }
-        }
-
-        static::assertEquals($expectedResponse, $actualResponse);
+        // remove property
+        $expected = [$actual[0]['id']];
+        $config = array_merge($this->defaultRequestConfig, [
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'params' => [
+                'resource_type' => 'property_types',
+            ],
+            'post' => [
+                'removePropertyTypes' => [
+                    $expected[0],
+                ],
+            ],
+        ]);
+        $request = new ServerRequest($config);
+        $this->ModelController = new PropertyTypesController($request);
+        $this->ModelController->save();
+        $actual = (array)Hash::get($this->ModelController->viewBuilder()->getVars(), 'removed');
+        static::assertEquals($expected, $actual);
     }
 
     /**
      * Test `getResourceType` and `setResourceType`.
      *
      * @return void
-     * @covers ::getResourceType()
-     * @covers ::setResourceType()
      */
     public function testGetSetResourceType(): void
     {
@@ -242,19 +278,5 @@ class PropertyTypesControllerTest extends TestCase
         $this->ModelController->setResourceType($expected);
         $actual = $this->ModelController->getResourceType();
         static::assertSame($expected, $actual);
-    }
-
-    /**
-     * Next ID for test
-     *
-     * @return string
-     */
-    private function nextId(): string
-    {
-        $this->setupController();
-        $response = $this->client->get('/model/property_types');
-        $maxId = (int)Hash::get($response, 'data.%d.id', count($response['data']));
-
-        return strval($maxId + 1);
     }
 }
