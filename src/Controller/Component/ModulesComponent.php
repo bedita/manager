@@ -339,9 +339,6 @@ class ModulesComponent extends Component
 
         // verify upload form data
         if ($this->checkRequestForUpload($requestData)) {
-            // has another stream? drop it
-            $this->removeStream($requestData);
-
             /** @var \Laminas\Diactoros\UploadedFile $file */
             $file = $requestData['file'];
             $filepath = $file->getStream()->getMetadata('uri');
@@ -352,12 +349,41 @@ class ModulesComponent extends Component
             $headers = ['Content-Type' => $file->getClientMediaType()];
             $apiClient = ApiClientProvider::getApiClient();
             $type = $this->getController()->getRequest()->getParam('object_type');
+
+            if (empty($requestData['id'])) {
+                $response = $apiClient->post(
+                    sprintf('/%s/upload/%s', $type, $filename),
+                    $content,
+                    $headers
+                );
+                $requestData['id'] = Hash::get($response, 'data.id');
+                unset($requestData['file'], $requestData['remote_url']);
+
+                return;
+            }
+
+            // remove stream
+            $this->removeStream($requestData);
+
+            // create stream
             $response = $apiClient->post(
-                sprintf('/%s/upload/%s', $type, $filename),
+                sprintf('/streams/upload/%s', $filename),
                 $content,
                 $headers
             );
-            $requestData['id'] = Hash::get($response, 'data.id');
+
+            // link stream to media
+            $streamUuid = Hash::get($response, 'data.id');
+            $mediaId = (string)$requestData['id'];
+            $response = $apiClient->patch(
+                sprintf('/streams/%s/relationships/object', $streamUuid),
+                json_encode([
+                    'data' => [
+                        'id' => $mediaId,
+                        'type' => $type,
+                    ],
+                ])
+            );
         }
         unset($requestData['file'], $requestData['remote_url']);
     }
