@@ -969,7 +969,7 @@ class ModulesComponentTest extends TestCase
      * @return void
      */
     #[DataProvider('uploadProvider')]
-    public function testUpload(array $requestData, $expectedException, $uploaded): void
+    public function testUpload(array $requestData, $expectedException, $uploaded, ?string $contentType): void
     {
         // if upload failed, verify exception
         if ($expectedException != null) {
