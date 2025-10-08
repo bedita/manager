@@ -946,6 +946,7 @@ class ModulesComponentTest extends TestCase
      * @param string|null $contentType The content type of the uploaded file
      * @return void
      * @covers ::upload()
+     * @covers ::assocStreamToMedia()
      * @covers ::removeStream()
      * @covers ::checkRequestForUpload()
      * @dataProvider uploadProvider()

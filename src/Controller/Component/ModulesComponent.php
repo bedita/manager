@@ -339,9 +339,6 @@ class ModulesComponent extends Component
 
         // verify upload form data
         if ($this->checkRequestForUpload($requestData)) {
-            // has another stream? drop it
-            $this->removeStream($requestData);
-
             /** @var \Laminas\Diactoros\UploadedFile $file */
             $file = $requestData['file'];
             $filepath = $file->getStream()->getMetadata('uri');
@@ -352,12 +349,28 @@ class ModulesComponent extends Component
             $headers = ['Content-Type' => $file->getClientMediaType()];
             $apiClient = ApiClientProvider::getApiClient();
             $type = $this->getController()->getRequest()->getParam('object_type');
-            $response = $apiClient->post(
-                sprintf('/%s/upload/%s', $type, $filename),
-                $content,
-                $headers
-            );
-            $requestData['id'] = Hash::get($response, 'data.id');
+
+            if (empty($requestData['id'])) {
+                $response = $apiClient->post(
+                    sprintf('/%s/upload/%s', $type, $filename),
+                    $content,
+                    $headers
+                );
+                $requestData['id'] = Hash::get($response, 'data.id');
+                unset($requestData['file'], $requestData['remote_url']);
+
+                return;
+            }
+
+            // remove stream
+            $this->removeStream($requestData);
+
+            // create stream
+            $response = $apiClient->upload($filename, $filepath, $headers);
+
+            // link stream to media
+            $streamUuid = Hash::get($response, 'data.id');
+            $response = $this->assocStreamToMedia($streamUuid, $requestData, $filename);
         }
         unset($requestData['file'], $requestData['remote_url']);
     }
@@ -394,8 +407,6 @@ class ModulesComponent extends Component
      * @param array $requestData The request data
      * @param string $defaultTitle The default title for media
      * @return string The media ID
-     * @deprecated 5.15.4 This method is no longer used and will be removed in a future version.
-     * @codeCoverageIgnore
      */
     public function assocStreamToMedia(string $streamId, array &$requestData, string $defaultTitle): string
     {
