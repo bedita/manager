@@ -395,6 +395,7 @@ class ModulesComponent extends Component
      * @param string $defaultTitle The default title for media
      * @return string The media ID
      * @deprecated 5.15.4 This method is no longer used and will be removed in a future version.
+     * @codeCoverageIgnore
      */
     public function assocStreamToMedia(string $streamId, array &$requestData, string $defaultTitle): string
     {
