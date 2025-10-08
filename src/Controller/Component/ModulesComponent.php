@@ -366,24 +366,11 @@ class ModulesComponent extends Component
             $this->removeStream($requestData);
 
             // create stream
-            $response = $apiClient->post(
-                sprintf('/streams/upload/%s', $filename),
-                $content,
-                $headers
-            );
+            $response = $apiClient->upload($filename, $filepath, $headers);
 
             // link stream to media
             $streamUuid = Hash::get($response, 'data.id');
-            $mediaId = (string)$requestData['id'];
-            $response = $apiClient->patch(
-                sprintf('/streams/%s/relationships/object', $streamUuid),
-                json_encode([
-                    'data' => [
-                        'id' => $mediaId,
-                        'type' => $type,
-                    ],
-                ])
-            );
+            $response = $this->assocStreamToMedia($streamUuid, $requestData, $filename);
         }
         unset($requestData['file'], $requestData['remote_url']);
     }
@@ -420,8 +407,6 @@ class ModulesComponent extends Component
      * @param array $requestData The request data
      * @param string $defaultTitle The default title for media
      * @return string The media ID
-     * @deprecated 5.15.4 This method is no longer used and will be removed in a future version.
-     * @codeCoverageIgnore
      */
     public function assocStreamToMedia(string $streamId, array &$requestData, string $defaultTitle): string
     {
