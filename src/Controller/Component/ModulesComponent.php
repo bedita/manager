@@ -339,22 +339,38 @@ class ModulesComponent extends Component
 
         // verify upload form data
         if ($this->checkRequestForUpload($requestData)) {
-            // has another stream? drop it
-            $this->removeStream($requestData);
-
             /** @var \Laminas\Diactoros\UploadedFile $file */
             $file = $requestData['file'];
+            $filepath = $file->getStream()->getMetadata('uri');
+            $content = file_get_contents($filepath);
 
             // upload file
             $filename = basename($file->getClientFileName());
-            $filepath = $file->getStream()->getMetadata('uri');
             $headers = ['Content-Type' => $file->getClientMediaType()];
             $apiClient = ApiClientProvider::getApiClient();
+            $type = $this->getController()->getRequest()->getParam('object_type');
+
+            if (empty($requestData['id'])) {
+                $response = $apiClient->post(
+                    sprintf('/%s/upload/%s', $type, $filename),
+                    $content,
+                    $headers
+                );
+                $requestData['id'] = Hash::get($response, 'data.id');
+                unset($requestData['file'], $requestData['remote_url']);
+
+                return;
+            }
+
+            // remove stream
+            $this->removeStream($requestData);
+
+            // create stream
             $response = $apiClient->upload($filename, $filepath, $headers);
 
-            // assoc stream to media
-            $streamId = $response['data']['id'];
-            $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
+            // link stream to media
+            $streamUuid = Hash::get($response, 'data.id');
+            $response = $this->assocStreamToMedia($streamUuid, $requestData, $filename);
         }
         unset($requestData['file'], $requestData['remote_url']);
     }

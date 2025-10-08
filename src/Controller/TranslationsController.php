@@ -198,7 +198,7 @@ class TranslationsController extends ModulesController
     {
         $jsonKeys = array_map(
             function ($v) {
-                return sprintf('translated_fields.%s', $v);
+                return str_replace(['[', ']'], ['.', ''], $v);
             },
             explode(',', (string)$this->request->getData('_jsonKeys')),
         );
