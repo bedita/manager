@@ -344,17 +344,20 @@ class ModulesComponent extends Component
 
             /** @var \Laminas\Diactoros\UploadedFile $file */
             $file = $requestData['file'];
+            $filepath = $file->getStream()->getMetadata('uri');
+            $content = file_get_contents($filepath);
 
             // upload file
             $filename = basename($file->getClientFileName());
-            $filepath = $file->getStream()->getMetadata('uri');
             $headers = ['Content-Type' => $file->getClientMediaType()];
             $apiClient = ApiClientProvider::getApiClient();
-            $response = $apiClient->upload($filename, $filepath, $headers);
-
-            // assoc stream to media
-            $streamId = $response['data']['id'];
-            $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
+            $type = $this->getController()->getRequest()->getParam('object_type');
+            $response = $apiClient->post(
+                sprintf('/%s/upload/%s', $type, $filename),
+                $content,
+                $headers
+            );
+            $requestData['id'] = Hash::get($response, 'data.id');
         }
         unset($requestData['file'], $requestData['remote_url']);
     }
@@ -391,6 +394,8 @@ class ModulesComponent extends Component
      * @param array $requestData The request data
      * @param string $defaultTitle The default title for media
      * @return string The media ID
+     * @deprecated 5.15.4 This method is no longer used and will be removed in a future version.
+     * @codeCoverageIgnore
      */
     public function assocStreamToMedia(string $streamId, array &$requestData, string $defaultTitle): string
     {
