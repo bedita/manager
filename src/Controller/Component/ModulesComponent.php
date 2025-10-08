@@ -354,7 +354,7 @@ class ModulesComponent extends Component
                 $response = $apiClient->post(
                     sprintf('/%s/upload/%s', $type, $filename),
                     $content,
-                    $headers
+                    $headers,
                 );
                 $requestData['id'] = Hash::get($response, 'data.id');
                 unset($requestData['file'], $requestData['remote_url']);
@@ -370,7 +370,7 @@ class ModulesComponent extends Component
 
             // link stream to media
             $streamUuid = Hash::get($response, 'data.id');
-            $response = $this->assocStreamToMedia($streamUuid, $requestData, $filename);
+            $this->assocStreamToMedia($streamUuid, $requestData, $filename);
         }
         unset($requestData['file'], $requestData['remote_url']);
     }
