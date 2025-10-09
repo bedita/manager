@@ -26,7 +26,7 @@
                         type="text"
                         date="true"
                         :time="!all_day"
-                        :data-min-date="end_date ? false : start_date"
+                        :data-min-date="minDateStart(start_date)"
                         daterange="true"
                         v-model="end_date"
                         v-datepicker="true"
@@ -249,6 +249,15 @@ export default {
             const diff = moment.duration(ed.diff(sd)).asDays();
 
             return diff >= 1;
+        },
+        minDateStart(startDate) {
+            if (!startDate) {
+                return '';
+            }
+            const date = moment(startDate);
+            date.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+
+            return date.toISOString();
         },
         msdiff(dateRange) {
             const input = dateRange || this.range;
