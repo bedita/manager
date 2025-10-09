@@ -1,18 +1,20 @@
+@use "../../../resources/styles/variables";
+
 body.view-model {
     .module-form form section.fieldset {
         input[disabled] {
-            background-color: $gray-700;
-            color: $gray-100;
+            background-color: variables.$gray-700;
+            color: variables.$gray-100;
         }
 
         .link-to-parent {
             display: block;
-            margin-top: -.75 * $gutter;
+            margin-top: -.75 * variables.$gutter;
         }
     }
 
     .modules-view section:not(:first-child) {
-        margin-top: $gutter * 3;
+        margin-top: variables.$gutter * 3;
     }
 
 
@@ -29,7 +31,7 @@ body.view-model {
     .properties {
         &-container {
             display: grid;
-            grid-gap: $gutter;
+            grid-gap: variables.$gutter;
             grid-template-columns: repeat(1, 1fr);
             @media screen and (min-width: 768px) {
                 grid-template-columns: repeat(2, 1fr);
@@ -42,7 +44,7 @@ body.view-model {
         .buttons-container {
             display: flex;
             flex-direction: column;
-            button { margin-bottom: $gutter * .5; }
+            button { margin-bottom: variables.$gutter * .5; }
         }
     }
 }
