@@ -149,8 +149,13 @@ class ModulesComponentTest extends TestCase
         return [
             'ok' => [
                 [
-                    'name' => 'BEdita',
-                    'version' => 'v4.0.0-gustavo',
+                    'api' => [
+                        'name' => 'BEdita',
+                    ],
+                    'beditaApi' => [
+                        'name' => 'BEdita',
+                        'version' => 'v4.0.0-gustavo',
+                    ],
                 ],
                 [
                     'project' => [
@@ -161,15 +166,25 @@ class ModulesComponentTest extends TestCase
             ],
             'empty' => [
                 [
-                    'name' => '',
-                    'version' => '',
+                    'api' => [
+                        'name' => '',
+                    ],
+                    'beditaApi' => [
+                        'name' => '',
+                        'version' => '',
+                    ],
                 ],
                 [],
             ],
             'client exception' => [
                 [
-                    'name' => '',
-                    'version' => '',
+                    'api' => [
+                        'name' => '',
+                    ],
+                    'beditaApi' => [
+                        'name' => '',
+                        'version' => '',
+                    ],
                 ],
                 new BEditaClientException('I am a client exception'),
             ],
@@ -179,8 +194,13 @@ class ModulesComponentTest extends TestCase
             ],
             'config' => [
                 [
-                    'name' => 'Gustavo',
-                    'version' => '4.1.2',
+                    'api' => [
+                        'name' => '',
+                    ],
+                    'beditaApi' => [
+                        'name' => 'Gustavo',
+                        'version' => '4.1.2',
+                    ],
                 ],
                 [
                     'version' => '4.1.2',
@@ -682,8 +702,13 @@ class ModulesComponentTest extends TestCase
                 ],
                 null,
                 [
-                    'name' => 'BEdita',
-                    'version' => 'v4.0.0-gustavo',
+                    'api' => [
+                        'name' => 'BEdita',
+                    ],
+                    'beditaApi' => [
+                        'name' => 'BEdita',
+                        'version' => 'v4.0.0-gustavo',
+                    ],
                 ],
                 [
                     'resources' => [
@@ -717,8 +742,13 @@ class ModulesComponentTest extends TestCase
                 ],
                 'supporto',
                 [
-                    'name' => 'BEdita',
-                    'version' => 'v4.0.0-gustavo',
+                    'api' => [
+                        'name' => 'BEdita',
+                    ],
+                    'beditaApi' => [
+                        'name' => 'BEdita',
+                        'version' => 'v4.0.0-gustavo',
+                    ],
                 ],
                 [
                     'resources' => [
@@ -828,9 +858,9 @@ class ModulesComponentTest extends TestCase
     public function uploadProvider(): array
     {
         $filename = sprintf('%s/tests/files/%s', getcwd(), 'test.png');
-        $file = new UploadedFile($filename, filesize($filename), 0, $filename);
-        $fileErr = new UploadedFile($filename, filesize($filename), 1, $filename);
-        $fileEmpty = new UploadedFile($filename, filesize($filename), 4, $filename);
+        $file = new UploadedFile($filename, filesize($filename), 0, $filename, 'image/png');
+        $fileErr = new UploadedFile($filename, filesize($filename), 1, $filename, 'image/png');
+        $fileEmpty = new UploadedFile($filename, filesize($filename), 4, $filename, 'image/png');
 
         return [
             'no file' => [
@@ -840,6 +870,7 @@ class ModulesComponentTest extends TestCase
                 ],
                 null,
                 false,
+                null,
             ],
             'model-type empty' => [
                 [
@@ -848,6 +879,7 @@ class ModulesComponentTest extends TestCase
                 ],
                 new InternalErrorException('Invalid form data: model-type'),
                 false,
+                null,
             ],
             'model-type not a string' => [
                 [
@@ -857,6 +889,7 @@ class ModulesComponentTest extends TestCase
                 ],
                 new InternalErrorException('Invalid form data: model-type'),
                 false,
+                null,
             ],
             'upload ok' => [
                 [
@@ -866,6 +899,7 @@ class ModulesComponentTest extends TestCase
                 ],
                 null,
                 true,
+                'image/png',
             ],
             'generic upload error' => [
                 [
@@ -875,6 +909,7 @@ class ModulesComponentTest extends TestCase
                 ],
                 new UploadException(null, 1), // !UPLOAD_ERR_OK
                 true,
+                'image/png',
             ],
             'save with empty file' => [
                 [
@@ -884,6 +919,7 @@ class ModulesComponentTest extends TestCase
                 ],
                 null,
                 false,
+                null,
             ],
             'upload remote url' => [
                 [
@@ -896,6 +932,7 @@ class ModulesComponentTest extends TestCase
                     'provider' => 'YouTube',
                     'provider_uid' => 'v=fE50xrnJnR8',
                 ],
+                null,
             ],
         ];
     }
@@ -906,14 +943,15 @@ class ModulesComponentTest extends TestCase
      * @param array $requestData The request data
      * @param \Exception|null $expectedException The exception expected
      * @param array|bool $uploaded The upload result (boolean or expected requestdata)
+     * @param string|null $contentType The content type of the uploaded file
      * @return void
      * @covers ::upload()
-     * @covers ::removeStream()
      * @covers ::assocStreamToMedia()
+     * @covers ::removeStream()
      * @covers ::checkRequestForUpload()
      * @dataProvider uploadProvider()
      */
-    public function testUpload(array $requestData, $expectedException, $uploaded): void
+    public function testUpload(array $requestData, $expectedException, $uploaded, ?string $contentType): void
     {
         // if upload failed, verify exception
         if ($expectedException != null) {
@@ -927,6 +965,9 @@ class ModulesComponentTest extends TestCase
 
         if ($requestData['upload_behavior'] === 'file') {
             // do component call
+            if (array_key_exists('model-type', $requestData)) {
+                $this->Modules->getController()->setRequest($this->Modules->getController()->getRequest()->withParam('object_type', $requestData['model-type']));
+            }
             $this->Modules->upload($requestData);
         } else {
             // mock for ModulesComponent
@@ -961,7 +1002,7 @@ class ModulesComponentTest extends TestCase
 
             // test upload of another file to change stream
             $filename = sprintf('%s/tests/files/%s', getcwd(), 'test2.png');
-            $file = new UploadedFile($filename, filesize($filename), 0, $filename);
+            $file = new UploadedFile($filename, filesize($filename), 0, $filename, $contentType);
             $requestData = [
                 'file' => $file,
                 'model-type' => 'images',

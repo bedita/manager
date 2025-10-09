@@ -21,23 +21,24 @@
         <div :class="dateRangeClass()">
             <span>{{ msgTo }}</span>
             <div>
-                <template v-if="start_date">
+                <template v-if="start_date && ready">
                     <input
                         type="text"
                         date="true"
                         :time="!all_day"
+                        :data-min-date="minDateStart(start_date)"
                         daterange="true"
                         v-model="end_date"
                         v-datepicker="true"
                         @change="onDateChanged(false, $event)"
-                        v-if="ready"
                     >
                 </template>
-                <input
-                    type="text"
-                    disabled="disabled"
-                    v-else
-                >
+                <template v-else>
+                    <input
+                        type="text"
+                        disabled="disabled"
+                    >
+                </template>
             </div>
         </div>
         <div v-show="!optionIsSet('all_day')">
@@ -142,7 +143,7 @@
         </div>
         <div
             class="icon-error"
-            v-show="!compact && validate() === false"
+            v-show="!compact && start_date && validate() === false"
         >
             {{ msgInvalidDateRange }}
         </div>
@@ -248,6 +249,15 @@ export default {
             const diff = moment.duration(ed.diff(sd)).asDays();
 
             return diff >= 1;
+        },
+        minDateStart(startDate) {
+            if (!startDate) {
+                return '';
+            }
+            const date = moment(startDate);
+            date.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+
+            return date.toISOString();
         },
         msdiff(dateRange) {
             const input = dateRange || this.range;

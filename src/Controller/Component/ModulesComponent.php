@@ -185,10 +185,11 @@ class ModulesComponent extends Component
         }
         /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
-        if (empty($user) || empty($user->getOriginalData())) {
+        $userRoles = (array)$user->get('roles');
+        if (empty($user) || empty($user->getOriginalData()) || in_array('admin', $userRoles)) {
             return;
         }
-        $roles = array_intersect(array_keys($accessControl), (array)$user->get('roles'));
+        $roles = array_intersect(array_keys($accessControl), $userRoles);
         $modules = (array)array_keys($this->modules);
         $hidden = [];
         $readonly = [];
@@ -251,12 +252,22 @@ class ModulesComponent extends Component
     {
         /** @var \Authentication\Identity $user */
         $user = $this->Authentication->getIdentity();
-        $meta = $this->getMeta($user);
-        $project = (array)Configure::read('Project');
-        $name = (string)Hash::get($project, 'name', Hash::get($meta, 'project.name'));
-        $version = Hash::get($meta, 'version', '');
+        $api = $this->getMeta($user);
+        $apiName = (string)Hash::get($api, 'project.name');
+        $apiName = str_replace('API', '', $apiName);
+        $api['project']['name'] = $apiName;
 
-        return compact('name', 'version');
+        return [
+            'api' => (array)Hash::get($api, 'project'),
+            'beditaApi' => [
+                'name' => (string)Hash::get(
+                    (array)Configure::read('Project'),
+                    'name',
+                    (string)Hash::get($api, 'project.name')
+                ),
+                'version' => (string)Hash::get($api, 'version'),
+            ],
+        ];
     }
 
     /**
@@ -328,22 +339,38 @@ class ModulesComponent extends Component
 
         // verify upload form data
         if ($this->checkRequestForUpload($requestData)) {
-            // has another stream? drop it
-            $this->removeStream($requestData);
-
             /** @var \Laminas\Diactoros\UploadedFile $file */
             $file = $requestData['file'];
+            $filepath = $file->getStream()->getMetadata('uri');
+            $content = file_get_contents($filepath);
 
             // upload file
             $filename = basename($file->getClientFileName());
-            $filepath = $file->getStream()->getMetadata('uri');
             $headers = ['Content-Type' => $file->getClientMediaType()];
             $apiClient = ApiClientProvider::getApiClient();
+            $type = $this->getController()->getRequest()->getParam('object_type');
+
+            if (empty($requestData['id'])) {
+                $response = $apiClient->post(
+                    sprintf('/%s/upload/%s', $type, $filename),
+                    $content,
+                    $headers
+                );
+                $requestData['id'] = Hash::get($response, 'data.id');
+                unset($requestData['file'], $requestData['remote_url']);
+
+                return;
+            }
+
+            // remove stream
+            $this->removeStream($requestData);
+
+            // create stream
             $response = $apiClient->upload($filename, $filepath, $headers);
 
-            // assoc stream to media
-            $streamId = $response['data']['id'];
-            $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
+            // link stream to media
+            $streamUuid = Hash::get($response, 'data.id');
+            $response = $this->assocStreamToMedia($streamUuid, $requestData, $filename);
         }
         unset($requestData['file'], $requestData['remote_url']);
     }
