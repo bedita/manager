@@ -87,6 +87,20 @@ class SystemHelper extends Helper
     ];
 
     /**
+     * Maximum size for uploaded files, in bytes
+     *
+     * @var int
+     */
+    protected int $defaultUploadMaxSize = -1;
+
+    /**
+     * Timeout for upload operations, in milliseconds
+     *
+     * @var int
+     */
+    protected int $defaultUploadTimeout = 30000; // in milliseconds
+
+    /**
      * Maximum resolution for images
      *
      * @var string
@@ -166,8 +180,10 @@ class SystemHelper extends Helper
         $accepted = (array)Configure::read('uploadAccepted', $this->defaultUploadAccepted);
         $forbidden = (array)Configure::read('uploadForbidden', $this->defaultUploadForbidden);
         $maxResolution = (string)Configure::read('uploadMaxResolution', $this->defaultUploadMaxResolution);
+        $maxSize = (int)Configure::read('uploadMaxSize', $this->defaultUploadMaxSize);
+        $timeout = (int)Configure::read('uploadTimeout', $this->defaultUploadTimeout);
 
-        return compact('accepted', 'forbidden', 'maxResolution');
+        return compact('accepted', 'forbidden', 'maxResolution', 'maxSize', 'timeout');
     }
 
     /**
