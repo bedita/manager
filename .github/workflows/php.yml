@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - '**/*.php'
+      - '.codecov.yml'
       - '.github/workflows/php.yml'
       - '.scrutinizer.yml'
       - 'composer.json'
@@ -13,6 +14,7 @@ on:
   push:
     paths:
       - '**/*.php'
+      - '.codecov.yml'
       - '.github/workflows/php.yml'
       - '.scrutinizer.yml'
       - 'composer.json'
