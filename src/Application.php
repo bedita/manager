@@ -38,7 +38,7 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Application class. Just a temporary change to trigger gh actions
+ * Application class.
  */
 class Application extends BaseApplication implements AuthenticationServiceProviderInterface
 {
