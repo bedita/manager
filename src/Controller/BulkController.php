@@ -67,6 +67,13 @@ class BulkController extends AppController
     protected $errors = [];
 
     /**
+     * Saved ids
+     *
+     * @var array
+     */
+    protected $saved = [];
+
+    /**
      * @inheritDoc
      */
     public function initialize(): void
@@ -86,6 +93,7 @@ class BulkController extends AppController
     {
         $requestData = $this->getRequest()->getData();
         $this->objects = $requestData['objects'];
+        $this->objects = is_string($this->objects) ? json_decode($this->objects, true) : $this->objects;
         $this->saveAttribute($requestData['attributes']);
         $this->showResult();
 
@@ -197,6 +205,7 @@ class BulkController extends AppController
         }
         $result = $this->apiClient->bulkEdit($itemsMap, $attributes);
         $this->errors = (array)Hash::get($result, 'data.errors');
+        $this->saved = (array)Hash::get($result, 'data.saved');
     }
 
     /**
@@ -304,7 +313,7 @@ class BulkController extends AppController
     protected function showResult(): void
     {
         if (empty($this->errors)) {
-            $this->Flash->success(__('Bulk action performed on {0} objects', count($this->ids)));
+            $this->Flash->success(__('Bulk action performed on {0} objects', count($this->saved) ?? count($this->ids)));
 
             return;
         }
