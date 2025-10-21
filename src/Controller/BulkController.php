@@ -313,7 +313,8 @@ class BulkController extends AppController
     protected function showResult(): void
     {
         if (empty($this->errors)) {
-            $this->Flash->success(__('Bulk action performed on {0} objects', count($this->saved) ?? count($this->ids)));
+            $count = count($this->saved) > 0 ? count($this->saved) : count($this->ids);
+            $this->Flash->success(__('Bulk action performed on {0} objects', $count));
 
             return;
         }
