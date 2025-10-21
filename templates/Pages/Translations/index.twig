@@ -4,7 +4,7 @@
 {{ element('Modules/index_header', { 'meta': meta, 'filter': filter, 'Schema': Schema }) }}
 
 {% set ids = Array.extract(objects, '{*}.id') %}
-<modules-index inline-template ids='{{ ids|json_encode }}'>
+<modules-index inline-template ids='{{ ids|json_encode }}' objects={{ Schema.minimalObjectsList(objects)|json_encode }}>
 
     <div class="module-index">
 

@@ -58,7 +58,7 @@
                 <span class="ml-05">{{ __('Reset') }}</span>
             </button>
 
-            {% if hideFilterRelations == '' %}
+            {% if hideFilterRelations == '' and schema and schema.relations %}
             <button class="toggle-filters button button-outlined is-width-auto" type="button" @click.prevent="toggleFilterRelations()">
                 <app-icon icon="carbon:filter-edit" v-show="!editFilterRelations"></app-icon><span class="ml-05" v-show="!editFilterRelations">{{ __('Relations') }}</span>
                 <app-icon icon="carbon:filter" v-show="editFilterRelations"></app-icon><span class="ml-05" v-show="editFilterRelations">{{ __('Relations') }}</span>
@@ -73,12 +73,12 @@
         </div>
     </div>
 
-    {% if hideFilterRelations == '' %}
+    {% if hideFilterRelations == '' and schema and schema.relations %}
     <div class="more-filters" v-show="editFilterRelations">
         <div class="filter-container">
             <related-objects-filter
                 :initial-filter="{{ _view.request.getQuery('filter')|json_encode }}"
-                :relations-schema="{{ schema['relations']|json_encode }}"
+                :relations-schema="{{ schema['relations']|default({})|json_encode }}"
                 @edit-filter-relations="editFilterRelations = 1"
                 @update-filter-related="updateFilterRelations"
             >

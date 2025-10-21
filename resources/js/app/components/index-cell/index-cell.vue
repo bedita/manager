@@ -121,7 +121,7 @@ export default {
             default: () => [],
         },
         schema: {
-            type: Object,
+            type: [Object, Array],
             default: () => ({}),
         },
         settings: {
