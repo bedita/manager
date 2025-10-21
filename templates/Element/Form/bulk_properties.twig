@@ -8,7 +8,9 @@
         })|raw }}
         <div class="fieldset" :disabled="!selectedRows.length">
             <input type="hidden" name="ids" v-bind:value="selectedRows">
+            <input type="text" name="objects" v-bind:value="selectedObjects">
             {% do Form.unlockField('ids') %}
+            {% do Form.unlockField('objects') %}
 
             {% set options = Schema.controlOptions(key, null, schema.properties[key]) %}
             {% set options = options|merge({

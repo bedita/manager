@@ -46,6 +46,13 @@ class BulkController extends AppController
     protected $ids = [];
 
     /**
+     * Selected objects (in the format [{id:<id>, type:<type>}, ...])
+     *
+     * @var array
+     */
+    protected $objects = [];
+
+    /**
      * Selected categories
      *
      * @var array|string
@@ -78,7 +85,7 @@ class BulkController extends AppController
     public function attribute(): ?Response
     {
         $requestData = $this->getRequest()->getData();
-        $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
+        $this->objects = $requestData['objects'];
         $this->saveAttribute($requestData['attributes']);
         $this->showResult();
 
@@ -184,13 +191,12 @@ class BulkController extends AppController
      */
     protected function saveAttribute(array $attributes): void
     {
-        foreach ($this->ids as $id) {
-            try {
-                $this->apiClient->save($this->objectType, compact('id') + $attributes);
-            } catch (BEditaClientException $e) {
-                $this->errors[] = ['id' => $id, 'message' => $e->getAttributes()];
-            }
+        $itemsMap = [];
+        foreach ($this->objects as $item) {
+            $itemsMap[$item['type']][] = $item['id'];
         }
+        $result = $this->apiClient->bulkEdit($itemsMap, $attributes);
+        $this->errors = (array)Hash::get($result, 'data.errors');
     }
 
     /**
