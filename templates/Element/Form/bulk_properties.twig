@@ -8,7 +8,7 @@
         })|raw }}
         <div class="fieldset" :disabled="!selectedRows.length">
             <input type="hidden" name="ids" v-bind:value="selectedRows">
-            <input type="text" name="objects" v-bind:value="selectedObjects">
+            <input type="hidden" name="objects" v-bind:value="selectedObjects">
             {% do Form.unlockField('ids') %}
             {% do Form.unlockField('objects') %}
 
