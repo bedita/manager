@@ -62,7 +62,7 @@ class LockController extends AppController
             $this->apiClient->patch(
                 sprintf('/%s/%s', $type, $id),
                 $payload,
-                ['Content-Type' => 'application/json']
+                ['Content-Type' => 'application/json'],
             );
         } catch (BEditaClientException $ex) {
             $this->log($ex->getMessage(), LogLevel::ERROR);

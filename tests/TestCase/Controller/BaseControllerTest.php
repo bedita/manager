@@ -1,6 +1,7 @@
 <?php
 namespace App\Test\TestCase\Controller;
 
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
@@ -16,42 +17,42 @@ class BaseControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * Uname for test object
      *
      * @var string
      */
-    protected $uname = 'controller-test-document';
+    protected string $uname = 'controller-test-document';
 
     /**
      * Uname for test object
      *
      * @var string
      */
-    protected $folderUname = 'controller-test-folder';
+    protected string $folderUname = 'controller-test-folder';
 
     /**
      * Uname for test media
      *
      * @var string
      */
-    protected $mediaUname = 'controller-test-media';
+    protected string $mediaUname = 'controller-test-media';
 
     /**
      * Uname for test media with stream
      *
      * @var string
      */
-    protected $mediaWithStreamUname = 'controller-test-media-stream';
+    protected string $mediaWithStreamUname = 'controller-test-media-stream';
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],

@@ -1,16 +1,23 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Test\TestCase;
+namespace App\Test\TestCase\Utility;
 
 use App\Utility\DateRangesTools;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * App\Utility\DateRangesTools Test Case
- *
- * @coversDefaultClass App\Utility\DateRangesTools
+ * {@see \App\Utility\DateRangesTools} Test Case
  */
+#[CoversClass(DateRangesTools::class)]
+#[CoversMethod(DateRangesTools::class, 'cleanParams')]
+#[CoversMethod(DateRangesTools::class, 'isOneDayRange')]
+#[CoversMethod(DateRangesTools::class, 'parseParams')]
+#[CoversMethod(DateRangesTools::class, 'prepare')]
+#[CoversMethod(DateRangesTools::class, 'toString')]
 class DateRangesToolsTest extends TestCase
 {
     /**
@@ -18,7 +25,7 @@ class DateRangesToolsTest extends TestCase
      *
      * @return array
      */
-    public function prepareProvider(): array
+    public static function prepareProvider(): array
     {
         return [
             'empty ranges' => [
@@ -258,12 +265,8 @@ class DateRangesToolsTest extends TestCase
      * @param array $dateRanges Date ranges to format.
      * @param array $expected Expected result.
      * @return void
-     * @dataProvider prepareProvider()
-     * @covers ::prepare()
-     * @covers ::parseParams()
-     * @covers ::cleanParams()
-     * @covers ::isOneDayRange()
      */
+    #[DataProvider('prepareProvider')]
     public function testPrepare(array $dateRanges, array $expected): void
     {
         $actual = DateRangesTools::prepare($dateRanges);
@@ -274,7 +277,6 @@ class DateRangesToolsTest extends TestCase
      * Test `toString` method.
      *
      * @return void
-     * @covers ::toString()
      */
     public function testToString(): void
     {

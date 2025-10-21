@@ -26,21 +26,21 @@ class PermsHelper extends Helper
      *
      * @var array
      */
-    protected $current = [];
+    protected array $current = [];
 
     /**
      * API methods allowed in all modules
      *
      * @var array
      */
-    protected $allowed = [];
+    protected array $allowed = [];
 
     /**
      * Permissions on folders enabled flag
      *
      * @var bool
      */
-    protected $permissionsOnFolders = false;
+    protected bool $permissionsOnFolders = false;
 
     /**
      * {@inheritDoc}
@@ -100,8 +100,8 @@ class PermsHelper extends Helper
                 $modules,
                 function ($module) {
                     return $this->canCreate($module);
-                }
-            )
+                },
+            ),
         );
     }
 
