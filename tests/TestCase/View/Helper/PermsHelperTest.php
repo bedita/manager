@@ -19,12 +19,27 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\ArrayHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\PermsHelper
  */
+#[CoversClass(PermsHelper::class)]
+#[CoversMethod(PermsHelper::class, 'access')]
+#[CoversMethod(PermsHelper::class, 'canCreate')]
+#[CoversMethod(PermsHelper::class, 'canCreateModules')]
+#[CoversMethod(PermsHelper::class, 'canDelete')]
+#[CoversMethod(PermsHelper::class, 'canLock')]
+#[CoversMethod(PermsHelper::class, 'canRead')]
+#[CoversMethod(PermsHelper::class, 'canSave')]
+#[CoversMethod(PermsHelper::class, 'initialize')]
+#[CoversMethod(PermsHelper::class, 'isAllowed')]
+#[CoversMethod(PermsHelper::class, 'isLockedByParents')]
+#[CoversMethod(PermsHelper::class, 'userIsAdmin')]
+#[CoversMethod(PermsHelper::class, 'userIsAllowed')]
+#[CoversMethod(PermsHelper::class, 'userRoles')]
 class PermsHelperTest extends TestCase
 {
     /**
@@ -32,7 +47,7 @@ class PermsHelperTest extends TestCase
      *
      * @var \App\View\Helper\PermsHelper
      */
-    public $Perms;
+    public PermsHelper $Perms;
 
     /**
      * @inheritDoc
@@ -63,7 +78,7 @@ class PermsHelperTest extends TestCase
      *
      * @return array
      */
-    public function isAllowedProvider(): array
+    public static function isAllowedProvider(): array
     {
         return [
             [
@@ -95,14 +110,8 @@ class PermsHelperTest extends TestCase
      * @param string $method Helper method
      * @param array|string $arg The argument for function
      * @return void
-     * @dataProvider isAllowedProvider()
-     * @covers ::isAllowed()
-     * @covers ::initialize()
-     * @covers ::canDelete()
-     * @covers ::canRead()
-     * @covers ::canCreate()
-     * @covers ::canSave()
      */
+    #[DataProvider('isAllowedProvider')]
     public function testIsAllowed(bool $expected, string $method, $arg = null): void
     {
         $result = $this->Perms->{$method}($arg);
@@ -113,7 +122,6 @@ class PermsHelperTest extends TestCase
      * Test `isAllowed` method with no current module perms.
      *
      * @return void
-     * @covers ::isAllowed()
      */
     public function testIsAllowedNoCurrent(): void
     {
@@ -127,7 +135,6 @@ class PermsHelperTest extends TestCase
      * Test `canLock` method.
      *
      * @return void
-     * @covers ::canLock()
      */
     public function testCanLock(): void
     {
@@ -144,43 +151,36 @@ class PermsHelperTest extends TestCase
      * Test `canCreate` method
      *
      * @return void
-     * @covers ::canCreate()
      */
     public function testCanCreate(): void
     {
-        $result = $this->Perms->canCreate();
-        static::assertFalse($result);
+        static::assertFalse($this->Perms->canCreate());
     }
 
     /**
      * Test `canRead` method
      *
      * @return void
-     * @covers ::canRead()
      */
     public function testCanRead(): void
     {
-        $result = $this->Perms->canRead();
-        static::assertTrue($result);
+        static::assertTrue($this->Perms->canRead());
     }
 
     /**
      * Test `canSave` method
      *
      * @return void
-     * @covers ::canSave()
      */
     public function testCanSave(): void
     {
-        $result = $this->Perms->canSave();
-        static::assertFalse($result);
+        static::assertFalse($this->Perms->canSave());
     }
 
     /**
      * Test `canDelete` method
      *
      * @return void
-     * @covers ::canDelete()
      */
     public function testCanDelete(): void
     {
@@ -188,8 +188,7 @@ class PermsHelperTest extends TestCase
             'type' => 'documents',
             'meta' => ['locked' => true],
         ];
-        $result = $this->Perms->canDelete($document);
-        static::assertFalse($result);
+        static::assertFalse($this->Perms->canDelete($document));
 
         // locked by parents
         $mock = $this->createPartialMock(PermsHelper::class, ['isLockedByParents']);
@@ -199,8 +198,7 @@ class PermsHelperTest extends TestCase
             'type' => 'documents',
             'meta' => ['locked' => false],
         ];
-        $result = $this->Perms->canDelete($document);
-        static::assertFalse($result);
+        static::assertFalse($this->Perms->canDelete($document));
     }
 
     /**
@@ -208,7 +206,7 @@ class PermsHelperTest extends TestCase
      *
      * @return array
      */
-    public function accessProvider(): array
+    public static function accessProvider(): array
     {
         return [
             'write' => [
@@ -249,9 +247,8 @@ class PermsHelperTest extends TestCase
      * @param string $moduleName The module name
      * @param string $expected The expected value
      * @return void
-     * @covers ::access()
-     * @dataProvider accessProvider()
      */
+    #[DataProvider('accessProvider')]
     public function testAccess(array $accessControl, string $roleName, string $moduleName, string $expected): void
     {
         $actual = $this->Perms->access($accessControl, $roleName, $moduleName);
@@ -262,24 +259,20 @@ class PermsHelperTest extends TestCase
      * Test `userIsAdmin`
      *
      * @return void
-     * @covers ::userIsAdmin()
      */
     public function testUserIsAdmin(): void
     {
         $this->Perms->getView()->set('user', new Identity([]));
-        $actual = $this->Perms->userIsAdmin();
-        static::assertFalse($actual);
+        static::assertFalse($this->Perms->userIsAdmin());
 
         $this->Perms->getView()->set('user', new Identity(['roles' => ['admin']]));
-        $actual = $this->Perms->userIsAdmin();
-        static::assertTrue($actual);
+        static::assertTrue($this->Perms->userIsAdmin());
     }
 
     /**
      * Test `userIsAllowed
      *
      * @return void
-     * @covers ::userIsAllowed()
      */
     public function testUserIsAllowed(): void
     {
@@ -324,7 +317,6 @@ class PermsHelperTest extends TestCase
      * Test `userRoles`
      *
      * @return void
-     * @covers ::userRoles()
      */
     public function testUserRoles(): void
     {
@@ -338,7 +330,6 @@ class PermsHelperTest extends TestCase
      * Test `isLockedByParents` method.
      *
      * @return void
-     * @covers ::isLockedByParents()
      */
     public function testIsLockedByParents(): void
     {
@@ -532,7 +523,6 @@ class PermsHelperTest extends TestCase
      * Test `canCreateModules` method
      *
      * @return void
-     * @covers ::canCreateModules()
      */
     public function testCanCreateModules(): void
     {

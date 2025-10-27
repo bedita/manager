@@ -14,6 +14,7 @@
 namespace App\Form;
 
 use Cake\Utility\Inflector;
+use InvalidArgumentException;
 
 /**
  * Form class provides utilities for \App\Form classes.
@@ -34,7 +35,7 @@ class Form
      * @param string|null $format The format
      * @return array
      */
-    public static function getMethod(string $className, string $name, $format = ''): array
+    public static function getMethod(string $className, string $name, ?string $format = ''): array
     {
         $methodName = !empty($format) ? $format : Inflector::variable(str_replace('-', '_', $name));
         $method = [$className, $methodName];
@@ -42,6 +43,6 @@ class Form
             return $method;
         }
 
-        throw new \InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
+        throw new InvalidArgumentException(sprintf('Method "%s" is not callable', $methodName));
     }
 }

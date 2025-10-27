@@ -138,7 +138,7 @@ class CategoriesComponent extends Component
      * @param array $category The category data.
      * @return void
      */
-    protected function fillRoots(array &$roots, $category): void
+    protected function fillRoots(array &$roots, array $category): void
     {
         if (!empty(Hash::get($category, 'attributes.parent_id'))) {
             return;
@@ -217,7 +217,7 @@ class CategoriesComponent extends Component
      * @param string $type The object type name of the category.
      * @return array|null The BEdita API response for the deleted category.
      */
-    public function delete(string $id, $type = null): ?array
+    public function delete(string $id, ?string $type = null): ?array
     {
         $apiClient = ApiClientProvider::getApiClient();
 

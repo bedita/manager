@@ -27,7 +27,7 @@ class CalendarHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Time'];
+    public array $helpers = ['Time'];
 
     /**
      * Get calendar date ranges list html

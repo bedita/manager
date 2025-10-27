@@ -62,7 +62,7 @@ trait PermissionsTrait
         foreach ($roleIds as $roleId) {
             ApiClientProvider::getApiClient()->save(
                 'object_permissions',
-                ['object_id' => $objectId, 'role_id' => $roleId]
+                ['object_id' => $objectId, 'role_id' => $roleId],
             );
         }
     }
@@ -110,7 +110,7 @@ trait PermissionsTrait
             return Hash::combine(
                 (array)ApiClientProvider::getApiClient()->get('/roles'),
                 'data.{n}.id',
-                'data.{n}.attributes.name'
+                'data.{n}.attributes.name',
             );
         });
     }

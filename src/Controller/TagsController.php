@@ -23,7 +23,7 @@ class TagsController extends ModelTagsController
     {
         parent::initialize();
         $this->loadComponent('ProjectConfiguration');
-        $this->Security->setConfig('unlockedActions', ['create', 'patch', 'delete']);
+        $this->FormProtection->setConfig('unlockedActions', ['create', 'patch', 'delete']);
     }
 
     /**

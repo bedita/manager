@@ -14,10 +14,11 @@ class DummyImportFilter extends ImportFilter
     /**
      * @inheritDoc
      */
-    protected static $serviceName = '';
+    protected static ?string $serviceName = '';
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
      * @param string $filename The file name
      * @param string $filepath The file path
      * @param array $options The import options

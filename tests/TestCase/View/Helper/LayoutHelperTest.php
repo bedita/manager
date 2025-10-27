@@ -13,6 +13,7 @@
 
 namespace App\Test\TestCase\View\Helper;
 
+use App\Plugin;
 use App\Utility\CacheTools;
 use App\View\Helper\EditorsHelper;
 use App\View\Helper\LayoutHelper;
@@ -23,15 +24,40 @@ use Cake\Core\Configure;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\Cookie\CookieCollection;
 use Cake\Http\ServerRequest;
+use Cake\I18n\I18n;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\LayoutHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\LayoutHelper
  */
+#[CoversClass(LayoutHelper::class)]
+#[CoversMethod(LayoutHelper::class, 'commandLinkClass')]
+#[CoversMethod(LayoutHelper::class, 'dashboardModuleLink')]
+#[CoversMethod(LayoutHelper::class, 'getCsrfToken')]
+#[CoversMethod(LayoutHelper::class, 'indexLists')]
+#[CoversMethod(LayoutHelper::class, 'isDashboard')]
+#[CoversMethod(LayoutHelper::class, 'isLogin')]
+#[CoversMethod(LayoutHelper::class, 'messages')]
+#[CoversMethod(LayoutHelper::class, 'metaConfig')]
+#[CoversMethod(LayoutHelper::class, 'moduleClass')]
+#[CoversMethod(LayoutHelper::class, 'moduleCount')]
+#[CoversMethod(LayoutHelper::class, 'moduleIcon')]
+#[CoversMethod(LayoutHelper::class, 'moduleLink')]
+#[CoversMethod(LayoutHelper::class, 'moduleIndexDefaultViewType')]
+#[CoversMethod(LayoutHelper::class, 'moduleIndexViewType')]
+#[CoversMethod(LayoutHelper::class, 'moduleIndexViewTypes')]
+#[CoversMethod(LayoutHelper::class, 'propertyGroup')]
+#[CoversMethod(LayoutHelper::class, 'publishStatus')]
+#[CoversMethod(LayoutHelper::class, 'showCounter')]
+#[CoversMethod(LayoutHelper::class, 'title')]
+#[CoversMethod(LayoutHelper::class, 'tr')]
+#[CoversMethod(LayoutHelper::class, 'trashLink')]
+#[CoversMethod(LayoutHelper::class, 'uiRicheditorConfig')]
 class LayoutHelperTest extends TestCase
 {
     /**
@@ -48,7 +74,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function isDashboardProvider(): array
+    public static function isDashboardProvider(): array
     {
         return [
             'dashboard' => [
@@ -63,10 +89,9 @@ class LayoutHelperTest extends TestCase
      *
      * @param string $name The view name
      * @param bool $expected The expected result
-     * @dataProvider isDashboardProvider()
-     * @covers ::isDashboard()
      */
-    public function testIsDashboard($name, $expected): void
+    #[DataProvider('isDashboardProvider')]
+    public function testIsDashboard(string $name, bool $expected): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
@@ -80,7 +105,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function isLoginProvider(): array
+    public static function isLoginProvider(): array
     {
         return [
             'login' => [
@@ -99,10 +124,9 @@ class LayoutHelperTest extends TestCase
      *
      * @param string $name The view name
      * @param bool $expected The expected result
-     * @dataProvider isLoginProvider()
-     * @covers ::isLogin()
      */
-    public function testIsLogin($name, $expected): void
+    #[DataProvider('isLoginProvider')]
+    public function testIsLogin(string $name, bool $expected): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
@@ -116,7 +140,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function messagesProvider(): array
+    public static function messagesProvider(): array
     {
         return [
             'login' => [
@@ -135,10 +159,9 @@ class LayoutHelperTest extends TestCase
      *
      * @param string $name The view name
      * @param bool $expected The expected result
-     * @dataProvider messagesProvider()
-     * @covers ::messages()
      */
-    public function testMessages($name, $expected): void
+    #[DataProvider('messagesProvider')]
+    public function testMessages(string $name, bool $expected): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
@@ -152,7 +175,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleClassProvider(): array
+    public static function moduleClassProvider(): array
     {
         return [
             'app-module-box locked' => [
@@ -180,42 +203,60 @@ class LayoutHelperTest extends TestCase
      * @param bool $concurrent The concurrent editors flag
      * @param string $expected The expected class
      * @return void
-     * @dataProvider moduleClassProvider()
-     * @covers ::moduleClass()
      */
+    #[DataProvider('moduleClassProvider')]
     public function testModuleClass(bool $locked, bool $concurrent, string $expected): void
     {
         $request = $response = $events = null;
         $view = new View($request, $response, $events, ['name' => 'Objects']);
         $view->set('object', ['id' => 999]);
-        $layout = new LayoutHelper($view);
+
+        $layout = new class ($view) extends LayoutHelper {
+            public PermsHelper $Perms;
+            public EditorsHelper $Editors;
+        };
         if ($locked) {
-            $mock = $this->createPartialMock(PermsHelper::class, ['isLockedByParents']);
-            $mock->method('isLockedByParents')->willReturn(true);
-            $layout->Perms = $mock;
+            $layout->Perms = new class ($view) extends PermsHelper {
+                public function isLockedByParents(string $id): bool
+                {
+                    return true;
+                }
+            };
         } elseif ($concurrent) {
-            $mock = $this->createPartialMock(PermsHelper::class, ['isLockedByParents']);
-            $mock->method('isLockedByParents')->willReturn(false);
-            $layout->Perms = $mock;
-            $mock = $this->createPartialMock(EditorsHelper::class, ['list']);
-            $mock->method('list')->willReturn([
-                [
-                    'id' => 1,
-                    'username' => 'first',
-                ],
-                [
-                    'id' => 2,
-                    'username' => 'second',
-                ],
-            ]);
-            $layout->Editors = $mock;
+            $layout->Perms = new class ($view) extends PermsHelper {
+                public function isLockedByParents(string $id): bool
+                {
+                    return false;
+                }
+            };
+            $layout->Editors = new class ($view) extends EditorsHelper {
+                public function list(): array
+                {
+                    return [
+                        [
+                            'id' => 1,
+                            'username' => 'first',
+                        ],
+                        [
+                            'id' => 2,
+                            'username' => 'second',
+                        ],
+                    ];
+                }
+            };
         } else {
-            $mock = $this->createPartialMock(PermsHelper::class, ['isLockedByParents']);
-            $mock->method('isLockedByParents')->willReturn(false);
-            $layout->Perms = $mock;
-            $mock = $this->createPartialMock(EditorsHelper::class, ['list']);
-            $mock->method('list')->willReturn([]);
-            $layout->Editors = $mock;
+            $layout->Perms = new class ($view) extends PermsHelper {
+                public function isLockedByParents(string $id): bool
+                {
+                    return false;
+                }
+            };
+            $layout->Editors = new class ($view) extends EditorsHelper {
+                public function list(): array
+                {
+                    return [];
+                }
+            };
         }
         $actual = $layout->moduleClass();
         static::assertSame($expected, $actual);
@@ -226,7 +267,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleLinkProvider(): array
+    public static function moduleLinkProvider(): array
     {
         return [
             'user profile' => [
@@ -259,11 +300,9 @@ class LayoutHelperTest extends TestCase
      * @param string $expected The expected link
      * @param string $name The view name
      * @param array $viewVars The view vars
-     * @dataProvider moduleLinkProvider()
-     * @covers ::moduleLink()
-     * @covers ::commandLinkClass()
      */
-    public function testModuleLink($expected, $name, array $viewVars = []): void
+    #[DataProvider('moduleLinkProvider')]
+    public function testModuleLink(string $expected, string $name, array $viewVars = []): void
     {
         $request = $response = $events = null;
         $data = ['name' => $name];
@@ -281,7 +320,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleIndexDefaultViewTypeProvider(): array
+    public static function moduleIndexDefaultViewTypeProvider(): array
     {
         return [
             'documents' => [
@@ -301,9 +340,8 @@ class LayoutHelperTest extends TestCase
      * @param array $viewVars The view vars
      * @param string $expected The expected result
      * @return void
-     * @dataProvider moduleIndexDefaultViewTypeProvider()
-     * @covers ::moduleIndexDefaultViewType()
      */
+    #[DataProvider('moduleIndexDefaultViewTypeProvider')]
     public function testModuleIndexDefaultViewType(array $viewVars, string $expected): void
     {
         $request = $response = $events = null;
@@ -323,7 +361,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleIndexViewTypeProvider(): array
+    public static function moduleIndexViewTypeProvider(): array
     {
         return [
             'documents list' => [
@@ -351,10 +389,8 @@ class LayoutHelperTest extends TestCase
      * @param array $query The query params
      * @param string $expected The expected result
      * @return void
-     * @dataProvider moduleIndexViewTypeProvider()
-     * @covers ::moduleIndexViewType()
-     * @covers ::moduleIndexDefaultViewType()
      */
+    #[DataProvider('moduleIndexViewTypeProvider')]
     public function testModuleIndexViewType(array $viewVars, array $query, string $expected): void
     {
         $request = new ServerRequest(['query' => $query]);
@@ -375,7 +411,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleIndexViewTypesProvider(): array
+    public static function moduleIndexViewTypesProvider(): array
     {
         return [
             'documents' => [
@@ -392,13 +428,11 @@ class LayoutHelperTest extends TestCase
     /**
      * Test `moduleIndexViewTypes
      *
-     * @param array $viewVars
-     * @param array $expected
+     * @param array $viewVars The view vars
+     * @param array $expected The expected result
      * @return void
-     * @dataProvider moduleIndexViewTypesProvider()
-     * @covers ::moduleIndexViewTypes()
-     * @covers ::moduleIndexDefaultViewType()
      */
+    #[DataProvider('moduleIndexViewTypesProvider')]
     public function testModuleIndexViewTypes(array $viewVars, array $expected): void
     {
         $request = $response = $events = null;
@@ -418,7 +452,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function titleProvider(): array
+    public static function titleProvider(): array
     {
         return [
             'empty' => [
@@ -478,9 +512,8 @@ class LayoutHelperTest extends TestCase
      * @param string $expected The expected title
      * @param string $name The view name
      * @param array $viewVars The view vars
-     * @dataProvider titleProvider()
-     * @covers ::title()
      */
+    #[DataProvider('titleProvider')]
     public function testTitle(string $expected, string $name, array $viewVars = []): void
     {
         $request = $response = $events = null;
@@ -498,7 +531,6 @@ class LayoutHelperTest extends TestCase
      * Test `tr` method
      *
      * @return void
-     * @covers ::tr()
      */
     public function testTranslation(): void
     {
@@ -515,7 +547,7 @@ class LayoutHelperTest extends TestCase
         static::assertSame($expected, $actual);
     }
 
-    public function publishStatusProvider(): array
+    public static function publishStatusProvider(): array
     {
         return [
             'empty object' => [
@@ -549,9 +581,8 @@ class LayoutHelperTest extends TestCase
      * Test `publishStatus` method
      *
      * @return void
-     * @dataProvider publishStatusProvider()
-     * @covers ::publishStatus()
      */
+    #[DataProvider('publishStatusProvider')]
     public function testPublishStatus(array $object, string $expected): void
     {
         $view = new View();
@@ -564,7 +595,6 @@ class LayoutHelperTest extends TestCase
      * Test `metaConfig` method
      *
      * @return void
-     * @covers ::metaConfig()
      */
     public function testMetaConfig(): void
     {
@@ -585,9 +615,9 @@ class LayoutHelperTest extends TestCase
             'currentModule' => ['name' => 'home'],
             'template' => '',
             'modules' => ['documents', 'images'],
-            'plugins' => \App\Plugin::loadedAppPlugins(),
+            'plugins' => Plugin::loadedAppPlugins(),
             'uploadable' => ['images'],
-            'locale' => \Cake\I18n\I18n::getLocale(),
+            'locale' => I18n::getLocale(),
             'csrfToken' => 'my-token',
             'maxFileSize' => $system->getMaxFileSize(),
             'canReadUsers' => false,
@@ -608,7 +638,6 @@ class LayoutHelperTest extends TestCase
      * Test `metaConfig` method
      *
      * @return void
-     * @covers ::metaConfig()
      */
     public function testMetaConfigToken(): void
     {
@@ -625,7 +654,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function csrfTokenProvider(): array
+    public static function csrfTokenProvider(): array
     {
         $request = new ServerRequest();
 
@@ -659,9 +688,8 @@ class LayoutHelperTest extends TestCase
      * @param string|null $expected The expected result
      * @param \App\View\Helper\LayoutHelper $layout The layout helper
      * @return void
-     * @dataProvider csrfTokenProvider()
-     * @covers ::getCsrfToken()
      */
+    #[DataProvider('csrfTokenProvider')]
     public function testGetCsrfToken(?string $expected, LayoutHelper $layout): void
     {
         $actual = $layout->getCsrfToken();
@@ -673,7 +701,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function trashLinkProvider(): array
+    public static function trashLinkProvider(): array
     {
         return [
             'null' => [
@@ -709,9 +737,8 @@ class LayoutHelperTest extends TestCase
      * @param string|null $input The input
      * @param string $expected The expected result
      * @return void
-     * @dataProvider trashLinkProvider()
-     * @covers ::trashLink()
      */
+    #[DataProvider('trashLinkProvider')]
     public function testTrashLink(?string $input, string $expected): void
     {
         $viewVars = [
@@ -735,7 +762,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function dashboardModuleLinkProvider(): array
+    public static function dashboardModuleLinkProvider(): array
     {
         return [
             'trash' => [
@@ -760,10 +787,8 @@ class LayoutHelperTest extends TestCase
      * Test `dashboardModuleLink`.
      *
      * @return void
-     * @dataProvider dashboardModuleLinkProvider()
-     * @covers ::dashboardModuleLink()
-     * @covers ::moduleIcon()
      */
+    #[DataProvider('dashboardModuleLinkProvider')]
     public function testDashboardModuleLink(string $name, array $module, string $expected): void
     {
         $modules = (array)Configure::read('Modules', []);
@@ -782,7 +807,7 @@ class LayoutHelperTest extends TestCase
      *
      * @return array
      */
-    public function moduleIconProvider(): array
+    public static function moduleIconProvider(): array
     {
         return [
             'hints multiple types' => [
@@ -825,9 +850,8 @@ class LayoutHelperTest extends TestCase
      * @param array $module The module configuration
      * @param string $expected The expected result
      * @return void
-     * @dataProvider moduleIconProvider()
-     * @covers ::moduleIcon()
      */
+    #[DataProvider('moduleIconProvider')]
     public function testModuleIcon(string $name, array $module, string $expected): void
     {
         $modules = (array)Configure::read('Modules', []);
@@ -845,8 +869,6 @@ class LayoutHelperTest extends TestCase
      * Test `moduleCount` method.
      *
      * @return void
-     * @covers ::moduleCount()
-     * @covers ::showCounter()
      */
     public function testModuleCount(): void
     {
@@ -866,6 +888,7 @@ class LayoutHelperTest extends TestCase
         static::assertEquals($expected, $actual);
         $actual = $layout->moduleCount($moduleName, 'my-dummy-css-class');
         $expected = sprintf('<span class="module-count">%s</span>', $count);
+        static::assertEquals($expected, $actual);
         Cache::disable();
     }
 
@@ -873,7 +896,6 @@ class LayoutHelperTest extends TestCase
      * Test `showCounter` method.
      *
      * @return void
-     * @covers ::showCounter()
      */
     public function testShowCounter(): void
     {
@@ -895,7 +917,6 @@ class LayoutHelperTest extends TestCase
      * Test `propertyGroup` method.
      *
      * @return void
-     * @covers ::propertyGroup()
      */
     public function testPropertyGroup(): void
     {
@@ -918,7 +939,6 @@ class LayoutHelperTest extends TestCase
      * Test `indexLists` method.
      *
      * @return void
-     * @covers ::indexLists()
      */
     public function testIndexLists(): void
     {
@@ -964,7 +984,6 @@ class LayoutHelperTest extends TestCase
      * Test `uiRicheditorConfig` method.
      *
      * @return void
-     * @covers ::uiRicheditorConfig()
      */
     public function testUiRicheditorConfig(): void
     {

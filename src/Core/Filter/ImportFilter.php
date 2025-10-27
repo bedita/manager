@@ -13,10 +13,11 @@
 namespace App\Core\Filter;
 
 use App\Core\Result\ImportResult;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
-use Cake\Filesystem\File;
 use Cake\Log\LogTrait;
 use Cake\Utility\Hash;
+use LogicException;
 
 /**
  * Import abstract class
@@ -28,24 +29,24 @@ abstract class ImportFilter
     /**
      * BEdita Api client
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    protected $apiClient = null;
+    protected ?BEditaClient $apiClient = null;
 
     /**
      * Filter import result
      *
-     * @var \App\Core\Result\ImportResult
+     * @var \App\Core\Result\ImportResult|null
      */
-    protected $result = null;
+    protected ?ImportResult $result = null;
 
     /**
      * The service name used by async job.
      * If defined the import is intended as asynchronous.
      *
-     * @var string
+     * @var string|null
      */
-    protected static $serviceName = null;
+    protected static ?string $serviceName = null;
 
     /**
      * Constructor
@@ -78,7 +79,7 @@ abstract class ImportFilter
      * @param array $options The import options
      * @return \App\Core\Result\ImportResult The result
      */
-    abstract public function import($filename, $filepath, ?array $options = []): ImportResult;
+    abstract public function import(string $filename, string $filepath, ?array $options = []): ImportResult;
 
     /**
      * Upload file used to import data and create async job linking to it.
@@ -89,15 +90,14 @@ abstract class ImportFilter
      * @return \App\Core\Result\ImportResult
      * @throws \LogicException When method is called but missing the async job service name.
      */
-    protected function createAsyncJob($filename, $filepath, ?array $options = []): ImportResult
+    protected function createAsyncJob(string $filename, string $filepath, ?array $options = []): ImportResult
     {
         if (empty(static::getServiceName())) {
-            throw new \LogicException('Cannot create async job without service name defined.');
+            throw new LogicException('Cannot create async job without service name defined.');
         }
 
         // upload file to import
-        $file = new File($filepath); /* @phpstan-ignore-line */
-        $headers = ['Content-Type' => $file->mime()];
+        $headers = ['Content-Type' => mime_content_type($filepath)];
         $result = $this->apiClient->upload($filename, $filepath, $headers);
 
         // create async_job

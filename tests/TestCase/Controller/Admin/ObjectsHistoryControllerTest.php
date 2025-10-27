@@ -2,25 +2,26 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\ObjectsHistoryController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * {@see \App\Controller\Admin\ObjectsHistoryController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\ObjectsHistoryController
  */
+#[CoversClass(ObjectsHistoryController::class)]
 class ObjectsHistoryControllerTest extends TestCase
 {
-    public $ObjectsHistoryController;
+    public ObjectsHistoryController $ObjectsHistoryController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -34,7 +35,7 @@ class ObjectsHistoryControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc

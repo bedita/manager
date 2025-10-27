@@ -22,19 +22,19 @@ class EndpointsController extends AdministrationBaseController
     /**
      * Resource type in use
      *
-     * @var string
+     * @var string|null
      */
-    protected $resourceType = 'endpoints';
+    protected ?string $resourceType = 'endpoints';
 
     /**
      * @inheritDoc
      */
-    protected $readonly = false;
+    protected bool $readonly = false;
 
     /**
      * @inheritDoc
      */
-    protected $properties = [
+    protected array $properties = [
         'name' => 'string',
         'description' => 'text',
     ];
@@ -42,5 +42,5 @@ class EndpointsController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $sortBy = 'name';
+    protected ?string $sortBy = 'name';
 }

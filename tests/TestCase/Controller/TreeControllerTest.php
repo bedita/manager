@@ -21,13 +21,27 @@ use BEdita\SDK\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\TreeController} Test Case
- *
- * @coversDefaultClass \App\Controller\TreeController
- * @uses \App\Controller\TreeController
  */
+#[CoversClass(TreeController::class)]
+#[CoversMethod(TreeController::class, 'fetchNodeData')]
+#[CoversMethod(TreeController::class, 'fetchParentData')]
+#[CoversMethod(TreeController::class, 'fetchParentsData')]
+#[CoversMethod(TreeController::class, 'fetchTreeData')]
+#[CoversMethod(TreeController::class, 'get')]
+#[CoversMethod(TreeController::class, 'initialize')]
+#[CoversMethod(TreeController::class, 'minimalData')]
+#[CoversMethod(TreeController::class, 'minimalDataWithMeta')]
+#[CoversMethod(TreeController::class, 'node')]
+#[CoversMethod(TreeController::class, 'parent')]
+#[CoversMethod(TreeController::class, 'parents')]
+#[CoversMethod(TreeController::class, 'slug')]
+#[CoversMethod(TreeController::class, 'slugPathCompact')]
+#[CoversMethod(TreeController::class, 'treeData')]
 class TreeControllerTest extends BaseControllerTest
 {
     /**
@@ -43,9 +57,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `get` method
      *
      * @return void
-     * @covers ::get()
-     * @covers ::treeData()
-     * @covers ::fetchTreeData()
      */
     public function testGet(): void
     {
@@ -72,8 +83,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `treeData` method on exception
      *
      * @return void
-     * @covers ::get()
-     * @covers ::treeData()
      */
     public function testDataException(): void
     {
@@ -101,10 +110,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `node` method
      *
      * @return void
-     * @covers ::node()
-     * @covers ::fetchNodeData()
-     * @covers ::minimalData()
-     * @covers ::slugPathCompact()
      */
     public function testNode(): void
     {
@@ -136,8 +141,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `node` method
      *
      * @return void
-     * @covers ::node()
-     * @covers ::fetchNodeData()
      */
     public function testNodeException(): void
     {
@@ -161,9 +164,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `parent` method
      *
      * @return void
-     * @covers ::parent()
-     * @covers ::fetchParentData()
-     * @covers ::minimalDataWithMeta()
      */
     public function testParent(): void
     {
@@ -195,9 +195,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `parent` method
      *
      * @return void
-     * @covers ::parent()
-     * @covers ::fetchParentData()
-     * @covers ::minimalDataWithMeta()
      */
     public function testParentNull(): void
     {
@@ -222,8 +219,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `parent` method
      *
      * @return void
-     * @covers ::parent()
-     * @covers ::fetchParentData()
      */
     public function testParentException(): void
     {
@@ -247,9 +242,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `parents` method
      *
      * @return void
-     * @covers ::parents()
-     * @covers ::fetchParentsData()
-     * @covers ::minimalData()
      */
     public function testParents(): void
     {
@@ -297,8 +289,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `parents` method on exception
      *
      * @return void
-     * @covers ::parents()
-     * @covers ::fetchParentsData()
      */
     public function testParentsException(): void
     {
@@ -323,7 +313,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `minimalData` method
      *
      * @return void
-     * @covers ::minimalData()
      */
     public function testMinimalDataEmpty(): void
     {
@@ -355,8 +344,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `slug` method
      *
      * @return void
-     * @covers ::initialize()
-     * @covers ::slug()
      */
     public function testSlug(): void
     {
@@ -401,8 +388,6 @@ class TreeControllerTest extends BaseControllerTest
      * Test `slug` method on exception
      *
      * @return void
-     * @covers ::initialize()
-     * @covers ::slug()
      */
     public function testSlugException(): void
     {

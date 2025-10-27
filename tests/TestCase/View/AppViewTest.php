@@ -16,19 +16,21 @@ namespace App\Test\TestCase\View;
 use App\View\AppView;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\View\AppView} Test Case
- *
- * @coversDefaultClass \App\View\AppView
  */
+#[CoversClass(AppView::class)]
+#[CoversMethod(AppView::class, 'initialize')]
+#[CoversMethod(AppView::class, '_getElementFileName')]
 class AppViewTest extends TestCase
 {
     /**
      * Test `initialize` method
      *
      * @return void
-     * @covers ::initialize()
      */
     public function testInitialize(): void
     {
@@ -42,7 +44,6 @@ class AppViewTest extends TestCase
      * Test `_getElementFileName` method
      *
      * @return void
-     * @covers ::_getElementFileName()
      */
     public function testCustomElement(): void
     {
