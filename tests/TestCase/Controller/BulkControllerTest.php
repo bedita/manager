@@ -307,7 +307,7 @@ class BulkControllerTest extends BaseControllerTest
         // get object for test
         $o = $this->getTestObject();
         // set $this->controller->objects
-        $property = new \ReflectionProperty(BulkController::class, 'objects');
+        $property = new ReflectionProperty(BulkController::class, 'objects');
         $property->setAccessible(true);
         $property->setValue($this->controller, [['id' => $o['id'], 'type' => $o['type']]]);
         $attributes = ['status' => 'draft'];
@@ -323,7 +323,7 @@ class BulkControllerTest extends BaseControllerTest
 
         // do controller call
         // set $this->controller->objects
-        $property = new \ReflectionProperty(BulkController::class, 'objects');
+        $property = new ReflectionProperty(BulkController::class, 'objects');
         $property->setAccessible(true);
         $property->setValue($this->controller, [['id' => 1, 'type' => 'users']]);
         $method->invokeArgs($this->controller, [$attributes]);

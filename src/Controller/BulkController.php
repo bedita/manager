@@ -50,7 +50,7 @@ class BulkController extends AppController
      *
      * @var array
      */
-    protected $objects = [];
+    protected array $objects = [];
 
     /**
      * Selected categories
@@ -71,7 +71,7 @@ class BulkController extends AppController
      *
      * @var array
      */
-    protected $saved = [];
+    protected array $saved = [];
 
     /**
      * @inheritDoc
