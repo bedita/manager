@@ -48,9 +48,9 @@ class BulkController extends AppController
     /**
      * Selected objects (in the format [{id:<id>, type:<type>}, ...])
      *
-     * @var array
+     * @var array|string
      */
-    protected array $objects = [];
+    protected array|string $objects = [];
 
     /**
      * Selected categories
