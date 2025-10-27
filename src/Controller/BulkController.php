@@ -92,7 +92,7 @@ class BulkController extends AppController
     public function attribute(): ?Response
     {
         $requestData = $this->getRequest()->getData();
-        $this->objects = (array)Hash::get($requestData, 'objects');
+        $this->objects = Hash::get($requestData, 'objects');
         $this->objects = is_string($this->objects) ? json_decode($this->objects, true) : $this->objects;
         $this->saveAttribute((array)Hash::get($requestData, 'attributes'));
         $this->showResult();
