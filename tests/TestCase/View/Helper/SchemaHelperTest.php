@@ -38,6 +38,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversMethod(SchemaHelper::class, 'formatDateTime')]
 #[CoversMethod(SchemaHelper::class, 'filterList')]
 #[CoversMethod(SchemaHelper::class, 'filterListByType')]
+#[CoversMethod(SchemaHelper::class, 'minimalObjectsList')]
 #[CoversMethod(SchemaHelper::class, 'sortable')]
 #[CoversMethod(SchemaHelper::class, 'translatableFields')]
 #[CoversMethod(SchemaHelper::class, 'translatableType')]
@@ -1114,7 +1115,6 @@ class SchemaHelperTest extends TestCase
      * Test `minimalObjectsList` method.
      *
      * @return void
-     * @covers ::minimalObjectsList()
      */
     public function testMinimalObjectsList(): void
     {
