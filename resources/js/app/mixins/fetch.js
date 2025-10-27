@@ -31,7 +31,7 @@ export const FetchMixin = {
         createCustomAxios() {
             return axios.create({
                 baseURL: BEDITA.base,
-                timeout: 30000,
+                timeout: BEDITA?.uploadConfig?.timeout || 30000,
                 credentials: 'same-origin',
                 headers: {
                     'accept': 'application/json',
