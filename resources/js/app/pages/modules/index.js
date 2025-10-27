@@ -33,6 +33,10 @@ export default {
             type: String,
             default: () => ([]),
         },
+        objects: {
+            type: String,
+            default: () => '[]',
+        },
     },
 
     /**
@@ -43,6 +47,8 @@ export default {
     data() {
         return {
             allIds: [],
+            objectsList: JSON.parse(this.objects),
+            selectedObjects: '[]',
             selectedRows: [],
             bulkField: null,
             bulkValue: null,
@@ -88,6 +94,8 @@ export default {
             } else {
                 this.$refs.checkAllCB.indeterminate = true;
             }
+            const selectedObjects = this.objectsList.filter((o) => val.includes(o.id));
+            this.selectedObjects = JSON.stringify(selectedObjects);
         },
     },
 
@@ -108,6 +116,9 @@ export default {
             }
         },
         checkAll() {
+            const oo = this.objectsList.map((o) => { return {id: o.id, type: o.type}; });
+            const selectedObjects = JSON.parse(JSON.stringify(oo));
+            this.selectedObjects = JSON.stringify(selectedObjects);
             this.selectedRows = JSON.parse(JSON.stringify(this.allIds));
             for (let id of this.allIds) {
                 let row = document.querySelector(`a[data-id="${id}"]`);
@@ -115,6 +126,7 @@ export default {
             }
         },
         unCheckAll() {
+            this.selectedObjects = '[]';
             this.selectedRows = [];
             for (let id of this.allIds) {
                 let row = document.querySelector(`a[data-id="${id}"]`);
@@ -191,6 +203,18 @@ export default {
                     this.selectedRows.splice(position, 1);
                 } else {
                     this.selectedRows.push(cb.value);
+                }
+                // push into selectedObjects, if still not present
+                const obj = this.objectsList.find((o) => o.id == cb.value);
+                if (obj) {
+                    const selectedObjects = JSON.parse(this.selectedObjects);
+                    const objPosition = selectedObjects.findIndex((o) => o.id == cb.value);
+                    if (objPosition == -1) {
+                        selectedObjects.push({id: obj.id, type: obj.type});
+                    } else {
+                        selectedObjects.splice(objPosition, 1);
+                    }
+                    this.selectedObjects = JSON.stringify(selectedObjects);
                 }
             } else {
                 let row = event.target.closest('a.table-row');

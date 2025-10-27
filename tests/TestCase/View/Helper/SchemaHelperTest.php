@@ -1112,4 +1112,26 @@ class SchemaHelperTest extends TestCase
         $actual = $this->Schema->filterListByType($filtersByType, $schemasByType);
         static::assertSame($expected, $actual);
     }
+
+    /**
+     * Test `minimalObjectsList` method.
+     *
+     * @return void
+     * @covers ::minimalObjectsList()
+     */
+    public function testMinimalObjectsList(): void
+    {
+        $input = [
+            ['id' => 1, 'title' => 'First', 'type' => 'documents', 'extra' => 'data'],
+            ['id' => 2, 'title' => 'Second', 'type' => 'documents', 'extra' => 'data'],
+            ['id' => 3, 'title' => 'Third', 'type' => 'images', 'extra' => 'data'],
+        ];
+        $expected = [
+            ['id' => 1, 'type' => 'documents'],
+            ['id' => 2, 'type' => 'documents'],
+            ['id' => 3, 'type' => 'images'],
+        ];
+        $actual = $this->Schema->minimalObjectsList($input);
+        static::assertSame($expected, $actual);
+    }
 }

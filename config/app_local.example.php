@@ -740,6 +740,7 @@ return [
     // ],
     // 'uploadMaxResolution' => '1920x1080',
     // 'uploadMaxSize' => -1, // -1 means no limit, otherwise set a limit in bytes
+    // 'uploadTimeout' => 30000, // in milliseconds
 
     /**
      * Configuration for "Children" association parameters.
