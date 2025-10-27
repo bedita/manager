@@ -153,7 +153,7 @@ class BulkControllerTest extends BaseControllerTest
                 'REQUEST_METHOD' => 'POST',
             ],
             'post' => [
-                'objects' => [$o['id']],
+                'objects' => [['type' => $o['type'], 'id' => $o['id']]],
                 'attributes' => [
                     'status' => $o['attributes']['status'],
                 ],
