@@ -10,7 +10,7 @@
 {% endif %}
 
 {% set ids = Array.extract(objects, '{*}.id') %}
-<modules-index inline-template ids='{{ ids|json_encode }}'>
+<modules-index inline-template ids='{{ ids|json_encode }}' objects={{ Schema.minimalObjectsList(objects)|json_encode }}>
     <div class="module-index">
         {{ element('Modules/' ~ indexViewType) }}
         {{ element(Element.sidebar()) }}
