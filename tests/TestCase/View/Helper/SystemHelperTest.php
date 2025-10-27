@@ -186,7 +186,13 @@ class SystemHelperTest extends TestCase
         $property = $reflectionClass->getProperty('defaultUploadMaxResolution');
         $property->setAccessible(true);
         $maxResolution = $property->getValue($this->System);
-        $expected = compact('accepted', 'forbidden', 'maxResolution');
+        $property = $reflectionClass->getProperty('defaultUploadMaxSize');
+        $property->setAccessible(true);
+        $maxSize = $property->getValue($this->System);
+        $property = $reflectionClass->getProperty('defaultUploadTimeout');
+        $property->setAccessible(true);
+        $timeout = $property->getValue($this->System);
+        $expected = compact('accepted', 'forbidden', 'maxResolution', 'maxSize', 'timeout');
         $actual = $this->System->uploadConfig();
         static::assertSame($expected, $actual);
     }

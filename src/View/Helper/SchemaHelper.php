@@ -379,4 +379,23 @@ class SchemaHelper extends Helper
 
         return $list;
     }
+
+    /**
+     * Get minimal objects list (id and type only) from full objects array
+     *
+     * @param array $objects Full objects array
+     * @return array
+     */
+    public function minimalObjectsList(array $objects): array
+    {
+        $list = [];
+        foreach ($objects as $obj) {
+            $list[] = [
+                'id' => Hash::get($obj, 'id'),
+                'type' => Hash::get($obj, 'type'),
+            ];
+        }
+
+        return $list;
+    }
 }

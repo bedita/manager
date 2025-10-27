@@ -46,6 +46,13 @@ class BulkController extends AppController
     protected array $ids = [];
 
     /**
+     * Selected objects (in the format [{id:<id>, type:<type>}, ...])
+     *
+     * @var array
+     */
+    protected $objects = [];
+
+    /**
      * Selected categories
      *
      * @var array|string
@@ -58,6 +65,13 @@ class BulkController extends AppController
      * @var array
      */
     protected array $errors = [];
+
+    /**
+     * Saved ids
+     *
+     * @var array
+     */
+    protected $saved = [];
 
     /**
      * @inheritDoc
@@ -78,8 +92,9 @@ class BulkController extends AppController
     public function attribute(): ?Response
     {
         $requestData = $this->getRequest()->getData();
-        $this->ids = explode(',', (string)Hash::get($requestData, 'ids'));
-        $this->saveAttribute($requestData['attributes']);
+        $this->objects = (array)Hash::get($requestData, 'objects');
+        $this->objects = is_string($this->objects) ? json_decode($this->objects, true) : $this->objects;
+        $this->saveAttribute((array)Hash::get($requestData, 'attributes'));
         $this->showResult();
 
         return $this->modulesListRedirect();
@@ -184,13 +199,13 @@ class BulkController extends AppController
      */
     protected function saveAttribute(array $attributes): void
     {
-        foreach ($this->ids as $id) {
-            try {
-                $this->apiClient->save($this->objectType, compact('id') + $attributes);
-            } catch (BEditaClientException $e) {
-                $this->errors[] = ['id' => $id, 'message' => $e->getAttributes()];
-            }
+        $itemsMap = [];
+        foreach ($this->objects as $item) {
+            $itemsMap[$item['type']][] = $item['id'];
         }
+        $result = $this->apiClient->bulkEdit($itemsMap, $attributes);
+        $this->errors = (array)Hash::get($result, 'data.errors');
+        $this->saved = (array)Hash::get($result, 'data.saved');
     }
 
     /**
@@ -298,7 +313,8 @@ class BulkController extends AppController
     protected function showResult(): void
     {
         if (empty($this->errors)) {
-            $this->Flash->success(__('Bulk action performed on {0} objects', count($this->ids)));
+            $count = count($this->saved) > 0 ? count($this->saved) : count($this->ids);
+            $this->Flash->success(__('Bulk action performed on {0} objects', $count));
 
             return;
         }
