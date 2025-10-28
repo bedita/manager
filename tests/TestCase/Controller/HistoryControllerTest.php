@@ -278,12 +278,29 @@ class HistoryControllerTest extends TestCase
      */
     public function testGet(): void
     {
-        $this->HistoryController->get();
+        $request = new ServerRequest([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+            'params' => [
+                'object_type' => 'documents',
+            ],
+        ]);
+        $controller = new class ($request) extends HistoryController {
+            public HistoryComponent $History;
+
+            public function __construct(ServerRequest $request)
+            {
+                $this->History = new HistoryComponent(new ComponentRegistry($this));
+                parent::__construct($request);
+            }
+        };
+        $controller->get();
         $vars = ['data', 'meta'];
         foreach ($vars as $var) {
-            static::assertNotEmpty($this->HistoryController->viewBuilder()->getVar($var));
+            static::assertNotEmpty($controller->viewBuilder()->getVar($var));
         }
-        $actual = $this->HistoryController->viewBuilder()->getVar('data')[0];
+        $actual = $controller->viewBuilder()->getVar('data')[0];
         $vars = [
             'id',
             'type',
