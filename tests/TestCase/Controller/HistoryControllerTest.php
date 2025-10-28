@@ -18,6 +18,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 #[CoversClass(HistoryController::class)]
 #[CoversMethod(HistoryController::class, 'clone')]
+#[CoversMethod(HistoryController::class, 'get')]
 #[CoversMethod(HistoryController::class, 'info')]
 #[CoversMethod(HistoryController::class, 'objects')]
 #[CoversMethod(HistoryController::class, 'restore')]
@@ -274,7 +275,6 @@ class HistoryControllerTest extends TestCase
      * Test `get` method
      *
      * @return void
-     * @covers ::get()
      */
     public function testGet(): void
     {
