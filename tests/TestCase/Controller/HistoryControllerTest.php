@@ -222,7 +222,7 @@ class HistoryControllerTest extends TestCase
      */
     public function testGet(): void
     {
-        $this->HistoryController->get($this->documentId);
+        $this->HistoryController->get();
         $vars = ['data', 'meta'];
         foreach ($vars as $var) {
             static::assertNotEmpty($this->HistoryController->viewBuilder()->getVar($var));
