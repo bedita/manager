@@ -457,6 +457,11 @@ $routes->scope('/', function (RouteBuilder $routes) {
     );
 
     $routes->get(
+        '/history/get',
+        ['controller' => 'History', 'action' => 'get'],
+        'history:get',
+    );
+    $routes->get(
         '/history/objects',
         ['controller' => 'History', 'action' => 'objects'],
         'history:objects',

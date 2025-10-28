@@ -119,7 +119,7 @@ export default {
             const filterDate = this.filterDate ? new Date(this.filterDate).toISOString() : '';
             const query = filterDate ? `page_size=${pageSize}&page=${page}&filter[created][gt]=${filterDate}&sort=-created` : `page_size=${pageSize}&page=${page}&sort=-created`;
 
-            return fetch(`/api/history?${query}`).then((r) => r.json());
+            return fetch(`/history/get?${query}`).then((r) => r.json());
         },
         async getObjects(ids) {
             return fetch(`/history/objects?filter[id]=${ids.join(',')}`).then((r) => r.json());
