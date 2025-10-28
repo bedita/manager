@@ -147,7 +147,7 @@ export default {
             try {
                 this.loading = true;
                 this.error = '';
-                const response = await fetch(`${API_URL}api/history?filter[user_id]=${userId}&page=${page}&page_size=${pageSize}&sort=-created`, API_OPTIONS);
+                const response = await fetch(`${API_URL}history/get?filter[user_id]=${userId}&page=${page}&page_size=${pageSize}&sort=-created`, API_OPTIONS);
                 const json = await response.json();
                 this.pagination = json.meta.pagination;
                 this.currentPage = json.meta.pagination.page;
