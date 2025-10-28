@@ -27,6 +27,24 @@ class HistoryController extends AppController
     }
 
     /**
+     * Get history using query parameters.
+     * This is a proxy for /api/history endpoint.
+     *
+     * @return void
+     */
+    public function get(): void
+    {
+        $this->viewBuilder()->setClassName('Json');
+        $this->getRequest()->allowMethod('get');
+        $query = $this->getRequest()->getQueryParams();
+        $response = ApiTools::cleanResponse((array)$this->apiClient->get('/history', $query));
+        $data = $response['data'];
+        $meta = $response['meta'];
+        $this->set(compact('data', 'meta'));
+        $this->setSerialize(['data', 'meta']);
+    }
+
+    /**
      * Get objects list: id, title, uname only / no relationships, no links.
      *
      * @return void
