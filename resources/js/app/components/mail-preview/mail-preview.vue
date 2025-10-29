@@ -61,7 +61,7 @@ export default {
             this.placeholders = this.text.match(/{{(.*?)}}/g).map(placeholder => placeholder.replace(/{{|}}/g, '').trim().toLowerCase());
             this.placeholders.sort();
             this.placeholders = [...new Set(this.placeholders)];
-            this.placeholders.forEach((placeholder, k) => {
+            this.placeholders.forEach((placeholder) => {
                 this.$set(this.variables, placeholder, '');
             });
         });
