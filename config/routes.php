@@ -535,6 +535,13 @@ $routes->scope('/', function (RouteBuilder $routes): void {
         ['_name' => 'lock:remove'],
     );
 
+    // SendMail
+    $routes->connect(
+        '/sendmail',
+        ['controller' => 'SendMail', 'action' => 'index'],
+        ['_name' => 'sendmail:index'],
+    );
+
     // Session
     $routes->get(
         '/session/{name}',
