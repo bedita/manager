@@ -48,6 +48,7 @@ export default {
         ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
         PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
         MediaItem: () => import(/* webpackChunkName: "media-item" */'app/components/media-item/media-item'),
+        MailPreview: () => import(/* webpackChunkName: "mail-preview" */'app/components/mail-preview/mail-preview.vue'),
     },
 
     props: {
