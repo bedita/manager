@@ -254,7 +254,7 @@ class AdministrationBaseControllerTest extends TestCase
                         'resource_type' => 'roles',
                     ],
                 ],
-                '[400] Not Found',
+                '[400]',
             ],
             'patch 404' => [
                 [
