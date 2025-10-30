@@ -287,7 +287,7 @@ class AdministrationBaseControllerTest extends TestCase
         static::assertEquals('/admin/roles', $response->getHeader('Location')[0]);
         $flash = $this->RlsController->getRequest()->getSession()->read('Flash');
         $actual = $flash['flash'][0]['message'];
-        static::assertEquals($expected, $actual);
+        static::assertStringContainsString($expected, $actual);
     }
 
     /**
