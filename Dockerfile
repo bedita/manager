@@ -10,9 +10,9 @@ RUN curl -o /wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for
 COPY . /var/www/html
 
 # Set APP_NAME to avoid .env load
-ENV APP_NAME BE-MANAGER
+ENV APP_NAME=BE-MANAGER
 ARG DEBUG
-ENV DEBUG ${DEBUG:-false}
+ENV DEBUG=${DEBUG:-false}
 
 # Install libraries
 WORKDIR /var/www/html
