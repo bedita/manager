@@ -33,7 +33,7 @@ class TreeController extends AppController
     {
         parent::initialize();
 
-        $this->Security->setConfig('unlockedActions', ['slug']);
+        $this->FormProtection->setConfig('unlockedActions', ['slug']);
     }
 
     /**
@@ -127,7 +127,7 @@ class TreeController extends AppController
             ];
             $response = $this->apiClient->post(
                 sprintf('/folders/%s/relationships/children', (string)Hash::get($data, 'parent')),
-                json_encode($body)
+                json_encode($body),
             );
             // Clearing cache after successful save
             Cache::clearGroup('tree', TreeCacheEventHandler::CACHE_CONFIG);
@@ -159,7 +159,7 @@ class TreeController extends AppController
             function ($key) {
                 return $key !== 'filter';
             },
-            ARRAY_FILTER_USE_KEY
+            ARRAY_FILTER_USE_KEY,
         );
         $key = CacheTools::cacheKey(sprintf('tree-%s-%s', $subkey, md5(serialize($tmp))));
         $data = [];
@@ -169,7 +169,7 @@ class TreeController extends AppController
                 function () use ($query) {
                     return $this->fetchTreeData($query);
                 },
-                TreeCacheEventHandler::CACHE_CONFIG
+                TreeCacheEventHandler::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // Something bad happened
@@ -201,7 +201,7 @@ class TreeController extends AppController
 
                     return $this->minimalData($data);
                 },
-                TreeCacheEventHandler::CACHE_CONFIG
+                TreeCacheEventHandler::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // Something bad happened
@@ -233,7 +233,7 @@ class TreeController extends AppController
 
                     return $this->minimalDataWithMeta($data);
                 },
-                TreeCacheEventHandler::CACHE_CONFIG
+                TreeCacheEventHandler::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // Something bad happened
@@ -269,7 +269,7 @@ class TreeController extends AppController
 
                     return $included;
                 },
-                TreeCacheEventHandler::CACHE_CONFIG
+                TreeCacheEventHandler::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // Something bad happened

@@ -15,12 +15,17 @@ namespace App\Test\TestCase\Core\Filter;
 
 use App\Core\Filter\ReadCSVTrait;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\CoversTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Core\Filter\ReadCSVTrait} Test Case
- *
- * @coversDefaultClass \App\Core\Filter\ReadCSVTrait
  */
+#[CoversClass(ReadCSVTrait::class)]
+#[CoversTrait(ReadCSVTrait::class)]
+#[CoversMethod(ReadCSVTrait::class, 'readCSVFile')]
 class ReadCSVTraitTest extends TestCase
 {
     use ReadCSVTrait;
@@ -30,7 +35,7 @@ class ReadCSVTraitTest extends TestCase
      *
      * @return array
      */
-    public function readCSVFileProvider(): array
+    public static function readCSVFileProvider(): array
     {
         return [
             'empty' => [
@@ -56,10 +61,9 @@ class ReadCSVTraitTest extends TestCase
      * @param array $data Expected data
      * @param string $filepath CSV File path
      * @param array $options CSV options
-     * @dataProvider readCSVFileProvider
-     * @covers ::readCSVFile()
      * @return void
      */
+    #[DataProvider('readCSVFileProvider')]
     public function testReadCSVFile(array $keys, array $data, string $filepath, array $options = []): void
     {
         $this->readCSVFile($filepath, $options);

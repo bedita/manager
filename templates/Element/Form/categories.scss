@@ -1,6 +1,8 @@
+@use "../../../resources/styles/variables";
+
 .categories-container {
     .categories {
-        margin: $gutter 0;
+        margin: variables.$gutter 0;
 
         .select {
             columns: 2 auto;
@@ -13,10 +15,10 @@
         }
 
         + .categories {
-            margin-top: $gutter * 2;
+            margin-top: variables.$gutter * 2;
 
             &:last-child {
-                margin-bottom: $gutter * 4;
+                margin-bottom: variables.$gutter * 4;
             }
         }
     }

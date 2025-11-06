@@ -1,3 +1,5 @@
+@use "../../../resources/styles/variables";
+
 .filter-box {
     display: flex;
     flex-direction: column;
@@ -25,16 +27,16 @@
         margin-bottom: 0 !important;
 
         > * {
-            margin-bottom: $gutter;
+            margin-bottom: variables.$gutter;
         }
 
         > *:not(:last-child) {
-            margin-right: $gutter;
+            margin-right: variables.$gutter;
         }
     }
 
     .more-filters {
-        margin-top: $gutter;
+        margin-top: variables.$gutter;
     }
 
     .filter-container {
@@ -45,7 +47,7 @@
             display: flex;
             input[type="text"] {
                 width: 100%;
-                min-width: $gutter * 12;
+                min-width: variables.$gutter * 12;
             }
         }
 
@@ -57,7 +59,7 @@
         label {
             display: inline-flex;
             align-items: center;
-            margin-right: $gutter * .5;
+            margin-right: variables.$gutter * .5;
 
             &:first-letter {
                 text-transform: uppercase;
@@ -72,7 +74,7 @@
             display: flex;
 
             > * + * {
-                margin-left: $gutter * .5;
+                margin-left: variables.$gutter * .5;
             }
 
             input {
@@ -94,7 +96,7 @@
         .descendants-filter {
             display: flex;
             align-items: center;
-            margin-left: $gutter;
+            margin-left: variables.$gutter;
         }
     }
 }

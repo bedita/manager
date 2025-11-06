@@ -26,9 +26,9 @@ class Applications
     /**
      * Applications
      *
-     * @var array
+     * @var array|null
      */
-    public static $applications = null;
+    public static ?array $applications = null;
 
     /**
      * Get application name by application ID
@@ -59,7 +59,7 @@ class Applications
                     $response = (array)ApiClientProvider::getApiClient()->get('applications');
 
                     return Hash::combine($response, 'data.{n}.id', 'data.{n}.attributes.name');
-                }
+                },
             );
         } catch (BEditaClientException $e) {
             return [];
