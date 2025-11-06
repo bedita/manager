@@ -4,3 +4,6 @@
 .vscode
 node_modules
 plugins
+config/app_local.php
+config/projects
+config/.env
