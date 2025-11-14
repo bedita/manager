@@ -1,25 +1,21 @@
-/**
- * Templates that uses this component (directly or indirectly):
- *  Template/Elements/relations.twig
- *
- * <staggered-list> component used for lists with staggered animation
- *
- */
-
+<template>
+    <transition-group
+        appear
+        name="${NAME}"
+        @enter="enter"
+        @after-enter="afterEnter"
+    >
+        <slot />
+    </transition-group>
+</template>
+<script>
 const NAME = 'staggered';
 
 export default {
-    template: `
-        <transition-group appear
-            name="${NAME}"
-            v-on:enter="enter"
-            v-on:after-enter="afterEnter">
-            <slot></slot>
-        </transition-group>`,
-
+    name: 'StaggeredList',
     props: {
         stagger: {
-            type: String,
+            type: Number,
             default: () => 50,
         },
     },
@@ -52,3 +48,4 @@ export default {
         }
     }
 }
+</script>
