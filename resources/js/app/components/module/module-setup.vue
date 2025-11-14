@@ -218,7 +218,7 @@ export default {
                     });
                 }, 2000);
             } catch (e) {
-                BEDITA.error(e);
+                this.$helpers.handleApiError(e);
             } finally {
                 this.loading = false;
             }
