@@ -56,8 +56,4 @@
         'app-module-buttons',
         '<a href="' ~ Url.build({'_name': 'modules:setup', 'object_type': objectType}) ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><app-icon icon="carbon:settings"></app-icon><span class="ml-05">' ~ __('Setup module') ~ '</span></a>'
     ) %}
-    {% do _view.append(
-        'app-module-buttons',
-        '<a href="' ~ Url.build({'_name': 'admin:cache:clear'}) ~ '" class="button button-primary button-primary-hover-module-admin is-width-auto"><app-icon icon="carbon:trash-can"></app-icon><span class="ml-05">' ~ __('Clear cache') ~ '</span></a>'
-    ) %}
 {% endif %}
