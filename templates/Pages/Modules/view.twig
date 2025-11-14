@@ -156,6 +156,13 @@
                 ) %}
             {% endif %}
 
+            {% if in_array('admin', user.roles) %}
+                {% do _view.append(
+                    'app-module-buttons',
+                    '<a href="' ~ Url.build({'_name': 'admin:cache:clear'}) ~ '" class="button button-primary button-primary-hover-module-admin is-width-auto"><app-icon icon="carbon:trash-can"></app-icon><span class="ml-05">' ~ __('Clear cache') ~ '</span></a>'
+                ) %}
+            {% endif %}
+
             {# Append "Prev" and "Next" #}
             {% if object.id and objectNav %}
                 {% set onav = objectNav|json_encode %}
