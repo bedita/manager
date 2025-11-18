@@ -84,7 +84,7 @@ class ApplicationTest extends TestCase
         static::assertInstanceOf(RecoveryMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(BodyParserMiddleware::class, $middleware->current());
-}
+    }
 
     /**
      * Test `csrfMiddleware` method
