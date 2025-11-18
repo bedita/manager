@@ -35,7 +35,10 @@ class ConfigurationMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (Configure::check('API.apiBaseUrl')) {
-            ApiClientProvider::getApiClient()->setupTokens($request->getAttribute('identity')->get('tokens'));
+            $identity = $request->getAttribute('identity');
+            if ($identity && $identity->get('tokens')) {
+                ApiClientProvider::getApiClient()->setupTokens($identity->get('tokens'));
+            }
             $this->readApiConfig();
         }
 
