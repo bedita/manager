@@ -133,9 +133,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // Provides a `GET /status` endpoint. This must be
             ->add(new StatusMiddleware())
 
-            // Load configuration from API for the current project.
-            ->add(new ConfigurationMiddleware())
-
             // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
@@ -158,6 +155,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
             // Authentication middleware.
             ->add(new OAuth2Middleware())
+
+            // Load configuration from API for the current project.
+            ->add(new ConfigurationMiddleware())
 
             // Recovery middleware
             ->add(new RecoveryMiddleware())

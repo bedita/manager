@@ -87,8 +87,12 @@ trait ApiConfigTrait
      */
     protected function fetchConfig(?string $key = null): array
     {
-        $query = ['page_size' => 100];
-        $response = (array)ApiClientProvider::getApiClient()->get('/config', $query);
+        $client = ApiClientProvider::getApiClient();
+        $response = (array)$client->get('/config', ['page_size' => 100], [
+            'Authorization' => sprintf('Bearer %s', Hash::get($client->getTokens(), 'jwt')),
+            'X-Api-Key' => Configure::read('API.apiKey'),
+            'Accept' => 'application/json',
+        ]);
         $collection = new Collection((array)Hash::get($response, 'data'));
 
         return $collection->reject(function ($item) use ($key) {

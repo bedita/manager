@@ -15,6 +15,7 @@ namespace App\Test\TestCase;
 use App\Application;
 use App\Middleware\ConfigurationMiddleware;
 use App\Middleware\ProjectMiddleware;
+use App\Middleware\RecoveryMiddleware;
 use App\Middleware\StatusMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\Authenticator\AuthenticatorInterface;
@@ -25,6 +26,7 @@ use BEdita\I18n\Middleware\I18nMiddleware;
 use BEdita\WebTools\Middleware\OAuth2Middleware;
 use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Http\ServerRequest;
@@ -68,8 +70,6 @@ class ApplicationTest extends TestCase
         $middleware->next();
         static::assertInstanceOf(StatusMiddleware::class, $middleware->current());
         $middleware->next();
-        static::assertInstanceOf(ConfigurationMiddleware::class, $middleware->current());
-        $middleware->next();
         static::assertInstanceOf(AssetMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(I18nMiddleware::class, $middleware->current());
@@ -81,6 +81,12 @@ class ApplicationTest extends TestCase
         static::assertInstanceOf(AuthenticationMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(OAuth2Middleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(ConfigurationMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(RecoveryMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(BodyParserMiddleware::class, $middleware->current());
     }
 
     /**
