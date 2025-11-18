@@ -65,8 +65,6 @@ class ApplicationTest extends TestCase
         $middleware->next();
         static::assertInstanceOf(StatusMiddleware::class, $middleware->current());
         $middleware->next();
-        static::assertInstanceOf(ConfigurationMiddleware::class, $middleware->current());
-        $middleware->next();
         static::assertInstanceOf(AssetMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(I18nMiddleware::class, $middleware->current());
@@ -76,6 +74,8 @@ class ApplicationTest extends TestCase
         static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(AuthenticationMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(ConfigurationMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(OAuth2Middleware::class, $middleware->current());
     }
