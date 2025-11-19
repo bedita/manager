@@ -150,7 +150,7 @@ export default {
         this.$nextTick(() => {
             this.originalVal = JSON.stringify(this.module);
             this.fields.forEach((field) => {
-                this.map[field] = this.module[field] || '';
+                this.map[field] = this.module?.[field] || '';
             });
         });
     },

@@ -723,6 +723,7 @@ class ModulesController extends AppController
         }
         $this->getRequest()->allowMethod(['get', 'post']);
         if ($this->getRequest()->is('post')) {
+            $this->viewBuilder()->setClassName('Json');
             try {
                 $requestData = $this->getRequest()->getData();
                 $configurationKey = $requestData['configurationKey'] ?? null;
