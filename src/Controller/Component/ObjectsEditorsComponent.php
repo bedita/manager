@@ -15,6 +15,7 @@ namespace App\Controller\Component;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
+use Cake\Utility\Hash;
 
 /**
  * ObjectsEditors component
@@ -28,21 +29,21 @@ class ObjectsEditorsComponent extends Component
      *
      * @var array
      */
-    protected $components = ['Authentication'];
+    protected array $components = ['Authentication'];
 
     /**
      * Objects editors.
      *
      * @var array
      */
-    public $objectsEditors;
+    public array $objectsEditors;
 
     /**
      * Concurrent check time.
      *
      * @var int
      */
-    public $concurrentCheckTime = 20000;
+    public int $concurrentCheckTime = 20000;
 
     /**
      * @inheritDoc
@@ -108,11 +109,14 @@ class ObjectsEditorsComponent extends Component
             return null;
         }
 
-        if (!empty($user['attributes']['name']) && !empty($user['attributes']['surname'])) {
-            return sprintf('%s %s', $user['attributes']['name'], $user['attributes']['surname']);
+        $name = (string)Hash::get($user, 'attributes.name');
+        $surname = (string)Hash::get($user, 'attributes.surname');
+        if (!empty($name) && !empty($surname)) {
+            return sprintf('%s %s', $name, $surname);
         }
-        if (!empty($user['attributes']['username'])) {
-            return $user['attributes']['username'];
+        $username = (string)Hash::get($user, 'attributes.username');
+        if (!empty($username)) {
+            return $username;
         }
 
         return null;

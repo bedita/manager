@@ -1,5 +1,6 @@
 .git
 .github
+.phpunit.cache
 .phpunit.result.cache
 .vscode
 coverage

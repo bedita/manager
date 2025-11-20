@@ -22,10 +22,10 @@
     ],
     "require": {
         "php": ">=8.3",
-        "bedita/i18n": "^5.1.0",
-        "bedita/web-tools": "^5.4.0",
-        "cakephp/authentication": "^2.9",
-        "cakephp/cakephp": "~4.5.0",
+        "bedita/i18n": "^6.0.0",
+        "bedita/web-tools": "^6.0.0",
+        "cakephp/authentication": "^3.0.3",
+        "cakephp/cakephp": "^5.0",
         "cakephp/plugin-installer": "^1.3",
         "josegonzalez/dotenv": "^4.0",
         "league/flysystem": "^3.16",
@@ -37,17 +37,17 @@
         "wikimedia/composer-merge-plugin": "^2.0.1"
     },
     "require-dev": {
-        "cakephp/bake": "^2.6",
-        "cakephp/cakephp-codesniffer": "~4.7.0",
-        "cakephp/console": "^4.4",
-        "cakephp/debug_kit": "^4.7.1",
-        "cakephp/repl": "^0.1",
-        "dereuromark/cakephp-ide-helper": "~1.17.0",
-        "phpstan/extension-installer": "^1.2",
-        "phpstan/phpstan": "^1.10",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpunit/phpunit": "^9.6",
-        "vimeo/psalm": "^5.18"
+        "cakephp/bake": "^3.2",
+        "cakephp/cakephp-codesniffer": "^5.0",
+        "cakephp/console": "^5.0",
+        "cakephp/debug_kit": "^5.0",
+        "cakephp/repl": "^2.0",
+        "dereuromark/cakephp-ide-helper": "^2.6",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^1.12",
+        "phpstan/phpstan-deprecation-rules": "^1.2",
+        "phpunit/phpunit": "^11.1.3",
+        "vimeo/psalm": "^6.8"
     },
     "autoload": {
         "psr-4": {
@@ -68,6 +68,7 @@
             "@test",
             "@cs-check"
         ],
+        "psalm": "vendor/bin/psalm",
         "stan": "vendor/bin/phpstan analyse",
         "cs-check": "vendor/bin/phpcs",
         "cs-fix": "vendor/bin/phpcbf",

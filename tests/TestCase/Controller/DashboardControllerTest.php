@@ -17,7 +17,7 @@ use App\Controller\DashboardController;
 use App\Utility\CacheTools;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
-use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
 use BEdita\WebTools\ApiClientProvider;
@@ -27,15 +27,19 @@ use Cake\Core\Configure;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\DashboardController} Test Case
- *
- * @coversDefaultClass \App\Controller\DashboardController
- * @uses \App\Controller\DashboardController
  */
+#[CoversClass(DashboardController::class)]
+#[CoversMethod(DashboardController::class, 'index')]
+#[CoversMethod(DashboardController::class, 'initialize')]
+#[CoversMethod(DashboardController::class, 'messages')]
 class DashboardControllerTest extends TestCase
 {
     /**
@@ -43,7 +47,7 @@ class DashboardControllerTest extends TestCase
      *
      * @var \App\Controller\DashboardController
      */
-    public $Dashboard;
+    public DashboardController $Dashboard;
 
     /**
      * {@inheritDoc}
@@ -69,9 +73,9 @@ class DashboardControllerTest extends TestCase
      * @param ?array $config The config
      * @return void
      */
-    protected function setupController($config = null): void
+    protected function setupController(?array $config = null): void
     {
-        $request = null;
+        $request = new ServerRequest();
         if ($config != null) {
             $request = new ServerRequest($config);
         }
@@ -96,11 +100,11 @@ class DashboardControllerTest extends TestCase
         // Mock Authentication component
         ApiClientProvider::getApiClient()->setupTokens([]); // reset client
         $service = new AuthenticationService();
-        $service->loadIdentifier(ApiIdentifier::class);
         $service->loadAuthenticator('Authentication.Form', [
+            'identifier' => ApiIdentifier::class,
             'fields' => [
-                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+                AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
             ],
         ]);
         $this->Dashboard->setRequest($this->Dashboard->getRequest()->withAttribute('authentication', $service));
@@ -144,7 +148,6 @@ class DashboardControllerTest extends TestCase
     /**
      * Test `initialize` method
      *
-     * @covers ::initialize()
      * @return void
      */
     public function testInitialize(): void
@@ -160,7 +163,7 @@ class DashboardControllerTest extends TestCase
      *
      * @return array
      */
-    public function indexProvider(): array
+    public static function indexProvider(): array
     {
         return [
             'post' => [
@@ -187,10 +190,9 @@ class DashboardControllerTest extends TestCase
      *
      * @param MethodNotAllowedException|null $expected The expected exception or null
      * @param string $method The request method, can be 'GET', 'PATCH', 'POST', 'DELETE'
-     * @covers ::index()
-     * @dataProvider indexProvider()
      * @return void
      */
+    #[DataProvider('indexProvider')]
     public function testIndex($expected, $method): void
     {
         $requestConfig = [
@@ -252,7 +254,6 @@ class DashboardControllerTest extends TestCase
     /**
      * Test `messages` method
      *
-     * @covers ::messages()
      * @return void
      */
     public function testMessages(): void
@@ -270,7 +271,6 @@ class DashboardControllerTest extends TestCase
     /**
      * Test `messages` method for "MethodNotAllowed" case
      *
-     * @covers ::messages()
      * @return void
      */
     public function testMessagesMethodNotAllowed(): void

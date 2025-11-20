@@ -54,7 +54,7 @@ class CustomComponentControl implements CustomHandlerInterface
      * @param mixed|null $value The value
      * @return string
      */
-    protected function jsonValue($value): string
+    protected function jsonValue(mixed $value): string
     {
         if (empty($value)) {
             return '';

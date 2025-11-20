@@ -72,3 +72,4 @@ bundle-report.*.html
 /webroot/js/*.js
 /webroot/js/vendors
 /webroot/manifest.json
+.phpunit.cache/test-results

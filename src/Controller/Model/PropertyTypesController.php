@@ -27,9 +27,9 @@ class PropertyTypesController extends ModelBaseController
     /**
      * Resource type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected $resourceType = 'property_types';
+    protected ?string $resourceType = 'property_types';
 
     /**
      * {@inheritDoc}
@@ -39,7 +39,7 @@ class PropertyTypesController extends ModelBaseController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Security->setConfig('unlockedActions', ['save']);
+        $this->FormProtection->setConfig('unlockedActions', ['save']);
     }
 
     /**
