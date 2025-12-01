@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: Checkout current revision
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
