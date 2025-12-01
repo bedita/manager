@@ -1,6 +1,6 @@
 {
   "name": "bedita-manager",
-  "version": "5.16.1",
+  "version": "5.17.2",
   "description": "BEdita Manager",
   "keywords": [
     "BEdita",
@@ -74,5 +74,6 @@
     "webpack": "^5.97.0",
     "webpack-cli": "^4.9.0",
     "webpack-watch-files-plugin": "^1.2.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
