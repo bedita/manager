@@ -50,7 +50,7 @@ class ProjectConfigurationComponent extends Component
                 function () {
                     return $this->fetchConfig();
                 },
-                self::CACHE_CONFIG
+                self::CACHE_CONFIG,
             );
             Configure::write('Project.config', $config);
         } catch (BEditaClientException $e) {
@@ -80,9 +80,9 @@ class ProjectConfigurationComponent extends Component
         $config = Hash::combine($response, 'data.{n}.attributes.name', 'data.{n}.attributes.content');
         array_walk(
             $config,
-            function (&$value, $key) {
+            function (&$value, $key): void {
                 $value = json_decode($value, true);
-            }
+            },
         );
 
         return $config;
