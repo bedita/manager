@@ -215,6 +215,45 @@ class HistoryControllerTest extends TestCase
     }
 
     /**
+     * Test `get` method
+     *
+     * @return void
+     * @covers ::get()
+     */
+    public function testGet(): void
+    {
+        $this->HistoryController->get();
+        $vars = ['data', 'meta'];
+        foreach ($vars as $var) {
+            static::assertNotEmpty($this->HistoryController->viewBuilder()->getVar($var));
+        }
+        $actual = $this->HistoryController->viewBuilder()->getVar('data')[0];
+        $vars = [
+            'id',
+            'type',
+            'meta',
+        ];
+        foreach ($vars as $var) {
+            static::assertArrayHasKey($var, $actual);
+        }
+        static::assertArrayNotHasKey('links', $actual);
+        static::assertArrayNotHasKey('relationships', $actual);
+        $meta = $actual['meta'];
+        $vars = [
+            'resource_id',
+            'resource_type',
+            'created',
+            'user_id',
+            'application_id',
+            'user_action',
+            'changed',
+        ];
+        foreach ($vars as $var) {
+            static::assertArrayHasKey($var, $meta);
+        }
+    }
+
+    /**
      * Test `objects` method
      *
      * @return void
