@@ -1,4 +1,5 @@
 @use "../../../resources/styles/variables";
+@use "../../../resources/styles/utility_classes";
 
 .relation-view {
     .related-list-container {
@@ -199,7 +200,7 @@
             background-color: variables.$gray-100;
             pointer-events: none;
             figure {
-                @extend .full-size-absolute !optional;
+                @extend .full-size-absolute;
                 font-size: 2.5rem; // icons
                 img {
                     display: block;
