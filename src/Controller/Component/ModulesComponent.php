@@ -166,8 +166,31 @@ class ModulesComponent extends Component
         if (!$this->Schema->tagsInUse()) {
             unset($this->modules['tags']);
         }
+        $types = array_keys($this->modules);
+        if (isset($this->modules['translations']) && !$this->translationsEnabled($types)) {
+            unset($this->modules['translations']);
+        }
 
         return $this->modules;
+    }
+
+    /**
+     * Check if translations are enabled for at least one of the given object types.
+     *
+     * @param array $types Object types to check.
+     * @return bool
+     */
+    public function translationsEnabled(array $types): bool
+    {
+        foreach ($types as $objectType) {
+            $schema = (array)$this->Schema->getSchema($objectType);
+            $translatable = (array)Hash::get($schema, 'translatable');
+            if (count($translatable) > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

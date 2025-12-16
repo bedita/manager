@@ -72,6 +72,7 @@ use RuntimeException;
 #[CoversMethod(ModulesComponent::class, 'skipSavePermissions')]
 #[CoversMethod(ModulesComponent::class, 'skipSaveRelated')]
 #[CoversMethod(ModulesComponent::class, 'startup')]
+#[CoversMethod(ModulesComponent::class, 'translationsEnabled')]
 #[CoversMethod(ModulesComponent::class, 'upload')]
 class ModulesComponentTest extends TestCase
 {
@@ -586,6 +587,18 @@ class ModulesComponentTest extends TestCase
                         }
 
                         return compact('meta');
+                    },
+                );
+            $apiClient->method('schema')
+                ->willReturnCallback(
+                    function ($type) {
+                        if ($type === 'bedita') {
+                            return [
+                                'translatable' => ['title', 'body'],
+                            ];
+                        }
+
+                        return [];
                     },
                 );
         }
