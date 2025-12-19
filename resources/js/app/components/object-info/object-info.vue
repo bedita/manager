@@ -55,8 +55,7 @@ export default {
             }).join(' ');
         },
         fillData() {
-            const source = BEDITA?.indexLists?.[this.reloadedData?.type] || {};
-            this.fields = source || ['title', 'description'];
+            this.fields = BEDITA?.indexLists?.[this.reloadedData?.type] || ['title', 'description'];
             this.fields = this.fields?.filter((value, index, array) => {
                 return array.indexOf(value) === index;
             });
