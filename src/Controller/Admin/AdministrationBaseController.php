@@ -30,63 +30,63 @@ abstract class AdministrationBaseController extends AppController
      *
      * @var string
      */
-    protected $endpoint = '/admin';
+    protected string $endpoint = '/admin';
 
     /**
      * Resource type in use
      *
-     * @var string
+     * @var string|null
      */
-    protected $resourceType = null;
+    protected ?string $resourceType = null;
 
     /**
      * Readonly flag view.
      *
      * @var bool
      */
-    protected $readonly = true;
+    protected bool $readonly = true;
 
     /**
      * Deleteonly flag view.
      *
      * @var bool
      */
-    protected $deleteonly = false;
+    protected bool $deleteonly = false;
 
     /**
      * Properties to show in index columns
      *
      * @var array
      */
-    protected $properties = [];
+    protected array $properties = [];
 
     /**
      * Properties to json decode before save
      *
      * @var array
      */
-    protected $propertiesForceJson = [];
+    protected array $propertiesForceJson = [];
 
     /**
      * Properties that are secrets
      *
      * @var array
      */
-    protected $propertiesSecrets = [];
+    protected array $propertiesSecrets = [];
 
     /**
      * Meta to show in index columns
      *
      * @var array
      */
-    protected $meta = ['created', 'modified'];
+    protected array $meta = ['created', 'modified'];
 
     /**
      * Sort field
      *
-     * @var string
+     * @var string|null
      */
-    protected $sortBy = null;
+    protected ?string $sortBy = null;
 
     /**
      * @inheritDoc
@@ -94,7 +94,6 @@ abstract class AdministrationBaseController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-
         $this->loadComponent('Properties');
     }
 
@@ -221,7 +220,6 @@ abstract class AdministrationBaseController extends AppController
      */
     protected function loadData(): array
     {
-        $query = $this->getRequest()->getQueryParams();
         $resourceEndpoint = sprintf('%s/%s', $this->endpoint, $this->resourceType);
         $endpoint = $this->resourceType === 'roles' ? 'roles' : $resourceEndpoint;
         $resultResponse = ['data' => []];
@@ -249,7 +247,7 @@ abstract class AdministrationBaseController extends AppController
                 usort($resultResponse['data'], function ($a, $b) use ($key) {
                     return strcmp(
                         (string)Hash::get($a, sprintf('%s.%s', $key, $this->sortBy)),
-                        (string)Hash::get($b, sprintf('%s.%s', $key, $this->sortBy))
+                        (string)Hash::get($b, sprintf('%s.%s', $key, $this->sortBy)),
                     );
                 });
             }

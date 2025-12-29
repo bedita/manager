@@ -25,17 +25,6 @@ use Cake\Http\Response;
 class ErrorController extends AppController
 {
     /**
-     * Initialization hook method.
-     *
-     * @return void
-     * @codeCoverageIgnore
-     */
-    public function initialize(): void
-    {
-        $this->loadComponent('RequestHandler', ['enableBeforeRedirect' => false]);
-    }
-
-    /**
      * beforeFilter callback.
      *
      * @param \Cake\Event\EventInterface $event Event.

@@ -1,3 +1,6 @@
+@use "../../../resources/styles/variables";
+@use "../../../resources/styles/utility_classes";
+
 .relation-view {
     .related-list-container {
         .columns {
@@ -172,8 +175,8 @@
         }
 
         header h1 {
-            min-height: $font-size-lg * 2;
-            padding-right: $gutter * .75;
+            min-height: variables.$font-size-lg * 2;
+            padding-right: variables.$gutter * .75;
             word-break: break-word;
             line-height: 1.25em;;
         }
@@ -184,8 +187,8 @@
 
         .priority {
             position: absolute;
-            top: $gutter * .5;
-            left: $gutter * .5;
+            top: variables.$gutter * .5;
+            left: variables.$gutter * .5;
             z-index: 2;
         }
 
@@ -194,7 +197,7 @@
             width: 100%;
             height: 0;
             padding-bottom: 63%; // 16 / 9 56%
-            background-color: $gray-100;
+            background-color: variables.$gray-100;
             pointer-events: none;
             figure {
                 @extend .full-size-absolute;
@@ -225,7 +228,7 @@
         article {
             //box-shadow: 0 0 0 3px var(--box-shadow-color);
             .badge {
-                padding: $gutter * .5;
+                padding: variables.$gutter * .5;
                 border: none;
                 letter-spacing: 1px;
             }
@@ -233,16 +236,16 @@
     }
     .ribbon {
         position: absolute;
-        top: $gutter * .5;
-        right: -$gutter * .5;
+        top: variables.$gutter * .5;
+        right: -(variables.$gutter) * .5;
         z-index: 2;
         display: block;
         color: #fff;
         background-color: #000;
-        font-size: $font-size-sssm;
-        font-weight: $font-weight-black;
+        font-size: variables.$font-size-sssm;
+        font-weight: variables.$font-weight-black;
         text-transform: uppercase;
-        padding: $gutter * 0.25 $gutter $gutter * 0.25 $gutter;
+        padding: variables.$gutter * 0.25 variables.$gutter variables.$gutter * 0.25 variables.$gutter;
     }
     .in-data-list {
         background-color: transparent !important;
@@ -264,7 +267,7 @@
 
     footer {
         position: sticky;
-        background-color: $gray-800;
+        background-color: variables.$gray-800;
         bottom: 0;
         left: 0;
         display: flex;
@@ -284,7 +287,7 @@
 
 
 .main-panel-container .edit-relation {
-    @extend %relation-panel-common;
+    @extend %relation-panel-common !optional;
     label {
         display: flex;
         flex-direction: column;
@@ -295,7 +298,7 @@
         }
     }
 
-    #{$text-inputs}, select {
+    #{variables.$text-inputs}, select {
         &:not(.input-narrow) {
             min-width: 12rem;
         }
@@ -303,7 +306,7 @@
 }
 
 .main-panel-container .relations-add {
-    @extend %relation-panel-common;
+    @extend %relation-panel-common !optional;
 
     .columns {
         &[data-list='true'] {
@@ -447,15 +450,15 @@
                 justify-content: center;
                 align-items: center;
                 position: absolute;
-                width: $gutter * 2.25;
-                height: $gutter * 2.25;
-                top: $gutter * .5;
-                left: $gutter * .5;
+                width: variables.$gutter * 2.25;
+                height: variables.$gutter * 2.25;
+                top: variables.$gutter * .5;
+                left: variables.$gutter * .5;
                 border: 2px solid white;
                 border-radius: 50%;
-                background-color: $info;
+                background-color: variables.$info;
                 color: #fff;
-                font-weight: $font-weight-black;
+                font-weight: variables.$font-weight-black;
             }
         }
     }

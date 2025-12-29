@@ -117,6 +117,7 @@ const _vueInstance = new Vue({
         AddRelatedById: () => import(/* webpackChunkName: "add-related-by-id" */'app/components/add-related-by-id/add-related-by-id'),
         UploadedObject: () => import(/* webpackChunkName: "uploaded-object" */'app/components/uploaded-object/uploaded-object.vue'),
         RibbonItem: () => import(/* webpackChunkName: "ribbon-item" */'./components/ribbon-item/ribbon-item.vue'),
+        MailPreview: () => import(/* webpackChunkName: "mail-preview" */'./components/mail-preview/mail-preview.vue'),
         AppIcon,
     },
 

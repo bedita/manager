@@ -1,3 +1,5 @@
+@use "../../../resources/styles/variables";
+
 .lang-header {
     grid-column: span 3;
     gap: 12px;
@@ -5,5 +7,5 @@
 }
 
 .module-form {
-    margin-bottom: $gutter;
+    margin-bottom: variables.$gutter;
 }

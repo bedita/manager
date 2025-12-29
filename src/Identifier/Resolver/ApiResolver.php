@@ -12,7 +12,7 @@
  */
 namespace App\Identifier\Resolver;
 
-use Authentication\Identifier\IdentifierInterface;
+use ArrayAccess;
 use Authentication\Identifier\Resolver\ResolverInterface;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
@@ -27,13 +27,13 @@ class ApiResolver implements ResolverInterface
     /**
      * @inheritDoc
      */
-    public function find(array $conditions, $type = self::TYPE_AND)
+    public function find(array $conditions, string $type = self::TYPE_AND): ArrayAccess|array|null
     {
         $apiClient = ApiClientProvider::getApiClient();
-        if (isset($conditions[IdentifierInterface::CREDENTIAL_USERNAME], $conditions[IdentifierInterface::CREDENTIAL_PASSWORD])) {
+        if (isset($conditions['username'], $conditions['password'])) {
             // Authenticate with credentials
             try {
-                $result = $apiClient->authenticate($conditions[IdentifierInterface::CREDENTIAL_USERNAME], $conditions[IdentifierInterface::CREDENTIAL_PASSWORD]);
+                $result = $apiClient->authenticate($conditions['username'], $conditions['password']);
             } catch (BEditaClientException $e) {
                 Log::info(sprintf('Login failed - %s', $e->getMessage()));
 
@@ -47,9 +47,9 @@ class ApiResolver implements ResolverInterface
             }
 
             $apiClient->setupTokens($result['meta']);
-        } elseif (isset($conditions[IdentifierInterface::CREDENTIAL_TOKEN])) {
+        } elseif (isset($conditions['token'])) {
             // Authenticate with renew token
-            $apiClient->setupTokens(['renew' => $conditions[IdentifierInterface::CREDENTIAL_TOKEN]]);
+            $apiClient->setupTokens(['renew' => $conditions['token']]);
             try {
                 $apiClient->refreshTokens();
             } catch (BEditaClientException $e) {

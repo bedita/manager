@@ -10,7 +10,7 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-namespace App\Test\Middleware;
+namespace App\Test\TestCase\Middleware;
 
 use App\Middleware\ConfigurationMiddleware;
 use App\Utility\CacheTools;
@@ -19,22 +19,23 @@ use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Http\ServerRequestFactory;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * {@see \App\Middleware\ConfigurationMiddleware} Test Case
- *
- * @coversDefaultClass \App\Middleware\ConfigurationMiddleware
  */
+#[CoversClass(ConfigurationMiddleware::class)]
+#[CoversMethod(ConfigurationMiddleware::class, 'process')]
 class ConfigurationMiddlewareTest extends TestCase
 {
     /**
      * Test `process` method.
      *
      * @return void
-     * @covers ::process()
      */
     public function testProcess(): void
     {

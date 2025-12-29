@@ -31,22 +31,22 @@ class RolesModulesController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $endpoint = '/roles';
+    protected string $endpoint = '/roles';
 
     /**
      * @inheritDoc
      */
-    protected $resourceType = 'roles';
+    protected ?string $resourceType = 'roles';
 
     /**
      * @inheritDoc
      */
-    protected $readonly = false;
+    protected bool $readonly = false;
 
     /**
      * @inheritDoc
      */
-    protected $properties = [
+    protected array $properties = [
         'name' => 'string',
         'description' => 'text',
     ];
@@ -68,7 +68,7 @@ class RolesModulesController extends AdministrationBaseController
             ]);
             $this->set('resources', $this->allowedRoles(
                 $this->viewBuilder()->getVar('resources'),
-                (array)Hash::extract($endpointPermissions, 'data')
+                (array)Hash::extract($endpointPermissions, 'data'),
             ));
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), 'error');

@@ -1,3 +1,5 @@
+@use "../../../resources/styles/variables";
+
 #flashMessagesContainer {
     position: fixed;
     top: 0;
@@ -27,13 +29,13 @@
         align-items: flex-start;
         flex: 1 auto;
         margin-top: auto;
-        padding: $gutter * .75 $gutter;
+        padding: variables.$gutter * .75 variables.$gutter;
         max-height: 50%;
         max-width: 70%;
         border-top: 4px solid transparent;
-        background-color: $gray-100;
-        color: $gray-900;
-        font-size: $font-size-sm;
+        background-color: variables.$gray-100;
+        color: variables.$gray-900;
+        font-size: variables.$font-size-sm;
         transition: transform .25s;
         // when parent has not class 'on'
         transform: translateY(100%);
@@ -44,44 +46,44 @@
         }
 
         // colors
-        &.success    { border-color: $success; }
-        &.info       { border-color: $info; }
-        &.error      { border-color: $error; }
-        &.warning    { border-color: $warning; }
-        &.success h2 [class^="icon-"] { color: $success; }
-        &.info h2    [class^="icon-"] { color: $info; }
-        &.error h2   [class^="icon-"] { color: $error; }
-        &.warning h2 [class^="icon-"] { color: $warning; }
+        &.success    { border-color: variables.$success; }
+        &.info       { border-color: variables.$info; }
+        &.error      { border-color: variables.$error; }
+        &.warning    { border-color: variables.$warning; }
+        &.success h2 [class^="icon-"] { color: variables.$success; }
+        &.info h2    [class^="icon-"] { color: variables.$info; }
+        &.error h2   [class^="icon-"] { color: variables.$error; }
+        &.warning h2 [class^="icon-"] { color: variables.$warning; }
 
         h2 {
             display: flex;
             align-items: center;
             margin: 0;
-            padding-right: $gutter * 1.5;
-            font-size: $font-size-llg;
+            padding-right: variables.$gutter * 1.5;
+            font-size: variables.$font-size-llg;
             [class^="icon-"] { margin-top: 2px; }
         }
 
         details { width: 100%; }
         summary { cursor: pointer; }
         .dump {
-            margin-top: $gutter * .75;
-            padding: $gutter * .75;
+            margin-top: variables.$gutter * .75;
+            padding: variables.$gutter * .75;
             width: 100%;
             max-height: 400px;
             flex: 1;
             overflow: auto;
-            background-color: $gray-200;
+            background-color: variables.$gray-200;
             font-family: monospace;
-            font-size: $font-size-sm;
+            font-size: variables.$font-size-sm;
         }
 
         .icon-cancel-1 {
             position: absolute;
-            top: $gutter * .5;
-            right: $gutter;
+            top: variables.$gutter * .5;
+            right: variables.$gutter;
             cursor: pointer;
-            color: $black;
+            color: variables.$black;
 
             &::before {
                 margin: 0;

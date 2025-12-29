@@ -25,17 +25,17 @@ class ExternalAuthController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $resourceType = 'external_auth';
+    protected ?string $resourceType = 'external_auth';
 
     /**
      * @inheritDoc
      */
-    protected $readonly = false;
+    protected bool $readonly = false;
 
     /**
      * @inheritDoc
      */
-    protected $properties = [
+    protected array $properties = [
         'user_id' => 'string',
         'auth_provider_id' => 'auth_providers',
         'provider_username' => 'string',
@@ -45,14 +45,19 @@ class ExternalAuthController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $propertiesForceJson = [
+    protected array $propertiesForceJson = [
         'params',
     ];
 
     /**
      * @inheritDoc
      */
-    protected $sortBy = 'auth_provider_id';
+    protected array $meta = [];
+
+    /**
+     * @inheritDoc
+     */
+    protected ?string $sortBy = 'auth_provider_id';
 
     /**
      * Index method
@@ -71,9 +76,4 @@ class ExternalAuthController extends AdministrationBaseController
 
         return null;
     }
-
-    /**
-     * @inheritDoc
-     */
-    protected $meta = [];
 }

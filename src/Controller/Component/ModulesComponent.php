@@ -59,12 +59,12 @@ class ModulesComponent extends Component
     /**
      * @inheritDoc
      */
-    public $components = ['Authentication', 'Children', 'Config', 'Parents', 'Schema'];
+    public array $components = ['Authentication', 'Children', 'Config', 'Parents', 'Schema'];
 
     /**
      * @inheritDoc
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'currentModuleName' => null,
         'clearHomeCache' => false,
     ];
@@ -74,14 +74,14 @@ class ModulesComponent extends Component
      *
      * @var array
      */
-    protected $modules = [];
+    protected array $modules = [];
 
     /**
      * Other "logic" modules, non objects
      *
      * @var array
      */
-    protected $otherModules = [
+    protected array $otherModules = [
         'tags' => [
             'name' => 'tags',
             'hints' => ['allow' => ['GET', 'POST', 'PATCH', 'DELETE']],
@@ -153,21 +153,44 @@ class ModulesComponent extends Component
         $modules = array_intersect_key($modules, $metaModules);
         array_walk(
             $modules,
-            function (&$data, $key) use ($metaModules) {
+            function (&$data, $key) use ($metaModules): void {
                 $data = array_merge((array)Hash::get($metaModules, $key), $data);
-            }
+            },
         );
         $this->modules = array_merge(
             $modules,
             array_diff_key($metaModules, $modules),
-            $pluginModules
+            $pluginModules,
         );
         $this->modulesByAccessControl();
         if (!$this->Schema->tagsInUse()) {
             unset($this->modules['tags']);
         }
+        $types = array_keys($this->modules);
+        if (isset($this->modules['translations']) && !$this->translationsEnabled($types)) {
+            unset($this->modules['translations']);
+        }
 
         return $this->modules;
+    }
+
+    /**
+     * Check if translations are enabled for at least one of the given object types.
+     *
+     * @param array $types Object types to check.
+     * @return bool
+     */
+    public function translationsEnabled(array $types): bool
+    {
+        foreach ($types as $objectType) {
+            $schema = (array)$this->Schema->getSchema($objectType);
+            $translatable = (array)Hash::get($schema, 'translatable');
+            if (count($translatable) > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -263,7 +286,7 @@ class ModulesComponent extends Component
                 'name' => (string)Hash::get(
                     (array)Configure::read('Project'),
                     'name',
-                    (string)Hash::get($api, 'project.name')
+                    (string)Hash::get($api, 'project.name'),
                 ),
                 'version' => (string)Hash::get($api, 'version'),
             ],
@@ -354,7 +377,7 @@ class ModulesComponent extends Component
                 $response = $apiClient->post(
                     sprintf('/%s/upload/%s', $type, $filename),
                     $content,
-                    $headers
+                    $headers,
                 );
                 $requestData['id'] = Hash::get($response, 'data.id');
                 unset($requestData['file'], $requestData['remote_url']);
@@ -370,7 +393,7 @@ class ModulesComponent extends Component
 
             // link stream to media
             $streamUuid = Hash::get($response, 'data.id');
-            $response = $this->assocStreamToMedia($streamUuid, $requestData, $filename);
+            $this->assocStreamToMedia($streamUuid, $requestData, $filename);
         }
         unset($requestData['file'], $requestData['remote_url']);
     }
@@ -564,7 +587,7 @@ class ModulesComponent extends Component
             function ($role) {
                 return (int)$role;
             },
-            $requestPermissions
+            $requestPermissions,
         );
         sort($requestPermissions);
         $query = ['filter' => ['object_id' => $id], 'page_size' => 100];
@@ -668,8 +691,8 @@ class ModulesComponent extends Component
 
                     return $attributes['inverse_label'];
                 },
-                $names
-            )
+                $names,
+            ),
         );
     }
 
@@ -758,7 +781,7 @@ class ModulesComponent extends Component
             }
             $response = ApiClientProvider::getApiClient()->save(
                 (string)Hash::get($obj, 'type'),
-                (array)Hash::get($obj, 'attributes')
+                (array)Hash::get($obj, 'attributes'),
             );
             $relatedObjects[] = [
                 'id' => Hash::get($response, 'data.id'),

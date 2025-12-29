@@ -1,10 +1,12 @@
+@use "../../../resources/styles/variables";
+
 .object-form {
     .fieldset > .tab-container,
     .fieldset > .container {
-        padding: $gutter 0 0 0;
+        padding: variables.$gutter 0 0 0;
 
         > div {
-            margin: $gutter 0;
+            margin: variables.$gutter 0;
 
             &:first-child {
                 margin: 0;
@@ -12,8 +14,8 @@
         }
 
         .history-field {
-            border: dashed $gray-600 1px;
-            padding: $gutter * .5;
+            border: dashed variables.$gray-600 1px;
+            padding: variables.$gutter * .5;
         }
 
         .history-field > label {
@@ -22,14 +24,14 @@
 
         .input.title, .input.uri {
             input[type=text] {
-                font-size: $font-size-llg;
+                font-size: variables.$font-size-llg;
             }
         }
 
         @media screen and (min-width: 1024px) {
             grid-template-columns: repeat( auto-fit, minmax(212px, 1fr) );
             display: grid;
-            grid-gap: $gutter * 1.5 $gutter;
+            grid-gap: variables.$gutter * 1.5 variables.$gutter;
 
             > div {
                 margin: 0;
@@ -45,15 +47,15 @@
         }
 
         .create-media-box {
-            padding: $gutter * .5 $gutter $gutter * 1.25;
-            margin-bottom: $gutter * 1.5;
-            background-color: $gray-800;
+            padding: variables.$gutter * .5 variables.$gutter variables.$gutter * 1.25;
+            margin-bottom: variables.$gutter * 1.5;
+            background-color: variables.$gray-800;
             border-radius: 4px;
         }
 
-        #{$text-inputs}, textarea {
+        #{variables.$text-inputs}, textarea {
             width: 100%;
-            background-color: $gray-200;
+            background-color: variables.$gray-200;
 
             &:disabled {
                 opacity: 0.65;
@@ -61,9 +63,9 @@
             }
         }
 
-        #{$text-inputs} {
+        #{variables.$text-inputs} {
             &.input-narrow {
-                max-width: 4 * $gutter;
+                max-width: 4 * variables.$gutter;
             }
         }
 
@@ -74,7 +76,7 @@
 
         .select {
             select {
-                min-width: 12 * $gutter;
+                min-width: 12 * variables.$gutter;
             }
             label {
                 cursor: pointer;
@@ -84,18 +86,18 @@
         label {
             display: block;
             flex: 1 0 100%;
-            line-height: $gutter * 1.75;
+            line-height: variables.$gutter * 1.75;
         }
 
         .stream {
             display: flex;
         }
         .thumb {
-            background-color: $gray-400;
+            background-color: variables.$gray-400;
             display: inline-block;
             a {
                 display: block;
-                background-image: linear-gradient(45deg, $gray-300 25%, transparent 25%), linear-gradient(-45deg, $gray-300 25%, transparent 25%), linear-gradient(45deg, transparent 75%, $gray-300 75%), linear-gradient(-45deg, transparent 75%, $gray-300 75%);
+                background-image: linear-gradient(45deg, variables.$gray-300 25%, transparent 25%), linear-gradient(-45deg, variables.$gray-300 25%, transparent 25%), linear-gradient(45deg, transparent 75%, variables.$gray-300 75%), linear-gradient(-45deg, transparent 75%, variables.$gray-300 75%);
                 background-size: 20px 20px;
                 background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
                 img {
@@ -126,7 +128,7 @@
 
             label:not(:first-child) {
                 flex: 0 0 auto;
-                margin-right: $gutter;
+                margin-right: variables.$gutter;
                 cursor: pointer;
             }
         }
@@ -139,7 +141,7 @@
                 height: 2.125rem;
                 max-width: auto;
                 min-width: auto;
-                border: 1px solid $gray-900;
+                border: 1px solid variables.$gray-900;
                 text-align: center;
                 padding:0;
             }
