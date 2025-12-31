@@ -113,6 +113,7 @@ const _vueInstance = new Vue({
         FieldString: () => import(/* webpackChunkName: "field-string" */'app/components/form/field-string'),
         FieldTextarea: () => import(/* webpackChunkName: "field-textarea" */'app/components/form/field-textarea'),
         FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
+        CalendarView: () => import(/* webpackChunkName: "calendar-view" */'app/components/calendar-view/calendar-view'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
         RelatedObjectsFilter: () => import(/* webpackChunkName: "related-objects-filter" */'app/components/related-objects-filter/related-objects-filter'),
         ModuleProperties: () => import(/* webpackChunkName: "module-properties" */'app/components/module/module-properties'),
@@ -629,6 +630,7 @@ window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
 Vue.component('AppIcon', AppIcon);
+Vue.component('CalendarView', _vueInstance.$options.components.CalendarView);
 Vue.component('ClipboardItem', _vueInstance.$options.components.ClipboardItem);
 Vue.component('DateRangesView', _vueInstance.$options.components.DateRangesView);
 Vue.component('FieldCheckbox', _vueInstance.$options.components.FieldCheckbox);

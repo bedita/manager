@@ -6,6 +6,7 @@
         <a
             :title="msgShowObjectInfo"
             class="button button-outlined-white is-small show-info"
+            :style="styles"
         >
             <app-icon icon="carbon:information" />
         </a>

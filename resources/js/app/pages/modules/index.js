@@ -21,6 +21,7 @@ export default {
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
         PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
         DropUpload: () => import(/* webpackChunkName: "drop-upload" */'app/components/drop-upload'),
+        CalendarView: () => import(/* webpackChunkName: "calendar-view" */'app/components/calendar-view/calendar-view'),
     },
 
     /**

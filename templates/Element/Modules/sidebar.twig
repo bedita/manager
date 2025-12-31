@@ -36,7 +36,21 @@
 {% endfor %}
 {% endif %}
 
-{{ Layout.appendViewTypeButtons() }}
+{% set indexViewTypes = Layout.moduleIndexViewTypes() %}
+{% if indexViewTypes|length > 1 %}
+	{% set mapIcon = {
+        'list': 'carbon:list',
+        'tree': 'carbon:tree-view',
+        'calendar': 'carbon:calendar',
+    } %}
+	{% set mapLabel = {
+        'list': __('List'),
+        'tree': __('Tree'),
+        'calendar': __('Calendar'),
+    } %}
+    {{ Layout.appendViewTypeButtons() }}
+{% endif %}
+
 
 {% if in_array('admin', user.roles) %}
     {% do _view.append(

@@ -7,6 +7,7 @@
             <span>{{ msgFrom }}</span>
             <div :class="dateRangeClass()">
                 <input
+                    class="date-range-input"
                     type="text"
                     date="true"
                     :time="!all_day"
@@ -398,7 +399,11 @@ export default {
 }
 </script>
 <style>
-div.removed {
+div.dateRange div.removed {
     opacity: 0.5;
+}
+div.dateRange input.date-range-input {
+    min-width: 200px;
+    font-size: 11px;
 }
 </style>
