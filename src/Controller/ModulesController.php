@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\Utility\ApiConfigTrait;
 use App\Utility\CacheTools;
 use App\Utility\Message;
-use App\Utility\PermissionsTrait;
 use App\Utility\Schema;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\Utility\ApiTools;
@@ -46,7 +45,6 @@ use Psr\Log\LogLevel;
 class ModulesController extends AppController
 {
     use ApiConfigTrait;
-    use PermissionsTrait;
 
     /**
      * Object type currently used

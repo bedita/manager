@@ -56,6 +56,7 @@ use stdClass;
 #[CoversMethod(AppController::class, 'loginRedirectRoute')]
 #[CoversMethod(AppController::class, 'prepareRequest')]
 #[CoversMethod(AppController::class, 'prepareDateRanges')]
+#[CoversMethod(AppController::class, 'prepareRoles')]
 #[CoversMethod(AppController::class, 'prepareRelations')]
 #[CoversMethod(AppController::class, 'relatedIds')]
 #[CoversMethod(AppController::class, 'setupOutputTimezone')]
@@ -508,6 +509,31 @@ class AppControllerTest extends TestCase
                             'end_date' => '',
                         ],
                     ]),
+                ],
+            ],
+            'roles' => [
+                'users', // object_type
+                [ // expected
+                    'id' => '5',
+                    'username' => 'mario',
+                    '_api' => [
+                        [
+                            'method' => 'replaceRelated',
+                            'id' => '5',
+                            'relation' => 'roles',
+                            'relatedIds' => [
+                                [
+                                    'id' => '1',
+                                    'type' => 'roles',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [ // data provided
+                    'id' => '5',
+                    'username' => 'mario',
+                    'roles' => json_encode(['admin']),
                 ],
             ],
             'relations' => [
