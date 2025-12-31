@@ -18,6 +18,7 @@ use App\Utility\CacheTools;
 use App\View\Helper\EditorsHelper;
 use App\View\Helper\LayoutHelper;
 use App\View\Helper\PermsHelper;
+use App\View\Helper\PropertyHelper;
 use App\View\Helper\SystemHelper;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
@@ -36,6 +37,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * {@see \App\View\Helper\LayoutHelper} Test Case
  */
 #[CoversClass(LayoutHelper::class)]
+#[CoversMethod(LayoutHelper::class, 'appendViewTypeButtons')]
 #[CoversMethod(LayoutHelper::class, 'commandLinkClass')]
 #[CoversMethod(LayoutHelper::class, 'dashboardModuleLink')]
 #[CoversMethod(LayoutHelper::class, 'getCsrfToken')]
@@ -376,8 +378,8 @@ class LayoutHelperTest extends TestCase
             ],
             'folders list' => [
                 ['currentModule' => ['name' => 'folders']],
-                ['view_type' => 'list'],
-                'list',
+                ['tree', 'tree-compact', 'list'],
+                'tree',
             ],
         ];
     }
@@ -420,7 +422,7 @@ class LayoutHelperTest extends TestCase
             ],
             'folders' => [
                 ['currentModule' => ['name' => 'folders']],
-                ['tree', 'list'],
+                ['tree', 'tree-compact', 'list'],
             ],
         ];
     }
@@ -445,6 +447,24 @@ class LayoutHelperTest extends TestCase
         $layout = new LayoutHelper($view);
         $actual = $layout->moduleIndexViewTypes();
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `appendViewTypeButtons` method.
+     *
+     * @return void
+     */
+    public function testAppendViewTypeButtons(): void
+    {
+        $response = $events = null;
+        $request = new ServerRequest(['query' => ['view_type' => 'other']]);
+        $view = new View($request, $response, $events);
+        $layout = new LayoutHelper($view);
+        $view->set('currentModule', ['name' => 'folders']);
+        $layout->appendViewTypeButtons();
+        $actual = $view->fetch('app-module-buttons');
+        $expected = '<a href="/?view_type=tree" class="button button-outlined button-outlined-module-"><app-icon icon="carbon:tree-view"></app-icon><span class="ml-05">Tree view</span></a><a href="/?view_type=tree-compact" class="button button-outlined button-outlined-module-"><app-icon icon="carbon:tree-view"></app-icon><span class="ml-05">Tree compact</span></a><a href="/?view_type=list" class="button button-outlined button-outlined-module-"><app-icon icon="carbon:list"></app-icon><span class="ml-05">List view</span></a>';
+        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -608,6 +628,7 @@ class LayoutHelperTest extends TestCase
         ];
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
+        $property = new PropertyHelper($view);
         $system = new SystemHelper($view);
         $conf = $layout->metaConfig();
         $expected = [
@@ -629,6 +650,8 @@ class LayoutHelperTest extends TestCase
             'richeditorConfig' => (array)Configure::read('Richeditor'),
             'richeditorByPropertyConfig' => $layout->uiRicheditorConfig(),
             'indexLists' => (array)$layout->indexLists(),
+            'fastCreateFields' => (array)$property->fastCreateFieldsMap(),
+            'concreteTypes' => (array)$view->get('allConcreteTypes', []),
         ];
         static::assertSame($expected, $conf);
         Cache::disable();

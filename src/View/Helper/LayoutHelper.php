@@ -28,6 +28,7 @@ use Cake\View\Helper;
  * @property \Cake\View\Helper\HtmlHelper $Html
  * @property \App\View\Helper\LinkHelper $Link
  * @property \App\View\Helper\PermsHelper $Perms
+ * @property \App\View\Helper\PropertyHelper $Property
  * @property \App\View\Helper\SystemHelper $System
  * @property \Cake\View\Helper\UrlHelper $Url
  */
@@ -38,7 +39,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public array $helpers = ['Editors', 'Html', 'Link', 'Perms', 'System', 'Url'];
+    public array $helpers = ['Editors', 'Html', 'Link', 'Perms', 'Property', 'System', 'Url'];
 
     /**
      * Is Dashboard
@@ -305,7 +306,63 @@ class LayoutHelper extends Helper
     {
         $defaultType = $this->moduleIndexDefaultViewType();
 
-        return $defaultType === 'tree' ? ['tree', 'list'] : ['list'];
+        return $defaultType === 'tree' ? ['tree', 'tree-compact', 'list'] : ['list'];
+    }
+
+    /**
+     * Append view type buttons to the sidebar
+     *
+     * @return void
+     */
+    public function appendViewTypeButtons(): void
+    {
+        $indexViewTypes = $this->moduleIndexViewTypes();
+        if (count($indexViewTypes) > 1) {
+            $indexViewType = $this->moduleIndexViewType();
+            foreach ($indexViewTypes as $t) {
+                if ($t !== $indexViewType) {
+                    $append = false;
+                    $icon = '';
+                    $label = '';
+                    switch ($t) {
+                        case 'tree':
+                            $icon = 'carbon:tree-view';
+                            $label = __('Tree view');
+                            $append = true;
+                            break;
+                        case 'tree-compact':
+                            $icon = 'carbon:tree-view';
+                            $label = __('Tree compact');
+                            $meta = (array)$this->getView()->get('meta');
+                            $count = (int)Hash::get($meta, 'pagination.count');
+                            $append = $count <= Configure::read('UI.tree_compact_view_limit', 100);
+                            break;
+                        case 'list':
+                            $icon = 'carbon:list';
+                            $label = __('List view');
+                            $append = true;
+                            break;
+                    }
+                    if ($append) {
+                        $url = $this->Url->build(
+                            [
+                                '_name' => 'modules:list',
+                                'object_type' => $this->getView()->get('objectType'),
+                            ],
+                        );
+                        $url = sprintf('%s?view_type=%s', $url, $t);
+                        $anchor = sprintf(
+                            '<a href="%s" class="button button-outlined button-outlined-module-%s"><app-icon icon="%s"></app-icon><span class="ml-05">%s</span></a>',
+                            $url,
+                            $this->getView()->get('currentModule.name'),
+                            $icon,
+                            __($label),
+                        );
+                        $this->getView()->append('app-module-buttons', $anchor);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -379,6 +436,8 @@ class LayoutHelper extends Helper
             'richeditorConfig' => (array)Configure::read('Richeditor'),
             'richeditorByPropertyConfig' => $this->uiRicheditorConfig(),
             'indexLists' => (array)$this->indexLists(),
+            'fastCreateFields' => (array)$this->Property->fastCreateFieldsMap(),
+            'concreteTypes' => (array)$this->getView()->get('allConcreteTypes', []),
         ];
     }
 

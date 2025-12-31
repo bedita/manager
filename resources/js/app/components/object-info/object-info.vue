@@ -17,6 +17,14 @@ import { t } from 'ttag';
 export default {
     name: 'ObjectInfo',
     props: {
+        borderColor: {
+            type: String,
+            default: 'black',
+        },
+        color: {
+            type: String,
+            default: 'white',
+        },
         objectData: {
             type: Object,
             required: true
@@ -29,6 +37,10 @@ export default {
             labelsMap: new Map(),
             msgShowObjectInfo: t`Show object info`,
             reloadedData: this.objectData || {},
+            styles: {
+                borderColor: this.borderColor,
+                color: this.color,
+            },
             values: {},
         };
     },

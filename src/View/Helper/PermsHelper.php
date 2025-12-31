@@ -130,7 +130,23 @@ class PermsHelper extends Helper
      */
     public function canSave(?string $module = null): bool
     {
-        return $this->isAllowed('PATCH', $module) && $this->userIsAllowed($module);
+        return $this->userIsAdmin() || ($this->isAllowed('PATCH', $module) && $this->userIsAllowed($module));
+    }
+
+    /**
+     * Map of modules and their save permissions for the authenticated user.
+     *
+     * @return array
+     */
+    public function canSaveMap(): array
+    {
+        $modules = array_keys((array)$this->_View->get('modules'));
+        $map = [];
+        foreach ($modules as $module) {
+            $map[$module] = $this->canSave($module);
+        }
+
+        return $map;
     }
 
     /**

@@ -34,6 +34,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversMethod(PermsHelper::class, 'canLock')]
 #[CoversMethod(PermsHelper::class, 'canRead')]
 #[CoversMethod(PermsHelper::class, 'canSave')]
+#[CoversMethod(PermsHelper::class, 'canSaveMap')]
 #[CoversMethod(PermsHelper::class, 'initialize')]
 #[CoversMethod(PermsHelper::class, 'isAllowed')]
 #[CoversMethod(PermsHelper::class, 'isLockedByParents')]
@@ -175,6 +176,21 @@ class PermsHelperTest extends TestCase
     public function testCanSave(): void
     {
         static::assertFalse($this->Perms->canSave());
+    }
+
+    /**
+     * Test `canSaveMap` method
+     *
+     * @return void
+     */
+    public function testCanSaveMap(): void
+    {
+        $result = $this->Perms->canSaveMap();
+        static::assertIsArray($result);
+        static::assertArrayHasKey('documents', $result);
+        static::assertTrue($result['documents']);
+        static::assertArrayHasKey('profiles', $result);
+        static::assertFalse($result['profiles']);
     }
 
     /**
