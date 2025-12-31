@@ -75,7 +75,7 @@ export default {
     props: {
         module: {
             type: Object,
-            required: true,
+            default: () => ({}),
         },
         objectType: {
             type: String,
