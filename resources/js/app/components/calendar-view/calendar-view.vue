@@ -381,6 +381,7 @@ export default {
                 this.createNew = false;
                 this.createNewDateRanges = [];
                 this.refetchEvents();
+                window._vueInstance.dataChanged.clear()
             } catch (error) {
                 this.error = error;
             } finally {
