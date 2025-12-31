@@ -48,17 +48,7 @@
         'tree': __('Tree'),
         'calendar': __('Calendar'),
     } %}
-	{% set indexViewType = Layout.moduleIndexViewType() %}
-	{% for t in indexViewTypes %}
-		{% if t != indexViewType %}
-			{% set icon = mapIcon[t] %}
-			{% set label = mapLabel[t] %}
-			{% do _view.append(
-                'app-module-buttons',
-                '<a href="' ~ url ~ '?view_type=' ~ t ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><app-icon icon="' ~ icon ~ '"></app-icon><span class="ml-05">' ~ label ~ '</span></a>'
-            ) %}
-		{% endif %}
-	{% endfor %}
+    {{ Layout.appendViewTypeButtons() }}
 {% endif %}
 
 

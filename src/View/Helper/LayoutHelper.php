@@ -309,9 +309,65 @@ class LayoutHelper extends Helper
     {
         $defaultType = $this->moduleIndexDefaultViewType();
         $defaultList = $defaultType === 'calendar' ? ['calendar', 'list'] : ['list'];
-        $defaultList = $defaultType === 'tree' ? ['tree', 'list'] : $defaultList;
+        $defaultList = $defaultType === 'tree' ? ['tree', 'tree-compact', 'list'] : $defaultList;
 
         return $defaultList;
+    }
+
+    /**
+     * Append view type buttons to the sidebar
+     *
+     * @return void
+     */
+    public function appendViewTypeButtons(): void
+    {
+        $indexViewTypes = $this->moduleIndexViewTypes();
+        if (count($indexViewTypes) > 1) {
+            $indexViewType = $this->moduleIndexViewType();
+            foreach ($indexViewTypes as $t) {
+                if ($t !== $indexViewType) {
+                    $append = false;
+                    $icon = '';
+                    $label = '';
+                    switch ($t) {
+                        case 'tree':
+                            $icon = 'carbon:tree-view';
+                            $label = __('Tree view');
+                            $append = true;
+                            break;
+                        case 'tree-compact':
+                            $icon = 'carbon:tree-view';
+                            $label = __('Tree compact');
+                            $meta = (array)$this->getView()->get('meta');
+                            $count = (int)Hash::get($meta, 'pagination.count');
+                            $append = $count <= Configure::read('UI.tree_compact_view_limit', 100);
+                            break;
+                        case 'list':
+                            $icon = 'carbon:list';
+                            $label = __('List view');
+                            $append = true;
+                            break;
+                    }
+                    if ($append) {
+                        $url = $this->Url->build(
+                            [
+                                '_name' => 'modules:list',
+                                'object_type' => $this->getView()->get('objectType'),
+                            ],
+                        );
+                        $url = sprintf('%s?view_type=%s', $url, $t);
+                        $anchor = sprintf(
+                            '<a href="%s" class="button button-outlined button-outlined-module-%s"><app-icon icon="%s"></app-icon><span class="ml-05">%s</span></a>',
+                            $url,
+                            $this->getView()->get('currentModule.name'),
+                            $icon,
+                            __($label),
+                        );
+                        $this->getView()->append('app-module-buttons', $anchor);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -386,6 +442,7 @@ class LayoutHelper extends Helper
             'richeditorByPropertyConfig' => $this->uiRicheditorConfig(),
             'indexLists' => (array)$this->indexLists(),
             'fastCreateFields' => (array)$this->Property->fastCreateFieldsMap(),
+            'concreteTypes' => (array)$this->getView()->get('allConcreteTypes', []),
         ];
     }
 
