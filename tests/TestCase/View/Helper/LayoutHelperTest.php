@@ -422,7 +422,7 @@ class LayoutHelperTest extends TestCase
             ],
             'folders' => [
                 ['currentModule' => ['name' => 'folders']],
-                ['tree', 'list'],
+                ['tree', 'tree-compact', 'list'],
             ],
         ];
     }
