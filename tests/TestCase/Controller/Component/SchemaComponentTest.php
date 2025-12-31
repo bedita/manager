@@ -491,8 +491,12 @@ class SchemaComponentTest extends TestCase
         static::assertNotEmpty($result['properties']['roles']);
 
         $expected = [
-            'type' => 'string',
-            'enum' => ['admin', 'manager'],
+            'type' => 'array',
+            'items' => [
+                'type' => 'string',
+                'enum' => ['admin', 'manager'],
+            ],
+            'uniqueItems' => true,
         ];
         static::assertEquals($expected, $result['properties']['roles']);
     }
