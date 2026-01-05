@@ -9,60 +9,59 @@
 
 BEdita Manager
 */
+@use 'styles/variables';   // common variables used for color, margins, typography, media breakpoints, tag collections
+@use 'styles/mixins';
+
+// general
+@use 'styles/base_normalize';
+@use 'styles/base';
+@use 'styles/layout';      // main grid base layout
+@use 'styles/buttons';
+@use 'styles/forms';
+@use 'styles/forms_file';
+@use 'styles/utility_classes';
+@use 'styles/elements';
+@use 'styles/columns';
+@use 'styles/richtexteditor';
+
+// elements
+@use '../templates/Element/Form/form';
+@use '../templates/Element/Form/calendar';
+@use '../templates/Element/Form/locations';
+@use '../templates/Element/Form/trees';
+@use '../templates/Element/Form/publish_properties';
+@use '../templates/Element/Form/relations';
+@use '../templates/Element/Form/map';
+@use '../templates/Element/Form/history';
+@use '../templates/Element/Form/categories';
+@use '../templates/Element/flash/flash';
+@use '../templates/Element/Menu/colophon';
+@use '../templates/Element/Menu/menu';
+@use '../templates/Element/Menu/sidebar';
+@use '../templates/Element/Modules/index_properties';
+@use '../templates/Element/FilterBox/filter_box';
+@use '../templates/Element/Panel/panel';
+
+// components
+@use 'js/app/components/dialog/dialog.scss';
+@use 'js/app/components/ajax-login/ajax-login.scss';
+@use 'js/app/components/tag-form/tag-form.scss';
+
+// Pages
+@use '../templates/Pages/Login/login';
+@use '../templates/Pages/Dashboard/dashboard';
+@use '../templates/Pages/Admin/admin';
+@use '../templates/Pages/Import/import';
+@use '../templates/Pages/Modules/modules-index';
+@use '../templates/Pages/Modules/modules-view';
+@use '../templates/Pages/Model/model-index';
+@use '../templates/Pages/Model/model-view';
+@use '../templates/Pages/Translations/view';
+
+@use 'styles/non-production';
 
 // Google Fonts
 @import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,200;0,400;1,200;1,400&family=IBM+Plex+Sans:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&family=IBM+Plex+Serif:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap';
-
-@import './styles/variables';   // common variables used for color, margins, typography, media breakpoints, tag collections
-@import './styles/mixins';
-
-// general
-@import './styles/base_normalize';
-@import './styles/base';
-@import './styles/layout';      // main grid base layout
-@import './styles/buttons';
-@import './styles/forms';
-@import './styles/forms_file';
-@import './styles/utility_classes';
-@import './styles/elements';
-@import './styles/columns';
-@import './styles/richtexteditor';
-
-// elements
-@import '../templates/Element/Form/form';
-@import '../templates/Element/Form/calendar';
-@import '../templates/Element/Form/locations';
-@import '../templates/Element/Form/trees';
-@import '../templates/Element/Form/publish_properties';
-@import '../templates/Element/Form/relations';
-@import '../templates/Element/Form/map';
-@import '../templates/Element/Form/history';
-@import '../templates/Element/Form/categories';
-@import '../templates/Element/flash/flash';
-@import '../templates/Element/Menu/colophon';
-@import '../templates/Element/Menu/menu';
-@import '../templates/Element/Menu/sidebar';
-@import '../templates/Element/Modules/index_properties';
-@import '../templates/Element/FilterBox/filter_box';
-@import '../templates/Element/Panel/panel';
-
-// components
-@import './js/app/components/dialog/dialog.scss';
-@import './js/app/components/ajax-login/ajax-login.scss';
-@import './js/app/components/tag-form/tag-form.scss';
-
-// Pages
-@import '../templates/Pages/Login/login';
-@import '../templates/Pages/Dashboard/dashboard';
-@import '../templates/Pages/Admin/admin';
-@import '../templates/Pages/Import/import';
-@import '../templates/Pages/Modules/modules-index';
-@import '../templates/Pages/Modules/modules-view';
-@import '../templates/Pages/Model/model-index';
-@import '../templates/Pages/Model/model-view';
-@import '../templates/Pages/Translations/view';
-
-@import './styles/non-production';
 
 // vue
 [v-cloak] {
@@ -84,7 +83,7 @@ BEdita Manager
         border-top-color: transparent;
         content: "";
         display: block;
-        height: $gutter * 2;
-        width: $gutter * 2;
+        height: variables.$gutter * 2;
+        width: variables.$gutter * 2;
     }
 }

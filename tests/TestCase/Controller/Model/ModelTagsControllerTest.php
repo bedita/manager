@@ -10,19 +10,22 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-namespace App\Test\TestCase\Controller;
+namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Model\TagsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Model\TagsController} Test Case
- *
- * @coversDefaultClass \App\Controller\Model\TagsController
- * @uses \App\Controller\Model\TagsController
  */
+#[CoversClass(TagsController::class)]
+#[CoversMethod(TagsController::class, 'index')]
+#[CoversMethod(TagsController::class, 'initialize')]
 class ModelTagsControllerTest extends TestCase
 {
     /**
@@ -30,21 +33,21 @@ class ModelTagsControllerTest extends TestCase
      *
      * @var \App\Controller\Model\TagsController
      */
-    public $Tags;
+    public TagsController $Tags;
 
     /**
      * Client API
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -84,8 +87,6 @@ class ModelTagsControllerTest extends TestCase
     /**
      * Test `index` method
      *
-     * @covers ::initialize()
-     * @covers ::index()
      * @return void
      */
     public function testIndex(): void

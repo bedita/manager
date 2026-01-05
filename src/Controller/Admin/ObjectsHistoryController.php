@@ -20,17 +20,17 @@ class ObjectsHistoryController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $resourceType = 'applications';
+    protected ?string $resourceType = 'applications';
 
     /**
      * @inheritDoc
      */
-    protected $readonly = true;
+    protected bool $readonly = true;
 
     /**
      * @inheritDoc
      */
-    protected $properties = [
+    protected array $properties = [
         'name' => 'string',
     ];
 }

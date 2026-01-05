@@ -19,13 +19,15 @@ use Cake\Core\Configure;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\TranslatorController} Test Case
- *
- * @coversDefaultClass \App\Controller\TranslatorController
- * @uses \App\Controller\TranslatorController
  */
+#[CoversClass(TranslatorController::class)]
+#[CoversMethod(TranslatorController::class, 'initialize')]
+#[CoversMethod(TranslatorController::class, 'translate')]
 class TranslatorControllerTest extends TestCase
 {
     /**
@@ -33,12 +35,11 @@ class TranslatorControllerTest extends TestCase
      *
      * @var \App\Controller\TranslatorController
      */
-    public $controller;
+    public TranslatorController $controller;
 
     /**
      * Test `translate` method
      *
-     * @covers ::translate()
      * @return void
      */
     public function testTranslateMethodNotAllowedException(): void
@@ -49,7 +50,7 @@ class TranslatorControllerTest extends TestCase
                 'environment' => [
                     'REQUEST_METHOD' => 'GET',
                 ],
-            ])
+            ]),
         );
         $this->controller->translate();
     }
@@ -57,7 +58,6 @@ class TranslatorControllerTest extends TestCase
     /**
      * Test `translate` method
      *
-     * @covers ::translate()
      * @return void
      */
     public function testTranslateNoTranslatorEngine(): void
@@ -73,7 +73,7 @@ class TranslatorControllerTest extends TestCase
                     'to' => 'it',
                     'translator' => 'xxx',
                 ],
-            ])
+            ]),
         );
         $this->controller->translate();
 
@@ -83,7 +83,6 @@ class TranslatorControllerTest extends TestCase
     /**
      * Test `translate` method
      *
-     * @covers ::translate()
      * @return void
      */
     public function testTranslate(): void
@@ -110,7 +109,7 @@ class TranslatorControllerTest extends TestCase
                     'to' => 'it',
                     'translator' => 'dummy',
                 ],
-            ])
+            ]),
         );
         $this->controller->translate();
         $actual = $this->controller->viewBuilder()->getVar('translation');
@@ -123,7 +122,6 @@ class TranslatorControllerTest extends TestCase
      * test `initialize` function
      *
      * @return void
-     * @covers ::initialize()
      */
     public function testInitialize(): void
     {
@@ -137,7 +135,7 @@ class TranslatorControllerTest extends TestCase
                     'from' => 'en',
                     'to' => 'it',
                 ],
-            ])
+            ]),
         );
         static::assertNotEmpty($this->controller->{'Translator'});
     }

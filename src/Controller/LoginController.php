@@ -26,7 +26,7 @@ class LoginController extends AppController
     /**
      * @inheritDoc
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         // Projects configuration files base path
         'projectsPath' => CONFIG . 'projects' . DS,
     ];
@@ -75,7 +75,7 @@ class LoginController extends AppController
         // Load project config if `multi project` setup
         Application::loadProjectConfig(
             (string)$this->getRequest()->getData('project'),
-            (string)$this->getConfig('projectsPath')
+            (string)$this->getConfig('projectsPath'),
         );
 
         $result = $this->Authentication->getResult();

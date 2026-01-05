@@ -14,10 +14,12 @@ namespace App\Controller;
 
 use App\Form\Form;
 use App\Utility\DateRangesTools;
+use App\Utility\PermissionsTrait;
 use Authentication\Identity;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\Controller;
-use Cake\Controller\Exception\SecurityException;
+use Cake\Controller\Exception\FormProtectionException;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\BadRequestException;
@@ -36,12 +38,25 @@ use Cake\Utility\Hash;
  */
 class AppController extends Controller
 {
+    use PermissionsTrait;
+
     /**
      * BEdita4 API client
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    protected $apiClient = null;
+    protected ?BEditaClient $apiClient = null;
+
+    /**
+     * {@inheritDoc}
+     *
+     * From LocatorAwareTrait...
+     * Set this to empty string to avoid use of datasource and table locator.
+     * This way controller magic getter will not try to load a table instance and will search the property from components instead.
+     *
+     * @var string|null
+     */
+    protected ?string $defaultTable = '';
 
     /**
      * @inheritDoc
@@ -50,9 +65,8 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler', ['enableBeforeRedirect' => false]);
         $this->loadComponent('App.Flash', ['clear' => true]);
-        $this->loadComponent('Security');
+        $this->loadComponent('FormProtection');
 
         // API config may not be set in `login` for a multi-project setup
         if (Configure::check('API.apiBaseUrl')) {
@@ -90,7 +104,7 @@ class AppController extends Controller
             return $this->redirect($route);
         }
         $this->setupOutputTimezone();
-        $this->Security->setConfig('blackHoleCallback', 'blackhole');
+        $this->FormProtection->setConfig('blackHoleCallback', 'blackhole');
 
         return null;
     }
@@ -99,12 +113,12 @@ class AppController extends Controller
      * Handle security blackhole with logs for now
      *
      * @param string $type Exception type
-     * @param \Cake\Controller\Exception\SecurityException $exception Raised exception
+     * @param \Cake\Controller\Exception\FormProtectionException $exception Raised exception
      * @return void
      * @throws \Cake\Http\Exception\BadRequestException
      * @codeCoverageIgnore
      */
-    public function blackhole(string $type, SecurityException $exception): void
+    public function blackhole(string $type, FormProtectionException $exception): void
     {
         // Log original exception
         $this->log($exception->getMessage(), 'error');
@@ -202,7 +216,7 @@ class AppController extends Controller
      * @param string $type Object type
      * @return array request data
      */
-    protected function prepareRequest($type): array
+    protected function prepareRequest(string $type): array
     {
         $data = (array)$this->getRequest()->getData();
 
@@ -234,7 +248,7 @@ class AppController extends Controller
         }
 
         $this->decodeJsonAttributes($data);
-
+        $this->prepareRoles($data);
         $this->prepareDateRanges($data);
 
         // prepare categories
@@ -300,6 +314,25 @@ class AppController extends Controller
     }
 
     /**
+     * Transform roles data into relations format.
+     *
+     * @param array $data The data to prepare
+     * @return void
+     */
+    protected function prepareRoles(array &$data): void
+    {
+        $roles = (string)Hash::get($data, 'roles');
+        $roles = empty($roles) ? [] : (array)json_decode($roles, true);
+        $data = array_filter($data, fn($key) => $key !== 'roles', ARRAY_FILTER_USE_KEY);
+        if (!empty($roles)) {
+            $data['relations']['roles']['replaceRelated'] = array_map(
+                fn($id) => ['id' => $id, 'type' => 'roles'],
+                array_keys($this->rolesByNames($roles)),
+            );
+        }
+    }
+
+    /**
      * Prepare request relation data.
      *
      * @param array $data Request data
@@ -311,7 +344,7 @@ class AppController extends Controller
         if (!empty($data['relations'])) {
             $api = [];
             foreach ($data['relations'] as $relation => $relationData) {
-                $id = $data['id'];
+                $id = (string)Hash::get($data, 'id');
                 foreach ($relationData as $method => $ids) {
                     $relatedIds = $this->relatedIds($ids);
                     if ($method === 'replaceRelated' || !empty($relatedIds)) {
@@ -321,15 +354,18 @@ class AppController extends Controller
             }
             $data['_api'] = $api;
         }
-        unset($data['relations']);
+        $data = array_filter($data, fn($key) => $key !== 'relations', ARRAY_FILTER_USE_KEY);
     }
 
     /**
      * Get related ids from items array.
      * If items is string, it is json encoded array.
      * If items is array, it can be json encoded array or array of id/type data.
+     *
+     * @param mixed $items Items to parse
+     * @return array
      */
-    protected function relatedIds($items): array
+    protected function relatedIds(mixed $items): array
     {
         if (empty($items)) {
             return [];
@@ -342,7 +378,7 @@ class AppController extends Controller
                 function ($json) {
                     return json_decode($json, true);
                 },
-                $items
+                $items,
             );
         }
 
@@ -376,19 +412,19 @@ class AppController extends Controller
 
                 return $acc;
             },
-            []
+            [],
         );
         $addRelated = array_map(
             function ($id) use ($replaceRelated) {
                 return Hash::get($replaceRelated, $id);
             },
-            $changedParents
+            $changedParents,
         );
         $addRelated = array_filter(
             $addRelated,
             function ($elem) {
                 return !empty($elem);
-            }
+            },
         );
         $data['relations'][$relation]['addRelated'] = $addRelated;
 
@@ -400,7 +436,7 @@ class AppController extends Controller
                 function ($id) {
                     return ['id' => $id, 'type' => 'folders'];
                 },
-                $rem
+                $rem,
             );
         }
         unset($data['relations'][$relation]['replaceRelated']);
@@ -448,7 +484,7 @@ class AppController extends Controller
      * @param string $key The field key
      * @return bool
      */
-    protected function hasFieldChanged($oldValue, $newValue, string $key): bool
+    protected function hasFieldChanged(mixed $oldValue, mixed $newValue, string $key): bool
     {
         if ($oldValue === $newValue) {
             return false; // not changed
@@ -562,7 +598,7 @@ class AppController extends Controller
      * @param array $objects The objects to parse to set prev and next data
      * @return void
      */
-    protected function setObjectNav($objects): void
+    protected function setObjectNav(array $objects): void
     {
         $moduleName = $this->Modules->getConfig('currentModuleName');
         $total = count(array_keys($objects));
@@ -588,7 +624,7 @@ class AppController extends Controller
      * @param string $id The object ID
      * @return array
      */
-    protected function getObjectNav($id): array
+    protected function getObjectNav(string $id): array
     {
         // get objectNav from session
         $session = $this->getRequest()->getSession();

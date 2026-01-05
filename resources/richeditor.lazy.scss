@@ -8,14 +8,14 @@
 
 BEdita Manager
 */
-@import './styles/variables';   // common variables used for color, margins, typography, media breakpoints, tag collections
-@import './styles/mixins';
+@use 'styles/variables';   // common variables used for color, margins, typography, media breakpoints, tag collections
+@use 'styles/mixins';
 
 // general
-@import './styles/base';
+@use 'styles/base';
 
 // tinymce base content style
-@import '~tinymce/skins/ui/oxide/content';
+@use '../node_modules/tinymce/skins/ui/oxide/content';
 
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,200;0,400;1,200;1,400&family=IBM+Plex+Sans:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&family=IBM+Plex+Serif:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap");
 
@@ -23,9 +23,9 @@ body {
     padding: 1em !important;
     color: unset;
     background: unset;
-    font-family: $font-family-monospace;
-    font-size: $font-size-base;
-    font-weight: $font-weight-base;
+    font-family: variables.$font-family-monospace;
+    font-size: variables.$font-size-base;
+    font-weight: variables.$font-weight-base;
 }
 
 .mce-offscreen-selection {
@@ -40,7 +40,7 @@ p {
 blockquote {
     padding-left:1rem;
     margin-left:0;
-    border-left: 4px solid $gray-700;
+    border-left: 4px solid variables.$gray-700;
 }
 
 a {
@@ -58,7 +58,7 @@ a:link, a:hover, a:active, a:visited {
 
 [data-placeholder] {
     &[data-mce-selected] {
-        outline: solid 2px $info;
+        outline: solid 2px variables.$info;
     }
 }
 
@@ -91,11 +91,11 @@ div[data-placeholder] {
 }
 
 details {
-    border: 1px solid $gray-700;
+    border: 1px solid variables.$gray-700;
     border-radius: 2px;
     padding: 0 4px;
 }
 
 summary {
-    border-bottom: 1px solid $gray-700;
+    border-bottom: 1px solid variables.$gray-700;
 }

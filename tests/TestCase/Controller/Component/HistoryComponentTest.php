@@ -10,12 +10,20 @@ use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\Component\HistoryComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\HistoryComponent
  */
+#[CoversClass(HistoryComponent::class)]
+#[CoversMethod(HistoryComponent::class, 'content')]
+#[CoversMethod(HistoryComponent::class, 'fetch')]
+#[CoversMethod(HistoryComponent::class, 'formatResponseData')]
+#[CoversMethod(HistoryComponent::class, 'label')]
+#[CoversMethod(HistoryComponent::class, 'load')]
+#[CoversMethod(HistoryComponent::class, 'write')]
 class HistoryComponentTest extends TestCase
 {
     /**
@@ -23,35 +31,35 @@ class HistoryComponentTest extends TestCase
      *
      * @var \App\Controller\Component\HistoryComponent
      */
-    public $HistoryComponent;
+    public HistoryComponent $HistoryComponent;
 
     /**
      * Http Request
      *
-     * @var \Cake\Http\ServerRequest
+     * @var \Cake\Http\ServerRequest|null
      */
-    private $Request = null;
+    private ?ServerRequest $Request = null;
 
     /**
      * Schema component
      *
      * @var \App\Controller\Component\SchemaComponent
      */
-    public $SchemaComponent;
+    public SchemaComponent $SchemaComponent;
 
     /**
      * Client class
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    private $ApiClient = null;
+    private ?BEditaClient $ApiClient = null;
 
     /**
      * Document ID
      *
-     * @var string
+     * @var string|null
      */
-    private $documentId = null;
+    private ?string $documentId = null;
 
     /**
      * @inheritDoc
@@ -60,7 +68,7 @@ class HistoryComponentTest extends TestCase
     {
         parent::setUp();
 
-        $controller = new Controller();
+        $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
         /** @var \App\Controller\Component\HistoryComponent $historyComponent */
         $historyComponent = $registry->load(HistoryComponent::class);
@@ -101,7 +109,7 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function loadProvider(): array
+    public static function loadProvider(): array
     {
         return [
             'empty object' => [
@@ -128,12 +136,11 @@ class HistoryComponentTest extends TestCase
     /**
      * Test `load` method
      *
-     * @covers ::load()
-     * @dataProvider loadProvider()
      * @param array $object The object for test
      * @param string $expected The expected object
      * @return void
      */
+    #[DataProvider('loadProvider')]
     public function testLoad(array $object, string $expected): void
     {
         $session = $this->HistoryComponent->getController()->getRequest()->getSession();
@@ -155,13 +162,12 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function writeProvider(): array
+    public static function writeProvider(): array
     {
         return [
             'test document, keepUname false' => [
                 [
                     'objectType' => 'documents',
-                    'id' => $this->documentId,
                     'historyId' => 1,
                     'keepUname' => false,
                 ],
@@ -170,7 +176,6 @@ class HistoryComponentTest extends TestCase
             'test document, keepUname true' => [
                 [
                     'objectType' => 'documents',
-                    'id' => $this->documentId,
                     'historyId' => 1,
                     'keepUname' => true,
                 ],
@@ -185,9 +190,8 @@ class HistoryComponentTest extends TestCase
      * @param array $options The options for test
      * @param string $expected The expected serialized data
      * @return void
-     * @covers ::write()
-     * @dataProvider writeProvider()
      */
+    #[DataProvider('writeProvider')]
     public function testWrite(array $options, string $expected): void
     {
         // mock api /history
@@ -210,6 +214,7 @@ class HistoryComponentTest extends TestCase
             ->willReturn($response);
         // set options
         $options += [
+            'id' => $this->documentId,
             'ApiClient' => $apiClient,
             'Schema' => $this->SchemaComponent,
             'Request' => $this->Request->withQueryParams(['title' => 'a new title']),
@@ -225,7 +230,7 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function fetchProvider(): array
+    public static function fetchProvider(): array
     {
         return [
             'a document history' => [
@@ -251,12 +256,11 @@ class HistoryComponentTest extends TestCase
     /**
      * Test `fetch` method
      *
-     * @covers ::fetch()
-     * @dataProvider fetchProvider()
      * @param array $data The data for test
      * @param mixed $expected The expected value
      * @return void
      */
+    #[DataProvider('fetchProvider')]
     public function testFetch(array $data, $expected): void
     {
         $response = $this->HistoryComponent->fetch($this->documentId, $data, ['page_size' => 100, 'page' => 1]);
@@ -269,7 +273,7 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function formatResponseDataProvider(): array
+    public static function formatResponseDataProvider(): array
     {
         return [
             'empty response data' => [
@@ -327,16 +331,15 @@ class HistoryComponentTest extends TestCase
     /**
      * Test `formatResponseData` method
      *
-     * @covers ::formatResponseData()
-     * @dataProvider formatResponseDataProvider()
      * @param array $data The data for test
      * @param mixed $expected The expected value
      * @return void
      */
+    #[DataProvider('formatResponseDataProvider')]
     public function testFormatResponseData(array $data, $expected): void
     {
         // call private method using AppControllerTest->invokeMethod
-        $test = new AppControllerTest();
+        $test = new AppControllerTest('test');
         $test->invokeMethod($this->HistoryComponent, 'formatResponseData', [&$data[0], $data[1]]);
         $actual = $data[0];
         static::assertEquals($expected, $actual);
@@ -347,7 +350,7 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function contentDataProvider(): array
+    public static function contentDataProvider(): array
     {
         return [
             'empty content' => [
@@ -408,9 +411,8 @@ class HistoryComponentTest extends TestCase
      * @param mixed $value The value
      * @param string $expected The expected content
      * @return void
-     * @covers ::content()
-     * @dataProvider contentDataProvider()
      */
+    #[DataProvider('contentDataProvider')]
     public function testContent(string $field, array $schema, $value, string $expected): void
     {
         $actual = $this->HistoryComponent->content($field, $schema, $value);
@@ -422,7 +424,7 @@ class HistoryComponentTest extends TestCase
      *
      * @return array
      */
-    public function labelDataProvider(): array
+    public static function labelDataProvider(): array
     {
         return [
             'empty label' => [
@@ -446,9 +448,8 @@ class HistoryComponentTest extends TestCase
      * @param string $field The field
      * @param string $expected The expected label
      * @return void
-     * @covers ::label()
-     * @dataProvider labelDataProvider()
      */
+    #[DataProvider('labelDataProvider')]
     public function testLabel(string $field, string $expected): void
     {
         $actual = $this->HistoryComponent->label($field);

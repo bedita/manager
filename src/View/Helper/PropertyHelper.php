@@ -20,6 +20,7 @@ use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
+use Throwable;
 
 /**
  * Helper class to generate properties html
@@ -34,7 +35,7 @@ class PropertyHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Form', 'Schema'];
+    public array $helpers = ['Form', 'Schema'];
 
     /**
      * Special paths to retrieve properties from related resources
@@ -69,7 +70,7 @@ class PropertyHelper extends Helper
      * @param string|null $type The object or resource type, for others schemas
      * @return string
      */
-    public function control(string $name, $value, array $options = [], ?string $type = null): string
+    public function control(string $name, mixed $value, array $options = [], ?string $type = null): string
     {
         $forceReadonly = !empty(Hash::get($options, 'readonly'));
         $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, $type));
@@ -101,7 +102,7 @@ class PropertyHelper extends Helper
      * @param array $options The form element options, if any
      * @return string
      */
-    public function translationControl(string $name, $value, array $options = []): string
+    public function translationControl(string $name, mixed $value, array $options = []): string
     {
         $formControlName = sprintf('translated_fields[%s]', $name);
         $controlOptions = $this->Schema->controlOptions($name, $value, $this->schema($name, null));
@@ -227,7 +228,7 @@ class PropertyHelper extends Helper
                                 function ($val, $key) use ($removeKeys) {
                                     return is_string($val) && !in_array($key, $removeKeys);
                                 },
-                                ARRAY_FILTER_USE_BOTH
+                                ARRAY_FILTER_USE_BOTH,
                             );
 
                             return array_merge($carry, $groupKeys);
@@ -257,7 +258,7 @@ class PropertyHelper extends Helper
                                 function ($val, $key) use ($removeKeys) {
                                     return is_string($val) && !in_array($key, $removeKeys);
                                 },
-                                ARRAY_FILTER_USE_BOTH
+                                ARRAY_FILTER_USE_BOTH,
                             );
 
                             return array_merge($carry, $groupKeys);
@@ -278,9 +279,9 @@ class PropertyHelper extends Helper
                     }
 
                     return $map;
-                }
+                },
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $map = [];
         }
 

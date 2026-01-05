@@ -9,16 +9,23 @@ use Authentication\IdentityInterface;
 use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * {@see \App\Controller\Component\ObjectsEditorsComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\ObjectsEditorsComponent
  */
+#[CoversClass(ObjectsEditorsComponent::class)]
+#[CoversMethod(ObjectsEditorsComponent::class, 'cleanup')]
+#[CoversMethod(ObjectsEditorsComponent::class, 'editorName')]
+#[CoversMethod(ObjectsEditorsComponent::class, 'getEditors')]
+#[CoversMethod(ObjectsEditorsComponent::class, 'initialize')]
+#[CoversMethod(ObjectsEditorsComponent::class, 'update')]
 class ObjectsEditorsComponentTest extends TestCase
 {
     /**
@@ -26,14 +33,14 @@ class ObjectsEditorsComponentTest extends TestCase
      *
      * @var \App\Controller\Component\ObjectsEditorsComponent
      */
-    public $ObjectsEditors;
+    public ObjectsEditorsComponent $ObjectsEditors;
 
     /**
      * Authentication component
      *
      * @var \Authentication\Controller\Component\AuthenticationComponent;
      */
-    public $Authentication;
+    public AuthenticationComponent $Authentication;
 
     /**
      * @inheritDoc
@@ -42,7 +49,7 @@ class ObjectsEditorsComponentTest extends TestCase
     {
         Cache::enable();
         parent::setUp();
-        $controller = new Controller();
+        $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
         $registry->load('Authentication.Authentication');
         /** @var \App\Controller\Component\ObjectsEditorsComponent $objectsEditorsComponent */
@@ -95,7 +102,6 @@ class ObjectsEditorsComponentTest extends TestCase
      * Test initial setup
      *
      * @return void
-     * @covers ::initialize()
      */
     public function testInitialize(): void
     {
@@ -120,7 +126,6 @@ class ObjectsEditorsComponentTest extends TestCase
      * Test `update` method
      *
      * @return void
-     * @covers ::update()
      */
     public function testUpdate(): void
     {
@@ -169,7 +174,6 @@ class ObjectsEditorsComponentTest extends TestCase
      * Test `editorName` method
      *
      * @return void
-     * @covers ::editorName()
      */
     public function testEditorName(): void
     {
@@ -210,7 +214,6 @@ class ObjectsEditorsComponentTest extends TestCase
      * Test `getEditors` method
      *
      * @return void
-     * @covers ::getEditors()
      */
     public function testGetEditors(): void
     {
@@ -239,7 +242,6 @@ class ObjectsEditorsComponentTest extends TestCase
      * Test `cleanup` method
      *
      * @return void
-     * @covers ::cleanup()
      */
     public function testCleanup(): void
     {

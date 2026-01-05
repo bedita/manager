@@ -20,12 +20,22 @@ use App\Utility\PermissionsTrait;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\CoversTrait;
 
 /**
  * {@see \App\Utility\PermissionsTrait} Test Case
- *
- * @coversDefaultClass \App\Utility\PermissionsTrait
  */
+#[CoversClass(PermissionsTrait::class)]
+#[CoversTrait(PermissionsTrait::class)]
+#[CoversMethod(PermissionsTrait::class, 'addPermissions')]
+#[CoversMethod(PermissionsTrait::class, 'objectPermissionsIds')]
+#[CoversMethod(PermissionsTrait::class, 'removePermissions')]
+#[CoversMethod(PermissionsTrait::class, 'roles')]
+#[CoversMethod(PermissionsTrait::class, 'rolesByIds')]
+#[CoversMethod(PermissionsTrait::class, 'rolesByNames')]
+#[CoversMethod(PermissionsTrait::class, 'savePermissions')]
 class PermissionsTraitTest extends BaseControllerTest
 {
     use PermissionsTrait;
@@ -52,7 +62,6 @@ class PermissionsTraitTest extends BaseControllerTest
      * Test `savePermission` method.
      *
      * @return void
-     * @covers ::savePermissions()
      */
     public function testSavePermissions(): void
     {
@@ -84,7 +93,6 @@ class PermissionsTraitTest extends BaseControllerTest
      * Test `addPermissions` method
      *
      * @return void
-     * @covers ::addPermissions()
      */
     public function testAddPermissions(): void
     {
@@ -101,7 +109,6 @@ class PermissionsTraitTest extends BaseControllerTest
      * Test `removePermissions` method
      *
      * @return void
-     * @covers ::removePermissions()
      */
     public function testRemovePermissions(): void
     {
@@ -118,7 +125,6 @@ class PermissionsTraitTest extends BaseControllerTest
      * Test `objectPermissionsIds` method
      *
      * @return void
-     * @covers ::objectPermissionsIds()
      */
     public function testObjectPermissionsIds(): void
     {
@@ -151,7 +157,6 @@ class PermissionsTraitTest extends BaseControllerTest
      * Test `roles` method
      *
      * @return void
-     * @covers ::roles()
      */
     public function testRoles(): void
     {
@@ -164,7 +169,6 @@ class PermissionsTraitTest extends BaseControllerTest
      * Test `rolesByNames` method
      *
      * @return void
-     * @covers ::rolesByNames()
      */
     public function testRolesByNames(): void
     {
@@ -183,7 +187,6 @@ class PermissionsTraitTest extends BaseControllerTest
      * Test `rolesByIds` method
      *
      * @return void
-     * @covers ::rolesByIds()
      */
     public function testRolesByIds(): void
     {
