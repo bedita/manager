@@ -20,7 +20,7 @@ jobs:
     uses: bedita/github-workflows/.github/workflows/release.yml@v2
     with:
       main_branch: 'master'
-      dist_branches: '["master", "3.x"]'
+      dist_branches: '["master", "4.x", "5.x"]'
       version_bump: ${{ inputs.releaseType }}
       version_ini_path: config/version.ini
       version_ini_prefix: "[Manager]\nversion="
@@ -32,7 +32,7 @@ jobs:
     steps:
 
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Debug output version
         run: |

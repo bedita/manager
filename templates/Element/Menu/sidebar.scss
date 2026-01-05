@@ -1,11 +1,13 @@
+@use "../../../resources/styles/variables";
+
 .app-module-box a {
     position: relative;
     display: flex;
-    height: $dashboard-item-height;
-    background-color: $gray-600;
-    font-size: $font-size-base;
+    height: variables.$dashboard-item-height;
+    background-color: variables.$gray-600;
+    font-size: variables.$font-size-base;
     line-height: 1;
-    padding: $gutter*0.875 $gutter;
+    padding: variables.$gutter*0.875 variables.$gutter;
     filter: brightness(1);
     transition: filter .3s;
 
@@ -13,8 +15,8 @@
         content: '';
         position: absolute;
         bottom: 0; left: 0;
-        width: 100%; height: $gutter * 1.5;
-        background-color: $black;
+        width: 100%; height: variables.$gutter * 1.5;
+        background-color: variables.$black;
         opacity: .2;
         transition: opacity .3s;
     }
@@ -31,7 +33,7 @@
     a {
         position: relative;
         display: flex;
-        height: $dashboard-item-height;
+        height: variables.$dashboard-item-height;
         background-repeat:no-repeat;
         background-position: center center;
     }
@@ -60,13 +62,13 @@
 .app-module-box-concurrent-editors a {
     position: relative;
     display: flex;
-    height: $dashboard-item-height;
+    height: variables.$dashboard-item-height;
     background-image: url('/svg/concurrent-editors.svg');
     background-repeat:no-repeat;
     background-position: center center;
-    font-size: $font-size-base;
+    font-size: variables.$font-size-base;
     line-height: 1;
-    padding: $gutter*0.875 $gutter;
+    padding: variables.$gutter*0.875 variables.$gutter;
     filter: brightness(1);
     transition: filter .3s;
 
@@ -74,8 +76,8 @@
         content: '';
         position: absolute;
         bottom: 0; left: 0;
-        width: 100%; height: $gutter * 1.5;
-        background-color: $black;
+        width: 100%; height: variables.$gutter * 1.5;
+        background-color: variables.$black;
         opacity: .2;
         transition: opacity .3s;
     }
@@ -95,7 +97,7 @@ ul.concurrent-editors {
     margin:0; padding:0;
     li {
         padding: .5rem 0 .5rem 0;
-        border-bottom: 1px solid $gray-600;
+        border-bottom: 1px solid variables.$gray-600;
     }
 }
 
@@ -106,34 +108,34 @@ ul.concurrent-editors {
     overflow: hidden;
     @media (min-width: 568px) {
         height: 0;
-        padding-bottom: $dashboard-items-ratio;
+        padding-bottom: variables.$dashboard-items-ratio;
     }
     .app-module-box a {
-        background-color: $gray-strange;
-        font: $font-weight-normal $font-size-lg $font-family-serif;
+        background-color: variables.$gray-strange;
+        font: variables.$font-weight-normal variables.$font-size-lg variables.$font-family-serif;
     }
 }
 
 .sidebar {
     @media (min-width: 568px) {
         position: fixed;
-        top: 0; left: $gutter;
+        top: 0; left: variables.$gutter;
     }
     display: flex;
     flex-direction: column;
     min-height: 100%;
-    padding: $gutter 0 $gutter 0;
-    width: $dashboard-item-width;
+    padding: variables.$gutter 0 variables.$gutter 0;
+    width: variables.$dashboard-item-width;
 
     // > *:not(:last-child) { margin-bottom: $gutter;}
 
     button, .button {
-        width: $dashboard-item-width * .8;
+        width: variables.$dashboard-item-width * .8;
     }
 
     &-bedita-logo {
-        width: $gutter * 3;
-        height: $gutter * 3;
+        width: variables.$gutter * 3;
+        height: variables.$gutter * 3;
         background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTUwLjQgMTIxLjkiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDE1MC40IDEyMS45OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4uc3Qwe2ZpbGw6IzAxMDEwMTt9PC9zdHlsZT48Zz48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMjgsMTA3LjZjLTQuNS01LTYuOC0xMi4zLTYuOC0yMmMwLTcuMiwyLjQtMTMuMSw3LjMtMTcuOGM0LjgtNC42LDExLjgtNywyMC43LTdjMy43LDAsNi44LDAsOS4zLDAuMWMyLjUsMC4xLDQuNCwwLjIsNS43LDAuMnY0Mi45YzAsMy42LTEuNSw2LjMtNC40LDguMmMtMi45LDEuOC03LDIuNy0xMi4yLDIuN0MzOS4xLDExNS4xLDMyLjUsMTEyLjYsMjgsMTA3LjYgTTMzLjEsNDYuN2MtMi4xLTIuNS0zLjYtNS4yLTQuNC04LjFjLTAuOC0yLjktMS4yLTYuNC0xLjItMTAuNGMwLTYuNywxLjgtMTIsNS41LTE1LjhjMy43LTMuOCw5LjQtNS43LDE3LjMtNS43YzAuMiwwLDAuNSwwLDAuNywwYzUuNCwwLDguMiwxLjcsOS45LDMuMmMxLjQsMS4zLDMuMywzLjQsMy4zLDkuNXYzNC41SDUzLjNjLTQuNywwLTguNy0wLjYtMTItMS44QzM3LjksNTAuOSwzNS4yLDQ5LjEsMzMuMSw0Ni43IE0xNDQuMiw4NmMtMC44LDIuNi0yLjcsNi43LTUuNSwxMi4zYy0yLjksNS42LTUuNyw5LjctOC4zLDEyLjVjLTEsMS0yLjYsMS44LTQuOSwyLjRjLTIuMywwLjYtNC42LDEtNi43LDEuMmMtMi4xLDAuMi00LjcsMC4zLTcuOCwwLjNoLTcuNWMtNC44LDAtOC40LTAuMi0xMS0wLjVjLTIuNi0wLjMtNC42LTEtNi4xLTIuMWMtMS41LTEuMS0yLjUtMi43LTMtNC44Yy0wLjUtMi4xLTAuOC01LTAuOC04LjdWNjIuM2gxMy43YzMuNywwLDYuNywwLjMsOSwxYzIuMywwLjcsNC4zLDIuMSw2LjEsNC40YzEuMSwxLjQsMi4xLDMuNiwzLjEsNi43YzEsMy4xLDEuNiw2LDEuOCw4LjdoNi40VjM1LjNoLTYuNGMtMC4zLDIuNS0wLjksNS4xLTEuOCw3LjljLTAuOSwyLjgtMiw1LTMuMiw2LjdjLTEuNSwxLjktMy4zLDMuMy01LjQsNC4yYy0yLDAuOC01LjMsMS4yLTkuNywxLjJIODIuNVY2LjhoMTkuMmMzLjIsMCw2LDAuMSw4LjQsMC4yYzIuNSwwLjEsNC42LDAuMyw2LjQsMC41YzMuNCwwLjUsNy4xLDMuMSwxMC45LDhjMy44LDQuOSw2LjMsOS41LDcuNCwxMy45aDYuNFYwaC05OWMtNC40LDAtOC41LDAuNC0xMi41LDEuM2MtNCwwLjktNy44LDIuNC0xMS40LDQuNmMtMy40LDItNi4yLDQuNy04LjMsOC4yYy0yLjIsMy40LTMuMyw3LjYtMy4zLDEyLjVjMCw0LjMsMC44LDguMSwyLjMsMTEuNWMxLjUsMy40LDMuNyw2LjIsNi41LDguNmMyLjYsMi4zLDUuNyw0LjIsOS4xLDUuOGMzLjQsMS42LDcuMSwyLjgsMTEsMy43djAuOGMtMy41LDAuNC03LjQsMS4zLTExLjcsMi42Yy00LjMsMS4zLTguMiwzLjItMTEuNiw1LjZjLTMuNiwyLjQtNi41LDUuNi04LjgsOS40QzEuMiw3OC41LDAsODMuMiwwLDg4LjdjMCw1LjcsMS4yLDEwLjYsMy43LDE0LjhjMi41LDQuMiw1LjcsNy42LDkuNiwxMC4zYzMuOCwyLjYsOC4yLDQuNiwxMyw2YzQuOCwxLjQsOS44LDIuMSwxNSwyLjFoMTA2LjdsMi4zLTM1LjlIMTQ0LjJ6Ii8+PC9nPjwvc3ZnPg==");
         background-repeat: no-repeat;
         background-size: 100%;
@@ -148,12 +150,14 @@ ul.concurrent-editors {
         display: flex;
         flex-direction: column;
 
-        > *:not(:empty) { margin-bottom: $gutter; }
+        > *:not(:empty) { margin-bottom: variables.$gutter; }
 
         .app-module-buttons, .app-module-links {
             display: flex;
             flex-direction: column;
-            > *:not(:last-child) { margin-bottom: $gutter; }
+            overflow: auto;
+            max-height: 400px;
+            > *:not(:last-child) { margin-bottom: variables.$gutter; }
         }
 
         .app-module-box > a.module-item {
@@ -183,20 +187,20 @@ ul.concurrent-editors {
         }
 
         .listobjnav  {
-            color:$gray-600;
+            color:variables.$gray-600;
             font-size:4em;
             text-align: center;
-            width: $dashboard-item-width * .8;
+            width: variables.$dashboard-item-width * .8;
             a {
                 background-color: transparent;
-                color:$gray-400;
+                color:variables.$gray-400;
                 display: inline-flex;
                 &:hover {
                     color:white;
                 }
             }
             > div {
-                color:$gray-100;
+                color:variables.$gray-100;
                 font-size:0.3em;
             }
         }
@@ -209,15 +213,15 @@ ul.concurrent-editors {
             text-decoration: underline;
         }
         > *:not(:last-child) {
-            margin: $gutter 0 $gutter 0;
-            a:hover { color: $gray-500; }
+            margin: variables.$gutter 0 variables.$gutter 0;
+            a:hover { color: variables.$gray-500; }
         }
     }
 
 
     // sidebar footer is in layout-footer on mobile
     &-footer {
-        margin-top: $gutter;
+        margin-top: variables.$gutter;
         display: block;
         // @media (min-width: 568px) { display: block; }
     }

@@ -26,24 +26,29 @@ class ConfigController extends AdministrationBaseController
     /**
      * Resource type in use
      *
-     * @var string
+     * @var string|null
      */
-    protected $resourceType = 'config';
+    protected ?string $resourceType = 'config';
 
     /**
      * @inheritDoc
      */
-    protected $readonly = false;
+    protected bool $readonly = false;
 
     /**
      * @inheritDoc
      */
-    protected $properties = [
+    protected array $properties = [
         'name' => 'string',
         'context' => 'string',
         'content' => 'json',
         'application_id' => 'applications',
     ];
+
+    /**
+     * @inheritDoc
+     */
+    protected ?string $sortBy = 'name';
 
     /**
      * @inheritDoc

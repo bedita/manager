@@ -32,6 +32,17 @@ return [
     // ],
 
     /**
+     * Permissions per roles: force configuration.
+     * This is used to define which roles cannot edit permissions, even though they are allowed to modify the folder and its descendants.
+     */
+    // 'Permissions' => [
+    //     'readonly' => [
+    //         'publisher',
+    //         'editor',
+    //     ],
+    // ],
+
+    /**
      * Display an alert message in a top bar.
      * Useful to announce mainteinance or to specify a non-production environment
      *
@@ -67,33 +78,46 @@ return [
     // ],
 
     /**
+     * Api Proxy configuration, for ApiController.
+     * This refers to `/api/{endpoint}` calls.
+     * Contains an array of setting to use for API proxy configuration.
+     *
+     * ## Options
+     *
+     * - `allowed` - Array of allowed methods per endpoint.
+     * - `blocked` - Array of blocked methods per endpoint.
+     */
+    // 'ApiProxy' => [
+    //     'allowed' => [
+    //         'products' => ['GET', 'POST', 'PATCH', 'DELETE'],
+    //     ],
+    //     'blocked' => [
+    //         'objects' => ['GET', 'POST', 'PATCH', 'DELETE'],
+    //         'users' => ['GET', 'POST', 'PATCH', 'DELETE'],
+    //     ],
+    // ],
+
+    /**
      * Clone configuration.
      * This adds custom rules to clone objects.
      * Rules are defined as `object type name` => ['reset' => [], 'unique' => []]
      * where:
      * - `reset` is an array of fields to reset => unset
-     * - `unique` is an array of fields that must be unique => add `-<timestamp>` to val
      * Example:
      * 'users' => [
      *     'reset' => [
      *         'name', 'surname', 'address',
      *     ],
-     *     'unique' => [
-     *         'email',
-     *     ],
      * ],
      * will reset `name`, `surname` and `address` fields and add `-<timestamp>` to `email` field
      * when cloning a user object.
-     * Note: `reset` and `unique` are optional.
+     * Note: `reset` is optional.
      */
     // 'Clone' => [
     //     // ...
     //     'users' => [
     //         'reset' => [
     //             'name', 'surname', 'address',
-    //         ],
-    //         'unique' => [
-    //             'email',
     //         ],
     //     ],
     //     // ...
@@ -276,6 +300,8 @@ return [
      *          for a complete list of icons
      *  'sidebar' - additional custom sidebar links added in modules index and single item view,
      *     defined as associative array with 'index' and 'view' keys
+     *  'dropupload' - custom dropupload element to use for this module, f.i. 'MyPlugin.Form/dropupload'
+     *  'multiupload' - custom multiupload element to use for this module, f.i. 'MyPlugin.Form/multiupload'
      */
     // 'Modules' => [
     //     'objects' => [
@@ -290,6 +316,12 @@ return [
     //     ],
     //     'documents' => [
     //         'color' => '#cc4700',
+    //         'dropupload' => [
+    //             '_element' => 'MyPlugin.Form/dropupload',
+    //         ],
+    //         'multiupload' => [
+    //             '_element' => 'MyPlugin.Form/multiupload',
+    //         ],
     //     ],
     //     'events' => [
     //         'color' => '#09c',
@@ -565,16 +597,6 @@ return [
     // ],
 
     /**
-     * UI settings.
-     * index.copy2clipboard => enable "onmouseover" of index general cells showing copy to clipboard button
-     */
-    // 'UI' => [
-    //     'index' => [
-    //         'copy2clipboard' => true,
-    //     ],
-    // ],
-
-    /**
      * Richeditor configuration.
      */
     // 'Richeditor' => [
@@ -588,6 +610,16 @@ return [
     //     ],
     //     'style_formats_merge' => true,
     //     'content_style' => '.be-highlight { background-color: #F6F6F6; }',
+    //     'cleanup_regex_pattern' => '\\sstyle="[^"]*"', // remove style attributes from tags
+    //     'cleanup_regex_argument' => 'gs', // global and match new lines
+    //     'cleanup_regex_replace' => '', // replace with empty string
+    //     'fields_regex_map' => [
+    //         'title' => [ // cleanup title field from unwanted tags
+    //             'cleanup_regex_pattern' => '<(?!/?(em|sub|sup)\\b)[^>]+>',
+    //             'cleanup_regex_argument' => 'gi',
+    //             'cleanup_regex_replacement' => '',
+    //         ],
+    //     ],
     // ],
 
     /**
@@ -607,10 +639,12 @@ return [
     //         'bearing' => 'integer',
     //         'pitch' => 'integer',
     //         'zoom' => 'integer',
+    //         'caption' => 'richtext'
     //     ],
     //     'videos' => [
     //         'controls' => 'boolean',
     //         'autoplay' => 'boolean',
+    //         'caption' => 'richtext',
     //     ],
     // ],
 
@@ -618,6 +652,8 @@ return [
      * UI settings.
      * - index: index settings. 'copy2clipboard' enables "onmouseover" of index general cells showing copy to clipboard button
      * - modules: modules settings. 'counters' to show counters in modules; 'all', 'none', <list of modules> to show all, none or custom modules. Default is ['trash']
+     * - richeditor: richeditor settings per field: you can set 'config' and 'toolbar' per single field.
+     * - fast_create_form: custom element to use for fast create form
      */
     // 'UI' => [
     //     'index' => [
@@ -626,56 +662,53 @@ return [
     //     'modules' => [
     //         'counters' => ['objects', 'media', 'images', 'videos', 'audio', 'files', 'trash', 'users'],
     //     ],
+    //     'richeditor' => [
+    //         'title' => [
+    //             'config' => [
+    //                 'forced_root_block' => 'div',
+    //                 'forced_root_block_attrs' => ['class' => 'titleContainer'],
+    //             ],
+    //             'toolbar' => [
+    //                 'italic',
+    //                 'subscript',
+    //                 'superscript',
+    //             ],
+    //         ],
+    //         'description' => [
+    //             'config' => [
+    //                 'forced_root_block' => 'div',
+    //                 'forced_root_block_attrs' => ['class' => 'descriptionContainer'],
+    //             ],
+    //             'toolbar' => [
+    //                 'bold',
+    //                 'italic',
+    //                 'subscript',
+    //                 'superscript',
+    //                 'link',
+    //                 'unlink',
+    //                 'code',
+    //             ],
+    //         ],
+    //     ],
+    //     'fast_create_form' => [
+    //         '_element' => 'MyPlugin.Form/fast_create',
+    //     ],
     // ],
 
     /**
      * Upload configurations.
+     *
+     * 'files' and 'media' accept all mimes, so no configuration needed.
      */
     // 'uploadAccepted' => [
     //     'audio' => [
     //         'audio/*',
-    //     ],
-    //     'files' => [
-    //         'application/msword', // .doc, .dot
-    //         'application/pdf', // .pdf
-    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
-    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
-    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
-    //         'application/x-mpegURL',
-    //         'audio/*',
-    //         'text/csv',
-    //         'text/html',
-    //         'text/plain',
-    //         'text/rtf',
-    //         'text/xml',
-    //         'image/*',
-    //         'video/*',
     //     ],
     //     'images' => [
     //         'image/*',
     //     ],
     //     'videos' => [
     //         'application/x-mpegURL',
-    //         'video/*',
-    //     ],
-    //     'media' => [
-    //         'application/msword', // .doc, .dot
-    //         'application/pdf', // .pdf
-    //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-    //         'application/vnd.ms-excel', // .xls, .xlt, .xla
-    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-    //         'application/vnd.ms-powerpoint', // .ppt, .pot, .pps, .ppa
-    //         'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
-    //         'application/x-mpegURL',
-    //         'audio/*',
-    //         'image/*',
-    //         'text/csv',
-    //         'text/html',
-    //         'text/plain',
-    //         'text/rtf',
-    //         'text/xml',
     //         'video/*',
     //     ],
     // ],
@@ -706,6 +739,8 @@ return [
     //     ],
     // ],
     // 'uploadMaxResolution' => '1920x1080',
+    // 'uploadMaxSize' => -1, // -1 means no limit, otherwise set a limit in bytes
+    // 'uploadTimeout' => 30000, // in milliseconds
 
     /**
      * Configuration for "Children" association parameters.
@@ -787,6 +822,40 @@ return [
     // 'Schema' => [
     //     'associations' => [
     //         'Captions',
+    //     ],
+    // ],
+
+    /**
+     * Configuration for "Captions".
+     * - formats.allowed: allowed formats for captions
+     * - formats.default: default format for captions
+     */
+    // 'Captions' => [
+    //     'formats' => [
+    //         'allowed' => ['srt', 'sub', 'webvtt'],
+    //         'default' => 'webvtt',
+    //     ],
+    // ],
+
+    /**
+     * Configuration for "TreePreview", to enable anchors on specific positions on the tree.
+     * - '123' is the root id
+     * - 'title' is the title for the preview anchor
+     * - 'url' is the href for the preview anchor
+     * - 'color' is the color of the icon for the preview anchor (default is 'white')
+     */
+    // 'TreePreview' => [
+    //     '123' => [
+    //         [
+    //             'title' => 'Staging url',
+    //             'url' => 'https://staging.example.com',
+    //             'color' => 'orange',
+    //         ],
+    //         [
+    //             'title' => 'Production url',
+    //             'url' => 'https://example.com',
+    //             'color' => 'red',
+    //         ],
     //     ],
     // ],
 ];

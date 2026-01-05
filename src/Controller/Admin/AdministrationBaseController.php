@@ -14,6 +14,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\Utility\ApiTools;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
@@ -29,49 +30,63 @@ abstract class AdministrationBaseController extends AppController
      *
      * @var string
      */
-    protected $endpoint = '/admin';
+    protected string $endpoint = '/admin';
 
     /**
      * Resource type in use
      *
-     * @var string
+     * @var string|null
      */
-    protected $resourceType = null;
+    protected ?string $resourceType = null;
 
     /**
      * Readonly flag view.
      *
      * @var bool
      */
-    protected $readonly = true;
+    protected bool $readonly = true;
 
     /**
      * Deleteonly flag view.
      *
      * @var bool
      */
-    protected $deleteonly = false;
+    protected bool $deleteonly = false;
 
     /**
      * Properties to show in index columns
      *
      * @var array
      */
-    protected $properties = [];
+    protected array $properties = [];
+
+    /**
+     * Properties to json decode before save
+     *
+     * @var array
+     */
+    protected array $propertiesForceJson = [];
 
     /**
      * Properties that are secrets
      *
      * @var array
      */
-    protected $propertiesSecrets = [];
+    protected array $propertiesSecrets = [];
 
     /**
      * Meta to show in index columns
      *
      * @var array
      */
-    protected $meta = ['created', 'modified'];
+    protected array $meta = ['created', 'modified'];
+
+    /**
+     * Sort field
+     *
+     * @var string|null
+     */
+    protected ?string $sortBy = null;
 
     /**
      * @inheritDoc
@@ -79,7 +94,6 @@ abstract class AdministrationBaseController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-
         $this->loadComponent('Properties');
     }
 
@@ -147,13 +161,7 @@ abstract class AdministrationBaseController extends AppController
         $this->getRequest()->allowMethod(['post']);
         $data = (array)$this->getRequest()->getData();
         $id = (string)Hash::get($data, 'id');
-        unset($data['id']);
-        $body = [
-            'data' => [
-                'type' => $this->resourceType,
-                'attributes' => $data,
-            ],
-        ];
+        $body = $this->prepareBody($data);
         $endpoint = $this->endpoint();
         try {
             if (empty($id)) {
@@ -212,22 +220,62 @@ abstract class AdministrationBaseController extends AppController
      */
     protected function loadData(): array
     {
-        $query = $this->getRequest()->getQueryParams();
         $resourceEndpoint = sprintf('%s/%s', $this->endpoint, $this->resourceType);
         $endpoint = $this->resourceType === 'roles' ? 'roles' : $resourceEndpoint;
-        $resultResponse = [];
-        $pagination = ['page' => 0];
-        while (Hash::get($pagination, 'page') === 0 || Hash::get($pagination, 'page', -1) < Hash::get($pagination, 'page_count', -1)) {
-            $query['page'] = $pagination['page'] + 1;
-            $response = (array)$this->apiClient->get($endpoint, $query);
-            $pagination = (array)Hash::get($response, 'meta.pagination');
-            foreach ((array)Hash::get($response, 'data') as $data) {
-                $resultResponse['data'][] = $data;
-            }
+        $resultResponse = ['data' => []];
+        $pageCount = $page = 1;
+        $total = 0;
+        $limit = 500;
+        while ($limit > $total && $page <= $pageCount) {
+            $response = (array)$this->apiClient->get($endpoint, compact('page') + ['page_size' => 100]);
+            $response = ApiTools::cleanResponse($response);
+            $resultResponse['data'] = array_merge(
+                $resultResponse['data'],
+                (array)Hash::get($response, 'data'),
+            );
             $resultResponse['meta'] = Hash::get($response, 'meta');
-            $resultResponse['links'] = Hash::get($response, 'links');
+            $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
+            $count = (int)Hash::get($response, 'meta.pagination.page_items');
+            $total += $count;
+            $page++;
+        }
+        if ($this->sortBy != null && !empty($resultResponse['data'])) {
+            $attributesKeys = array_keys($resultResponse['data'][0]['attributes'] ?? []);
+            $metaKeys = array_keys($resultResponse['data'][0]['meta'] ?? []);
+            if (in_array($this->sortBy, $attributesKeys) || in_array($this->sortBy, $metaKeys)) {
+                $key = in_array($this->sortBy, $attributesKeys) ? 'attributes' : 'meta';
+                usort($resultResponse['data'], function ($a, $b) use ($key) {
+                    return strcmp(
+                        (string)Hash::get($a, sprintf('%s.%s', $key, $this->sortBy)),
+                        (string)Hash::get($b, sprintf('%s.%s', $key, $this->sortBy)),
+                    );
+                });
+            }
         }
 
         return $resultResponse;
+    }
+
+    /**
+     * Prepare body for request
+     *
+     * @param array $data The data
+     * @return array
+     */
+    protected function prepareBody(array $data): array
+    {
+        foreach ($this->propertiesForceJson as $property) {
+            $data[$property] = json_decode((string)Hash::get($data, $property), true);
+        }
+        $attributes = array_filter($data, function ($key) {
+            return $key !== 'id';
+        }, ARRAY_FILTER_USE_KEY);
+
+        return [
+            'data' => [
+                'type' => $this->resourceType,
+                'attributes' => $attributes,
+            ],
+        ];
     }
 }

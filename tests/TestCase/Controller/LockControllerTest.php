@@ -2,17 +2,22 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\LockController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use ReflectionClass;
 
 /**
  * {@see \App\Controller\LockController} Test Case
- *
- * @coversDefaultClass \App\Controller\LockController
- * @uses \App\Controller\LockController
  */
+#[CoversClass(LockController::class)]
+#[CoversMethod(LockController::class, 'add')]
+#[CoversMethod(LockController::class, 'lock')]
+#[CoversMethod(LockController::class, 'remove')]
 class LockControllerTest extends TestCase
 {
     /**
@@ -20,21 +25,21 @@ class LockControllerTest extends TestCase
      *
      * @var \App\Controller\LockController
      */
-    public $LockController;
+    public LockController $LockController;
 
     /**
      * Client class
      *
-     * @var \BEdita\SDK\BEditaClient
+     * @var \BEdita\SDK\BEditaClient|null
      */
-    private $ApiClient = null;
+    private ?BEditaClient $ApiClient = null;
 
     /**
      * Document ID
      *
-     * @var string
+     * @var string|null
      */
-    private $documentId = null;
+    private ?string $documentId = null;
 
     /**
      * @inheritDoc
@@ -60,7 +65,7 @@ class LockControllerTest extends TestCase
                     'object_type' => 'documents',
                     'id' => $this->documentId,
                 ],
-            ])
+            ]),
         );
     }
 
@@ -77,7 +82,6 @@ class LockControllerTest extends TestCase
      * Test `add` method
      *
      * @return void
-     * @covers ::add()
      */
     public function testAdd(): void
     {
@@ -92,7 +96,6 @@ class LockControllerTest extends TestCase
      * Test `remove` method
      *
      * @return void
-     * @covers ::remove()
      */
     public function testRemove(): void
     {
@@ -107,11 +110,10 @@ class LockControllerTest extends TestCase
      * Test `lock` method
      *
      * @return void
-     * @covers ::lock()
      */
     public function testLock(): void
     {
-        $reflectionClass = new \ReflectionClass($this->LockController);
+        $reflectionClass = new ReflectionClass($this->LockController);
         $method = $reflectionClass->getMethod('lock');
         $method->setAccessible(true);
         $method->invokeArgs($this->LockController, [true]);
@@ -125,7 +127,6 @@ class LockControllerTest extends TestCase
      * Test `lock` method, on exception
      *
      * @return void
-     * @covers ::lock()
      */
     public function testLockException(): void
     {
@@ -138,9 +139,9 @@ class LockControllerTest extends TestCase
                     'object_type' => 'documents',
                     'id' => 999999999,
                 ],
-            ])
+            ]),
         );
-        $reflectionClass = new \ReflectionClass($this->LockController);
+        $reflectionClass = new ReflectionClass($this->LockController);
         $method = $reflectionClass->getMethod('lock');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->LockController, [true]);

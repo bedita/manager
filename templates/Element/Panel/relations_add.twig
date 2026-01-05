@@ -1,90 +1,29 @@
 {% set selectBaseClasses = "has-background-gray-700 has-border-gray-700 has-font-weight-light has-text-gray-200 has-text-size-smallest" %}
 
 <div class="relations-add">
-    <section class="fieldset mb-1">
-        <header class="mx-1 tab unselectable"
-            :class="{ open: showCreateObjectForm }"
-            :disabled="saving"
-            @click="resetForms">
-            <h2><span v-show="relationName"><strong>{{ __('create new for') }}</strong> "<: relationLabel :></span>"</h2>
-        </header>
 
-        <div class="create-new-object mt-1 mx-1" v-if="showCreateObjectForm">
-            <div class="select">
-                <label for="related_object_type">{{ __('Type') }}</label>
-                <select id="related_object_type"
-                    name="related_object_type"
-                    class="{{ selectBaseClasses }}"
-                    @change="onChangeType"
-                    v-if="relationTypes"
-                    v-model="object.type">
-                    <option value="_choose">{{ __('Choose a type') }}</option>
-                    <option v-for="type in relationTypes.right" :value="type"><: t(capitalize(type)) :></option>
-                </select>
-            </div>
-
-            {% for type in rightTypes %}
-                {% set prefix = '_fast_create_' ~ type ~ '_' %}
-                {{ Form.create(null, {
-                    'name': 'create-object',
-                    'class': 'object-form fast-create',
-                    ':disable': 'saving',
-                    'id': type ~ '-form',
-                    'ref': type ~ '-form',
-                    'v-if': "object.type == '" ~ type ~ "'"
-                })|raw }}
-                    {{ Form.control('upload_behavior', {
-                        'id': 'url_behavior',
-                        'type': 'hidden',
-                        'v-bind:value': 'url'
-                    }) | raw }}
-                    {{ Form.control('upload_behavior', {
-                        'id': 'file_behavior',
-                        'type': 'hidden',
-                        'v-bind:value': 'file'
-                    }) | raw }}
-                    {% do Form.unlockField('upload_behavior') %}
-
-                    <section class="fieldset mb-1">
-                        <div class="container">
-                            <fieldset id="{{ type }}-form-fields">
-                                {{ Property.fastCreateFields(type, prefix)|raw }}
-                            </fieldset>
-
-                            <div class="input text" v-if="isMedia">
-                                <label for="{{ prefix }}file">{{ __('File') }}</label>
-                                <input type="file" name="file" :accept="fileAcceptMimeTypes(object?.type)" v-on:change="processFile($event, object?.type)" id="{{ prefix }}file" class="drop-file" />
-
-                                <figure class="thumb" v-if="object?.type === 'images' && file?.name">
-                                    <img :src=previewImage() alt="" style="max-width: 100%;" />
-                                </figure>
-                            </div>
-
-                            <div class="input text" v-if="isMedia">
-                                <label for="{{ prefix }}remote_url">{{ __('Url') }}</label>
-                                {{ Form.text('remote_url', {
-                                    'id': prefix ~ 'remote_url',
-                                    'v-model': 'url',
-                                    'type': 'text',
-                                    'autocomplete': 'off',
-                                    'autocorrect': 'off',
-                                    'autocapitalize': 'off',
-                                    'spellcheck': 'false',
-                                    'placeholder': __('Remote URL') }) | raw
-                                }}
-                            </div>
-                        </div>
-                    </section>
-                    <button @click="createObject" type="button">{{ __('create') }}</button>
-                    <button @click="resetForm($event, object?.type)">{{ __('reset') }}</button>
-                {{ Form.end()|raw }}
-            {% endfor %}
-        </div>
-    </section>
+    {# FastCreate #}
+    {{ element(config('UI.fast_create_form._element')|default('Form/fast_create')) }}
 
     <section class="fieldset shrinks">
         <header class="mx-1 tab tab-static unselectable" v-bind:class="!objects || loading ? 'is-loading-spinner' : ''">
-            <h2><span v-show="relationName"><strong>{{ __('add') }}</strong>&nbsp;{{ __('elements to') }}&nbsp;"<strong><: relationLabel :></strong>"</span></h2>
+            <h2>
+                <span v-show="relationName">
+                    <strong>{{ __('add') }}</strong>
+                    &nbsp;
+                    {{ __('elements to') }}
+                    &nbsp;
+                    "<strong><: relationLabel :></strong>"
+                </span>
+            </h2>
+            <div class="buttons">
+                <button @click.prevent @click.stop="dataList=false" :data-active="!dataList" class="switch-view">
+                    <app-icon icon="carbon:grid"></app-icon>
+                </button>
+                <button @click.prevent @click.stop="dataList=true" :data-active="dataList" class="switch-view">
+                    <app-icon icon="carbon:list-bulleted"></app-icon>
+                </button>
+            </div>
         </header>
 
         <div class="px-1 my-1">
@@ -106,12 +45,19 @@
 
                 inline-template
             >
-                {{ element('FilterBox/filter_box', { 'showFilterSearchByType': true }) }}
+                {{ element('FilterBox/filter_box', { 'showFilterSearchByType': true, 'hideFilterRelations': true }) }}
             </filter-box-view>
         </div>
 
+        <div class="px-1 mb-1 shrinks" v-if="!loading && objects.length > 0">
+            <div>
+                <input type="checkbox" id="pick-all" :checked="!!selectAll" @change="toggleAll($event)"/>
+                <label class="ml-05 cursor-pointer" for="pick-all">{{ __('Pick all') }}</label>
+            </div>
+        </div>
+
         <div class="px-1 shrinks">
-            <div class="columns">
+            <div class="columns" :data-list="dataList">
                 <div class="ml-05 mb-1" v-if="loading">{{ __('Loading ...') }}</div>
                 <div class="ml-05 mb-1" v-if="!loading && objects.length === 0">{{ __('No items found') }}</div>
                 <template v-else>

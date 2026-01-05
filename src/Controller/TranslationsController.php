@@ -18,6 +18,7 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
+use Exception;
 use Psr\Log\LogLevel;
 
 /**
@@ -43,6 +44,7 @@ class TranslationsController extends ModulesController
         $this->setRequest($this->getRequest()->withParam('object_type', 'translations'));
         parent::initialize();
         $this->Query->setConfig('include', 'object');
+        $this->Schema->setConfig(['internalSchema' => true]);
     }
 
     /**
@@ -62,7 +64,7 @@ class TranslationsController extends ModulesController
      * @param string|int $id Object ID.
      * @return \Cake\Http\Response|null
      */
-    public function add($id): ?Response
+    public function add(string|int $id): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
         $this->objectType = $this->typeFromUrl();
@@ -77,7 +79,7 @@ class TranslationsController extends ModulesController
             return $this->redirect(['_name' => 'modules:view', 'object_type' => $this->objectType, 'id' => $id]);
         }
         $this->ProjectConfiguration->read();
-
+        $this->Schema->setConfig(['internalSchema' => false]);
         $this->set('schema', $this->Schema->getSchema($this->objectType));
 
         $object = Hash::extract($response, 'data');
@@ -96,7 +98,7 @@ class TranslationsController extends ModulesController
      * @param string $lang The lang code.
      * @return \Cake\Http\Response|null
      */
-    public function edit($id, $lang): ?Response
+    public function edit(string|int $id, string $lang): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
         $this->objectType = $this->typeFromUrl();
@@ -116,7 +118,7 @@ class TranslationsController extends ModulesController
             if (empty($translation)) {
                 throw new NotFoundException(sprintf('Translation not found per %s %s and lang %s', $this->objectType, $id, $lang));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Error! Back to index.
             $this->log($e->getMessage(), LogLevel::ERROR);
             $this->Flash->error($e->getMessage(), ['params' => $e]);
@@ -125,6 +127,7 @@ class TranslationsController extends ModulesController
         }
         $this->ProjectConfiguration->read();
 
+        $this->Schema->setConfig(['internalSchema' => false]);
         $this->set('schema', $this->Schema->getSchema($this->objectType));
 
         $object = Hash::extract($response, 'data');
@@ -195,9 +198,9 @@ class TranslationsController extends ModulesController
     {
         $jsonKeys = array_map(
             function ($v) {
-                return sprintf('translated_fields.%s', $v);
+                return str_replace(['[', ']'], ['.', ''], $v);
             },
-            explode(',', (string)$this->request->getData('_jsonKeys'))
+            explode(',', (string)$this->request->getData('_jsonKeys')),
         );
         $this->request = $this->request->withData('_jsonKeys', implode(',', $jsonKeys));
     }

@@ -12,9 +12,12 @@
  */
 namespace App\View\Helper;
 
+use App\Plugin;
 use App\Utility\CacheTools;
 use App\Utility\Translate;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\I18n\I18n;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 
@@ -25,6 +28,7 @@ use Cake\View\Helper;
  * @property \Cake\View\Helper\HtmlHelper $Html
  * @property \App\View\Helper\LinkHelper $Link
  * @property \App\View\Helper\PermsHelper $Perms
+ * @property \App\View\Helper\PropertyHelper $Property
  * @property \App\View\Helper\SystemHelper $System
  * @property \Cake\View\Helper\UrlHelper $Url
  */
@@ -35,7 +39,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Editors', 'Html', 'Link', 'Perms', 'System', 'Url'];
+    public array $helpers = ['Editors', 'Html', 'Link', 'Perms', 'Property', 'System', 'Url'];
 
     /**
      * Is Dashboard
@@ -109,6 +113,7 @@ class LayoutHelper extends Helper
         $name = (string)Hash::get($module, 'name');
         $object = (array)$this->getView()->get('object');
         $title = (string)Hash::get($object, 'attributes.title');
+        $title = strip_tags($title);
 
         return empty($title) ? $name : sprintf('%s | %s', $title, $name);
     }
@@ -136,7 +141,7 @@ class LayoutHelper extends Helper
             sprintf('dashboard-item has-background-module-%s %s', $name, Hash::get($module, 'class', '')),
             $this->tr($label),
             $this->moduleIcon($name, $module),
-            $count
+            $count,
         );
     }
 
@@ -255,7 +260,7 @@ class LayoutHelper extends Helper
                 sprintf('module-item has-background-module-%s', $name),
                 $this->tr($label),
                 $this->moduleIcon($name, $currentModule),
-                $count
+                $count,
             );
         }
 
@@ -263,7 +268,7 @@ class LayoutHelper extends Helper
         return $this->Html->link(
             $this->tr($this->getView()->getName()),
             (array)$this->getView()->get('moduleLink'),
-            ['class' => $this->commandLinkClass()]
+            ['class' => $this->commandLinkClass()],
         );
     }
 
@@ -276,8 +281,11 @@ class LayoutHelper extends Helper
     {
         $module = (array)$this->getView()->get('currentModule');
         $name = (string)Hash::get($module, 'name');
+        $schema = (array)$this->_View->get('schema');
+        $defaultType = in_array('DateRanges', (array)Hash::get($schema, 'associations')) ? 'calendar' : 'list';
+        $defaultType = $name === 'folders' ? 'tree' : $defaultType;
 
-        return $name === 'folders' ? 'tree' : 'list';
+        return $defaultType;
     }
 
     /**
@@ -300,8 +308,66 @@ class LayoutHelper extends Helper
     public function moduleIndexViewTypes(): array
     {
         $defaultType = $this->moduleIndexDefaultViewType();
+        $defaultList = $defaultType === 'calendar' ? ['calendar', 'list'] : ['list'];
+        $defaultList = $defaultType === 'tree' ? ['tree', 'tree-compact', 'list'] : $defaultList;
 
-        return $defaultType === 'tree' ? ['tree', 'list'] : ['list'];
+        return $defaultList;
+    }
+
+    /**
+     * Append view type buttons to the sidebar
+     *
+     * @return void
+     */
+    public function appendViewTypeButtons(): void
+    {
+        $indexViewTypes = $this->moduleIndexViewTypes();
+        if (count($indexViewTypes) > 1) {
+            $indexViewType = $this->moduleIndexViewType();
+            foreach ($indexViewTypes as $t) {
+                if ($t !== $indexViewType) {
+                    $append = false;
+                    $icon = '';
+                    $label = '';
+                    switch ($t) {
+                        case 'tree':
+                            $icon = 'carbon:tree-view';
+                            $label = __('Tree view');
+                            $append = true;
+                            break;
+                        case 'tree-compact':
+                            $icon = 'carbon:tree-view';
+                            $label = __('Tree compact');
+                            $meta = (array)$this->getView()->get('meta');
+                            $count = (int)Hash::get($meta, 'pagination.count');
+                            $append = $count <= Configure::read('UI.tree_compact_view_limit', 100);
+                            break;
+                        case 'list':
+                            $icon = 'carbon:list';
+                            $label = __('List view');
+                            $append = true;
+                            break;
+                    }
+                    if ($append) {
+                        $url = $this->Url->build(
+                            [
+                                '_name' => 'modules:list',
+                                'object_type' => $this->getView()->get('objectType'),
+                            ],
+                        );
+                        $url = sprintf('%s?view_type=%s', $url, $t);
+                        $anchor = sprintf(
+                            '<a href="%s" class="button button-outlined button-outlined-module-%s"><app-icon icon="%s"></app-icon><span class="ml-05">%s</span></a>',
+                            $url,
+                            $this->getView()->get('currentModule.name'),
+                            $icon,
+                            __($label),
+                        );
+                        $this->getView()->append('app-module-buttons', $anchor);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -331,6 +397,8 @@ class LayoutHelper extends Helper
             'SystemInfo' => 'has-background-black',
             'UserAccesses' => 'has-background-black',
             'Statistics' => 'has-background-black',
+            'AuthProviders' => 'has-background-black',
+            'ExternalAuth' => 'has-background-black',
         ];
 
         return (string)Hash::get($moduleClasses, $this->_View->getName(), 'commands-menu__module');
@@ -359,9 +427,9 @@ class LayoutHelper extends Helper
             'currentModule' => $this->getView()->get('currentModule', ['name' => 'home']),
             'template' => $this->getView()->getTemplate(),
             'modules' => array_keys($this->getView()->get('modules', [])),
-            'plugins' => \App\Plugin::loadedAppPlugins(),
+            'plugins' => Plugin::loadedAppPlugins(),
             'uploadable' => $this->getView()->get('uploadable', []),
-            'locale' => \Cake\I18n\I18n::getLocale(),
+            'locale' => I18n::getLocale(),
             'csrfToken' => $this->getCsrfToken(),
             'maxFileSize' => $this->System->getMaxFileSize(),
             'canReadUsers' => $this->Perms->canRead('users'),
@@ -371,7 +439,32 @@ class LayoutHelper extends Helper
             'uploadConfig' => $this->System->uploadConfig(),
             'relationsSchema' => $this->getView()->get('relationsSchema', []),
             'richeditorConfig' => (array)Configure::read('Richeditor'),
+            'richeditorByPropertyConfig' => $this->uiRicheditorConfig(),
+            'indexLists' => (array)$this->indexLists(),
+            'fastCreateFields' => (array)$this->Property->fastCreateFieldsMap(),
+            'concreteTypes' => (array)$this->getView()->get('allConcreteTypes', []),
         ];
+    }
+
+    /**
+     * Return configuration for UI rich editor.
+     * For admin users, add 'code' to the toolbar if not present.
+     *
+     * @return array
+     */
+    public function uiRicheditorConfig(): array
+    {
+        $cfg = (array)Configure::read('UI.richeditor', []);
+        if (!$this->Perms->userIsAdmin()) {
+            return $cfg;
+        }
+        foreach ($cfg as &$value) {
+            if (isset($value['toolbar']) && is_array($value['toolbar']) && !in_array('code', $value['toolbar'], true)) {
+                $value['toolbar'][] = 'code';
+            }
+        }
+
+        return $cfg;
     }
 
     /**
@@ -421,7 +514,58 @@ class LayoutHelper extends Helper
         return $this->Html->link(
             sprintf('<span class="is-sr-only">%s</span><app-icon icon="carbon:trash-can"></app-icon>', __('Trash')),
             ['_name' => 'trash:list', '?' => compact('filter')],
-            ['class' => $classes, 'title' => $title, 'escape' => false]
+            ['class' => $classes, 'title' => $title, 'escape' => false],
         );
+    }
+
+    /**
+     * Return properties group for given property
+     *
+     * @param string $needle The property to search
+     * @return ?string
+     */
+    public function propertyGroup(string $needle): ?string
+    {
+        $properties = (array)$this->getView()->get('properties');
+        foreach ($properties as $group => $props) {
+            $keys = array_keys($props);
+            if (in_array($needle, $keys)) {
+                return $group;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return list of properties to display in `index` view per modules
+     *
+     * @return array
+     */
+    public function indexLists(): array
+    {
+        if (!Configure::check('API.apiBaseUrl')) {
+            return [];
+        }
+        $cacheKey = CacheTools::cacheKey('properties.indexLists');
+        $indexLists = Cache::read($cacheKey, 'default');
+        if (!empty($indexLists)) {
+            return $indexLists;
+        }
+        Configure::load('properties');
+        $properties = (array)Configure::read('Properties');
+        $defaultProperties = (array)Configure::read('DefaultProperties');
+        $keys = array_keys($properties);
+        $keysDefault = array_keys($defaultProperties);
+        $keys = array_unique(array_merge($keys, $keysDefault));
+        $indexLists = [];
+        foreach ($keys as $objectType) {
+            $il = (array)Hash::get($properties, sprintf('%s.index', $objectType));
+            $il = empty($il) ? (array)Hash::get($defaultProperties, sprintf('%s.index', $objectType)) : $il;
+            $indexLists[$objectType] = $il;
+        }
+        Cache::write($cacheKey, $indexLists);
+
+        return $indexLists;
     }
 }

@@ -25,11 +25,9 @@ BEdita Manager
     {{ Html.css(['vendors'])|raw }}
     {{ Html.css(['style'])|raw }}
 
-    <link href="https://fonts.googleapis.com/css?family=Mukta:300,400,700&amp;subset=latin-ext" rel="stylesheet">
-
     {{ element('custom_colors') }}
 
-    <title>{{ "#{_view.fetch('title')} | #{project.name ?: 'BEdita Manager'}" }}</title>
+    <title>{{ Layout.title()|default(_view.fetch('title')) }} | {{ "#{project.name ?: 'BEdita Manager'}" }}</title>
 
     {{ element('json_meta_config') }}
 </head>

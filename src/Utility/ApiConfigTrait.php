@@ -33,14 +33,14 @@ trait ApiConfigTrait
      *
      * @var string
      */
-    protected static $cacheKey = 'api_config';
+    protected static string $cacheKey = 'api_config';
 
     /**
      * Allowed configuration keys from API
      *
      * @var array
      */
-    protected static $configKeys = [
+    protected static array $configKeys = [
         'AccessControl',
         'AlertMessage',
         'AlertMessageByArea',
@@ -64,7 +64,7 @@ trait ApiConfigTrait
                 CacheTools::cacheKey(static::$cacheKey),
                 function () {
                     return $this->fetchConfig();
-                }
+                },
             );
         } catch (BEditaClientException $e) {
             Log::error($e->getMessage());
@@ -82,13 +82,17 @@ trait ApiConfigTrait
     /**
      * Fetch configurations from API
      *
-     * @param null|string $key Configuration key to fetch, fetch all keys if null.
+     * @param string|null $key Configuration key to fetch, fetch all keys if null.
      * @return array
      */
     protected function fetchConfig(?string $key = null): array
     {
-        $query = ['page_size' => 100];
-        $response = (array)ApiClientProvider::getApiClient()->get('/config', $query);
+        $client = ApiClientProvider::getApiClient();
+        $response = (array)$client->get('/config', ['page_size' => 100], [
+            'Authorization' => sprintf('Bearer %s', Hash::get($client->getTokens(), 'jwt')),
+            'X-Api-Key' => Configure::read('API.apiKey'),
+            'Accept' => 'application/json',
+        ]);
         $collection = new Collection((array)Hash::get($response, 'data'));
 
         return $collection->reject(function ($item) use ($key) {

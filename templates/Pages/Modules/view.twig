@@ -3,18 +3,11 @@
 <modules-view inline-template ref="moduleView" :object="{{ object|json_encode }}">
     <div class="modules-view">
         <header>
-            {% if object.id %}
-                <h1 untitled-label="{{ __('Untitled') }}">{{ object.attributes.title }}
-                {% for obj in included %}
-                    {% if obj.type == 'streams' %}
-                        <a class="button button-outlined mx-1" href="{{ obj.meta.url }}" target="_blank">
-                            <app-icon icon="carbon:launch"></app-icon>
-                            <span class="ml-05">{{ __('Open File') }}</span>
-                        </a>
-                    {% endif %}
-                {% endfor %}</h1>
+            {% set customElement = Element.custom('title', 'group') %}
+            {% if not customElement %}
+                {{ element('Form/title', {'object': object, 'included': included}) }}
             {% else %}
-                <h1 class="has-text-gray-600">{{ __('New object in') }} {{ Layout.tr(object.type) }}</h1>
+                {{ element(customElement, {'object': object, 'included': included}) }}
             {% endif %}
         </header>
 
@@ -25,6 +18,7 @@
                 'id': 'form-main',
                 'check-changes': 'true',
                 'ref': 'formMain',
+                'class': 'object-form',
             })|raw }}
 
             {{ Form.hidden('id', {'value': (object) ? object.id : resource.id})|raw }}
@@ -60,6 +54,8 @@
 
                 {{ element('Form/media') }}
 
+                {{ element('Form/captions') }}
+
                 {{ element('Form/map') }}
 
                 {{ element('Form/other_properties') }}
@@ -75,7 +71,7 @@
                 {{ element('Form/custom_right') }}
 
                 {# if `roles` in relationships (`users` only) display custom roles element #}
-                {% if object.relationships.roles %}
+                {% if 'roles' in object.relationships|keys or object.type == 'users' %}
                     {{ element('Form/roles') }}
                 {% endif %}
 
@@ -95,7 +91,8 @@
             {{ element('Form/relations', {'relations': objectRelations.main, 'mainObject': object}) }}
 
             {% if object.id %}
-                {{ element('Form/history') }}
+                {% set historyPath = config('Properties.' ~ objectType ~ '.view.history._element', 'Form/history') %}
+                {{ element(historyPath) }}
             {% endif %}
 
             {# Set `_jsonKeys` hidden input from config #}

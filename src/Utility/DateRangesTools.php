@@ -38,7 +38,7 @@ class DateRangesTools
                 $ed = (string)Hash::get($item, 'end_date');
 
                 return !empty($sd) || !empty($ed);
-            }
+            },
         );
         $dateRanges = array_map(
             function ($item) {
@@ -50,7 +50,7 @@ class DateRangesTools
 
                 return $item;
             },
-            $dateRanges
+            $dateRanges,
         );
         foreach ($dateRanges as &$item) {
             if (empty(Hash::get($item, 'params'))) {
@@ -141,5 +141,30 @@ class DateRangesTools
         }
 
         return empty($data) ? null : $data;
+    }
+
+    /**
+     * Convert date ranges to string.
+     *
+     * @param array $dateRanges Date ranges to convert.
+     * @return string
+     */
+    public static function toString(array $dateRanges): string
+    {
+        $drs = [];
+        foreach ($dateRanges as $dateRange) {
+            $startDate = (string)Hash::get($dateRange, 'start_date');
+            $endDate = (string)Hash::get($dateRange, 'end_date');
+            $params = json_encode((array)Hash::get($dateRange, 'params', []));
+
+            $drs[] = sprintf(
+                '%s-%s-%s',
+                $startDate,
+                $endDate,
+                $params,
+            );
+        }
+
+        return implode(',', $drs);
     }
 }

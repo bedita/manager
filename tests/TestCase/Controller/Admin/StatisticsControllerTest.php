@@ -3,25 +3,32 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\StatisticsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\Admin\StatisticsController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\StatisticsController
  */
+#[CoversClass(StatisticsController::class)]
+#[CoversMethod(StatisticsController::class, 'fetch')]
+#[CoversMethod(StatisticsController::class, 'fetchCount')]
+#[CoversMethod(StatisticsController::class, 'index')]
+#[CoversMethod(StatisticsController::class, 'intervals')]
 class StatisticsControllerTest extends TestCase
 {
-    public $StatisticsController;
+    public StatisticsController $StatisticsController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -32,7 +39,7 @@ class StatisticsControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc
@@ -55,10 +62,6 @@ class StatisticsControllerTest extends TestCase
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
-     * @covers ::fetch()
-     * @covers ::intervals()
-     * @covers ::fetchCount()
      */
     public function testIndex(): void
     {
@@ -97,11 +100,26 @@ class StatisticsControllerTest extends TestCase
     }
 
     /**
+     * Test `fetchCount` method
+     *
+     * @return void
+     */
+    public function testFetchCountZero(): void
+    {
+        $controller = new class (new ServerRequest()) extends StatisticsController {
+            public function fetchCount(string $objectType, string $from, string $to): int
+            {
+                return parent::fetchCount($objectType, $from, $to);
+            }
+        };
+        $actual = $controller->fetchCount('documents', '2999-01-01', '2999-12-31');
+        static::assertSame(0, $actual);
+    }
+
+    /**
      * Test `fetchCount` method when exception is thrown
      *
      * @return void
-     * @covers ::index()
-     * @covers ::fetchCount()
      */
     public function testFetchCountException(): void
     {
@@ -132,7 +150,7 @@ class StatisticsControllerTest extends TestCase
      *
      * @return array
      */
-    public function intervalsProvider(): array
+    public static function intervalsProvider(): array
     {
         return [
             'case day: return interval with just one day' => [
@@ -174,10 +192,8 @@ class StatisticsControllerTest extends TestCase
      * Test `intervals` method
      *
      * @return void
-     * @covers ::index()
-     * @covers ::intervals()
-     * @dataProvider intervalsProvider()
      */
+    #[DataProvider('intervalsProvider')]
     public function testIntervals(array $query, array $expected): void
     {
         $request = new ServerRequest([

@@ -28,9 +28,9 @@ class CategoriesController extends AppController
     /**
      * Object type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected $objectType = null;
+    protected ?string $objectType = null;
 
     /**
      * @inheritDoc
@@ -46,7 +46,7 @@ class CategoriesController extends AppController
             $this->Modules->setConfig('currentModuleName', $this->objectType);
             $this->Schema->setConfig('type', $this->objectType);
         }
-        $this->Security->setConfig('unlockedActions', ['delete', 'save']);
+        $this->FormProtection->setConfig('unlockedActions', ['delete', 'save']);
     }
 
     /**

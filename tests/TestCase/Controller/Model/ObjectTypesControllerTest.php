@@ -20,21 +20,75 @@ use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use ReflectionClass;
 
 /**
  * {@see \App\Controller\Model\ObjectTypesController} Test Case
- *
- * @coversDefaultClass \App\Controller\Model\ObjectTypesController
- * @uses \App\Controller\Model\ObjectTypesController
  */
+#[CoversClass(ObjectTypesController::class)]
+#[CoversMethod(ObjectTypesController::class, 'addCustomProperties')]
+#[CoversMethod(ObjectTypesController::class, 'create')]
+#[CoversMethod(ObjectTypesController::class, 'prepareProperties')]
+#[CoversMethod(ObjectTypesController::class, 'propertiesData')]
+#[CoversMethod(ObjectTypesController::class, 'save')]
+#[CoversMethod(ObjectTypesController::class, 'tables')]
+#[CoversMethod(ObjectTypesController::class, 'updateSchema')]
+#[CoversMethod(ObjectTypesController::class, 'view')]
 class ObjectTypesControllerTest extends TestCase
 {
     /**
      * The original API client (not mocked).
      *
+     * @var \BEdita\SDK\BEditaClient|null
+     */
+    protected ?BEditaClient $apiClient = null;
+
+    /**
+     * Test subject
+     *
+     * @var \App\Controller\Model\ObjectTypesController
+     */
+    public ObjectTypesController $ModelController;
+
+    /**
+     * Client API
+     *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $apiClient = null;
+    public BEditaClient $client;
+
+    /**
+     * Test default request config
+     *
+     * @var array
+     */
+    public array $defaultRequestConfig = [
+        'environment' => [
+            'REQUEST_METHOD' => 'GET',
+        ],
+        'params' => [
+            'resource_type' => 'object_types',
+        ],
+    ];
+
+    /**
+     * Test `save` request config
+     *
+     * @var array
+     */
+    public array $saveRequestConfig = [
+        'environment' => [
+            'REQUEST_METHOD' => 'POST',
+        ],
+        'post' => [
+            'addedProperties' => '[{"name": "my_prop", "type": "datetime"}]',
+        ],
+        'params' => [
+            'resource_type' => 'object_types',
+        ],
+    ];
 
     /**
      * @inheritDoc
@@ -53,51 +107,6 @@ class ObjectTypesControllerTest extends TestCase
     {
         ApiClientProvider::setApiClient($this->apiClient);
     }
-
-    /**
-     * Test subject
-     *
-     * @var \App\Controller\Model\ObjectTypesController
-     */
-    public $ModelController;
-
-    /**
-     * Client API
-     *
-     * @var \BEdita\SDK\BEditaClient
-     */
-    public $client;
-
-    /**
-     * Test default request config
-     *
-     * @var array
-     */
-    public $defaultRequestConfig = [
-        'environment' => [
-            'REQUEST_METHOD' => 'GET',
-        ],
-        'params' => [
-            'resource_type' => 'object_types',
-        ],
-    ];
-
-    /**
-     * Test `save` request config
-     *
-     * @var array
-     */
-    public $saveRequestConfig = [
-        'environment' => [
-            'REQUEST_METHOD' => 'POST',
-        ],
-        'post' => [
-            'addedProperties' => '[{"name": "my_prop", "type": "datetime"}]',
-        ],
-        'params' => [
-            'resource_type' => 'object_types',
-        ],
-    ];
 
     /**
      * Setup api client and auth
@@ -130,7 +139,6 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `create` method
      *
-     * @covers ::create()
      * @return void
      */
     public function testCreate(): void
@@ -146,9 +154,6 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `view` method
      *
-     * @covers ::view()
-     * @covers ::prepareProperties()
-     * @covers ::propertiesData()
      * @return void
      */
     public function testView(): void
@@ -169,7 +174,6 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `view` failure method
      *
-     * @covers ::view()
      * @return void
      */
     public function testViewFail(): void
@@ -180,17 +184,59 @@ class ObjectTypesControllerTest extends TestCase
     }
 
     /**
+     * Test `prepareProperties` method
+     *
+     * @return void
+     */
+    public function testPrepareCustomProperties(): void
+    {
+        $controller = new class (new ServerRequest()) extends ObjectTypesController {
+            public function prepareProperties(array $data, string $name): array
+            {
+                return parent::prepareProperties($data, $name);
+            }
+        };
+        $data = [
+            [
+                'id' => '123',
+                'name' => 'my_prop',
+                'type' => 'datetime',
+                'description' => 'My custom property',
+                'default' => null,
+                'required' => false,
+                'multiple' => false,
+            ],
+        ];
+        $expected = [
+            'core' => [],
+            'inherited' => [],
+            'custom' => [
+                [
+                    'id' => '123',
+                    'name' => 'my_prop',
+                    'type' => 'datetime',
+                    'description' => 'My custom property',
+                    'default' => null,
+                    'required' => false,
+                    'multiple' => false,
+                ],
+            ],
+        ];
+        $actual = $controller->prepareProperties($data, 'test');
+        static::assertSame($expected, $actual);
+    }
+
+    /**
      * Test `updateSchema`
      *
      * @return void
-     * @covers ::updateSchema()
      */
     public function testUpdateSchema(): void
     {
         $this->setupController();
         $expected = $schema = ['whatever'];
         $resource = ['meta' => ['core_type' => true]];
-        $reflectionClass = new \ReflectionClass($this->ModelController);
+        $reflectionClass = new ReflectionClass($this->ModelController);
         $method = $reflectionClass->getMethod('updateSchema');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->ModelController, [$schema, $resource]);
@@ -230,15 +276,13 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `save` method
      *
-     * @covers ::save()
-     * @covers ::addCustomProperties()
      * @return void
      */
     public function testSave(): void
     {
         $this->saveApiMock();
         $controller = new ObjectTypesController(
-            new ServerRequest($this->saveRequestConfig)
+            new ServerRequest($this->saveRequestConfig),
         );
         $controller->save();
 
@@ -249,7 +293,6 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `save` method with empty data
      *
-     * @covers ::addCustomProperties()
      * @return void
      */
     public function testSaveEmpty(): void
@@ -267,7 +310,6 @@ class ObjectTypesControllerTest extends TestCase
     /**
      * Test `save` method with empty associations
      *
-     * @covers ::save()
      * @return void
      */
     public function testEmptyAssocSave(): void
@@ -304,7 +346,6 @@ class ObjectTypesControllerTest extends TestCase
      * Test `tables`
      *
      * @return void
-     * @covers ::tables()
      */
     public function testTables(): void
     {
@@ -316,13 +357,13 @@ class ObjectTypesControllerTest extends TestCase
                 [
                     'objectTypesTables' => $testTables,
                 ],
-            )
+            ),
         );
         $expected = array_unique(array_merge(ObjectTypesController::TABLES, $testTables));
         $expected = array_unique(array_merge($expected, ['dummy']));
         sort($expected);
         $this->setupController();
-        $reflectionClass = new \ReflectionClass($this->ModelController);
+        $reflectionClass = new ReflectionClass($this->ModelController);
         $method = $reflectionClass->getMethod('tables');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->ModelController, [['attributes' => ['table' => 'dummy']]]);

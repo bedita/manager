@@ -14,17 +14,21 @@
 namespace App\Test\TestCase\Authentication\Identifier\Resolver;
 
 use App\Identifier\Resolver\ApiResolver;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Identifier\Resolver\ApiResolver} Test Case
- *
- * @coversDefaultClass \App\Identifier\Resolver\ApiResolver
  */
+#[CoversClass(ApiResolver::class)]
+#[CoversMethod(ApiResolver::class, 'find')]
 class ApiResolverTest extends TestCase
 {
-    public function findProvider(): array
+    public static function findProvider(): array
     {
         return [
             'missing-credentials' => [
@@ -95,9 +99,8 @@ class ApiResolverTest extends TestCase
      * @param array $credentials Test credentials
      * @param array|null $expected Expected result
      * @return void
-     * @covers ::find()
-     * @dataProvider findProvider()
      */
+    #[DataProvider('findProvider')]
     public function testFind(array $credentials, ?array $expected): void
     {
         ApiClientProvider::getApiClient()->setupTokens([]); // reset client
@@ -121,5 +124,30 @@ class ApiResolverTest extends TestCase
         foreach ($expected as $key => $val) {
             $this->assertEquals($val, $identity[$key]);
         }
+    }
+
+    /**
+     * Test missing meta from authentication response.
+     *
+     * @return void
+     */
+    public function testMissingMetaFromAuthenticationResponse(): void
+    {
+        $safeClient = ApiClientProvider::getApiClient();
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('authenticate')
+            ->willReturn(['data' => ['id' => 1]]);
+        ApiClientProvider::setApiClient($apiClient);
+        $resolver = new ApiResolver();
+        $credentials = [
+            'username' => env('BEDITA_ADMIN_USR'),
+            'password' => env('BEDITA_ADMIN_PWD'),
+        ];
+        $identity = $resolver->find($credentials);
+        // Missing meta from authentication response
+        static::assertNull($identity);
+        ApiClientProvider::setApiClient($safeClient);
     }
 }

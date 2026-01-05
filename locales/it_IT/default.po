@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-10-24 09:51:55 \n"
+"POT-Creation-Date: 2025-12-31 09:53:48 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -45,6 +45,9 @@ msgstr "Avanzate"
 msgid "Advanced Data"
 msgstr "Dati Avanzati"
 
+msgid "Age"
+msgstr "Età"
+
 msgid "Alert Message"
 msgstr "Messaggio di Attenzione"
 
@@ -84,6 +87,9 @@ msgstr "Applicazioni"
 msgid "Async Jobs"
 msgstr "Processi asincroni"
 
+msgid "Auth Providers"
+msgstr "Provider di autenticazione"
+
 msgid "Auto-translate"
 msgstr "Traduci automaticamente"
 
@@ -117,8 +123,8 @@ msgstr "Calendario"
 msgid "Cannot create abstract objects or objects without schema"
 msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
 
-msgid "Cannot produce a thumbnail for this file"
-msgstr "Impossibile produrre una miniatura per questo file"
+msgid "Captions"
+msgstr "Sottotitoli"
 
 msgid "Categories"
 msgstr "Categorie"
@@ -137,9 +143,6 @@ msgstr "Ordinamento contenuti"
 
 msgid "Choose a file"
 msgstr "Scegli un file"
-
-msgid "Choose a type"
-msgstr "Selezionare un tipo"
 
 msgid "City"
 msgstr "Città"
@@ -174,6 +177,9 @@ msgstr "Configurazioni"
 msgid "Confirm new password"
 msgstr "Conferma nuova password"
 
+msgid "Confirm-password"
+msgstr "Conferma password"
+
 msgid "Conflict"
 msgstr "Conflitto"
 
@@ -206,6 +212,9 @@ msgstr "Creazione ↑ Meno recenti in testa"
 
 msgid "Created ↓ Newest on top"
 msgstr "Creazione ↓ Più recenti in testa"
+
+msgid "Creation date"
+msgstr "Data di creazione"
 
 msgid "Current password"
 msgstr "Password corrente"
@@ -303,9 +312,6 @@ msgstr "Errore: %s"
 msgid "Events"
 msgstr "Eventi"
 
-msgid "Expired"
-msgstr "Scaduto"
-
 msgid "Export"
 msgstr "Esporta"
 
@@ -315,11 +321,11 @@ msgstr "Esporta Tutti"
 msgid "Export Filtered"
 msgstr "Esporta Filtrati"
 
+msgid "External Auth"
+msgstr "Autenticazioni esterne"
+
 msgid "Failed to write file to disk"
 msgstr "Scrittura file su disco fallita"
-
-msgid "File"
-msgstr ""
 
 msgid "File Name"
 msgstr "Nome File"
@@ -351,14 +357,14 @@ msgstr "Non consentito"
 msgid "Forgot your password?"
 msgstr "Hai dimenticato la password?"
 
+msgid "Form data has been modified. Save it to persist the changes"
+msgstr "Dati del form modificati. Salva per mantenere le modifiche"
+
 msgid "Format choosen is not available"
 msgstr "Il formato selezionato non è disponibile"
 
 msgid "From"
 msgstr "Da"
-
-msgid "Future"
-msgstr "Futuro"
 
 msgid "Gender"
 msgstr "Genere"
@@ -439,11 +445,20 @@ msgstr "Lingua"
 msgid "Language and translations"
 msgstr "Lingua e traduzioni"
 
+msgid "Last login"
+msgstr "Ultimo accesso"
+
+msgid "Last login error"
+msgstr "Ultimo errore di accesso"
+
 msgid "Left types"
 msgstr "Tipi di sinistra"
 
 msgid "Less"
 msgstr "Meno"
+
+msgid "Limit"
+msgstr "Limite"
 
 msgid "List"
 msgstr "Lista"
@@ -460,6 +475,9 @@ msgstr "Posizioni"
 msgid "Lock"
 msgstr "Blocca"
 
+msgid "Locked"
+msgstr "Bloccato"
+
 msgid "Locked_until"
 msgstr "Termine blocco"
 
@@ -468,6 +486,9 @@ msgstr "Esci"
 
 msgid "Login"
 msgstr "Accedi"
+
+msgid "Login informations"
+msgstr "Informazioni di accesso"
 
 msgid "Login required"
 msgstr "È richiesto il login"
@@ -553,6 +574,13 @@ msgstr "No"
 msgid "No application"
 msgstr "Nessuna applicazione"
 
+msgid ""
+"No auth providers found: you cannot create external auth entries. Create at "
+"least one auth provider first"
+msgstr ""
+"Nessun provider di autenticazione trovato: non puoi creare voci di "
+"autenticazione esterne. Crea almeno un provider di autenticazione"
+
 msgid "No import filters set"
 msgstr "Nessun filtro di importazione impostato"
 
@@ -567,6 +595,12 @@ msgstr "Non trovato"
 
 msgid "Number of created objects"
 msgstr "Numero di oggetti creati"
+
+msgid "Number of folders"
+msgstr "Numero di cartelle"
+
+msgid "Number of login errors"
+msgstr "Numero di errori di accesso"
 
 msgid "Number of updated objects"
 msgstr "Numero di oggetti aggiornati"
@@ -599,7 +633,10 @@ msgid "Off"
 msgstr ""
 
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
+
+msgid "Old Password"
+msgstr "Vecchia Password"
 
 msgid "On"
 msgstr ""
@@ -612,9 +649,6 @@ msgstr "Apri"
 
 msgid "Open File"
 msgstr "Apri File"
-
-msgid "Open image"
-msgstr "Apri immagine"
 
 msgid "Open module"
 msgstr "Apri modulo"
@@ -634,8 +668,14 @@ msgstr "Paginazione"
 msgid "Parent"
 msgstr "Genitore"
 
+msgid "Password"
+msgstr "Password"
+
 msgid "Password Modified"
 msgstr "Password modificata il"
+
+msgid "Password informations"
+msgstr "Informazioni password"
 
 msgid "Password reset"
 msgstr "Reimposta password"
@@ -657,6 +697,9 @@ msgstr "Telefono"
 
 msgid "Pick"
 msgstr "Scegli"
+
+msgid "Pick all"
+msgstr "Scegli tutti"
 
 msgid "Please check your mailbox and follow the instructions"
 msgstr "Controlla la tua casella di posta e segui le istruzioni"
@@ -801,6 +844,12 @@ msgstr "Cerca"
 msgid "Select a project"
 msgstr "Seleziona un progetto"
 
+msgid "Setup module"
+msgstr "Configura modulo"
+
+msgid "Show active positions"
+msgstr "Mostra posizioni attive"
+
 msgid "Sign in"
 msgstr "Accedi"
 
@@ -809,9 +858,6 @@ msgstr "Accedi con {0}"
 
 msgid "Size"
 msgstr "Dimensione"
-
-msgid "Sorry, your browser does not support embedded {0} element"
-msgstr "Spiacenti, il tuo browser non supporta l'elemento {0} incorporato"
 
 msgid "State Name"
 msgstr "Provincia"
@@ -847,8 +893,8 @@ msgstr "Tag"
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
 
-msgid "The thumbnail is not available"
-msgstr "La miniatura non è disponibile"
+msgid "The number of folders is too high to be displayed in tree-compact view"
+msgstr "Il numero di cartelle è troppo alto per essere visualizzato nella vista ad albero compatta"
 
 msgid "There were errors creating the thumbnail(s)"
 msgstr "È avvenuto un errore nella creazione delle miniature"
@@ -858,9 +904,6 @@ msgstr "Miniatura non disponibile"
 
 msgid "Thumb not ready: coming soon"
 msgstr "Miniatura non pronta: in lavorazione"
-
-msgid "Thumbnail is not ready"
-msgstr "La miniatura non è pronta"
 
 msgid "Title"
 msgstr "Titolo"
@@ -904,6 +947,12 @@ msgstr "Cestino"
 msgid "Trashd"
 msgstr "Cancellato"
 
+msgid "Tree"
+msgstr "Albero"
+
+msgid "Tree compact"
+msgstr "Albero compatto"
+
 msgid "Tree view"
 msgstr "Vista ad albero"
 
@@ -937,9 +986,6 @@ msgstr "Carica file locale"
 msgid "Upload multiple"
 msgstr "Upload multiplo"
 
-msgid "Url"
-msgstr ""
-
 msgid "User Accesses"
 msgstr "Accessi utente"
 
@@ -964,6 +1010,9 @@ msgstr "Utenti"
 msgid "Vat Number"
 msgstr "Partita Iva"
 
+msgid "Verified"
+msgstr "Verificato"
+
 msgid "Version"
 msgstr "Versione"
 
@@ -972,9 +1021,6 @@ msgstr "Video"
 
 msgid "View file"
 msgstr "Vedi file"
-
-msgid "View original"
-msgstr "Vedi originale"
 
 msgid "Website"
 msgstr "Sito Web"
@@ -988,8 +1034,17 @@ msgstr "Scrittura"
 msgid "Yes"
 msgstr "Sì"
 
+msgid "You are not authorized to access here"
+msgstr "Non sei autorizzato ad accedere qui."
+
 msgid "You are not authorized to access that location."
 msgstr "Non sei autorizzato ad accedere a quest'area."
+
+msgid "You are not authorized to access this resource"
+msgstr "Non sei autorizzato ad accedere a questa risorsa"
+
+msgid "You cannot see folders in tree-compact view"
+msgstr "Non puoi vedere le cartelle nella vista ad albero compatta"
 
 msgid "You do not have the required permissions to view this page."
 msgstr "Non hai i permessi necessari per visualizzare questa pagina."
@@ -1015,11 +1070,20 @@ msgstr "id applicazione"
 msgid "application_id"
 msgstr "id applicazione"
 
+msgid "auth_class"
+msgstr "classe di autenticazione"
+
+msgid "auth_provider_id"
+msgstr "provider di autenticazione"
+
 msgid "autoplay"
 msgstr ""
 
 msgid "bearing"
 msgstr ""
+
+msgid "by"
+msgstr "da"
 
 msgid "cancel"
 msgstr "annulla"
@@ -1039,17 +1103,14 @@ msgstr "contesto"
 msgid "controls"
 msgstr ""
 
-msgid "create"
-msgstr "crea"
-
-msgid "create new for"
-msgstr "crea nuovo per"
-
 msgid "created"
 msgstr "creato"
 
 msgid "current password"
 msgstr "password corrente"
+
+msgid "day(s)"
+msgstr "giorno/i"
 
 msgid "description"
 msgstr "descrizione"
@@ -1123,11 +1184,11 @@ msgstr "telefono"
 msgid "pitch"
 msgstr ""
 
+msgid "provider_username"
+msgstr "campo autenticazione provider"
+
 msgid "remove"
 msgstr "rimuovi"
-
-msgid "reset"
-msgstr ""
 
 msgid "scheduled_from"
 msgstr "programmato da"
@@ -1164,6 +1225,9 @@ msgstr "annulla rimozione"
 
 msgid "untitled"
 msgstr "senza titolo"
+
+msgid "user_id"
+msgstr "id utente"
 
 msgid "username"
 msgstr "nome utente"
@@ -1214,6 +1278,15 @@ msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 
 msgid "Add placeholder"
 msgstr "Aggiungi placeholder"
+
+msgid "Accordion content"
+msgstr "Contenuto accordion"
+
+msgid "Remove accordion"
+msgstr "Cancella accordion"
+
+msgid "Accordion title"
+msgstr "Titolo accordion"
 
 #, javascript-format
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
@@ -1481,6 +1554,18 @@ msgstr "Data di inizio"
 msgid "User"
 msgstr "Utente"
 
+#, javascript-format
+msgid "Created on ${ created }."
+msgstr "Creato il ${ created }."
+
+#, javascript-format
+msgid "Modified on ${ modified }."
+msgstr "Modificato il ${ modified }."
+
+#, javascript-format
+msgid "Publish start on ${ published }."
+msgstr "Pubblicato il ${ published }."
+
 msgid "Loading branches for position"
 msgstr "Caricamento rami per posizione"
 
@@ -1505,6 +1590,30 @@ msgstr "pagina"
 msgid "View"
 msgstr "Vedi"
 
+msgid "New content"
+msgstr "Nuovo contenuto"
+
+msgid "New folder"
+msgstr "Nuova cartella"
+
+msgid "Open in new tab"
+msgstr "Apri in una nuova scheda"
+
+msgid "Undo"
+msgstr "Annulla"
+
+msgid "Choose object type"
+msgstr "Scegli il tipo di oggetto"
+
+msgid "Object type"
+msgstr "Tipo di oggetto"
+
+msgid "Parent folder"
+msgstr "Cartella genitore"
+
+msgid "/ (root)"
+msgstr "/ (radice)"
+
 msgid "Add new tag"
 msgstr "Aggiungi un nuovo tag"
 
@@ -1527,14 +1636,14 @@ msgstr "Ascendente"
 msgid "Descending"
 msgstr "Discendente"
 
-msgid "Sort by"
-msgstr "Ordina per"
+msgid "Reorder by"
+msgstr "Riordina per"
 
 msgid "Related items order will be changed."
 msgstr "L'ordine degli elementi correlati verrà modificato."
 
-msgid "Continue?"
-msgstr "Vuoi continuare?"
+msgid "OK"
+msgstr ""
 
 msgid "Hide"
 msgstr "Nascondi"
@@ -1545,17 +1654,17 @@ msgstr "Mostra"
 msgid "copied in the clipboard"
 msgstr "copiato negli appunti"
 
-#, javascript-format
-msgid "Created on ${ created }."
-msgstr "Creato il ${ created }."
+msgid "Expired"
+msgstr "Scaduto"
 
-#, javascript-format
-msgid "Modified on ${ modified }."
-msgstr "Modificato il ${ modified }."
+msgid "Future"
+msgstr "Futuro"
 
-#, javascript-format
-msgid "Publish start on ${ published }."
-msgstr "Pubblicato il ${ published }."
+msgid "New"
+msgstr "Nuovo"
+
+msgid "Uploaded"
+msgstr "Caricato"
 
 #, javascript-format
 msgid "Missing required data \"${ required }\". Retry"
@@ -1563,6 +1672,18 @@ msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
+
+msgid "Edit related objects"
+msgstr "Modifica oggetti correlati"
+
+msgid "Choose relation"
+msgstr "Scegli la relazione"
+
+msgid "Filter to apply"
+msgstr "Filtro da applicare"
+
+msgid "Search related objects"
+msgstr "Cerca oggetti correlati"
 
 msgid "Action"
 msgstr "Azione"
@@ -1590,6 +1711,9 @@ msgstr "(eliminato)"
 
 msgid "placeholders"
 msgstr "segnaposto"
+
+msgid "Roles that cannot modify permissions"
+msgstr "Ruoli che non possono modificare i permessi"
 
 msgid "You can modify the permissions"
 msgstr "Puoi modificare i permessi"
@@ -1646,11 +1770,68 @@ msgstr "Traducibile"
 msgid "Error on deleting property"
 msgstr "Errore nella cancellazione della proprietà"
 
+msgid "Show object info"
+msgstr "Mostra informazioni"
+
+msgid "Media URL"
+msgstr "URL Media"
+
 msgid "Search on categories"
 msgstr "Cerca tra le categorie"
 
-msgid "Password"
-msgstr "Password"
+msgid "Caption"
+msgstr "Sottotitolo"
+
+msgid "Format"
+msgstr "Formato"
+
+msgid "New caption"
+msgstr "Nuovo sottotitolo"
+
+msgid "No captions"
+msgstr "Nessun sottotitolo"
+
+msgid "Not valid"
+msgstr "Non valido"
+
+msgid "Parameters"
+msgstr "Parametri"
+
+msgid "Valid"
+msgstr "Valido"
+
+msgid "Module"
+msgstr ""
+
+msgid ""
+"Sorry, your browser does not support embedded <code>audio</code> element"
+msgstr ""
+"Spiacenti, il tuo browser non supporta l'elemento <code>audio</code> "
+"incorporato"
+
+msgid "Cannot produce a thumbnail for this file"
+msgstr "Impossibile produrre una miniatura per questo file"
+
+msgid "The thumbnail is not available"
+msgstr "La miniatura non è disponibile"
+
+msgid "The thumbnail is not ready"
+msgstr "La miniatura non è pronta"
+
+msgid "Open image"
+msgstr "Apri immagine"
+
+msgid ""
+"Sorry, your browser does not support embedded <code>video</code> element"
+msgstr ""
+"Spiacenti, il tuo browser non supporta l'elemento <code>video</code> "
+"incorporato"
+
+msgid "View original"
+msgstr "Vedi originale"
+
+msgid "Send"
+msgstr "Invia"
 
 msgid "Address"
 msgstr "Indirizzo"
@@ -1733,14 +1914,71 @@ msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
 
-msgid "version by"
-msgstr "versione di"
-
 msgid "date"
 msgstr "data"
 
 msgid "Trashed"
 msgstr "Rimosso"
+
+msgid "version by"
+msgstr "versione di"
+
+msgid "Latitude"
+msgstr "Latitudine"
+
+msgid "Longitude"
+msgstr "Longitudine"
+
+msgid "Canceled"
+msgstr "Annullato"
+
+msgid "Choose file"
+msgstr "Scegli file"
+
+msgid "File upload"
+msgstr "Upload file"
+
+msgid "No file selected"
+msgstr "Nessun file selezionato"
+
+msgid "Replace media"
+msgstr "Sostituisci media"
+
+msgid "Uploading..."
+msgstr "Caricamento in corso..."
+
+msgid "Upload succeeded"
+msgstr "Caricamento riuscito"
+
+msgid "Choose a type"
+msgstr "Selezionare un tipo"
+
+msgid "Create new for"
+msgstr "Crea nuovo per"
+
+msgid "Add multiple date ranges"
+msgstr "Aggiungi intervalli multipli di date"
+
+msgid "Day"
+msgstr "Giorno"
+
+msgid "Month"
+msgstr "Mese"
+
+msgid "Repeat times"
+msgstr "Numero di ripetizioni"
+
+msgid "Repeat type"
+msgstr "Tipo di ripetizione"
+
+msgid "Required"
+msgstr "Obbligatorio"
+
+msgid "Year"
+msgstr "Anno"
+
+msgid "Add multiple"
+msgstr "Aggiungi multiplo"
 
 msgid "Insert date(s)"
 msgstr "Inserire data(e)"
@@ -1750,9 +1988,6 @@ msgstr "Tutti i giorni"
 
 msgid "Invalid date range"
 msgstr "Intervallo date non valido"
-
-msgid "Undo"
-msgstr "Annulla"
 
 msgid "Copied!"
 msgstr "Copiato!"
@@ -1768,3 +2003,15 @@ msgstr "Errore durante il salvataggio della categoria"
 
 msgid "Error on deleting category"
 msgstr "Errore durante l'eliminazione della categoria"
+
+msgid "Create new"
+msgstr "Crea nuovo"
+
+msgid "Loading"
+msgstr "Caricamento in corso"
+
+msgid "Allowed types"
+msgstr "Tipi consentiti"
+
+msgid "Not found"
+msgstr "Non trovato"

@@ -13,13 +13,17 @@
 namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
+use App\Utility\DateRangesTools;
 use App\Utility\OEmbed;
+use App\Utility\RelationsTools;
 use App\Utility\SchemaTrait;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\Event\EventInterface;
+use Cake\Http\Client\Response;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\I18n\I18n;
@@ -55,12 +59,12 @@ class ModulesComponent extends Component
     /**
      * @inheritDoc
      */
-    public $components = ['Authentication', 'Children', 'Config', 'Parents', 'Schema'];
+    public array $components = ['Authentication', 'Children', 'Config', 'Parents', 'Schema'];
 
     /**
      * @inheritDoc
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'currentModuleName' => null,
         'clearHomeCache' => false,
     ];
@@ -70,19 +74,33 @@ class ModulesComponent extends Component
      *
      * @var array
      */
-    protected $modules = [];
+    protected array $modules = [];
 
     /**
      * Other "logic" modules, non objects
      *
      * @var array
      */
-    protected $otherModules = [
+    protected array $otherModules = [
         'tags' => [
             'name' => 'tags',
             'hints' => ['allow' => ['GET', 'POST', 'PATCH', 'DELETE']],
         ],
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function beforeFilter(EventInterface $event): ?Response
+    {
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->Authentication->getIdentity();
+        if (!empty($user)) {
+            $this->getController()->set('modules', $this->getModules());
+        }
+
+        return null;
+    }
 
     /**
      * Read modules and project info from `/home' endpoint.
@@ -103,12 +121,12 @@ class ModulesComponent extends Component
             Cache::delete(sprintf('home_%d', $user->get('id')));
         }
 
-        $modules = $this->getModules();
         $project = $this->getProject();
         $uploadable = (array)Hash::get($this->Schema->objectTypesFeatures(), 'uploadable');
-        $this->getController()->set(compact('modules', 'project', 'uploadable'));
+        $this->getController()->set(compact('project', 'uploadable'));
 
         $currentModuleName = $this->getConfig('currentModuleName');
+        $modules = (array)$this->getController()->viewBuilder()->getVar('modules');
         if (!empty($currentModuleName)) {
             $currentModule = Hash::get($modules, $currentModuleName);
         }
@@ -135,21 +153,44 @@ class ModulesComponent extends Component
         $modules = array_intersect_key($modules, $metaModules);
         array_walk(
             $modules,
-            function (&$data, $key) use ($metaModules) {
+            function (&$data, $key) use ($metaModules): void {
                 $data = array_merge((array)Hash::get($metaModules, $key), $data);
-            }
+            },
         );
         $this->modules = array_merge(
             $modules,
             array_diff_key($metaModules, $modules),
-            $pluginModules
+            $pluginModules,
         );
         $this->modulesByAccessControl();
         if (!$this->Schema->tagsInUse()) {
             unset($this->modules['tags']);
         }
+        $types = array_keys($this->modules);
+        if (isset($this->modules['translations']) && !$this->translationsEnabled($types)) {
+            unset($this->modules['translations']);
+        }
 
         return $this->modules;
+    }
+
+    /**
+     * Check if translations are enabled for at least one of the given object types.
+     *
+     * @param array $types Object types to check.
+     * @return bool
+     */
+    public function translationsEnabled(array $types): bool
+    {
+        foreach ($types as $objectType) {
+            $schema = (array)$this->Schema->getSchema($objectType);
+            $translatable = (array)Hash::get($schema, 'translatable');
+            if (count($translatable) > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -167,11 +208,11 @@ class ModulesComponent extends Component
         }
         /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
-        if (empty($user) || empty($user->getOriginalData())) {
+        $userRoles = (array)$user->get('roles');
+        if (empty($user) || empty($user->getOriginalData()) || in_array('admin', $userRoles)) {
             return;
         }
-
-        $roles = (array)$user->get('roles');
+        $roles = array_intersect(array_keys($accessControl), $userRoles);
         $modules = (array)array_keys($this->modules);
         $hidden = [];
         $readonly = [];
@@ -234,12 +275,22 @@ class ModulesComponent extends Component
     {
         /** @var \Authentication\Identity $user */
         $user = $this->Authentication->getIdentity();
-        $meta = $this->getMeta($user);
-        $project = (array)Configure::read('Project');
-        $name = (string)Hash::get($project, 'name', Hash::get($meta, 'project.name'));
-        $version = Hash::get($meta, 'version', '');
+        $api = $this->getMeta($user);
+        $apiName = (string)Hash::get($api, 'project.name');
+        $apiName = str_replace('API', '', $apiName);
+        $api['project']['name'] = $apiName;
 
-        return compact('name', 'version');
+        return [
+            'api' => (array)Hash::get($api, 'project'),
+            'beditaApi' => [
+                'name' => (string)Hash::get(
+                    (array)Configure::read('Project'),
+                    'name',
+                    (string)Hash::get($api, 'project.name'),
+                ),
+                'version' => (string)Hash::get($api, 'version'),
+            ],
+        ];
     }
 
     /**
@@ -311,22 +362,38 @@ class ModulesComponent extends Component
 
         // verify upload form data
         if ($this->checkRequestForUpload($requestData)) {
-            // has another stream? drop it
-            $this->removeStream($requestData);
-
             /** @var \Laminas\Diactoros\UploadedFile $file */
             $file = $requestData['file'];
+            $filepath = $file->getStream()->getMetadata('uri');
+            $content = file_get_contents($filepath);
 
             // upload file
             $filename = basename($file->getClientFileName());
-            $filepath = $file->getStream()->getMetadata('uri');
             $headers = ['Content-Type' => $file->getClientMediaType()];
             $apiClient = ApiClientProvider::getApiClient();
+            $type = $this->getController()->getRequest()->getParam('object_type');
+
+            if (empty($requestData['id'])) {
+                $response = $apiClient->post(
+                    sprintf('/%s/upload/%s', $type, $filename),
+                    $content,
+                    $headers,
+                );
+                $requestData['id'] = Hash::get($response, 'data.id');
+                unset($requestData['file'], $requestData['remote_url']);
+
+                return;
+            }
+
+            // remove stream
+            $this->removeStream($requestData);
+
+            // create stream
             $response = $apiClient->upload($filename, $filepath, $headers);
 
-            // assoc stream to media
-            $streamId = $response['data']['id'];
-            $requestData['id'] = $this->assocStreamToMedia($streamId, $requestData, $filename);
+            // link stream to media
+            $streamUuid = Hash::get($response, 'data.id');
+            $this->assocStreamToMedia($streamUuid, $requestData, $filename);
         }
         unset($requestData['file'], $requestData['remote_url']);
     }
@@ -432,27 +499,107 @@ class ModulesComponent extends Component
     }
 
     /**
-     * Set session data for `failedSave.{type}.{id}` and `failedSave.{type}.{id}__timestamp`.
+     * Check if save can be skipped.
+     * This is used to avoid saving object with no changes.
      *
-     * @param string $type The object type.
-     * @param array $data The data to store into session.
-     * @return void
+     * @param string $id The object ID
+     * @param array $requestData The request data
+     * @return bool True if save can be skipped, false otherwise
      */
-    public function setDataFromFailedSave(string $type, array $data): void
+    public function skipSaveObject(string $id, array &$requestData): bool
     {
-        if (empty($data) || empty($data['id']) || empty($type)) {
-            return;
+        if (empty($id)) {
+            return false;
         }
-        $key = sprintf('failedSave.%s.%s', $type, $data['id']);
-        $session = $this->getController()->getRequest()->getSession();
-        unset($data['id']); // remove 'id', avoid future merged with attributes
-        $session->write($key, $data);
-        $session->write(sprintf('%s__timestamp', $key), time());
+        if (isset($requestData['date_ranges'])) {
+            // check if date_ranges has changed
+            $type = $this->getController()->getRequest()->getParam('object_type');
+            $response = ApiClientProvider::getApiClient()->getObject($id, $type, ['fields' => 'date_ranges']);
+            $actualDateRanges = (array)Hash::get($response, 'data.attributes.date_ranges');
+            $dr1 = DateRangesTools::toString($actualDateRanges);
+            $requestDateRanges = (array)Hash::get($requestData, 'date_ranges');
+            $dr2 = DateRangesTools::toString($requestDateRanges);
+            if ($dr1 === $dr2) {
+                unset($requestData['date_ranges']);
+            } else {
+                return false;
+            }
+        }
+        $data = array_filter($requestData, function ($key) {
+            return !in_array($key, ['id', 'date_ranges', 'permissions']);
+        }, ARRAY_FILTER_USE_KEY);
+
+        return empty($data);
+    }
+
+    /**
+     * Check if save related can be skipped.
+     * This is used to avoid saving object relations with no changes.
+     *
+     * @param string $id The object ID
+     * @param array $relatedData The related data
+     * @return bool True if save related can be skipped, false otherwise
+     */
+    public function skipSaveRelated(string $id, array &$relatedData): bool
+    {
+        if (empty($relatedData)) {
+            return true;
+        }
+        $methods = (array)Hash::extract($relatedData, '{n}.method');
+        if (in_array('addRelated', $methods) || in_array('removeRelated', $methods) || empty($id)) {
+            return false;
+        }
+        // check replaceRelated
+        $type = $this->getController()->getRequest()->getParam('object_type');
+        $rr = $relatedData;
+        foreach ($rr as $method => $data) {
+            $actualRelated = (array)ApiClientProvider::getApiClient()->getRelated($id, $type, $data['relation']);
+            $actualRelated = (array)Hash::get($actualRelated, 'data');
+            $actualRelated = RelationsTools::toString($actualRelated);
+            $requestRelated = (array)Hash::get($data, 'relatedIds', []);
+            $requestRelated = RelationsTools::toString($requestRelated);
+            if ($actualRelated === $requestRelated) {
+                unset($relatedData[$method]);
+                continue;
+            }
+
+            return false;
+        }
+
+        return empty($relatedData);
+    }
+
+    /**
+     * Check if save permissions can be skipped.
+     * This is used to avoid saving object permissions with no changes.
+     *
+     * @param string $id The object ID
+     * @param array $requestPermissions The request permissions
+     * @param array $schema The object type schema
+     * @return bool True if save permissions can be skipped, false otherwise
+     */
+    public function skipSavePermissions(string $id, array $requestPermissions, array $schema): bool
+    {
+        if (!in_array('Permissions', (array)Hash::get($schema, 'associations'))) {
+            return true;
+        }
+        $requestPermissions = array_map(
+            function ($role) {
+                return (int)$role;
+            },
+            $requestPermissions,
+        );
+        sort($requestPermissions);
+        $query = ['filter' => ['object_id' => $id], 'page_size' => 100];
+        $objectPermissions = (array)ApiClientProvider::getApiClient()->getObjects('object_permissions', $query);
+        $actualPermissions = (array)Hash::extract($objectPermissions, 'data.{n}.attributes.role_id');
+        sort($actualPermissions);
+
+        return $actualPermissions === $requestPermissions;
     }
 
     /**
      * Set current attributes from loaded $object data in `currentAttributes`.
-     * Load session failure data if available.
      *
      * @param array $object The object.
      * @return void
@@ -461,45 +608,6 @@ class ModulesComponent extends Component
     {
         $currentAttributes = json_encode((array)Hash::get($object, 'attributes'));
         $this->getController()->set(compact('currentAttributes'));
-
-        $this->updateFromFailedSave($object);
-    }
-
-    /**
-     * Update object, when failed save occurred.
-     * Check session data by `failedSave.{type}.{id}` key and `failedSave.{type}.{id}__timestamp`.
-     * If data is set and timestamp is not older than 5 minutes.
-     *
-     * @param array $object The object.
-     * @return void
-     */
-    protected function updateFromFailedSave(array &$object): void
-    {
-        // check session data for object id => use `failedSave.{type}.{id}` as key
-        $session = $this->getController()->getRequest()->getSession();
-        $key = sprintf(
-            'failedSave.%s.%s',
-            Hash::get($object, 'type'),
-            Hash::get($object, 'id')
-        );
-        $data = $session->read($key);
-        if (empty($data)) {
-            return;
-        }
-
-        // read timestamp session key
-        $timestampKey = sprintf('%s__timestamp', $key);
-        $timestamp = $session->read($timestampKey);
-
-        // if data exist for {type} and {id} and `__timestamp` not too old (<= 5 minutes)
-        if ($timestamp > strtotime('-5 minutes')) {
-            //  => merge with $object['attributes']
-            $object['attributes'] = array_merge($object['attributes'], (array)$data);
-        }
-
-        // remove session data
-        $session->delete($key);
-        $session->delete($timestampKey);
     }
 
     /**
@@ -583,8 +691,8 @@ class ModulesComponent extends Component
 
                     return $attributes['inverse_label'];
                 },
-                $names
-            )
+                $names,
+            ),
         );
     }
 
@@ -673,7 +781,7 @@ class ModulesComponent extends Component
             }
             $response = ApiClientProvider::getApiClient()->save(
                 (string)Hash::get($obj, 'type'),
-                (array)Hash::get($obj, 'attributes')
+                (array)Hash::get($obj, 'attributes'),
             );
             $relatedObjects[] = [
                 'id' => Hash::get($response, 'data.id'),

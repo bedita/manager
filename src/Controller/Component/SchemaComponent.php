@@ -31,7 +31,7 @@ class SchemaComponent extends Component
     /**
      * @inheritDoc
      */
-    public $components = ['Flash'];
+    public array $components = ['Flash'];
 
     /**
      * Cache config name for type schemas.
@@ -43,7 +43,7 @@ class SchemaComponent extends Component
     /**
      * @inheritDoc
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'type' => null, // resource or object type name
         'internalSchema' => false, // use internal schema
     ];
@@ -55,7 +55,7 @@ class SchemaComponent extends Component
      * @param string|null $revision Schema revision.
      * @return array|bool JSON Schema.
      */
-    public function getSchema(?string $type = null, ?string $revision = null)
+    public function getSchema(?string $type = null, ?string $revision = null): array|bool
     {
         if ($type === null) {
             $type = $this->getConfig('type');
@@ -76,7 +76,7 @@ class SchemaComponent extends Component
                 function () use ($type) {
                     return $this->fetchSchema($type);
                 },
-                self::CACHE_CONFIG
+                self::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // Something bad happened. Booleans **ARE** valid JSON Schemas: returning `false` instead.
@@ -136,7 +136,7 @@ class SchemaComponent extends Component
      * @param string $type Type to get schema for.
      * @return array|bool JSON Schema.
      */
-    protected function fetchSchema(string $type)
+    protected function fetchSchema(string $type): array|bool
     {
         $schema = ApiClientProvider::getApiClient()->schema($type);
         if (empty($schema)) {
@@ -145,8 +145,12 @@ class SchemaComponent extends Component
         // add special property `roles` to `users`
         if ($type === 'users') {
             $schema['properties']['roles'] = [
-                'type' => 'string',
-                'enum' => $this->fetchRoles(),
+                'type' => 'array',
+                'items' => [
+                    'type' => 'string',
+                    'enum' => $this->fetchRoles(),
+                ],
+                'uniqueItems' => true,
             ];
         }
         $categories = $this->fetchCategories($type);
@@ -197,7 +201,7 @@ class SchemaComponent extends Component
         ];
         $response = ApiClientProvider::getApiClient()->get(
             sprintf('/model/object_types/%s', $type),
-            $query
+            $query,
         );
 
         return [
@@ -243,7 +247,7 @@ class SchemaComponent extends Component
                     'enabled' => Hash::get((array)$item, 'attributes.enabled'),
                 ];
             },
-            $data
+            $data,
         );
     }
 
@@ -274,7 +278,7 @@ class SchemaComponent extends Component
                 function () {
                     return $this->fetchRelationData();
                 },
-                self::CACHE_CONFIG
+                self::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             // The exception is being caught _outside_ of `Cache::remember()` to avoid caching the fallback.
@@ -365,6 +369,53 @@ class SchemaComponent extends Component
     }
 
     /**
+     * Retrieve list of custom properties for a given object type.
+     *
+     * @param string $type Object type name.
+     * @return array
+     */
+    public function customProps(string $type): array
+    {
+        return (array)Cache::remember(
+            CacheTools::cacheKey(sprintf('custom_props_%s', $type)),
+            function () use ($type) {
+                return $this->fetchCustomProps($type);
+            },
+            self::CACHE_CONFIG,
+        );
+    }
+
+    /**
+     * Fetch custom properties for a given object type.
+     *
+     * @param string $type Object type name.
+     * @return array
+     */
+    protected function fetchCustomProps(string $type): array
+    {
+        if ($this->getConfig('internalSchema')) {
+            return []; // internal resources don't have custom properties
+        }
+        $customProperties = [];
+        $pageCount = $page = 1;
+        while ($page <= $pageCount) {
+            $query = [
+                'fields' => 'name',
+                'filter' => ['object_type' => $type, 'type' => 'dynamic'],
+                'page' => $page,
+                'page_size' => 100,
+            ];
+            $response = ApiClientProvider::getApiClient()->get('/model/properties', $query);
+            $customProperties = array_merge($customProperties, (array)Hash::extract($response, 'data.{n}.attributes.name'));
+            $pageCount = (int)Hash::get($response, 'meta.pagination.page_count');
+            $page++;
+        }
+        sort($customProperties);
+
+        return $customProperties;
+    }
+
+    /**
      * Read object types features from API
      *
      * @return array
@@ -377,7 +428,7 @@ class SchemaComponent extends Component
                 function () {
                     return $this->fetchObjectTypesFeatures();
                 },
-                self::CACHE_CONFIG
+                self::CACHE_CONFIG,
             );
         } catch (BEditaClientException $e) {
             $this->log($e->getMessage(), LogLevel::ERROR);
@@ -470,6 +521,25 @@ class SchemaComponent extends Component
     {
         $features = $this->objectTypesFeatures();
         $types = array_keys($features['descendants']);
+        sort($types);
+
+        return $types;
+    }
+
+    /**
+     * Get all concrete types, i.e. all descendants of abstract types.
+     *
+     * @return array
+     */
+    public function allConcreteTypes(): array
+    {
+        $features = $this->objectTypesFeatures();
+        $types = [];
+        foreach ($features['descendants'] as $descendants) {
+            if (!empty($descendants)) {
+                $types = array_unique(array_merge($types, $descendants));
+            }
+        }
         sort($types);
 
         return $types;

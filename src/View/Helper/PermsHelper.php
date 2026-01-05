@@ -26,21 +26,21 @@ class PermsHelper extends Helper
      *
      * @var array
      */
-    protected $current = [];
+    protected array $current = [];
 
     /**
      * API methods allowed in all modules
      *
      * @var array
      */
-    protected $allowed = [];
+    protected array $allowed = [];
 
     /**
      * Permissions on folders enabled flag
      *
      * @var bool
      */
-    protected $permissionsOnFolders = false;
+    protected bool $permissionsOnFolders = false;
 
     /**
      * {@inheritDoc}
@@ -87,6 +87,25 @@ class PermsHelper extends Helper
     }
 
     /**
+     * Return modules that can be created by the authenticated user.
+     *
+     * @return array
+     */
+    public function canCreateModules(): array
+    {
+        $modules = array_keys((array)$this->_View->get('modules'));
+
+        return array_values(
+            array_filter(
+                $modules,
+                function ($module) {
+                    return $this->canCreate($module);
+                },
+            ),
+        );
+    }
+
+    /**
      * Check delete permission.
      *
      * @param array $object The object
@@ -111,7 +130,23 @@ class PermsHelper extends Helper
      */
     public function canSave(?string $module = null): bool
     {
-        return $this->isAllowed('PATCH', $module) && $this->userIsAllowed($module);
+        return $this->userIsAdmin() || ($this->isAllowed('PATCH', $module) && $this->userIsAllowed($module));
+    }
+
+    /**
+     * Map of modules and their save permissions for the authenticated user.
+     *
+     * @return array
+     */
+    public function canSaveMap(): array
+    {
+        $modules = array_keys((array)$this->_View->get('modules'));
+        $map = [];
+        foreach ($modules as $module) {
+            $map[$module] = $this->canSave($module);
+        }
+
+        return $map;
     }
 
     /**
@@ -209,10 +244,10 @@ class PermsHelper extends Helper
      */
     public function userRoles(): array
     {
-        /** @var \Authentication\Identity $identity */
+        /** @var \Authentication\Identity|null $identity */
         $identity = $this->_View->get('user');
 
-        return (array)$identity->get('roles');
+        return empty($identity) ? [] : (array)$identity->get('roles');
     }
 
     /**

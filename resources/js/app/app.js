@@ -48,6 +48,8 @@ const _vueInstance = new Vue({
         DateRangesView: () => import(/* webpackChunkName: "date-ranges-view" */'app/components/date-ranges-view/date-ranges-view'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
+        TreeSlug: () => import(/* webpackChunkName: "tree-slug" */'app/components/tree-slug/tree-slug'),
+        TreeCompact: () => import(/* webpackChunkName: "tree-compact" */'app/components/tree-compact/tree-compact'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
@@ -87,10 +89,39 @@ const _vueInstance = new Vue({
         UserAccesses:() => import(/* webpackChunkName: "user-accesses" */'app/components/user-accesses/user-accesses'),
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
+        ObjectCaptions: () => import(/* webpackChunkName: "object-captions" */'app/components/object-captions/object-captions'),
         ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
         PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
         BarChart:() => import(/* webpackChunkName: "bar-chart" */'app/components/charts/bar-chart'),
         SortRelated: () => import(/* webpackChunkName: "sort-related" */'app/components/sort-related/sort-related'),
+        MediaItem: () => import(/* webpackChunkName: "media-item" */'app/components/media-item/media-item'),
+        FastCreate: () => import(/* webpackChunkName: "fast-create" */'app/components/fast-create/fast-create'),
+        FastCreateContainer: () => import(/* webpackChunkName: "fast-create-container" */'app/components/fast-create/fast-create-container'),
+        FormField: () => import(/* webpackChunkName: "form-field" */'app/components/fast-create/form-field'),
+        FileUpload: () => import(/* webpackChunkName: "file-upload" */'app/components/file-upload/file-upload'),
+        FieldCheckbox: () => import(/* webpackChunkName: "field-checkbox" */'app/components/form/field-checkbox'),
+        FieldDate: () => import(/* webpackChunkName: "field-date" */'app/components/form/field-date'),
+        FieldGeoCoordinates: () => import(/* webpackChunkName: "field-geo-coordinates" */'app/components/form/field-geo-coordinates'),
+        FieldInteger: () => import(/* webpackChunkName: "field-integer" */'app/components/form/field-integer'),
+        FieldJson: () => import(/* webpackChunkName: "field-json" */'app/components/form/field-json'),
+        FieldMultipleCheckboxes: () => import(/* webpackChunkName: "field-multiple-checkboxes" */'app/components/form/field-multiple-checkboxes'),
+        FieldNumber: () => import(/* webpackChunkName: "field-number" */'app/components/form/field-number'),
+        FieldPassword: () => import(/* webpackChunkName: "field-password" */'app/components/form/field-password'),
+        FieldPlaintext: () => import(/* webpackChunkName: "field-plaintext" */'app/components/form/field-plaintext'),
+        FieldRadio: () => import(/* webpackChunkName: "field-radio" */'app/components/form/field-radio'),
+        FieldSelect: () => import(/* webpackChunkName: "field-select" */'app/components/form/field-select'),
+        FieldString: () => import(/* webpackChunkName: "field-string" */'app/components/form/field-string'),
+        FieldTextarea: () => import(/* webpackChunkName: "field-textarea" */'app/components/form/field-textarea'),
+        FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
+        CalendarView: () => import(/* webpackChunkName: "calendar-view" */'app/components/calendar-view/calendar-view'),
+        ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
+        RelatedObjectsFilter: () => import(/* webpackChunkName: "related-objects-filter" */'app/components/related-objects-filter/related-objects-filter'),
+        ModuleProperties: () => import(/* webpackChunkName: "module-properties" */'app/components/module/module-properties'),
+        ModuleSetup: () => import(/* webpackChunkName: "module-setup" */'app/components/module/module-setup'),
+        AddRelatedById: () => import(/* webpackChunkName: "add-related-by-id" */'app/components/add-related-by-id/add-related-by-id'),
+        UploadedObject: () => import(/* webpackChunkName: "uploaded-object" */'app/components/uploaded-object/uploaded-object.vue'),
+        RibbonItem: () => import(/* webpackChunkName: "ribbon-item" */'./components/ribbon-item/ribbon-item.vue'),
+        MailPreview: () => import(/* webpackChunkName: "mail-preview" */'./components/mail-preview/mail-preview.vue'),
         AppIcon,
     },
 
@@ -225,8 +256,8 @@ const _vueInstance = new Vue({
                 for (const uitem of options?.unique || []) {
                     query += `&${uitem.field}=${uitem.value}`;
                 }
-                query += `&cloneRelations=${options?.relations || false}`;
-                query += `&cloneTranslations=${options?.translations || false}`;
+                query += `&relationships=${options?.relations || false}`;
+                query += `&translations=${options?.translations || false}`;
                 const origin = window.location.origin;
                 const path = window.location.pathname.replace('/view/', '/clone/');
                 const url = `${origin}${path}${query}`;
@@ -599,3 +630,30 @@ window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
 Vue.component('AppIcon', AppIcon);
+Vue.component('CalendarView', _vueInstance.$options.components.CalendarView);
+Vue.component('ClipboardItem', _vueInstance.$options.components.ClipboardItem);
+Vue.component('DateRangesView', _vueInstance.$options.components.DateRangesView);
+Vue.component('FieldCheckbox', _vueInstance.$options.components.FieldCheckbox);
+Vue.component('FieldGeoCoordinates', _vueInstance.$options.components.FieldGeoCoordinates);
+Vue.component('FieldDate', _vueInstance.$options.components.FieldDate);
+Vue.component('FieldInteger', _vueInstance.$options.components.FieldInteger);
+Vue.component('FieldJson', _vueInstance.$options.components.FieldJson);
+Vue.component('FieldMultipleCheckboxes', _vueInstance.$options.components.FieldMultipleCheckboxes);
+Vue.component('FieldNumber', _vueInstance.$options.components.FieldNumber);
+Vue.component('FieldPassword', _vueInstance.$options.components.FieldPassword);
+Vue.component('FieldPlaintext', _vueInstance.$options.components.FieldPlaintext);
+Vue.component('FieldRadio', _vueInstance.$options.components.FieldRadio);
+Vue.component('FieldSelect', _vueInstance.$options.components.FieldSelect);
+Vue.component('FieldString', _vueInstance.$options.components.FieldString);
+Vue.component('FieldTextarea', _vueInstance.$options.components.FieldTextarea);
+Vue.component('FieldTitle', _vueInstance.$options.components.FieldTitle);
+Vue.component('FileUpload', _vueInstance.$options.components.FileUpload);
+Vue.component('ModuleProperties', _vueInstance.$options.components.ModuleProperties);
+Vue.component('ModuleSetup', _vueInstance.$options.components.ModuleSetup);
+Vue.component('ObjectCategories', _vueInstance.$options.components.ObjectCategories);
+Vue.component('ObjectCaptions', _vueInstance.$options.components.ObjectCaptions);
+Vue.component('ObjectInfo', _vueInstance.$options.components.ObjectInfo);
+Vue.component('RelatedObjectsFilter', _vueInstance.$options.components.RelatedObjectsFilter);
+Vue.component('Thumbnail', _vueInstance.$options.components.Thumbnail);
+Vue.component('RibbonItem', _vueInstance.$options.components.RibbonItem);
+Vue.component('UploadedObject', _vueInstance.$options.components.UploadedObject);

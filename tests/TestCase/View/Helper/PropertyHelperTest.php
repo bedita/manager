@@ -18,12 +18,24 @@ use App\View\Helper\PropertyHelper;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\PropertyHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\PropertyHelper
  */
+#[CoversClass(PropertyHelper::class)]
+#[CoversMethod(PropertyHelper::class, 'control')]
+#[CoversMethod(PropertyHelper::class, 'dateRange')]
+#[CoversMethod(PropertyHelper::class, 'fastCreateFields')]
+#[CoversMethod(PropertyHelper::class, 'fastCreateFieldsMap')]
+#[CoversMethod(PropertyHelper::class, 'fieldLabel')]
+#[CoversMethod(PropertyHelper::class, 'prepareFieldOptions')]
+#[CoversMethod(PropertyHelper::class, 'schema')]
+#[CoversMethod(PropertyHelper::class, 'translationControl')]
+#[CoversMethod(PropertyHelper::class, 'translationsMap')]
+#[CoversMethod(PropertyHelper::class, 'value')]
 class PropertyHelperTest extends TestCase
 {
     /**
@@ -49,7 +61,7 @@ class PropertyHelperTest extends TestCase
      *
      * @return array
      */
-    public function controlProvider(): array
+    public static function controlProvider(): array
     {
         return [
             'text' => [
@@ -181,11 +193,8 @@ class PropertyHelperTest extends TestCase
      * @param string $expected The expected result
      * @param string $expectedTranslation The expected translation result
      * @return void
-     * @dataProvider controlProvider()
-     * @covers ::control()
-     * @covers ::translationControl()
-     * @covers ::schema()
      */
+    #[DataProvider('controlProvider')]
     public function testControl(string $key, $value, array $options = [], array $schema = [], string $expected = '', string $expectedTranslation = ''): void
     {
         if (array_key_exists('readonly', $options)) {
@@ -213,7 +222,7 @@ class PropertyHelperTest extends TestCase
      *
      * @return array
      */
-    public function schemaProvider(): array
+    public static function schemaProvider(): array
     {
         return [
             'string' => [
@@ -272,9 +281,8 @@ class PropertyHelperTest extends TestCase
      * @param string $name Property name
      * @param array|null $schema Object schema
      * @return void
-     * @dataProvider schemaProvider()
-     * @covers ::schema()
      */
+    #[DataProvider('schemaProvider')]
     public function testSchema(?array $expected, string $name, ?array $schema = null): void
     {
         $view = new View(null, null, null, []);
@@ -288,8 +296,6 @@ class PropertyHelperTest extends TestCase
      * Test `control` with parameter type, for "other" types schema controls
      *
      * @return void
-     * @covers ::control()
-     * @covers ::schema()
      */
     public function testControlOtherType(): void
     {
@@ -325,7 +331,7 @@ class PropertyHelperTest extends TestCase
      *
      * @return array
      */
-    public function valueProvider(): array
+    public static function valueProvider(): array
     {
         return [
             'object attribute' => [
@@ -387,9 +393,8 @@ class PropertyHelperTest extends TestCase
      * @param string $property The property
      * @param string $expected The expected value
      * @return void
-     * @dataProvider valueProvider()
-     * @covers ::value()
      */
+    #[DataProvider('valueProvider')]
     public function testValue(array $object, string $property, string $expected): void
     {
         $view = new View(null, null, null, []);
@@ -413,7 +418,6 @@ class PropertyHelperTest extends TestCase
      * Test `fieldLabel`.
      *
      * @return void
-     * @covers ::fieldLabel()
      */
     public function testFieldLabel(): void
     {
@@ -434,9 +438,9 @@ class PropertyHelperTest extends TestCase
         Configure::write(
             'Properties.dummies',
             array_merge(
-                (array)\Cake\Core\Configure::read('Properties.dummies'),
-                ['options' => ['about' => ['label' => $expected]]]
-            )
+                (array)Configure::read('Properties.dummies'),
+                ['options' => ['about' => ['label' => $expected]]],
+            ),
         );
         $actual = $helper->fieldLabel('about', 'dummies');
         static::assertEquals($expected, $actual);
@@ -446,7 +450,6 @@ class PropertyHelperTest extends TestCase
      * Test `fastCreateFields`.
 
      * @return void
-     * @covers ::fastCreateFields()
      */
     public function testFastCreateFields(): void
     {
@@ -462,10 +465,38 @@ class PropertyHelperTest extends TestCase
     }
 
     /**
+     * Test `fastCreateFieldsMap`.
+
+     * @return void
+     */
+    public function testFastCreateFieldsMap(): void
+    {
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        Configure::write('Properties.documents.fastCreate', [
+            'required' => ['status'],
+            'all' => ['status', 'title', 'description' => 'plaintext', 'body' => 'richtext', 'extra' => 'json', 'date_ranges'],
+        ]);
+        $map = $helper->fastCreateFieldsMap();
+        $actual = $map['documents'];
+        $expected = [
+            'required' => ['status'],
+            'fields' => [
+                'status',
+                'title',
+                'date_ranges',
+                'description' => 'plaintext',
+                'body' => 'richtext',
+                'extra' => 'json',
+            ],
+        ];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Test `prepareFieldOptions`.
 
      * @return void
-     * @covers ::prepareFieldOptions()
      */
     public function testPrepareFieldOptions(): void
     {
@@ -488,7 +519,6 @@ class PropertyHelperTest extends TestCase
      * Test `dateRange`.
 
      * @return void
-     * @covers ::dateRange()
      */
     public function testDateRange(): void
     {
@@ -498,5 +528,60 @@ class PropertyHelperTest extends TestCase
         $expected = '<div class="date-ranges-item mb-1"><div><div class="input text"><label for="start_date_0">From</label><input type="text" name="date_ranges[0][start_date]" id="start_date_0" v-datepicker="true" date="true" time="true" daterange="true" value=""></div><div class="input text"><label for="end_date_0">To</label><input type="text" name="date_ranges[0][end_date]" id="end_date_0" v-datepicker="true" date="true" time="true" daterange="true" value=""></div><div class="input checkbox"><input type="hidden" name="date_ranges[0][params][all_day]" value="0"><label for="all_day_0"><input type="checkbox" name="date_ranges[0][params][all_day]" value="" id="all_day_0" checked="checked">All Day</label></div></div></div>';
         $expected = str_replace("\n", '', $expected);
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `translationsMap`.
+     *
+     * @return void
+     */
+    public function testTranslationsMap(): void
+    {
+        Configure::write('Properties.dummies.fastCreate.all', [
+            ['title' => 'string'],
+            'description',
+            'body',
+        ]);
+        Configure::write('Properties.dummies.view', [
+            'core' => [
+                'title',
+                'description',
+                'body',
+            ],
+            'custom' => [
+                'status',
+                '_element' => 'MyPlugin.Form/custom-element',
+                '_hide' => ['status'],
+                '_keep' => ['title'],
+            ],
+        ]);
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->translationsMap();
+        $expected = [
+            'title' => 'Title',
+            'description' => 'Description',
+            'body' => 'Body',
+            'status' => 'Status',
+        ];
+        foreach ($expected as $key => $value) {
+            static::assertSame($value, $actual[$key]);
+        }
+    }
+
+    /**
+     * Test `translationsMap` with exception.
+     *
+     * @return void
+     */
+    public function testTranslationsMapExpection(): void
+    {
+        $properties = Configure::read('Properties');
+        Configure::write('Properties', 123);
+        $view = new View(null, null, null, []);
+        $helper = new PropertyHelper($view);
+        $actual = $helper->translationsMap();
+        static::assertEquals([], $actual);
+        Configure::write('Properties', $properties);
     }
 }

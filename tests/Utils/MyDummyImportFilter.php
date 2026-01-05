@@ -11,5 +11,5 @@ class MyDummyImportFilter extends DummyImportFilter
     /**
      * @inheritDoc
      */
-    protected static $serviceName = 'My.Dummy.Import.Service.Class';
+    protected static ?string $serviceName = 'My.Dummy.Import.Service.Class';
 }

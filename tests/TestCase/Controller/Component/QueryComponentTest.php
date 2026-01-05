@@ -3,14 +3,21 @@ namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\Component\QueryComponent;
 use Cake\Controller\Controller;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\Component\QueryComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\QueryComponent
  */
+#[CoversClass(QueryComponent::class)]
+#[CoversMethod(QueryComponent::class, 'handleInclude')]
+#[CoversMethod(QueryComponent::class, 'handleSort')]
+#[CoversMethod(QueryComponent::class, 'index')]
+#[CoversMethod(QueryComponent::class, 'prepare')]
 class QueryComponentTest extends TestCase
 {
     /**
@@ -18,7 +25,7 @@ class QueryComponentTest extends TestCase
      *
      * @var \App\Controller\Component\QueryComponent
      */
-    public $Query;
+    public QueryComponent $Query;
 
     /**
      * @inheritDoc
@@ -26,7 +33,7 @@ class QueryComponentTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $controller = new Controller();
+        $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
         /** @var \App\Controller\Component\QueryComponent $queryComponent */
         $queryComponent = $registry->load(QueryComponent::class);
@@ -48,7 +55,7 @@ class QueryComponentTest extends TestCase
      *
      * @return array
      */
-    public function indexProvider(): array
+    public static function indexProvider(): array
     {
         return [
             'query filter' => [
@@ -88,10 +95,8 @@ class QueryComponentTest extends TestCase
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
-     * @covers ::handleSort()
-     * @dataProvider indexProvider()
      */
+    #[DataProvider('indexProvider')]
     public function testIndex(array $queryParams, array $config, array $expected): void
     {
         $controller = new Controller(
@@ -101,8 +106,8 @@ class QueryComponentTest extends TestCase
                     'environment' => [
                         'REQUEST_METHOD' => 'GET',
                     ],
-                ]
-            )
+                ],
+            ),
         );
         $registry = $controller->components();
         /** @var \App\Controller\Component\QueryComponent $Query */
@@ -115,11 +120,54 @@ class QueryComponentTest extends TestCase
     }
 
     /**
+     * Test `handleInclude` method.
+     *
+     * @return void
+     */
+    public function testHandleInclude(): void
+    {
+        $controller = new Controller(
+            new ServerRequest(
+                [
+                    'query' => [],
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    'params' => [
+                        'object_type' => 'test',
+                    ],
+                ],
+            ),
+        );
+        $registry = $controller->components();
+        $component = new class ($registry) extends QueryComponent {
+            public function handleInclude(array $query): array
+            {
+                return parent::handleInclude($query);
+            }
+        };
+        $component->setConfig('include', 'c,d,e');
+        $query = [];
+        Configure::write('Properties.test.index', [
+            'title',
+            'description',
+            [
+                'a' => ['title'],
+                'b' => ['title'],
+                'c' => ['title'],
+            ],
+        ]);
+        $actual = $component->handleInclude($query);
+        $expected = ['include' => 'a,b,c,d,e'];
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
      * Data provider for `testPrepare`
      *
      * @return array
      */
-    public function prepareProvider(): array
+    public static function prepareProvider(): array
     {
         return [
             'simple' => [
@@ -165,9 +213,8 @@ class QueryComponentTest extends TestCase
      * Test `prepare` method.
      *
      * @return void
-     * @dataProvider prepareProvider
-     * @covers ::prepare()
      */
+    #[DataProvider('prepareProvider')]
     public function testPrepare(array $expected, array $query): void
     {
         $actual = $this->Query->prepare($query);

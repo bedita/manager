@@ -21,8 +21,32 @@
                 <div class="{{ prop }}-cell">
                     {{ element('Modules/index_properties_date_ranges', { dateRanges: object.attributes[prop] }) }}
                 </div>
+            {% elseif (prop is iterable) %}
+                {% for relationName,relationFields in prop %}
+                    {% set relationThumbs = [] %}
+                    {% for f in relationFields %}
+                        {% if f == 'media_url' %}
+                            {% for o in object.relationships[relationName]['data'] %}
+                                {% set t = Thumb.getUrl(o, { 'options': { 'w': width } }) %}
+                                {% set relationThumbs = relationThumbs|merge([t]) %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    <index-cell
+                        :prop="{{ relationName|json_encode }}"
+                        :related="{{ object.relationships[relationName]['data']|json_encode }}"
+                        :related-fields="{{ relationFields|json_encode }}"
+                        :related-thumbs="{{ relationThumbs|json_encode }}"
+                    >
+                    </index-cell>
+                {% endfor %}
             {% else %}
-                <index-cell :settings="{{ config('UI.index')|default({'copy2clipboard': false})|json_encode }}" :prop="{{ prop|json_encode }}" :text="{{ Property.value(object, prop)|striptags|json_encode }}">
+                <index-cell
+                    :settings="{{ config('UI.index')|default({'copy2clipboard': false})|json_encode }}"
+                    :prop="{{ prop|json_encode }}"
+                    :text="{{ Property.value(object, prop)|json_encode }}"
+                    :schema="{{ schema['properties'][prop]|default({})|json_encode }}"
+                >
                 </index-cell>
             {% endif %}
         {% endfor %}

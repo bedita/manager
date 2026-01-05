@@ -44,8 +44,11 @@ export default {
         PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
+        ObjectCaptions: () => import(/* webpackChunkName: "object-captions" */'app/components/object-captions/object-captions'),
         ObjectCategories: () => import(/* webpackChunkName: "object-categories" */'app/components/object-categories/object-categories'),
         PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */'app/components/placeholder-list/placeholder-list'),
+        MediaItem: () => import(/* webpackChunkName: "media-item" */'app/components/media-item/media-item'),
+        MailPreview: () => import(/* webpackChunkName: "mail-preview" */'app/components/mail-preview/mail-preview.vue'),
     },
 
     props: {
@@ -91,6 +94,8 @@ export default {
             userInfoLoaded: false,
             fileChanged: false,
             searchInPosition: '',
+            searchInPositionActive: false,
+            positions: [],
         }
     },
 
@@ -124,6 +129,7 @@ export default {
         toggleVisibility() {
             this.isOpen = !this.isOpen;
             this.searchInPosition = '';
+            this.searchInPositionActive = this.searchInPositionActive ? true : false;
             this.checkLoadRelated();
             this.updateStorage();
         },
@@ -186,7 +192,7 @@ export default {
                 const creatorId = this.object?.meta?.created_by;
                 const modifierId = this.object?.meta?.modified_by;
                 const usersId = [creatorId, modifierId];
-                const userRes = await fetch(`${API_URL}api/users?filter[id]=${usersId.join(',')}&fields[users]=name,surname,username`, API_OPTIONS);
+                const userRes = await fetch(`${API_URL}users/list?filter[id]=${usersId.join(',')}`, API_OPTIONS);
                 const userJson = await userRes.json();
                 const users = userJson.data;
 
@@ -198,11 +204,21 @@ export default {
 
                     // using == because user.id String and creatorById Number
                     if(user.id == creatorId && userInfo!= undefined) {
-                        document.querySelector('td[name=\'created_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        if (document.querySelector('span[name=\'created_by\']')) {
+                            document.querySelector('span[name=\'created_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        }
+                        if (document.querySelector('td[name=\'created_by\']')) {
+                            document.querySelector('td[name=\'created_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        }
                     }
-
+                    // using == because user.id String and modifierId Number
                     if (user.id == modifierId && userInfo!= undefined) {
-                        document.querySelector('td[name=\'modified_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        if (document.querySelector('span[name=\'modified_by\']')) {
+                            document.querySelector('span[name=\'modified_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        }
+                        if (document.querySelector('td[name=\'modified_by\']')) {
+                            document.querySelector('td[name=\'modified_by\']').innerHTML = `<a href="${href}">${userInfo}</a>`;
+                        }
                     }
                 });
             }
@@ -247,6 +263,15 @@ export default {
             }
 
             return debouncedSearchPosition(e.target.value);
+        },
+
+        onSearchInPositionActive(e) {
+            this.searchInPositionActive = e.target.checked ? true : false;
+        },
+
+        updatePositions(n) {
+            this.positions = n;
+            this.$forceUpdate();
         },
     }
 }

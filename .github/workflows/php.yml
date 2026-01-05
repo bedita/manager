@@ -5,6 +5,7 @@ on:
     paths:
       - '**/*.php'
       - '.github/workflows/php.yml'
+      - '.scrutinizer.yml'
       - 'composer.json'
       - 'phpcs.xml.dist'
       - 'phpstan.neon.dist'
@@ -13,6 +14,7 @@ on:
     paths:
       - '**/*.php'
       - '.github/workflows/php.yml'
+      - '.scrutinizer.yml'
       - 'composer.json'
       - 'phpcs.xml.dist'
       - 'phpstan.neon.dist'
@@ -22,28 +24,28 @@ jobs:
   cs:
     uses: bedita/github-workflows/.github/workflows/php-cs.yml@v2
     with:
-      php_versions: '["8.3"]'
+      php_versions: '["8.4"]'
 
   psalm:
     uses: bedita/github-workflows/.github/workflows/php-psalm.yml@v2
     with:
-      php_versions: '["8.3"]'
+      php_versions: '["8.4"]'
 
   stan:
     uses: bedita/github-workflows/.github/workflows/php-stan.yml@v2
     with:
-      php_versions: '["8.3"]'
-
-  unit-4:
-    uses: bedita/github-workflows/.github/workflows/php-unit.yml@v2
-    with:
-      php_versions: '["7.4", "8.1", "8.2", "8.3"]'
-      bedita_version: '4'
-      coverage_min_percentage: 98
+      php_versions: '["8.4"]'
 
   unit-5:
     uses: bedita/github-workflows/.github/workflows/php-unit.yml@v2
     with:
-      php_versions: '["7.4", "8.1", "8.2", "8.3"]'
+      php_versions: '["8.3"]'
       bedita_version: '5'
+      coverage_min_percentage: 98
+
+  unit-6:
+    uses: bedita/github-workflows/.github/workflows/php-unit.yml@v2
+    with:
+      php_versions: '["8.4"]'
+      bedita_version: '6'
       coverage_min_percentage: 98

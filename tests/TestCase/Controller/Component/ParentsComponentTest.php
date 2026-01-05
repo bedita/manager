@@ -8,12 +8,14 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\ComponentRegistry;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Component\ParentsComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\ParentsComponent
  */
+#[CoversClass(ParentsComponent::class)]
+#[CoversMethod(ParentsComponent::class, 'addRelated')]
 class ParentsComponentTest extends TestCase
 {
     /**
@@ -34,7 +36,6 @@ class ParentsComponentTest extends TestCase
      * Test addRelated method with valid data.
      *
      * @return void
-     * @covers ::addRelated()
      */
     public function testAddRelated(): void
     {

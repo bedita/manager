@@ -18,7 +18,7 @@ use App\Form\Form;
 use App\Identifier\ApiIdentifier;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
-use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
@@ -28,15 +28,40 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\MethodNotAllowedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use DateTime;
+use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionClass;
+use ReflectionProperty;
+use stdClass;
 
 /**
  * {@see \App\Controller\AppController} Test Case
- *
- * @coversDefaultClass \App\Controller\AppController
- * @uses \App\Controller\AppController
  */
+#[CoversClass(AppController::class)]
+#[CoversMethod(AppController::class, 'applySessionFilter')]
+#[CoversMethod(AppController::class, 'beforeFilter')]
+#[CoversMethod(AppController::class, 'beforeRender')]
+#[CoversMethod(AppController::class, 'changedAttributes')]
+#[CoversMethod(AppController::class, 'checkRequest')]
+#[CoversMethod(AppController::class, 'decodeJsonAttributes')]
+#[CoversMethod(AppController::class, 'filterEmpty')]
+#[CoversMethod(AppController::class, 'getObjectNav')]
+#[CoversMethod(AppController::class, 'hasFieldChanged')]
+#[CoversMethod(AppController::class, 'initialize')]
+#[CoversMethod(AppController::class, 'loginRedirectRoute')]
+#[CoversMethod(AppController::class, 'prepareRequest')]
+#[CoversMethod(AppController::class, 'prepareDateRanges')]
+#[CoversMethod(AppController::class, 'prepareRoles')]
+#[CoversMethod(AppController::class, 'prepareRelations')]
+#[CoversMethod(AppController::class, 'relatedIds')]
+#[CoversMethod(AppController::class, 'setupOutputTimezone')]
+#[CoversMethod(AppController::class, 'setObjectNav')]
+#[CoversMethod(AppController::class, 'specialAttributes')]
 class AppControllerTest extends TestCase
 {
     /**
@@ -63,7 +88,7 @@ class AppControllerTest extends TestCase
      */
     protected function setupController($config = null): void
     {
-        $request = null;
+        $request = new ServerRequest();
         if ($config != null) {
             $request = new ServerRequest($config);
             if (!empty($config['?'])) {
@@ -94,11 +119,11 @@ class AppControllerTest extends TestCase
         // Mock Authentication component
         ApiClientProvider::getApiClient()->setupTokens([]); // reset client
         $service = new AuthenticationService();
-        $service->loadIdentifier(ApiIdentifier::class);
         $service->loadAuthenticator('Authentication.Form', [
+            'identifier' => ApiIdentifier::class,
             'fields' => [
-                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+                AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
             ],
         ]);
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $service));
@@ -142,16 +167,14 @@ class AppControllerTest extends TestCase
     /**
      * test `initialize` function
      *
-     * @covers ::initialize()
      * @return void
      */
     public function testInitialize(): void
     {
         $this->setupController();
 
-        static::assertNotEmpty($this->AppController->{'RequestHandler'});
         static::assertNotEmpty($this->AppController->{'Flash'});
-        static::assertNotEmpty($this->AppController->{'Security'});
+        static::assertNotEmpty($this->AppController->{'FormProtection'});
         static::assertNotEmpty($this->AppController->{'Authentication'});
         static::assertNotEmpty($this->AppController->{'Modules'});
         static::assertNotEmpty($this->AppController->{'Schema'});
@@ -160,7 +183,6 @@ class AppControllerTest extends TestCase
     /**
      * test `beforeFilter` not logged error
      *
-     * @covers ::beforeFilter()
      * @return void
      */
     public function testBeforeFilterLoginError(): void
@@ -170,7 +192,7 @@ class AppControllerTest extends TestCase
         // Mock Authentication component
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
 
-        $event = $this->AppController->dispatchEvent('Controller.initialize');
+        $this->AppController->dispatchEvent('Controller.initialize');
 
         $flash = $this->AppController->getRequest()->getSession()->read('Flash');
 
@@ -181,24 +203,32 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * test 'beforeFilter' for correct apiClient token setup
+     * test 'initialize' and 'beforeFilter' for correct apiClient token setup
      *
-     * @covers ::beforeFilter()
      * @return void
      */
-    public function testBeforeFilterCorrectTokens(): void
+    public function testCorrectTokens(): void
     {
-        $expectedtokens = [];
-
+        // no auth
         $this->setupControllerAndLogin();
-
-        /** @var \Authentication\Identity|null $user */
-        $user = $this->AppController->Authentication->getIdentity();
-        $expectedtokens = $user->get('tokens');
+        $expected = ['jwt', 'renew'];
+        $emptyUser = new Identity([]);
+        $this->AppController->Authentication->setIdentity($emptyUser);
         $this->AppController->dispatchEvent('Controller.initialize');
         $apiClient = $this->accessProperty($this->AppController, 'apiClient');
         $apiClientTokens = $apiClient->getTokens();
+        $actual = array_keys($apiClientTokens);
+        static::assertEquals($expected, $actual);
 
+        // auth
+        $this->setupControllerAndLogin();
+        /** @var \Authentication\Identity|null $user */
+        $user = $this->AppController->Authentication->getIdentity();
+        $expectedtokens = $user->get('tokens');
+        $this->AppController->initialize();
+        $this->AppController->dispatchEvent('Controller.initialize');
+        $apiClient = $this->accessProperty($this->AppController, 'apiClient');
+        $apiClientTokens = $apiClient->getTokens();
         static::assertEquals($expectedtokens, $apiClientTokens);
     }
 
@@ -207,7 +237,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function loginRedirectRouteProvider(): array
+    public static function loginRedirectRouteProvider(): array
     {
         return [
             'request is not a get' => [
@@ -228,14 +258,13 @@ class AppControllerTest extends TestCase
     /**
      * test 'loginRedirectRoute'.
      *
-     * @covers ::loginRedirectRoute()
-     * @dataProvider loginRedirectRouteProvider()
      * @return void
      */
+    #[DataProvider('loginRedirectRouteProvider')]
     public function testLoginRedirectRoute($config, $expected): void
     {
         $this->setupController($config);
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('loginRedirectRoute');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->AppController, []);
@@ -245,7 +274,6 @@ class AppControllerTest extends TestCase
     /**
      * test `setupOutputTimezone`
      *
-     * @covers ::setupOutputTimezone
      * @return void
      */
     public function testSetupOutputTimezone(): void
@@ -274,14 +302,13 @@ class AppControllerTest extends TestCase
     /**
      * Test `beforeRender` method for correct user object in Controller viewVars
      *
-     * @covers ::beforeRender()
      * @return void
      */
     public function testBeforeRender(): void
     {
         $user = $this->setupControllerAndLogin();
 
-        $event = $this->AppController->dispatchEvent('Controller.beforeRender');
+        $this->AppController->dispatchEvent('Controller.beforeRender');
 
         static::assertArrayHasKey('user', $this->AppController->viewBuilder()->getVars());
         $user = $this->AppController->viewBuilder()->getVar('user');
@@ -293,7 +320,6 @@ class AppControllerTest extends TestCase
     /**
      * Test `beforeRender` method, when updating tokens in session
      *
-     * @covers ::beforeRender()
      * @return void
      */
     public function testBeforeRenderUpdateTokens(): void
@@ -315,7 +341,7 @@ class AppControllerTest extends TestCase
             ->willReturn($updatedToken);
 
         // set $this->AppController->apiClient
-        $property = new \ReflectionProperty(AppController::class, 'apiClient');
+        $property = new ReflectionProperty(AppController::class, 'apiClient');
         $property->setAccessible(true);
         $property->setValue($this->AppController, $apiClient);
 
@@ -332,7 +358,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function prepareRequestProvider(): array
+    public static function prepareRequestProvider(): array
     {
         return [
             'documents' => [ // test _jsonKeys json_decode
@@ -485,6 +511,31 @@ class AppControllerTest extends TestCase
                     ]),
                 ],
             ],
+            'roles' => [
+                'users', // object_type
+                [ // expected
+                    'id' => '5',
+                    'username' => 'mario',
+                    '_api' => [
+                        [
+                            'method' => 'replaceRelated',
+                            'id' => '5',
+                            'relation' => 'roles',
+                            'relatedIds' => [
+                                [
+                                    'id' => '1',
+                                    'type' => 'roles',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [ // data provided
+                    'id' => '5',
+                    'username' => 'mario',
+                    'roles' => json_encode(['admin']),
+                ],
+            ],
             'relations' => [
                 'documents', // object_type
                 [
@@ -624,7 +675,7 @@ class AppControllerTest extends TestCase
             'empty json' => [
                 'documents',
                 [
-                    'json_prop' => new \stdClass(),
+                    'json_prop' => new stdClass(),
                     'json_prop2' => [
                         'gin' => 'vodka',
                     ],
@@ -690,17 +741,9 @@ class AppControllerTest extends TestCase
      * @param string $objectType The object type
      * @param array $expected The expected request data
      * @param array $data The payload data
-     * @covers ::prepareRequest()
-     * @covers ::specialAttributes()
-     * @covers ::decodeJsonAttributes()
-     * @covers ::prepareDateRanges()
-     * @covers ::prepareRelations()
-     * @covers ::setupParentsRelation()
-     * @covers ::changedAttributes()
-     * @covers ::filterEmpty()
-     * @dataProvider prepareRequestProvider()
      * @return void
      */
+    #[DataProvider('prepareRequestProvider')]
     public function testPrepareRequest($objectType, $expected, $data): void
     {
         $config = [
@@ -725,7 +768,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function changedAttributesProvider(): array
+    public static function changedAttributesProvider(): array
     {
         return [
             'missing _actualAttributes' => [
@@ -761,12 +804,11 @@ class AppControllerTest extends TestCase
      * @param array $data The data
      * @param array $expected The expected data
      * @return void
-     * @covers ::changedAttributes()
-     * @dataProvider changedAttributesProvider()
      */
+    #[DataProvider('changedAttributesProvider')]
     public function testChangedAttributes(array $data, array $expected): void
     {
-        $controller = new class extends AppController {
+        $controller = new class (new ServerRequest()) extends AppController {
             /**
              * Wrapper for changedAttributes() method.
              *
@@ -789,10 +831,10 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function hasFieldChangedProvider(): array
+    public static function hasFieldChangedProvider(): array
     {
-        $d1 = new \DateTime('2019-01-01T15:03:01.012345Z');
-        $d2 = new \DateTime('2019-01-01T16:03:01.012345Z');
+        $d1 = new DateTime('2019-01-01T15:03:01.012345Z');
+        $d2 = new DateTime('2019-01-01T16:03:01.012345Z');
 
         return [
             'null and empty | unchanged' => [ null, '', 'null_and_empty', false ],
@@ -822,11 +864,11 @@ class AppControllerTest extends TestCase
      *
      * @param mixed $val1 The first value
      * @param mixed $val2 The second value
+     * @param string $key The field key
      * @param bool $expected The expected result from function hasFieldChanged
-     * @covers ::hasFieldChanged()
-     * @dataProvider hasFieldChangedProvider()
      * @return void
      */
+    #[DataProvider('hasFieldChangedProvider')]
     public function testHasFieldChanged($val1, $val2, $key, $expected): void
     {
         $this->setupController();
@@ -839,7 +881,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function checkRequestProvider(): array
+    public static function checkRequestProvider(): array
     {
         return [
             'methodNotAllowed' => [
@@ -878,15 +920,14 @@ class AppControllerTest extends TestCase
     /**
      * Test `checkRequest` method
      *
-     * @covers ::checkRequest()
-     * @dataProvider checkRequestProvider()
      * @return void
      */
+    #[DataProvider('checkRequestProvider')]
     public function testCheckRequest($expected, $params, $config): void
     {
         $this->setupController($config);
 
-        if ($expected instanceof \Exception) {
+        if ($expected instanceof Exception) {
             $this->expectException(get_class($expected));
         }
 
@@ -903,9 +944,9 @@ class AppControllerTest extends TestCase
      * @param array  $parameters Array of parameters to pass into method.
      * @return mixed Method return.
      */
-    public function invokeMethod(&$object, $methodName, array $parameters = [])
+    public function invokeMethod(&$object, string $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
 
@@ -919,9 +960,9 @@ class AppControllerTest extends TestCase
      * @param string $propertyName Property name to access
      * @return mixed Method return.
      */
-    public function accessProperty(&$object, $propertyName)
+    public function accessProperty(&$object, string $propertyName)
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new ReflectionClass(get_class($object));
         $property = $reflection->getProperty($propertyName);
         $property->setAccessible(true);
 
@@ -933,7 +974,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function applySessionFilterProvider(): array
+    public static function applySessionFilterProvider(): array
     {
         return [
             'reset' => [ // expected remove of session filter and redirect
@@ -1005,8 +1046,6 @@ class AppControllerTest extends TestCase
     /**
      * Test `applySessionFilter` method
      *
-     * @covers ::applySessionFilter()
-     * @dataProvider applySessionFilterProvider()
      * @param array $requestConfig
      * @param string $sessionKey
      * @param mixed|null $sessionValue
@@ -1015,6 +1054,7 @@ class AppControllerTest extends TestCase
      * @param string|null $expectedResultType
      * @return void
      */
+    #[DataProvider('applySessionFilterProvider')]
     public function testApplySessionFilter($requestConfig, $sessionKey, $sessionValue, $expectedSessionValue, $expectedHttpStatusCode, $expectedResultType): void
     {
         // Setup controller for test
@@ -1025,7 +1065,7 @@ class AppControllerTest extends TestCase
         $session->write($sessionKey, $sessionValue);
 
         // do controller call
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('applySessionFilter');
         $method->setAccessible(true);
         $result = $method->invokeArgs($this->AppController, []);
@@ -1048,7 +1088,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function setObjectNavProvider(): array
+    public static function setObjectNavProvider(): array
     {
         return [
             'animals' => [
@@ -1129,10 +1169,9 @@ class AppControllerTest extends TestCase
      * @param array $objects The objects to filter to set object nav
      * @param array $expectedObjectNav The object nav array expected
      * @param string $expectedObjectNavModule The object type string type expected
-     * @covers ::setObjectNav()
-     * @dataProvider setObjectNavProvider()
      * @return void
      */
+    #[DataProvider('setObjectNavProvider')]
     public function testSetObjectNav(string $moduleName, array $objects, array $expectedObjectNav, string $expectedObjectNavModule): void
     {
         // Setup controller for test
@@ -1140,7 +1179,7 @@ class AppControllerTest extends TestCase
         $this->AppController->Modules->setConfig('currentModuleName', $moduleName);
 
         // do controller call
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('setObjectNav');
         $method->setAccessible(true);
         $method->invokeArgs($this->AppController, [ $objects ]);
@@ -1156,7 +1195,7 @@ class AppControllerTest extends TestCase
      *
      * @return array
      */
-    public function getObjectNavProvider(): array
+    public static function getObjectNavProvider(): array
     {
         return [
             'empty' => [
@@ -1187,10 +1226,9 @@ class AppControllerTest extends TestCase
      *
      * @param string $moduleName The module name for the test
      * @param array $objects The objects to filter to set object nav
-     * @covers ::getObjectNav()
-     * @dataProvider getObjectNavProvider()
      * @return void
      */
+    #[DataProvider('getObjectNavProvider')]
     public function testGetObjectNav(string $moduleName, array $objects): void
     {
         // Setup controller for test
@@ -1198,7 +1236,7 @@ class AppControllerTest extends TestCase
         $this->AppController->Modules->setConfig('currentModuleName', $moduleName);
 
         // set objectNav data
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('setObjectNav');
         $method->setAccessible(true);
         $method->invokeArgs($this->AppController, [ $objects ]);
@@ -1225,7 +1263,6 @@ class AppControllerTest extends TestCase
      * Test `getObjectNav`, when empty
      *
      * @return void
-     * @covers ::getObjectNav()
      */
     public function testGetObjectNavEmpty(): void
     {
@@ -1233,7 +1270,7 @@ class AppControllerTest extends TestCase
         $this->setupController();
 
         // set objectNav data to empty array
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('setObjectNav');
         $method->setAccessible(true);
         $method->invokeArgs($this->AppController, [ [] ]);
@@ -1253,7 +1290,7 @@ class AppControllerTest extends TestCase
     /**
      * Data provider for `testRelatedIds` test case.
      */
-    public function relatedIdsProvider(): array
+    public static function relatedIdsProvider(): array
     {
         return [
             'empty items' => [
@@ -1301,13 +1338,12 @@ class AppControllerTest extends TestCase
      * @param mixed $items The items to test
      * @param array $expected The expected result
      * @return void
-     * @covers ::relatedIds()
-     * @dataProvider relatedIdsProvider()
      */
+    #[DataProvider('relatedIdsProvider')]
     public function testRelatedIds($items, array $expected): void
     {
         $this->setupController();
-        $reflectionClass = new \ReflectionClass($this->AppController);
+        $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('relatedIds');
         $method->setAccessible(true);
         $actual = $method->invokeArgs($this->AppController, [$items]);

@@ -38,6 +38,10 @@ export default {
             default: '[10]'
         },
         filterActive: Boolean,
+        filterRelationsActive: {
+            type: Boolean,
+            default: false
+        },
         filterList: {
             type: Array,
             default: () => [],
@@ -81,7 +85,9 @@ export default {
              * When disabled, only direct children are fetched.
              * This will switch the API filter between `parent` and `ancestor`.
              */
+            editFilterRelations: this.filterRelationsActive,
             filterByDescendants: false,
+            filterRelations: {},
             folder: null,
             moreFilters: this.filterActive,
             pageSize: this.pagination.page_size,
@@ -261,6 +267,7 @@ export default {
             this.availableFilters = this.filterList;
         } else if (this.rightTypes.length == 1 && this.filtersByType) {
             this.availableFilters = this.filtersByType[this.rightTypes[0]];
+            this.queryFilter.filter.type = this.rightTypes[0];
         } else {
             this.availableFilters = this.filtersByType?.[this.queryFilter.filter.type] || [];
         }
@@ -363,6 +370,10 @@ export default {
 
             const filter = this.prepareFilters();
             const filterObject = { ...this.queryFilter, filter };
+            filterObject.filter = {
+                ...filterObject.filter,
+                ...this.filterRelations,
+            };
             this.availableFilters = this.filtersByType?.[filterObject?.filter?.type] || [];
             this.$emit('filter-objects', filterObject);
         },
@@ -383,6 +394,10 @@ export default {
             this.folder = null;
             this.selectedSearchType = 'q';
             this.queryFilter = this.getCleanQuery();
+            if (this.rightTypes.length == 1 && this.filtersByType) {
+                this.availableFilters = this.filtersByType[this.rightTypes[0]];
+                this.queryFilter.filter.type = this.rightTypes[0];
+            }
             this.$emit('filter-reset');
         },
 
@@ -455,6 +470,20 @@ export default {
             const oldFilter = newFilter === 'ancestor' ? 'parent' : 'ancestor';
             delete this.queryFilter.filter[oldFilter];
             this.queryFilter.filter[newFilter] = this.folder?.id || null;
+        },
+
+        toggleFilterRelations() {
+            this.editFilterRelations = !this.editFilterRelations;
+        },
+
+        updateFilterRelations(filter) {
+            this.filterRelations = {};
+            for (const [key, value] of Object.entries(filter)) {
+                this.filterRelations[key] = [];
+                for (const v of value) {
+                    this.filterRelations[key].push(v);
+                }
+            }
         },
     }
 };

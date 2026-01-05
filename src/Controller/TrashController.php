@@ -99,7 +99,7 @@ class TrashController extends AppController
      * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function view($id): ?Response
+    public function view(mixed $id): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
 
@@ -215,11 +215,8 @@ class TrashController extends AppController
      */
     public function deleteData(string $id): void
     {
-        $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $id]]);
+        $this->apiClient->get('/streams', ['filter' => ['object_id' => $id]]);
         $this->apiClient->remove($id);
-        // this for BE versions < 5.25.1, where streams are not deleted with media on delete
-        $streams = (array)Hash::get($response, 'data');
-        $this->removeStreams($streams);
     }
 
     /**
@@ -231,10 +228,7 @@ class TrashController extends AppController
     public function deleteMulti(array $ids): bool
     {
         try {
-            $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $ids]]);
             $this->apiClient->removeObjects($ids);
-            $streams = (array)Hash::get($response, 'data');
-            $this->removeStreams($streams);
         } catch (BEditaClientException $e) {
             // Error! Back to object view.
             $this->log($e->getMessage(), LogLevel::ERROR);
@@ -244,25 +238,5 @@ class TrashController extends AppController
         }
 
         return true;
-    }
-
-    /**
-     * Remove streams
-     *
-     * @param array $streams The streams to remove
-     * @return void
-     */
-    public function removeStreams(array $streams): void
-    {
-        // this for BE versions < 5.25.1, where streams are not deleted with media on delete
-        $uuids = (array)Hash::extract($streams, '{n}.id');
-        if (empty($uuids)) {
-            return;
-        }
-        $search = $this->apiClient->get('/streams', ['filter' => ['uuid' => $uuids]]);
-        $search = (array)Hash::get($search, 'data');
-        foreach ($search as $stream) {
-            $this->apiClient->delete(sprintf('/streams/%s', $stream['id']));
-        }
     }
 }

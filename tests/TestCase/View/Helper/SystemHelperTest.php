@@ -19,12 +19,21 @@ use App\View\Helper\SystemHelper;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use ReflectionClass;
 
 /**
  * {@see \App\View\Helper\SystemHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\SystemHelper
  */
+#[CoversClass(SystemHelper::class)]
+#[CoversMethod(SystemHelper::class, 'alertBgColor')]
+#[CoversMethod(SystemHelper::class, 'alertMsg')]
+#[CoversMethod(SystemHelper::class, 'checkBeditaApiVersion')]
+#[CoversMethod(SystemHelper::class, 'getMaxFileSize')]
+#[CoversMethod(SystemHelper::class, 'isBEditaApiVersionGte')]
+#[CoversMethod(SystemHelper::class, 'placeholdersConfig')]
+#[CoversMethod(SystemHelper::class, 'uploadConfig')]
 class SystemHelperTest extends TestCase
 {
     /**
@@ -61,7 +70,6 @@ class SystemHelperTest extends TestCase
      * Test `getMaxFileSize`
      *
      * @return void
-     * @covers ::getMaxFileSize()
      */
     public function testGetMaxFileSize(): void
     {
@@ -70,13 +78,18 @@ class SystemHelperTest extends TestCase
         $expected = min($pms, $umf) * 1024 * 1024;
         $actual = $this->System->getMaxFileSize();
         static::assertSame($expected, $actual);
+        // test with forced max file size
+        $forcedMaxFileSize = -1;
+        Configure::write('Upload.uploadMaxSize', $forcedMaxFileSize);
+        $actual = $this->System->getMaxFileSize();
+        static::assertSame($forcedMaxFileSize, $actual);
+        Configure::delete('Upload.uploadMaxSize');
     }
 
     /**
      * Test `checkBeditaApiVersion`
      *
      * @return void
-     * @covers ::checkBeditaApiVersion()
      */
     public function testCheckBeditaApiVersion(): void
     {
@@ -92,10 +105,20 @@ class SystemHelperTest extends TestCase
         // project version 4.13.0
         $this->System->getView()->set('project', ['version' => '4.13.0']);
         $actual = $this->System->checkBeditaApiVersion();
-        static::assertTrue($actual);
+        static::assertFalse($actual);
 
         // project version 5.13.0
         $this->System->getView()->set('project', ['version' => '5.13.0']);
+        $actual = $this->System->checkBeditaApiVersion();
+        static::assertFalse($actual);
+
+        // project version 5.36.0
+        $this->System->getView()->set('project', ['version' => '5.36.0']);
+        $actual = $this->System->checkBeditaApiVersion();
+        static::assertTrue($actual);
+
+        // project version 5.38.0
+        $this->System->getView()->set('project', ['version' => '5.38.0']);
         $actual = $this->System->checkBeditaApiVersion();
         static::assertTrue($actual);
     }
@@ -104,7 +127,6 @@ class SystemHelperTest extends TestCase
      * Test `isBEditaApiVersionGte`
      *
      * @return void
-     * @covers ::isBEditaApiVersionGte()
      */
     public function testIsBEditaApiVersionGte(): void
     {
@@ -134,12 +156,11 @@ class SystemHelperTest extends TestCase
      * Test `placeholdersConfig`
      *
      * @return void
-     * @covers ::placeholdersConfig()
      */
     public function testPlaceholdersConfig(): void
     {
         // empty config, defaultUploadAccepted
-        $reflectionClass = new \ReflectionClass($this->System);
+        $reflectionClass = new ReflectionClass($this->System);
         $property = $reflectionClass->getProperty('defaultPlaceholders');
         $property->setAccessible(true);
         $expected = $property->getValue($this->System);
@@ -151,12 +172,11 @@ class SystemHelperTest extends TestCase
      * Test `uploadConfig`
      *
      * @return void
-     * @covers ::uploadConfig()
      */
     public function testUploadConfig(): void
     {
         // empty config, defaultUploadAccepted
-        $reflectionClass = new \ReflectionClass($this->System);
+        $reflectionClass = new ReflectionClass($this->System);
         $property = $reflectionClass->getProperty('defaultUploadAccepted');
         $property->setAccessible(true);
         $accepted = $property->getValue($this->System);
@@ -166,7 +186,13 @@ class SystemHelperTest extends TestCase
         $property = $reflectionClass->getProperty('defaultUploadMaxResolution');
         $property->setAccessible(true);
         $maxResolution = $property->getValue($this->System);
-        $expected = compact('accepted', 'forbidden', 'maxResolution');
+        $property = $reflectionClass->getProperty('defaultUploadMaxSize');
+        $property->setAccessible(true);
+        $maxSize = $property->getValue($this->System);
+        $property = $reflectionClass->getProperty('defaultUploadTimeout');
+        $property->setAccessible(true);
+        $timeout = $property->getValue($this->System);
+        $expected = compact('accepted', 'forbidden', 'maxResolution', 'maxSize', 'timeout');
         $actual = $this->System->uploadConfig();
         static::assertSame($expected, $actual);
     }
@@ -175,7 +201,6 @@ class SystemHelperTest extends TestCase
      * Test `alertBgColor`
      *
      * @return void
-     * @covers ::alertBgColor()
      */
     public function testAlertBgColor(): void
     {
@@ -193,7 +218,6 @@ class SystemHelperTest extends TestCase
      * Test `alertMsg`
      *
      * @return void
-     * @covers ::alertMsg()
      */
     public function testAlertMsg(): void
     {

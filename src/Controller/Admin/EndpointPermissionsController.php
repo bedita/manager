@@ -25,19 +25,19 @@ class EndpointPermissionsController extends AdministrationBaseController
     /**
      * Resource type in use
      *
-     * @var string
+     * @var string|null
      */
-    protected $resourceType = 'endpoint_permissions';
+    protected ?string $resourceType = 'endpoint_permissions';
 
     /**
      * @inheritDoc
      */
-    protected $readonly = false;
+    protected bool $readonly = false;
 
     /**
      * @inheritDoc
      */
-    protected $properties = [
+    protected array $properties = [
         'endpoint_id' => 'endpoints',
         'application_id' => 'applications',
         'role_id' => 'roles',

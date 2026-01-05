@@ -70,6 +70,13 @@ export const PaginatedContentMixin = {
 
                     return Promise.resolve();
                 }
+                if (requestUrl.indexOf('view/relationships') >= 0) {
+                    requestUrl = requestUrl.replace('view/relationships', 'view/0/relationships');
+                }
+
+                if (requestUrl.indexOf('view/resources') >= 0) {
+                    requestUrl = requestUrl.replace('view/resources', 'view/0/resources');
+                }
 
                 // if requestQueue is populated then abort all fetch request and start over
                 if (this.requestsQueue.length > 0) {
@@ -158,7 +165,7 @@ export const PaginatedContentMixin = {
                 formattedObj.type = obj.type;
 
                 // search for meta.relation using this.formatObjectsFilter
-                const metaRelation = obj.meta.relation;
+                const metaRelation = obj?.meta?.relation || {};
                 if (metaRelation) {
                     let formattedMeta = {};
                     this.formatObjectsFilter.forEach((filter) => {

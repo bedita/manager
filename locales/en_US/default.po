@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2024-10-24 09:51:55 \n"
+"POT-Creation-Date: 2025-12-31 09:53:48 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -43,6 +43,9 @@ msgstr ""
 msgid "Advanced Data"
 msgstr ""
 
+msgid "Age"
+msgstr ""
+
 msgid "Alert Message"
 msgstr ""
 
@@ -82,6 +85,9 @@ msgstr ""
 msgid "Async Jobs"
 msgstr ""
 
+msgid "Auth Providers"
+msgstr ""
+
 msgid "Auto-translate"
 msgstr ""
 
@@ -115,7 +121,7 @@ msgstr ""
 msgid "Cannot create abstract objects or objects without schema"
 msgstr ""
 
-msgid "Cannot produce a thumbnail for this file"
+msgid "Captions"
 msgstr ""
 
 msgid "Categories"
@@ -134,9 +140,6 @@ msgid "Children order"
 msgstr ""
 
 msgid "Choose a file"
-msgstr ""
-
-msgid "Choose a type"
 msgstr ""
 
 msgid "City"
@@ -172,6 +175,9 @@ msgstr ""
 msgid "Confirm new password"
 msgstr ""
 
+msgid "Confirm-password"
+msgstr ""
+
 msgid "Conflict"
 msgstr ""
 
@@ -203,6 +209,9 @@ msgid "Created ↑ Oldest on top"
 msgstr ""
 
 msgid "Created ↓ Newest on top"
+msgstr ""
+
+msgid "Creation date"
 msgstr ""
 
 msgid "Current password"
@@ -301,9 +310,6 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
-msgid "Expired"
-msgstr ""
-
 msgid "Export"
 msgstr ""
 
@@ -313,10 +319,10 @@ msgstr ""
 msgid "Export Filtered"
 msgstr ""
 
-msgid "Failed to write file to disk"
+msgid "External Auth"
 msgstr ""
 
-msgid "File"
+msgid "Failed to write file to disk"
 msgstr ""
 
 msgid "File Name"
@@ -349,13 +355,13 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr ""
 
+msgid "Form data has been modified. Save it to persist the changes"
+msgstr ""
+
 msgid "Format choosen is not available"
 msgstr ""
 
 msgid "From"
-msgstr ""
-
-msgid "Future"
 msgstr ""
 
 msgid "Gender"
@@ -436,10 +442,19 @@ msgstr ""
 msgid "Language and translations"
 msgstr ""
 
+msgid "Last login"
+msgstr ""
+
+msgid "Last login error"
+msgstr ""
+
 msgid "Left types"
 msgstr ""
 
 msgid "Less"
+msgstr ""
+
+msgid "Limit"
 msgstr ""
 
 msgid "List"
@@ -457,6 +472,9 @@ msgstr ""
 msgid "Lock"
 msgstr ""
 
+msgid "Locked"
+msgstr ""
+
 msgid "Locked_until"
 msgstr ""
 
@@ -464,6 +482,9 @@ msgid "Log out"
 msgstr ""
 
 msgid "Login"
+msgstr ""
+
+msgid "Login informations"
 msgstr ""
 
 msgid "Login required"
@@ -550,6 +571,11 @@ msgstr ""
 msgid "No application"
 msgstr ""
 
+msgid ""
+"No auth providers found: you cannot create external auth entries. Create at "
+"least one auth provider first"
+msgstr ""
+
 msgid "No import filters set"
 msgstr ""
 
@@ -563,6 +589,12 @@ msgid "Not Found"
 msgstr ""
 
 msgid "Number of created objects"
+msgstr ""
+
+msgid "Number of folders"
+msgstr ""
+
+msgid "Number of login errors"
 msgstr ""
 
 msgid "Number of updated objects"
@@ -598,6 +630,9 @@ msgstr ""
 msgid "Ok"
 msgstr ""
 
+msgid "Old Password"
+msgstr ""
+
 msgid "On"
 msgstr ""
 
@@ -608,9 +643,6 @@ msgid "Open"
 msgstr ""
 
 msgid "Open File"
-msgstr ""
-
-msgid "Open image"
 msgstr ""
 
 msgid "Open module"
@@ -631,7 +663,13 @@ msgstr ""
 msgid "Parent"
 msgstr ""
 
+msgid "Password"
+msgstr ""
+
 msgid "Password Modified"
+msgstr ""
+
+msgid "Password informations"
 msgstr ""
 
 msgid "Password reset"
@@ -653,6 +691,9 @@ msgid "Phone"
 msgstr ""
 
 msgid "Pick"
+msgstr ""
+
+msgid "Pick all"
 msgstr ""
 
 msgid "Please check your mailbox and follow the instructions"
@@ -796,6 +837,12 @@ msgstr ""
 msgid "Select a project"
 msgstr ""
 
+msgid "Setup module"
+msgstr ""
+
+msgid "Show active positions"
+msgstr ""
+
 msgid "Sign in"
 msgstr ""
 
@@ -803,9 +850,6 @@ msgid "Sign in with {0}"
 msgstr ""
 
 msgid "Size"
-msgstr ""
-
-msgid "Sorry, your browser does not support embedded {0} element"
 msgstr ""
 
 msgid "State Name"
@@ -841,7 +885,7 @@ msgstr ""
 msgid "Temporary folder missing"
 msgstr ""
 
-msgid "The thumbnail is not available"
+msgid "The number of folders is too high to be displayed in tree-compact view"
 msgstr ""
 
 msgid "There were errors creating the thumbnail(s)"
@@ -851,9 +895,6 @@ msgid "Thumb not available"
 msgstr ""
 
 msgid "Thumb not ready: coming soon"
-msgstr ""
-
-msgid "Thumbnail is not ready"
 msgstr ""
 
 msgid "Title"
@@ -898,6 +939,12 @@ msgstr ""
 msgid "Trashd"
 msgstr "Trashed"
 
+msgid "Tree"
+msgstr ""
+
+msgid "Tree compact"
+msgstr ""
+
 msgid "Tree view"
 msgstr ""
 
@@ -931,9 +978,6 @@ msgstr ""
 msgid "Upload multiple"
 msgstr ""
 
-msgid "Url"
-msgstr ""
-
 msgid "User Accesses"
 msgstr ""
 
@@ -958,6 +1002,9 @@ msgstr ""
 msgid "Vat Number"
 msgstr ""
 
+msgid "Verified"
+msgstr ""
+
 msgid "Version"
 msgstr ""
 
@@ -965,9 +1012,6 @@ msgid "Videos"
 msgstr ""
 
 msgid "View file"
-msgstr ""
-
-msgid "View original"
 msgstr ""
 
 msgid "Website"
@@ -982,7 +1026,16 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
+msgid "You are not authorized to access here"
+msgstr ""
+
 msgid "You are not authorized to access that location."
+msgstr ""
+
+msgid "You are not authorized to access this resource"
+msgstr ""
+
+msgid "You cannot see folders in tree-compact view"
 msgstr ""
 
 msgid "You do not have the required permissions to view this page."
@@ -1009,10 +1062,19 @@ msgstr ""
 msgid "application_id"
 msgstr ""
 
+msgid "auth_class"
+msgstr ""
+
+msgid "auth_provider_id"
+msgstr ""
+
 msgid "autoplay"
 msgstr ""
 
 msgid "bearing"
+msgstr ""
+
+msgid "by"
 msgstr ""
 
 msgid "cancel"
@@ -1033,16 +1095,13 @@ msgstr ""
 msgid "controls"
 msgstr ""
 
-msgid "create"
-msgstr ""
-
-msgid "create new for"
-msgstr ""
-
 msgid "created"
 msgstr ""
 
 msgid "current password"
+msgstr ""
+
+msgid "day(s)"
 msgstr ""
 
 msgid "description"
@@ -1117,10 +1176,10 @@ msgstr ""
 msgid "pitch"
 msgstr ""
 
-msgid "remove"
+msgid "provider_username"
 msgstr ""
 
-msgid "reset"
+msgid "remove"
 msgstr ""
 
 msgid "scheduled_from"
@@ -1157,6 +1216,9 @@ msgid "undo remove"
 msgstr ""
 
 msgid "untitled"
+msgstr ""
+
+msgid "user_id"
 msgstr ""
 
 msgid "username"
@@ -1206,6 +1268,15 @@ msgid "There are unsaved changes, are you sure you want to leave page?"
 msgstr ""
 
 msgid "Add placeholder"
+msgstr ""
+
+msgid "Accordion content"
+msgstr ""
+
+msgid "Remove accordion"
+msgstr ""
+
+msgid "Accordion title"
 msgstr ""
 
 #, javascript-format
@@ -1464,6 +1535,18 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+#, javascript-format
+msgid "Created on ${ created }."
+msgstr ""
+
+#, javascript-format
+msgid "Modified on ${ modified }."
+msgstr ""
+
+#, javascript-format
+msgid "Publish start on ${ published }."
+msgstr ""
+
 msgid "Loading branches for position"
 msgstr ""
 
@@ -1488,6 +1571,30 @@ msgstr ""
 msgid "View"
 msgstr ""
 
+msgid "New content"
+msgstr ""
+
+msgid "New folder"
+msgstr ""
+
+msgid "Open in new tab"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Choose object type"
+msgstr ""
+
+msgid "Object type"
+msgstr ""
+
+msgid "Parent folder"
+msgstr ""
+
+msgid "/ (root)"
+msgstr ""
+
 msgid "Add new tag"
 msgstr ""
 
@@ -1510,13 +1617,13 @@ msgstr ""
 msgid "Descending"
 msgstr ""
 
-msgid "Sort by"
+msgid "Reorder by"
 msgstr ""
 
 msgid "Related items order will be changed."
 msgstr ""
 
-msgid "Continue?"
+msgid "OK"
 msgstr ""
 
 msgid "Hide"
@@ -1528,16 +1635,16 @@ msgstr ""
 msgid "copied in the clipboard"
 msgstr ""
 
-#, javascript-format
-msgid "Created on ${ created }."
+msgid "Expired"
 msgstr ""
 
-#, javascript-format
-msgid "Modified on ${ modified }."
+msgid "Future"
 msgstr ""
 
-#, javascript-format
-msgid "Publish start on ${ published }."
+msgid "New"
+msgstr ""
+
+msgid "Uploaded"
 msgstr ""
 
 #, javascript-format
@@ -1545,6 +1652,18 @@ msgid "Missing required data \"${ required }\". Retry"
 msgstr ""
 
 msgid "Error while creating new object."
+msgstr ""
+
+msgid "Edit related objects"
+msgstr ""
+
+msgid "Choose relation"
+msgstr ""
+
+msgid "Filter to apply"
+msgstr ""
+
+msgid "Search related objects"
 msgstr ""
 
 msgid "Action"
@@ -1572,6 +1691,9 @@ msgid "(deleted)"
 msgstr ""
 
 msgid "placeholders"
+msgstr ""
+
+msgid "Roles that cannot modify permissions"
 msgstr ""
 
 msgid "You can modify the permissions"
@@ -1629,10 +1751,63 @@ msgstr ""
 msgid "Error on deleting property"
 msgstr ""
 
+msgid "Show object info"
+msgstr ""
+
+msgid "Media URL"
+msgstr ""
+
 msgid "Search on categories"
 msgstr ""
 
-msgid "Password"
+msgid "Caption"
+msgstr ""
+
+msgid "Format"
+msgstr ""
+
+msgid "New caption"
+msgstr ""
+
+msgid "No captions"
+msgstr ""
+
+msgid "Not valid"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Valid"
+msgstr ""
+
+msgid "Module"
+msgstr ""
+
+msgid ""
+"Sorry, your browser does not support embedded <code>audio</code> element"
+msgstr ""
+
+msgid "Cannot produce a thumbnail for this file"
+msgstr ""
+
+msgid "The thumbnail is not available"
+msgstr ""
+
+msgid "The thumbnail is not ready"
+msgstr ""
+
+msgid "Open image"
+msgstr ""
+
+msgid ""
+"Sorry, your browser does not support embedded <code>video</code> element"
+msgstr ""
+
+msgid "View original"
+msgstr ""
+
+msgid "Send"
 msgstr ""
 
 msgid "Address"
@@ -1714,13 +1889,70 @@ msgid ""
 "saving). Are you sure?"
 msgstr ""
 
-msgid "version by"
-msgstr ""
-
 msgid "date"
 msgstr ""
 
 msgid "Trashed"
+msgstr ""
+
+msgid "version by"
+msgstr ""
+
+msgid "Latitude"
+msgstr ""
+
+msgid "Longitude"
+msgstr ""
+
+msgid "Canceled"
+msgstr ""
+
+msgid "Choose file"
+msgstr ""
+
+msgid "File upload"
+msgstr ""
+
+msgid "No file selected"
+msgstr ""
+
+msgid "Replace media"
+msgstr ""
+
+msgid "Uploading..."
+msgstr ""
+
+msgid "Upload succeeded"
+msgstr ""
+
+msgid "Choose a type"
+msgstr ""
+
+msgid "Create new for"
+msgstr ""
+
+msgid "Add multiple date ranges"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Repeat times"
+msgstr ""
+
+msgid "Repeat type"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Add multiple"
 msgstr ""
 
 msgid "Insert date(s)"
@@ -1730,9 +1962,6 @@ msgid "Every day"
 msgstr ""
 
 msgid "Invalid date range"
-msgstr ""
-
-msgid "Undo"
 msgstr ""
 
 msgid "Copied!"
@@ -1748,4 +1977,16 @@ msgid "Error while saving category"
 msgstr ""
 
 msgid "Error on deleting category"
+msgstr ""
+
+msgid "Create new"
+msgstr ""
+
+msgid "Loading"
+msgstr ""
+
+msgid "Allowed types"
+msgstr ""
+
+msgid "Not found"
 msgstr ""

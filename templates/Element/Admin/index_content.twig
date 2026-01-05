@@ -11,122 +11,123 @@
 <admin-index inline-template>
 
     <div class="module-index">
-        <div class="list-objects">
+        <div class="table-container">
+            <div class="list-objects">
 
-            {# list resources : table header #}
-            <nav class="table-header has-border-black">
-                <div>{{ __('Id') }}</div>
-                {% for key in allProperties %}
-                    {% set label = key %}
-                    <div class="{{ Link.sortClass(key) }} {{ key }}"><a href="{{ Link.sortUrl(key) }}">{{ __(label)|humanize }}</a></div>
-                {% endfor %}
-                {% for key in metaColumns %}
-                    <div>{{ __(key) }}</div>
-                {% endfor %}
-                {% if not readonly or deleteonly %}
-                    <div></div>
-                {% endif %}
-            </nav>
-            {% if resources|length == 0 %}
-                <div class="mt-2 ml-2">{{ __('Resources not available') }}</div>
-            {% endif %}
-
-            {# list resources : rows #}
-            {% for resource in resources %}
-                {{ Form.create(null, {
-                    'id': 'form-' ~ resource.id,
-                    'url': {'_name': 'admin:save:' ~ resourceType},
-                    'class': 'table-row',
-                })|raw }}
-                    <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
-                        {{ resource.id|truncate(10) }}
-                    </div>
-                    {% for property,type in properties %}
-                        {% set val = resource.attributes[property] %}
-                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            {% if type == 'json' %}
-                                <show-hide field="field-{{ resource.id }}"></show-hide>
-                                <div id="field-{{ resource.id }}" class="mt-05">
-                                    {{ Admin.control(type, property, val)|raw }}
-                                </div>
-                            {% else %}
-                                {{ Admin.control(type, property, val)|raw }}
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                    {% for property in propertiesSecrets %}
-                        {% set val = resource.attributes[property] %}
-                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            <secret val="{{ resource.meta[property] }}" />
-                        </div>
+                {# list resources : table header #}
+                <nav class="table-header has-border-black">
+                    <div>{{ __('Id') }}</div>
+                    {% for key in allProperties %}
+                        {% set label = key %}
+                        <div class="{{ Link.sortClass(key) }} {{ key }}"><a href="{{ Link.sortUrl(key) }}">{{ __(label)|humanize }}</a></div>
                     {% endfor %}
                     {% for key in metaColumns %}
-                        <div class="narrow">
-                            {{ Time.format(resource.meta[key], 'd MMM YYYY') }}
-                        </div>
+                        <div>{{ __(key) }}</div>
                     {% endfor %}
-                    {% if not readonly and not resource.meta.unchangeable %}
-                        <div class="buttons-cell narrow">
-                            <button form="form-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Save') ~ ' ' ~ resource.attributes.name }}">
-                                <app-icon icon="carbon:save"></app-icon>
-                                <span class="ml-05">{{ __('Save') }}</span>
-                            </button>
-
-                            <button form="form-remove-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
-                                <app-icon icon="carbon:trash-can"></app-icon>
-                                <span class="ml-05">{{ __('Remove') }}</span>
-                            </button>
-                        </div>
-                    {% elseif deleteonly %}
-                        <div class="buttons-cell narrow">
-                            <button form="form-remove-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
-                                <app-icon icon="carbon:trash-can"></app-icon>
-                                <span class="ml-05">{{ __('Remove') }}</span>
-                            </button>
-                        </div>
+                    {% if not readonly or deleteonly %}
+                        <div></div>
                     {% endif %}
+                </nav>
+                {% if resources|length == 0 %}
+                    <div class="mt-2 ml-2">{{ __('Resources not available') }}</div>
+                {% endif %}
 
-                {{ Form.hidden('id', {'value': resource.id})|raw }}
-                {{ Form.end()|raw }}
-
-                {{ Form.create(null, {
-                    'id': 'form-remove-' ~ resource.id,
-                    'url': {'_name': 'admin:remove:' ~ resourceType, 'id': resource.id},
-                })|raw }}
-                {{ Form.end()|raw }}
-
-            {% endfor %}
-
-            {# form to create a NEW record #}
-            {% if not readonly %}
-                {{ Form.create(null, {
-                    'id': 'form-create',
-                    'url': {'_name': 'admin:save:' ~ resourceType},
-                    'class': 'table-row new-record mt-1',
-                })|raw }}
-                    <div>{{ __('NEW') }}</div>
-                    {% for property,type in properties %}
-                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            {{ Admin.control(type, property, null)|raw }}
+                {# list resources : rows #}
+                {% for resource in resources %}
+                    {{ Form.create(null, {
+                        'id': 'form-' ~ resource.id,
+                        'url': {'_name': 'admin:save:' ~ resourceType},
+                        'class': 'table-row',
+                    })|raw }}
+                        <div class="{{ prop }}-cell" untitled-label="{{ __('Untitled') }}">
+                            {{ resource.id|truncate(10) }}
                         </div>
-                    {% endfor %}
-                    {% for property in propertiesSecrets %}
-                        <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
-                            ---
+                        {% for property,type in properties %}
+                            {% set val = resource.attributes[property] %}
+                            <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                                {% if type == 'json' %}
+                                    <show-hide field="field-{{ resource.id }}"></show-hide>
+                                    <div id="field-{{ resource.id }}" class="mt-05">
+                                        {{ Admin.control(type, property, val)|raw }}
+                                    </div>
+                                {% else %}
+                                    {{ Admin.control(type, property, val)|raw }}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        {% for property in propertiesSecrets %}
+                            {% set val = resource.attributes[property] %}
+                            <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                                <secret val="{{ resource.meta[property] }}" />
+                            </div>
+                        {% endfor %}
+                        {% for key in metaColumns %}
+                            <div class="narrow">
+                                {{ Time.format(resource.meta[key], 'd MMM YYYY') }}
+                            </div>
+                        {% endfor %}
+                        {% if not readonly and not resource.meta.unchangeable %}
+                            <div class="buttons-cell narrow">
+                                <button form="form-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Save') ~ ' ' ~ resource.attributes.name }}">
+                                    <app-icon icon="carbon:save"></app-icon>
+                                    <span class="ml-05">{{ __('Save') }}</span>
+                                </button>
+
+                                <button form="form-remove-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
+                                    <app-icon icon="carbon:trash-can"></app-icon>
+                                    <span class="ml-05">{{ __('Remove') }}</span>
+                                </button>
+                            </div>
+                        {% elseif deleteonly %}
+                            <div class="buttons-cell narrow">
+                                <button form="form-remove-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
+                                    <app-icon icon="carbon:trash-can"></app-icon>
+                                    <span class="ml-05">{{ __('Remove') }}</span>
+                                </button>
+                            </div>
+                        {% endif %}
+
+                    {{ Form.hidden('id', {'value': resource.id})|raw }}
+                    {{ Form.end()|raw }}
+
+                    {{ Form.create(null, {
+                        'id': 'form-remove-' ~ resource.id,
+                        'url': {'_name': 'admin:remove:' ~ resourceType, 'id': resource.id},
+                    })|raw }}
+                    {{ Form.end()|raw }}
+
+                {% endfor %}
+
+                {# form to create a NEW record #}
+                {% if not readonly %}
+                    {{ Form.create(null, {
+                        'id': 'form-create',
+                        'url': {'_name': 'admin:save:' ~ resourceType},
+                        'class': 'table-row new-record mt-1',
+                    })|raw }}
+                        <div>{{ __('NEW') }}</div>
+                        {% for property,type in properties %}
+                            <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                                {{ Admin.control(type, property, null)|raw }}
+                            </div>
+                        {% endfor %}
+                        {% for property in propertiesSecrets %}
+                            <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                                ---
+                            </div>
+                        {% endfor %}
+                        {% for key in metaColumns %}
+                            <div class="narrow">-</div>
+                        {% endfor %}
+                        <div class="buttons-cell narrow">
+                            <button form="form-create" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Create') ~ ' ' ~ resourceType }}">
+                                <app-icon icon="carbon:save"></app-icon>
+                                <span class="ml-05">{{ __('Create') }}</span>
+                            </button>
                         </div>
-                    {% endfor %}
-                    {% for key in metaColumns %}
-                        <div class="narrow">-</div>
-                    {% endfor %}
-                    <div class="buttons-cell narrow">
-                        <button form="form-create" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Create') ~ ' ' ~ resourceType }}">
-                            <app-icon icon="carbon:save"></app-icon>
-                            <span class="ml-05">{{ __('Create') }}</span>
-                        </button>
-                    </div>
-                {{ Form.end()|raw }}
-            {% endif %}
+                    {{ Form.end()|raw }}
+                {% endif %}
+            </div>
         </div>
-
     </div>
 </admin-index>

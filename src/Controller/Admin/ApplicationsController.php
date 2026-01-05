@@ -22,17 +22,17 @@ class ApplicationsController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $resourceType = 'applications';
+    protected ?string $resourceType = 'applications';
 
     /**
      * @inheritDoc
      */
-    protected $readonly = false;
+    protected bool $readonly = false;
 
     /**
      * @inheritDoc
      */
-    protected $properties = [
+    protected array $properties = [
         'name' => 'string',
         'description' => 'text',
         'enabled' => 'bool',
@@ -41,5 +41,10 @@ class ApplicationsController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    protected $propertiesSecrets = ['api_key', 'client_secret'];
+    protected array $propertiesSecrets = ['api_key', 'client_secret'];
+
+    /**
+     * @inheritDoc
+     */
+    protected ?string $sortBy = 'name';
 }

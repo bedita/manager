@@ -26,9 +26,9 @@ class DummyTranslator implements TranslatorInterface
     }
 
     /**
-     * Translate an array of texts $texts from language source $from to language target $to
+     * Translate an array of texts $text from language source $from to language target $to
      *
-     * @param array $texts The texts to translate
+     * @param array $text The texts to translate
      * @param string $from The source language
      * @param string $to The target language
      * @return string The translation in json format as string, i.e.
@@ -41,11 +41,11 @@ class DummyTranslator implements TranslatorInterface
      *     ]
      * }
      */
-    public function translate(array $texts, string $from, string $to): string
+    public function translate(array $text, string $from, string $to): string
     {
         $translation = [];
-        foreach ($texts as $text) {
-            $translation[] = sprintf('text: %s, from: %s, to: %s', $text, $from, $to);
+        foreach ($text as $tt) {
+            $translation[] = sprintf('text: %s, from: %s, to: %s', $tt, $from, $to);
         }
 
         return json_encode(compact('translation'));

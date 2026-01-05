@@ -26,9 +26,9 @@ class RelationsController extends ModelBaseController
     /**
      * Resource type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected $resourceType = 'relations';
+    protected ?string $resourceType = 'relations';
 
     /**
      * @inheritDoc
@@ -138,7 +138,7 @@ class RelationsController extends ModelBaseController
 
                 return compact('id') + ['type' => 'object_types'];
             },
-            $types
+            $types,
         );
     }
 

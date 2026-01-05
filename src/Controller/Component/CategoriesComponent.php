@@ -13,7 +13,6 @@
 namespace App\Controller\Component;
 
 use App\Utility\CacheTools;
-use App\Utility\System;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
@@ -139,7 +138,7 @@ class CategoriesComponent extends Component
      * @param array $category The category data.
      * @return void
      */
-    protected function fillRoots(array &$roots, $category): void
+    protected function fillRoots(array &$roots, array $category): void
     {
         if (!empty(Hash::get($category, 'attributes.parent_id'))) {
             return;
@@ -160,12 +159,7 @@ class CategoriesComponent extends Component
     public function getAllAvailableRoots(): array
     {
         $roots = ['' => ['id' => 0, 'label' => '-', 'name' => '', 'object_type_name' => '']];
-        $options = ['page_size' => self::DEFAULT_PAGE_SIZE];
-        $actualApiVersion = Hash::get((array)$this->getController()->viewBuilder()->getVar('project'), 'version');
-        // BE APIs provide roots filter from version 5.27.0
-        if (System::compareBEditaApiVersion($actualApiVersion, '5.27.0')) {
-            $options['filter']['roots'] = 1;
-        }
+        $options = ['page_size' => self::DEFAULT_PAGE_SIZE, 'filter' => ['roots' => 1]];
         $pageCount = $page = 1;
         $endpoint = '/model/categories';
         while ($page <= $pageCount) {
@@ -223,7 +217,7 @@ class CategoriesComponent extends Component
      * @param string $type The object type name of the category.
      * @return array|null The BEdita API response for the deleted category.
      */
-    public function delete(string $id, $type = null): ?array
+    public function delete(string $id, ?string $type = null): ?array
     {
         $apiClient = ApiClientProvider::getApiClient();
 

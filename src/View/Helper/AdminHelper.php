@@ -30,21 +30,21 @@ class AdminHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Form', 'Property', 'Schema'];
+    public array $helpers = ['Form', 'Property', 'Schema'];
 
     /**
      * Object containing i18n strings
      *
      * @var array
      */
-    protected $dictionary = [];
+    protected array $dictionary = [];
 
     /**
      * Options
      *
      * @var array
      */
-    protected $options = [];
+    protected array $options = [];
 
     /**
      * @inheritDoc
@@ -89,7 +89,7 @@ class AdminHelper extends Helper
      * @param mixed $value The value
      * @return string
      */
-    public function control(string $type, string $property, $value): string
+    public function control(string $type, string $property, mixed $value): string
     {
         $readonly = (bool)$this->_View->get('readonly');
         $resource = (array)$this->_View->get('resource');
@@ -101,10 +101,14 @@ class AdminHelper extends Helper
         }
 
         if (in_array($type, ['bool', 'json', 'text'])) {
+            if ($type === 'json' && is_array($value)) {
+                $value = json_encode($value);
+            }
+
             return $this->Form->control($property, $this->options[$type] + compact('value'));
         }
 
-        if (in_array($type, ['applications', 'endpoints', 'roles'])) {
+        if (in_array($type, ['applications', 'auth_providers', 'endpoints', 'roles'])) {
             $options = (array)$this->_View->get($type);
             $value = $value ?? '-';
 

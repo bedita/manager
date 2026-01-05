@@ -45,7 +45,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function customControl(string $name, $value): array
+    public static function customControl(string $name, mixed $value): array
     {
         if (!in_array($name, Options::CUSTOM_CONTROLS)) {
             return [];
@@ -64,7 +64,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function lang($value): array
+    public static function lang(mixed $value): array
     {
         $languages = Configure::read('Project.config.I18n.languages');
         if (empty($languages)) {
@@ -84,7 +84,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function dateRanges($value): array
+    public static function dateRanges(mixed $value): array
     {
         return Control::datetime(compact('value'));
     }
@@ -95,7 +95,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function startDate($value): array
+    public static function startDate(mixed $value): array
     {
         return Control::datetime(compact('value'));
     }
@@ -106,7 +106,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function endDate($value): array
+    public static function endDate(mixed $value): array
     {
         return Control::datetime(compact('value'));
     }
@@ -121,7 +121,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function status($value): array
+    public static function status(mixed $value): array
     {
         return compact('value') + [
             'type' => 'radio',
@@ -142,7 +142,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function oldPassword($value): array
+    public static function oldPassword(mixed $value): array
     {
         return compact('value') + [
             'class' => 'password',
@@ -160,7 +160,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function password($value): array
+    public static function password(mixed $value): array
     {
         return compact('value') + [
             'class' => 'password',
@@ -176,7 +176,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function confirmPassword($value): array
+    public static function confirmPassword(mixed $value): array
     {
         return compact('value') + [
             'label' => __('Retype password'),
@@ -196,7 +196,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function title($value): array
+    public static function title(mixed $value): array
     {
         return compact('value') + [
             'class' => 'title',
@@ -213,7 +213,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function coords($value): array
+    public static function coords(mixed $value): array
     {
         $label = sprintf('<label>%s</label>', __('Long Lat Coordinates'));
         $options = json_encode((array)Configure::read('Location.google'));
@@ -234,7 +234,7 @@ class Options
      * @param mixed|null $value The field value.
      * @return array
      */
-    public static function childrenOrder($value): array
+    public static function childrenOrder(mixed $value): array
     {
         return compact('value') + [
             'type' => 'select',

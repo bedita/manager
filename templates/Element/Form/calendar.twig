@@ -15,8 +15,11 @@
         </header>
 
         <div v-show="isOpen" class="tab-container">
-            <date-ranges-view ranges={{ object.attributes.date_ranges|json_encode }}
-                :options={{ options|json_encode }}>
+            <date-ranges-view
+                ranges={{ object.attributes.date_ranges|json_encode }}
+                :options={{ options|json_encode }}
+                :readonly="{{ Perms.canCreate() ? 'false' : 'true' }}"
+            >
             </date-ranges-view>
             {% do Form.unlockField('date_ranges') %}
         </div>

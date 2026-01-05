@@ -1,16 +1,20 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="8"
+    errorLevel="7"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="false"
+    phpVersion="8.4"
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    findUnusedBaselineEntry="true"
-    findUnusedCode="false"
 >
     <issueHandlers>
         <ImplicitToStringCast errorLevel="suppress" />
+        <MissingOverrideAttribute errorLevel="suppress" />
+        <MissingTemplateParam errorLevel="suppress" />
         <UndefinedConstant errorLevel="suppress" />
+        <UndefinedFunction errorLevel="suppress" />
     </issueHandlers>
     <projectFiles>
         <directory name="src" />

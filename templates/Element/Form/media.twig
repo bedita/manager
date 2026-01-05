@@ -11,61 +11,74 @@
             {% if object.attributes.provider_extra.html %}
                 {% set height = object.attributes.provider_extra.height|default(1) %}
                 {% set width = object.attributes.provider_extra.width|default(1) %}
-                <div class="embedded-container"
+                <div class="embedded-container mt-1 grid-span-full"
                     {% if height matches '/^\\d+$/' and width matches '/^\\d+$/' %}
                         style="padding-bottom: {{ 100 * height / width|default(1) }}%;"
                     {% endif %}>
                     {{ object.attributes.provider_extra.html|raw }}
                 </div>
+                {% if object.attributes.provider and object.attributes.provider_url %}
+                    <div class="mt-1 grid-span-full">
+                        {% if Layout.propertyGroup('provider_url') == 'media' %}
+                        <div class="input text">
+                            {{ Form.hidden('upload_behavior', {value: 'embed'})|raw }}
+                            {{ Property.control('remote_url', {value: object.attributes.provider_url})|raw }}
+                        </div>
+                        {% endif %}
+                        {% if Layout.propertyGroup('provider') == 'media' %}
+                        <div class="input text">
+                            {{ Property.control('provider', object.attributes.provider, {'disabled': true})|raw }}
+                        </div>
+                        {% endif %}
+                        {% if Layout.propertyGroup('provider_url') == 'media' %}
+                        <div class="input text">
+                            {{ Property.control('provider_url', object.attributes.provider_url, {'disabled': true})|raw }}
+                        </div>
+                        {% endif %}
+                        {% if Layout.propertyGroup('provider_uid') == 'media' %}
+                        <div class="input text">
+                            {{ Property.control('provider_uid', object.attributes.provider_uid, {'disabled': true})|raw }}
+                        </div>
+                        {% endif %}
+                        {% if Layout.propertyGroup('provider_thumbnail') == 'media' %}
+                        <div class="input text">
+                            {{ Property.control('provider_thumbnail', object.attributes.provider_thumbnail, {'disabled': true})|raw }}
+                        </div>
+                        {% endif %}
+                        {% if Layout.propertyGroup('provider_extra') == 'media' %}
+                        <div class="input text">
+                            {{ Property.control('provider_extra', object.attributes.provider_extra, {'disabled': true, 'readonly': true})|raw }}
+                        </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
             {% else %}
 
                 {# Show first stream #}
                 {% set stream = streams|first %}
-                {% set thumb = null %}
+                {% set thumb = '' %}
+                {% if object.type == 'images' %}
+                    {% set thumb = stream.attributes.mime_type == 'image/svg+xml' ? stream.meta.url : Thumb.getUrl(object) %}
+                {% endif %}
+                {% set thumbCodes = {
+                    notAcceptable: constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE'),
+                    notAvailable: constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE'),
+                    notReady: constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_READY'),
+                    noUrl: constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NO_URL'),
+                } %}
 
                 {# the stream #}
                 <div class="stream">
-                    {# thumb #}
-                    {% if object.type == 'images' %}
-                        {% if stream.attributes.mime_type == 'image/svg+xml' %}
-                            {% set thumb = stream.meta.url %}
-                        {% else %}
-                            {% set thumb = Thumb.getUrl(object) %}
-                        {% endif %}
-                        {% if thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE') %}
-                            <p>{{ __('Cannot produce a thumbnail for this file') }}</p>
-                        {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE') %}
-                            <p>{{ __('The thumbnail is not available') }}</p>
-                            <p>
-                                <a href={{ stream.meta.url }} title="{{ __('View original') }}" target="_blank">
-                                    {{ __('View original') }}
-                                </a>
-                            </p>
-                        {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_READY') %}
-                            <p>{{ __('Thumbnail is not ready') }}</p>
-                        {% elseif thumb == constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NO_URL') %}
-                            <p>
-                                <a href={{ stream.meta.url }} title="{{ __('View original') }}" target="_blank">
-                                    {{ __('View original') }}
-                                </a>
-                            </p>
-                        {% else %}
-                            <figure class="thumb">
-                                <a href={{ stream.meta.url }} title="{{ __('Open image') }}" target="_blank">
-                                    <img :src=previewImage("{{ thumb }}") alt="" id="imageThumb" style="min-width:500px;" />
-                                </a>
-                            </figure>
-                        {% endif %}
-                    {% elseif object.type == 'videos' %}
-                        <video controls width="100%">
-                            <source src="{{ stream.meta.url }}" type="{{ stream.attributes.mime_type }}">
-                            {{ __('Sorry, your browser does not support embedded {0} element', '<code>video</code>')|raw }}.
-                        </video>
-                    {% elseif object.type == 'audio' %}
-                        <audio controls src="{{ stream.meta.url }}">
-                            {{ __('Sorry, your browser does not support embedded {0} element', '<code>audio</code>')|raw }}.
-                        </audio>
-                    {% endif %}
+                    <media-item
+                        :captions="{{ object.attributes.captions|default([])|json_encode }}"
+                        :languages="{{ config('Project.config.I18n.languages')|default(null)|json_encode|escape('html_attr') }}"
+                        :mime="{{ stream.attributes.mime_type|json_encode }}"
+                        :object-type="{{ objectType|json_encode }}"
+                        :thumb="{{ thumb|json_encode }}"
+                        :thumb-codes="{{ thumbCodes|json_encode }}"
+                        :url={{ stream.meta.url|json_encode }}
+                    >
+                    </media-item>
                 </div>
 
                 {# Stream properties #}

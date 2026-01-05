@@ -37,6 +37,8 @@ export default {
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         Thumbnail:() => import(/* webpackChunkName: "thumbnail" */'app/components/thumbnail/thumbnail'),
         ClipboardItem: () => import(/* webpackChunkName: "clipboard-item" */'app/components/clipboard-item/clipboard-item'),
+        FastCreate: () => import(/* webpackChunkName: "fast-create" */'app/components/fast-create/fast-create'),
+        FastCreateContainer: () => import(/* webpackChunkName: "fast-create-container" */'app/components/fast-create/fast-create-container'),
     },
 
     props: {
@@ -69,12 +71,13 @@ export default {
             selectedObjects: [],
             addedObjects: [],
             activeFilter: {},
+            dataList: false,
+            selectAll: false,
 
             // create object form data
             saving: false,
             file: null,
             url: null,
-            showCreateObjectForm: false,
             object: createData('_choose'),
         };
     },
@@ -107,7 +110,7 @@ export default {
 
             // alreadyInView doesn't get out of pagination objects. We need to "re-add" all objects
             try {
-                if (this.$attrs.object.type && this.$attrs.object.id) {
+                if (this.$attrs.object?.type && this.$attrs.object?.id) {
                     const related = await this.fetchRelated(this.$attrs.object.type, this.$attrs.object.id);
                     for (const obj of related) {
                         if (this.alreadyInView.indexOf(obj.id) === -1) {
@@ -232,6 +235,12 @@ export default {
             this.toPage(page, this.activeFilter);
         },
 
+        addCreated(object) {
+            let createdObjects = (Array.isArray(object) ? object : [object]) || [];
+            this.objects = createdObjects.concat(this.objects);
+            this.selectedObjects = createdObjects.concat(this.selectedObjects);
+        },
+
         /**
          * send selected objects to relation view
          *
@@ -248,11 +257,6 @@ export default {
          */
         closePanel() {
             PanelEvents.closePanel();
-        },
-
-        resetForms() {
-            this.showCreateObjectForm = !this.showCreateObjectForm;
-            this.resetType();
         },
 
         formCheck() {
@@ -460,6 +464,16 @@ export default {
         },
 
         /**
+         * Select/deselect all objects
+         *
+         * @param {Event} event The event object
+         * @return {void}
+         */
+        toggleAll(event) {
+            this.selectedObjects = event.target.checked ? [...this.objects] : [];
+        },
+
+        /**
          * Load objects (using filter and pagination)
          *
          * @emits Event#count
@@ -497,49 +511,8 @@ export default {
             return response;
         },
 
-        onChangeType() {
-            this.file = null;
-            for (let t of this.relationTypes?.right || []) {
-                if (this.$refs[`${t}-form`]) {
-                    this.$refs[`${t}-form`].reset();
-                }
-            }
-        },
-
         fileAcceptMimeTypes(type) {
             return this.$helpers.acceptMimeTypes(type);
-        },
-
-        /**
-         * set file, object type and placeholder
-         *
-         * @param {Event} event input file change event
-         * @param {String} type The object type
-         */
-        processFile(event, type) {
-            if (this.$helpers.checkMimeForUpload(event.target.files[0], type) === false) {
-                return;
-            }
-            if (type === 'images') {
-                this.$helpers.checkImageResolution(event.target.files[0]);
-            }
-            if (this.$helpers.checkMaxFileSize(event.target.files[0]) === false) {
-                return false;
-            }
-            this.file = event.target.files[0];
-            if (!this.file) {
-                return false;
-            }
-
-            if (!this.object.attributes.title) {
-                this.object.attributes.title = this.file.name;
-            }
-            const titleId = `_fast_create_${type}_title`;
-            this.$helpers.setTitleFromFileName(titleId, this.file.name);
-        },
-
-        previewImage() {
-            return this.$helpers.updatePreviewImage(this.file);
         },
 
         datesInfo(obj) {

@@ -1,0 +1,28 @@
+{% if object.id %}
+{% if schema.properties.captions %}
+{% set captions = object.attributes.captions %}
+<property-view inline-template :tab-open="tabsOpen" tab-name="captions">
+	<section class="fieldset">
+		<header @click.prevent="toggleVisibility()" class="tab unselectable" :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+			<h2>{{ __('Captions') }}</h2>
+			<span class="tag is-smallest is-black mx-05 {% if captions|length == 0 %}empty{% endif %}">{{ captions|length }}</span>
+		</header>
+		<div v-show="isOpen" class="tab-container">
+			<div class="captions-container">
+                <object-captions
+                    :object-id="{{ object.id|json_encode }}"
+                    :object-type="{{ object.type|json_encode }}"
+                    :items="{{ captions|json_encode }}"
+                    :config="{{ config('Captions')|default({formats:{'allowed':['webvtt'],'default':'webvtt'}})|json_encode }}"
+                    :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}"
+                    :readonly="{{ Perms.canCreate() ? 'false' : 'true' }}"
+                >
+                </object-captions>
+                {% do Form.unlockField('captions') %}
+                {{ write_config('_jsonKeys', config('_jsonKeys', [])|merge(['captions'])) }}
+			</div>
+		</div>
+	</section>
+</property-view>
+{% endif %}
+{% endif %}

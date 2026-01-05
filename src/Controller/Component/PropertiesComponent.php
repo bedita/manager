@@ -31,19 +31,26 @@ class PropertiesComponent extends Component
     /**
      * @inheritDoc
      */
-    protected $components = ['Config'];
+    protected array $components = ['Config'];
 
     /**
      * Default properties groups
      *
      * @var array
      */
-    protected $defaultGroups = [
+    protected array $defaultGroups = [
         'view' => [
             // always open on the top
             'core' => [
                 'title',
                 'description',
+            ],
+            'media' => [
+                'provider',
+                'provider_uid',
+                'provider_url',
+                'provider_thumbnail',
+                'provider_extra',
             ],
             // publishing related
             'publish' => [
@@ -83,12 +90,14 @@ class PropertiesComponent extends Component
      *
      * @var array
      */
-    protected $excluded = [
+    protected array $excluded = [
         'categories',
         'date_ranges',
         'tags',
         'lang',
         'children_order',
+        'captions',
+        'roles',
     ];
 
     /**
@@ -111,15 +120,15 @@ class PropertiesComponent extends Component
         $keys = array_unique(
             array_merge(
                 array_keys($properties),
-                array_keys($defaultProperties)
-            )
+                array_keys($defaultProperties),
+            ),
         );
         sort($keys);
         $config = [];
         foreach ($keys as $key) {
             $config[$key] = array_merge(
                 (array)Hash::get($defaultProperties, $key),
-                (array)Hash::get($properties, $key)
+                (array)Hash::get($properties, $key),
             );
         }
         $this->setConfig('Properties', $config);
@@ -156,9 +165,11 @@ class PropertiesComponent extends Component
         $keep = (array)$this->getConfig(sprintf('Properties.%s.view._keep', $type), []);
         $hide = (array)$this->getConfig(sprintf('Properties.%s.view._hide', $type), []);
         $attributes = array_merge(array_fill_keys($keep, ''), (array)Hash::get($object, 'attributes'));
+        $attributes = array_merge($attributes, (array)Hash::get($object, 'meta', []));
         $attributes = array_diff_key($attributes, array_flip($this->excluded));
         $attributes = array_diff_key($attributes, array_flip($hide));
         $defaults = array_merge($this->getConfig(sprintf('Properties.%s.view', $type), []), $this->defaultGroups['view']);
+        $defaults = array_filter($defaults, fn($group) => $group !== 'history', ARRAY_FILTER_USE_KEY);
         unset($defaults['_keep']);
 
         foreach ($defaults as $group => $items) {
@@ -175,6 +186,14 @@ class PropertiesComponent extends Component
         }
         // add remaining properties to 'other' group
         $properties['other'] += array_diff_key($attributes, array_flip($used));
+        $metaKeys = array_keys((array)Hash::get($object, 'meta', []));
+        $properties['other'] = array_filter(
+            $properties['other'],
+            function ($key) use ($metaKeys) {
+                return !in_array($key, $metaKeys);
+            },
+            ARRAY_FILTER_USE_KEY,
+        );
 
         return $properties;
     }
@@ -187,9 +206,12 @@ class PropertiesComponent extends Component
      */
     public function indexList(string $type): array
     {
-        $list = $this->getConfig(sprintf('Properties.%s.index', $type), $this->defaultGroups['index']);
-
-        return array_diff($list, ['id', 'status', 'modified']);
+        return array_filter(
+            $this->getConfig(sprintf('Properties.%s.index', $type), $this->defaultGroups['index']),
+            function ($item) {
+                return !in_array($item, ['id', 'status', 'modified']);
+            },
+        );
     }
 
     /**
@@ -223,8 +245,8 @@ class PropertiesComponent extends Component
 
                     return $accumulator;
                 },
-                []
-            )
+                [],
+            ),
         );
     }
 

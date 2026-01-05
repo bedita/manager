@@ -11,6 +11,8 @@ use BEdita\SDK\BEditaClient;
  */
 class ModulesControllerSample extends ModulesController
 {
+    public ?BEditaClient $apiClient;
+
     /**
      * Public version of parent function (protected) descendants
      *
@@ -29,16 +31,6 @@ class ModulesControllerSample extends ModulesController
     public function availableRelationshipsUrl(string $relation): string
     {
         return parent::availableRelationshipsUrl($relation);
-    }
-
-    /**
-     * Create new object from ajax request.
-     *
-     * @return \BEdita\SDK\BEditaClient
-     */
-    public function getApiClient(): BEditaClient
-    {
-        return $this->apiClient;
     }
 
     /**

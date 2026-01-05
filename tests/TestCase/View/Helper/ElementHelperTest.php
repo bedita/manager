@@ -8,19 +8,25 @@ use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\ElementHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\ElementHelper
  */
+#[CoversClass(ElementHelper::class)]
+#[CoversMethod(ElementHelper::class, 'categories')]
+#[CoversMethod(ElementHelper::class, 'custom')]
+#[CoversMethod(ElementHelper::class, 'dropupload')]
+#[CoversMethod(ElementHelper::class, 'multiupload')]
+#[CoversMethod(ElementHelper::class, 'sidebar')]
 class ElementHelperTest extends TestCase
 {
     /**
      * Test `categories` method
      *
      * @return void
-     * @covers ::categories()
      */
     public function testCategories(): void
     {
@@ -43,7 +49,7 @@ class ElementHelperTest extends TestCase
      *
      * @return array
      */
-    public function customProvider(): array
+    public static function customProvider(): array
     {
         return [
             'empty' => [
@@ -83,9 +89,8 @@ class ElementHelperTest extends TestCase
      * @param string $type The item type
      * @param array $conf Configuration to use
      * @return void
-     * @dataProvider customProvider()
-     * @covers ::custom()
      */
+    #[DataProvider('customProvider')]
     public function testCustom(string $expected, string $item, string $type = 'relation', array $conf = []): void
     {
         Configure::write('Properties.documents', $conf);
@@ -100,7 +105,6 @@ class ElementHelperTest extends TestCase
      * Test `sidebar` method
      *
      * @return void
-     * @covers ::sidebar()
      */
     public function testSidebar(): void
     {
@@ -116,5 +120,47 @@ class ElementHelperTest extends TestCase
         Configure::write('Modules.documents.sidebar._element', 'another_sidebar');
         $actual = $element->sidebar();
         static::assertSame('another_sidebar', $actual);
+    }
+
+    /**
+     * Test `dropupload` method
+     *
+     * @return void
+     */
+    public function testDropupload(): void
+    {
+        $expected = 'Form/dropupload';
+        $viewVars = [
+            'currentModule' => ['name' => 'documents'],
+        ];
+        $view = new View(new ServerRequest(), null, null, compact('viewVars'));
+        $element = new ElementHelper($view);
+        $actual = $element->dropupload(['documents', 'events']);
+        static::assertSame($expected, $actual);
+
+        Configure::write('Modules.documents.dropupload._element', 'another_dropupload');
+        $actual = $element->dropupload(['documents', 'events']);
+        static::assertSame('another_dropupload', $actual);
+    }
+
+    /**
+     * Test `multiupload` method
+     *
+     * @return void
+     */
+    public function testMultiupload(): void
+    {
+        $expected = 'Form/multiupload';
+        $viewVars = [
+            'currentModule' => ['name' => 'documents'],
+        ];
+        $view = new View(new ServerRequest(), null, null, compact('viewVars'));
+        $element = new ElementHelper($view);
+        $actual = $element->multiupload();
+        static::assertSame($expected, $actual);
+
+        Configure::write('Modules.documents.multiupload._element', 'another_multiupload');
+        $actual = $element->multiupload();
+        static::assertSame('another_multiupload', $actual);
     }
 }

@@ -1,10 +1,12 @@
 {% do _view.assign('title', __(currentModule.name|humanize)) %}
 {% set indexViewType = Layout.moduleIndexViewType() %}
 
-{{ element('Modules/index_header', { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': indexViewType == 'tree'}) }}
+{% if indexViewType not in ['calendar', 'tree-compact'] %}
+    {{ element('Modules/index_header', { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': indexViewType == 'tree'}) }}
+{% endif %}
 
 {% set ids = Array.extract(objects, '{*}.id') %}
-<modules-index inline-template ids='{{ ids|json_encode }}'>
+<modules-index inline-template ids='{{ ids|json_encode }}' objects={{ Schema.minimalObjectsList(objects)|json_encode }}>
     <div class="module-index">
         {{ element('Modules/' ~ indexViewType) }}
         {{ element(Element.sidebar()) }}

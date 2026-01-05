@@ -36,26 +36,18 @@
         </div>
     {% endif %}
 
-
     {# RIBBON (new items) #}
-    {% if stage %}
-        <div class="ribbon" :class="'has-background-module-' + related.type">
-            {{ __('NEW') }}
-        </div>
-    {% endif %}
-
-    <div v-if="Date.parse(related.attributes.publish_start) > Date.now()" class="ribbon" :class="'has-background-module-' + related.type">
-         {{ __('Future') }}
-    </div>
-    <div v-if="Date.parse(related.attributes.publish_end) < Date.now()" class="ribbon" :class="'has-background-module-' + related.type">
-         {{ __('Expired') }}
-    </div>
+    <ribbon-item
+        :stage={{ stage|json_encode }}
+        :item="related"
+        :data-list="dataList"
+    >
+    </ribbon-item>
 
     {# THUMBNAIL #}
     {% if not translation %}
         <thumbnail :related="related"></thumbnail>
     {% endif %}
-
 
     {# BODY #}
     <div class="box-body p-05">
@@ -64,7 +56,12 @@
             {% if translation %}
                 <span class="tag is-dark"><: related.attributes.lang :></span>
             {% else %}
-                <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                <template v-if="dataList">
+                    <span class="tag ml-2" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                </template>
+                <template v-else>
+                    <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                </template>
 
                 <span class="icon-calendar-check-o" v-title="datesInfo(related)"></span>
             {% endif %}
@@ -82,12 +79,10 @@
 
                 <h3 class="title m-0 has-text-size-small" style="padding-bottom: 7px;">
                     {% if translation %}
-                        <span :title="related.attributes.translated_fields.title" v-if="related.attributes.translated_fields && related.attributes.translated_fields.title ">
-                            <: truncate(related.attributes.translated_fields.title, 50) :>
+                        <span v-html="truncate(related.attributes.translated_fields.title, 50)" :title=" related.attributes.translated_fields.title" v-if=" related.attributes.translated_fields && related.attributes.translated_fields.title ">
                         </span>
                     {% else %}
-                        <span :title="related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-'">
-                            <: truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 50) :>
+                        <span v-html="truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 50)" :title=" related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-' ">
                         </span>
                     {% endif %}
                 </h3>
@@ -183,6 +178,7 @@
             <button class="is-small has-font-weight-bold mr-1"
                 v-html="(selectedObjects.indexOf(related) !== -1)? '{{ __('Discard') }}' : '{{ __('Pick') }}'"
                 :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check button-secondary' : 'button-outlined-white button-text icon-check-empty'"></button>
+            <object-info :object-data="related"></object-info>
             <a class="button button-outlined-white is-small" @click.stop :href="$helpers.buildViewUrl(related.id)" target="_blank">
                 <app-icon icon="carbon:launch"></app-icon>
                 <span class="ml-05">{{ __('Open') }}</span>
@@ -204,6 +200,7 @@
             </a>
 
         {% else %}
+            <object-info :object-data="related"></object-info>
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)">
                 <app-icon icon="carbon:launch"></app-icon>
                 <span class="ml-05">{{ __('Edit') }}</span>
