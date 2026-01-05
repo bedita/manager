@@ -17,6 +17,7 @@ export default {
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */'app/components/json-fields/key-value-list'),
         StringList: () => import(/* webpackChunkName: "string-list" */'app/components/json-fields/string-list'),
         LanguageSelector:() => import(/* webpackChunkName: "language-selector" */'app/components/language-selector/language-selector'),
+        MailPreview: () => import(/* webpackChunkName: "mail-preview" */'app/components/mail-preview/mail-preview.vue'),
     },
 
     props: {

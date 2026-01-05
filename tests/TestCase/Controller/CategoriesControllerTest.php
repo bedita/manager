@@ -4,31 +4,27 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\CategoriesController;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\CategoriesController} Test Case
- *
- * @coversDefaultClass \App\Controller\CategoriesController
- * @uses \App\Controller\CategoriesController
  */
+#[CoversClass(CategoriesController::class)]
+#[CoversMethod(CategoriesController::class, 'delete')]
+#[CoversMethod(CategoriesController::class, 'index')]
+#[CoversMethod(CategoriesController::class, 'initialize')]
+#[CoversMethod(CategoriesController::class, 'save')]
 class CategoriesControllerTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Controller\CategoriesController
-     */
-    protected $CategoriesController;
-
     /**
      * Test `initialize`
      *
      * @return void
-     * @covers ::initialize()
      */
     public function testInitialize(): void
     {
-        $this->CategoriesController = new CategoriesController(new ServerRequest([
+        $request = new ServerRequest([
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
             ],
@@ -36,20 +32,26 @@ class CategoriesControllerTest extends TestCase
             'params' => [
                 'object_type' => 'documents',
             ],
-        ]));
-        static::assertNotEmpty($this->CategoriesController->{'Categories'});
-        static::assertNotEmpty($this->CategoriesController->{'Properties'});
+        ]);
+        $controller = new class ($request) extends CategoriesController {
+            public function initialize(): void
+            {
+                parent::initialize();
+                $this->loadComponent('Categories');
+            }
+        };
+        static::assertNotEmpty($controller->{'Categories'});
+        static::assertNotEmpty($controller->{'Properties'});
     }
 
     /**
      * Test `index`
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {
-        $this->CategoriesController = new CategoriesController(new ServerRequest([
+        $request = new ServerRequest([
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
             ],
@@ -57,30 +59,38 @@ class CategoriesControllerTest extends TestCase
             'params' => [
                 'object_type' => 'documents',
             ],
-        ]));
-        $this->CategoriesController->viewBuilder()->setVar('project', ['version' => '5.26.0']);
-        $result = $this->CategoriesController->index();
+        ]);
+        $controller = new class ($request) extends CategoriesController {
+            public function initialize(): void
+            {
+                parent::initialize();
+                $this->loadComponent('Categories');
+            }
+        };
+        $controller->viewBuilder()->setVar('project', ['version' => '5.26.0']);
+        $result = $controller->index();
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->CategoriesController->getResponse()->getStatusCode());
-        static::assertEquals('text/html', $this->CategoriesController->getResponse()->getType());
+        static::assertEquals(200, $controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $controller->getResponse()->getType());
 
         // verify expected vars in view
         $expected = ['resources', 'roots', 'categoriesTree', 'names', 'meta', 'links', 'schema', 'properties', 'filter', 'object_types', 'objectType'];
-        $this->assertExpectedViewVars($expected);
+        foreach ($expected as $varName) {
+            static::assertArrayHasKey($varName, $controller->viewBuilder()->getVars());
+        }
     }
 
     /**
      * Test `save`
      *
      * @return void
-     * @covers ::save()
      */
     public function testSave(): void
     {
         // Setup controller for test
-        $this->CategoriesController = new CategoriesController(new ServerRequest([
+        $request = new ServerRequest([
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
@@ -88,26 +98,32 @@ class CategoriesControllerTest extends TestCase
             'params' => [
                 'object_type' => 'documents',
             ],
-        ]));
+        ]);
+        $controller = new class ($request) extends CategoriesController {
+            public function initialize(): void
+            {
+                parent::initialize();
+                $this->loadComponent('Categories');
+            }
+        };
 
-        $result = $this->CategoriesController->save();
+        $result = $controller->save();
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->CategoriesController->getResponse()->getStatusCode());
-        static::assertEquals('text/html', $this->CategoriesController->getResponse()->getType());
+        static::assertEquals(200, $controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $controller->getResponse()->getType());
     }
 
     /**
      * Test `delete`
      *
      * @return void
-     * @covers ::delete()
      */
     public function testDelete(): void
     {
         // Setup controller for test
-        $this->CategoriesController = new CategoriesController(new ServerRequest([
+        $request = new ServerRequest([
             'environment' => [
                 'REQUEST_METHOD' => 'POST',
             ],
@@ -115,26 +131,20 @@ class CategoriesControllerTest extends TestCase
             'params' => [
                 'object_type' => 'documents',
             ],
-        ]));
+        ]);
+        $controller = new class ($request) extends CategoriesController {
+            public function initialize(): void
+            {
+                parent::initialize();
+                $this->loadComponent('Categories');
+            }
+        };
 
-        $result = $this->CategoriesController->delete('999');
+        $result = $controller->delete('999');
 
         // verify response status code and type
         static::assertNull($result);
-        static::assertEquals(200, $this->CategoriesController->getResponse()->getStatusCode());
-        static::assertEquals('text/html', $this->CategoriesController->getResponse()->getType());
-    }
-
-    /**
-     * Verify existence of vars in controller view
-     *
-     * @param array $expected The expected vars in view
-     * @return void
-     */
-    private function assertExpectedViewVars($expected): void
-    {
-        foreach ($expected as $varName) {
-            static::assertArrayHasKey($varName, $this->CategoriesController->viewBuilder()->getVars());
-        }
+        static::assertEquals(200, $controller->getResponse()->getStatusCode());
+        static::assertEquals('text/html', $controller->getResponse()->getType());
     }
 }

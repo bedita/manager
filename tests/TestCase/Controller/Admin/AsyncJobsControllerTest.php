@@ -2,15 +2,16 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\AsyncJobsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * {@see \App\Controller\Admin\AsyncJobsController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\AsyncJobsController
  */
+#[CoversClass(AsyncJobsController::class)]
 class AsyncJobsControllerTest extends TestCase
 {
     /**
@@ -18,14 +19,14 @@ class AsyncJobsControllerTest extends TestCase
      *
      * @var \App\Controller\Admin\AsyncJobsController
      */
-    public $AsyncJobsController;
+    public AsyncJobsController $AsyncJobsController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -39,7 +40,7 @@ class AsyncJobsControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc
@@ -52,8 +53,8 @@ class AsyncJobsControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->AsyncJobsController = new class ($request) extends AsyncJobsController
         {
-            protected $resourceType = 'async_jobs';
-            protected $properties = ['name'];
+            protected ?string $resourceType = 'async_jobs';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');

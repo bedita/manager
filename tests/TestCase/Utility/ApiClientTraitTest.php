@@ -16,12 +16,14 @@ namespace App\Test\TestCase\Utility;
 
 use App\Utility\ApiClientTrait;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Utility\ApiClientTrait} Test Case
- *
- * @coversDefaultClass \App\Utility\ApiClientTrait
  */
+#[CoversClass(ApiClientTrait::class)]
+#[CoversMethod(ApiClientTrait::class, 'getClient')]
 class ApiClientTraitTest extends TestCase
 {
     use ApiClientTrait;
@@ -30,7 +32,6 @@ class ApiClientTraitTest extends TestCase
      * Test getClient method.
      *
      * @return void
-     * @covers ::getClient()
      */
     public function testGetClient(): void
     {

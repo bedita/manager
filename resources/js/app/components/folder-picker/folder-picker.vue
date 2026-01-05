@@ -70,7 +70,7 @@ export default {
 
     async created() {
         if (this.initialFolder) {
-            const response = await fetch(`${API_URL}api/folders/${this.initialFolder}`);
+            const response = await fetch(`${API_URL}api/folders/${this.initialFolder}/children`);
             const json = await response.json();
             const data = json.data;
             const folder = { id: data.id, label: data.attributes.title };

@@ -16,12 +16,17 @@ namespace App\Test\TestCase\Authentication\Identifier;
 use App\Identifier\ApiIdentifier;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Identifier\ApiIdentifier} Test Case
- *
- * @coversDefaultClass \App\Identifier\ApiIdentifier
  */
+#[CoversClass(ApiIdentifier::class)]
+#[CoversMethod(ApiIdentifier::class, 'findIdentity')]
+#[CoversMethod(ApiIdentifier::class, 'identify')]
+#[CoversMethod(ApiIdentifier::class, 'userTimezone')]
 class ApiIdentifierTest extends TestCase
 {
     /**
@@ -29,7 +34,7 @@ class ApiIdentifierTest extends TestCase
      *
      * @return array
      */
-    public function identifyProvider(): array
+    public static function identifyProvider(): array
     {
         return [
             'missing-credentials' => [
@@ -77,11 +82,8 @@ class ApiIdentifierTest extends TestCase
      * @param array $credentials Test credentials
      * @param array|null $expected Expected result
      * @return void
-     * @covers ::identify()
-     * @covers ::findIdentity()
-     * @covers ::userTimezone()
-     * @dataProvider identifyProvider()
      */
+    #[DataProvider('identifyProvider')]
     public function testIdentify(array $credentials, ?array $expected): void
     {
         ApiClientProvider::getApiClient()->setupTokens([]); // reset client

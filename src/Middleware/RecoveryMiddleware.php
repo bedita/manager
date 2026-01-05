@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Middleware;
 
 use Authentication\AuthenticationServiceInterface;
+use Authentication\Authenticator\UnauthenticatedException;
 use Cake\Core\Configure;
 use Cake\Http\Client\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -55,7 +56,7 @@ class RecoveryMiddleware implements MiddlewareInterface
         $service->clearIdentity($request, new Response());
         /** @var \Cake\Http\ServerRequest $sr */
         $sr = $request;
-        $ex = new \Authentication\Authenticator\UnauthenticatedException();
+        $ex = new UnauthenticatedException();
         $sr->getFlash()->setExceptionMessage($ex);
 
         throw $ex;

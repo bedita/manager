@@ -1,10 +1,12 @@
+@use "variables";
+
 // flex columns
 .columns {
     display: block;
     flex-wrap: wrap;
-    margin-left: -($gutter * .5);
-    margin-right: -($gutter * .5);
-    margin-top: -($gutter * .5);
+    margin-left: -(variables.$gutter * .5);
+    margin-right: -(variables.$gutter * .5);
+    margin-top: -(variables.$gutter * .5);
     @media screen and (min-width: 420px) {
         display: flex;
     }
@@ -15,7 +17,7 @@
     flex-basis: 0;
     flex-grow: 1;
     flex-shrink: 1;
-    padding: ($gutter * .5);
+    padding: (variables.$gutter * .5);
     &.is-1 {
         flex: none;
         flex-basis: 100%;

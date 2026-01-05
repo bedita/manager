@@ -49,6 +49,7 @@ const _vueInstance = new Vue({
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         TreeSlug: () => import(/* webpackChunkName: "tree-slug" */'app/components/tree-slug/tree-slug'),
+        TreeCompact: () => import(/* webpackChunkName: "tree-compact" */'app/components/tree-compact/tree-compact'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
@@ -103,13 +104,16 @@ const _vueInstance = new Vue({
         FieldGeoCoordinates: () => import(/* webpackChunkName: "field-geo-coordinates" */'app/components/form/field-geo-coordinates'),
         FieldInteger: () => import(/* webpackChunkName: "field-integer" */'app/components/form/field-integer'),
         FieldJson: () => import(/* webpackChunkName: "field-json" */'app/components/form/field-json'),
+        FieldMultipleCheckboxes: () => import(/* webpackChunkName: "field-multiple-checkboxes" */'app/components/form/field-multiple-checkboxes'),
         FieldNumber: () => import(/* webpackChunkName: "field-number" */'app/components/form/field-number'),
+        FieldPassword: () => import(/* webpackChunkName: "field-password" */'app/components/form/field-password'),
         FieldPlaintext: () => import(/* webpackChunkName: "field-plaintext" */'app/components/form/field-plaintext'),
         FieldRadio: () => import(/* webpackChunkName: "field-radio" */'app/components/form/field-radio'),
         FieldSelect: () => import(/* webpackChunkName: "field-select" */'app/components/form/field-select'),
         FieldString: () => import(/* webpackChunkName: "field-string" */'app/components/form/field-string'),
         FieldTextarea: () => import(/* webpackChunkName: "field-textarea" */'app/components/form/field-textarea'),
         FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
+        CalendarView: () => import(/* webpackChunkName: "calendar-view" */'app/components/calendar-view/calendar-view'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
         RelatedObjectsFilter: () => import(/* webpackChunkName: "related-objects-filter" */'app/components/related-objects-filter/related-objects-filter'),
         ModuleProperties: () => import(/* webpackChunkName: "module-properties" */'app/components/module/module-properties'),
@@ -117,6 +121,7 @@ const _vueInstance = new Vue({
         AddRelatedById: () => import(/* webpackChunkName: "add-related-by-id" */'app/components/add-related-by-id/add-related-by-id'),
         UploadedObject: () => import(/* webpackChunkName: "uploaded-object" */'app/components/uploaded-object/uploaded-object.vue'),
         RibbonItem: () => import(/* webpackChunkName: "ribbon-item" */'./components/ribbon-item/ribbon-item.vue'),
+        MailPreview: () => import(/* webpackChunkName: "mail-preview" */'./components/mail-preview/mail-preview.vue'),
         AppIcon,
     },
 
@@ -625,6 +630,7 @@ window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
 Vue.component('AppIcon', AppIcon);
+Vue.component('CalendarView', _vueInstance.$options.components.CalendarView);
 Vue.component('ClipboardItem', _vueInstance.$options.components.ClipboardItem);
 Vue.component('DateRangesView', _vueInstance.$options.components.DateRangesView);
 Vue.component('FieldCheckbox', _vueInstance.$options.components.FieldCheckbox);
@@ -632,7 +638,9 @@ Vue.component('FieldGeoCoordinates', _vueInstance.$options.components.FieldGeoCo
 Vue.component('FieldDate', _vueInstance.$options.components.FieldDate);
 Vue.component('FieldInteger', _vueInstance.$options.components.FieldInteger);
 Vue.component('FieldJson', _vueInstance.$options.components.FieldJson);
+Vue.component('FieldMultipleCheckboxes', _vueInstance.$options.components.FieldMultipleCheckboxes);
 Vue.component('FieldNumber', _vueInstance.$options.components.FieldNumber);
+Vue.component('FieldPassword', _vueInstance.$options.components.FieldPassword);
 Vue.component('FieldPlaintext', _vueInstance.$options.components.FieldPlaintext);
 Vue.component('FieldRadio', _vueInstance.$options.components.FieldRadio);
 Vue.component('FieldSelect', _vueInstance.$options.components.FieldSelect);

@@ -10,13 +10,14 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-namespace App\Test\Middleware;
+namespace App\Test\TestCase\Middleware;
 
 use App\Controller\AppController;
 use App\Identifier\ApiIdentifier;
 use App\Middleware\RecoveryMiddleware;
 use Authentication\AuthenticationService;
-use Authentication\Identifier\IdentifierInterface;
+use Authentication\Authenticator\UnauthenticatedException;
+use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identity;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
@@ -24,15 +25,18 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Http\ServerRequestFactory;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * {@see \App\Middleware\RecoveryMiddleware} Test Case
- *
- * @coversDefaultClass \App\Middleware\RecoveryMiddleware
  */
+#[CoversClass(RecoveryMiddleware::class)]
+#[CoversMethod(RecoveryMiddleware::class, 'process')]
+#[CoversMethod(RecoveryMiddleware::class, 'check')]
 class RecoveryMiddlewareTest extends TestCase
 {
     /**
@@ -46,8 +50,6 @@ class RecoveryMiddlewareTest extends TestCase
      * Test `process` method.
      *
      * @return void
-     * @covers ::process()
-     * @covers ::check()
      */
     public function testProcessAndCheck(): void
     {
@@ -75,7 +77,7 @@ class RecoveryMiddlewareTest extends TestCase
         // user non admin
         $user = new Identity(['id' => 1, 'roles' => ['guest']]);
         $this->AppController->Authentication->setIdentity($user);
-        $this->expectException(\Authentication\Authenticator\UnauthenticatedException::class);
+        $this->expectException(UnauthenticatedException::class);
         $middleware->process($this->AppController->getRequest()->withAttribute('identity', $user), $handler);
     }
 
@@ -95,16 +97,16 @@ class RecoveryMiddlewareTest extends TestCase
                     'username' => env('BEDITA_ADMIN_USR'),
                     'password' => env('BEDITA_ADMIN_PWD'),
                 ],
-            ])
+            ]),
         );
 
         ApiClientProvider::getApiClient()->setupTokens([]); // reset client
         $service = new AuthenticationService();
-        $service->loadIdentifier(ApiIdentifier::class);
         $service->loadAuthenticator('Authentication.Form', [
+            'identifier' => ApiIdentifier::class,
             'fields' => [
-                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+                AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
             ],
         ]);
         $this->AppController->setRequest($this->AppController->getRequest()->withAttribute('authentication', $service));

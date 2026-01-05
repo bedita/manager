@@ -19,7 +19,7 @@ use App\Utility\CacheTools;
 use BEdita\SDK\BEditaClientException;
 use Cake\Cache\Cache;
 use Cake\Http\Response;
-use Cake\I18n\FrozenDate;
+use Cake\I18n\DateTime;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
@@ -31,9 +31,9 @@ class StatisticsController extends ModelBaseController
     /**
      * Resource type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected $resourceType = 'object_types';
+    protected ?string $resourceType = 'object_types';
 
     /**
      * @inheritDoc
@@ -100,7 +100,7 @@ class StatisticsController extends ModelBaseController
     protected function fetchCount(string $objectType, string $from, string $to): int
     {
         // if from is in the future, return 0
-        if (new FrozenDate($from) > new FrozenDate('today')) {
+        if (new DateTime($from) > new DateTime('today')) {
             return 0;
         }
         $key = CacheTools::cacheKey(sprintf('statistics-%s-%s-%s', $objectType, $from, $to));
@@ -120,11 +120,11 @@ class StatisticsController extends ModelBaseController
                             ],
                             'page' => 1,
                             'page_size' => 1,
-                        ]
+                        ],
                     );
 
                     return (int)Hash::get($response, 'meta.pagination.count', 0);
-                }
+                },
             );
         } catch (BEditaClientException $e) {
             $count = 0;
@@ -147,7 +147,7 @@ class StatisticsController extends ModelBaseController
         $day = Hash::get($params, 'day');
         // case day: return interval with just one day
         if ($day !== null) {
-            $start = new FrozenDate($day);
+            $start = new DateTime($day);
             $end = $start->addDays(1);
 
             return [['start' => $start->format('Y-m-d'), 'end' => $end->format('Y-m-d')]];
@@ -156,7 +156,7 @@ class StatisticsController extends ModelBaseController
         if ($week !== null) {
             $firstWeek = intval($week);
             $lastWeek = intval($week);
-            $start = new FrozenDate(sprintf('first day of %s', $month));
+            $start = new DateTime(sprintf('first day of %s', $month));
             $start = $start->addWeeks($firstWeek - 1);
             $end = $start->addWeeks(1)->subDays(1);
             $intervals = [];
@@ -173,14 +173,14 @@ class StatisticsController extends ModelBaseController
             $firstWeek = 1;
             $defaultLastWeek = $month === 'february' ? 4 : 5;
             $lastWeek = $defaultLastWeek;
-            $start = new FrozenDate(sprintf('first day of %s %s', $month, $year));
+            $start = new DateTime(sprintf('first day of %s %s', $month, $year));
             $start = $start->addWeeks($firstWeek - 1);
             $end = $start->addWeeks($lastWeek)->subDays(1);
             $intervals = [];
             while ($start->lessThanOrEquals($end)) {
                 $next = $start->addWeeks(1);
                 if ($next->format('m') !== $start->format('m')) {
-                    $end = new FrozenDate(sprintf('last day of %s %s', $month, $year));
+                    $end = new DateTime(sprintf('last day of %s %s', $month, $year));
                     $next = $end->addDays(1);
                 }
                 $intervals[] = ['start' => $start->format('Y-m-d'), 'end' => $next->format('Y-m-d')];
@@ -190,8 +190,8 @@ class StatisticsController extends ModelBaseController
             return $intervals;
         }
         // case year: return interval with 12 months
-        $start = new FrozenDate(sprintf('first day of january %s', $year));
-        $end = new FrozenDate(sprintf('last day of december %s', $year));
+        $start = new DateTime(sprintf('first day of january %s', $year));
+        $end = new DateTime(sprintf('last day of december %s', $year));
         $intervals = [];
         while ($start->lessThanOrEquals($end)) {
             $next = $start->addMonths(1);

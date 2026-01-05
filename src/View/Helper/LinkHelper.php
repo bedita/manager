@@ -30,7 +30,7 @@ class LinkHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html'];
+    public array $helpers = ['Html'];
 
     /**
      * {@inheritDoc}
@@ -43,7 +43,7 @@ class LinkHelper extends Helper
      *  - 'manifestPath': Manifest file path
      *  - 'manifest': Manifest content (array)
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'apiBaseUrl' => '',
         'webBaseUrl' => '',
         'query' => [],
@@ -95,7 +95,7 @@ class LinkHelper extends Helper
      * @param string $apiUrl Api url
      * @return void
      */
-    public function fromAPI($apiUrl): void
+    public function fromAPI(string $apiUrl): void
     {
         echo str_replace($this->getConfig('apiBaseUrl'), $this->getConfig('webBaseUrl'), $apiUrl);
     }
@@ -107,7 +107,7 @@ class LinkHelper extends Helper
      * @param bool $resetPage flag to reset pagination.
      * @return string
      */
-    public function sortUrl($field, $resetPage = true): string
+    public function sortUrl(string $field, bool $resetPage = true): string
     {
         $sort = (string)Hash::get($this->getConfig('query'), 'sort');
         $sort = $this->sortValue($field, $sort);
@@ -182,7 +182,7 @@ class LinkHelper extends Helper
      * @param int $page destination page.
      * @return void
      */
-    public function page($page): void
+    public function page(int $page): void
     {
         echo $this->replaceQueryParams(['page' => $page]);
     }
@@ -193,7 +193,7 @@ class LinkHelper extends Helper
      * @param int $pageSize new page size.
      * @return void
      */
-    public function pageSize($pageSize): void
+    public function pageSize(int $pageSize): void
     {
         echo $this->replaceQueryParams(['page_size' => $pageSize]);
     }
@@ -204,13 +204,13 @@ class LinkHelper extends Helper
      * @param array $options options for query
      * @return string url
      */
-    public function here($options = []): string
+    public function here(array $options = []): string
     {
         $url = (string)$this->getConfig('webBaseUrl');
         $here = sprintf(
             '%s%s',
             $url,
-            $this->getView()->getRequest()->getAttribute('here')
+            $this->getView()->getRequest()->getAttribute('here'),
         );
         $query = (array)$this->getConfig('query');
         if (empty($query) || !empty($options['no-query'])) {

@@ -41,7 +41,7 @@ trait SchemaTrait
                     $client = ApiClientProvider::getApiClient();
 
                     return $client->get('/home');
-                }
+                },
             );
         } catch (BEditaClientException $e) {
             // Something bad happened. Returning an empty array instead.
