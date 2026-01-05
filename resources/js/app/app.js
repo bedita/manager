@@ -1,6 +1,5 @@
 import Vue from 'vue';
 
-import 'libs/filters';
 import 'config/config';
 
 import '../../style.scss';
