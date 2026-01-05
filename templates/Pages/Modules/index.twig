@@ -1,7 +1,7 @@
 {% do _view.assign('title', __(currentModule.name|humanize)) %}
 {% set indexViewType = Layout.moduleIndexViewType() %}
 
-{% if not indexViewType in ['calendar', 'tree-compact'] %}
+{% if indexViewType not in ['calendar', 'tree-compact'] %}
     {{ element('Modules/index_header', { 'meta': meta, 'filter': filter, 'Schema': Schema, 'hidePagination': indexViewType == 'tree'}) }}
 {% endif %}
 
