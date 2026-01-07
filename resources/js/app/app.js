@@ -113,6 +113,7 @@ const _vueInstance = new Vue({
         FieldTextarea: () => import(/* webpackChunkName: "field-textarea" */'app/components/form/field-textarea'),
         FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
         CalendarView: () => import(/* webpackChunkName: "calendar-view" */'app/components/calendar-view/calendar-view'),
+        ComponentsPlayground: () => import(/* webpackChunkName: "components-playground" */'app/components/components-playground'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
         RelatedObjectsFilter: () => import(/* webpackChunkName: "related-objects-filter" */'app/components/related-objects-filter/related-objects-filter'),
         ModuleProperties: () => import(/* webpackChunkName: "module-properties" */'app/components/module/module-properties'),

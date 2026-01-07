@@ -17,6 +17,17 @@ return [
      */
     // 'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
 
+    /*
+     * Development Mode:
+     *
+     * Production Mode:
+     * false: Development mode is off.
+     *
+     * Development Mode:
+     * true: Development mode is on.
+     */
+    // 'development' => filter_var(env('DEVELOPMENT', true), FILTER_VALIDATE_BOOLEAN),
+
     /**
      * Modules accesses per role(s)
      */
