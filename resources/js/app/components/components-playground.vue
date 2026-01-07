@@ -101,6 +101,74 @@ data() {
                     </div>
                 </div>
             </div>
+
+            <!-- Object Properties (Event Bus Migration) -->
+            <div class="box">
+                <div class="box-header" @click="toggleSection('objectProperties')">
+                    <h4 class="box-title">Object Properties (Event Bus → Props/Emits)</h4>
+                    <button class="section-toggle-btn">
+                        {{ sections.objectProperties ? '▼' : '▶' }}
+                    </button>
+                </div>
+                <div v-if="sections.objectProperties" class="box-content">
+                    <p class="box-description">
+                        Tests parent-child event communication (migrated from EventBus)
+                    </p>
+
+                    <object-properties
+                        :init-properties="objectProperties"
+                        type="custom"
+                        :hidden="[]"
+                        :translatable="[]"
+                        :translation-rules="[]"
+                    >
+                        <template #default="{ onPropAdded }">
+                            <object-property-add
+                                :prop-types="propTypesOptions"
+                                @prop-added="onPropAdded"
+                            />
+                        </template>
+                    </object-properties>
+
+                    <input id="addedProperties" type="hidden">
+                    <input id="hidden" type="hidden">
+                    <input id="translationRules" type="hidden">
+
+                    <div class="source-code-toggle">
+                        <button @click="toggleSource('objectProperties')" class="source-toggle-btn">
+                            {{ showSource.objectProperties ? '▼' : '▶' }} View Source Code
+                        </button>
+                    </div>
+
+                    <pre v-if="showSource.objectProperties" class="source-code"><code>// Parent component (object-properties.vue)
+&lt;template&gt;
+    &lt;slot @prop-added="onPropAdded"&gt;&lt;/slot&gt;
+&lt;/template&gt;
+
+// Usage - child automatically emits to parent via slot
+&lt;object-properties type="custom"&gt;
+    &lt;object-property-add :prop-types="types" /&gt;
+&lt;/object-properties&gt;
+
+// Child component (object-property-add.vue)
+emits: ['prop-added'],
+methods: {
+    add() {
+        this.$emit('prop-added', { name, property_type_name, description });
+    }
+}</code></pre>
+
+                    <div class="checklist">
+                        <strong class="checklist-title">✓ Verification</strong>
+                        <ul class="checklist-items">
+                            <li>Add property form appears</li>
+                            <li>New properties appear in list after clicking Add</li>
+                            <li>No EventBus usage (check console for errors)</li>
+                            <li>Props/emits pattern works correctly</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -112,6 +180,8 @@ export default {
     components: {
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */ 'app/components/json-fields/key-value-list'),
         StringList: () => import(/* webpackChunkName: "string-list" */ 'app/components/json-fields/string-list'),
+        ObjectProperties: () => import(/* webpackChunkName: "object-properties" */ 'app/components/object-property/object-properties'),
+        ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */ 'app/components/object-property/object-property-add'),
     },
 
     data() {
@@ -119,13 +189,23 @@ export default {
             sections: {
                 stringList: false,
                 keyValueList: false,
+                objectProperties: false,
             },
             showSource: {
                 stringList: false,
                 keyValueList: false,
+                objectProperties: false,
             },
             stringListValue: '["test item 1", "test item 2"]',
             keyValueListValue: '{"key1": "value1", "key2": "value2"}',
+            objectProperties: [],
+            propTypesOptions: [
+                { value: 'string', text: 'String' },
+                { value: 'integer', text: 'Integer' },
+                { value: 'boolean', text: 'Boolean' },
+                { value: 'date', text: 'Date' },
+            ],
+            addedPropertiesJson: '[]',
         };
     },
 
@@ -135,7 +215,7 @@ export default {
         },
         toggleSource(section) {
             this.showSource[section] = !this.showSource[section];
-        }
+        },
     }
 };
 </script>
