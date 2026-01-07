@@ -130,9 +130,18 @@ data() {
                         </template>
                     </object-properties>
 
-                    <input id="addedProperties" type="hidden">
-                    <input id="hidden" type="hidden">
-                    <input id="translationRules" type="hidden">
+                    <input
+                        id="addedProperties"
+                        type="hidden"
+                    >
+                    <input
+                        id="hidden"
+                        type="hidden"
+                    >
+                    <input
+                        id="translationRules"
+                        type="hidden"
+                    >
 
                     <div class="source-code-toggle">
                         <button @click="toggleSource('objectProperties')" class="source-toggle-btn">
@@ -169,6 +178,104 @@ methods: {
                     </div>
                 </div>
             </div>
+
+            <!-- Coordinates/Map (Provide/Inject EventBus Migration) -->
+            <div class="box">
+                <div class="box-header" @click="toggleSection('coordinates')">
+                    <h4 class="box-title">CoordinatesView / MapView (EventBus → Provide/Inject)</h4>
+                    <button class="section-toggle-btn">
+                        {{ sections.coordinates ? '▼' : '▶' }}
+                    </button>
+                </div>
+                <div v-if="sections.coordinates" class="box-content">
+                    <p class="box-description">
+                        Tests sibling component communication (migrated from EventBus using provide/inject)
+                    </p>
+
+                    <div>
+                        <label class="field-label">Address Fields (for geocoding) + Coordinates (long,lat):</label>
+                        <div class="address-grid">
+                            <input id="address" type="text" placeholder="Address (e.g., Via del Corso)" class="address-input">
+                            <input id="locality" type="text" placeholder="Locality (e.g., Roma)" class="address-input">
+                            <input id="zipcode" type="text" placeholder="Zipcode (e.g., 00186)" class="address-input">
+                            <input id="country" type="text" placeholder="Country (e.g., Italy)" class="address-input">
+                            <input id="region" type="text" placeholder="Region (e.g., Lazio)" class="address-input">
+                            <coordinates-view
+                                :coordinates="currentCoordinates"
+                                :options="mapOptions"
+                            />
+                        </div>
+                    </div>
+
+                    <div v-if="mapboxToken" class="field-section">
+                        <label class="field-label">Map View (drag marker to update coordinates):</label>
+                        <map-view
+                            lng="12.4964"
+                            lat="41.9028"
+                            popup-html="Rome, Italy"
+                            :map-token="mapboxToken"
+                        />
+                    </div>
+
+                    <div v-else class="field-section">
+                        <label class="field-label">Map View:</label>
+                        <div class="map-placeholder">
+                            <div class="map-placeholder-content">
+                                <p class="map-icon">🗺️</p>
+                                <p class="map-message">Map requires Mapbox token</p>
+                                <p class="map-hint">Configure in app_local.php: Maps.mapbox.token</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="source-code-toggle">
+                        <button @click="toggleSource('coordinates')" class="source-toggle-btn">
+                            {{ showSource.coordinates ? '▼' : '▶' }} View Source Code
+                        </button>
+                    </div>
+
+                    <pre v-if="showSource.coordinates" class="source-code"><code>// Parent provides coordination (components-playground.vue)
+provide() {
+    return {
+        onCoordinatesUpdate: (coords) => {
+            this.coordinatesListeners.forEach(fn => fn(coords));
+        },
+        registerCoordinatesListener: (callback) => {
+            this.coordinatesListeners.push(callback);
+        }
+    };
+}
+
+// Map component injects callback (map-view.vue)
+inject: ['onCoordinatesUpdate'],
+marker.on('dragend', () => {
+    if (this.onCoordinatesUpdate) {
+        this.onCoordinatesUpdate(marker.getLngLat());
+    }
+});
+
+// Coordinates component injects registration (coordinates-view.vue)
+inject: ['registerCoordinatesListener'],
+mounted() {
+    if (this.registerCoordinatesListener) {
+        this.registerCoordinatesListener((point) => {
+            this.value = `${point.lng}, ${point.lat}`;
+        });
+    }
+}</code></pre>
+
+                    <div class="checklist">
+                        <strong class="checklist-title">✓ Verification</strong>
+                        <ul class="checklist-items">
+                            <li>Coordinates input displays correctly</li>
+                            <li>When map marker is dragged, coordinates input updates</li>
+                            <li>No EventBus usage (check console for errors)</li>
+                            <li>Provide/inject pattern works for sibling components</li>
+                            <li>Both components have backward compatibility fallbacks</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -182,6 +289,30 @@ export default {
         StringList: () => import(/* webpackChunkName: "string-list" */ 'app/components/json-fields/string-list'),
         ObjectProperties: () => import(/* webpackChunkName: "object-properties" */ 'app/components/object-property/object-properties'),
         ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */ 'app/components/object-property/object-property-add'),
+        CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */ 'app/components/coordinates-view'),
+        MapView: () => import(/* webpackChunkName: "map-view" */ 'app/components/map-view'),
+    },
+
+    provide() {
+        return {
+            onCoordinatesUpdate: (coords) => {
+                this.coordinatesListeners.forEach(listener => listener(coords));
+            },
+            registerCoordinatesListener: (callback) => {
+                this.coordinatesListeners.push(callback);
+            },
+        };
+    },
+
+    props: {
+        googleMapsApiKey: {
+            type: String,
+            default: '',
+        },
+        mapboxToken: {
+            type: String,
+            default: '',
+        },
     },
 
     data() {
@@ -190,11 +321,13 @@ export default {
                 stringList: false,
                 keyValueList: false,
                 objectProperties: false,
+                coordinates: false,
             },
             showSource: {
                 stringList: false,
                 keyValueList: false,
                 objectProperties: false,
+                coordinates: false,
             },
             stringListValue: '["test item 1", "test item 2"]',
             keyValueListValue: '{"key1": "value1", "key2": "value2"}',
@@ -206,6 +339,9 @@ export default {
                 { value: 'date', text: 'Date' },
             ],
             addedPropertiesJson: '[]',
+            coordinatesListeners: [],
+            currentCoordinates: 'POINT(12.4964 41.9028)', // Rome coordinates
+            mapOptions: JSON.stringify({ key: this.googleMapsApiKey, url: 'https://maps.googleapis.com/maps/api/' }),
         };
     },
 
@@ -231,12 +367,9 @@ export default {
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 15px;
-    border-bottom: 1px solid #52565e;
     padding-bottom: 15px;
+    border-bottom: 1px solid #52565e;
 }
 
 .title {
@@ -244,10 +377,6 @@ export default {
     color: #ffffff;
     font-size: 1.1em;
     font-weight: 500;
-}
-
-.content {
-    margin-top: 0;
 }
 
 .box {
@@ -304,27 +433,6 @@ export default {
     color: #ffffff;
 }
 
-/* Ensure all nested content has proper text colors */
-.box ::v-deep input,
-.box ::v-deep textarea,
-.box ::v-deep label,
-.box ::v-deep div,
-.box ::v-deep span,
-.box ::v-deep button {
-    color: inherit;
-}
-
-.box ::v-deep input,
-.box ::v-deep textarea {
-    color: #212529 !important;
-    background: #f8f9fa;
-    border: 1px solid #ced4da;
-}
-
-.box ::v-deep button {
-    color: #212529 !important;
-}
-
 .source-code-toggle {
     margin: 15px 0 10px 0;
 }
@@ -379,5 +487,53 @@ export default {
     color: #e0e0e0;
     font-size: 0.85em;
     line-height: 1.6;
+}
+
+.field-section {
+    margin-bottom: 20px;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #b8bcc4;
+    font-size: 0.9em;
+}
+
+.address-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.map-placeholder {
+    height: 400px;
+    background: #1e1e1e;
+    border: 1px solid #52565e;
+    border-radius: 4px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-placeholder-content {
+    text-align: center;
+    color: #b8bcc4;
+}
+
+.map-icon {
+    margin: 0 0 10px 0;
+}
+
+.map-message {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.map-hint {
+    margin: 5px 0 0 0;
+    font-size: 0.85em;
+    opacity: 0.7;
 }
 </style>
