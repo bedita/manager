@@ -1,6 +1,6 @@
 import { t } from 'ttag';
 import 'tinymce/tinymce';
-import { EventBus } from 'app/components/event-bus';
+import { PlaceholderBus as placeholderBus } from 'app/components/placeholder-bus';
 import { PanelEvents } from 'app/components/panel-view';
 import tinymce from 'tinymce/tinymce';
 import { utf8ToBase64, base64ToUtf8 } from 'app/helpers/text-helper';
@@ -120,7 +120,7 @@ tinymce.util.Tools.resolve('tinymce.PluginManager').add('placeholders', function
                         tinymce.dom.DOMUtils.DOM.remove(node);
                     }
                 });
-                EventBus.send('refresh-placeholders', {id: editor.id, content: editor.getContent()});
+                placeholderBus.send('refresh-placeholders', {id: editor.id, content: editor.getContent()});
             };
 
             let onClose = () => {

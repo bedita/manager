@@ -46,7 +46,7 @@ const DEFAULT_TOOLBAR = [
     'code',
 ].join(' ');
 
-import { EventBus } from 'app/components/event-bus';
+import { PlaceholderBus as placeholderBus } from 'app/components/placeholder-bus';
 
 const emit = (vnode, name, data) => {
     let handlers = (vnode.data && vnode.data.on) || (vnode.componentOptions && vnode.componentOptions.listeners);
@@ -176,7 +176,7 @@ export default {
                     ... BEDITA?.richeditorByPropertyConfig?.[elementName]?.config || {},
                     setup: (editor) => {
                         editor.on('change', () => {
-                            EventBus.send('refresh-placeholders', {id: editor.id, content: editor.getContent()});
+                            placeholderBus.send('refresh-placeholders', {id: editor.id, content: editor.getContent()});
                         });
                     }
                 });
@@ -203,7 +203,7 @@ export default {
                     changing = false;
                 });
 
-                EventBus.listen('replace-placeholder', (data) => {
+                placeholderBus.listen('replace-placeholder', (data) => {
                     if (editor.id !== data?.field) {
                         return;
                     }

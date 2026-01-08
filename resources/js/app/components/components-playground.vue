@@ -179,6 +179,105 @@ methods: {
                 </div>
             </div>
 
+            <!-- Placeholders (PlaceholderBus Migration) -->
+            <div class="box">
+                <div class="box-header" @click="toggleSection('placeholders')">
+                    <h4 class="box-title">Placeholder System (EventBus → PlaceholderBus)</h4>
+                    <button class="section-toggle-btn">
+                        {{ sections.placeholders ? '▼' : '▶' }}
+                    </button>
+                </div>
+                <div v-if="sections.placeholders" class="box-content">
+                    <p class="box-description">
+                        Tests directive-component communication (migrated from EventBus to dedicated placeholderBus)
+                    </p>
+
+                    <div class="field-section">
+                        <label class="field-label">Rich Text Editor (placeholder button disabled in playground):</label>
+                        <textarea
+                            id="richeditor-test"
+                            name="richeditor_test"
+                            v-model="richtextValue"
+                            v-richeditor
+                            @change="handleRichtextChange"
+                        />
+                        <p class="box-description" style="margin-top: 8px;">
+                            Note: To test placeholder detection, switch to "Source Code" view in the editor and add:<br>
+                            <code>&lt;span data-placeholder="<strong>OBJECT_ID</strong>"&gt;&lt;!--BE-PLACEHOLDER.<strong>OBJECT_ID</strong>.--&gt;&lt;/span&gt;</code><br>
+                            <strong>Replace OBJECT_ID with an existing image/media object ID from your database.</strong>
+                        </p>
+                    </div>
+
+                    <div class="field-section">
+                        <label class="field-label">Detected Placeholders:</label>
+                        <placeholder-list
+                            field="richeditor-test"
+                            :value="richtextValue"
+                            v-if="richtextValue"
+                        />
+                        <p class="box-description" v-if="!hasPlaceholders">
+                            No placeholders detected. Add the HTML structure shown above to test.
+                        </p>
+                    </div>
+
+                    <div class="source-code-toggle">
+                        <button @click="toggleSource('placeholders')" class="source-toggle-btn">
+                            {{ showSource.placeholders ? '▼' : '▶' }} View Source Code
+                        </button>
+                    </div>
+
+                    <pre v-if="showSource.placeholders" class="source-code"><code>// placeholderBus.js - Simple event emitter for placeholder events
+class PlaceholderBus {
+    listen(event, callback) { /* ... */ }
+    send(event, data) { /* ... */ }
+}
+export const placeholderBus = new PlaceholderBus();
+
+// richeditor.js directive
+import { placeholderBus } from 'app/components/placeholder-bus';
+
+setup: (editor) => {
+    editor.on('change', () => {
+        placeholderBus.send('refresh-placeholders', {
+            id: editor.id,
+            content: editor.getContent()
+        });
+    });
+}
+
+placeholderBus.listen('replace-placeholder', (data) => {
+    // Update placeholder in editor
+});
+
+// placeholder-list.vue component
+import { placeholderBus } from 'app/components/placeholder-bus';
+
+mounted() {
+    placeholderBus.listen('refresh-placeholders', this.refresh);
+}
+
+// placeholder-params.vue component
+import { placeholderBus } from 'app/components/placeholder-bus';
+
+changeParams() {
+    placeholderBus.send('replace-placeholder', {
+        id, field, oldParams, newParams
+    });
+}</code></pre>
+
+                    <div class="checklist">
+                        <strong class="checklist-title">✓ Verification</strong>
+                        <ul class="checklist-items">
+                            <li>Rich text editor loads correctly</li>
+                            <li>PlaceholderBus imported (not EventBus)</li>
+                            <li>Placeholder detection works when HTML contains comment syntax</li>
+                            <li>No console errors</li>
+                            <li>Note: Placeholder button disabled (requires real object/backend)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <!-- Coordinates/Map (Provide/Inject EventBus Migration) -->
             <div class="box">
                 <div class="box-header" @click="toggleSection('coordinates')">
@@ -291,6 +390,7 @@ export default {
         ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */ 'app/components/object-property/object-property-add'),
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */ 'app/components/coordinates-view'),
         MapView: () => import(/* webpackChunkName: "map-view" */ 'app/components/map-view'),
+        PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */ 'app/components/placeholder-list/placeholder-list'),
     },
 
     provide() {
@@ -313,6 +413,17 @@ export default {
             type: String,
             default: '',
         },
+        object: {
+            type: Object,
+            default: () => ({
+                id: 999,
+                type: 'documents',
+                attributes: {
+                    title: 'Playground Mock Document',
+                    status: 'on'
+                }
+            }),
+        },
     },
 
     data() {
@@ -321,12 +432,14 @@ export default {
                 stringList: false,
                 keyValueList: false,
                 objectProperties: false,
+                placeholders: false,
                 coordinates: false,
             },
             showSource: {
                 stringList: false,
                 keyValueList: false,
                 objectProperties: false,
+                placeholders: false,
                 coordinates: false,
             },
             stringListValue: '["test item 1", "test item 2"]',
@@ -340,8 +453,10 @@ export default {
             ],
             addedPropertiesJson: '[]',
             coordinatesListeners: [],
-            currentCoordinates: 'POINT(12.4964 41.9028)', // Rome coordinates
+            currentCoordinates: 'POINT(12.4964 41.9028)',
             mapOptions: JSON.stringify({ key: this.googleMapsApiKey, url: 'https://maps.googleapis.com/maps/api/' }),
+            richtextValue: '<p>Sample richtext content. Use the placeholder button to add placeholders.</p>',
+            hasPlaceholders: false,
         };
     },
 
@@ -351,6 +466,11 @@ export default {
         },
         toggleSource(section) {
             this.showSource[section] = !this.showSource[section];
+        },
+        handleRichtextChange(event) {
+            this.richtextValue = event.target.value;
+            // Check if content has placeholder structure
+            this.hasPlaceholders = this.richtextValue.includes('data-placeholder');
         },
     }
 };
