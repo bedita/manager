@@ -20,7 +20,7 @@
     "bundle-report": "webpack --mode production --report",
     "develop": "webpack --mode development --hot",
     "dev": "webpack --mode development --hot",
-    "dev-plugins": "webpack --config ./webpack.config.plugin.js --mode development",
+    "dev-plugins": "webpack --config ./webpack.config.plugin.js --mode development --hot",
     "build-plugins": "yarn install:plugins; webpack --config ./webpack.config.plugin.js --mode production"
   },
   "dependencies": {
