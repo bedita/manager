@@ -810,4 +810,22 @@ class SchemaComponentTest extends TestCase
         $actual = $this->Schema->tagsInUse();
         static::assertFalse($actual);
     }
+
+    /**
+     * Test `allConcreteTypes`
+     *
+     * @return void
+     * @covers ::allConcreteTypes()
+     */
+    public function testAllConcreteTypes(): void
+    {
+        $actual = $this->Schema->allConcreteTypes();
+        static::assertIsArray($actual);
+        // do not contain abstract types as objects or media
+        static::assertNotContains('objects', $actual);
+        static::assertNotContains('media', $actual);
+        // contain concrete types as documents, images, etc.
+        static::assertContains('documents', $actual);
+        static::assertContains('images', $actual);
+    }
 }
