@@ -829,4 +829,26 @@ class SchemaComponentTest extends TestCase
         static::assertContains('documents', $actual);
         static::assertContains('images', $actual);
     }
+
+    /**
+     * Test `fetchSchema` for `trash`.
+     *
+     * @return void
+     */
+    public function testFetchTrashSchema(): void
+    {
+        $actual = $this->Schema->getSchema('trash');
+        static::assertFalse($actual);
+    }
+
+    /**
+     * Test `fetchSchema` for `translations`.
+     *
+     * @return void
+     */
+    public function testFetchTranslationsSchema(): void
+    {
+        $actual = $this->Schema->getSchema('translations');
+        static::assertFalse($actual);
+    }
 }
