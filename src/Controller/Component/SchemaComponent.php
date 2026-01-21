@@ -138,6 +138,9 @@ class SchemaComponent extends Component
      */
     protected function fetchSchema(string $type): array|bool
     {
+        if (in_array($type, ['translations', 'trash'])) {
+            return false;
+        }
         $schema = ApiClientProvider::getApiClient()->schema($type);
         if (empty($schema)) {
             return false;
