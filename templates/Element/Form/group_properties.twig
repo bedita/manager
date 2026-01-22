@@ -1,6 +1,8 @@
 {% set customElement = Element.custom(group, 'group') %}
 {% if customElement %}
-    {{ element(customElement, {'properties' : properties}) }}
+    {% if group is not 'media' %}
+        {{ element(customElement, {'properties' : properties}) }}
+    {% endif %}
 {% else %}
     {% set locked = object.meta.locked or (object.id and Perms.isLockedByParents(object.id)) %}
     {% for key, value in properties %}

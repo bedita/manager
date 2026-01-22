@@ -116,6 +116,10 @@
                     </div>
                 </div>
             {% endif %}
+            {% set customElement = Element.custom('media', 'media') %}
+            {% if customElement %}
+                {{ element(customElement, {'properties' : properties}) }}
+            {% endif %}
         </div>
     </section>
 </property-view>
