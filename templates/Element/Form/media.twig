@@ -116,7 +116,7 @@
                     </div>
                 </div>
             {% endif %}
-            {% set customElement = Element.custom('media', 'media') %}
+            {% set customElement = Element.custom('media', 'group') %}
             {% if customElement %}
                 {{ element(customElement, {'properties' : properties}) }}
             {% endif %}
