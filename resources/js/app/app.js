@@ -122,6 +122,7 @@ const _vueInstance = new Vue({
         UploadedObject: () => import(/* webpackChunkName: "uploaded-object" */'app/components/uploaded-object/uploaded-object.vue'),
         RibbonItem: () => import(/* webpackChunkName: "ribbon-item" */'./components/ribbon-item/ribbon-item.vue'),
         MailPreview: () => import(/* webpackChunkName: "mail-preview" */'./components/mail-preview/mail-preview.vue'),
+        ObjectAnnotations: () => import(/* webpackChunkName: "object-annotations" */'./components/object-annotations/object-annotations.vue'),
         AppIcon,
     },
 
@@ -657,3 +658,4 @@ Vue.component('RelatedObjectsFilter', _vueInstance.$options.components.RelatedOb
 Vue.component('Thumbnail', _vueInstance.$options.components.Thumbnail);
 Vue.component('RibbonItem', _vueInstance.$options.components.RibbonItem);
 Vue.component('UploadedObject', _vueInstance.$options.components.UploadedObject);
+Vue.component('ObjectAnnotations', _vueInstance.$options.components.ObjectAnnotations);
