@@ -1,7 +1,8 @@
 // require environment setup
 require('./webpack.config.environment');
 
-const webpack = require('webpack');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const path = require('path');
@@ -54,7 +55,37 @@ module.exports = {
             filename: '[name]/webroot/css/[name].plugin.css',
         }),
         new VueLoaderPlugin(),
-    ],
+    ].concat(devMode ? [
+        new BrowserSyncPlugin({
+            proxy: {
+                target: ENVIRONMENT.proxy,
+                proxyReq: [
+                    (proxyReq) => {
+                        proxyReq.setHeader('Access-Control-Allow-Origin', '*');
+                        proxyReq.setHeader('Access-Control-Allow-Headers', 'content-type, origin, x-api-key, x-requested-with, authorization');
+                        proxyReq.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, PATCH, DELETE, OPTIONS');
+                    }
+                ]
+            },
+            cors: true,
+            notify: false,
+            open: true,
+            reloadOnRestart: true,
+            host: ENVIRONMENT.host,
+            port: ENVIRONMENT.port,
+            watch: true,
+            logLevel: 'debug'
+        }),
+        new WatchExternalFilesPlugin.default({
+            files: [
+                `./${BUNDLE.templateRoot}/**/*.twig`,
+                `./${BUNDLE.resourcesRoot}/**/*.js`,
+                `./${BUNDLE.resourcesRoot}/**/*.vue`,
+                `./${BUNDLE.resourcesRoot}/**/*.scss`,
+                `./${BUNDLE.resourcesRoot}/**/*.css`,
+            ]
+        }),
+    ] : []),
 
     module: {
         rules: [
