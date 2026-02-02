@@ -115,6 +115,7 @@ export default {
                         const exp = JSON.parse(binding.expression);
                         toolbar = exp ? exp.join(' ') : toolbar;
                     } catch (e) {
+                        console.log('Failed to parse toolbar expression:', e);
                         // do nothing
                     }
                 }

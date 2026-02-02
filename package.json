@@ -25,6 +25,8 @@
   },
   "dependencies": {
     "@chialab/typos": "^0.1.1",
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^9.39.2",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
@@ -43,6 +45,7 @@
     "eslint": "^9.26.0",
     "eslint-webpack-plugin": "^4.0.0",
     "flatpickr": "^4.6.9",
+    "globals": "^17.3.0",
     "mapbox-gl": "^2.12.1",
     "mapbox-gl-compare": "^0.4.0",
     "moment": "^2.29.4",

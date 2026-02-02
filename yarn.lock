@@ -1030,10 +1030,30 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@eslint/eslintrc@^3.3.3":
+  version "3.3.3"
+  resolved "https://registry.npmjs.org/@eslint/eslintrc/-/eslintrc-3.3.3.tgz#26393a0806501b5e2b6a43aa588a4d8df67880ac"
+  integrity sha512-Kr+LPIUVKz2qkx1HAMH8q1q6azbqBAsXJUxBl/ODDuVPX45Z9DfwB8tPjTi6nNZ8BuM3nbJxC5zCAg5elnBUTQ==
+  dependencies:
+    ajv "^6.12.4"
+    debug "^4.3.2"
+    espree "^10.0.1"
+    globals "^14.0.0"
+    ignore "^5.2.0"
+    import-fresh "^3.2.1"
+    js-yaml "^4.1.1"
+    minimatch "^3.1.2"
+    strip-json-comments "^3.1.1"
+
 "@eslint/js@9.26.0":
   version "9.26.0"
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-9.26.0.tgz#1e13126b67a3db15111d2dcc61f69a2acff70bd5"
   integrity sha512-I9XlJawFdSMvWjDt6wksMCrgns5ggLNfFwFvnShsleWruvXM514Qxk8V246efTw+eo9JABvVz+u3q2RiAowKxQ==
+
+"@eslint/js@^9.39.2":
+  version "9.39.2"
+  resolved "https://registry.npmjs.org/@eslint/js/-/js-9.39.2.tgz#2d4b8ec4c3ea13c1b3748e0c97ecd766bdd80599"
+  integrity sha512-q1mjIoW1VX4IvSocvM/vbTiveKC4k9eLrajNEuSsmjymSDEbpGddtpfOoN7YGAqBK3NG+uqo8ia4PDTt8buCYA==
 
 "@eslint/object-schema@^2.1.6":
   version "2.1.7"
@@ -3419,6 +3439,11 @@ globals@^14.0.0:
   version "14.0.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-14.0.0.tgz#898d7413c29babcf6bafe56fcadded858ada724e"
   integrity sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==
+
+globals@^17.3.0:
+  version "17.3.0"
+  resolved "https://registry.npmjs.org/globals/-/globals-17.3.0.tgz#8b96544c2fa91afada02747cc9731c002a96f3b9"
+  integrity sha512-yMqGUQVVCkD4tqjOJf3TnrvaaHDMYp4VlUSObbkIiuCPe/ofdMBFIAcBbCSRFWOnos6qRiTVStDwqPLUclaxIw==
 
 gopd@^1.2.0:
   version "1.2.0"
