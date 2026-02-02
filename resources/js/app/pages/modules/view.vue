@@ -101,7 +101,7 @@ export default {
                 try {
                     json = await response.json();
                 } catch (e) {
-                    console.error('Malformed json response on save');
+                    console.error('Malformed json response on save', e);
                     window.location.reload();
                 }
                 if (json?.error) {

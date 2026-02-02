@@ -55,7 +55,7 @@ export default {
                             }
                         }));
                     } catch(e) {
-                        console.warn('still not valid json');
+                        console.warn('still not valid json', e);
                     }
                 },
             });

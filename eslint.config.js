@@ -1,31 +1,51 @@
-module.exports = {
-    root: true,
-    env: {
-        'node': true,
-        'es6': true,
-        'browser': true,
+const {
+    defineConfig,
+    globalIgnores,
+} = require('eslint/config');
+
+const globals = require('globals');
+const js = require('@eslint/js');
+
+const {
+    FlatCompat,
+} = require('@eslint/eslintrc');
+
+const compat = new FlatCompat({
+    baseDirectory: __dirname,
+    recommendedConfig: js.configs.recommended,
+    allConfig: js.configs.all
+});
+
+module.exports = defineConfig([{
+    languageOptions: {
+        globals: {
+            ...globals.node,
+            ...globals.browser,
+            'BEDITA': true,
+            'BEDITA_I18N': true,
+            'tinymce': true,
+            'vue': true,
+        },
+
+        ecmaVersion: 2021,
+        sourceType: 'module',
+        parserOptions: {},
     },
-    extends: [
-        'eslint:recommended',
-        'plugin:vue/recommended',
-    ],
-    globals: {
-        'BEDITA': true,
-        'BEDITA_I18N': true,
-        'tinymce': true,
-        'vue': true
-    },
+
+    extends: compat.extends('eslint:recommended', 'plugin:vue/recommended'),
+
     rules: {
         'quotes': [1, 'single'],
         'comma-dangle': 'off',
+
         'indent': [1, 4, {
             SwitchCase: 1,
         }],
+
         'no-extra-semi': 'off',
         'no-console': 'off',
         'semi': 'off',
 
-        // override/add rules settings here
         'vue/attributes-order': ['warn', {
             'order': [
                 'GLOBAL',
@@ -38,18 +58,22 @@ module.exports = {
                 'CONTENT',
                 'CONDITIONALS',
             ],
-            'alphabetical': false
+
+            'alphabetical': false,
         }],
+
         'vue/first-attribute-linebreak': ['warn', {
             'singleline': 'beside',
-            'multiline': 'ignore'
+            'multiline': 'ignore',
         }],
+
         'vue/html-indent': ['warn', 4],
         'vue/multi-word-component-names': ['warn'],
         'vue/no-mutating-props': ['warn'],
         'vue/no-unused-components': ['warn'],
         'vue/no-use-v-if-with-v-for': ['warn'],
         'vue/no-v-html': ['off'],
+
         'vue/order-in-components': ['warn', {
             'order': [
                 ['template', 'render'],
@@ -84,17 +108,10 @@ module.exports = {
                 'watchQuery',
                 'LIFECYCLE_HOOKS',
                 'methods',
-                'renderError'
-            ]
+                'renderError',
+            ],
         }],
+
         'vue/require-v-for-key': ['warn'],
     },
-    parserOptions: {
-        ecmaVersion: 2021,
-        sourceType: 'module',
-    },
-    ignorePatterns: [
-        'node_modules',
-        'webroot/js/*'
-    ]
-}
+}, globalIgnores(['**/node_modules', 'webroot/js/*'])]);
