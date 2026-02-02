@@ -1,92 +1,68 @@
 {% do _view.assign('title', __('Dashboard')) %}
 {% do _view.assign('bodyViewClass', 'view-dashboard') %}
 
-<dashboard q="{{ _view.getRequest().getSession().read('objects.filter.q') }}" inline-template>
-    <div class="dashboard">
-        <section class="dashboard-section">
-            <div class="dashboard-items">
-            {% for name, module in modules %}
-                {{ Layout.dashboardModuleLink(name, module)|raw }}
-            {% endfor %}
-            </div>
-        </section>
-
-        <section class="dashboard-section">
-
-            <header>
-                <h2>{{ __('Preferences and Tools') }}</h2>
-            </header>
-
-            <div class="dashboard-items">
-
-                {% if modules.trash %}
-                    <a href="{{ Url.build({ '_name': 'trash:list' }) }}" title="{{ __('Trash') }}" class="dashboard-item has-background-black">
-                        <span>{{ __('Trash can') }}</span>
-                        {{ Layout.moduleCount('trash', 'has-background-black')|raw }}
-                        <app-icon icon="carbon:trash-can" :style="{ width: '28px', height: '28px' }"></app-icon>
-                    </a>
-                {% endif %}
-
-                {% if modules.users %}
-                    <a href="{{ Url.build({'_name': 'modules:list', 'object_type': 'users'}) }}" title="{{ __('System users') }}" class="dashboard-item has-background-black">
-                        <span>{{ __('System users') }}</span>
-                        {% if Layout.showCounter('users') %}{{ Layout.moduleCount('users', 'has-background-black')|raw }}{% endif %}
-                        <app-icon icon="carbon:events-alt" :style="{ width: '28px', height: '28px' }"></app-icon>
-                    </a>
-                {% endif %}
-
-                <a href="{{ Url.build({'_name': 'user_profile:view'}) }}" title="{{ __('User Profile') }}" class="dashboard-item has-background-black">
-                    <span>{{ __('User Profile') }}</span>
-                    <app-icon icon="carbon:user-profile" :style="{ width: '28px', height: '28px' }"></app-icon>
-                </a>
-
-                {% if config('Filters.import') and ('POST' in jobsAllow or 'GET' in jobsAllow) %}
-                    <a href="{{ Url.build({'_name': 'import:index'}) }}" title="{{ __('Import') }}" class="dashboard-item has-background-black">
-                        <span>{{ __('Import') }}</span>
-                        <app-icon icon="carbon:download" :style="{ width: '28px', height: '28px' }"></app-icon>
-                    </a>
-                {% endif %}
-
-                {% if in_array('admin', user.roles) %}
-                    <a href="{{ Url.build({'_name': 'admin:list:appearance'}) }}" title="{{ __('Administration') }}" class="dashboard-item has-background-black">
-                        <span>{{ __('Administration') }}</span>
-                        <app-icon icon="carbon:settings" :style="{ width: '28px', height: '28px' }"></app-icon>
-                    </a>
-                    <a href="{{ Url.build({'_name': 'model:list:object_types'}) }}" title="{{ __('Data modeling') }}" class="dashboard-item has-background-black">
-                        <span>{{ __('Data modeling') }}</span>
-                        <app-icon icon="carbon:concept" :style="{ width: '28px', height: '28px' }"></app-icon>
-                    </a>
-                {% endif %}
-            </div>
-        </section>
-
-        <section class="dashboard-section">
-            <header>
-                <h2>{{ __('Search') }}</h2>
-            </header>
-
-            <div role="search">
-                <div role="textsearch">
-                    <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
-                    <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">
-                        <app-icon icon="carbon:search"></app-icon>
-                        {{ __('Search') }}
-                    </button>
-                </div>
-                <div role="idsearch">
-                    <input type="text" placeholder="{{ __('ID or uname') }}" v-model="searchId">
-                    <button @click.prevent="goToID()" :disabled="!searchId">
-                        {{ __('ID') }}
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <div class="dashboard-area">
-
-            <recent-activity :page-sizes={{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }} :user-id={{ user.id }}></recent-activity>
-
+<div class="dashboard">
+    <section class="dashboard-section">
+        <div class="dashboard-items">
+        {% for name, module in modules %}
+            {{ Layout.dashboardModuleLink(name, module)|raw }}
+        {% endfor %}
         </div>
+    </section>
 
+    <section class="dashboard-section">
+
+        <header>
+            <h2>{{ __('Preferences and Tools') }}</h2>
+        </header>
+
+        <div class="dashboard-items">
+
+            {% if modules.trash %}
+                <a href="{{ Url.build({ '_name': 'trash:list' }) }}" title="{{ __('Trash') }}" class="dashboard-item has-background-black">
+                    <span>{{ __('Trash can') }}</span>
+                    {{ Layout.moduleCount('trash', 'has-background-black')|raw }}
+                    <app-icon icon="carbon:trash-can" :style="{ width: '28px', height: '28px' }"></app-icon>
+                </a>
+            {% endif %}
+
+            {% if modules.users %}
+                <a href="{{ Url.build({'_name': 'modules:list', 'object_type': 'users'}) }}" title="{{ __('System users') }}" class="dashboard-item has-background-black">
+                    <span>{{ __('System users') }}</span>
+                    {% if Layout.showCounter('users') %}{{ Layout.moduleCount('users', 'has-background-black')|raw }}{% endif %}
+                    <app-icon icon="carbon:events-alt" :style="{ width: '28px', height: '28px' }"></app-icon>
+                </a>
+            {% endif %}
+
+            <a href="{{ Url.build({'_name': 'user_profile:view'}) }}" title="{{ __('User Profile') }}" class="dashboard-item has-background-black">
+                <span>{{ __('User Profile') }}</span>
+                <app-icon icon="carbon:user-profile" :style="{ width: '28px', height: '28px' }"></app-icon>
+            </a>
+
+            {% if config('Filters.import') and ('POST' in jobsAllow or 'GET' in jobsAllow) %}
+                <a href="{{ Url.build({'_name': 'import:index'}) }}" title="{{ __('Import') }}" class="dashboard-item has-background-black">
+                    <span>{{ __('Import') }}</span>
+                    <app-icon icon="carbon:download" :style="{ width: '28px', height: '28px' }"></app-icon>
+                </a>
+            {% endif %}
+
+            {% if in_array('admin', user.roles) %}
+                <a href="{{ Url.build({'_name': 'admin:list:appearance'}) }}" title="{{ __('Administration') }}" class="dashboard-item has-background-black">
+                    <span>{{ __('Administration') }}</span>
+                    <app-icon icon="carbon:settings" :style="{ width: '28px', height: '28px' }"></app-icon>
+                </a>
+                <a href="{{ Url.build({'_name': 'model:list:object_types'}) }}" title="{{ __('Data modeling') }}" class="dashboard-item has-background-black">
+                    <span>{{ __('Data modeling') }}</span>
+                    <app-icon icon="carbon:concept" :style="{ width: '28px', height: '28px' }"></app-icon>
+                </a>
+            {% endif %}
+        </div>
+    </section>
+
+    <dashboard-search :q="{{ _view.getRequest().getSession().read('objects.filter.q')|json_encode }}"></dashboard-search>
+
+    <div class="dashboard-area">
+        <recent-activity :page-sizes={{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }} :user-id={{ user.id }}></recent-activity>
     </div>
-</dashboard>
+
+</div>
