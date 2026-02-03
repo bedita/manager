@@ -145,8 +145,12 @@ class SchemaComponent extends Component
         // add special property `roles` to `users`
         if ($type === 'users') {
             $schema['properties']['roles'] = [
-                'type' => 'string',
-                'enum' => $this->fetchRoles(),
+                'type' => 'array',
+                'items' => [
+                    'type' => 'string',
+                    'enum' => $this->fetchRoles(),
+                ],
+                'uniqueItems' => true,
             ];
         }
         $categories = $this->fetchCategories($type);
