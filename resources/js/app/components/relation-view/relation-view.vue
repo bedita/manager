@@ -723,7 +723,7 @@ export default {
                         body: JSON.stringify({ data: toRemove }),
                     });
                     if (response?.error) {
-                        BEDITA.error(response.error?.title || response?.error);
+                        this.$helpers.handleApiError(response);
                     } else {
                         this.removedRelated = [];
                         this.prepareRelationsToRemove(this.removedRelated);
@@ -744,7 +744,7 @@ export default {
                     });
                     const json = await response.json();
                     if (json?.error) {
-                        BEDITA.error(json.error?.title);
+                        this.$helpers.handleApiError(json);
                     } else {
                         this.addedRelations = [];
                         this.modifiedRelations = [];
@@ -753,11 +753,7 @@ export default {
                 }
                 await this.reloadObjects();
             } catch (error) {
-                if (typeof error === 'string') {
-                    BEDITA.error(error);
-                } else {
-                    BEDITA.error(error?.title);
-                }
+                this.$helpers.handleApiError(error);
             } finally {
                 this.savingRelated = false;
             }
