@@ -38,17 +38,27 @@
 
 {% set indexViewTypes = Layout.moduleIndexViewTypes() %}
 {% if indexViewTypes|length > 1 %}
-    {% set indexViewType = Layout.moduleIndexViewType() %}
-    {% for t in indexViewTypes %}
-        {% if t != indexViewType %}
-            {% set icon = t == 'tree' ? 'carbon:tree-view' : 'carbon:list' %}
-            {% set label = t == 'tree' ? __('Tree view') : __('List view') %}
-            {% do _view.append(
+    {% set mapIcon = {
+        'list': 'carbon:list',
+        'tree': 'carbon:tree-view',
+        'calendar': 'carbon:calendar',
+    } %}
+    {% set mapLabel = {
+        'list': __('List'),
+        'tree': __('Tree'),
+        'calendar': __('Calendar'),
+    } %}
+	{% set indexViewType = Layout.moduleIndexViewType() %}
+	{% for t in indexViewTypes %}
+		{% if t != indexViewType %}
+			{% set icon = mapIcon[t] %}
+            {% set label = mapLabel[t] %}
+			{% do _view.append(
                 'app-module-buttons',
-                '<a href="' ~ url ~ '?view_type=' ~ t ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><app-icon icon="' ~ icon ~ '"></app-icon><span class="ml-05">' ~ __(label) ~ '</span></a>'
+                '<a href="' ~ url ~ '?view_type=' ~ t ~ '" class="button button-outlined button-outlined-module-' ~ currentModule.name ~ '"><app-icon icon="' ~ icon ~ '"></app-icon><span class="ml-05">' ~ label ~ '</span></a>'
             ) %}
-        {% endif %}
-    {% endfor %}
+		{% endif %}
+	{% endfor %}
 {% endif %}
 
 {% if in_array('admin', user.roles) %}
