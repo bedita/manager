@@ -239,8 +239,8 @@ class ImportControllerTest extends TestCase
             ->willThrowException(new BEditaClientException('My test exception'));
         $import->apiClient = $apiClient;
         // pass service query param
-        $request = $this->Import->getRequest()->withQueryParams(['service' => 'dummy']);
-        $this->Import->setRequest($request);
+        $request = $import->getRequest()->withQueryParams(['service' => 'dummy']);
+        $import->setRequest($request);
         $method->invokeArgs($import, []);
         $actual = $import->viewBuilder()->getVar('jobs');
         $expected = [];
