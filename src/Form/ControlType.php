@@ -165,13 +165,6 @@ class ControlType
      */
     public static function fromArray(array $schema): string
     {
-        $isArray = Hash::get($schema, 'type') === 'array';
-        $uniqueItems = Hash::get($schema, 'uniqueItems') === true;
-        $isEnumStrings = Hash::get($schema, 'items.type') === 'string' && !empty($schema['items']['enum']);
-        if ($isArray && $uniqueItems && $isEnumStrings) {
-            return 'enum';
-        }
-
         return 'checkbox';
     }
 
