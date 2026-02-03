@@ -457,6 +457,9 @@ msgstr "Tipi di sinistra"
 msgid "Less"
 msgstr "Meno"
 
+msgid "Limit"
+msgstr "Limite"
+
 msgid "List"
 msgstr "Lista"
 
@@ -592,6 +595,9 @@ msgstr "Non trovato"
 
 msgid "Number of created objects"
 msgstr "Numero di oggetti creati"
+
+msgid "Number of folders"
+msgstr "Numero di cartelle"
 
 msgid "Number of login errors"
 msgstr "Numero di errori di accesso"
@@ -887,6 +893,9 @@ msgstr "Tag"
 msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
 
+msgid "The number of folders is too high to be displayed in tree-compact view"
+msgstr "Il numero di cartelle è troppo elevato per essere visualizzato nella vista compatta ad albero."
+
 msgid "There were errors creating the thumbnail(s)"
 msgstr "È avvenuto un errore nella creazione delle miniature"
 
@@ -937,6 +946,9 @@ msgstr "Cestino"
 
 msgid "Trashd"
 msgstr "Cancellato"
+
+msgid "Tree compact"
+msgstr "Albero compatto"
 
 msgid "Tree view"
 msgstr "Vista ad albero"
@@ -1027,6 +1039,9 @@ msgstr "Non sei autorizzato ad accedere a quest'area."
 
 msgid "You are not authorized to access this resource"
 msgstr "Non sei autorizzato ad accedere a questa risorsa"
+
+msgid "You cannot see folders in tree-compact view"
+msgstr "Non puoi vedere le cartelle nella vista compatta ad albero."
 
 msgid "You do not have the required permissions to view this page."
 msgstr "Non hai i permessi necessari per visualizzare questa pagina."
@@ -1572,6 +1587,30 @@ msgstr "pagina"
 msgid "View"
 msgstr "Vedi"
 
+msgid "New content"
+msgstr "Nuovo contenuto"
+
+msgid "New folder"
+msgstr "Nuova cartella"
+
+msgid "Open in new tab"
+msgstr "Apri in una nuova scheda"
+
+msgid "Undo"
+msgstr "Annulla"
+
+msgid "Choose object type"
+msgstr "Scegli il tipo di oggetto"
+
+msgid "Object type"
+msgstr "Tipo di oggetto"
+
+msgid "Parent folder"
+msgstr "Cartella padre"
+
+msgid "/ (root)"
+msgstr "/ (radice)"
+
 msgid "Add new tag"
 msgstr "Aggiungi un nuovo tag"
 
@@ -1946,9 +1985,6 @@ msgstr "Tutti i giorni"
 
 msgid "Invalid date range"
 msgstr "Intervallo date non valido"
-
-msgid "Undo"
-msgstr "Annulla"
 
 msgid "Copied!"
 msgstr "Copiato!"
