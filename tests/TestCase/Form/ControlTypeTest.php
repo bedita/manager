@@ -154,6 +154,17 @@ class ControlTypeTest extends TestCase
                     'enum' => ['a', 'b', 'c'],
                 ],
             ],
+            'enum roles' => [
+                'enum',
+                [
+                    'type' => 'array',
+                    'uniqueItems' => true,
+                    'items' => [
+                        'type' => 'string',
+                        'enum' => ['admin', 'editor', 'viewer'],
+                    ],
+                ],
+            ],
             'array' => [
                 'checkbox',
                 [
@@ -164,7 +175,7 @@ class ControlTypeTest extends TestCase
                         ],
                         [
                             'type' => 'array',
-                            'uniqueItems' => true,
+                            'uniqueItems' => false,
                             'items' => [
                                 'type' => 'string',
                                 'enum' => ['a', 'b', 'c', 'd'],

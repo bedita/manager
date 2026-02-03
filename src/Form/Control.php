@@ -342,6 +342,10 @@ class Control
             }
         }
 
+        if (!empty($schema['items']['enum'])) {
+            $schema['enum'] = $schema['items']['enum'];
+        }
+
         return [
             'type' => 'select',
             'options' => array_map(
