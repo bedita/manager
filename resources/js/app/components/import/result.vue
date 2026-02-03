@@ -28,7 +28,7 @@ import { t } from 'ttag';
 
 export default {
 
-    name: 'import-result',
+    name: 'ImportResult',
 
     props: {
         result: {
