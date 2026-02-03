@@ -492,6 +492,7 @@ class SchemaComponentTest extends TestCase
         static::assertNotEmpty($result['properties']['roles']);
 
         $expected = [
+            '$id' => '#/properties/roles',
             'type' => 'array',
             'items' => [
                 'type' => 'string',

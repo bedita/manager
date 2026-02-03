@@ -148,6 +148,7 @@ class SchemaComponent extends Component
         // add special property `roles` to `users`
         if ($type === 'users') {
             $schema['properties']['roles'] = [
+                '$id' => '#/properties/roles',
                 'type' => 'array',
                 'items' => [
                     'type' => 'string',
