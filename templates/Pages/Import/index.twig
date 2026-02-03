@@ -18,6 +18,7 @@
 {% endif %}
 
 {% if 'GET' in jobsAllow %}
-    <import-jobs :jobs="{{ jobs|json_encode() }}" :services="{{ services|json_encode() }}">
-    </import-jobs>
+    {% for service in services %}
+    <import-job-list service={{ service }}></import-job-list>
+    {% endfor %}
 {% endif %}
