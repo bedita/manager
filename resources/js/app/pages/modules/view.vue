@@ -19,6 +19,19 @@ export default {
         MailPreview: () => import(/* webpackChunkName: "mail-preview" */'app/components/mail-preview/mail-preview.vue'),
     },
 
+    provide() {
+        return {
+            // Provide callback for map-view to call when coordinates change
+            onCoordinatesUpdate: (coords) => {
+                this.coordinatesListeners.forEach(listener => listener(coords));
+            },
+            // Provide registration function for coordinates-view to register as listener
+            registerCoordinatesListener: (callback) => {
+                this.coordinatesListeners.push(callback);
+            },
+        };
+    },
+
     props: {
         object: {
             type: Object,
@@ -36,6 +49,7 @@ export default {
             submitListener: null,
             tabsOpen: true,
             errors: [],
+            coordinatesListeners: [], // Store listeners for coordinates updates
         };
     },
 
