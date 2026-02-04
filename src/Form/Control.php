@@ -343,7 +343,6 @@ class Control
         }
         if (empty($schema['enum']) && !empty($schema['items']['enum'])) {
             $schema['enum'] = $schema['items']['enum'];
-            array_unshift($schema['enum'], '');
         }
 
         return [
