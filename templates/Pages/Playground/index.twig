@@ -2,5 +2,9 @@
 {% do _view.assign('bodyViewClass', 'view-playground') %}
 
 <div class="playground-page">
-    <components-playground></components-playground>
+    <components-playground
+        google-maps-api-key="{{ config('Location.google.apiKey') }}"
+        mapbox-token="{{ config('Maps.mapbox.token') }}"
+    >
+    </components-playground>
 </div>

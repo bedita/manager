@@ -101,6 +101,280 @@ data() {
                     </div>
                 </div>
             </div>
+
+            <!-- Object Properties (Event Bus Migration) -->
+            <div class="box">
+                <div class="box-header" @click="toggleSection('objectProperties')">
+                    <h4 class="box-title">Object Properties (Event Bus → Props/Emits)</h4>
+                    <button class="section-toggle-btn">
+                        {{ sections.objectProperties ? '▼' : '▶' }}
+                    </button>
+                </div>
+                <div v-if="sections.objectProperties" class="box-content">
+                    <p class="box-description">
+                        Tests parent-child event communication (migrated from EventBus)
+                    </p>
+
+                    <object-properties
+                        :init-properties="objectProperties"
+                        type="custom"
+                        :hidden="[]"
+                        :translatable="[]"
+                        :translation-rules="[]"
+                    >
+                        <template #default="{ onPropAdded }">
+                            <object-property-add
+                                :prop-types="propTypesOptions"
+                                @prop-added="onPropAdded"
+                            />
+                        </template>
+                    </object-properties>
+
+                    <input
+                        id="addedProperties"
+                        type="hidden"
+                    >
+                    <input
+                        id="hidden"
+                        type="hidden"
+                    >
+                    <input
+                        id="translationRules"
+                        type="hidden"
+                    >
+
+                    <div class="source-code-toggle">
+                        <button @click="toggleSource('objectProperties')" class="source-toggle-btn">
+                            {{ showSource.objectProperties ? '▼' : '▶' }} View Source Code
+                        </button>
+                    </div>
+
+                    <pre v-if="showSource.objectProperties" class="source-code"><code>// Parent component (object-properties.vue)
+&lt;template&gt;
+    &lt;slot @prop-added="onPropAdded"&gt;&lt;/slot&gt;
+&lt;/template&gt;
+
+// Usage - child automatically emits to parent via slot
+&lt;object-properties type="custom"&gt;
+    &lt;object-property-add :prop-types="types" /&gt;
+&lt;/object-properties&gt;
+
+// Child component (object-property-add.vue)
+emits: ['prop-added'],
+methods: {
+    add() {
+        this.$emit('prop-added', { name, property_type_name, description });
+    }
+}</code></pre>
+
+                    <div class="checklist">
+                        <strong class="checklist-title">✓ Verification</strong>
+                        <ul class="checklist-items">
+                            <li>Add property form appears</li>
+                            <li>New properties appear in list after clicking Add</li>
+                            <li>No EventBus usage (check console for errors)</li>
+                            <li>Props/emits pattern works correctly</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Placeholders (PlaceholderBus Migration) -->
+            <div class="box">
+                <div class="box-header" @click="toggleSection('placeholders')">
+                    <h4 class="box-title">Placeholder System (EventBus → PlaceholderBus)</h4>
+                    <button class="section-toggle-btn">
+                        {{ sections.placeholders ? '▼' : '▶' }}
+                    </button>
+                </div>
+                <div v-if="sections.placeholders" class="box-content">
+                    <p class="box-description">
+                        Tests directive-component communication (migrated from EventBus to dedicated placeholderBus)
+                    </p>
+
+                    <div class="field-section">
+                        <label class="field-label">Rich Text Editor (placeholder button disabled in playground):</label>
+                        <textarea
+                            id="richeditor-test"
+                            name="richeditor_test"
+                            v-model="richtextValue"
+                            v-richeditor
+                            @change="handleRichtextChange"
+                        />
+                        <p class="box-description" style="margin-top: 8px;">
+                            Note: To test placeholder detection, switch to "Source Code" view in the editor and add:<br>
+                            <code>&lt;span data-placeholder="<strong>OBJECT_ID</strong>"&gt;&lt;!--BE-PLACEHOLDER.<strong>OBJECT_ID</strong>.--&gt;&lt;/span&gt;</code><br>
+                            <strong>Replace OBJECT_ID with an existing image/media object ID from your database.</strong>
+                        </p>
+                    </div>
+
+                    <div class="field-section">
+                        <label class="field-label">Detected Placeholders:</label>
+                        <placeholder-list
+                            field="richeditor-test"
+                            :value="richtextValue"
+                            v-if="richtextValue"
+                        />
+                        <p class="box-description" v-if="!hasPlaceholders">
+                            No placeholders detected. Add the HTML structure shown above to test.
+                        </p>
+                    </div>
+
+                    <div class="source-code-toggle">
+                        <button @click="toggleSource('placeholders')" class="source-toggle-btn">
+                            {{ showSource.placeholders ? '▼' : '▶' }} View Source Code
+                        </button>
+                    </div>
+
+                    <pre v-if="showSource.placeholders" class="source-code"><code>// placeholderBus.js - Simple event emitter for placeholder events
+class PlaceholderBus {
+    listen(event, callback) { /* ... */ }
+    send(event, data) { /* ... */ }
+}
+export const placeholderBus = new PlaceholderBus();
+
+// richeditor.js directive
+import { placeholderBus } from 'app/components/placeholder-bus';
+
+setup: (editor) => {
+    editor.on('change', () => {
+        placeholderBus.send('refresh-placeholders', {
+            id: editor.id,
+            content: editor.getContent()
+        });
+    });
+}
+
+placeholderBus.listen('replace-placeholder', (data) => {
+    // Update placeholder in editor
+});
+
+// placeholder-list.vue component
+import { placeholderBus } from 'app/components/placeholder-bus';
+
+mounted() {
+    placeholderBus.listen('refresh-placeholders', this.refresh);
+}
+
+// placeholder-params.vue component
+import { placeholderBus } from 'app/components/placeholder-bus';
+
+changeParams() {
+    placeholderBus.send('replace-placeholder', {
+        id, field, oldParams, newParams
+    });
+}</code></pre>
+
+                    <div class="checklist">
+                        <strong class="checklist-title">✓ Verification</strong>
+                        <ul class="checklist-items">
+                            <li>Rich text editor loads correctly</li>
+                            <li>PlaceholderBus imported (not EventBus)</li>
+                            <li>Placeholder detection works when HTML contains comment syntax</li>
+                            <li>No console errors</li>
+                            <li>Note: Placeholder button disabled (requires real object/backend)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coordinates/Map (Provide/Inject EventBus Migration) -->
+            <div class="box">
+                <div class="box-header" @click="toggleSection('coordinates')">
+                    <h4 class="box-title">CoordinatesView / MapView (EventBus → Provide/Inject)</h4>
+                    <button class="section-toggle-btn">
+                        {{ sections.coordinates ? '▼' : '▶' }}
+                    </button>
+                </div>
+                <div v-if="sections.coordinates" class="box-content">
+                    <p class="box-description">
+                        Tests sibling component communication (migrated from EventBus using provide/inject)
+                    </p>
+
+                    <div>
+                        <label class="field-label">Address Fields (for geocoding) + Coordinates (long,lat):</label>
+                        <div class="address-grid">
+                            <input id="address" type="text" placeholder="Address (e.g., Via del Corso)" class="address-input">
+                            <input id="locality" type="text" placeholder="Locality (e.g., Roma)" class="address-input">
+                            <input id="zipcode" type="text" placeholder="Zipcode (e.g., 00186)" class="address-input">
+                            <input id="country" type="text" placeholder="Country (e.g., Italy)" class="address-input">
+                            <input id="region" type="text" placeholder="Region (e.g., Lazio)" class="address-input">
+                            <coordinates-view
+                                :coordinates="currentCoordinates"
+                                :options="mapOptions"
+                            />
+                        </div>
+                    </div>
+
+                    <div v-if="mapboxToken" class="field-section">
+                        <label class="field-label">Map View (drag marker to update coordinates):</label>
+                        <map-view
+                            lng="12.4964"
+                            lat="41.9028"
+                            popup-html="Rome, Italy"
+                            :map-token="mapboxToken"
+                        />
+                    </div>
+
+                    <div v-else class="field-section">
+                        <label class="field-label">Map View:</label>
+                        <div class="map-placeholder">
+                            <div class="map-placeholder-content">
+                                <p class="map-icon">🗺️</p>
+                                <p class="map-message">Map requires Mapbox token</p>
+                                <p class="map-hint">Configure in app_local.php: Maps.mapbox.token</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="source-code-toggle">
+                        <button @click="toggleSource('coordinates')" class="source-toggle-btn">
+                            {{ showSource.coordinates ? '▼' : '▶' }} View Source Code
+                        </button>
+                    </div>
+
+                    <pre v-if="showSource.coordinates" class="source-code"><code>// Parent provides coordination (components-playground.vue)
+provide() {
+    return {
+        onCoordinatesUpdate: (coords) => {
+            this.coordinatesListeners.forEach(fn => fn(coords));
+        },
+        registerCoordinatesListener: (callback) => {
+            this.coordinatesListeners.push(callback);
+        }
+    };
+}
+
+// Map component injects callback (map-view.vue)
+inject: ['onCoordinatesUpdate'],
+marker.on('dragend', () => {
+    if (this.onCoordinatesUpdate) {
+        this.onCoordinatesUpdate(marker.getLngLat());
+    }
+});
+
+// Coordinates component injects registration (coordinates-view.vue)
+inject: ['registerCoordinatesListener'],
+mounted() {
+    if (this.registerCoordinatesListener) {
+        this.registerCoordinatesListener((point) => {
+            this.value = `${point.lng}, ${point.lat}`;
+        });
+    }
+}</code></pre>
+
+                    <div class="checklist">
+                        <strong class="checklist-title">✓ Verification</strong>
+                        <ul class="checklist-items">
+                            <li>Coordinates input displays correctly</li>
+                            <li>When map marker is dragged, coordinates input updates</li>
+                            <li>No EventBus usage (check console for errors)</li>
+                            <li>Provide/inject pattern works for sibling components</li>
+                            <li>Both components have backward compatibility fallbacks</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -112,6 +386,44 @@ export default {
     components: {
         KeyValueList: () => import(/* webpackChunkName: "key-value-list" */ 'app/components/json-fields/key-value-list'),
         StringList: () => import(/* webpackChunkName: "string-list" */ 'app/components/json-fields/string-list'),
+        ObjectProperties: () => import(/* webpackChunkName: "object-properties" */ 'app/components/object-property/object-properties'),
+        ObjectPropertyAdd: () => import(/* webpackChunkName: "object-property-add" */ 'app/components/object-property/object-property-add'),
+        CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */ 'app/components/coordinates-view'),
+        MapView: () => import(/* webpackChunkName: "map-view" */ 'app/components/map-view'),
+        PlaceholderList: () => import(/* webpackChunkName: "placeholder-list" */ 'app/components/placeholder-list/placeholder-list'),
+    },
+
+    provide() {
+        return {
+            onCoordinatesUpdate: (coords) => {
+                this.coordinatesListeners.forEach(listener => listener(coords));
+            },
+            registerCoordinatesListener: (callback) => {
+                this.coordinatesListeners.push(callback);
+            },
+        };
+    },
+
+    props: {
+        googleMapsApiKey: {
+            type: String,
+            default: '',
+        },
+        mapboxToken: {
+            type: String,
+            default: '',
+        },
+        object: {
+            type: Object,
+            default: () => ({
+                id: 999,
+                type: 'documents',
+                attributes: {
+                    title: 'Playground Mock Document',
+                    status: 'on'
+                }
+            }),
+        },
     },
 
     data() {
@@ -119,13 +431,32 @@ export default {
             sections: {
                 stringList: false,
                 keyValueList: false,
+                objectProperties: false,
+                placeholders: false,
+                coordinates: false,
             },
             showSource: {
                 stringList: false,
                 keyValueList: false,
+                objectProperties: false,
+                placeholders: false,
+                coordinates: false,
             },
             stringListValue: '["test item 1", "test item 2"]',
             keyValueListValue: '{"key1": "value1", "key2": "value2"}',
+            objectProperties: [],
+            propTypesOptions: [
+                { value: 'string', text: 'String' },
+                { value: 'integer', text: 'Integer' },
+                { value: 'boolean', text: 'Boolean' },
+                { value: 'date', text: 'Date' },
+            ],
+            addedPropertiesJson: '[]',
+            coordinatesListeners: [],
+            currentCoordinates: 'POINT(12.4964 41.9028)',
+            mapOptions: JSON.stringify({ key: this.googleMapsApiKey, url: 'https://maps.googleapis.com/maps/api/' }),
+            richtextValue: '<p>Sample richtext content. Use the placeholder button to add placeholders.</p>',
+            hasPlaceholders: false,
         };
     },
 
@@ -135,7 +466,12 @@ export default {
         },
         toggleSource(section) {
             this.showSource[section] = !this.showSource[section];
-        }
+        },
+        handleRichtextChange(event) {
+            this.richtextValue = event.target.value;
+            // Check if content has placeholder structure
+            this.hasPlaceholders = this.richtextValue.includes('data-placeholder');
+        },
     }
 };
 </script>
@@ -151,12 +487,9 @@ export default {
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 15px;
-    border-bottom: 1px solid #52565e;
     padding-bottom: 15px;
+    border-bottom: 1px solid #52565e;
 }
 
 .title {
@@ -164,10 +497,6 @@ export default {
     color: #ffffff;
     font-size: 1.1em;
     font-weight: 500;
-}
-
-.content {
-    margin-top: 0;
 }
 
 .box {
@@ -224,27 +553,6 @@ export default {
     color: #ffffff;
 }
 
-/* Ensure all nested content has proper text colors */
-.box ::v-deep input,
-.box ::v-deep textarea,
-.box ::v-deep label,
-.box ::v-deep div,
-.box ::v-deep span,
-.box ::v-deep button {
-    color: inherit;
-}
-
-.box ::v-deep input,
-.box ::v-deep textarea {
-    color: #212529 !important;
-    background: #f8f9fa;
-    border: 1px solid #ced4da;
-}
-
-.box ::v-deep button {
-    color: #212529 !important;
-}
-
 .source-code-toggle {
     margin: 15px 0 10px 0;
 }
@@ -299,5 +607,53 @@ export default {
     color: #e0e0e0;
     font-size: 0.85em;
     line-height: 1.6;
+}
+
+.field-section {
+    margin-bottom: 20px;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #b8bcc4;
+    font-size: 0.9em;
+}
+
+.address-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.map-placeholder {
+    height: 400px;
+    background: #1e1e1e;
+    border: 1px solid #52565e;
+    border-radius: 4px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-placeholder-content {
+    text-align: center;
+    color: #b8bcc4;
+}
+
+.map-icon {
+    margin: 0 0 10px 0;
+}
+
+.map-message {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.map-hint {
+    margin: 5px 0 0 0;
+    font-size: 0.85em;
+    opacity: 0.7;
 }
 </style>
