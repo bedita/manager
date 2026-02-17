@@ -238,6 +238,9 @@ class ImportControllerTest extends TestCase
             ->with('/async_jobs')
             ->willThrowException(new BEditaClientException('My test exception'));
         $import->apiClient = $apiClient;
+        // pass service query param
+        $request = $import->getRequest()->withQueryParams(['service' => 'dummy']);
+        $import->setRequest($request);
         $method->invokeArgs($import, []);
         $actual = $import->viewBuilder()->getVar('jobs');
         $expected = [];

@@ -54,6 +54,20 @@
                     @change="change"
                 />
             </div>
+            <div
+                class="input checkbox"
+                v-for="field in boolFields"
+                :key="field"
+            >
+                <input
+                    type="checkbox"
+                    :name="field"
+                    v-model="map[field]"
+                >
+                <label :for="field">
+                    {{ field }}
+                </label>
+            </div>
             <div>
                 <template v-if="success">
                     <button @click.prevent="skip">
@@ -110,6 +124,7 @@ export default {
                 'sort',
                 'route',
                 'sidebar',
+                'annotations',
             ],
             jsonEditorOptions: {
                 mainMenuBar: true,
@@ -118,6 +133,7 @@ export default {
                 statusBar: false,
                 readOnly: false,
             },
+            boolFields: ['annotations'],
             jsonFields: ['route', 'sidebar'],
             loading: false,
             otherFields: ['color', 'icon', 'shortLabel', 'sort'],
@@ -128,6 +144,7 @@ export default {
                 icon: '',
                 sidebar: '',
                 route: '',
+                annotations: false,
             },
             samples: {
                 color: 'i.e. #FF0000',
@@ -260,5 +277,15 @@ div.module-setup input {
 div.module-setup .tab {
     cursor: pointer;
     border-bottom: solid #FFF 1px;
+}
+div.module-setup .checkbox {
+    flex-direction: row;
+    align-items: center;
+}
+div.module-setup .checkbox > label {
+    margin-left: 0.5rem;
+}
+div.module-setup .checkbox > input {
+    width: auto;
 }
 </style>

@@ -1,13 +1,11 @@
 import Vue from 'vue';
 
-import 'libs/filters';
 import 'config/config';
 
 import '../../style.scss';
 
 import { BELoader } from 'libs/bedita';
 
-import { EventBus } from 'app/components/event-bus';
 import { PanelView, PanelEvents } from 'app/components/panel-view';
 import { confirm, error, info, success, prompt, warning } from 'app/components/dialog/dialog';
 
@@ -32,7 +30,6 @@ const _vueInstance = new Vue({
     el: 'main',
 
     components: {
-        EventBus,
         PanelView,
         Autocomplete,
         LoginPassword: () => import(/* webpackChunkName: "login-password" */'app/components/login-password/login-password'),
@@ -60,8 +57,8 @@ const _vueInstance = new Vue({
         TrashIndex: () => import(/* webpackChunkName: "trash-index" */'app/pages/trash/index'),
         TrashView: () => import(/* webpackChunkName: "trash-view" */'app/pages/trash/view'),
         ImportIndex: () => import(/* webpackChunkName: "import-index" */'app/pages/import/index'),
-        ImportJobs: () => import(/* webpackChunkName: "import-jobs" */'app/components/import/jobs'),
         ImportResult: () => import(/* webpackChunkName: "import-result" */'app/components/import/result'),
+        ImportJobList: () => import(/* webpackChunkName: "import-job-list" */'app/components/import/job'),
         JsonEditor: () => import(/* webpackChunkName: "json-editor" */'app/components/json-editor/json-editor'),
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
         AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
@@ -114,6 +111,7 @@ const _vueInstance = new Vue({
         FieldTextarea: () => import(/* webpackChunkName: "field-textarea" */'app/components/form/field-textarea'),
         FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
         CalendarView: () => import(/* webpackChunkName: "calendar-view" */'app/components/calendar-view/calendar-view'),
+        ComponentsPlayground: () => import(/* webpackChunkName: "components-playground" */'app/components/components-playground'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
         RelatedObjectsFilter: () => import(/* webpackChunkName: "related-objects-filter" */'app/components/related-objects-filter/related-objects-filter'),
         ModuleProperties: () => import(/* webpackChunkName: "module-properties" */'app/components/module/module-properties'),
@@ -122,6 +120,7 @@ const _vueInstance = new Vue({
         UploadedObject: () => import(/* webpackChunkName: "uploaded-object" */'app/components/uploaded-object/uploaded-object.vue'),
         RibbonItem: () => import(/* webpackChunkName: "ribbon-item" */'./components/ribbon-item/ribbon-item.vue'),
         MailPreview: () => import(/* webpackChunkName: "mail-preview" */'./components/mail-preview/mail-preview.vue'),
+        ObjectAnnotations: () => import(/* webpackChunkName: "object-annotations" */'./components/object-annotations/object-annotations.vue'),
         AppIcon,
     },
 
@@ -217,8 +216,6 @@ const _vueInstance = new Vue({
         this.$on('filter-update-page-size', this.onUpdatePageSize);
         this.$on('filter-update-current-page', this.onUpdateCurrentPage);
         this.$on('resource-changed', this.onResourceChanged);
-
-        Vue.prototype.$eventBus = new Vue();
     },
 
     mounted: function () {
@@ -657,3 +654,4 @@ Vue.component('RelatedObjectsFilter', _vueInstance.$options.components.RelatedOb
 Vue.component('Thumbnail', _vueInstance.$options.components.Thumbnail);
 Vue.component('RibbonItem', _vueInstance.$options.components.RibbonItem);
 Vue.component('UploadedObject', _vueInstance.$options.components.UploadedObject);
+Vue.component('ObjectAnnotations', _vueInstance.$options.components.ObjectAnnotations);

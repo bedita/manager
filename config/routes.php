@@ -97,6 +97,11 @@ $routes->scope('/', function (RouteBuilder $routes): void {
         ['_name' => 'dashboard:messages'],
     );
     $routes->connect(
+        '/dev/playground',
+        ['controller' => 'Playground', 'action' => 'index'],
+        ['_name' => 'playground'],
+    );
+    $routes->connect(
         '/tree',
         ['controller' => 'Tree', 'action' => 'get'],
         ['_name' => 'tree:get'],

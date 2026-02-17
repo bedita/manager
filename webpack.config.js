@@ -12,7 +12,6 @@ const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 
 // config
@@ -80,13 +79,6 @@ let webpackPlugins = [
     }),
 
     new WebpackManifestPlugin({}),
-
-    new ESLintPlugin({
-        extensions: ['js'],
-        emitError: true,
-        emitWarning: true,
-        outputReport: true
-    }),
 
     new VueLoaderPlugin(),
 ];

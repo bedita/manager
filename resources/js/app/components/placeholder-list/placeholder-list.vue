@@ -70,7 +70,7 @@
     </div>
 </template>
 <script>
-import { EventBus } from 'app/components/event-bus';
+import { PlaceholderBus as placeholderBus } from 'app/components/placeholder-bus';
 import { t } from 'ttag';
 
 export default {
@@ -101,7 +101,7 @@ export default {
         this.$nextTick(async () => {
             this.richtextContent = this.value || document.getElementById(this.field).value || '';
             await this.extractPlaceholders();
-            EventBus.listen('refresh-placeholders', this.debounceRefresh);
+            placeholderBus.listen('refresh-placeholders', this.debounceRefresh);
         });
     },
     methods: {
@@ -128,8 +128,8 @@ export default {
                     text: m[0],
                     id: m[1],
                     obj: o,
-                    params_raw: m[2],
-                    params: this.$helpers.base64ToUtf8(m[2]),
+                    params_raw: m[2] || '',
+                    params: this.$helpers.base64ToUtf8(m[2] || ''),
                 });
             }
         },
