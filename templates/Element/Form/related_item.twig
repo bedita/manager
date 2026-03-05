@@ -161,7 +161,7 @@
 
     {# BUTTONS #}
     {% if Perms.canSave() %}
-    <footer class="is-flex mt-05 p-05">
+    <footer class="is-flex mt-05 p-05" :class="{ 'last-child-auto': !dataList }">
         {% if stage %}
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">
                 <app-icon icon="carbon:launch"></app-icon>

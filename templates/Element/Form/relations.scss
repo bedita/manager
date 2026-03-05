@@ -208,6 +208,11 @@
             }
         }
 
+        footer.last-child-auto {
+            > :last-child {
+                margin-left: auto;
+            }
+        }
     }
 
     &.removed {
