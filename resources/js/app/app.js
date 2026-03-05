@@ -1,5 +1,9 @@
 import Vue from 'vue';
 
+if (typeof Vue.configureCompat === 'function') {
+    Vue.configureCompat({ MODE: 2 });
+}
+
 import 'config/config';
 
 import '../../style.scss';
@@ -28,6 +32,7 @@ import { Icon as AppIcon } from '@iconify/vue2';
 
 const _vueInstance = new Vue({
     el: 'main',
+    delimiters: ['<:', ':>'],
 
     components: {
         PanelView,

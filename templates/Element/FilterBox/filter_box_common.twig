@@ -111,15 +111,15 @@
         {# status filter #}
         <div class="filter-container" v-if="statusFilter.options">
             <label>{{ __('Status') }}</label>
-            <label v-for="s in statusFilter.options">
+            <label v-for="(s, idx) in statusFilter.options" :key="s && s.value ? s.value : idx">
                 <input
                     type="checkbox"
                     form="_filters"
-                    :id="s.value"
+                    :id="s?.value || ''"
                     :name="statusFilter.name"
-                    :value="s.value"
+                    :value="s?.value || ''"
                     v-model="queryFilter.filter.status">
-                <: s.text :>
+                <: s?.text || '' :>
             </label>
         </div>
 
@@ -200,8 +200,8 @@
                     <option value="">
                         {{ __('All') }}
                     </option>
-                    <option v-for="option in filter.options" v-if="option.text" :name="option.name" :value="option.value">
-                        <: t(option.text) :>
+                    <option v-for="(option, idx) in filter.options" v-if="option && option.text" :key="option && option.value ? option.value : idx" :name="option && option.name ? option.name : ''" :value="option && option.value ? option.value : ''">
+                        <: t(option && option.text ? option.text : '') :>
                     </option>
                 </select>
             </span>

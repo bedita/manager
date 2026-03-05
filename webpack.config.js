@@ -238,7 +238,9 @@ module.exports = {
 
     resolve: {
         // aliases for import
-        alias: SRC_TEMPLATE_ALIAS,
+        alias: Object.assign({}, SRC_TEMPLATE_ALIAS, {
+            vue: '@vue/compat',
+        }),
         extensions: ['.js', '.vue', '.json', '.scss', '.css', 'po'],
     },
 

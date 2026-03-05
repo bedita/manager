@@ -28,6 +28,11 @@ for (let property in VueOptions) {
     }
 }
 
+if (!Vue.config.compilerOptions) {
+    Vue.config.compilerOptions = {};
+}
+Vue.config.compilerOptions.delimiters = VueOptions.delimiters;
+
 Locale(BEDITA.locale);
 
 // General Configs

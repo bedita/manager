@@ -1,21 +1,28 @@
+import { createApp } from 'vue';
+
 /**
  * Uri vue directive
  */
 export default {
-    install(Vue) {
-        Vue.directive('uri', {
-            inserted (el) {
+    install(app) {
+        app.directive('uri', {
+            mounted(el) {
                 import(/* webpackChunkName: "uri-input" */'app/components/uri-input')
                     .then(module => module.default)
                     .then((component) => {
-                        const Constructor = Vue.extend(component);
-                        const vm = new Constructor({
-                            propsData: {
-                                el,
-                            }
+                        const directiveApp = createApp(component, {
+                            el,
                         });
-                        vm.$mount();
+                        directiveApp.mount(document.createElement('div'));
+                        el.__uriDirectiveApp = directiveApp;
                     });
+            },
+
+            unmounted(el) {
+                if (el.__uriDirectiveApp) {
+                    el.__uriDirectiveApp.unmount();
+                    delete el.__uriDirectiveApp;
+                }
             },
         });
     }
