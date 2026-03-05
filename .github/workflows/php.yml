@@ -24,17 +24,17 @@ jobs:
   cs:
     uses: bedita/github-workflows/.github/workflows/php-cs.yml@v2
     with:
-      php_versions: '["8.4"]'
+      php_versions: '["8.5"]'
 
   psalm:
     uses: bedita/github-workflows/.github/workflows/php-psalm.yml@v2
     with:
-      php_versions: '["8.4"]'
+      php_versions: '["8.5"]'
 
   stan:
     uses: bedita/github-workflows/.github/workflows/php-stan.yml@v2
     with:
-      php_versions: '["8.4"]'
+      php_versions: '["8.5"]'
 
   unit-5:
     uses: bedita/github-workflows/.github/workflows/php-unit.yml@v2
@@ -46,6 +46,6 @@ jobs:
   unit-6:
     uses: bedita/github-workflows/.github/workflows/php-unit.yml@v2
     with:
-      php_versions: '["8.4"]'
+      php_versions: '["8.4", "8.5"]'
       bedita_version: '6'
       coverage_min_percentage: 98

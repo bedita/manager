@@ -34,7 +34,7 @@ use Cake\Utility\Hash;
  *
  * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
  * @property \App\Controller\Component\ChildrenComponent $Children
- * @property \App\Controller\Component\ConfigComponent $Config
+ * @property \App\Controller\Component\ProjectConfigurationComponent $Config
  * @property \App\Controller\Component\ParentsComponent $Parents
  * @property \App\Controller\Component\SchemaComponent $Schema
  */
@@ -745,9 +745,19 @@ class ModulesComponent extends Component
         $relation = (string)Hash::get($data, 'relation');
         $related = $this->getRelated($data);
         if ($relation === 'parent' && $type === 'folders') {
+            // addRelated only
+            if (in_array($method, ['removeRelated', 'replaceRelated'])) {
+                return [];
+            }
+
             return $this->Parents->{$method}($id, $related);
         }
         if ($relation === 'children' && $type === 'folders') {
+            // addRelated and removeRelated only
+            if (in_array($method, ['replaceRelated'])) {
+                return [];
+            }
+
             return $this->Children->{$method}($id, $related);
         }
         $lang = I18n::getLocale();
