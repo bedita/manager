@@ -22,7 +22,7 @@ use Cake\Utility\Inflector;
 /**
  * Appearance Controller
  *
- * @property \App\Controller\Component\ConfigComponent $Config
+ * @property \App\Controller\Component\ProjectConfigurationComponent $Config
  */
 class AppearanceController extends AdministrationBaseController
 {
