@@ -1982,4 +1982,38 @@ class ModulesComponentTest extends TestCase
         static::assertTrue($actual);
         ApiClientProvider::setApiClient($safeClient);
     }
+
+    /**
+     * Test `saveRelatedObjects` method for parent folders:
+     * removeRelated and replaceRelated methods should return empty array,
+     * since only addRelated is allowed for parent folders.
+     *
+     * @return void
+     */
+    public function testSaveRelatedObjectsParentFoldersAddRelatedOnly(): void
+    {
+        // if method is 'removeRelated' or 'replaceRelated' then return empty array
+        $data = ['method' => 'removeRelated', 'relation' => 'parent'];
+        $actual = $this->Modules->saveRelatedObjects('123456789', 'folders', $data);
+        static::assertSame([], $actual);
+
+        $data = ['method' => 'replaceRelated', 'relation' => 'parent'];
+        $actual = $this->Modules->saveRelatedObjects('123456789', 'folders', $data);
+        static::assertSame([], $actual);
+    }
+
+    /**
+     * Test `saveRelatedObjects` method for children folders:
+     * replaceRelated method should return empty array,
+     * since only addRelated and removeRelated are allowed for children folders.
+     *
+     * @return void
+     */
+    public function testSaveRelatedObjectsChildrenFoldersAddRelatedRemoveRelatedOnly(): void
+    {
+        // if method is 'replaceRelated' then return empty array
+        $data = ['method' => 'replaceRelated', 'relation' => 'children'];
+        $actual = $this->Modules->saveRelatedObjects('123456789', 'folders', $data);
+        static::assertSame([], $actual);
+    }
 }
