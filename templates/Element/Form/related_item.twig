@@ -57,7 +57,7 @@
                 <span class="tag is-dark"><: related.attributes.lang :></span>
             {% else %}
                 <template v-if="dataList">
-                    <span class="tag ml-2" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                    <span class="tag ml-2" v-bind:class="'has-background-module-' + related.type" style="min-width: 7em;"><: related.type :></span>
                 </template>
                 <template v-else>
                     <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
@@ -65,7 +65,7 @@
 
                 <span class="icon-calendar-check-o" v-title="datesInfo(related)"></span>
             {% endif %}
-            <span class="status is-uppercase has-text-size-smallest" :class="related.attributes.status" v-if="related.attributes.status"><: related.attributes.status :></span>
+            <span class="status is-uppercase has-text-size-smallest" :class="related.attributes.status" style="min-width: 5em;" v-if="related.attributes.status"><: related.attributes.status :></span>
 
         </div>
 
@@ -77,12 +77,12 @@
         <header class="is-flex space-between mt-05">
             <div>
 
-                <h3 class="title m-0 has-text-size-small" style="padding-bottom: 7px;">
+                <h3 class="title m-0 has-text-size-small" style="min-width: 17em; padding-bottom: 7px;">
                     {% if translation %}
-                        <span v-html="truncate(related.attributes.translated_fields.title, 50)" :title=" related.attributes.translated_fields.title" v-if=" related.attributes.translated_fields && related.attributes.translated_fields.title ">
+                        <span v-html="truncate(related.attributes.translated_fields.title, 100)" :title=" related.attributes.translated_fields.title" v-if=" related.attributes.translated_fields && related.attributes.translated_fields.title ">
                         </span>
                     {% else %}
-                        <span v-html="truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 50)" :title=" related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-' ">
+                        <span v-html="truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 100)" :title=" related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-' ">
                         </span>
                     {% endif %}
                 </h3>
@@ -161,7 +161,7 @@
 
     {# BUTTONS #}
     {% if Perms.canSave() %}
-    <footer class="is-flex space-between mt-05 p-05">
+    <footer class="is-flex mt-05 p-05" :class="{ 'last-child-auto': !dataList }">
         {% if stage %}
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">
                 <app-icon icon="carbon:launch"></app-icon>
