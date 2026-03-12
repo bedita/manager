@@ -35,6 +35,9 @@ class QueryComponent extends Component
         }
         $query = $this->handleInclude($query);
 
+        // add ?saved_by_refs=1 if necessary
+        $query = $this->handleSavedByRefs($query);
+
         // make sure `filter[history_editor]` is empty in order to use logged user id
         if (isset($query['filter']['history_editor'])) {
             $query['filter']['history_editor'] = '';
@@ -84,6 +87,33 @@ class QueryComponent extends Component
         }
         if (!empty($decoded)) {
             $query['include'] = implode(',', $decoded);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Add 'saved_by_refs' as query string if created_by_user or modified_by_user are
+     * in index configuration per module object type.
+     *
+     * @param array $query The query
+     * @return array
+     */
+    protected function handleSavedByRefs(array $query): array
+    {
+        $fields = array_filter(
+            (array)Configure::read(
+                sprintf(
+                    'Properties.%s.index',
+                    $this->getController()->getRequest()->getParam('object_type'),
+                ),
+            ),
+            function ($value) {
+                return in_array($value, ['created_by_user', 'modified_by_user']);
+            },
+        );
+        if (!empty($fields)) {
+            $query['saved_by_refs'] = 1;
         }
 
         return $query;
