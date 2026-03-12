@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-08-26 08:17:45 \n"
+"POT-Creation-Date: 2026-03-10 13:13:21 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -200,6 +200,9 @@ msgid "Create a new tag"
 msgstr ""
 
 msgid "Created"
+msgstr ""
+
+msgid "Created By User"
 msgstr ""
 
 msgid "Created ↑ Oldest on top"
@@ -512,6 +515,9 @@ msgid "Missing thumb url"
 msgstr ""
 
 msgid "Modified"
+msgstr ""
+
+msgid "Modified By User"
 msgstr ""
 
 msgid "Modified ↑ Oldest on top"
