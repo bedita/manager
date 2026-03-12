@@ -5,3 +5,19 @@ parameters:
     - src
     - tests
   level: 5
+  ignoreErrors:
+    -
+      message: '#^Cannot unset property App\\Test\\.* because it might have hooks in a subclass\.$#'
+      path: tests/*
+    -
+      message: '#^Call to static method PHPUnit\\Framework\\Assert::assertIsArray\(\) with .* will always evaluate to true\.$#'
+      path: tests/*
+    -
+      message: '#^Call to static method PHPUnit\\Framework\\Assert::assertNotNull\(\) with .* will always evaluate to true\.$#'
+      path: tests/*
+    -
+      message: '#^Call to function is_array\(\) with .* will always evaluate to true\.$#'
+      path: tests/*
+    -
+      message: '#^Method .* never returns (?:null|bool) so it can be removed from the return type\.$#'
+      path: tests/*

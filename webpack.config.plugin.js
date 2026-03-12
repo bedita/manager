@@ -27,7 +27,7 @@ pluginsFound.forEach(plugin => {
     aliases[plugin] = path.resolve(__dirname, `${BUNDLE.beditaPluginsRoot}/${plugin}/node_modules`);
 });
 
-let sassOptions = { quietDeps: true, silenceDeprecations: ['mixed-decls'] };
+let sassOptions = { quietDeps: true };
 
 module.exports = {
     entry: entries,

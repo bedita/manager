@@ -24,7 +24,7 @@ use Cake\Utility\Inflector;
 /**
  * Component to handle properties view in modules.
  *
- * @property \App\Controller\Component\ConfigComponent $Config
+ * @property \App\Controller\Component\ProjectConfigurationComponent $Config
  */
 class PropertiesComponent extends Component
 {

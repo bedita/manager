@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-12-31 09:53:48 \n"
+"POT-Creation-Date: 2026-03-12 08:25:45 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -74,6 +74,9 @@ msgstr "Tutti gli oggetti"
 
 msgid "An extension stopped the file upload"
 msgstr "Un'estensione ha fermato il caricamento del file"
+
+msgid "Annotations"
+msgstr "Note"
 
 msgid "Any"
 msgstr "Qualsiasi"
@@ -206,6 +209,9 @@ msgstr "Crea nuovo tag"
 
 msgid "Created"
 msgstr "Creato"
+
+msgid "Created By User"
+msgstr "Creato da"
 
 msgid "Created ↑ Oldest on top"
 msgstr "Creazione ↑ Meno recenti in testa"
@@ -522,6 +528,9 @@ msgstr "Url miniatura mancante"
 
 msgid "Modified"
 msgstr "Modificato"
+
+msgid "Modified By User"
+msgstr "Modificato da"
 
 msgid "Modified ↑ Oldest on top"
 msgstr "Data di modifica ↑ Meno recenti in testa"
@@ -894,7 +903,9 @@ msgid "Temporary folder missing"
 msgstr "Cartella temporanea mancante"
 
 msgid "The number of folders is too high to be displayed in tree-compact view"
-msgstr "Il numero di cartelle è troppo alto per essere visualizzato nella vista ad albero compatta"
+msgstr ""
+"Il numero di cartelle è troppo alto per essere visualizzato nella vista ad "
+"albero compatta"
 
 msgid "There were errors creating the thumbnail(s)"
 msgstr "È avvenuto un errore nella creazione delle miniature"
@@ -1800,6 +1811,9 @@ msgstr "Parametri"
 msgid "Valid"
 msgstr "Valido"
 
+msgid "Loading"
+msgstr "Caricamento in corso"
+
 msgid "Module"
 msgstr ""
 
@@ -2006,9 +2020,6 @@ msgstr "Errore durante l'eliminazione della categoria"
 
 msgid "Create new"
 msgstr "Crea nuovo"
-
-msgid "Loading"
-msgstr "Caricamento in corso"
 
 msgid "Allowed types"
 msgstr "Tipi consentiti"

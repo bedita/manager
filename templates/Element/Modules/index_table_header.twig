@@ -9,16 +9,18 @@
     {% for prop in properties %}
         {% if prop is iterable %}
             {% for relationName,relationFields in prop %}
+                {% set s = Layout.tr(relationName) %}
                 <div>
-                    {{ Layout.tr(relationName) }}
+                    <span title="{{ s }}">{{ s|truncate(20) }}</span>
                 </div>
             {% endfor %}
         {% else %}
         <div class="{{ Link.sortClass(prop) }}">
+            {% set s = Property.fieldLabel(prop) %}
             {% if emptyQuerySearch and Schema.sortable(prop) %}
-                <a href="{{ Link.sortUrl(prop) }}">{{ Property.fieldLabel(prop) }}</a>
+                <a href="{{ Link.sortUrl(prop) }}" title="{{ s }}">{{ s|truncate(20) }}</a>
             {% else %}
-                {{ Property.fieldLabel(prop) }}
+                <span title="{{ s }}">{{ s|truncate(20) }}</span>
             {% endif %}
         </div>
         {% endif %}
