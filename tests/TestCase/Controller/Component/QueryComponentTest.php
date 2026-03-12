@@ -15,6 +15,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 #[CoversClass(QueryComponent::class)]
 #[CoversMethod(QueryComponent::class, 'handleInclude')]
+#[CoversMethod(QueryComponent::class, 'handleSavedByRefs')]
 #[CoversMethod(QueryComponent::class, 'handleSort')]
 #[CoversMethod(QueryComponent::class, 'index')]
 #[CoversMethod(QueryComponent::class, 'prepare')]
@@ -218,6 +219,44 @@ class QueryComponentTest extends TestCase
     public function testPrepare(array $expected, array $query): void
     {
         $actual = $this->Query->prepare($query);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `handleSavedByRefs` method.
+     *
+     * @return void
+     */
+    public function testHandleSavedByRefs(): void
+    {
+        $controller = new Controller(
+            new ServerRequest(
+                [
+                    'query' => [],
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    'params' => [
+                        'object_type' => 'test',
+                    ],
+                ],
+            ),
+        );
+        $registry = $controller->components();
+        $component = new class ($registry) extends QueryComponent {
+            public function handleSavedByRefs(array $query): array
+            {
+                return parent::handleSavedByRefs($query);
+            }
+        };
+        Configure::write('Properties.test.index', [
+            'title',
+            'created_by_user',
+            'modified_by_user',
+        ]);
+        $query = [];
+        $actual = $component->handleSavedByRefs($query);
+        $expected = ['saved_by_refs' => 1];
         static::assertEquals($expected, $actual);
     }
 }
