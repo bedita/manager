@@ -546,7 +546,7 @@ class ModulesComponent extends Component
             return true;
         }
         $methods = (array)Hash::extract($relatedData, '{n}.method');
-        if (in_array('addRelated', $methods) || in_array('removeRelated', $methods) || empty($id)) {
+        if (in_array('addRelated', $methods) || in_array('removeRelated', $methods)) {
             return false;
         }
         // check replaceRelated
