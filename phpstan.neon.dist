@@ -7,6 +7,9 @@ parameters:
   level: 5
   ignoreErrors:
     -
+      message: '#^Cannot unset property App\\Test\\.* because it might have hooks in a subclass\.$#'
+      path: tests/*
+    -
       message: '#^Call to static method PHPUnit\\Framework\\Assert::assertIsArray\(\) with .* will always evaluate to true\.$#'
       path: tests/*
     -
