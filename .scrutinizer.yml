@@ -7,7 +7,7 @@ filter:
     - 'vendor/*'
 
 build:
-  image: ubuntu:noble
+  image: default-noble
   environment:
     node: v22
   nodes:
