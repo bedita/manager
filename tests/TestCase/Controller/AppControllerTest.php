@@ -495,6 +495,31 @@ class AppControllerTest extends TestCase
                     ]),
                 ],
             ],
+            'roles' => [
+                'users', // object_type
+                [ // expected
+                    'id' => '5',
+                    'username' => 'mario',
+                    '_api' => [
+                        [
+                            'method' => 'replaceRelated',
+                            'id' => '5',
+                            'relation' => 'roles',
+                            'relatedIds' => [
+                                [
+                                    'id' => '1',
+                                    'type' => 'roles',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [ // data provided
+                    'id' => '5',
+                    'username' => 'mario',
+                    'roles' => json_encode(['admin']),
+                ],
+            ],
             'relations' => [
                 'documents', // object_type
                 [
@@ -704,6 +729,7 @@ class AppControllerTest extends TestCase
      * @covers ::specialAttributes()
      * @covers ::decodeJsonAttributes()
      * @covers ::prepareDateRanges()
+     * @covers ::prepareRoles()
      * @covers ::prepareRelations()
      * @covers ::setupParentsRelation()
      * @covers ::changedAttributes()
