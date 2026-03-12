@@ -34,6 +34,13 @@ import { t } from 'ttag';
 export default {
     name: 'CoordinatesView',
 
+    inject: {
+        registerCoordinatesListener: {
+            from: 'registerCoordinatesListener',
+            default: null,
+        },
+    },
+
     props: {
         coordinates: {
             type: String,
@@ -65,9 +72,15 @@ export default {
     },
 
     async mounted() {
-        this.$eventBus.$on('updatecoords', (point) => {
+        const updateHandler = (point) => {
             this.value = `${point.lng}, ${point.lat}`;
-        });
+        };
+
+        // Register with provided callback
+        if (this.registerCoordinatesListener) {
+            this.registerCoordinatesListener(updateHandler);
+        }
+
         const options = JSON.parse(this.options);
         this.googleOptions = {
             apiKey: options.key,
@@ -163,3 +176,8 @@ export default {
     },
 };
 </script>
+<style scoped>
+input.coordinates {
+    width: 100%;
+}
+</style>

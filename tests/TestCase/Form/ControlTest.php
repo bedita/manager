@@ -231,6 +231,28 @@ class ControlTest extends TestCase
                     'value' => 'good',
                 ],
             ],
+            'enum from items.enum' => [
+                [
+                    'type' => 'array',
+                    'items' => [
+                        'type' => 'string',
+                        'enum' => [
+                            'good',
+                            'bad',
+                        ],
+                    ],
+                ],
+                'enum',
+                'good',
+                [
+                    'type' => 'select',
+                    'options' => [
+                        ['text' => 'Good', 'value' => 'good'],
+                        ['text' => 'Bad', 'value' => 'bad'],
+                    ],
+                    'value' => 'good',
+                ],
+            ],
             'enum nullable' => [
                 [
                     'oneOf' => [

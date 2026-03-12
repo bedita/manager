@@ -1,5 +1,6 @@
 <template>
-    <div class="map-container" />
+    <div class="map-container">
+    </div>
 </template>
 <script>
 import mapbox from 'mapbox-gl';
@@ -8,6 +9,14 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default {
     name: 'MapView',
+
+    inject: {
+        onCoordinatesUpdate: {
+            from: 'onCoordinatesUpdate',
+            default: null,
+        },
+    },
+
     props: {
         lng: {
             type: String,
@@ -25,10 +34,6 @@ export default {
             type: String,
             default: '',
         }
-    },
-
-    data() {
-        return {}
     },
 
     async mounted() {
@@ -93,7 +98,11 @@ export default {
             }
 
             marker.on('dragend', () => {
-                this.$eventBus.$emit('updatecoords', marker.getLngLat());
+                const coords = marker.getLngLat();
+                // Call provided callback if available
+                if (this.onCoordinatesUpdate) {
+                    this.onCoordinatesUpdate(coords);
+                }
             });
         }
     }

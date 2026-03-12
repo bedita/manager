@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-12-31 09:53:48 \n"
+"POT-Creation-Date: 2026-03-12 08:25:45 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -68,6 +68,9 @@ msgid "All objects"
 msgstr ""
 
 msgid "An extension stopped the file upload"
+msgstr ""
+
+msgid "Annotations"
 msgstr ""
 
 msgid "Any"
@@ -200,6 +203,9 @@ msgid "Create a new tag"
 msgstr ""
 
 msgid "Created"
+msgstr ""
+
+msgid "Created By User"
 msgstr ""
 
 msgid "Created ↑ Oldest on top"
@@ -515,6 +521,9 @@ msgid "Missing thumb url"
 msgstr ""
 
 msgid "Modified"
+msgstr ""
+
+msgid "Modified By User"
 msgstr ""
 
 msgid "Modified ↑ Oldest on top"
@@ -1778,6 +1787,9 @@ msgstr ""
 msgid "Valid"
 msgstr ""
 
+msgid "Loading"
+msgstr ""
+
 msgid "Module"
 msgstr ""
 
@@ -1977,9 +1989,6 @@ msgid "Error on deleting category"
 msgstr ""
 
 msgid "Create new"
-msgstr ""
-
-msgid "Loading"
 msgstr ""
 
 msgid "Allowed types"

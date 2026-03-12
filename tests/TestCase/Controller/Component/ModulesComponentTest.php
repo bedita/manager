@@ -86,7 +86,7 @@ class ModulesComponentTest extends TestCase
     /**
      * Authentication component
      *
-     * @var \Authentication\Controller\Component\AuthenticationComponent;
+     * @var \Authentication\Controller\Component\AuthenticationComponent
      */
     public AuthenticationComponent $Authentication;
 
@@ -1882,6 +1882,17 @@ class ModulesComponentTest extends TestCase
         $actual = $this->Modules->skipSaveRelated('123', $relatedData);
         static::assertTrue($actual);
 
+        // empty id => true
+        $relatedData = [
+            [
+                'method' => 'addRelated',
+                'relation' => 'see_also',
+                'relatedIds' => [['id' => '456', 'type' => 'dummies']],
+            ],
+        ];
+        $actual = $this->Modules->skipSaveRelated('', $relatedData);
+        static::assertTrue($actual);
+
         // addRelated or removeRelated => false
         $relatedData = [
             [
@@ -1981,5 +1992,39 @@ class ModulesComponentTest extends TestCase
         $actual = $this->Modules->skipSavePermissions('123', $requestData['permissions'], $schema);
         static::assertTrue($actual);
         ApiClientProvider::setApiClient($safeClient);
+    }
+
+    /**
+     * Test `saveRelatedObjects` method for parent folders:
+     * removeRelated and replaceRelated methods should return empty array,
+     * since only addRelated is allowed for parent folders.
+     *
+     * @return void
+     */
+    public function testSaveRelatedObjectsParentFoldersAddRelatedOnly(): void
+    {
+        // if method is 'removeRelated' or 'replaceRelated' then return empty array
+        $data = ['method' => 'removeRelated', 'relation' => 'parent'];
+        $actual = $this->Modules->saveRelatedObjects('123456789', 'folders', $data);
+        static::assertSame([], $actual);
+
+        $data = ['method' => 'replaceRelated', 'relation' => 'parent'];
+        $actual = $this->Modules->saveRelatedObjects('123456789', 'folders', $data);
+        static::assertSame([], $actual);
+    }
+
+    /**
+     * Test `saveRelatedObjects` method for children folders:
+     * replaceRelated method should return empty array,
+     * since only addRelated and removeRelated are allowed for children folders.
+     *
+     * @return void
+     */
+    public function testSaveRelatedObjectsChildrenFoldersAddRelatedRemoveRelatedOnly(): void
+    {
+        // if method is 'replaceRelated' then return empty array
+        $data = ['method' => 'replaceRelated', 'relation' => 'children'];
+        $actual = $this->Modules->saveRelatedObjects('123456789', 'folders', $data);
+        static::assertSame([], $actual);
     }
 }

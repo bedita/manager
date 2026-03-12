@@ -341,6 +341,9 @@ class Control
                 }
             }
         }
+        if (empty($schema['enum']) && !empty($schema['items']['enum'])) {
+            $schema['enum'] = $schema['items']['enum'];
+        }
 
         return [
             'type' => 'select',

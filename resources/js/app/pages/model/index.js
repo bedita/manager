@@ -95,7 +95,7 @@ export default {
                     }
                 }
             } catch (error) {
-                console.info('[editPropParams] params JSON parse failed - skipping this one...');
+                console.info('[editPropParams] params JSON parse failed - skipping this one...', error);
                 return;
             }
 
@@ -258,6 +258,7 @@ export default {
                         try {
                             JSON.parse(component.text);
                         } catch (error) {
+                            console.error(error);
                             // if new value is not valid, restore the previous one
                             component.text = component.originalValue;
                         }

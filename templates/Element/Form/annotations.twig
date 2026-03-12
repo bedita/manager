@@ -1,0 +1,16 @@
+{% set cfg = config('Modules.' ~ object.type ~ '.annotations') %}
+{% if cfg and object and object.id %}
+<property-view inline-template :tab-open="tabsOpen" tab-name="annotations" ref={{ resourceName }}>
+    <section class="fieldset order-{{ cssOrder }}" :class="isOpen? '' : 'closed'">
+        <header @click.prevent="toggleVisibility();" class="tab unselectable" :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+            <h2>
+                {{ __('Annotations') }}
+            </h2>
+        </header>
+        <div v-show="isOpen" class="tab-container">
+            <object-annotations :object-id="{{ object.id }}" :user-id="{{ user.id }}" :user-roles="{{ user.roles|json_encode }}"></object-annotations>
+        </div>
+    </section>
+</property-view>
+{% endif %}
+

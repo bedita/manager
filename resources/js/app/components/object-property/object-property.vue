@@ -47,7 +47,13 @@
             </div>
             <div v-if="!nobuttonsfor.includes(prop.attributes.name)" class="column is-narrow">
                 <div class="buttons-container">
-                    <button v-if="type === 'custom'" @click.prevent="remove()" class="icon-cancel button button-outlined button-text-white is-expanded">{{ msgDelete }}</button>
+                    <button
+                        class="icon-cancel button button-outlined button-text-white is-expanded"
+                        @click.prevent="remove()"
+                        v-if="type === 'custom'"
+                    >
+                        {{ msgDelete }}
+                    </button>
                 </div>
             </div>
         </div>
@@ -106,13 +112,6 @@ export default {
         };
     },
 
-    mounted() {
-        this.$nextTick(() => {
-            this.hidden = this.isHidden || false;
-            this.readonly = this.prop.attributes.read_only || false;
-            this.translatable = this.isTranslatable || false;
-        });
-    },
     computed: {
         boxClass() {
             if (this.hidden === true) {
@@ -137,6 +136,14 @@ export default {
 
             return 'tag';
         },
+    },
+
+    mounted() {
+        this.$nextTick(() => {
+            this.hidden = this.isHidden || false;
+            this.readonly = this.prop.attributes.read_only || false;
+            this.translatable = this.isTranslatable || false;
+        });
     },
 
     methods: {
@@ -165,6 +172,11 @@ export default {
             document.getElementById('translationRules').value = JSON.stringify(translationRules);
         },
         remove() {
+            if (this.isNew) {
+                this.display = false;
+
+                return;
+            }
             this.confirm = BEDITA.confirm(
                 t`If you confirm, this resource will be gone forever. Are you sure?`,
                 t`yes, proceed`,

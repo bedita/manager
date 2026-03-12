@@ -207,7 +207,7 @@ export const DragdropMixin = {
             try {
                 draggedData = JSON.parse(dragData);
             } catch (e) {
-                console.error('failed parsing drag data');
+                console.error('failed parsing drag data', e);
             }
             this.setDragdropData();
             this.$emit('dragstart', ev, draggedData);
