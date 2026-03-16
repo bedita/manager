@@ -1,1 +1,3 @@
-{{ element('Admin/index_content', { 'title': __(resourceType|humanize) }) }}
+{% for service in services %}
+	<admin-job-list service={{ service }}></admin-job-list>
+{% endfor %}
