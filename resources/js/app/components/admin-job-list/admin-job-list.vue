@@ -1,108 +1,130 @@
 <template>
-    <div class="columns">
-        <div class="column">
-            <section class="fieldset">
-                <h4 v-if="service !== 'all'">{{ tr(service) }}</h4>
-                <div>
-                    <div class="paginationContainer ml-2" style="width: fit-content;">
-                        <PaginationNavigation
-                            :pagination="pagination"
-                            :resource="msgAsyncJobs"
-                            @change-page-size="changePageSize"
-                            @change-page="changePage">
-                        </PaginationNavigation>
-                    </div>
-                    <div
-                        class="is-loading-spinner mt-05"
-                        v-if="loading"
-                    />
-                    <div
-                        class="tab-container"
-                        v-if="!loading && jobs?.length > 0"
+    <div class="admin-job-list">
+        <h4 v-if="service !== 'all'">{{ tr(service) }}</h4>
+        <div>
+            <div class="toolbar ml-2 mb-2">
+                <div
+                    class="service-filter"
+                    v-if="service === 'all'"
+                >
+                    <select
+                        v-model="selectedService"
+                        @change="onChangeServiceFilter"
                     >
-                        <div id="list-jobs" :class="{ 'file-column': columnFile }">
-                            <div class="table-header">
-                                Job
-                            </div>
-                            <div class="table-header" v-if="columnFile">
-                                {{ msgFileName }}
-                            </div>
-                            <div class="table-header">
-                                {{ msgServiceName }}
-                            </div>
-                            <div class="table-header">
-                                {{ msgScheduledFrom }}
-                            </div>
-                            <div class="table-header">
-                                {{ msgCompletedOn }}
-                            </div>
-                            <div class="table-header">
-                                {{ msgStatus }}
-                            </div>
-                            <div class="table-header" />
-                            <template v-for="job in jobs">
-                                <div :class="job.meta.status">
-                                    {{ fmt(job.meta.created) }}
-                                    <br />
-                                    {{ job.id }}
-                                </div>
-                                <div :class="job.meta.status" v-if="columnFile">
-                                    {{ job.attributes.payload && job.attributes.payload.filename }}
-                                </div>
-                                <div :class="job.meta.status">
-                                    {{ job.attributes.service }}
-                                </div>
-                                <div :class="job.meta.status">
-                                    {{ fmt(job.attributes.scheduled_from) }}
-                                </div>
-                                <div :class="job.meta.status">
-                                    {{ fmt(job.meta.completed) }}
-                                </div>
-                                <div :class="job.meta.status">
-                                    {{ job.meta.status }}
-                                </div>
-                                <div :class="job.meta.status">
-                                    <a :class="showPayloadId != job.id ? 'icon-plus' : 'icon-minus'"
-                                        @click.prevent="togglePayload(job.id)"
-                                    />
-                                </div>
-                                <div
-                                    class="job-payload" :class="{ 'job-payload-file': columnFile }"
-                                    v-show="showPayloadId == job.id"
-                                >
-                                    <h3>Payload</h3>
-                                    <div :id="`container-payload-${job.id}`" />
-                                    <json-editor
-                                        :options="jsonEditorOptions"
-                                        :target="`container-payload-${job.id}`"
-                                        :text="JSON.stringify(job.attributes.payload)"
-                                    />
-
-                                    <h3 v-if="job.attributes.results">
-                                        Results
-                                    </h3>
-                                    <div
-                                        :id="`container-results-${job.id}`"
-                                        v-if="job.attributes.results"
-                                    />
-                                    <json-editor
-                                        :options="jsonEditorOptions"
-                                        :target="`container-results-${job.id}`"
-                                        :text="JSON.stringify(job.attributes.results)"
-                                        v-if="job.attributes.results"
-                                    />
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-                    <div
-                        class="mt-05"
-                        v-if="!loading && jobs.length === 0"
-                    >
-                        {{ msgNoJobs }}
-                    </div>
+                        <option value="all">
+                            {{ msgAll }}
+                        </option>
+                        <option
+                            v-for="serviceOption in serviceOptions"
+                            :key="serviceOption"
+                            :value="serviceOption"
+                        >
+                            {{ serviceOption }}
+                        </option>
+                    </select>
                 </div>
-            </section>
+                <div class="paginationContainer">
+                    <PaginationNavigation
+                        :pagination="pagination"
+                        :resource="msgAsyncJobs"
+                        @change-page-size="changePageSize"
+                        @change-page="changePage"
+                    />
+                </div>
+            </div>
+            <div
+                class="is-loading-spinner mt-05"
+                v-if="loading"
+            />
+            <div
+                class="tab-container"
+                v-if="!loading && jobs?.length > 0"
+            >
+                <div
+                    id="list-jobs"
+                    :class="{ 'file-column': columnFile }"
+                >
+                    <div class="table-header">
+                        Job
+                    </div>
+                    <div class="table-header" v-if="columnFile">
+                        {{ msgFileName }}
+                    </div>
+                    <div class="table-header">
+                        {{ msgServiceName }}
+                    </div>
+                    <div class="table-header">
+                        {{ msgScheduledFrom }}
+                    </div>
+                    <div class="table-header">
+                        {{ msgCompletedOn }}
+                    </div>
+                    <div class="table-header">
+                        {{ msgStatus }}
+                    </div>
+                    <div class="table-header" />
+                    <template v-for="job in jobs">
+                        <div :class="job.meta.status">
+                            {{ fmt(job.meta.created) }}
+                            <br />
+                            {{ job.id }}
+                        </div>
+                        <div :class="job.meta.status" v-if="columnFile">
+                            {{ job.attributes.payload && job.attributes.payload.filename }}
+                        </div>
+                        <div :class="job.meta.status">
+                            {{ job.attributes.service }}
+                        </div>
+                        <div :class="job.meta.status">
+                            {{ fmt(job.attributes.scheduled_from) }}
+                        </div>
+                        <div :class="job.meta.status">
+                            {{ fmt(job.meta.completed) }}
+                        </div>
+                        <div :class="job.meta.status">
+                            {{ job.meta.status }}
+                        </div>
+                        <div :class="job.meta.status">
+                            <a :class="showPayloadId != job.id ? 'icon-plus' : 'icon-minus'"
+                                @click.prevent="togglePayload(job.id)"
+                            />
+                        </div>
+                        <div
+                            class="job-payload"
+                            :class="{ 'job-payload-file': columnFile }"
+                            v-show="showPayloadId == job.id"
+                        >
+                            <h3>Payload</h3>
+                            <div :id="`container-payload-${job.id}`" />
+                            <json-editor
+                                :options="jsonEditorOptions"
+                                :target="`container-payload-${job.id}`"
+                                :text="JSON.stringify(job.attributes.payload)"
+                            />
+
+                            <h3 v-if="job.attributes.results">
+                                Results
+                            </h3>
+                            <div
+                                :id="`container-results-${job.id}`"
+                                v-if="job.attributes.results"
+                            />
+                            <json-editor
+                                :options="jsonEditorOptions"
+                                :target="`container-results-${job.id}`"
+                                :text="JSON.stringify(job.attributes.results)"
+                                v-if="job.attributes.results"
+                            />
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div
+                class="mt-05"
+                v-if="!loading && jobs.length === 0"
+            >
+                {{ msgNoJobs }}
+            </div>
         </div>
     </div>
 </template>
@@ -140,7 +162,10 @@ export default {
                 page_count: 1,
                 total_count: 0,
             },
+            selectedService: 'all',
+            serviceOptions: ['credentials_change', 'mail', 'signup', 'thumbnail'],
             showPayloadId: null,
+            msgAll: t`All`,
             msgAsyncJobs: t`Async Jobs`,
             msgCompletedOn: t`Completed on`,
             msgFileName: t`File name`,
@@ -154,6 +179,7 @@ export default {
 
     async mounted() {
         this.columnFile = !['all', 'credentials_change', 'mail', 'signup', 'thumbnail'].includes(this.service);
+        this.selectedService = this.service;
         this.$nextTick(async () => {
             this.toggleOpen();
         });
@@ -166,6 +192,10 @@ export default {
         },
         changePageSize(pageSize) {
             this.updateJobs(1, pageSize);
+        },
+
+        onChangeServiceFilter() {
+            this.updateJobs(1);
         },
 
         fmt(d) {
@@ -202,8 +232,9 @@ export default {
                 return;
             }
             let query = `page=${page}&page_size=${pageSize}`;
-            if (this.service !== 'all') {
-                query += `&service=${this.service}`;
+            const serviceFilter = this.service !== 'all' ? this.service : this.selectedService;
+            if (serviceFilter && serviceFilter !== 'all') {
+                query += `&service=${serviceFilter}`;
             }
             let requestUrl = `${BEDITA.base}/admin/async_jobs/jobs?${query}`;
             const options =  {
@@ -235,13 +266,35 @@ export default {
 }
 </script>
 <style scoped>
+.admin-job-list {
+    max-width: 1200px;
+}
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.service-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.service-filter select {
+    min-width: 220px;
+}
+.paginationContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-left: auto;
+}
 #list-jobs {
-    max-width: 1400px;
+    max-width: 1200px;
     display: grid;
-    grid-template-columns: 400px 200px 200px 200px 100px 50px;
+    grid-template-columns: 1fr 200px 200px 200px 100px 50px;
 }
 #list-jobs.file-column {
-    grid-template-columns: 400px 200px 200px 200px 200px 100px 50px;
+    grid-template-columns: 1fr 200px 200px 200px 200px 100px 50px;
 }
 .job-payload {
     grid-column: span 6 !important;
