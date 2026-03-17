@@ -66,7 +66,10 @@ class AsyncJobsControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        static::markTestIncomplete('Not implemented yet.');
+        $result = $this->AsyncJobsController->index();
+        static::assertNull($result);
+        $vars = $this->AsyncJobsController->viewBuilder()->getVars();
+        static::assertIsArray($vars['services']);
     }
 
     /**
@@ -76,7 +79,11 @@ class AsyncJobsControllerTest extends TestCase
      */
     public function testJobs(): void
     {
-        static::markTestIncomplete('Not implemented yet.');
+        $this->AsyncJobsController->jobs();
+        $vars = $this->AsyncJobsController->viewBuilder()->getVars();
+        static::assertIsArray($vars['pagination']);
+        static::assertIsArray($vars['jobs']);
+        static::assertIsArray($vars['services']);
     }
 
     /**
@@ -86,6 +93,22 @@ class AsyncJobsControllerTest extends TestCase
      */
     public function testLoadAsyncJobs(): void
     {
-        static::markTestIncomplete('Not implemented yet.');
+        $request = $this->AsyncJobsController->getRequest()->withQueryParams([
+            'page' => 2,
+            'page_size' => 50,
+            'sort' => 'created',
+            'service' => 'mail',
+        ]);
+        $this->AsyncJobsController = new class ($request) extends AsyncJobsController {
+            public function loadAsyncJobs(): void
+            {
+                parent::loadAsyncJobs();
+            }
+        };
+        $this->AsyncJobsController->setRequest($request);
+        $this->AsyncJobsController->loadAsyncJobs();
+        $vars = $this->AsyncJobsController->viewBuilder()->getVars();
+        static::assertIsArray($vars['pagination']);
+        static::assertIsArray($vars['jobs']);
     }
 }

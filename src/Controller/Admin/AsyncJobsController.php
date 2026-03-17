@@ -56,7 +56,7 @@ class AsyncJobsController extends AdministrationBaseController
         $this->getRequest()->allowMethod('get');
         $this->set('services', $this->services);
         $this->loadAsyncJobs();
-        $this->setSerialize(['pagination', 'jobs']);
+        $this->setSerialize(['pagination', 'jobs', 'services']);
     }
 
     /**
@@ -69,9 +69,9 @@ class AsyncJobsController extends AdministrationBaseController
         $pagination = [];
         $jobs = [];
         $query = [
-            'sort' => '-created',
-            'page_size' => $this->getRequest()->getQuery('page_size', 100),
             'page' => $this->getRequest()->getQuery('page', 1),
+            'page_size' => $this->getRequest()->getQuery('page_size', 100),
+            'sort' => $this->getRequest()->getQuery('sort', '-created'),
         ];
         $service = $this->getRequest()->getQuery('service');
         if (!empty($service)) {
