@@ -328,7 +328,7 @@ export default {
 </script>
 <style scoped>
 .admin-job-list {
-    max-width: 1200px;
+    max-width: 1500px;
 }
 .toolbar {
     display: flex;
@@ -350,7 +350,7 @@ export default {
     margin-left: auto;
 }
 #list-jobs {
-    max-width: 1200px;
+    max-width: 1500px;
     display: grid;
     grid-template-columns: 350px 1fr 175px 175px 175px 175px 125px 100px 50px;
 }
