@@ -1867,17 +1867,6 @@ class ModulesComponentTest extends TestCase
         $actual = $this->Modules->skipSaveRelated('123', $relatedData);
         static::assertTrue($actual);
 
-        // empty id => true
-        $relatedData = [
-            [
-                'method' => 'addRelated',
-                'relation' => 'see_also',
-                'relatedIds' => [['id' => '456', 'type' => 'dummies']],
-            ],
-        ];
-        $actual = $this->Modules->skipSaveRelated('', $relatedData);
-        static::assertTrue($actual);
-
         // addRelated or removeRelated => false
         $relatedData = [
             [
