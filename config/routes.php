@@ -183,6 +183,14 @@ $routes->scope('/', function (RouteBuilder $routes): void {
                 ['controller' => $name, 'action' => 'remove'],
                 'remove:' . $controller,
             )->setPass(['id']);
+
+            if ($controller === 'async_jobs') {
+                $routes->get(
+                    "/$controller/jobs",
+                    ['controller' => $name, 'action' => 'jobs'],
+                    'jobs:' . $controller,
+                );
+            }
         }
         $routes->get(
             '/cache',

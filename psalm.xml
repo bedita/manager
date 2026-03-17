@@ -11,6 +11,11 @@
 >
     <issueHandlers>
         <ImplicitToStringCast errorLevel="suppress" />
+        <InvalidAttribute>
+            <errorLevel type="suppress">
+                <directory name="tests" />
+            </errorLevel>
+        </InvalidAttribute>
         <MissingOverrideAttribute errorLevel="suppress" />
         <MissingTemplateParam errorLevel="suppress" />
         <UndefinedConstant errorLevel="suppress" />
