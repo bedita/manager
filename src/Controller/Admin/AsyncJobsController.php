@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use BEdita\SDK\BEditaClientException;
-use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 
@@ -41,11 +40,6 @@ class AsyncJobsController extends AdministrationBaseController
     public function index(): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
-        $importFilters = Configure::read('Filters.import', []);
-        foreach ($importFilters as $filter) {
-            $value = (string)Hash::get($filter, 'class');
-            $this->updateServiceList($value);
-        }
         $this->set('services', $this->services);
 
         return null;
@@ -60,11 +54,6 @@ class AsyncJobsController extends AdministrationBaseController
     {
         $this->viewBuilder()->setClassName('Json');
         $this->getRequest()->allowMethod('get');
-        $importFilters = Configure::read('Filters.import', []);
-        foreach ($importFilters as $filter) {
-            $value = (string)Hash::get($filter, 'class');
-            $this->updateServiceList($value);
-        }
         $this->set('services', $this->services);
         $this->loadAsyncJobs();
         $this->setSerialize(['pagination', 'jobs']);
@@ -98,19 +87,5 @@ class AsyncJobsController extends AdministrationBaseController
         }
         $this->set('pagination', $pagination);
         $this->set('jobs', $jobs);
-    }
-
-    /**
-     * Update services list to lookup
-     *
-     * @param string $filterClass Filter class
-     * @return void
-     */
-    protected function updateServiceList(string $filterClass): void
-    {
-        $service = call_user_func([$filterClass, 'getServiceName']);
-        if (!empty($service) && !in_array($service, $this->services)) {
-            $this->services[] = $service;
-        }
     }
 }

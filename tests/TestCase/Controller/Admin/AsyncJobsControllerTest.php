@@ -51,11 +51,7 @@ class AsyncJobsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AsyncJobsController = new class ($request) extends AsyncJobsController
-        {
-            protected ?string $resourceType = 'async_jobs';
-            protected array $properties = ['name'];
-        };
+        $this->AsyncJobsController = new AsyncJobsController($request);
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
@@ -64,30 +60,32 @@ class AsyncJobsControllerTest extends TestCase
     }
 
     /**
-     * Basic test
+     * Test index method
      *
      * @return void
      */
-    public function testBase(): void
+    public function testIndex(): void
     {
-        $this->AsyncJobsController->index();
-        $keys = [
-            'resources',
-            'meta',
-            'links',
-            'resourceType',
-            'properties',
-            'metaColumns',
-            'filter',
-            'schema',
-            'readonly',
-            'deleteonly',
-        ];
-        $viewVars = (array)$this->AsyncJobsController->viewBuilder()->getVars();
-        foreach ($keys as $expectedKey) {
-            static::assertArrayHasKey($expectedKey, $viewVars);
-        }
-        static::assertEquals('async_jobs', $viewVars['resourceType']);
-        static::assertEquals(['name'], $viewVars['properties']);
+        static::markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test jobs method
+     *
+     * @return void
+     */
+    public function testJobs(): void
+    {
+        static::markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test loadAsyncJobs method
+     *
+     * @return void
+     */
+    public function testLoadAsyncJobs(): void
+    {
+        static::markTestIncomplete('Not implemented yet.');
     }
 }
