@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-03-12 08:25:45 \n"
+"POT-Creation-Date: 2026-03-17 08:30:31 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -2020,6 +2020,9 @@ msgstr "Errore durante l'eliminazione della categoria"
 
 msgid "Create new"
 msgstr "Crea nuovo"
+
+msgid "Job"
+msgstr "Processo"
 
 msgid "Allowed types"
 msgstr "Tipi consentiti"

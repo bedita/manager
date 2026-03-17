@@ -1,6 +1,6 @@
 <template>
     <div class="admin-job-list">
-        <h4 v-if="service !== 'all'">{{ tr(service) }}</h4>
+        <h4 v-if="service !== 'all'">{{ service }}</h4>
         <div>
             <div class="toolbar ml-2 mb-2">
                 <div
@@ -45,7 +45,7 @@
                     :class="{ 'file-column': columnFile }"
                 >
                     <div class="table-header">
-                        Job
+                        {{ msgJob }}
                     </div>
                     <div class="table-header" v-if="columnFile">
                         {{ msgFileName }}
@@ -64,28 +64,58 @@
                     </div>
                     <div class="table-header" />
                     <template v-for="job in jobs">
-                        <div :class="job.meta.status">
+                        <div
+                            :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
+                            @mouseover="hoveredJobId = job.id"
+                            @mouseleave="hoveredJobId = null"
+                        >
                             {{ fmt(job.meta.created) }}
-                            <br />
+                            <br>
                             {{ job.id }}
                         </div>
-                        <div :class="job.meta.status" v-if="columnFile">
+                        <div
+                            :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
+                            @mouseover="hoveredJobId = job.id"
+                            @mouseleave="hoveredJobId = null"
+                            v-if="columnFile"
+                        >
                             {{ job.attributes.payload && job.attributes.payload.filename }}
                         </div>
-                        <div :class="job.meta.status">
+                        <div
+                            :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
+                            @mouseover="hoveredJobId = job.id"
+                            @mouseleave="hoveredJobId = null"
+                        >
                             {{ job.attributes.service }}
                         </div>
-                        <div :class="job.meta.status">
+                        <div
+                            :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
+                            @mouseover="hoveredJobId = job.id"
+                            @mouseleave="hoveredJobId = null"
+                        >
                             {{ fmt(job.attributes.scheduled_from) }}
                         </div>
-                        <div :class="job.meta.status">
+                        <div
+                            :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
+                            @mouseover="hoveredJobId = job.id"
+                            @mouseleave="hoveredJobId = null"
+                        >
                             {{ fmt(job.meta.completed) }}
                         </div>
-                        <div :class="job.meta.status">
+                        <div
+                            :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
+                            @mouseover="hoveredJobId = job.id"
+                            @mouseleave="hoveredJobId = null"
+                        >
                             {{ job.meta.status }}
                         </div>
-                        <div :class="job.meta.status">
-                            <a :class="showPayloadId != job.id ? 'icon-plus' : 'icon-minus'"
+                        <div
+                            :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
+                            @mouseover="hoveredJobId = job.id"
+                            @mouseleave="hoveredJobId = null"
+                        >
+                            <a
+                                :class="showPayloadId != job.id ? 'icon-plus' : 'icon-minus'"
                                 @click.prevent="togglePayload(job.id)"
                             />
                         </div>
@@ -162,6 +192,7 @@ export default {
                 page_count: 1,
                 total_count: 0,
             },
+            hoveredJobId: null,
             selectedService: 'all',
             serviceOptions: ['credentials_change', 'mail', 'signup', 'thumbnail'],
             showPayloadId: null,
@@ -169,6 +200,7 @@ export default {
             msgAsyncJobs: t`Async Jobs`,
             msgCompletedOn: t`Completed on`,
             msgFileName: t`File name`,
+            msgJob: t`Job`,
             msgJobs: t`Jobs`,
             msgNoJobs: t`No Jobs`,
             msgScheduledFrom: t`Scheduled from`,
@@ -221,10 +253,6 @@ export default {
             }
 
             this.showPayloadId = jobId;
-        },
-
-        tr(key) {
-            return t`${key}`;
         },
 
         updateJobs(page = 1, pageSize = this.pagination?.page_size) {
@@ -295,6 +323,12 @@ export default {
 }
 #list-jobs.file-column {
     grid-template-columns: 1fr 200px 200px 200px 200px 100px 50px;
+}
+#list-jobs > div {
+    border-bottom: 1px solid gray;
+}
+.row-hover {
+    background-color: #414141;
 }
 .job-payload {
     grid-column: span 6 !important;
