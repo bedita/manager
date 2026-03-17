@@ -4,6 +4,14 @@
             <section class="fieldset">
                 <h4 v-if="service !== 'all'">{{ tr(service) }}</h4>
                 <div>
+                    <div class="paginationContainer ml-2" style="width: fit-content;">
+                        <PaginationNavigation
+                            :pagination="pagination"
+                            :resource="msgAsyncJobs"
+                            @change-page-size="changePageSize"
+                            @change-page="changePage">
+                        </PaginationNavigation>
+                    </div>
                     <div
                         class="is-loading-spinner mt-05"
                         v-if="loading"
@@ -12,16 +20,6 @@
                         class="tab-container"
                         v-if="!loading && jobs?.length > 0"
                     >
-                        <div>
-                            Page
-                            <template v-if="pagination.page > 1">
-                                <a @click="updateJobs(pagination.page - 1)"><app-icon icon="carbon:chevron-left" /></a>
-                            </template>
-                            {{ pagination.page }} / {{ pagination.page_count }}
-                            <template v-if="pagination.page < pagination.page_count">
-                                <a @click="updateJobs(pagination.page + 1)"><app-icon icon="carbon:chevron-right" /></a>
-                            </template>
-                        </div>
                         <div id="list-jobs" :class="{ 'file-column': columnFile }">
                             <div class="table-header">
                                 Job
@@ -117,6 +115,7 @@ export default {
 
     components: {
         JsonEditor: () => import(/* webpackChunkName: "json-editor" */'app/components/json-editor/json-editor'),
+        PaginationNavigation:() => import(/* webpackChunkName: "pagination-navigation" */'app/components/pagination-navigation/pagination-navigation'),
     },
 
     props: {
@@ -135,8 +134,14 @@ export default {
                 mainMenuBar: false,
             },
             loading: false,
-            pagination: {},
+            pagination: {
+                page: 1,
+                page_size: 10,
+                page_count: 1,
+                total_count: 0,
+            },
             showPayloadId: null,
+            msgAsyncJobs: t`Async Jobs`,
             msgCompletedOn: t`Completed on`,
             msgFileName: t`File name`,
             msgJobs: t`Jobs`,
@@ -155,6 +160,13 @@ export default {
     },
 
     methods: {
+
+        changePage(page) {
+            this.updateJobs(page);
+        },
+        changePageSize(pageSize) {
+            this.updateJobs(1, pageSize);
+        },
 
         fmt(d) {
             if (!d) {
@@ -185,11 +197,11 @@ export default {
             return t`${key}`;
         },
 
-        updateJobs(page = 1) {
+        updateJobs(page = 1, pageSize = this.pagination?.page_size) {
             if (!this.isOpen) {
                 return;
             }
-            let query = `page=${page}`;
+            let query = `page=${page}&page_size=${pageSize}`;
             if (this.service !== 'all') {
                 query += `&service=${this.service}`;
             }

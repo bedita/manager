@@ -81,7 +81,7 @@ class AsyncJobsController extends AdministrationBaseController
         $jobs = [];
         $query = [
             'sort' => '-created',
-            'page_size' => 100,
+            'page_size' => $this->getRequest()->getQuery('page_size', 100),
             'page' => $this->getRequest()->getQuery('page', 1),
         ];
         $service = $this->getRequest()->getQuery('service');
