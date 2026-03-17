@@ -79,22 +79,22 @@ class AsyncJobsController extends AdministrationBaseController
     {
         $pagination = [];
         $jobs = [];
+        $query = [
+            'sort' => '-created',
+            'page_size' => 100,
+            'page' => $this->getRequest()->getQuery('page', 1),
+        ];
         $service = $this->getRequest()->getQuery('service');
-        if (!empty($this->services) && !empty($service)) {
-            $query = [
-                'sort' => '-created',
-                'filter' => ['service' => $service],
-                'page_size' => 100,
-                'page' => $this->getRequest()->getQuery('page', 1),
-            ];
-            try {
-                $response = $this->apiClient->get('/async_jobs', $query);
-                $jobs = (array)Hash::get($response, 'data', []);
-                $pagination = (array)Hash::get($response, 'meta.pagination');
-            } catch (BEditaClientException $e) {
-                $this->log($e->getMessage(), 'error');
-                $this->Flash->error($e->getMessage(), ['params' => $e]);
-            }
+        if (!empty($service)) {
+            $query['filter'] = ['service' => $service];
+        }
+        try {
+            $response = $this->apiClient->get('/async_jobs', $query);
+            $jobs = (array)Hash::get($response, 'data', []);
+            $pagination = (array)Hash::get($response, 'meta.pagination');
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
         $this->set('pagination', $pagination);
         $this->set('jobs', $jobs);

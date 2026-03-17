@@ -3,7 +3,7 @@
         <div class="column">
             <section class="fieldset">
                 <details>
-                    <summary @click="toggleOpen" :open="isOpen">{{ msgJobs }} {{ service }}</summary>
+                    <summary @click="toggleOpen" :open="isOpen">{{ tr(service) }}</summary>
                     <div>
                         <div
                             class="is-loading-spinner mt-05"
@@ -25,7 +25,7 @@
                             </div>
                             <div id="list-jobs" :class="{ 'file-column': columnFile }">
                                 <div class="table-header">
-                                    Job ID
+                                    Job
                                 </div>
                                 <div class="table-header" v-if="columnFile">
                                     {{ msgFileName }}
@@ -45,6 +45,8 @@
                                 <div class="table-header" />
                                 <template v-for="job in jobs">
                                     <div :class="job.meta.status">
+                                        {{ fmt(job.meta.created) }}
+                                        <br />
                                         {{ job.id }}
                                     </div>
                                     <div :class="job.meta.status" v-if="columnFile">
@@ -122,7 +124,7 @@ export default {
     props: {
         service: {
             type: String,
-            default: () => '',
+            default: () => 'all',
         },
     },
 
@@ -148,7 +150,7 @@ export default {
     },
 
     mounted() {
-        this.columnFile = !['credentials_change', 'mail', 'signup', 'thumbnail'].includes(this.service);
+        this.columnFile = !['all', 'credentials_change', 'mail', 'signup', 'thumbnail'].includes(this.service);
     },
 
     methods: {
@@ -178,11 +180,19 @@ export default {
             this.showPayloadId = jobId;
         },
 
+        tr(key) {
+            return t`${key}`;
+        },
+
         updateJobs(page = 1) {
             if (!this.isOpen) {
                 return;
             }
-            let requestUrl = `${BEDITA.base}/admin/async_jobs/jobs?service=${this.service}&page=${page}&sort=-created`;
+            let query = `page=${page}`;
+            if (this.service !== 'all') {
+                query += `&service=${this.service}`;
+            }
+            let requestUrl = `${BEDITA.base}/admin/async_jobs/jobs?${query}`;
             const options =  {
                 credentials: 'same-origin',
                 headers: {
