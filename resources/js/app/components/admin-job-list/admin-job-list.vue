@@ -51,13 +51,22 @@
                         {{ msgFileName }}
                     </div>
                     <div class="table-header">
-                        {{ msgServiceName }}
+                        {{ msgService }}
+                    </div>
+                    <div class="table-header">
+                        {{ msgCreatedOn }}
+                    </div>
+                    <div class="table-header">
+                        {{ msgCompletedOn }}
                     </div>
                     <div class="table-header">
                         {{ msgScheduledFrom }}
                     </div>
                     <div class="table-header">
-                        {{ msgCompletedOn }}
+                        {{ msgExpires }}
+                    </div>
+                    <div class="table-header">
+                        {{ msgMaxAttempts }}
                     </div>
                     <div class="table-header">
                         {{ msgStatus }}
@@ -69,8 +78,6 @@
                             @mouseover="hoveredJobId = job.id"
                             @mouseleave="hoveredJobId = null"
                         >
-                            {{ fmt(job.meta.created) }}
-                            <br>
                             {{ job.id }}
                         </div>
                         <div
@@ -93,7 +100,7 @@
                             @mouseover="hoveredJobId = job.id"
                             @mouseleave="hoveredJobId = null"
                         >
-                            {{ fmt(job.attributes.scheduled_from) }}
+                            {{ fmt(job.meta.created) }}
                         </div>
                         <div
                             :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
@@ -101,6 +108,27 @@
                             @mouseleave="hoveredJobId = null"
                         >
                             {{ fmt(job.meta.completed) }}
+                        </div>
+                        <div
+                            :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
+                            @mouseover="hoveredJobId = job.id"
+                            @mouseleave="hoveredJobId = null"
+                        >
+                            {{ fmt(job.attributes.scheduled_from) }}
+                        </div>
+                        <div
+                            :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
+                            @mouseover="hoveredJobId = job.id"
+                            @mouseleave="hoveredJobId = null"
+                        >
+                            {{ fmt(job.attributes.expires) }}
+                        </div>
+                        <div
+                            :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
+                            @mouseover="hoveredJobId = job.id"
+                            @mouseleave="hoveredJobId = null"
+                        >
+                            {{ job.attributes.max_attempts }}
                         </div>
                         <div
                             :class="[job.meta.status, { 'row-hover': hoveredJobId === job.id }]"
@@ -124,7 +152,7 @@
                             :class="{ 'job-payload-file': columnFile }"
                             v-show="showPayloadId == job.id"
                         >
-                            <h3>Payload</h3>
+                            <h3>{{ msgPayload }}</h3>
                             <div :id="`container-payload-${job.id}`" />
                             <json-editor
                                 :options="jsonEditorOptions"
@@ -133,7 +161,7 @@
                             />
 
                             <h3 v-if="job.attributes.results">
-                                Results
+                                {{ msgResults }}
                             </h3>
                             <div
                                 :id="`container-results-${job.id}`"
@@ -188,7 +216,7 @@ export default {
             loading: false,
             pagination: {
                 page: 1,
-                page_size: 10,
+                page_size: 20,
                 page_count: 1,
                 total_count: 0,
             },
@@ -198,13 +226,18 @@ export default {
             showPayloadId: null,
             msgAll: t`All`,
             msgAsyncJobs: t`Async Jobs`,
+            msgCreatedOn: t`Created on`,
             msgCompletedOn: t`Completed on`,
+            msgExpires: t`Expires`,
             msgFileName: t`File name`,
             msgJob: t`Job`,
             msgJobs: t`Jobs`,
+            msgMaxAttempts: t`Max attempts`,
             msgNoJobs: t`No Jobs`,
+            msgPayload: t`Payload`,
+            msgResults: t`Results`,
             msgScheduledFrom: t`Scheduled from`,
-            msgServiceName: t`Service name`,
+            msgService: t`Service`,
             msgStatus: t`Status`,
         };
     },
@@ -319,10 +352,10 @@ export default {
 #list-jobs {
     max-width: 1200px;
     display: grid;
-    grid-template-columns: 1fr 200px 200px 200px 100px 50px;
+    grid-template-columns: 350px 1fr 175px 175px 175px 175px 125px 100px 50px;
 }
 #list-jobs.file-column {
-    grid-template-columns: 1fr 200px 200px 200px 200px 100px 50px;
+    grid-template-columns: 350px 1fr 175px 175px 175px 175px 175px 125px 100px 50px;
 }
 #list-jobs > div {
     border-bottom: 1px solid gray;
@@ -331,9 +364,9 @@ export default {
     background-color: #414141;
 }
 .job-payload {
-    grid-column: span 6 !important;
+    grid-column: span 9 !important;
 }
 .job-payload-file {
-    grid-column: span 7 !important;
+    grid-column: span 10 !important;
 }
 </style>
