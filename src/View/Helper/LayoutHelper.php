@@ -330,6 +330,11 @@ class LayoutHelper extends Helper
                     $icon = '';
                     $label = '';
                     switch ($t) {
+                        case 'calendar':
+                            $icon = 'carbon:calendar';
+                            $label = __('Calendar view');
+                            $append = true;
+                            break;
                         case 'tree':
                             $icon = 'carbon:tree-view';
                             $label = __('Tree view');
