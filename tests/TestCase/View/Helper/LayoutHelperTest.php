@@ -41,6 +41,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversMethod(LayoutHelper::class, 'commandLinkClass')]
 #[CoversMethod(LayoutHelper::class, 'dashboardModuleLink')]
 #[CoversMethod(LayoutHelper::class, 'getCsrfToken')]
+#[CoversMethod(LayoutHelper::class, 'iconLabel')]
 #[CoversMethod(LayoutHelper::class, 'indexLists')]
 #[CoversMethod(LayoutHelper::class, 'isDashboard')]
 #[CoversMethod(LayoutHelper::class, 'isLogin')]
@@ -465,6 +466,35 @@ class LayoutHelperTest extends TestCase
         $actual = $view->fetch('app-module-buttons');
         $expected = '<a href="/?view_type=tree" class="button button-outlined button-outlined-module-"><app-icon icon="carbon:tree-view"></app-icon><span class="ml-05">Tree view</span></a><a href="/?view_type=tree-compact" class="button button-outlined button-outlined-module-"><app-icon icon="carbon:tree-view"></app-icon><span class="ml-05">Tree compact</span></a><a href="/?view_type=list" class="button button-outlined button-outlined-module-"><app-icon icon="carbon:list"></app-icon><span class="ml-05">List view</span></a>';
         static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `iconLabel` method
+     *
+     * @return void
+     */
+    public function testIconLabel(): void
+    {
+        $request = $response = $events = null;
+        $view = new View($request, $response, $events);
+        $layout = new class ($view) extends LayoutHelper {
+            public function iconLabel(string $viewType): array
+            {
+                return parent::iconLabel($viewType);
+            }
+        };
+
+        $result = $layout->iconLabel('calendar');
+        static::assertSame(['append' => true, 'icon' => 'carbon:calendar', 'label' => __('Calendar view')], $result);
+
+        $result = $layout->iconLabel('list');
+        static::assertSame(['append' => true, 'icon' => 'carbon:list', 'label' => __('List view')], $result);
+
+        $result = $layout->iconLabel('tree');
+        static::assertSame(['append' => true, 'icon' => 'carbon:tree-view', 'label' => __('Tree view')], $result);
+
+        $result = $layout->iconLabel('tree-compact');
+        static::assertSame(['append' => true, 'icon' => 'carbon:tree-view', 'label' => __('Tree compact')], $result);
     }
 
     /**
