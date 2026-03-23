@@ -326,7 +326,10 @@ class LayoutHelper extends Helper
             $indexViewType = $this->moduleIndexViewType();
             foreach ($indexViewTypes as $t) {
                 if ($t !== $indexViewType) {
-                    extract($this->iconLabel($t));
+                    $tmp = $this->iconLabel($t);
+                    $append = $tmp['append'] ?? false;
+                    $icon = $tmp['icon'] ?? '';
+                    $label = $tmp['label'] ?? '';
                     if ($append) {
                         $url = $this->Url->build(
                             [
