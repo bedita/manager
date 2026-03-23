@@ -37,16 +37,17 @@
             <div class="related-container">
                 <div class="related-item">
                     <span
-                        class="ml-05"
+                        class="first-related ml-05"
                         v-for="f in relatedFields"
                         :key="f"
+                        :title="related?.[0]?.attributes?.[f] || related?.[0]?.meta?.[f]"
                         @click.stop.prevent="openRelated(related?.[0])"
                     >
                         <template v-if="f == 'media_url'">
                             <img :src="thumb(0)">
                         </template>
                         <template v-else>
-                            {{ related?.[0]?.attributes?.[f] || related?.[0]?.meta?.[f] }}
+                            {{ truncate(related?.[0]?.attributes?.[f] || related?.[0]?.meta?.[f]) }}
                         </template>
                     </span>
                     <span
@@ -266,6 +267,12 @@ export default {
 
             return !thumbError ? thumb : this.related?.[index]?.meta?.media_url;
         },
+        truncate(text, length = 17) {
+            if (!text || text.length <= length) {
+                return text;
+            }
+            return text.substring(0, length) + '...';
+        },
     },
 };
 </script>
@@ -278,6 +285,9 @@ div.index-cell > div.msg {
     color: forestgreen;
     font-family: monospace;
     font-style: italic;
+}
+div.index-cell .first-related {
+    white-space: nowrap !important;
 }
 div.index-cell div.related-container {
     display: flex;
