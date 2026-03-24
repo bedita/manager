@@ -22,6 +22,8 @@ use Authentication\AuthenticationServiceInterface;
 use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
+use BEdita\SDK\BEditaClient;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -332,14 +334,13 @@ class LoginControllerTest extends TestCase
     }
 
     /**
-     * Test `otp`
+     * Test `otp` not enabled, should redirect to login page
      *
      * @return void
      */
     public function testOtpNotEnabled(): void
     {
         Configure::delete('Otp');
-        // otp not enabled, should redirect to login page
         $this->setupController([
             'environment' => [
                 'REQUEST_METHOD' => 'GET',
@@ -357,7 +358,6 @@ class LoginControllerTest extends TestCase
      */
     public function testOtpUsersSkip(): void
     {
-        // otp enabled but user in users_skip_otp, should redirect to dashboard
         Configure::write('Otp', [
             'send' => '/otp',
             'users_skip_otp' => [env('BEDITA_ADMIN_USR')],
@@ -378,7 +378,7 @@ class LoginControllerTest extends TestCase
      *
      * @return void
      */
-    public function testOtpEnabled(): void
+    public function testOtpEnabledFailingPostOtp(): void
     {
         Configure::write('Otp', [
             'send' => '/otp/send',
@@ -392,6 +392,43 @@ class LoginControllerTest extends TestCase
         static::assertNull($response);
         $expected = 'Failed to send OTP code. Please try again later.';
         static::assertEquals($expected, $this->Login->getRequest()->getSession()->read('Flash.flash.0.message'));
+    }
+
+    /**
+     * Test `otp`, enabled scenario: should show otp page, successful POST request
+     *
+     * @return void
+     */
+    public function testOtpEnabledSuccessPostOtp(): void
+    {
+        // mock api /otp/send response
+        $safeClient = ApiClientProvider::getApiClient();
+        $expected = [
+            'otp_code' => '123456',
+            'expires_at' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+        ];
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('post')
+            ->with('/otp/send')
+            ->willReturn([
+                'data' => $expected,
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        Configure::write('Otp', [
+            'send' => '/otp/send',
+        ]);
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+        $response = $this->Login->otp();
+        static::assertNull($response);
+        $actual = $this->Login->getRequest()->getSession()->read('Otp');
+        static::assertEquals($expected, $actual);
+        ApiClientProvider::setApiClient($safeClient);
     }
 
     /**
