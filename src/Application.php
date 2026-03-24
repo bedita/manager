@@ -152,7 +152,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ->add(new AuthenticationMiddleware($this))
 
             // Otp middleware.
-            ->add(new OtpMiddleware($this))
+            ->add(new OtpMiddleware())
 
             // Authentication middleware.
             ->add(new OAuth2Middleware())
