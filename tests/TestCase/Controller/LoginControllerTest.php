@@ -42,6 +42,7 @@ use Psr\Http\Message\ServerRequestInterface;
 #[CoversMethod(LoginController::class, 'login')]
 #[CoversMethod(LoginController::class, 'logout')]
 #[CoversMethod(LoginController::class, 'otp')]
+#[CoversMethod(LoginController::class, 'otpEnabled')]
 #[CoversMethod(LoginController::class, 'otpVerify')]
 #[CoversMethod(LoginController::class, 'setupCurrentProject')]
 class LoginControllerTest extends TestCase
