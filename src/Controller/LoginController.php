@@ -189,21 +189,25 @@ class LoginController extends AppController
         if (!$this->otpEnabled()) {
             return $this->redirect('/login');
         }
-        $otpSession = (array)$this->getRequest()->getSession()->read('Otp');
-        $pending = (string)Hash::get($otpSession, 'pending');
-        $force = $this->getRequest()->getQuery('force', false);
-        if (!$pending || $force) {
-            // Send OTP code via API
-            $response = $this->apiClient->post(
-                $this->getConfig('otp.send'),
-                null,
-                ['Content-Type' => 'application/json'],
-            );
-            $this->getRequest()->getSession()->write('Otp', [
-                'otp_code' => $response['data']['otp_code'],
-                'expires_at' => $response['data']['expires_at'],
-                'pending' => true,
-            ]);
+        try {
+            $otpSession = (array)$this->getRequest()->getSession()->read('Otp');
+            $pending = (string)Hash::get($otpSession, 'pending');
+            $force = $this->getRequest()->getQuery('force', false);
+            if (!$pending || $force) {
+                // Send OTP code via API
+                $response = $this->apiClient->post(
+                    $this->getConfig('otp.send'),
+                    null,
+                    ['Content-Type' => 'application/json'],
+                );
+                $this->getRequest()->getSession()->write('Otp', [
+                    'otp_code' => $response['data']['otp_code'],
+                    'expires_at' => $response['data']['expires_at'],
+                    'pending' => true,
+                ]);
+            }
+        } catch (Throwable $e) {
+            $this->Flash->error(__('Failed to send OTP code. Please try again later.'));
         }
 
         return null;
