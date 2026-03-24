@@ -25,7 +25,6 @@ class OtpMiddlewareTest extends TestCase
      * Test process method.
      *
      * @return void
-     * @covers ::process()
      */
     public function testProcess(): void
     {
