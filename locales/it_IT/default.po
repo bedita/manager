@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-03-17 12:07:36 \n"
+"POT-Creation-Date: 2026-03-24 09:17:38 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -122,6 +122,9 @@ msgstr "Operazione massiva eseguita su {0} oggetti"
 
 msgid "Calendar"
 msgstr "Calendario"
+
+msgid "Calendar view"
+msgstr "Vista calendario"
 
 msgid "Cannot create abstract objects or objects without schema"
 msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
@@ -329,6 +332,9 @@ msgstr "Esporta Filtrati"
 
 msgid "External Auth"
 msgstr "Autenticazioni esterne"
+
+msgid "Failed to send OTP code. Please try again later."
+msgstr "Invio codice OTP fallito. Riprova più tardi."
 
 msgid "Failed to write file to disk"
 msgstr "Scrittura file su disco fallita"
@@ -614,6 +620,9 @@ msgstr "Numero di errori di accesso"
 msgid "Number of updated objects"
 msgstr "Numero di oggetti aggiornati"
 
+msgid "OTP code is expired or invalid"
+msgstr "Codice OTP scaduto o non valido"
+
 msgid "Object Types"
 msgstr "Tipi di Oggetto"
 
@@ -649,6 +658,9 @@ msgstr "Vecchia Password"
 
 msgid "On"
 msgstr ""
+
+msgid "One Time Password"
+msgstr "Codice monouso"
 
 msgid "Only my contents"
 msgstr "Solo i miei contenuti"
@@ -801,6 +813,9 @@ msgstr "Rimuovi"
 
 msgid "Request password"
 msgstr "Reimposta password"
+
+msgid "Resend OTP"
+msgstr "Invia nuovamente OTP"
 
 msgid "Reset"
 msgstr "Resetta"
@@ -1023,6 +1038,9 @@ msgstr "Partita Iva"
 
 msgid "Verified"
 msgstr "Verificato"
+
+msgid "Verify"
+msgstr "Verifica"
 
 msgid "Version"
 msgstr "Versione"
