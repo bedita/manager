@@ -453,6 +453,7 @@ class LoginControllerTest extends TestCase
         $expected = [
             'otp_code' => '123456',
             'expires_at' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+            'pending' => true,
         ];
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.com'])
