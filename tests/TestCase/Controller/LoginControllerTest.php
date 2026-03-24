@@ -141,6 +141,26 @@ class LoginControllerTest extends TestCase
     }
 
     /**
+     * Test `initialize` method when OTP is enabled.
+     * Should add 'otp' configuration from app config to controller config.
+     *
+     * @return void
+     * @covers ::initialize()
+     */
+    public function testInitializeOtpEnabled(): void
+    {
+        Configure::write('Otp', [
+            'send' => '/otp/send',
+        ]);
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+        static::assertEquals('/otp/send', $this->Login->getConfig('otp.send'));
+    }
+
+    /**
      * Test `authRequest` method, no user timezone set
      *
      * @covers ::authRequest()
