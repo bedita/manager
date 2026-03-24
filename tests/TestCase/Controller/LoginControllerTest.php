@@ -586,4 +586,43 @@ class LoginControllerTest extends TestCase
         static::assertEquals(302, $response->getStatusCode());
         static::assertEquals('/', $response->getHeaderLine('Location'));
     }
+
+    /**
+     * Test `otpEnabled`
+     *
+     * @return void
+     * @covers ::otpEnabled()
+     */
+    public function testOtpEnabled(): void
+    {
+        Configure::write('Otp', [
+            'send' => '/otp/send',
+        ]);
+        $config = array_merge($this->defaultRequestConfig, [
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+        $request = new ServerRequest($config);
+        $this->Login = new class ($request) extends LoginController
+        {
+            public function otpEnabled(?string $username = null): bool
+            {
+                return parent::otpEnabled($username);
+            }
+        };
+        $service = new AuthenticationService();
+        $service->loadIdentifier(ApiIdentifier::class);
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => [
+                IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+                IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+            ],
+        ]);
+        $this->Login->setRequest($this->Login->getRequest()->withAttribute('authentication', $service));
+        $result = $this->Login->Authentication->getAuthenticationService()->authenticate($this->Login->getRequest());
+        $identity = new Identity($result->getData() ?: []);
+        $this->Login->setRequest($this->Login->getRequest()->withAttribute('identity', $identity));
+        static::assertTrue($this->Login->otpEnabled());
+    }
 }
