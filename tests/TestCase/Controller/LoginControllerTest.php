@@ -334,6 +334,29 @@ class LoginControllerTest extends TestCase
     }
 
     /**
+     * Test `authRequest` method with otp config enabled.
+     * Should redirect to otp page.
+     *
+     * @return void
+     */
+    public function testAuthRequestOtpEnabled(): void
+    {
+        Configure::write('Otp', [
+            'send' => '/otp/send',
+        ]);
+        $this->setupController([
+            'post' => [
+                'username' => env('BEDITA_ADMIN_USR'),
+                'password' => env('BEDITA_ADMIN_PWD'),
+            ],
+        ]);
+
+        $response = $this->Login->login();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/otp', $response->getHeaderLine('Location'));
+    }
+
+    /**
      * Test `otp` not enabled, should redirect to login page
      *
      * @return void
