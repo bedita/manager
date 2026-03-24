@@ -15,6 +15,7 @@ namespace App\Test\TestCase;
 use App\Application;
 use App\Identifier\ApiIdentifier;
 use App\Middleware\ConfigurationMiddleware;
+use App\Middleware\OtpMiddleware;
 use App\Middleware\ProjectMiddleware;
 use App\Middleware\RecoveryMiddleware;
 use App\Middleware\StatusMiddleware;
@@ -76,6 +77,8 @@ class ApplicationTest extends TestCase
         static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(AuthenticationMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(OtpMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(OAuth2Middleware::class, $middleware->current());
         $middleware->next();
