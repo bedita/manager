@@ -92,9 +92,10 @@ class LoginController extends AppController
             // Setup current project name.
             $this->setupCurrentProject();
 
+            $provider = $this->request->getParam('provider');
             $username = $result->getData()['attributes']['username'];
 
-            if ($this->otpEnabled($username)) {
+            if (empty($provider) && $this->otpEnabled($username)) {
                 return $this->redirect('/otp');
             }
 
