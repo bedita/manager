@@ -429,6 +429,7 @@ class LoginControllerTest extends TestCase
         $expected = [
             'otp_code' => '123456',
             'expires_at' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+            'pending' => true,
         ];
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.com'])
@@ -494,6 +495,7 @@ class LoginControllerTest extends TestCase
         $this->Login->getRequest()->getSession()->write('Otp', [
             'otp_code' => '123456',
             'expires_at' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+            'pending' => true,
         ]);
         $response = $this->Login->otpVerify();
         static::assertEquals(302, $response->getStatusCode());
@@ -524,6 +526,7 @@ class LoginControllerTest extends TestCase
         $this->Login->getRequest()->getSession()->write('Otp', [
             'otp_code' => '123456',
             'expires_at' => date('Y-m-d H:i:s', strtotime('-1 hour')),
+            'pending' => true,
         ]);
         $response = $this->Login->otpVerify();
         static::assertEquals(302, $response->getStatusCode());
@@ -553,6 +556,7 @@ class LoginControllerTest extends TestCase
         $this->Login->getRequest()->getSession()->write('Otp', [
             'otp_code' => '123456',
             'expires_at' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+            'pending' => true,
         ]);
         $response = $this->Login->otpVerify();
         static::assertEquals(302, $response->getStatusCode());
