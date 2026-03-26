@@ -37,16 +37,24 @@
             <div class="related-container">
                 <div class="related-item">
                     <span
-                        class="ml-05"
+                        class="first-related ml-05"
                         v-for="f in relatedFields"
                         :key="f"
+                        :title="related?.[0]?.attributes?.[f] || related?.[0]?.meta?.[f]"
+                        @click.stop.prevent="openRelated(related?.[0])"
                     >
                         <template v-if="f == 'media_url'">
                             <img :src="thumb(0)">
                         </template>
                         <template v-else>
-                            {{ related?.[0]?.attributes?.[f] || related?.[0]?.meta?.[f] }}
+                            {{ truncate(related?.[0]?.attributes?.[f] || related?.[0]?.meta?.[f]) }}
                         </template>
+                    </span>
+                    <span
+                        class="open-new-tab-icon"
+                        v-if="hasRelatedLink(related?.[0])"
+                    >
+                        <app-icon icon="carbon:launch" />
                     </span>
                 </div>
                 <div
@@ -55,29 +63,34 @@
                 >
                     <button
                         class="show-toggle icon icon-only-icon"
-                        :title="msgMore"
+                        :title="relatedToggleLabel()"
                         @click.stop.prevent="relatedOpen = !relatedOpen"
                         v-if="relatedOpen"
                     >
                         <app-icon icon="carbon:subtract" />
-                        <span class="is-sr-only">{{ msgMore }}</span>
+                        <span class="is-sr-only">{{ relatedToggleLabel() }}</span>
                     </button>
                     <button
                         class="show-toggle icon icon-only-icon"
-                        :title="msgMore"
+                        :title="relatedToggleLabel()"
                         @click.stop.prevent="relatedOpen = !relatedOpen"
                         v-else
                     >
                         <app-icon icon="carbon:add" />
-                        <span class="is-sr-only">{{ msgMore }}</span>
+                        <span class="is-sr-only">{{ relatedToggleLabel() }}</span>
                     </button>
+                    <span class="tag is-smallest is-black mx-05 related-count empty">
+                        {{ relatedCountLabel() }}
+                    </span>
                 </div>
             </div>
-            <template v-if="relatedOpen">
+            <div
+                class="related-list"
+                v-if="relatedOpen"
+            >
                 <template v-for="(relatedItem, index) in related">
                     <div
                         class="related-item"
-                        @click.stop.prevent="relatedOpen = !relatedOpen"
                         :key="index"
                         v-if="index > 0"
                     >
@@ -85,6 +98,7 @@
                             class="ml-05"
                             v-for="f in relatedFields"
                             :key="f"
+                            @click.stop.prevent="openRelated(relatedItem)"
                         >
                             <template v-if="f == 'media_url'">
                                 <img :src="thumb(index)">
@@ -93,9 +107,15 @@
                                 {{ relatedItem?.attributes?.[f] || relatedItem?.meta?.[f] }}
                             </template>
                         </span>
+                        <span
+                            class="open-new-tab-icon"
+                            v-if="hasRelatedLink(relatedItem)"
+                        >
+                            <app-icon icon="carbon:launch" />
+                        </span>
                     </div>
                 </template>
-            </template>
+            </div>
         </template>
     </div>
 </template>
@@ -207,6 +227,34 @@ export default {
         reset() {
             this.msg = '';
         },
+        hasRelatedLink(relatedItem) {
+            if (relatedItem?.type === 'roles') {
+                return false;
+            }
+            return !!relatedItem?.id;
+        },
+        relatedCountLabel() {
+            const count = this.related?.length || 0;
+            if (!count) {
+                return '';
+            }
+
+            return `${this.relatedOpen ? count : 1}/${count}`;
+        },
+        relatedToggleLabel() {
+            return this.relatedCountLabel() || this.msgMore;
+        },
+        openRelated(relatedItem) {
+            const id = relatedItem?.id || null;
+            if (!id) {
+                return;
+            }
+            const url = this.$helpers?.buildViewUrl ? this.$helpers.buildViewUrl(id) : `/view/${id}`;
+            const newTab = window.open(url, '_blank');
+            if (newTab) {
+                newTab.focus();
+            }
+        },
         showCopyIcon() {
             if (this.settings?.copy2clipboard !== true) {
                 return false;
@@ -218,6 +266,12 @@ export default {
             const thumbError = !isNaN(thumb) && Number(thumb) < 0;
 
             return !thumbError ? thumb : this.related?.[index]?.meta?.media_url;
+        },
+        truncate(text, length = 17) {
+            if (!text || text.length <= length) {
+                return text;
+            }
+            return text.substring(0, length) + '...';
         },
     },
 };
@@ -232,11 +286,51 @@ div.index-cell > div.msg {
     font-family: monospace;
     font-style: italic;
 }
+div.index-cell .first-related {
+    white-space: nowrap !important;
+}
 div.index-cell div.related-container {
     display: flex;
+    align-items: flex-start;
 }
 div.index-cell div.related-item {
     display: flex;
+    flex-wrap: wrap;
+    min-width: 0;
+    color: #e6edf3;
+    align-items: center;
+    border-radius: 0.2rem;
+    transition: background-color 0.12s ease-in-out;
+}
+div.index-cell div.related-item > span {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    cursor: pointer;
+}
+div.index-cell div.related-list {
+    margin-top: 0.35rem;
+    margin-left: 0;
+}
+div.index-cell div.related-list div.related-item {
+    gap: 0.15rem 0.45rem;
+    padding: 0.2rem 0;
+}
+div.index-cell div.related-list div.related-item + div.related-item {
+    margin-top: 0.2rem;
+}
+div.index-cell div.related-item:hover {
+    background-color: #2f3943;
+}
+div.index-cell div.related-item .open-new-tab-icon {
+    opacity: 0;
+    margin-left: 0.3rem;
+    color: #c5d0db;
+    transition: opacity 0.12s ease-in-out;
+    pointer-events: none;
+}
+div.index-cell div.related-item:hover .open-new-tab-icon {
+    opacity: 1;
 }
 div.index-cell div.related-toggle {
     display: flex;
@@ -246,6 +340,9 @@ div.index-cell div.related-toggle > button {
     line-height: 1;
     height: 20px;
     cursor: cell;
+}
+div.index-cell span.related-count {
+    user-select: none;
 }
 div.index-cell img {
     margin-bottom: 0.2rem;
