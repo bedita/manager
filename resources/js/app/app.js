@@ -62,6 +62,7 @@ const _vueInstance = new Vue({
         AdminJobList: () => import(/* webpackChunkName: "admin-job-list" */'app/components/admin-job-list/admin-job-list'),
         JsonEditor: () => import(/* webpackChunkName: "json-editor" */'app/components/json-editor/json-editor'),
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
+        ModelSchema: () => import(/* webpackChunkName: "model-schema" */'app/pages/model/schema.vue'),
         AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
         AdminAppearance: () => import(/* webpackChunkName: "admin-appearance" */'app/pages/admin/appearance'),
         AdminStatistics: () => import(/* webpackChunkName: "admin-statistics" */'app/pages/admin/statistics'),

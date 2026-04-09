@@ -45,6 +45,7 @@
     "eslint": "^9.26.0",
     "flatpickr": "^4.6.9",
     "globals": "^17.3.0",
+    "jszip": "^3.10.1",
     "mapbox-gl": "^2.12.1",
     "mapbox-gl-compare": "^0.4.0",
     "moment": "^2.29.4",

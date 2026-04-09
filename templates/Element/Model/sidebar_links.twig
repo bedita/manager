@@ -13,7 +13,8 @@
 {# append links to sidebar #}
 {% do _view.append(
     'app-module-links',
-      '<a href="' ~ Url.build({'_name': 'model:list:object_types'}) ~ '"><app-icon icon="carbon:switcher"></app-icon><span class="has-border-none ml-05">' ~ __('Object types') ~ '</span></a>'
+      '<a href="' ~ Url.build({'_name': 'model:schema'}) ~ '"><app-icon icon="carbon:diagram"></app-icon><span class="has-border-none ml-05">' ~ __('Schema') ~ '</span></a>'
+    ~ '<a href="' ~ Url.build({'_name': 'model:list:object_types'}) ~ '"><app-icon icon="carbon:switcher"></app-icon><span class="has-border-none ml-05">' ~ __('Object types') ~ '</span></a>'
     ~ '<a href="' ~ Url.build({'_name': 'model:list:relations'}) ~ '"><app-icon icon="carbon:chart-relationship"></app-icon><span class="has-border-none ml-05">' ~ __('Relations') ~ '</span></a>'
     ~ '<a href="' ~ Url.build({'_name': 'model:list:property_types'}) ~ '"><app-icon icon="carbon:edit"></app-icon><span class="has-border-none ml-05">' ~ __('Property types') ~ '</span></a>'
     ~ '<a href="' ~ Url.build({'_name': 'model:list:categories'}) ~ '"><app-icon icon="carbon:tag"></app-icon><span class="has-border-none ml-05">' ~ __('Categories') ~ '</span></a>'
