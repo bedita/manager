@@ -344,7 +344,7 @@ export default {
 
             const centerX = this.width / 2;
             const centerY = this.height / 2;
-            const radius = Math.max(180, Math.min(this.width, this.height) * 0.35);
+            const radius = Math.max(180, Math.min(this.width, this.height) * 0.43);
 
             // Place all nodes on a ring to keep the graph readable with no external layout library.
             return source.map((item, index) => {
@@ -873,7 +873,7 @@ export default {
 
 .schema-content {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 44vw);
+    grid-template-columns: minmax(0, 3fr) minmax(280px, 2fr);
     gap: 1rem;
 }
 
@@ -894,7 +894,7 @@ export default {
 
 svg {
     width: 100%;
-    min-height: 640px;
+    aspect-ratio: 1200 / 760;
 }
 
 .edges line {
