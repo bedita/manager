@@ -85,6 +85,18 @@ $routes->scope('/', function (RouteBuilder $routes): void {
         ['_name' => 'login:oauth2'],
     );
 
+    // OTP.
+    $routes->connect(
+        '/otp',
+        ['controller' => 'Login', 'action' => 'otp'],
+        ['_name' => 'otp'],
+    );
+    $routes->connect(
+        '/otp/verify',
+        ['controller' => 'Login', 'action' => 'otpVerify'],
+        ['_name' => 'otp:verify'],
+    );
+
     // Dashboard.
     $routes->connect(
         '/',
