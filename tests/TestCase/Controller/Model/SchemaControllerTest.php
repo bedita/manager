@@ -121,7 +121,7 @@ class SchemaControllerTest extends TestCase
         $this->setupController();
         $result = $this->ModelController->index();
         $this->assertNull($result);
-        $this->assertSame('schema', $this->ModelController->viewVars['resourceType']);
-        $this->assertSame(['_name' => 'model:schema'], $this->ModelController->viewVars['moduleLink']);
+        $this->assertSame('schema', $this->ModelController->viewBuilder()->getVar('resourceType'));
+        $this->assertSame(['_name' => 'model:schema'], $this->ModelController->viewBuilder()->getVar('moduleLink'));
     }
 }
