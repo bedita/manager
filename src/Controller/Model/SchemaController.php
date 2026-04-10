@@ -13,8 +13,6 @@
 namespace App\Controller\Model;
 
 use App\Controller\AppController;
-use Cake\Event\EventInterface;
-use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
 
 /**
@@ -22,30 +20,6 @@ use Cake\Http\Response;
  */
 class SchemaController extends AppController
 {
-    /**
-     * {@inheritDoc}
-     *
-     * Restrict `model` module access to `admin`.
-     *
-     * @param \Cake\Event\EventInterface $event An Event instance
-     * @return \Cake\Http\Response|null
-     */
-    public function beforeFilter(EventInterface $event): ?Response
-    {
-        $res = parent::beforeFilter($event);
-        if ($res !== null) {
-            return $res;
-        }
-
-        /** @var \Authentication\Identity|null $user */
-        $user = $this->Authentication->getIdentity();
-        if (empty($user->get('roles')) || !in_array('admin', $user->get('roles'))) {
-            throw new UnauthorizedException(__('Module access not authorized'));
-        }
-
-        return null;
-    }
-
     /**
      * Show schema visualizer page.
      *
