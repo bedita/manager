@@ -125,12 +125,28 @@
                             v-for="edge in edges"
                             :key="edge.id"
                         >
+                            <path
+                                class="edge-loop"
+                                :d="loopPath(edge)"
+                                :class="edgeClass(edge)"
+                                v-if="isSelfLoop(edge)"
+                            />
                             <line
                                 :x1="edge.from.x"
                                 :y1="edge.from.y"
                                 :x2="edge.to.x"
                                 :y2="edge.to.y"
                                 :class="edgeClass(edge)"
+                                v-else
+                            />
+                            <path
+                                class="edge-hit-area edge-hit-area-loop"
+                                :d="loopPath(edge)"
+                                @mouseenter="onEdgeEnter(edge, $event)"
+                                @mousemove="onEdgeMove($event)"
+                                @mouseleave="onEdgeLeave"
+                                @click.stop="onEdgeClick(edge, $event)"
+                                v-if="isSelfLoop(edge)"
                             />
                             <line
                                 class="edge-hit-area"
@@ -142,6 +158,7 @@
                                 @mousemove="onEdgeMove($event)"
                                 @mouseleave="onEdgeLeave"
                                 @click.stop="onEdgeClick(edge, $event)"
+                                v-else
                             />
                         </g>
                     </g>
@@ -495,6 +512,14 @@ export default {
             return this.selectedNodeEdges.filter((edge) => edge.to.name === this.selectedNodeName && edge.from.name !== this.selectedNodeName);
         },
 
+        selectedLoopEdges() {
+            if (!this.selectedNodeName) {
+                return [];
+            }
+
+            return this.selectedNodeEdges.filter((edge) => edge.from.name === this.selectedNodeName && edge.to.name === this.selectedNodeName);
+        },
+
         selectedModelProperties() {
             if (!this.selectedNodeName) {
                 return [];
@@ -521,6 +546,10 @@ export default {
             return this.groupRelationsByType(this.selectedIncomingEdges, 'from');
         },
 
+        groupedLoopRelations() {
+            return this.groupRelationsByType(this.selectedLoopEdges, 'to');
+        },
+
         relationSections() {
             return [
                 {
@@ -534,6 +563,12 @@ export default {
                     title: 'Incoming relations',
                     arrow: '<-',
                     groups: this.groupedIncomingRelations,
+                },
+                {
+                    key: 'loop',
+                    title: 'Self relations',
+                    arrow: 'self',
+                    groups: this.groupedLoopRelations,
                 },
             ].filter((section) => section.groups.length);
         },
@@ -735,6 +770,19 @@ export default {
             }
 
             return `${edge.inverseRelation} (${edge.inverseRelationLabel})`;
+        },
+
+        isSelfLoop(edge) {
+            return edge?.from?.name === edge?.to?.name;
+        },
+
+        loopPath(edge) {
+            const x = edge.from.x;
+            const y = edge.from.y;
+            const spreadX = this.nodeRadius * 2.4;
+            const spreadY = this.nodeRadius * 2.1;
+
+            return `M ${x} ${y - this.nodeRadius} C ${x + spreadX} ${y - spreadY}, ${x + spreadX} ${y + spreadY}, ${x} ${y + this.nodeRadius}`;
         },
 
         positionTooltipAtPoint(baseX, baseY) {
@@ -1030,11 +1078,13 @@ svg {
     aspect-ratio: 1200 / 760;
 }
 
-.edges line {
+.edges line,
+.edges path.edge-loop {
     stroke: #b9c0c9;
     stroke-width: 1;
     opacity: 0.65;
     transition: opacity 0.18s ease, stroke-width 0.18s ease, stroke 0.18s ease;
+    fill: none;
 }
 
 .edges .edge-hit-area {
@@ -1044,34 +1094,45 @@ svg {
     pointer-events: stroke;
 }
 
-.edges line.selected {
+.edges .edge-hit-area-loop {
+    fill: none;
+}
+
+.edges line.selected,
+.edges path.edge-loop.selected {
     stroke-width: 2;
     opacity: 1;
 }
 
-.edges line.muted {
+.edges line.muted,
+.edges path.edge-loop.muted {
     opacity: 0.08;
 }
 
-.edges line.hovered {
+.edges line.hovered,
+.edges path.edge-loop.hovered {
     stroke-width: 3;
     opacity: 1;
 }
 
-.edges line.pinned {
+.edges line.pinned,
+.edges path.edge-loop.pinned {
     stroke-width: 4;
     opacity: 1;
 }
 
-.edges line.outgoing {
+.edges line.outgoing,
+.edges path.edge-loop.outgoing {
     stroke: #0d5cab;
 }
 
-.edges line.incoming {
+.edges line.incoming,
+.edges path.edge-loop.incoming {
     stroke: #af5a00;
 }
 
-.edges line.loop {
+.edges line.loop,
+.edges path.edge-loop.loop {
     stroke: #7f2aa8;
 }
 
@@ -1276,6 +1337,10 @@ svg {
 
 .direction-list.incoming {
     border-left: 4px solid #af5a00;
+}
+
+.direction-list.loop {
+    border-left: 4px solid #7f2aa8;
 }
 
 .relation-count {
