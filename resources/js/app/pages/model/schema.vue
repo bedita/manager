@@ -19,6 +19,40 @@
                 </span>
             </div>
             <div class="actions">
+                <div class="node-search">
+                    <input
+                        class="input node-search-input"
+                        type="search"
+                        list="schema-node-options"
+                        placeholder="Find object type"
+                        v-model.trim="nodeSearch"
+                        @input="onNodeSearchInput"
+                        @keydown.enter.prevent="selectSearchedNode"
+                    >
+                    <datalist id="schema-node-options">
+                        <option
+                            v-for="node in nodeSearchMatches.slice(0, 12)"
+                            :key="`search-${node.name}`"
+                            :value="node.name"
+                        />
+                    </datalist>
+                    <button
+                        class="button button-outlined node-search-button"
+                        type="button"
+                        :disabled="!nodeSearchMatches.length"
+                        @click="selectSearchedNode"
+                    >
+                        Go
+                    </button>
+                    <button
+                        class="button button-outlined node-search-button"
+                        type="button"
+                        @click="clearNodeSearch"
+                        v-if="nodeSearch"
+                    >
+                        Clear
+                    </button>
+                </div>
                 <label class="checkbox-row">
                     <input
                         type="checkbox"
@@ -119,6 +153,8 @@
                             class="node"
                             :class="{
                                 selected: selectedNodeName === node.name,
+                                connected: connectedNodeNames.includes(node.name),
+                                muted: isNodeMuted(node.name),
                                 disabled: !node.enabled,
                             }"
                             @click.stop="selectNode(node.name)"
@@ -319,6 +355,7 @@ export default {
             width: 1200,
             height: 760,
             nodeRadius: 14,
+            nodeSearch: '',
         };
     },
 
@@ -330,6 +367,15 @@ export default {
 
         relationCount() {
             return (this.schema?.relations || []).length;
+        },
+
+        nodeSearchMatches() {
+            const query = this.normalizeNodeSearch(this.nodeSearch);
+            if (!query) {
+                return this.nodes;
+            }
+
+            return this.nodes.filter((node) => node.name.toLowerCase().includes(query));
         },
 
         nodes() {
@@ -346,7 +392,6 @@ export default {
             const centerY = this.height / 2;
             const radius = Math.max(180, Math.min(this.width, this.height) * 0.43);
 
-            // Place all nodes on a ring to keep the graph readable with no external layout library.
             return source.map((item, index) => {
                 const angle = (2 * Math.PI * index) / count - Math.PI / 2;
                 return {
@@ -420,6 +465,18 @@ export default {
             return this.edges.filter((edge) => {
                 return edge.from.name === this.selectedNodeName || edge.to.name === this.selectedNodeName;
             });
+        },
+
+        connectedNodeNames() {
+            if (!this.selectedNodeName) {
+                return [];
+            }
+
+            return Array.from(new Set([
+                this.selectedNodeName,
+                ...this.selectedNodeEdges.map((edge) => edge.from.name),
+                ...this.selectedNodeEdges.map((edge) => edge.to.name),
+            ]));
         },
 
         selectedOutgoingEdges() {
@@ -517,7 +574,8 @@ export default {
             }
 
             if (!this.selectedNodeName || !nodes.some((node) => node.name === this.selectedNodeName)) {
-                this.selectedNodeName = nodes[0].name;
+                const match = this.findNodeBySearch(this.nodeSearch, nodes);
+                this.selectedNodeName = match?.name || nodes[0].name;
             }
         },
 
@@ -540,6 +598,52 @@ export default {
     },
 
     methods: {
+        makeRelationGroupKey(item) {
+            return [
+                item.relation,
+                item.relationLabel || '',
+                item.inverseRelation,
+                item.inverseRelationLabel || '',
+            ].join('|');
+        },
+
+        normalizeNodeSearch(value) {
+            return (value || '').trim().toLowerCase();
+        },
+
+        findNodeBySearch(query, source = this.nodes) {
+            const normalizedQuery = this.normalizeNodeSearch(query);
+            if (!normalizedQuery) {
+                return null;
+            }
+
+            return source.find((node) => node.name.toLowerCase() === normalizedQuery)
+                || source.find((node) => node.name.toLowerCase().startsWith(normalizedQuery))
+                || source.find((node) => node.name.toLowerCase().includes(normalizedQuery))
+                || null;
+        },
+
+        onNodeSearchInput() {
+            const match = this.findNodeBySearch(this.nodeSearch);
+            if (match) {
+                this.selectedNodeName = match.name;
+            }
+        },
+
+        selectSearchedNode() {
+            const match = this.findNodeBySearch(this.nodeSearch);
+            if (!match) {
+                return;
+            }
+
+            this.selectedNodeName = match.name;
+            this.nodeSearch = match.name;
+        },
+
+        clearNodeSearch() {
+            this.nodeSearch = '';
+        },
+
         exportProjectModelJson() {
             const content = JSON.stringify(this.schema, null, 2);
             const url = URL.createObjectURL(new Blob([content], { type: 'application/json' }));
@@ -582,12 +686,7 @@ export default {
             const grouped = new Map();
 
             edges.forEach((edge) => {
-                const key = [
-                    edge.relation,
-                    edge.relationLabel || '',
-                    edge.inverseRelation,
-                    edge.inverseRelationLabel || '',
-                ].join('|');
+                const key = this.makeRelationGroupKey(edge);
 
                 if (!grouped.has(key)) {
                     grouped.set(key, {
@@ -636,6 +735,36 @@ export default {
             }
 
             return `${edge.inverseRelation} (${edge.inverseRelationLabel})`;
+        },
+
+        positionTooltipAtPoint(baseX, baseY) {
+            const canvas = this.$refs.schemaCanvas;
+            if (!canvas) {
+                return;
+            }
+
+            const offset = 14;
+            const tooltipEl = this.$refs.edgeTooltip;
+            const tooltipWidth = tooltipEl?.offsetWidth || 300;
+            const tooltipHeight = tooltipEl?.offsetHeight || 74;
+
+            const minX = canvas.scrollLeft + 8;
+            const maxX = canvas.scrollLeft + canvas.clientWidth - tooltipWidth - 8;
+            const minY = canvas.scrollTop + 8;
+            const maxY = canvas.scrollTop + canvas.clientHeight - tooltipHeight - 8;
+
+            let nextX = baseX + offset;
+            let nextY = baseY + offset;
+
+            if (nextX > maxX) {
+                nextX = baseX - tooltipWidth - offset;
+            }
+            if (nextY > maxY) {
+                nextY = baseY - tooltipHeight - offset;
+            }
+
+            this.tooltip.x = Math.max(minX, Math.min(nextX, maxX));
+            this.tooltip.y = Math.max(minY, Math.min(nextY, maxY));
         },
 
         onEdgeEnter(edge, event) {
@@ -691,6 +820,7 @@ export default {
 
             // Clicking empty canvas clears current node selection.
             this.selectedNodeName = null;
+            this.nodeSearch = '';
         },
 
         updateTooltipPosition(event) {
@@ -702,29 +832,7 @@ export default {
             const rect = canvas.getBoundingClientRect();
             const baseX = event.clientX - rect.left + canvas.scrollLeft;
             const baseY = event.clientY - rect.top + canvas.scrollTop;
-            const offset = 14;
-
-            const tooltipEl = this.$refs.edgeTooltip;
-            const tooltipWidth = tooltipEl?.offsetWidth || 300;
-            const tooltipHeight = tooltipEl?.offsetHeight || 74;
-
-            const minX = canvas.scrollLeft + 8;
-            const maxX = canvas.scrollLeft + canvas.clientWidth - tooltipWidth - 8;
-            const minY = canvas.scrollTop + 8;
-            const maxY = canvas.scrollTop + canvas.clientHeight - tooltipHeight - 8;
-
-            let nextX = baseX + offset;
-            let nextY = baseY + offset;
-
-            if (nextX > maxX) {
-                nextX = baseX - tooltipWidth - offset;
-            }
-            if (nextY > maxY) {
-                nextY = baseY - tooltipHeight - offset;
-            }
-
-            this.tooltip.x = Math.max(minX, Math.min(nextX, maxX));
-            this.tooltip.y = Math.max(minY, Math.min(nextY, maxY));
+            this.positionTooltipAtPoint(baseX, baseY);
         },
 
         edgeClass(edge) {
@@ -746,13 +854,20 @@ export default {
                 outgoing: isOutgoing,
                 incoming: isIncoming,
                 loop: isLoop,
+                muted: !isOutgoing && !isIncoming && !isLoop,
                 hovered: isHovered,
                 pinned: isPinned,
             };
         },
 
+        isNodeMuted(nodeName) {
+            return !!this.selectedNodeName && !this.connectedNodeNames.includes(nodeName);
+        },
+
         selectNode(name) {
-            this.selectedNodeName = this.selectedNodeName === name ? null : name;
+            const nextSelectedNodeName = this.selectedNodeName === name ? null : name;
+            this.selectedNodeName = nextSelectedNodeName;
+            this.nodeSearch = nextSelectedNodeName || '';
         },
 
         fetchSchema() {
@@ -839,6 +954,21 @@ export default {
     flex-wrap: wrap;
 }
 
+.node-search {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.node-search-input {
+    min-width: 14rem;
+}
+
+.node-search-button {
+    white-space: nowrap;
+}
+
 .export-button {
     display: inline-flex;
     align-items: center;
@@ -901,6 +1031,7 @@ svg {
     stroke: #b9c0c9;
     stroke-width: 1;
     opacity: 0.65;
+    transition: opacity 0.18s ease, stroke-width 0.18s ease, stroke 0.18s ease;
 }
 
 .edges .edge-hit-area {
@@ -913,6 +1044,10 @@ svg {
 .edges line.selected {
     stroke-width: 2;
     opacity: 1;
+}
+
+.edges line.muted {
+    opacity: 0.08;
 }
 
 .edges line.hovered {
@@ -974,6 +1109,7 @@ svg {
 
 .node {
     cursor: pointer;
+    transition: opacity 0.18s ease;
 }
 
 .node circle {
@@ -1002,6 +1138,15 @@ svg {
     stroke: #0d5cab;
     stroke-width: 3;
     fill: #f2f8ff;
+}
+
+.node.connected:not(.selected) circle {
+    stroke-width: 2;
+    fill: #fafcff;
+}
+
+.node.muted {
+    opacity: 0.22;
 }
 
 .schema-info {
@@ -1172,12 +1317,15 @@ svg {
     margin-bottom: 0.25rem;
     font-weight: 500;
     letter-spacing: 0.01em;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .relation-targets {
     display: flex;
     gap: 0.35rem;
     align-items: flex-start;
+    white-space: normal;
 }
 
 .relation-arrow {
@@ -1191,6 +1339,7 @@ svg {
     font-size: 0.84rem;
     line-height: 1.25;
     word-break: break-word;
+    white-space: normal;
 }
 
 .model-properties-panel {
