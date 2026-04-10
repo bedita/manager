@@ -403,6 +403,7 @@ class LayoutHelper extends Helper
             'ObjectTypes' => 'has-background-black',
             'Relations' => 'has-background-black',
             'PropertyTypes' => 'has-background-black',
+            'Schema' => 'has-background-black',
             'Categories' => 'has-background-black',
             'Appearance' => 'has-background-black',
             'Applications' => 'has-background-black',

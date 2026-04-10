@@ -266,6 +266,12 @@ $routes->scope('/', function (RouteBuilder $routes): void {
             ['controller' => 'Export', 'action' => 'model'],
             'export',
         );
+
+        $routes->get(
+            '/schema',
+            ['controller' => 'Schema', 'action' => 'index'],
+            'schema',
+        );
     });
 
     // Import.
