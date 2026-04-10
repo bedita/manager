@@ -882,7 +882,10 @@ export default {
                 },
             };
 
-            fetch(`${BEDITA.base}/model/export`, options)
+            const basePath = `${new URL(BEDITA.base, window.location.origin).pathname}`.replace(/\/$/, '');
+            const requestUrl = `${basePath}/model/export`;
+
+            fetch(requestUrl, options)
                 .then((res) => {
                     if (!res.ok) {
                         throw new Error(`HTTP ${res.status}`);
