@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /**
  * BEdita, API-first content management framework
- * Copyright 2018 ChannelWeb Srl, Chialab Srl
+ * Copyright 2026 Chialab Srl
  *
  * This file is part of BEdita: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -27,7 +27,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
  * {@see \App\Controller\Model\SchemaController} Test Case
  */
 #[CoversClass(SchemaController::class)]
-#[CoversMethod(SchemaController::class, 'beforeFilter')]
 #[CoversMethod(SchemaController::class, 'index')]
 class SchemaControllerTest extends TestCase
 {
