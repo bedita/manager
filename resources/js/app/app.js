@@ -68,6 +68,7 @@ const _vueInstance = new Vue({
         AdminStatistics: () => import(/* webpackChunkName: "admin-statistics" */'app/pages/admin/statistics'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
         EditChildrenParams: () => import(/* webpackChunkName: "edit-children-params" */'app/components/edit-children-params'),
+        ViewChildrenParams: () => import(/* webpackChunkName: "view-children-params" */'app/components/view-children-params'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
         HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
@@ -648,4 +649,5 @@ Vue.component('ObjectInfo', _vueInstance.$options.components.ObjectInfo);
 Vue.component('RelatedObjectsFilter', _vueInstance.$options.components.RelatedObjectsFilter);
 Vue.component('Thumbnail', _vueInstance.$options.components.Thumbnail);
 Vue.component('RibbonItem', _vueInstance.$options.components.RibbonItem);
+Vue.component('ViewChildrenParams', _vueInstance.$options.components.ViewChildrenParams);
 Vue.component('UploadedObject', _vueInstance.$options.components.UploadedObject);
