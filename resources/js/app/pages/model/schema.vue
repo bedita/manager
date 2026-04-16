@@ -697,8 +697,39 @@ export default {
             }
 
             const zip = new JSZip();
+            const parseMaybeJsonString = (value) => {
+                if (typeof value !== 'string') {
+                    return value;
+                }
+
+                try {
+                    return JSON.parse(value);
+                } catch {
+                    return value;
+                }
+            };
+
             Object.keys(this.schema).forEach((key) => {
-                const content = JSON.stringify(this.schema[key], null, 2);
+                const value = this.schema[key];
+                const exportValue = key === 'config'
+                    ? (() => {
+                        if (Array.isArray(value)) {
+                            return value.map((item) => {
+                                if (!item || typeof item !== 'object') {
+                                    return item;
+                                }
+
+                                return {
+                                    ...item,
+                                    content: parseMaybeJsonString(item.content),
+                                };
+                            });
+                        }
+
+                        return value;
+                    })()
+                    : value;
+                const content = JSON.stringify(exportValue, null, 2);
                 zip.file(`${key}.json`, content);
             });
 
