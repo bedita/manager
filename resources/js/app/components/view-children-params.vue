@@ -6,8 +6,8 @@
                 v-for="item in items"
                 :key="item"
             >
-                <dt class="is-capitalized">
-                    {{ item }}
+                <dt>
+                    {{ $helpers.humanize(item) }}
                 </dt>
                 <dd>
                     <span>
@@ -43,12 +43,17 @@ export default {
 
     mounted() {
         this.$nextTick(() => {
-            this.items = Object.keys(this.related?.meta?.relation?.params || {});
+            const schemaKeys = Object.keys(this.relationSchema || {});
+            const paramKeys = Object.keys(this.related?.meta?.relation?.params || {});
+            this.items = [...new Set([...schemaKeys, ...paramKeys])];
         });
     },
 
     methods: {
         format(key, value) {
+            if (value === null || value === undefined || value === '') {
+                return '-';
+            }
             if (this.relationSchema && this.relationSchema[key]?.format === 'date-time') {
                 return flatpickr.formatDate(new Date(value), 'Y-m-d h:i K');
             }
@@ -56,7 +61,7 @@ export default {
             return value;
         },
         getVal(item, key) {
-            return item?.meta?.relation?.params?.[key] || null;
+            return item?.meta?.relation?.params?.[key] ?? null;
         },
     },
 }
