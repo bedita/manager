@@ -145,7 +145,7 @@
     {% if children and config('ChildrenParams') %}
     <view-children-params
         :related="related"
-        :relation-schema="{{ foldersSchema|json_encode }}"
+        :relation-schema="{{ config('ChildrenParams')|json_encode }}"
     >
     </view-children-params>
     {% endif %}
