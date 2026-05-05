@@ -85,6 +85,18 @@ $routes->scope('/', function (RouteBuilder $routes): void {
         ['_name' => 'login:oauth2'],
     );
 
+    // OTP.
+    $routes->connect(
+        '/otp',
+        ['controller' => 'Login', 'action' => 'otp'],
+        ['_name' => 'otp'],
+    );
+    $routes->connect(
+        '/otp/verify',
+        ['controller' => 'Login', 'action' => 'otpVerify'],
+        ['_name' => 'otp:verify'],
+    );
+
     // Dashboard.
     $routes->connect(
         '/',
@@ -183,6 +195,14 @@ $routes->scope('/', function (RouteBuilder $routes): void {
                 ['controller' => $name, 'action' => 'remove'],
                 'remove:' . $controller,
             )->setPass(['id']);
+
+            if ($controller === 'async_jobs') {
+                $routes->get(
+                    "/$controller/jobs",
+                    ['controller' => $name, 'action' => 'jobs'],
+                    'jobs:' . $controller,
+                );
+            }
         }
         $routes->get(
             '/cache',
@@ -245,6 +265,12 @@ $routes->scope('/', function (RouteBuilder $routes): void {
             '/export',
             ['controller' => 'Export', 'action' => 'model'],
             'export',
+        );
+
+        $routes->get(
+            '/schema',
+            ['controller' => 'Schema', 'action' => 'index'],
+            'schema',
         );
     });
 

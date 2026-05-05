@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2022 Atlas Srl, Chialab Srl
@@ -12,6 +14,10 @@
  */
 namespace App\Controller\Admin;
 
+use BEdita\SDK\BEditaClientException;
+use Cake\Http\Response;
+use Cake\Utility\Hash;
+
 /**
  * Async Jobs Controller
  *
@@ -20,30 +26,66 @@ namespace App\Controller\Admin;
 class AsyncJobsController extends AdministrationBaseController
 {
     /**
-     * Resource type in use
+     * List of async service names to lookup
      *
-     * @var string|null
+     * @var array
      */
-    protected ?string $resourceType = 'async_jobs';
+    protected array $services = ['credentials_change', 'mail', 'signup', 'thumbnail'];
 
     /**
-     * @inheritDoc
+     * Index method
+     *
+     * @return \Cake\Http\Response|null
      */
-    protected bool $deleteonly = true;
+    public function index(): ?Response
+    {
+        $this->getRequest()->allowMethod(['get']);
+        $this->set('services', $this->services);
+
+        return null;
+    }
 
     /**
-     * @inheritDoc
+     * Get jobs rendering as json.
+     *
+     * @return void
      */
-    protected array $properties = [
-        'service' => 'string',
-        'scheduled_from' => 'date',
-        'expires' => 'date',
-        'max_attempts' => 'integer',
-        'locked_until' => 'date',
-    ];
+    public function jobs(): void
+    {
+        $this->viewBuilder()->setClassName('Json');
+        $this->getRequest()->allowMethod('get');
+        $this->set('services', $this->services);
+        $this->loadAsyncJobs();
+        $this->setSerialize(['pagination', 'jobs', 'services']);
+    }
 
     /**
-     * @inheritDoc
+     * Load async jobs services to lookup
+     *
+     * @return void
      */
-    protected array $meta = ['created', 'modified', 'completed'];
+    protected function loadAsyncJobs(): void
+    {
+        $pagination = [];
+        $jobs = [];
+        $query = [
+            'page' => $this->getRequest()->getQuery('page', 1),
+            'page_size' => $this->getRequest()->getQuery('page_size', 100),
+            'sort' => $this->getRequest()->getQuery('sort', '-created'),
+        ];
+        $service = $this->getRequest()->getQuery('service');
+        if (!empty($service)) {
+            $query['filter'] = ['service' => $service];
+        }
+        try {
+            $response = $this->apiClient->get('/async_jobs', $query);
+            $jobs = (array)Hash::get($response, 'data', []);
+            $pagination = (array)Hash::get($response, 'meta.pagination');
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+        $this->set('pagination', $pagination);
+        $this->set('jobs', $jobs);
+    }
 }

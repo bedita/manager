@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2018 ChannelWeb Srl, Chialab Srl
@@ -20,6 +22,9 @@ use Authentication\AuthenticationServiceInterface;
 use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identity;
 use Authentication\IdentityInterface;
+use BEdita\SDK\BEditaClient;
+use BEdita\WebTools\ApiClientProvider;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -38,6 +43,9 @@ use Psr\Http\Message\ServerRequestInterface;
 #[CoversMethod(LoginController::class, 'loadAvailableProjects')]
 #[CoversMethod(LoginController::class, 'login')]
 #[CoversMethod(LoginController::class, 'logout')]
+#[CoversMethod(LoginController::class, 'otp')]
+#[CoversMethod(LoginController::class, 'otpEnabled')]
+#[CoversMethod(LoginController::class, 'otpVerify')]
 #[CoversMethod(LoginController::class, 'setupCurrentProject')]
 class LoginControllerTest extends TestCase
 {
@@ -323,5 +331,235 @@ class LoginControllerTest extends TestCase
         $this->Login->handleFlashMessages(['redirect' => 'dummy']);
         $message = $this->Login->getRequest()->getSession()->read('Flash');
         static::assertEquals('something', $message);
+    }
+
+    /**
+     * Test `authRequest` method with otp config enabled.
+     * Should redirect to otp page.
+     *
+     * @return void
+     */
+    public function testAuthRequestOtpEnabled(): void
+    {
+        Configure::write('Otp', [
+            'send' => '/otp/send',
+        ]);
+        $this->setupController([
+            'post' => [
+                'username' => env('BEDITA_ADMIN_USR'),
+                'password' => env('BEDITA_ADMIN_PWD'),
+            ],
+        ]);
+
+        $response = $this->Login->login();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/otp', $response->getHeaderLine('Location'));
+    }
+
+    /**
+     * Test `otp` not enabled, should redirect to login page
+     *
+     * @return void
+     */
+    public function testOtpNotEnabled(): void
+    {
+        Configure::delete('Otp');
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+        $response = $this->Login->otp();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/login', $response->getHeaderLine('Location'));
+    }
+
+    /**
+     * Test `otp` on "users_skip_otp" config set and matching.
+     *
+     * @return void
+     */
+    public function testOtpUsersSkip(): void
+    {
+        Configure::write('Otp', [
+            'send' => '/otp',
+            'users_skip_otp' => [env('BEDITA_ADMIN_USR')],
+        ]);
+        $this->setupController([
+            'post' => [
+                'username' => env('BEDITA_ADMIN_USR'),
+                'password' => env('BEDITA_ADMIN_PWD'),
+            ],
+        ]);
+        $response = $this->Login->login();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/', $response->getHeaderLine('Location'));
+    }
+
+    /**
+     * Test `otp`, enabled scenario: should show otp page, failing POST request
+     *
+     * @return void
+     */
+    public function testOtpEnabledFailingPostOtp(): void
+    {
+        Configure::write('Otp', [
+            'send' => '/otp/send',
+        ]);
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+        $response = $this->Login->otp();
+        static::assertNull($response);
+        $expected = 'Failed to send OTP code. Please try again later.';
+        static::assertEquals($expected, $this->Login->getRequest()->getSession()->read('Flash.flash.0.message'));
+    }
+
+    /**
+     * Test `otp`, enabled scenario: should show otp page, successful POST request
+     *
+     * @return void
+     */
+    public function testOtpEnabledSuccessPostOtp(): void
+    {
+        // mock api /otp/send response
+        $safeClient = ApiClientProvider::getApiClient();
+        $expected = [
+            'otp_code' => '123456',
+            'expires_at' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+            'pending' => true,
+        ];
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://media.example.com'])
+            ->getMock();
+        $apiClient->method('post')
+            ->with('/otp/send')
+            ->willReturn([
+                'data' => $expected,
+            ]);
+        ApiClientProvider::setApiClient($apiClient);
+        Configure::write('Otp', [
+            'send' => '/otp/send',
+        ]);
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'GET',
+            ],
+        ]);
+        $response = $this->Login->otp();
+        static::assertNull($response);
+        $actual = $this->Login->getRequest()->getSession()->read('Otp');
+        static::assertEquals($expected, $actual);
+        ApiClientProvider::setApiClient($safeClient);
+    }
+
+    /**
+     * Test `otpVerify` not enabled scenario, should redirect to login page
+     *
+     * @return void
+     */
+    public function testOtpVerifyNotEnabled(): void
+    {
+        Configure::delete('Otp');
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+        ]);
+        $response = $this->Login->otpVerify();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/login', $response->getHeaderLine('Location'));
+    }
+
+    /**
+     * Test `otpVerify` enabled scenario but non matching code.
+     * Flash error "OTP code is expired or invalid" and redirect to otp.
+     *
+     * @return void
+     */
+    public function testOtpVerifyNonMatching(): void
+    {
+        Configure::write('Otp', [
+            'send' => '/otp/send',
+        ]);
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'otp_code' => 'wrongcode',
+            ],
+        ]);
+        $this->Login->getRequest()->getSession()->write('Otp', [
+            'otp_code' => '123456',
+            'expires_at' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+            'pending' => true,
+        ]);
+        $response = $this->Login->otpVerify();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/otp', $response->getHeaderLine('Location'));
+        $expected = 'OTP code is expired or invalid';
+        static::assertEquals($expected, $this->Login->getRequest()->getSession()->read('Flash.flash.0.message'));
+    }
+
+    /**
+     * Test `otpVerify` enabled scenario but expired code.
+     * Flash error "OTP code is expired or invalid" and redirect to otp.
+     *
+     * @return void
+     */
+    public function testOtpVerifyExpired(): void
+    {
+        Configure::write('Otp', [
+            'send' => '/otp/send',
+        ]);
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'otp_code' => '123456',
+            ],
+        ]);
+        $this->Login->getRequest()->getSession()->write('Otp', [
+            'otp_code' => '123456',
+            'expires_at' => date('Y-m-d H:i:s', strtotime('-1 hour')),
+            'pending' => true,
+        ]);
+        $response = $this->Login->otpVerify();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/otp', $response->getHeaderLine('Location'));
+        $expected = 'OTP code is expired or invalid';
+        static::assertEquals($expected, $this->Login->getRequest()->getSession()->read('Flash.flash.0.message'));
+    }
+
+    /**
+     * Test `otpVerify` enabled scenario and matching non-expired code.
+     *
+     * @return void
+     */
+    public function testOtpVerifyMatching(): void
+    {
+        Configure::write('Otp', [
+            'send' => '/otp/send',
+        ]);
+        $this->setupController([
+            'environment' => [
+                'REQUEST_METHOD' => 'POST',
+            ],
+            'post' => [
+                'otp_code' => '123456',
+            ],
+        ]);
+        $this->Login->getRequest()->getSession()->write('Otp', [
+            'otp_code' => '123456',
+            'expires_at' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+            'pending' => true,
+        ]);
+        $response = $this->Login->otpVerify();
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertEquals('/', $response->getHeaderLine('Location'));
     }
 }

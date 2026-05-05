@@ -1,6 +1,6 @@
 {
   "name": "bedita-manager",
-  "version": "6.6.1",
+  "version": "6.11.1",
   "description": "BEdita Manager",
   "keywords": [
     "BEdita",
@@ -37,7 +37,7 @@
     "@trevoreyre/autocomplete-vue": "^2.4.1",
     "abortcontroller-polyfill": "^1.7.6",
     "autosize": "^5.0.1",
-    "axios": "^1.13.5",
+    "axios": "^1.15.2",
     "chart.js": "^4.4.7",
     "codemirror": "^5.63.3",
     "deepmerge": "^4.3.0",
@@ -45,6 +45,7 @@
     "eslint": "^9.26.0",
     "flatpickr": "^4.6.9",
     "globals": "^17.3.0",
+    "jszip": "^3.10.1",
     "mapbox-gl": "^2.12.1",
     "mapbox-gl-compare": "^0.4.0",
     "moment": "^2.29.4",

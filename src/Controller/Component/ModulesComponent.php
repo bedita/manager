@@ -542,11 +542,11 @@ class ModulesComponent extends Component
      */
     public function skipSaveRelated(string $id, array &$relatedData): bool
     {
-        if (empty($id) || empty($relatedData)) {
+        if (empty($relatedData)) {
             return true;
         }
         $methods = (array)Hash::extract($relatedData, '{n}.method');
-        if (in_array('addRelated', $methods) || in_array('removeRelated', $methods)) {
+        if (in_array('addRelated', $methods) || in_array('removeRelated', $methods) || empty($id)) {
             return false;
         }
         // check replaceRelated

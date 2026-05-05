@@ -53,6 +53,7 @@ export default {
                 readOnly: true,
             },
             jsonKeys: [
+                'Database',
                 'Extensions',
                 'Extensions info',
                 'GET /home',
