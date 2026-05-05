@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2026-03-12 08:25:45 \n"
+"POT-Creation-Date: 2026-03-24 09:17:38 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -116,6 +116,9 @@ msgid "Bulk action performed on {0} objects"
 msgstr ""
 
 msgid "Calendar"
+msgstr ""
+
+msgid "Calendar view"
 msgstr ""
 
 msgid "Cannot create abstract objects or objects without schema"
@@ -323,6 +326,9 @@ msgid "Export Filtered"
 msgstr ""
 
 msgid "External Auth"
+msgstr ""
+
+msgid "Failed to send OTP code. Please try again later."
 msgstr ""
 
 msgid "Failed to write file to disk"
@@ -606,6 +612,9 @@ msgstr ""
 msgid "Number of updated objects"
 msgstr ""
 
+msgid "OTP code is expired or invalid"
+msgstr ""
+
 msgid "Object Types"
 msgstr ""
 
@@ -640,6 +649,9 @@ msgid "Old Password"
 msgstr ""
 
 msgid "On"
+msgstr ""
+
+msgid "One Time Password"
 msgstr ""
 
 msgid "Only my contents"
@@ -790,6 +802,9 @@ msgid "Remove"
 msgstr ""
 
 msgid "Request password"
+msgstr ""
+
+msgid "Resend OTP"
 msgstr ""
 
 msgid "Reset"
@@ -1009,6 +1024,9 @@ msgid "Vat Number"
 msgstr ""
 
 msgid "Verified"
+msgstr ""
+
+msgid "Verify"
 msgstr ""
 
 msgid "Version"
@@ -1989,6 +2007,27 @@ msgid "Error on deleting category"
 msgstr ""
 
 msgid "Create new"
+msgstr ""
+
+msgid "Created on"
+msgstr ""
+
+msgid "Expires"
+msgstr ""
+
+msgid "Job"
+msgstr ""
+
+msgid "Max attempts"
+msgstr ""
+
+msgid "Payload"
+msgstr ""
+
+msgid "Results"
+msgstr ""
+
+msgid "Service"
 msgstr ""
 
 msgid "Allowed types"

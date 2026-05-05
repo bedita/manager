@@ -1,0 +1,30 @@
+{% do _view.assign('bodyViewClass', 'view-login') %}
+<div class="login">
+    <div class="login-title">
+        <div class="login-error">
+            {{ Flash.render()|raw }}
+        </div>
+        <div class="project-title">
+            <div class="app-module-box">
+                {{ Html.link( (config('Project.name') ?: 'BEdita Content Manager'), '/' ) | raw }}
+            </div>
+        </div>
+    </div>
+    <div class="login-form">
+        {{ Form.create(null, {
+            'url': {'_name': 'otp:verify'},
+        })|raw }}
+            {{ Form.control('otp_code', {
+                'required':'required',
+                'autocomplete': 'one-time-code',
+                'placeholder': 'e.g. 123456',
+                'label': __('One Time Password'),
+            })|raw }}
+            <button type="submit" class="button button-primary mt-2">
+                <app-icon icon="carbon:login"></app-icon>
+                <span class="ml-05">{{ __('Verify') }}</span>
+            </button>
+        {{ Form.end()|raw }}
+        <p class="mt-1">{{ Html.link(__('Resend OTP'), {'_name': 'otp', '?': {'force': 1}})|raw }}</p>
+    </div>
+</div>

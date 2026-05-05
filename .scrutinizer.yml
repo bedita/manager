@@ -5,6 +5,9 @@ filter:
     - 'src/*'
   dependency_paths:
     - 'vendor/*'
+  excluded_paths:
+    - 'vendor/*'
+    - 'tests/*'
 
 build:
   image: default-noble

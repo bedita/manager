@@ -326,28 +326,10 @@ class LayoutHelper extends Helper
             $indexViewType = $this->moduleIndexViewType();
             foreach ($indexViewTypes as $t) {
                 if ($t !== $indexViewType) {
-                    $append = false;
-                    $icon = '';
-                    $label = '';
-                    switch ($t) {
-                        case 'tree':
-                            $icon = 'carbon:tree-view';
-                            $label = __('Tree view');
-                            $append = true;
-                            break;
-                        case 'tree-compact':
-                            $icon = 'carbon:tree-view';
-                            $label = __('Tree compact');
-                            $meta = (array)$this->getView()->get('meta');
-                            $count = (int)Hash::get($meta, 'pagination.count');
-                            $append = $count <= Configure::read('UI.tree_compact_view_limit', 100);
-                            break;
-                        case 'list':
-                            $icon = 'carbon:list';
-                            $label = __('List view');
-                            $append = true;
-                            break;
-                    }
+                    $tmp = $this->iconLabel($t);
+                    $append = $tmp['append'] ?? false;
+                    $icon = $tmp['icon'] ?? '';
+                    $label = $tmp['label'] ?? '';
                     if ($append) {
                         $url = $this->Url->build(
                             [
@@ -371,6 +353,44 @@ class LayoutHelper extends Helper
     }
 
     /**
+     * Get icon and label per view type
+     *
+     * @param string $viewType The view type
+     * @return array
+     */
+    protected function iconLabel(string $viewType): array
+    {
+        $icon = $label = '';
+        $append = false;
+        switch ($viewType) {
+            case 'calendar':
+                $icon = 'carbon:calendar';
+                $label = __('Calendar view');
+                $append = true;
+                break;
+            case 'tree':
+                $icon = 'carbon:tree-view';
+                $label = __('Tree view');
+                $append = true;
+                break;
+            case 'tree-compact':
+                $icon = 'carbon:tree-view';
+                $label = __('Tree compact');
+                $meta = (array)$this->getView()->get('meta');
+                $count = (int)Hash::get($meta, 'pagination.count');
+                $append = $count <= Configure::read('UI.tree_compact_view_limit', 100);
+                break;
+            case 'list':
+                $icon = 'carbon:list';
+                $label = __('List view');
+                $append = true;
+                break;
+        }
+
+        return compact('append', 'icon', 'label');
+    }
+
+    /**
      * Return style class for command link
      *
      * @return string
@@ -383,6 +403,7 @@ class LayoutHelper extends Helper
             'ObjectTypes' => 'has-background-black',
             'Relations' => 'has-background-black',
             'PropertyTypes' => 'has-background-black',
+            'Schema' => 'has-background-black',
             'Categories' => 'has-background-black',
             'Appearance' => 'has-background-black',
             'Applications' => 'has-background-black',
