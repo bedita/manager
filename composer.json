@@ -32,7 +32,7 @@
         "league/oauth2-github": "^3.0",
         "league/oauth2-google": "^4.0",
         "mobiledetect/mobiledetectlib": "^2.8",
-        "phpoffice/phpspreadsheet": "^1.22",
+        "phpoffice/phpspreadsheet": "^5.7",
         "thenetworg/oauth2-azure": "^2.2",
         "wikimedia/composer-merge-plugin": "^2.0.1"
     },
