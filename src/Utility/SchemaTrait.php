@@ -36,7 +36,7 @@ trait SchemaTrait
     {
         try {
             $home = Cache::remember(
-                sprintf('home_%d', $user->get('id')),
+                CacheTools::homeCacheKey((int)$user->get('id')),
                 function () {
                     $client = ApiClientProvider::getApiClient();
 
