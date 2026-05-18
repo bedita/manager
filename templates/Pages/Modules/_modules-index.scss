@@ -1,5 +1,43 @@
 @use "../../../resources/styles/variables";
 
+@mixin responsive-index-columns($breakpoint, $keep-last) {
+    @media (max-width: $breakpoint) {
+        .module-index .list-objects .table-header > *:not(:nth-last-child(-n+#{$keep-last})):nth-child(n+4),
+        .module-index .list-objects .table-row > *:not(:nth-last-child(-n+#{$keep-last})):nth-child(n+4) {
+            display: none !important;
+        }
+        .module-index .list-objects:has(.table-row > .date_ranges-cell) .table-header > *:not(:nth-last-child(-n+#{$keep-last + 2})):nth-child(n+4),
+        .module-index .list-objects:has(.table-row > .date_ranges-cell) .table-row > *:not(:nth-last-child(-n+#{$keep-last + 2})):nth-child(n+4) {
+            display: none !important;
+        }
+    }
+}
+
+@include responsive-index-columns(1600px, 8);
+@include responsive-index-columns(1450px, 7);
+@include responsive-index-columns(1300px, 6);
+@include responsive-index-columns(1150px, 5);
+@include responsive-index-columns(1000px, 4);
+@include responsive-index-columns(850px,  3);
+
+@media (max-width: 1440px) {
+    .module-index .list-objects .table-row > div:not(.narrow):not(.buttons-cell) {
+        white-space: normal;
+    }
+    .module-index .list-objects .table-row > div.description-cell > div {
+        display: block;
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+}
+
+@media (max-width: 1150px) {
+    .module-index .list-objects .table-row .buttons-cell .button span {
+        display: none;
+    }
+}
+
 body.view-module {
     .module-header {
         min-height: variables.$dashboard-item-height - (variables.$gutter * 3.25) - variables.$gutter; // minus table header and margin
