@@ -51,11 +51,7 @@ class AsyncJobsControllerTest extends TestCase
 
         $config = array_merge($this->defaultRequestConfig, []);
         $request = new ServerRequest($config);
-        $this->AsyncJobsController = new class ($request) extends AsyncJobsController
-        {
-            protected ?string $resourceType = 'async_jobs';
-            protected array $properties = ['name'];
-        };
+        $this->AsyncJobsController = new AsyncJobsController($request);
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
@@ -64,30 +60,55 @@ class AsyncJobsControllerTest extends TestCase
     }
 
     /**
-     * Basic test
+     * Test index method
      *
      * @return void
      */
-    public function testBase(): void
+    public function testIndex(): void
     {
-        $this->AsyncJobsController->index();
-        $keys = [
-            'resources',
-            'meta',
-            'links',
-            'resourceType',
-            'properties',
-            'metaColumns',
-            'filter',
-            'schema',
-            'readonly',
-            'deleteonly',
-        ];
-        $viewVars = (array)$this->AsyncJobsController->viewBuilder()->getVars();
-        foreach ($keys as $expectedKey) {
-            static::assertArrayHasKey($expectedKey, $viewVars);
-        }
-        static::assertEquals('async_jobs', $viewVars['resourceType']);
-        static::assertEquals(['name'], $viewVars['properties']);
+        $result = $this->AsyncJobsController->index();
+        static::assertNull($result);
+        $vars = $this->AsyncJobsController->viewBuilder()->getVars();
+        static::assertIsArray($vars['services']);
+    }
+
+    /**
+     * Test jobs method
+     *
+     * @return void
+     */
+    public function testJobs(): void
+    {
+        $this->AsyncJobsController->jobs();
+        $vars = $this->AsyncJobsController->viewBuilder()->getVars();
+        static::assertIsArray($vars['pagination']);
+        static::assertIsArray($vars['jobs']);
+        static::assertIsArray($vars['services']);
+    }
+
+    /**
+     * Test loadAsyncJobs method
+     *
+     * @return void
+     */
+    public function testLoadAsyncJobs(): void
+    {
+        $request = $this->AsyncJobsController->getRequest()->withQueryParams([
+            'page' => 2,
+            'page_size' => 50,
+            'sort' => 'created',
+            'service' => 'mail',
+        ]);
+        $this->AsyncJobsController = new class ($request) extends AsyncJobsController {
+            public function loadAsyncJobs(): void
+            {
+                parent::loadAsyncJobs();
+            }
+        };
+        $this->AsyncJobsController->setRequest($request);
+        $this->AsyncJobsController->loadAsyncJobs();
+        $vars = $this->AsyncJobsController->viewBuilder()->getVars();
+        static::assertIsArray($vars['pagination']);
+        static::assertIsArray($vars['jobs']);
     }
 }

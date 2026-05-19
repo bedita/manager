@@ -13,6 +13,7 @@
 namespace App\Controller\Component;
 
 use App\Core\Exception\UploadException;
+use App\Utility\CacheTools;
 use App\Utility\DateRangesTools;
 use App\Utility\OEmbed;
 use App\Utility\RelationsTools;
@@ -118,7 +119,7 @@ class ModulesComponent extends Component
         }
 
         if ($this->getConfig('clearHomeCache')) {
-            Cache::delete(sprintf('home_%d', $user->get('id')));
+            Cache::delete(CacheTools::homeCacheKey((int)$user->get('id')));
         }
 
         $project = $this->getProject();
@@ -542,11 +543,11 @@ class ModulesComponent extends Component
      */
     public function skipSaveRelated(string $id, array &$relatedData): bool
     {
-        if (empty($id) || empty($relatedData)) {
+        if (empty($relatedData)) {
             return true;
         }
         $methods = (array)Hash::extract($relatedData, '{n}.method');
-        if (in_array('addRelated', $methods) || in_array('removeRelated', $methods)) {
+        if (in_array('addRelated', $methods) || in_array('removeRelated', $methods) || empty($id)) {
             return false;
         }
         // check replaceRelated

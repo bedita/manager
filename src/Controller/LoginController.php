@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2022 ChannelWeb Srl, Chialab Srl
@@ -13,8 +15,11 @@
 namespace App\Controller;
 
 use App\Application;
+use Cake\Core\Configure;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
+use Throwable;
 
 /**
  * Perform basic login and logout operations.
@@ -27,7 +32,7 @@ class LoginController extends AppController
      * @inheritDoc
      */
     protected array $_defaultConfig = [
-        // Projects configuration files base path
+        'otp' => null,
         'projectsPath' => CONFIG . 'projects' . DS,
     ];
 
@@ -38,6 +43,10 @@ class LoginController extends AppController
     {
         parent::initialize();
         $this->Authentication->allowUnauthenticated(['login']);
+        $otpConfig = (array)Configure::read('Otp');
+        if (!empty($otpConfig)) {
+            $this->setConfig('otp', $otpConfig);
+        }
     }
 
     /**
@@ -82,6 +91,14 @@ class LoginController extends AppController
         if ($result->isValid()) {
             // Setup current project name.
             $this->setupCurrentProject();
+
+            $provider = $this->request->getParam('provider');
+            $username = $result->getData()['attributes']['username'];
+
+            if (empty($provider) && $this->otpEnabled($username)) {
+                return $this->redirect('/otp');
+            }
+
             // Redirect.
             $target = $this->Authentication->getLoginRedirect() ?? ['_name' => 'dashboard'];
 
@@ -159,5 +176,81 @@ class LoginController extends AppController
             // Remove flash messages
             $this->getRequest()->getSession()->delete('Flash');
         }
+    }
+
+    /**
+     * Otp verification page.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function otp(): ?Response
+    {
+        $this->getRequest()->allowMethod(['get']);
+        if (!$this->otpEnabled()) {
+            return $this->redirect('/login');
+        }
+        try {
+            $otpSession = (array)$this->getRequest()->getSession()->read('Otp');
+            $pending = (string)Hash::get($otpSession, 'pending');
+            $force = $this->getRequest()->getQuery('force', false);
+            if (!$pending || $force) {
+                // Send OTP code via API
+                $response = $this->apiClient->post(
+                    $this->getConfig('otp.send'),
+                    null,
+                    ['Content-Type' => 'application/json'],
+                );
+                $this->getRequest()->getSession()->write('Otp', [
+                    'otp_code' => $response['data']['otp_code'],
+                    'expires_at' => $response['data']['expires_at'],
+                    'pending' => true,
+                ]);
+            }
+        } catch (Throwable $e) {
+            $this->Flash->error(__('Failed to send OTP code. Please try again later.'));
+        }
+
+        return null;
+    }
+
+    /**
+     * Otp verification request.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function otpVerify(): ?Response
+    {
+        $this->getRequest()->allowMethod(['post']);
+        if (!$this->otpEnabled()) {
+            return $this->redirect('/login');
+        }
+        $requestOtpCode = (string)$this->getRequest()->getData('otp_code');
+        $sessionOtpData = $this->getRequest()->getSession()->read('Otp');
+        $sessionOtpCode = (string)Hash::get($sessionOtpData, 'otp_code');
+        $sessionExpiresAt = (string)Hash::get($sessionOtpData, 'expires_at');
+        if (empty($sessionOtpData) || $sessionOtpCode !== $requestOtpCode || strtotime($sessionExpiresAt) < time()) {
+            $reason = __('OTP code is expired or invalid');
+            $this->getRequest()->getSession()->delete('Otp');
+            $this->Flash->error(__($reason));
+
+            return $this->redirect('/otp');
+        }
+        $this->getRequest()->getSession()->delete('Otp');
+
+        return $this->redirect($this->Authentication->getLoginRedirect() ?? ['_name' => 'dashboard']);
+    }
+
+    /**
+     * Check otp is enabled
+     *
+     * @return bool
+     */
+    protected function otpEnabled(?string $username = null): bool
+    {
+        $otpConfig = (array)$this->getConfig('otp');
+        $usersSkipOtp = (array)Hash::get($otpConfig, 'users_skip_otp', []);
+        $skip = $username !== null && in_array($username, $usersSkipOtp);
+
+        return !empty($otpConfig) && !$skip;
     }
 }

@@ -26,6 +26,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(CacheTools::class, 'cacheKey')]
 #[CoversMethod(CacheTools::class, 'existsCount')]
 #[CoversMethod(CacheTools::class, 'getModuleCount')]
+#[CoversMethod(CacheTools::class, 'homeCacheKey')]
 #[CoversMethod(CacheTools::class, 'setModuleCount')]
 class CacheToolsTest extends TestCase
 {
@@ -80,6 +81,20 @@ class CacheToolsTest extends TestCase
         CacheTools::setModuleCount($response, $moduleName);
         $expected = 42;
         $actual = CacheTools::getModuleCount($moduleName);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `homeCacheKey`.
+     *
+     * @return void
+     */
+    public function testHomeCacheKey(): void
+    {
+        $userId = 123;
+        $apiSignature = md5(ApiClientProvider::getApiClient()->getApiBaseUrl());
+        $expected = sprintf('home_%d_%s', $userId, $apiSignature);
+        $actual = CacheTools::homeCacheKey($userId);
         static::assertEquals($expected, $actual);
     }
 }

@@ -1,0 +1,18 @@
+{% do _view.assign('title', __('Model schema')) %}
+{% do _view.assign('bodyViewClass', 'view-module view-model') %}
+
+{% set resourceType = 'schema' %}
+
+<div class="module-header">
+    <header>
+        <h1>{{ __('Project model schema') }}</h1>
+    </header>
+</div>
+
+<div class="module-index">
+    <div class="list-objects model-schema-page">
+        <model-schema></model-schema>
+    </div>
+
+    {{ element('Model/sidebar_links') }}
+</div>

@@ -379,6 +379,14 @@ return [
     // ],
 
     /**
+     * OTP authentication setup
+     */
+    // 'Otp' => [
+    //     'send' => '/otp',
+    //     'users_skip_otp' => [], // array of usernames to skip OTP authentication
+    // ],
+
+    /**
      * Pagination default settings
      *
      * - sizeAvailable => available page size on modules view index

@@ -142,6 +142,13 @@
         {% endif %}
     </div>
     {% endif %}
+    {% if children and config('ChildrenParams') %}
+    <view-children-params
+        :related="related"
+        :relation-schema="{{ config('ChildrenParams')|json_encode }}"
+    >
+    </view-children-params>
+    {% endif %}
     {% if not readonly and children and config('ChildrenParams') %}
     <div class="params p-05 has-text-size-smaller">
         <button
