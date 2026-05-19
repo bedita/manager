@@ -18,6 +18,7 @@ use App\Controller\AppController;
 use App\Controller\Component\ModulesComponent;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
+use App\Utility\CacheTools;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\Controller\Component\AuthenticationComponent;
 use Authentication\Identity;
@@ -279,7 +280,7 @@ class ModulesComponentTest extends TestCase
         }
         ApiClientProvider::setApiClient($apiClient);
         Configure::write('Project', $config);
-        Cache::delete('home_0'); // otherwise mock is applied only on first round of test from data provider
+        Cache::delete(CacheTools::homeCacheKey(0)); // otherwise mock is applied only on first round of test from data provider
         $actual = $this->Modules->getProject();
 
         static::assertEquals($expected, $actual);
