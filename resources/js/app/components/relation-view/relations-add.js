@@ -332,7 +332,7 @@ export default {
             try {
                 const response = await fetch(postUrl, options);
                 const responseJson = await response.json();
-                if (responseJson.error) {
+                if (responseJson?.error) {
                     throw new Error(responseJson.error);
                 }
 

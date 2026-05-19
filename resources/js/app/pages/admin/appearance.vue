@@ -88,10 +88,10 @@ export default {
                 const response = await fetch(`${BEDITA.base}/admin/appearance/save`, options);
                 const responseJson = await response.json();
                 if (responseJson.error) {
-                    BEDITA.error(responseJson.error);
+                    this.$helpers.handleApiError(responseJson);
                 }
             } catch (error) {
-                BEDITA.error(error);
+                this.$helpers.handleApiError(error);
             } finally {
                 this.loading = false;
                 this.loadingKey = '';
