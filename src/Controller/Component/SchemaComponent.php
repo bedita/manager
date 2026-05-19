@@ -523,6 +523,25 @@ class SchemaComponent extends Component
     }
 
     /**
+     * Get all concrete types, i.e. all descendants of abstract types.
+     *
+     * @return array
+     */
+    public function allConcreteTypes(): array
+    {
+        $features = $this->objectTypesFeatures();
+        $types = [];
+        foreach ($features['descendants'] as $descendants) {
+            if (!empty($descendants)) {
+                $types = array_unique(array_merge($types, $descendants));
+            }
+        }
+        sort($types);
+
+        return $types;
+    }
+
+    /**
      * Clear schema cache
      *
      * @return void

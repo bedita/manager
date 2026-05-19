@@ -75,7 +75,7 @@ export default {
     props: {
         module: {
             type: Object,
-            required: true,
+            default: () => ({}),
         },
         objectType: {
             type: String,
@@ -150,7 +150,7 @@ export default {
         this.$nextTick(() => {
             this.originalVal = JSON.stringify(this.module);
             this.fields.forEach((field) => {
-                this.map[field] = this.module[field] || '';
+                this.map[field] = this.module?.[field] || '';
             });
         });
     },
