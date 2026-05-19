@@ -26,6 +26,7 @@ use Cake\View\Helper;
  * @property \Cake\View\Helper\HtmlHelper $Html
  * @property \App\View\Helper\LinkHelper $Link
  * @property \App\View\Helper\PermsHelper $Perms
+ * @property \App\View\Helper\PropertyHelper $Property
  * @property \App\View\Helper\SystemHelper $System
  * @property \Cake\View\Helper\UrlHelper $Url
  */
@@ -36,7 +37,7 @@ class LayoutHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Editors', 'Html', 'Link', 'Perms', 'System', 'Url'];
+    public $helpers = ['Editors', 'Html', 'Link', 'Perms', 'Property', 'System', 'Url'];
 
     /**
      * Is Dashboard
@@ -278,8 +279,11 @@ class LayoutHelper extends Helper
     {
         $module = (array)$this->getView()->get('currentModule');
         $name = (string)Hash::get($module, 'name');
+        $schema = (array)$this->_View->get('schema');
+        $defaultType = in_array('DateRanges', (array)Hash::get($schema, 'associations')) ? 'calendar' : 'list';
+        $defaultType = $name === 'folders' ? 'tree' : $defaultType;
 
-        return $name === 'folders' ? 'tree' : 'list';
+        return $defaultType;
     }
 
     /**
@@ -302,8 +306,10 @@ class LayoutHelper extends Helper
     public function moduleIndexViewTypes(): array
     {
         $defaultType = $this->moduleIndexDefaultViewType();
+        $defaultList = $defaultType === 'calendar' ? ['calendar', 'list'] : ['list'];
+        $defaultList = $defaultType === 'tree' ? ['tree', 'list'] : $defaultList;
 
-        return $defaultType === 'tree' ? ['tree', 'list'] : ['list'];
+        return $defaultList;
     }
 
     /**
@@ -377,6 +383,7 @@ class LayoutHelper extends Helper
             'richeditorConfig' => (array)Configure::read('Richeditor'),
             'richeditorByPropertyConfig' => $this->uiRicheditorConfig(),
             'indexLists' => (array)$this->indexLists(),
+            'fastCreateFields' => (array)$this->Property->fastCreateFieldsMap(),
         ];
     }
 

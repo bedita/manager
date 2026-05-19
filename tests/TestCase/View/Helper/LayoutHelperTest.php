@@ -17,6 +17,7 @@ use App\Utility\CacheTools;
 use App\View\Helper\EditorsHelper;
 use App\View\Helper\LayoutHelper;
 use App\View\Helper\PermsHelper;
+use App\View\Helper\PropertyHelper;
 use App\View\Helper\SystemHelper;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
@@ -579,6 +580,7 @@ class LayoutHelperTest extends TestCase
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
         $system = new SystemHelper($view);
+        $property = new PropertyHelper($view);
         $conf = $layout->metaConfig();
         $expected = [
             'base' => '',
@@ -599,6 +601,7 @@ class LayoutHelperTest extends TestCase
             'richeditorConfig' => (array)Configure::read('Richeditor'),
             'richeditorByPropertyConfig' => $layout->uiRicheditorConfig(),
             'indexLists' => (array)$layout->indexLists(),
+            'fastCreateFields' => (array)$property->fastCreateFieldsMap(),
         ];
         static::assertSame($expected, $conf);
         Cache::disable();
