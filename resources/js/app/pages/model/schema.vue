@@ -754,7 +754,8 @@ export default {
                         acc[objectType] = [];
                     }
 
-                    const { ...propertyWithoutObject } = prop;
+                    // eslint-disable-next-line no-unused-vars
+                    const { object, ...propertyWithoutObject } = prop;
                     acc[objectType].push(propertyWithoutObject);
 
                     return acc;
