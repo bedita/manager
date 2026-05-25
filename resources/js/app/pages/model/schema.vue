@@ -709,7 +709,17 @@ export default {
                 }
             };
 
+            const toSafeFileName = (value) => {
+                return String(value || 'unknown')
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^a-z0-9_-]+/g, '_');
+            };
             Object.keys(this.schema).forEach((key) => {
+                // properties is exported as properties/<objectType>.json
+                if (key === 'properties') {
+                    return;
+                }
                 const value = this.schema[key];
                 const exportValue = key === 'config'
                     ? (() => {
@@ -729,9 +739,39 @@ export default {
                         return value;
                     })()
                     : value;
-                const content = JSON.stringify(exportValue, null, 2);
-                zip.file(`${key}.json`, content);
+                zip.file(`${key}.json`, JSON.stringify(exportValue, null, 2));
             });
+
+            const properties = this.schema.properties;
+            if (Array.isArray(properties)) {
+                const byObjectType = properties.reduce((acc, prop) => {
+                    if (!prop || typeof prop !== 'object') {
+                        return acc;
+                    }
+
+                    const objectType = toSafeFileName(prop.object);
+                    if (!acc[objectType]) {
+                        acc[objectType] = [];
+                    }
+
+                    const { object, ...propertyWithoutObject } = prop;
+                    acc[objectType].push(propertyWithoutObject);
+
+                    return acc;
+                }, {});
+
+                Object.keys(byObjectType)
+                    .sort((a, b) => a.localeCompare(b))
+                    .forEach((objectType) => {
+                        zip.file(
+                            `properties/${objectType}.json`,
+                            JSON.stringify(byObjectType[objectType], null, 2),
+                        );
+                    });
+            } else if (properties !== undefined) {
+                // Fallback for unexpected non-array format
+                zip.file('properties.json', JSON.stringify(properties, null, 2));
+            }
 
             zip.generateAsync({ type: 'blob' })
                 .then((content) => {
