@@ -754,7 +754,7 @@ export default {
                         acc[objectType] = [];
                     }
 
-                    const { object, ...propertyWithoutObject } = prop;
+                    const { ...propertyWithoutObject } = prop;
                     acc[objectType].push(propertyWithoutObject);
 
                     return acc;
