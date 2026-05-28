@@ -60,6 +60,19 @@
                 {% if object.type == 'images' %}
                     {% set thumb = stream.attributes.mime_type == 'image/svg+xml' ? stream.meta.url : Thumb.getUrl(object) %}
                 {% endif %}
+                {% set streamAttributesByVersion = {} %}
+                {% for s in streams %}
+                    {% set streamVersion = s.attributes.version|default(s.meta.version|default(__('Default'))) %}
+                    {% set versionKey = streamVersion ~ '' %}
+                    {% if streamAttributesByVersion[versionKey] is not defined %}
+                        {% set streamAttributesByVersion = streamAttributesByVersion|merge({
+                            (versionKey): {
+                                label: streamVersion,
+                                attributes: s.attributes|merge(s.meta),
+                            }
+                        }) %}
+                    {% endif %}
+                {% endfor %}
                 {% set thumbCodes = {
                     notAcceptable: constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE'),
                     notAvailable: constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE'),
@@ -124,7 +137,7 @@
     </section>
 </property-view>
 
-    {% if attributes %}
+    {% if streamAttributesByVersion is defined and streamAttributesByVersion %}
     <property-view inline-template :tab-open="tabsOpen" :is-default-open=false :tab-open-at-start=false>
         <section class="fieldset">
             <header @click.prevent="toggleVisibility()"
@@ -134,40 +147,47 @@
             </header>
             <div v-show="isOpen" class="tab-container">
                 <div class="grid-span-full mt-1">
-                    <table class="inside-bordered">
-                        <tbody>
-                            {% for k, val in attributes %}
-                                {% if val and k != 'file_metadata' %}
-                                    <tr>
-                                        <th class="nowrap">{{ Layout.tr(k) }} :</th>
-                                        <td>
-                                            {% if k == 'url' %}
-                                                <a href={{ val }} target="_blank">{{ val }}</a>
-                                            {% elseif in_array(k, ['created', 'modified']) %}
-                                                {{ Schema.format(val, {'type': 'string', 'format': 'date-time'}) }}
-                                            {% elseif k == 'file_size' %}
-                                                {{ Schema.format(val, {'type': 'byte'}) }}
-                                            {% elseif k == 'duration' %}
-                                                {{ val|date('H:i:s', '+00:00 GMT') }}
-                                            {% elseif k == 'private_url' %}
-                                                {{ Schema.format(val, {'type': 'boolean'}) }}
-                                            {% else %}
-                                                {{ val }}
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    {% if attributes.file_metadata %}
+                    {% for versionKey, streamData in streamAttributesByVersion %}
                         <div class="grid-span-full mt-1">
-                            <h3>{{ __('Metadata') }}</h3>
-                            <div>
-                                <textarea style="min-height: 10rem; resize: none;" readonly>{{ attributes.file_metadata|json_encode(constant('JSON_PRETTY_PRINT')) }}</textarea>
-                            </div>
+                            {% if streams|length > 1 %}
+                                <h3>{{ __('Version') }} {{ streamData.label }}</h3>
+                            {% endif %}
+                            <table class="inside-bordered">
+                                <tbody>
+                                    {% for k, val in streamData.attributes %}
+                                        {% if val and k != 'file_metadata' %}
+                                            <tr>
+                                                <th class="nowrap">{{ Layout.tr(k) }} :</th>
+                                                <td>
+                                                    {% if k == 'url' %}
+                                                        <a href={{ val }} target="_blank">{{ val }}</a>
+                                                    {% elseif in_array(k, ['created', 'modified']) %}
+                                                        {{ Schema.format(val, {'type': 'string', 'format': 'date-time'}) }}
+                                                    {% elseif k == 'file_size' %}
+                                                        {{ Schema.format(val, {'type': 'byte'}) }}
+                                                    {% elseif k == 'duration' %}
+                                                        {{ val|date('H:i:s', '+00:00 GMT') }}
+                                                    {% elseif k == 'private_url' %}
+                                                        {{ Schema.format(val, {'type': 'boolean'}) }}
+                                                    {% else %}
+                                                        {{ val }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if streamData.attributes.file_metadata %}
+                                <div class="grid-span-full mt-1">
+                                    <h3>{{ __('Metadata') }}</h3>
+                                    <div>
+                                        <textarea style="min-height: 10rem; resize: none;" readonly>{{ streamData.attributes.file_metadata|json_encode(constant('JSON_PRETTY_PRINT')) }}</textarea>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
-                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </section>
