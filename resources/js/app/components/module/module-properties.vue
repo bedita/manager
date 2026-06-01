@@ -91,6 +91,7 @@ export default {
                 'index',
                 'options',
                 'relations',
+                'translatable',
                 'view',
             ],
             jsonEditorOptions: {
@@ -108,6 +109,7 @@ export default {
                 index: '',
                 options: '',
                 relations: '',
+                translatable: '',
                 view: '',
             },
             samples: {
@@ -117,6 +119,7 @@ export default {
                 index: 'look at <a href="https://github.com/bedita/manager/wiki/Setup:-Properties-display#index" target="_new">wikidoc</a>',
                 options: 'look at <a href="https://github.com/bedita/manager/wiki/Setup:-Properties-display#options" target="_new">wikidoc</a>',
                 relations: 'look at <a href="https://github.com/bedita/manager/wiki/Setup:-Properties-display#relations" target="_new">wikidoc</a>',
+                translatable: 'look at <a href="https://github.com/bedita/manager/wiki/Setup:-Properties-display#translatable" target="_new">wikidoc</a>',
                 view: 'look at <a href="https://github.com/bedita/manager/wiki/Setup:-Properties-display#view" target="_new">wikidoc</a>',
             },
             msgProperties: t`Properties`,

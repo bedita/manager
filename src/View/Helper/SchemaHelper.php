@@ -265,6 +265,7 @@ class SchemaHelper extends Helper
      */
     public function translatableFields(array $schema): array
     {
+        $translatableForced = (array)Configure::read(sprintf('Properties.%s.translatable', $this->_View->get('objectType')));
         if (isset($schema['translatable'])) {
             $priorityFields = array_intersect(static::DEFAULT_TRANSLATABLE, (array)$schema['translatable']);
             $otherFields = array_diff((array)$schema['translatable'], $priorityFields);
@@ -277,7 +278,7 @@ class SchemaHelper extends Helper
             ));
         }
 
-        return array_unique(array_values(array_merge($priorityFields, $otherFields)));
+        return array_unique(array_values(array_merge($priorityFields, $otherFields, $translatableForced)));
     }
 
     /**
