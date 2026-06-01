@@ -1,14 +1,35 @@
+<template>
+    <textarea
+        :value="text"
+        @input="handleChange"
+    />
+</template>
+<script>
 import autosize from 'autosize';
 
 export default {
-    props: ['value', 'reset-value'],
-
-    template: '<textarea @input="handleChange" :value="text"></textarea>',
+    name: 'AutosizeTextarea',
+    props: {
+        value: {
+            type: String,
+            default: '',
+        },
+        resetValue: {
+            type: String,
+            default: '',
+        },
+    },
 
     data() {
         return {
-            text: '',
-            originalValue: '',
+            text: {
+                type: String,
+                default: '',
+            },
+            originalValue: {
+                type: String,
+                default: '',
+            },
         };
     },
 
@@ -22,7 +43,7 @@ export default {
 
         value() {
             this.originalValue = this.value;
-        }
+        },
     },
 
     mounted() {
@@ -37,15 +58,10 @@ export default {
     },
 
     methods: {
-        /**
-         *
-         * @emits Event#input textarea value
-         *
-         * @param {Event} event event object
-         */
         handleChange(event) {
             this.text = event.target.value;
             this.$emit('input', this.text);
         }
     }
 };
+</script>
