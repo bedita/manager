@@ -61,7 +61,7 @@ class SchemaHelper extends Helper
      */
     public function controlOptions(string $name, mixed $value, ?array $schema = null): array
     {
-        $options = Options::customControl($name, $value);
+        $options = Options::customControl($name, $value, $schema);
         $objectType = (string)$this->_View->get('objectType');
         $ctrlOptionsPath = sprintf('Properties.%s.options.%s', $objectType, $name);
         $ctrlOptions = (array)Configure::read($ctrlOptionsPath);
