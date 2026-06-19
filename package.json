@@ -60,7 +60,7 @@
     "webvtt-parser": "^2.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.0",
+    "@babel/core": "^7.29.6",
     "@babel/plugin-syntax-dynamic-import": "^7.7.4",
     "@babel/preset-env": "^7.26.0",
     "@iconify/vue2": "^2.1.0",
