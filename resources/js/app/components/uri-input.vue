@@ -1,17 +1,22 @@
+<template>
+    <div>
+        <slot />
+    </div>
+</template>
+<script>
 import { t } from 'ttag';
 
 export default {
-    template: /* template */`
-    <div>
-        <slot></slot>
-    </div>
-    `,
-
+    name: 'UriInput',
     props: {
         el: {
             type: HTMLInputElement,
+            default: null,
         },
-        isValid: false
+        isValid: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     async mounted() {
@@ -73,3 +78,4 @@ export default {
         }
     }
 };
+</script>
