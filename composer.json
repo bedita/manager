@@ -82,11 +82,6 @@
             "wikimedia/composer-merge-plugin": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "php-http/discovery": true
-        },
-        "policy": {
-            "advisories": {
-                "block": false
-            }
         }
     },
     "extra": {
