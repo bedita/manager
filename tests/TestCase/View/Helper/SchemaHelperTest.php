@@ -730,7 +730,7 @@ class SchemaHelperTest extends TestCase
             ],
             'byte' => [
                 '1 MB',
-                1024 ** 2,
+                1_000_000,
                 [
                     'type' => 'byte',
                 ],
