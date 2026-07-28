@@ -36,7 +36,7 @@ class ThumbsComponent extends Component
     /**
      * Components
      *
-     * @var array
+     * @var array<int|string, string|array<string, mixed>>
      */
     protected array $components = ['Flash', 'Query'];
 

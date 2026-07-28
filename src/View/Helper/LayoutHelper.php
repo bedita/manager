@@ -37,7 +37,7 @@ class LayoutHelper extends Helper
     /**
      * List of helpers used by this helper
      *
-     * @var array
+     * @var array<int|string, string|array<string, mixed>>
      */
     public array $helpers = ['Editors', 'Html', 'Link', 'Perms', 'Property', 'System', 'Url'];
 
