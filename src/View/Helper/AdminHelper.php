@@ -28,7 +28,7 @@ class AdminHelper extends Helper
     /**
      * List of helpers used by this helper
      *
-     * @var array
+     * @var array<int|string, string|array<string, mixed>>
      */
     public array $helpers = ['Form', 'Property', 'Schema'];
 
