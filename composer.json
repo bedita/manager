@@ -98,8 +98,5 @@
             "merge-extra-deep": false,
             "merge-scripts": false
         }
-    },
-    "conflict": {
-        "slevomat/coding-standard": ">8.18.0"
     }
 }
