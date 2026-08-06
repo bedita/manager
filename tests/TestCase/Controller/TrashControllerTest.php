@@ -89,9 +89,9 @@ class TrashControllerTest extends BaseControllerTest
         $id = $this->createTrashObject();
 
         // set request and trash controller
-        $serialized = serialize(['filter' => ['type' => 'documents']]);
+        $encoded = json_encode(['filter' => ['type' => 'documents']]) ?: '';
         if ($query) {
-            $query = htmlspecialchars($serialized);
+            $query = htmlspecialchars($encoded);
         } else {
             $query = [];
         }

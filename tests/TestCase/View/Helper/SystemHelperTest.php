@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2022 Atlas Srl, Chialab Srl

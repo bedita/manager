@@ -33,7 +33,7 @@ class SchemaHelper extends Helper
     /**
      * {@inheritDoc}
      *
-     * @var array
+     * @var array<int|string, string|array<string, mixed>>
      */
     public array $helpers = ['Perms', 'Time'];
 
