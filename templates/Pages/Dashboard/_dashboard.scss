@@ -1,3 +1,5 @@
+@use "../../../resources/styles/variables";
+
 /*****************/
 /*** DASHBOARD ***/
 /*****************/
@@ -11,31 +13,31 @@ body.view-dashboard {
         width: 32px;
     }
     .dashboard {
-        margin-top: $gutter;
+        margin-top: variables.$gutter;
         &-section {
-            margin-bottom: $gutter;
+            margin-bottom: variables.$gutter;
             header {
                 h2 {
-                    padding-top: $gutter;
-                    margin-bottom: $gutter;
-                    font-size: $font-size-llg;
+                    padding-top: variables.$gutter;
+                    margin-bottom: variables.$gutter;
+                    font-size: variables.$font-size-llg;
                 }
             }
         }
 
         &-items {
             display: grid;
-            grid-gap: $gutter;
+            grid-gap: variables.$gutter;
             grid-template-columns: repeat(2, 1fr);
             @media (min-width: 768px) {
-                grid-template-columns: repeat(auto-fill, $dashboard-item-width);
+                grid-template-columns: repeat(auto-fill, variables.$dashboard-item-width);
             }
         }
 
         &-item {
             position: relative;
-            background-color: $gray-700;
-            font-size: $font-size-base;
+            background-color: variables.$gray-700;
+            font-size: variables.$font-size-base;
             line-height: 1;
             letter-spacing: .5px;
             display: flex;
@@ -58,8 +60,8 @@ body.view-dashboard {
                 width: 24px;
             }
 
-            padding: .375rem .375rem calc(#{$dashboard-items-ratio} - .375rem);
-            @media (min-width: 667px) { padding: $gutter*0.875 $gutter calc(#{$dashboard-items-ratio} - #{$gutter*0.875}); }
+            padding: .375rem .375rem calc(#{variables.$dashboard-items-ratio} - .375rem);
+            @media (min-width: 667px) { padding: variables.$gutter*0.875 variables.$gutter calc(#{variables.$dashboard-items-ratio} - #{variables.$gutter*0.875}); }
 
             &[class^="icon-"]:before, &[class*=" icon-"]:before {
                 position: absolute;
@@ -68,7 +70,7 @@ body.view-dashboard {
                 // @media (min-width: 667px) { top: $gutter * .5; right: $gutter * .5; }
                 margin-top: -1rem !important;
                 opacity: .5;
-                color: $white;
+                color: variables.$white;
                 font-size: 1.75rem;
                 z-index: 1;
                 filter: brightness(1);
@@ -79,14 +81,14 @@ body.view-dashboard {
                 content: '';
                 position: absolute;
                 bottom: 0; left: 0;
-                width: 100%; height: $gutter * 1.5;
-                background-color: $black;
+                width: 100%; height: variables.$gutter * 1.5;
+                background-color: variables.$black;
                 opacity: .2;
                 transition: opacity .3s;
             }
 
             &.has-background-black:after {
-                background-color: $gray-600;
+                background-color: variables.$gray-600;
             }
 
             &:hover {
@@ -105,10 +107,10 @@ body.view-dashboard {
 
         div[role="search"] {
             display: flex;
-            gap: $gutter * 2;
+            gap: variables.$gutter * 2;
             // @media (min-width: 568px) { width: 22 * $gutter + $gutter; }
             input {
-                margin-right: $gutter * .5;
+                margin-right: variables.$gutter * .5;
                 flex-grow: 1;
             }
         }
@@ -127,9 +129,9 @@ body.view-dashboard {
 
                 > div {
                     display: table-cell;
-                    height: $gutter * 2;
+                    height: variables.$gutter * 2;
                     white-space: nowrap;
-                    border-bottom: 1px solid $gray-550;
+                    border-bottom: 1px solid variables.$gray-550;
                     vertical-align: baseline;
 
                     &:empty:not(.title-cell) {
@@ -150,8 +152,8 @@ body.view-dashboard {
             // table header
             .table-header {
                 > div {
-                    height: $gutter * 3.25;
-                    padding: $gutter * 1.625 $gutter 0;
+                    height: variables.$gutter * 3.25;
+                    padding: variables.$gutter * 1.625 variables.$gutter 0;
                     line-height: 1;
                     border-bottom-color: inherit;
                     &:first-letter { text-transform: uppercase; }
@@ -185,7 +187,7 @@ body.view-dashboard {
             // table rows
             .table-row {
                 &.object-status-off, &.object-status-draft, &.object-status-deleted {
-                    color: $gray-550;
+                    color: variables.$gray-550;
                 }
 
                 &.object-status-deleted {
@@ -193,12 +195,12 @@ body.view-dashboard {
                 }
 
                 &:hover {
-                    background-color: $gray-800;
+                    background-color: variables.$gray-800;
                 }
 
                 // table cells
                 > div {
-                    padding: $gutter $gutter $gutter 0;
+                    padding: variables.$gutter variables.$gutter variables.$gutter 0;
                     &.narrow {
                         width: 1px;
                     }
@@ -208,7 +210,7 @@ body.view-dashboard {
                         white-space: initial;
                         &:empty:before {
                             content: attr(untitled-label);
-                            color: $gray-550;
+                            color: variables.$gray-550;
                             font-style: italic;
                         }
                     }
@@ -219,10 +221,10 @@ body.view-dashboard {
                         img {
                             padding: 1px;
                             display: inline-block;
-                            max-height: $gutter * 2;
-                            max-width: $gutter * 2.5;
+                            max-height: variables.$gutter * 2;
+                            max-width: variables.$gutter * 2.5;
                             vertical-align: middle;
-                            background-color: $gray-200;
+                            background-color: variables.$gray-200;
                         }
                     }
 
@@ -247,9 +249,9 @@ body.view-dashboard {
 
     .dashboard-area {
         @media (min-width: 1280px) {
-            grid-template-columns: ($dashboard-item-width * 4 + $gutter * 3) auto;
+            grid-template-columns: (variables.$dashboard-item-width * 4 + variables.$gutter * 3) auto;
             display:grid;
-            grid-gap: $gutter;
+            grid-gap: variables.$gutter;
         }
     }
 

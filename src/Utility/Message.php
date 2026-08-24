@@ -28,21 +28,21 @@ class Message
      *
      * @var string
      */
-    protected $title;
+    protected string $title;
 
     /**
      * Message detail text.
      *
      * @var string
      */
-    protected $detail;
+    protected string $detail;
 
     /**
      * Remap of error messages.
      *
      * @var array
      */
-    protected $remap;
+    protected array $remap;
 
     /**
      * Constructor

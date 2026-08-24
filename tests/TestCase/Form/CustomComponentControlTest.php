@@ -15,12 +15,16 @@ namespace App\Test\TestCase\Form;
 
 use App\Form\CustomComponentControl;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Form\CustomComponentControl} Test Case
- *
- * @coversDefaultClass \App\Form\CustomComponentControl
  */
+#[CoversClass(CustomComponentControl::class)]
+#[CoversMethod(CustomComponentControl::class, 'control')]
+#[CoversMethod(CustomComponentControl::class, 'jsonValue')]
 class CustomComponentControlTest extends TestCase
 {
     /**
@@ -28,7 +32,7 @@ class CustomComponentControlTest extends TestCase
      *
      * @return array
      */
-    public function controlProvider(): array
+    public static function controlProvider(): array
     {
         return [
             'default simple' => [
@@ -79,10 +83,8 @@ class CustomComponentControlTest extends TestCase
      * @param mixed|null $value The field value.
      * @param array $options Control options.
      * @return void
-     * @dataProvider controlProvider()
-     * @covers ::control()
-     * @covers ::jsonValue()
      */
+    #[DataProvider('controlProvider')]
     public function testCustomControl(array $expected, string $name, $value, array $options = []): void
     {
         $control = new CustomComponentControl();

@@ -1,18 +1,20 @@
+@use "../../../resources/styles/variables";
+
 .layout-header {
 
     .menu-bar {
         display: grid;
-        column-gap: $gutter;
+        column-gap: variables.$gutter;
         grid-template-columns: 1fr auto;
 
 
         nav[role="menu"] {
             display: grid;
-            row-gap: $gutter * .5;
-            grid-template-columns: repeat(auto-fill, $gutter * 2.5);
+            row-gap: variables.$gutter * .5;
+            grid-template-columns: repeat(auto-fill, variables.$gutter * 2.5);
             .menu-item-label { display: none; }
             @media screen and (min-width: 1024px) {
-                grid-template-columns: repeat(auto-fill, $gutter * 3);
+                grid-template-columns: repeat(auto-fill, variables.$gutter * 3);
                 .menu-item-label { display: block; }
                 .menu-item-short-label { display: none; }
             }
@@ -20,16 +22,16 @@
             .menu-item {
                 display: flex;
                 flex-direction: column;
-                padding-top: $gutter;
+                padding-top: variables.$gutter;
 
                 &-color-bar {
-                    height: $gutter * .625;
-                    background-color: $gray-700;
+                    height: variables.$gutter * .625;
+                    background-color: variables.$gray-700;
                 }
 
                 &-label, &-short-label {
-                    margin-top: $gutter * .25;
-                    font-size: $font-size-smallest;
+                    margin-top: variables.$gutter * .25;
+                    font-size: variables.$font-size-smallest;
                     letter-spacing: .5px;
                     text-transform: lowercase;
                 }
@@ -37,7 +39,7 @@
                 &:hover, &.current {
                     padding-top: 0;
                     .menu-item-color-bar {
-                        height: $gutter + $gutter * .625;
+                        height: variables.$gutter + variables.$gutter * .625;
                     }
                 }
             }
@@ -50,13 +52,13 @@
             .popup {
                 display: flex;
                 position: absolute;
-                top: $gutter * 4;
+                top: variables.$gutter * 4;
                 right: 0;
 
                 button {
                     min-width: 38px;
-                    margin-left: $gutter * .5;
-                    font-size: $font-size-ssm;
+                    margin-left: variables.$gutter * .5;
+                    font-size: variables.$font-size-ssm;
                 }
             }
         }

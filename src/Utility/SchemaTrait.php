@@ -36,12 +36,12 @@ trait SchemaTrait
     {
         try {
             $home = Cache::remember(
-                sprintf('home_%d', $user->get('id')),
+                CacheTools::homeCacheKey((int)$user->get('id')),
                 function () {
                     $client = ApiClientProvider::getApiClient();
 
                     return $client->get('/home');
-                }
+                },
             );
         } catch (BEditaClientException $e) {
             // Something bad happened. Returning an empty array instead.

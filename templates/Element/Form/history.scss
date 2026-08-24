@@ -1,3 +1,5 @@
+@use "../../../resources/styles/variables";
+
 .history {
     .history-content {
         $module-color: var(--module-color);
@@ -42,7 +44,7 @@
 
                 &:last-of-type {
                     padding-bottom: 1rem;
-                    border-image: linear-gradient(to bottom, $gray-600 0 1.4rem, transparent 1.4rem 100%) 1;
+                    border-image: linear-gradient(to bottom, variables.$gray-600 0 1.4rem, transparent 1.4rem 100%) 1;
                 }
             }
         }

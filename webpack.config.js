@@ -12,7 +12,6 @@ const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 
 // config
@@ -38,6 +37,29 @@ if (devMode) {
 // Print env infos
 bundler.printMessage(message, separator);
 
+// loaders options
+const cssFileLoaderOptions = {
+    loader: 'file-loader',
+    options: {
+        name: `${BUNDLE.cssDir}/[name].css`,
+    },
+};
+const cssLoaderOptions = {
+    loader: 'css-loader',
+    options: {
+        sourceMap: devMode,
+        url: false,
+    }
+};
+const sassLoaderOptions = {
+    loader: 'sass-loader',
+    options: {
+        api: 'modern',
+        sassOptions: { quietDeps: true },
+        sourceMap: devMode,
+    }
+};
+
 // Create webpack plugins list
 // Common Plugins
 let webpackPlugins = [
@@ -57,13 +79,6 @@ let webpackPlugins = [
     }),
 
     new WebpackManifestPlugin({}),
-
-    new ESLintPlugin({
-        extensions: ['js'],
-        emitError: true,
-        emitWarning: true,
-        outputReport: true
-    }),
 
     new VueLoaderPlugin(),
 ];
@@ -278,18 +293,8 @@ module.exports = {
                 ],
 
                 use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: `${BUNDLE.cssDir}/[name].css`,
-                        },
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: devMode,
-                        }
-                    },
+                    cssFileLoaderOptions,
+                    sassLoaderOptions,
                 ]
             },
             {
@@ -299,18 +304,8 @@ module.exports = {
                 ],
 
                 use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: `${BUNDLE.cssDir}/[name].css`,
-                        },
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: devMode,
-                        }
-                    },
+                    cssFileLoaderOptions,
+                    sassLoaderOptions,
                 ]
             },
             {
@@ -324,19 +319,8 @@ module.exports = {
 
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: devMode,
-                            url:false,
-                        }
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: devMode,
-                        }
-                    }
+                    cssLoaderOptions,
+                    sassLoaderOptions
                 ]
             },
             {
@@ -350,19 +334,8 @@ module.exports = {
 
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: devMode,
-                            url:false,
-                        }
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: devMode,
-                        }
-                    }
+                    cssLoaderOptions,
+                    sassLoaderOptions
                 ]
             },
             {
@@ -372,19 +345,8 @@ module.exports = {
                 ],
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: devMode,
-                            url:false,
-                        }
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: devMode
-                        }
-                    }
+                    cssLoaderOptions,
+                    sassLoaderOptions
                 ],
             },
             {

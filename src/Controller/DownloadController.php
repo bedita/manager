@@ -28,7 +28,7 @@ class DownloadController extends AppController
     /**
      * @inheritDoc
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         // HTTP client configuration
         'client' => [],
     ];

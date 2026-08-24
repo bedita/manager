@@ -5,20 +5,20 @@ use App\Controller\CourtesyPageController;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\CourtesyPageController} Test Case
- *
- * @coversDefaultClass \App\Controller\CourtesyPageController
- * @uses \App\Controller\CourtesyPageController
  */
+#[CoversClass(CourtesyPageController::class)]
+#[CoversMethod(CourtesyPageController::class, 'index')]
 class CourtesyPageControllerTest extends TestCase
 {
     /**
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {

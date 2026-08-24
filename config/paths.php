@@ -28,7 +28,9 @@ if (!defined('DS')) {
 /**
  * The full path to the directory which holds "src", WITHOUT a trailing DS.
  */
-define('ROOT', dirname(__DIR__));
+if (!defined('ROOT')) {
+    define('ROOT', dirname(__DIR__));
+}
 
 /**
  * The actual directory name for the application directory. Normally
@@ -85,10 +87,16 @@ define('RESOURCES', ROOT . DS . 'resources' . DS);
  *
  * CakePHP should always be installed with composer, so look there.
  */
-define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
+if (!defined('CAKE_CORE_INCLUDE_PATH')) {
+    define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
+}
 
 /**
  * Path to the cake directory.
  */
-define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
-define('CAKE', CORE_PATH . 'src' . DS);
+if (!defined('CORE_PATH')) {
+    define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
+}
+if (!defined('CAKE')) {
+    define('CAKE', CORE_PATH . 'src' . DS);
+}

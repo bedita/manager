@@ -1,6 +1,6 @@
 <template>
     <div class="input textarea text">
-        <label :for="`container-${name}`">{{ label|humanize }}</label>
+        <label :for="`container-${name}`">{{ humanize(label) }}</label>
         <div :id="`container-${name}`">
             <div class="key-value-item mb-1 is-flex" v-for="(item, index) in items">
                 <div class="is-expanded">
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { humanizeString } from 'app/helpers/text-helper';
 
 /**
  * <string-list> component to handle simple JSON array of strings
@@ -62,6 +63,10 @@ export default {
     },
 
     methods: {
+        humanize(str) {
+            return humanizeString(str);
+        },
+
         /**
          * Update input hidden form value.
          *

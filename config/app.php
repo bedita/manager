@@ -14,7 +14,18 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
-    'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
+    'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
+
+    /*
+     * Development Mode:
+     *
+     * Production Mode:
+     * false: Development mode is off.
+     *
+     * Development Mode:
+     * true: Development mode is on.
+     */
+    'development' => filter_var(env('DEVELOPMENT', false), FILTER_VALIDATE_BOOLEAN),
 
     /**
      * Configure basic information about the application.
@@ -105,9 +116,9 @@ return [
          * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
          * If you set 'className' => 'Null' core cache will be disabled.
          */
-        '_cake_core_' => [
+        '_cake_translations_' => [
             'className' => FileEngine::class,
-            'prefix' => 'manager_cake_core_',
+            'prefix' => 'manager_cake_translations_',
             'path' => CACHE . 'persistent/',
             'serialize' => true,
             'duration' => '+1 years',
@@ -263,7 +274,7 @@ return [
             'path' => LOGS,
             'file' => 'debug',
             'url' => env('LOG_DEBUG_URL', null),
-            'scopes' => false,
+            'scopes' => null,
             'levels' => ['notice', 'info', 'debug'],
         ],
         'error' => [
@@ -271,7 +282,7 @@ return [
             'path' => LOGS,
             'file' => 'error',
             'url' => env('LOG_ERROR_URL', null),
-            'scopes' => false,
+            'scopes' => null,
             'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
         ],
     ],

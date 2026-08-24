@@ -42,6 +42,7 @@ export default {
                 this.$emit('found', obj);
             } catch (error) {
                 BEDITA.error(`${this.msgNotFound}. ${this.msgAllowedTypes}: ${this.objectTypes.join(', ')}`);
+                console.error(error);
             }
         },
         async fetchObject(id, types) {

@@ -1,6 +1,6 @@
 <template>
     <div class="input textarea text">
-        <label :for="name">{{ label|humanize }}</label>
+        <label :for="name">{{ humanize(label) }}</label>
             <div :id="name">
                 <div class="key-value-item mb-1" v-for="(item, index) in items">
                     <div>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { humanizeString } from 'app/helpers/text-helper';
 
 /**
  * <key-value-list> component to handle simple JSON objects with key/values
@@ -63,6 +64,10 @@ export default {
     },
 
     methods: {
+        humanize(str) {
+            return humanizeString(str);
+        },
+
         /**
          * Update input hidden form value.
          *

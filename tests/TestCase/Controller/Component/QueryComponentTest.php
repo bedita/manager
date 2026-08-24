@@ -6,12 +6,19 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Controller\Component\QueryComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\QueryComponent
  */
+#[CoversClass(QueryComponent::class)]
+#[CoversMethod(QueryComponent::class, 'handleInclude')]
+#[CoversMethod(QueryComponent::class, 'handleSavedByRefs')]
+#[CoversMethod(QueryComponent::class, 'handleSort')]
+#[CoversMethod(QueryComponent::class, 'index')]
+#[CoversMethod(QueryComponent::class, 'prepare')]
 class QueryComponentTest extends TestCase
 {
     /**
@@ -19,7 +26,7 @@ class QueryComponentTest extends TestCase
      *
      * @var \App\Controller\Component\QueryComponent
      */
-    public $Query;
+    public QueryComponent $Query;
 
     /**
      * @inheritDoc
@@ -27,7 +34,7 @@ class QueryComponentTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $controller = new Controller();
+        $controller = new Controller(new ServerRequest());
         $registry = $controller->components();
         /** @var \App\Controller\Component\QueryComponent $queryComponent */
         $queryComponent = $registry->load(QueryComponent::class);
@@ -49,7 +56,7 @@ class QueryComponentTest extends TestCase
      *
      * @return array
      */
-    public function indexProvider(): array
+    public static function indexProvider(): array
     {
         return [
             'query filter' => [
@@ -89,11 +96,8 @@ class QueryComponentTest extends TestCase
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
-     * @covers ::handleSort()
-     * @covers ::handleInclude()
-     * @dataProvider indexProvider()
      */
+    #[DataProvider('indexProvider')]
     public function testIndex(array $queryParams, array $config, array $expected): void
     {
         $controller = new Controller(
@@ -103,8 +107,8 @@ class QueryComponentTest extends TestCase
                     'environment' => [
                         'REQUEST_METHOD' => 'GET',
                     ],
-                ]
-            )
+                ],
+            ),
         );
         $registry = $controller->components();
         /** @var \App\Controller\Component\QueryComponent $Query */
@@ -120,7 +124,6 @@ class QueryComponentTest extends TestCase
      * Test `handleInclude` method.
      *
      * @return void
-     * @covers ::handleInclude()
      */
     public function testHandleInclude(): void
     {
@@ -134,8 +137,8 @@ class QueryComponentTest extends TestCase
                     'params' => [
                         'object_type' => 'test',
                     ],
-                ]
-            )
+                ],
+            ),
         );
         $registry = $controller->components();
         $component = new class ($registry) extends QueryComponent {
@@ -165,7 +168,7 @@ class QueryComponentTest extends TestCase
      *
      * @return array
      */
-    public function prepareProvider(): array
+    public static function prepareProvider(): array
     {
         return [
             'simple' => [
@@ -211,12 +214,49 @@ class QueryComponentTest extends TestCase
      * Test `prepare` method.
      *
      * @return void
-     * @dataProvider prepareProvider
-     * @covers ::prepare()
      */
+    #[DataProvider('prepareProvider')]
     public function testPrepare(array $expected, array $query): void
     {
         $actual = $this->Query->prepare($query);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test `handleSavedByRefs` method.
+     *
+     * @return void
+     */
+    public function testHandleSavedByRefs(): void
+    {
+        $controller = new Controller(
+            new ServerRequest(
+                [
+                    'query' => [],
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    'params' => [
+                        'object_type' => 'test',
+                    ],
+                ],
+            ),
+        );
+        $registry = $controller->components();
+        $component = new class ($registry) extends QueryComponent {
+            public function handleSavedByRefs(array $query): array
+            {
+                return parent::handleSavedByRefs($query);
+            }
+        };
+        Configure::write('Properties.test.index', [
+            'title',
+            'created_by_user',
+            'modified_by_user',
+        ]);
+        $query = [];
+        $actual = $component->handleSavedByRefs($query);
+        $expected = ['saved_by_refs' => 1];
         static::assertEquals($expected, $actual);
     }
 }

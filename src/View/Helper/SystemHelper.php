@@ -29,7 +29,7 @@ class SystemHelper extends Helper
      *
      * @var array
      */
-    protected $defaultPlaceholders = [
+    protected array $defaultPlaceholders = [
         'audio' => ['controls' => 'boolean', 'autoplay' => 'boolean'],
         'files' => ['download' => 'boolean'],
         'images' => ['width' => 'integer', 'height' => 'integer', 'bearing' => 'integer', 'pitch' => 'integer', 'zoom' => 'integer'],
@@ -41,7 +41,7 @@ class SystemHelper extends Helper
      *
      * @var array
      */
-    protected $defaultUploadAccepted = [
+    protected array $defaultUploadAccepted = [
         'audio' => [
             'audio/*',
         ],
@@ -59,7 +59,7 @@ class SystemHelper extends Helper
      *
      * @var array
      */
-    protected $defaultUploadForbidden = [
+    protected array $defaultUploadForbidden = [
         'mimetypes' => [
             'application/javascript',
             'application/x-cgi',
@@ -87,11 +87,25 @@ class SystemHelper extends Helper
     ];
 
     /**
+     * Maximum size for uploaded files, in bytes
+     *
+     * @var int
+     */
+    protected int $defaultUploadMaxSize = -1;
+
+    /**
+     * Timeout for upload operations, in milliseconds
+     *
+     * @var int
+     */
+    protected int $defaultUploadTimeout = 30000; // in milliseconds
+
+    /**
      * Maximum resolution for images
      *
      * @var string
      */
-    protected $defaultUploadMaxResolution = '4096x2160'; // 4K
+    protected string $defaultUploadMaxResolution = '4096x2160'; // 4K
 
     /**
      * Get the minimum value between post_max_size and upload_max_filesize.
@@ -166,8 +180,10 @@ class SystemHelper extends Helper
         $accepted = (array)Configure::read('uploadAccepted', $this->defaultUploadAccepted);
         $forbidden = (array)Configure::read('uploadForbidden', $this->defaultUploadForbidden);
         $maxResolution = (string)Configure::read('uploadMaxResolution', $this->defaultUploadMaxResolution);
+        $maxSize = (int)Configure::read('uploadMaxSize', $this->defaultUploadMaxSize);
+        $timeout = (int)Configure::read('uploadTimeout', $this->defaultUploadTimeout);
 
-        return compact('accepted', 'forbidden', 'maxResolution');
+        return compact('accepted', 'forbidden', 'maxResolution', 'maxSize', 'timeout');
     }
 
     /**

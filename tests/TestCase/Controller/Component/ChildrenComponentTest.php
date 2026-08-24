@@ -8,12 +8,16 @@ use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Controller\ComponentRegistry;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Component\ChildrenComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\ChildrenComponent
  */
+#[CoversClass(ChildrenComponent::class)]
+#[CoversMethod(ChildrenComponent::class, 'addRelated')]
+#[CoversMethod(ChildrenComponent::class, 'removeRelated')]
+#[CoversMethod(ChildrenComponent::class, 'removeRelatedChild')]
 class ChildrenComponentTest extends TestCase
 {
     /**
@@ -34,7 +38,6 @@ class ChildrenComponentTest extends TestCase
      * Test addRelated method with valid data.
      *
      * @return void
-     * @covers ::addRelated()
      */
     public function testAddRelated(): void
     {
@@ -62,7 +65,6 @@ class ChildrenComponentTest extends TestCase
      * Test addRelated method with valid data and reorder.
      *
      * @return void
-     * @covers ::addRelated()
      */
     public function testAddRelatedReorder(): void
     {
@@ -97,8 +99,6 @@ class ChildrenComponentTest extends TestCase
      * Test removeRelated method with valid data.
      *
      * @return void
-     * @covers ::removeRelated()
-     * @covers ::removeRelatedChild()
      */
     public function testRemoveRelated(): void
     {

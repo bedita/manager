@@ -2,25 +2,26 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\ApplicationsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * {@see \App\Controller\Admin\ApplicationsController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\ApplicationsController
  */
+#[CoversClass(ApplicationsController::class)]
 class ApplicationsControllerTest extends TestCase
 {
-    public $AppsController;
+    public ApplicationsController $AppsController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -34,7 +35,7 @@ class ApplicationsControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc
@@ -47,9 +48,9 @@ class ApplicationsControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->AppsController = new class ($request) extends ApplicationsController
         {
-            protected $resourceType = 'applications';
-            protected $properties = ['name'];
-            protected $propertiesSecrets = ['api_key', 'client_secret'];
+            protected ?string $resourceType = 'applications';
+            protected array $properties = ['name'];
+            protected array $propertiesSecrets = ['api_key', 'client_secret'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');

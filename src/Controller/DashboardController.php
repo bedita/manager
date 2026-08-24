@@ -16,6 +16,7 @@ use App\Utility\CacheTools;
 use App\Utility\SchemaTrait;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
+use Exception;
 
 /**
  * Dashboard controller.
@@ -48,7 +49,7 @@ class DashboardController extends AppController
         $user = $this->Authentication->getIdentity();
         $this->set(
             'jobsAllow',
-            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow')
+            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow'),
         );
 
         // set modules counters
@@ -68,7 +69,7 @@ class DashboardController extends AppController
             try {
                 $response = $this->apiClient->get($endpoint, $options);
                 CacheTools::setModuleCount($response, $name);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 CacheTools::setModuleCount(['meta' => ['pagination' => ['count' => '-']]], $name);
             }
         }

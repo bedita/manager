@@ -74,7 +74,7 @@ class SystemInfoController extends AdministrationBaseController
         try {
             $info = (array)Hash::get(
                 $this->apiClient->get('/admin/sysinfo'),
-                'meta.info'
+                'meta.info',
             );
             /** @var \Authentication\Identity $user */
             $user = $this->Authentication->getIdentity();

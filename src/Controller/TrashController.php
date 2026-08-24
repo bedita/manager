@@ -99,7 +99,7 @@ class TrashController extends AppController
      * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function view($id): ?Response
+    public function view(mixed $id): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
 
@@ -172,12 +172,14 @@ class TrashController extends AppController
     protected function listQuery(): array
     {
         $query = $this->getRequest()->getData('query');
-        if (empty($query)) {
+        if (!is_string($query) || $query === '') {
             return [];
         }
         $query = htmlspecialchars_decode($query);
 
-        return (array)unserialize($query);
+        $decoded = json_decode($query, true);
+
+        return is_array($decoded) ? $decoded : [];
     }
 
     /**
@@ -215,7 +217,7 @@ class TrashController extends AppController
      */
     public function deleteData(string $id): void
     {
-        $response = $this->apiClient->get('/streams', ['filter' => ['object_id' => $id]]);
+        $this->apiClient->get('/streams', ['filter' => ['object_id' => $id]]);
         $this->apiClient->remove($id);
     }
 

@@ -29,6 +29,8 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'paths.php';
  */
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
 
+require CAKE . 'functions.php';
+
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\IniConfig;
@@ -39,6 +41,8 @@ use Cake\Http\ServerRequest;
 use Cake\Log\Log;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
+use Detection\MobileDetect;
+use josegonzalez\Dotenv\Loader;
 
 /*
  * See https://github.com/josegonzalez/php-dotenv for API details.
@@ -55,7 +59,7 @@ use Cake\Utility\Security;
  * for more information for recommended practices.
 */
 if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
-    $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
+    $dotenv = new Loader([CONFIG . '.env']);
     $dotenv->parse()
         ->putenv()
         ->toEnv()
@@ -94,7 +98,7 @@ try {
     Configure::config('ini', new IniConfig());
     Configure::load('version', 'ini');
     Configure::load('bedita-api-version', 'ini');
-} catch (\Exception $e) {
+} catch (Exception $e) {
     exit($e->getMessage() . "\n");
 }
 
@@ -112,7 +116,7 @@ if (file_exists(CONFIG . 'app_local.php')) {
  */
 if (Configure::read('debug')) {
     Configure::write('Cache._cake_model_.duration', '+2 minutes');
-    Configure::write('Cache._cake_core_.duration', '+2 minutes');
+    Configure::write('Cache._cake_translations_.duration', '+2 minutes');
     Configure::write('Cache._schema_types_.duration', '+2 minutes');
     Configure::write('Cache._project_config_.duration', '+2 minutes');
     Configure::write('Cache._thumbs_.duration', '+2 minutes');
@@ -191,12 +195,12 @@ Security::setSalt(Configure::consume('Security.salt'));
  * and the mobiledetect package from composer.json.
  */
 ServerRequest::addDetector('mobile', function ($request) {
-    $detector = new \Detection\MobileDetect();
+    $detector = new MobileDetect();
 
     return $detector->isMobile();
 });
 ServerRequest::addDetector('tablet', function ($request) {
-    $detector = new \Detection\MobileDetect();
+    $detector = new MobileDetect();
 
     return $detector->isTablet();
 });

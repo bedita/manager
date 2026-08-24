@@ -50,7 +50,7 @@ class ProjectConfigurationComponent extends Component
                 function () {
                     return $this->fetchConfig();
                 },
-                self::CACHE_CONFIG
+                self::CACHE_CONFIG,
             );
             Configure::write('Project.config', $config);
         } catch (BEditaClientException $e) {
@@ -70,14 +70,19 @@ class ProjectConfigurationComponent extends Component
      */
     protected function fetchConfig(): array
     {
-        $response = (array)ApiClientProvider::getApiClient()->get('config', ['page_size' => 100]);
+        $client = ApiClientProvider::getApiClient();
+        $response = (array)$client->get('config', ['page_size' => 100], [
+            'Authorization' => sprintf('Bearer %s', Hash::get($client->getTokens(), 'jwt')),
+            'X-Api-Key' => Configure::read('API.apiKey'),
+            'Accept' => 'application/json',
+        ]);
 
         $config = Hash::combine($response, 'data.{n}.attributes.name', 'data.{n}.attributes.content');
         array_walk(
             $config,
-            function (&$value, $key) {
+            function (&$value, $key): void {
                 $value = json_decode($value, true);
-            }
+            },
         );
 
         return $config;

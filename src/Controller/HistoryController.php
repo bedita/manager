@@ -27,6 +27,24 @@ class HistoryController extends AppController
     }
 
     /**
+     * Get history using query parameters.
+     * This is a proxy for /api/history endpoint.
+     *
+     * @return void
+     */
+    public function get(): void
+    {
+        $this->viewBuilder()->setClassName('Json');
+        $this->getRequest()->allowMethod('get');
+        $query = $this->getRequest()->getQueryParams();
+        $response = ApiTools::cleanResponse((array)$this->apiClient->get('/history', $query));
+        $data = $response['data'];
+        $meta = $response['meta'];
+        $this->set(compact('data', 'meta'));
+        $this->setSerialize(['data', 'meta']);
+    }
+
+    /**
      * Get objects list: id, title, uname only / no relationships, no links.
      *
      * @return void
@@ -37,7 +55,7 @@ class HistoryController extends AppController
         $this->getRequest()->allowMethod('get');
         $query = array_merge(
             $this->getRequest()->getQueryParams(),
-            ['fields' => 'id,title,uname']
+            ['fields' => 'id,title,uname'],
         );
         $response = ApiTools::cleanResponse((array)$this->apiClient->get('objects', $query));
         $data = $response['data'];
@@ -53,7 +71,7 @@ class HistoryController extends AppController
      * @param int $page Page number.
      * @return void
      */
-    public function info($id, int $page): void
+    public function info(string|int $id, int $page): void
     {
         $this->viewBuilder()->setClassName('Json');
         $this->getRequest()->allowMethod('get');
@@ -72,7 +90,7 @@ class HistoryController extends AppController
      * @param string|int $historyId History object ID.
      * @return \Cake\Http\Response|null
      */
-    public function clone($id, $historyId): ?Response
+    public function clone(string|int $id, string|int $historyId): ?Response
     {
         $this->setHistory($id, $historyId, false);
 
@@ -86,7 +104,7 @@ class HistoryController extends AppController
      * @param string|int $historyId History object ID.
      * @return \Cake\Http\Response|null
      */
-    public function restore($id, $historyId): ?Response
+    public function restore(string|int $id, string|int $historyId): ?Response
     {
         $this->setHistory($id, $historyId, true);
 
@@ -101,7 +119,7 @@ class HistoryController extends AppController
      * @param bool $keepUname Keep previous uname.
      * @return void
      */
-    protected function setHistory($id, $historyId, $keepUname): void
+    protected function setHistory(string|int $id, string|int $historyId, bool $keepUname): void
     {
         $objectType = $this->getRequest()->getParam('object_type');
         $options = compact('objectType', 'id', 'historyId', 'keepUname') + [

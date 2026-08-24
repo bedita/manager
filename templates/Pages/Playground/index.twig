@@ -1,0 +1,10 @@
+{% do _view.assign('title', 'Components Playground') %}
+{% do _view.assign('bodyViewClass', 'view-playground') %}
+
+<div class="playground-page">
+    <components-playground
+        google-maps-api-key="{{ config('Location.google.apiKey') }}"
+        mapbox-token="{{ config('Maps.mapbox.token') }}"
+    >
+    </components-playground>
+</div>

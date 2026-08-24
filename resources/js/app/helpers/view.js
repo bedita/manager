@@ -348,6 +348,12 @@ export default {
                 return d ?  new Date(d).toLocaleDateString(locale) + ' ' + new Date(d).toLocaleTimeString(locale, {hour: '2-digit', minute:'2-digit'}) : '';
             },
 
+            formatTime(d) {
+                const locale = BEDITA?.locale?.slice(0, 2) || 'en';
+
+                return d ? new Date(d).toLocaleTimeString(locale, {hour: '2-digit', minute:'2-digit'}) : '';
+            },
+
             formatBytes(size) {
                 let i = size == 0 ? 0 : Math.floor( Math.log(size) / Math.log(1024) );
 

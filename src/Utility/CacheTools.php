@@ -23,6 +23,22 @@ use Cake\Utility\Hash;
 class CacheTools
 {
     /**
+     * Create a cache key for `/home` metadata.
+     *
+     * The API signature prevents collisions when the same user id is used
+     * across different API project endpoints.
+     *
+     * @param int $userId User id.
+     * @return string
+     */
+    public static function homeCacheKey(int $userId): string
+    {
+        $apiSignature = md5(ApiClientProvider::getApiClient()->getApiBaseUrl());
+
+        return sprintf('home_%d_%s', $userId, $apiSignature);
+    }
+
+    /**
      * Create multi project cache key.
      *
      * @param string $name Cache item name.

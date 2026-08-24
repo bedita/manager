@@ -1,22 +1,46 @@
 <template>
-    <div class="mt-25">
+    <div class="object-property-add">
         <h3>{{ t('Create') }}</h3>
-        <input type="text" :placeholder="t('Name')" v-model="propName" />
+        <input
+            type="text"
+            :placeholder="t('Name')"
+            v-model="propName"
+        >
         <select v-model="propType">
-            <option v-for="(t,idx) in propTypes" :value="t.value" :key="idx">{{ t.text }}</option>
+            <option
+                v-for="(t,idx) in propTypes"
+                :value="t.value"
+                :key="idx"
+            >
+                {{ t.text }}
+            </option>
         </select>
-        <input type="text" v-model="propDescription" :placeholder="t('Description')" />
-        <button @click.prevent="add" :disabled="!propName || !propType">{{ t('Add') }}</button>
+        <input
+            type="text"
+            :placeholder="t('Description')"
+            v-model="propDescription"
+        >
+        <button
+            :disabled="!propName || !propType"
+            @click.prevent="add"
+        >
+            {{ t('Add') }}
+        </button>
     </div>
 </template>
 
 <script>
-
 export default {
+    name: 'ObjectPropertyAdd',
 
     props: {
-        propTypes: [],
+        propTypes: {
+            type: Array,
+            default: () => ([]),
+        },
     },
+
+    emits: ['prop-added'],
 
     data() {
         return {
@@ -29,7 +53,7 @@ export default {
     methods: {
         add() {
             this.updateAdded();
-            this.$eventBus.$emit('prop-added', {
+            this.$emit('prop-added', {
                 name: this.propName,
                 property_type_name: this.propType,
                 description: this.propDescription,
@@ -52,3 +76,8 @@ export default {
     },
 }
 </script>
+<style scoped>
+.object-property-add {
+    margin-top: 1rem;
+}
+</style>

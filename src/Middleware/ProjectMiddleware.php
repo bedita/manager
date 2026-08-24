@@ -32,14 +32,14 @@ class ProjectMiddleware implements MiddlewareInterface
      *
      * @var \App\Application
      */
-    protected $Application;
+    protected Application $Application;
 
     /**
      * Projects config base path
      *
      * @var string
      */
-    protected $projectsConfigPath = CONFIG . 'projects' . DS;
+    protected string $projectsConfigPath = CONFIG . 'projects' . DS;
 
     /**
      * Constructor

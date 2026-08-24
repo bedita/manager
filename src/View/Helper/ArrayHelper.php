@@ -77,7 +77,7 @@ class ArrayHelper extends Helper
      * @param string $path The path expression
      * @return array The result array
      */
-    public function extract($data, $path): array
+    public function extract(array $data, string $path): array
     {
         return (array)Hash::extract($data, $path);
     }

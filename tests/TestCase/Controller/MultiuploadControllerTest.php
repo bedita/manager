@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2024 ChannelWeb Srl, Chialab Srl
@@ -16,19 +17,20 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\MultiuploadController;
 use Cake\Http\ServerRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\MultiuploadController} Test Case
- *
- * @coversDefaultClass \App\Controller\MultiuploadController
  */
+#[CoversClass(MultiuploadController::class)]
+#[CoversMethod(MultiuploadController::class, 'initialize')]
 class MultiuploadControllerTest extends BaseControllerTest
 {
     /**
      * Test `initialize` method
      *
      * @return void
-     * @covers ::initialize()
      */
     public function testInitialize(): void
     {

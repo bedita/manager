@@ -5,6 +5,9 @@ filter:
     - 'src/*'
   dependency_paths:
     - 'vendor/*'
+  excluded_paths:
+    - 'vendor/*'
+    - 'tests/*'
 
 build:
   image: default-jammy
@@ -14,7 +17,7 @@ build:
     analysis:
       environment:
         php:
-          version: 8.3.3
+          version: 8.3.16
       tests:
         override:
           - php-scrutinizer-run

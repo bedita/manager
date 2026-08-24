@@ -344,7 +344,7 @@ export default {
                     this.modifyRelation(copy);
                 } catch (exp) {
                     // silent error
-                    console.error('[RelationView -> updatePriority] something\'s wrong with the data');
+                    console.error('[RelationView -> updatePriority] something\'s wrong with the data', exp);
                 }
             } else {
                 this.removeModifiedRelations(related.id);
@@ -396,7 +396,7 @@ export default {
                     this.modifyRelation(copy);
                 } catch (exp) {
                     // silent error
-                    console.error('[RelationView -> updatePosition] something\'s wrong with the data');
+                    console.error('[RelationView -> updatePosition] something\'s wrong with the data', exp);
                 }
             } else {
                 this.removeModifiedRelations(related.id);
@@ -875,6 +875,15 @@ export default {
                 return flatpickr.formatDate(new Date(value), 'Y-m-d h:i K');
             }
 
+            if (schema !== undefined && schema[key].format === 'json') {
+                try {
+                    return JSON.stringify(JSON.parse(value), null, 2);
+                } catch (e) {
+                    console.error(`Error parsing JSON for key "${key}": ${e}`);
+                    return value;
+                }
+            }
+
             // oneOf
             if(schema && schema[key].oneOf) {
                 const firstNotNull = schema[key].oneOf.find(p => p.type !== 'null');
@@ -884,6 +893,10 @@ export default {
             }
 
             return value;
+        },
+
+        openModal(content) {
+            BEDITA.info(content);
         },
 
         /**

@@ -16,12 +16,26 @@ namespace App\Test\TestCase\Form;
 use App\Form\Options;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Form\Options} Test Case
- *
- * @coversDefaultClass \App\Form\Options
  */
+#[CoversClass(Options::class)]
+#[CoversMethod(Options::class, 'childrenOrder')]
+#[CoversMethod(Options::class, 'confirmPassword')]
+#[CoversMethod(Options::class, 'coords')]
+#[CoversMethod(Options::class, 'customControl')]
+#[CoversMethod(Options::class, 'dateRanges')]
+#[CoversMethod(Options::class, 'endDate')]
+#[CoversMethod(Options::class, 'lang')]
+#[CoversMethod(Options::class, 'password')]
+#[CoversMethod(Options::class, 'oldPassword')]
+#[CoversMethod(Options::class, 'startDate')]
+#[CoversMethod(Options::class, 'status')]
+#[CoversMethod(Options::class, 'title')]
 class OptionsTest extends TestCase
 {
     /**
@@ -32,7 +46,7 @@ class OptionsTest extends TestCase
      *
      * @return array
      */
-    public function customControlProvider(): array
+    public static function customControlProvider(): array
     {
         return [
             'not custom' => [
@@ -157,6 +171,16 @@ class OptionsTest extends TestCase
                     ],
                 ],
             ],
+            'start_date date schema' => [
+                'start_date',
+                '2020-10-14',
+                [],
+                [],
+                [
+                    'type' => 'string',
+                    'format' => 'date',
+                ],
+            ],
             'end_date' => [
                 'end_date',
                 '2020-10-15',
@@ -229,27 +253,16 @@ class OptionsTest extends TestCase
      * @param mixed|null $value The field value.
      * @param array $expected Expected result.
      * @param array $config Configuration.
+     * @param array|null $schema Property schema.
      * @return void
-     * @dataProvider customControlProvider()
-     * @covers ::customControl()
-     * @covers ::lang
-     * @covers ::dateRanges(()
-     * @covers ::startDate()
-     * @covers ::endDate()
-     * @covers ::status
-     * @covers ::oldPassword
-     * @covers ::password
-     * @covers ::confirmPassword
-     * @covers ::title
-     * @covers ::coords
-     * @covers ::childrenOrder
      */
-    public function testCustomControl(string $name, $value, array $expected, array $config = []): void
+    #[DataProvider('customControlProvider')]
+    public function testCustomControl(string $name, $value, array $expected, array $config = [], ?array $schema = null): void
     {
         if (!empty($config)) {
             Configure::write($config);
         }
-        $actual = Options::customControl($name, $value);
+        $actual = Options::customControl($name, $value, $schema);
         ksort($expected);
         static::assertSame($expected, $actual);
     }

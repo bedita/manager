@@ -42,7 +42,7 @@ class ExportController extends AppController
      *
      * @var array
      */
-    public $filter = [];
+    public array $filter = [];
 
     /**
      * {@inheritDoc}
@@ -53,7 +53,7 @@ class ExportController extends AppController
         parent::initialize();
 
         $this->loadComponent('Export');
-        $this->Security->setConfig('unlockedActions', ['related']);
+        $this->FormProtection->setConfig('unlockedActions', ['related']);
     }
 
     /**
@@ -345,7 +345,7 @@ class ExportController extends AppController
      * @param array $response The response from which extract fields
      * @return array
      */
-    protected function getFieldNames($response): array
+    protected function getFieldNames(array $response): array
     {
         $fields = (array)Hash::get($response, 'data.0.attributes');
         $meta = (array)Hash::get($response, 'data.0.meta');
@@ -390,7 +390,7 @@ class ExportController extends AppController
      * @param mixed $value The value
      * @return mixed
      */
-    protected function getValue($value)
+    protected function getValue(mixed $value): mixed
     {
         if (is_array($value)) {
             return json_encode($value);

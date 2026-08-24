@@ -11,24 +11,29 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use ReflectionClass;
 
 /**
  * {@see \App\Controller\Admin\RolesModulesController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\RolesModulesController
  */
+#[CoversClass(RolesModulesController::class)]
+#[CoversMethod(RolesModulesController::class, 'allowedRoles')]
+#[CoversMethod(RolesModulesController::class, 'index')]
+#[CoversMethod(RolesModulesController::class, 'save')]
 class RolesModulesControllerTest extends TestCase
 {
     use ApiConfigTrait;
 
-    public $RlsController;
+    public RolesModulesController $RlsController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -42,7 +47,7 @@ class RolesModulesControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc
@@ -78,8 +83,8 @@ class RolesModulesControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->RlsController = new class ($request) extends RolesModulesController
         {
-            protected $resourceType = 'roles';
-            protected $properties = ['name'];
+            protected ?string $resourceType = 'roles';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -92,7 +97,6 @@ class RolesModulesControllerTest extends TestCase
      * Basic test
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {
@@ -122,7 +126,6 @@ class RolesModulesControllerTest extends TestCase
      * Test `index` exception
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndexException(): void
     {
@@ -130,21 +133,23 @@ class RolesModulesControllerTest extends TestCase
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://example.com'])
             ->getMock();
-        $apiClient->method('get')->will(
-            $this->returnCallback(
-                function ($param) {
-                    if ($param === '/roles') {
-                        return ['data' => [], 'meta' => [], 'links' => []];
-                    }
-                    if ($param === '/admin/endpoint_permissions') {
-                        throw new BEditaClientException('My test exception');
-                    }
+        $apiClient->method('get')->willReturnCallback(
+            function ($param) {
+                if ($param === '/roles') {
+                    return ['data' => [], 'meta' => [], 'links' => []];
                 }
-            )
+                if ($param === '/admin/endpoint_permissions') {
+                    throw new BEditaClientException('My test exception');
+                }
+            },
         );
-        $this->RlsController->apiClient = $apiClient;
-        $this->RlsController->index();
-        $flash = $this->RlsController->getRequest()->getSession()->read('Flash.flash');
+        $controller = new class ($this->RlsController->getRequest()) extends RolesModulesController
+        {
+            public ?BEditaClient $apiClient;
+        };
+        $controller->apiClient = $apiClient;
+        $controller->index();
+        $flash = $controller->getRequest()->getSession()->read('Flash.flash');
         static::assertEquals('My test exception', Hash::get($flash, '0.message'));
     }
 
@@ -152,7 +157,6 @@ class RolesModulesControllerTest extends TestCase
      * Test save
      *
      * @return void
-     * @covers ::save()
      */
     public function testSave(): void
     {
@@ -179,8 +183,8 @@ class RolesModulesControllerTest extends TestCase
                     'post' => [
                         'roles' => $roles,
                     ],
-                ]
-            )
+                ],
+            ),
         );
         $response = $this->RlsController->save();
         static::assertSame(Response::class, get_class($response));
@@ -190,11 +194,10 @@ class RolesModulesControllerTest extends TestCase
      * Test `allowedRoles`
      *
      * @return void
-     * @covers ::allowedRoles()
      */
     public function testAllowedRoles(): void
     {
-        $reflection = new \ReflectionClass(get_class($this->RlsController));
+        $reflection = new ReflectionClass(get_class($this->RlsController));
         $method = $reflection->getMethod('allowedRoles');
         $method->setAccessible(true);
 

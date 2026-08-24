@@ -1,3 +1,5 @@
+@use "../../../resources/styles/variables";
+
 body.view-admin {
     .filter-box-admin > .filters-container > .filter-container > span {
         margin-left: 15px;
@@ -11,23 +13,23 @@ body.view-admin {
     }
     .table-row {
         &.new-record > * {
-            padding-top: calc($gutter * 4) !important;
+            padding-top: calc(variables.$gutter * 4) !important;
         }
     }
 }
 
 .app-module-links {
     a:not(.button), span {
-        border-bottom: 1px solid $gray-600;
-        padding: calc($gutter * 0.5);
-        padding-left: $gutter;
+        border-bottom: 1px solid variables.$gray-600;
+        padding: calc(variables.$gutter * 0.5);
+        padding-left: variables.$gutter;
         margin: 0 !important;
     }
     .button {
-        margin-top: calc($gutter * 2);
+        margin-top: calc(variables.$gutter * 2);
     }
     .active-action {
-        background-color: $gray-600;
+        background-color: variables.$gray-600;
         font-weight: normal !important;
         color: black !important;
     }

@@ -13,6 +13,7 @@
 namespace App\Middleware;
 
 use App\Utility\ApiConfigTrait;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Core\Configure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -34,6 +35,10 @@ class ConfigurationMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (Configure::check('API.apiBaseUrl')) {
+            $identity = $request->getAttribute('identity');
+            if ($identity && $identity->get('tokens')) {
+                ApiClientProvider::getApiClient()->setupTokens($identity->get('tokens'));
+            }
             $this->readApiConfig();
         }
 

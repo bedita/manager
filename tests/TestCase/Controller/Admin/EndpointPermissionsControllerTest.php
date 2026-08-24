@@ -2,26 +2,27 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\EndpointPermissionsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * {@see \App\Controller\Admin\EndpointPermissionsController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\EndpointPermissionsController
  */
+#[CoversClass(EndpointPermissionsController::class)]
 class EndpointPermissionsControllerTest extends TestCase
 {
-    public $EndPermsController;
+    public EndpointPermissionsController $EndPermsController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -35,7 +36,7 @@ class EndpointPermissionsControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc
@@ -48,8 +49,8 @@ class EndpointPermissionsControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->EndPermsController = new class ($request) extends EndpointPermissionsController
         {
-            protected $resourceType = 'endpoint_permissions';
-            protected $properties = ['endpoint_id', 'application_id'];
+            protected ?string $resourceType = 'endpoint_permissions';
+            protected array $properties = ['endpoint_id', 'application_id'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -108,8 +109,8 @@ class EndpointPermissionsControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->EndPermsController = new class ($request) extends EndpointPermissionsController
         {
-            protected $resourceType = 'endpoint_permissions';
-            protected $properties = ['endpoint_id', 'application_id'];
+            protected ?string $resourceType = 'endpoint_permissions';
+            protected array $properties = ['endpoint_id', 'application_id'];
         };
         $response = $this->EndPermsController->save();
         static::assertSame(Response::class, get_class($response));

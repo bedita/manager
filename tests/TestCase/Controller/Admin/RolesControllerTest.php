@@ -3,25 +3,29 @@ namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\RolesController;
 use App\Test\TestCase\Controller\BaseControllerTest;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Http\ServerRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Admin\RolesController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\RolesController
  */
+#[CoversClass(RolesController::class)]
+#[CoversMethod(RolesController::class, 'save')]
+#[CoversMethod(RolesController::class, 'remove')]
 class RolesControllerTest extends BaseControllerTest
 {
-    public $RlsController;
+    public RolesController $RlsController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -35,7 +39,7 @@ class RolesControllerTest extends BaseControllerTest
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * @inheritDoc
@@ -70,8 +74,8 @@ class RolesControllerTest extends BaseControllerTest
         $request = new ServerRequest($config);
         $this->RlsController = new class ($request) extends RolesController
         {
-            protected $resourceType = 'roles';
-            protected $properties = ['name'];
+            protected ?string $resourceType = 'roles';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');

@@ -13,8 +13,10 @@
 namespace App\Identifier;
 
 use App\Identifier\Resolver\ApiResolver;
+use ArrayAccess;
 use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identifier\Resolver\ResolverAwareTrait;
+use Authentication\Identifier\TokenIdentifier;
 
 /**
  * Identifies authentication credentials through an API.
@@ -30,7 +32,7 @@ class ApiIdentifier extends AbstractIdentifier
      *
      * @var array
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'timezoneField' => 'timezone',
         'resolver' => ApiResolver::class,
     ];
@@ -38,12 +40,12 @@ class ApiIdentifier extends AbstractIdentifier
     /**
      * @inheritDoc
      */
-    public function identify(array $credentials)
+    public function identify(array $credentials): array|ArrayAccess|null
     {
         if (
-            empty($credentials[self::CREDENTIAL_USERNAME]) &&
-            empty($credentials[self::CREDENTIAL_PASSWORD]) &&
-            empty($credentials[self::CREDENTIAL_TOKEN])
+            empty($credentials[AbstractIdentifier::CREDENTIAL_USERNAME]) &&
+            empty($credentials[AbstractIdentifier::CREDENTIAL_PASSWORD]) &&
+            empty($credentials[TokenIdentifier::CREDENTIAL_TOKEN])
         ) {
             return null;
         }
@@ -57,7 +59,7 @@ class ApiIdentifier extends AbstractIdentifier
      * @param array $credentials The user credentials
      * @return array|\ArrayAccess|null
      */
-    protected function findIdentity(array $credentials)
+    protected function findIdentity(array $credentials): array|ArrayAccess|null
     {
         $identity = $this->getResolver()->find($credentials);
         if (empty($identity)) {
@@ -71,8 +73,8 @@ class ApiIdentifier extends AbstractIdentifier
         }
 
         // Flatten username and renew token in identity
-        $identity[self::CREDENTIAL_USERNAME] = $identity['attributes']['username'];
-        $identity[self::CREDENTIAL_TOKEN] = $identity['tokens']['renew'];
+        $identity[AbstractIdentifier::CREDENTIAL_USERNAME] = $identity['attributes']['username'];
+        $identity[TokenIdentifier::CREDENTIAL_TOKEN] = $identity['tokens']['renew'];
 
         return $identity;
     }

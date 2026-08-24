@@ -69,7 +69,7 @@ class PasswordController extends AppController
             $result = $this->apiClient->post(
                 '/auth/change',
                 json_encode($data),
-                ['Content-Type' => 'application/json']
+                ['Content-Type' => 'application/json'],
             );
             $this->set(compact('result'));
         } catch (BEditaClientException $ex) {
@@ -106,7 +106,7 @@ class PasswordController extends AppController
             $result = (array)$this->apiClient->patch(
                 '/auth/change',
                 json_encode($data),
-                ['Content-Type' => 'application/json']
+                ['Content-Type' => 'application/json'],
             );
         } catch (BEditaClientException $ex) {
             $this->Flash->error(__($ex->getMessage()));

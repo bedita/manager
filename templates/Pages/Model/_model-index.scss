@@ -1,3 +1,5 @@
+@use "../../../resources/styles/variables";
+
 body.view-model {
 
     // true
@@ -22,12 +24,12 @@ body.view-model {
 
                 .first-cell {
                     button {
-                        min-width: $gutter * 2;
+                        min-width: variables.$gutter * 2;
                     }
                 }
 
                 &.editing-property-type {
-                    border-bottom: 1px dashed $gray-200;
+                    border-bottom: 1px dashed variables.$gray-200;
                 }
 
                 &.delete-property-type {
@@ -54,17 +56,17 @@ body.view-model {
                 }
 
                 div {
-                    padding: $gutter * .25 $gutter * .5;
+                    padding: variables.$gutter * .25 variables.$gutter * .5;
                     vertical-align: middle;
 
                     &.first-cell, &.action-cell {
                         flex: 0 0 65px;
 
                         i {
-                            margin-left: $gutter * .5;
+                            margin-left: variables.$gutter * .5;
                         }
                         input {
-                            margin-right: $gutter * .5;
+                            margin-right: variables.$gutter * .5;
                         }
                     }
 
@@ -79,22 +81,22 @@ body.view-model {
 
                 &.new-row div {
                     &.primary, &.secondary, &.name-cell, &.inverse_name-cell, &.params-cell, &.enabled-cell, &.is_abstract-cell {
-                        padding: $gutter * 0.25 $gutter * 0.5;
+                        padding: variables.$gutter * 0.25 variables.$gutter * 0.5;
                     }
                 }
 
                 input, textarea {
                     background: transparent;
-                    color: $gray-100;
+                    color: variables.$gray-100;
                     border: 1px solid transparent;
 
                     &:hover, &:focus {
-                        border: 1px solid $gray-100;
+                        border: 1px solid variables.$gray-100;
                     }
                 }
 
                 textarea {
-                    min-height: $gutter * 2;
+                    min-height: variables.$gutter * 2;
                     width: 100%;
                     // resize: none;
                 }
@@ -104,7 +106,7 @@ body.view-model {
                 display: flex;
 
                 &.table-header {
-                    border-bottom: 1px solid $gray-700;
+                    border-bottom: 1px solid variables.$gray-700;
 
                     .first-cell, .action-cell {
                         flex: 0 0 65px;
@@ -137,10 +139,10 @@ body.view-model {
                 width: 100%;
 
                 &:hover {
-                    background-color: $gray-700;
+                    background-color: variables.$gray-700;
 
                     .inverted {
-                        background-color: $gray-700;
+                        background-color: variables.$gray-700;
                     }
                 }
             }
@@ -148,7 +150,7 @@ body.view-model {
             > nav, > .resource-status-on {
                 div {
                     display: flex;
-                    padding: $gutter * .5;
+                    padding: variables.$gutter * .5;
                     white-space: nowrap;
                     vertical-align: middle;
 
@@ -166,14 +168,14 @@ body.view-model {
                         overflow: hidden;
                         &:empty:before {
                             content: attr(untitled-label);
-                            color: $gray-600;
+                            color: variables.$gray-600;
                             font-style: italic;
                         }
                     }
 
                     &.thumb-cell {
-                        max-width: $gutter * 2.5;
-                        height: $gutter * 2;
+                        max-width: variables.$gutter * 2.5;
+                        height: variables.$gutter * 2;
                         padding: 0;
                         overflow: hidden;
                         img {
@@ -182,7 +184,7 @@ body.view-model {
                             max-height: 100%;
                             max-width: 100%;
                             vertical-align: middle;
-                            background-color: $gray-200;
+                            background-color: variables.$gray-200;
                         }
                         .icon {
                             display: inline-block;
@@ -207,10 +209,10 @@ body.view-model {
         }
 
         .bulk-actions {
-            border-top: 1px solid $gray-700;
+            border-top: 1px solid variables.$gray-700;
 
             header {
-                margin: $gutter 0 $gutter * .5;
+                margin: variables.$gutter 0 variables.$gutter * .5;
                 width: 100%;
                 opacity: .3;
             }
@@ -222,7 +224,7 @@ body.view-model {
             nav {
                 display: flex;
                 form {
-                    margin-right: $gutter;
+                    margin-right: variables.$gutter;
                     &:last-of-type {
                         margin-right: 0;
                         margin-left: auto;

@@ -10,26 +10,28 @@
  *
  * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
-namespace App\Test\TestCase;
+namespace App\Test\TestCase\Utility;
 
 use App\Utility\Applications;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
- * App\Utility\Applications Test Case
- *
- * @coversDefaultClass App\Utility\Applications
+ * {@see \App\Utility\Applications} Test Case
  */
+#[CoversClass(Applications::class)]
+#[CoversMethod(Applications::class, 'getName')]
+#[CoversMethod(Applications::class, 'list')]
 class ApplicationsTest extends TestCase
 {
     /**
      * Test `list` method.
      *
      * @return void
-     * @covers ::list()
      */
     public function testList(): void
     {
@@ -70,7 +72,6 @@ class ApplicationsTest extends TestCase
      * Test `list` method, exception case.
      *
      * @return void
-     * @covers ::list()
      */
     public function testListException(): void
     {
@@ -89,7 +90,6 @@ class ApplicationsTest extends TestCase
      * Test `getName` method
      *
      * @return void
-     * @covers ::getName()
      */
     public function testGetName(): void
     {

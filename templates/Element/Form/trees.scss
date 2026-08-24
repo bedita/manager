@@ -1,10 +1,12 @@
+@use "../../../resources/styles/variables";
+
 .tree-view-node {
-    color: $gray-100;
-    padding: 0 $gutter * .5;
+    color: variables.$gray-100;
+    padding: 0 variables.$gutter * .5;
     line-height: 1;
 
     &.is-root {
-        border-bottom: solid 1px $gray-800;
+        border-bottom: solid 1px variables.$gray-800;
     }
 
     .node-element {
@@ -15,28 +17,28 @@
 
         &[data-status='draft'],
         &[data-status='off'] {
-            color: $gray-500;
+            color: variables.$gray-500;
         }
 
         > label.node-label {
             flex: none !important;
-            margin-right: $gutter;
+            margin-right: variables.$gutter;
             color: inherit;
-            line-height: $gutter * 2;
+            line-height: variables.$gutter * 2;
             cursor: pointer;
 
             > input[type='checkbox'],
             > input[type='radio'] {
-                margin-top: -$gutter * .125;
-                margin-right: $gutter * .5;
+                margin-top: -(variables.$gutter) * .125;
+                margin-right: variables.$gutter * .5;
                 vertical-align: middle;
             }
         }
 
         > a {
             display: inline-block;
-            padding: $gutter * .5 $gutter * 1.5;
-            margin-left: $gutter;
+            padding: variables.$gutter * .5 variables.$gutter * 1.5;
+            margin-left: variables.$gutter;
             vertical-align: middle;
             text-transform: uppercase;
             border: solid 1px currentColor;
@@ -58,7 +60,7 @@
 
         .tree-param {
             position: relative;
-            margin: $gutter * .25 $gutter * .5 $gutter * .25 0;
+            margin: variables.$gutter * .25 variables.$gutter * .5 variables.$gutter * .25 0;
 
             input {
                 position: absolute;
@@ -70,7 +72,7 @@
                 appearance: none;
 
                 &:checked + label {
-                    color: $white;
+                    color: variables.$white;
                     background: var(--color-module, #000);
                     border-color: transparent;
                 }
@@ -81,7 +83,7 @@
                 align-items: center;
                 margin: 0;
                 padding: 0.25em 0.5em;
-                color: $gray-500;
+                color: variables.$gray-500;
                 line-height: 1 !important;
                 border-radius: 2em;
                 border: solid 1px currentColor;
@@ -91,7 +93,7 @@
 
         > button {
             margin: 0;
-            min-width: $gutter * 2;
+            min-width: variables.$gutter * 2;
             color: currentColor;
             background: transparent;
             border: 0;
@@ -115,10 +117,10 @@
 
     .node-element ~ .node-children {
         &:not(:empty) {
-            margin-top: -$gutter;
-            margin-left: 3 * $gutter * .125;
-            padding-top: $gutter;
-            padding-left: $gutter * .5;
+            margin-top: -(variables.$gutter);
+            margin-left: 3 * variables.$gutter * .125;
+            padding-top: variables.$gutter;
+            padding-left: variables.$gutter * .5;
             border-left: solid 1px rgba(255, 255, 255, 0.25);
         }
     }

@@ -15,17 +15,21 @@ namespace App\Test\TestCase\Controller\Model;
 
 use App\Controller\Component\SchemaComponent;
 use App\Controller\Model\CategoriesController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
+use Cake\Controller\ComponentRegistry;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Model\CategoriesController} Test Case
- *
- * @coversDefaultClass \App\Controller\Model\CategoriesController
- * @uses \App\Controller\Model\CategoriesController
  */
+#[CoversClass(CategoriesController::class)]
+#[CoversMethod(CategoriesController::class, 'index')]
+#[CoversMethod(CategoriesController::class, 'initialize')]
 class CategoriesControllerTest extends TestCase
 {
     /**
@@ -33,21 +37,21 @@ class CategoriesControllerTest extends TestCase
      *
      * @var \App\Controller\Model\CategoriesController
      */
-    public $Categories;
+    public CategoriesController $Categories;
 
     /**
      * Client API
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -58,6 +62,15 @@ class CategoriesControllerTest extends TestCase
             'resource_type' => 'categories',
         ],
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown(): void
+    {
+        unset($this->Categories);
+        parent::tearDown();
+    }
 
     /**
      * Setup api client and auth
@@ -85,42 +98,36 @@ class CategoriesControllerTest extends TestCase
     {
         $config = array_merge($this->defaultRequestConfig, $requestConfig);
         $request = new ServerRequest($config);
-        $this->Categories = new CategoriesController($request);
+        $this->Categories = new class ($request) extends CategoriesController {
+            public SchemaComponent $Schema;
+            public function initialize(): void
+            {
+                $this->Schema = new class (new ComponentRegistry($this)) extends SchemaComponent {
+                    public function objectTypesFeatures(): array
+                    {
+                        return [
+                            'categorized' => [
+                                'cats',
+                                'dogs',
+                                'horses',
+                            ],
+                        ];
+                    }
+                };
+                parent::initialize();
+            }
+        };
         $this->setupApi();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function tearDown(): void
-    {
-        unset($this->Categories);
-
-        parent::tearDown();
     }
 
     /**
      * Test `index` method
      *
-     * @covers ::initialize()
-     * @covers ::index()
      * @return void
      */
     public function testIndex(): void
     {
         $this->setupController();
-        // mock objectTypesFeatures()
-        // mock schema component
-        $mockResponse = [
-            'categorized' => [
-                'cats',
-                'dogs',
-                'horses',
-            ],
-        ];
-        $this->Categories->Schema = $this->createMock(SchemaComponent::class);
-        $this->Categories->Schema->method('objectTypesFeatures')
-            ->willReturn($mockResponse);
         $beditaApiVersion = (string)Hash::get((array)ApiClientProvider::getApiClient()->get('/home'), 'meta.version');
         $this->Categories->viewBuilder()->setVar('project', ['version' => $beditaApiVersion]);
         $this->Categories->index();

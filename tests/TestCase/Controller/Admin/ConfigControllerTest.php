@@ -2,25 +2,29 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\ConfigController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Admin\ConfigController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\ConfigController
  */
+#[CoversClass(ConfigController::class)]
+#[CoversMethod(ConfigController::class, 'beforeFilter')]
+#[CoversMethod(ConfigController::class, 'fetchApplications')]
 class ConfigControllerTest extends TestCase
 {
-    public $CfgController;
+    public ConfigController $CfgController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -34,7 +38,7 @@ class ConfigControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc
@@ -48,8 +52,8 @@ class ConfigControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->CfgController = new class ($request) extends ConfigController
         {
-            protected $resourceType = 'config';
-            protected $properties = ['name'];
+            protected ?string $resourceType = 'config';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');
@@ -90,7 +94,6 @@ class ConfigControllerTest extends TestCase
      * Test `beforeFilter`
      *
      * @return void
-     * @covers ::beforeFilter()
      */
     public function testBeforeFilter(): void
     {
@@ -104,7 +107,6 @@ class ConfigControllerTest extends TestCase
      * Test `fetchApplications`
      *
      * @return void
-     * @covers ::fetchApplications()
      */
     public function testFetchApplications(): void
     {

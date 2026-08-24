@@ -9,6 +9,7 @@
         {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
             'url': {'_name': 'user_profile:save', 'object_type': 'users'},
             'id': 'form-main',
+            'class': 'object-form',
         })|raw }}
 
             {{ Form.hidden('id', {'value': object.id})|raw }}

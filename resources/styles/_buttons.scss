@@ -1,4 +1,6 @@
-#{$button-inputs},
+@use "variables";
+
+#{variables.$button-inputs},
 button, .button {
     display: inline-flex;
     justify-content: center;
@@ -8,10 +10,10 @@ button, .button {
     vertical-align: top;
 
     position: relative;
-    height: $gutter * 2;
-    min-width: $gutter * 3;
+    height: variables.$gutter * 2;
+    min-width: variables.$gutter * 3;
     @media screen and (min-width: 1440px) {
-        min-width: $gutter * 4;
+        min-width: variables.$gutter * 4;
     }
     flex-shrink: 0;
     box-shadow: none;
@@ -25,14 +27,14 @@ button, .button {
     border-style: solid;
 
     // -- overridden by specific utility buttons
-    background-color: $gray-200;
-    border-color: $gray-200;
-    color: $gray-900;
+    background-color: variables.$gray-200;
+    border-color: variables.$gray-200;
+    color: variables.$gray-900;
     // --
 
-    font-family: $font-family-sans-serif;
-    font-size: $font-size-sssm;
-    font-weight: $font-weight-medium;
+    font-family: variables.$font-family-sans-serif;
+    font-size: variables.$font-size-sssm;
+    font-weight: variables.$font-weight-medium;
     text-transform: uppercase;
     line-height: 1;
 
@@ -45,22 +47,22 @@ button, .button {
 
     // button states
     &:disabled, &.disabled {
-        color: $gray-800 !important;
-        background-color: $gray-600 !important;
-        border-color: $gray-600 !important;
+        color: variables.$gray-800 !important;
+        background-color: variables.$gray-600 !important;
+        border-color: variables.$gray-600 !important;
         pointer-events: none;
     }
 
 
     &:hover {
-        background-color: $gray-600;
+        background-color: variables.$gray-600;
         color: #FFF;
         outline: 0;
     }
 
     &:focus {
         outline: 0;
-        background-color: $gray-600;
+        background-color: variables.$gray-600;
         border-color: #fff;
         color: #FFF;
     }
@@ -72,15 +74,15 @@ button, .button {
     }
 
     &.is-small {
-        height: $gutter * 1.5;
+        height: variables.$gutter * 1.5;
         padding-left: .5em;
         padding-right: .5em;
-        font-size: $font-size-sssm;
+        font-size: variables.$font-size-sssm;
     }
 
     &.is-dark {
-        background-color: $gray-700;
-        color: $gray-300;
+        background-color: variables.$gray-700;
+        color: variables.$gray-300;
     }
 
     &.is-loading-spinner {
@@ -88,7 +90,7 @@ button, .button {
         pointer-events: none;
         &:after {
             position: absolute;
-            border-color: $gray-900;
+            border-color: variables.$gray-900;
             border-right-color: transparent;
             border-top-color: transparent;
         }
@@ -100,7 +102,7 @@ button, .button {
         border: none;
         width: auto;
         min-width: initial;
-        color: $white;
+        color: variables.$white;
         font-size: 1rem;
     }
 }
@@ -109,28 +111,28 @@ button, .button {
 // utility buttons
 .button {
     &-primary {
-        background-color: $white;
-        border-color: $white;
-        color: $black;
+        background-color: variables.$white;
+        border-color: variables.$white;
+        color: variables.$black;
     }
     &-secondary {
-        background-color: $gray-300;
-        border-color: $gray-300;
-        color: $black;
+        background-color: variables.$gray-300;
+        border-color: variables.$gray-300;
+        color: variables.$black;
     }
     &-outlined {
         background-color: transparent;
-        border-color: $white;
-        color: $white;
+        border-color: variables.$white;
+        color: variables.$white;
         &:disabled, &.disabled {
         }
     }
     &-outlined-white {
         background-color: transparent;
-        border-color: $black;
-        color: $black;
+        border-color: variables.$black;
+        color: variables.$black;
         &:hover {
-            border-color: $gray-600;
+            border-color: variables.$gray-600;
         }
         &:disabled, &.disabled {
         }
@@ -138,14 +140,14 @@ button, .button {
     &-text {
         background-color: transparent;
         border-color: transparent;
-        color: $black;
+        color: variables.$black;
         &:disabled, &.disabled {
         }
     }
     &-text-white {
         background-color: transparent;
         border-color: transparent;
-        color: $white;
+        color: variables.$white;
         &:disabled, &.disabled {
         }
     }

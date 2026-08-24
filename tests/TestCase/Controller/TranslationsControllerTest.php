@@ -14,19 +14,31 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\TranslationsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\Exception\BadRequestException;
+use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use Exception;
 use Laminas\Diactoros\Uri;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use ReflectionClass;
 
 /**
  * {@see \App\Controller\TranslationsController} Test Case
- *
- * @coversDefaultClass \App\Controller\TranslationsController
- * @uses \App\Controller\TranslationsController
  */
+#[CoversClass(TranslationsController::class)]
+#[CoversMethod(TranslationsController::class, 'add')]
+#[CoversMethod(TranslationsController::class, 'delete')]
+#[CoversMethod(TranslationsController::class, 'edit')]
+#[CoversMethod(TranslationsController::class, 'index')]
+#[CoversMethod(TranslationsController::class, 'initialize')]
+#[CoversMethod(TranslationsController::class, 'save')]
+#[CoversMethod(TranslationsController::class, 'setupJsonKeys')]
+#[CoversMethod(TranslationsController::class, 'typeFromUrl')]
 class TranslationsControllerTest extends TestCase
 {
     /**
@@ -43,28 +55,28 @@ class TranslationsControllerTest extends TestCase
      *
      * @var \App\Controller\TranslationsController
      */
-    public $controller;
+    public TranslationsController $controller;
 
     /**
      * Test api client
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    public $client;
+    public BEditaClient $client;
 
     /**
      * Uname for test object
      *
      * @var string
      */
-    protected $uname = 'translations-controller-test-document';
+    protected string $uname = 'translations-controller-test-document';
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -107,7 +119,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `initialize` method
      *
-     * @covers ::initialize()
      * @return void
      */
     public function testInitialize(): void
@@ -122,7 +133,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `add` method
      *
-     * @covers ::add()
      * @return void
      */
     public function testAdd(): void
@@ -146,7 +156,7 @@ class TranslationsControllerTest extends TestCase
 
         // on error
         $result = $this->controller->add(123456789);
-        $expected = get_class(new \Cake\Http\Response());
+        $expected = get_class(new Response());
         $actual = get_class($result);
         static::assertEquals($expected, $actual);
     }
@@ -154,7 +164,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `edit` method
      *
-     * @covers ::edit()
      * @return void
      */
     public function testEdit(): void
@@ -179,7 +188,7 @@ class TranslationsControllerTest extends TestCase
 
         // on error
         $result = $this->controller->edit(123456789, $lang);
-        $expected = get_class(new \Cake\Http\Response());
+        $expected = get_class(new Response());
         $actual = get_class($result);
         static::assertEquals($expected, $actual);
     }
@@ -187,7 +196,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `save` method
      *
-     * @covers ::save()
      * @return void
      */
     public function testSave(): void
@@ -305,8 +313,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `save` method with JSON fields
      *
-     * @covers ::save()
-     * @covers ::setupJsonKeys()
      * @return void
      */
     public function testSaveJson(): void
@@ -366,7 +372,6 @@ class TranslationsControllerTest extends TestCase
     /**
      * Test `delete` method
      *
-     * @covers ::delete()
      * @return void
      */
     public function testDelete(): void
@@ -415,7 +420,7 @@ class TranslationsControllerTest extends TestCase
         $this->controller = new TranslationsController($request);
         try {
             $this->controller->delete();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $expected = get_class(new BadRequestException());
             $actual = get_class($e);
             static::assertEquals($expected, $actual);
@@ -435,7 +440,7 @@ class TranslationsControllerTest extends TestCase
         $this->controller = new TranslationsController($request);
         try {
             $this->controller->delete();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $expected = get_class(new BadRequestException());
             $actual = get_class($e);
             static::assertEquals($expected, $actual);
@@ -455,7 +460,7 @@ class TranslationsControllerTest extends TestCase
         $this->controller = new TranslationsController($request);
         try {
             $this->controller->delete();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $expected = get_class(new BadRequestException());
             $actual = get_class($e);
             static::assertEquals($expected, $actual);
@@ -474,7 +479,7 @@ class TranslationsControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->controller = new TranslationsController($request);
         $response = $this->controller->delete();
-        $expected = get_class(new \Cake\Http\Response());
+        $expected = get_class(new Response());
         $actual = get_class($response);
         static::assertEquals($expected, $actual);
     }
@@ -483,14 +488,13 @@ class TranslationsControllerTest extends TestCase
      * Test `typeFromUrl` method.
      *
      * @return void
-     * @covers ::typeFromUrl()
      */
     public function testTypeFromUrl(): void
     {
         $uri = new Uri('/documents/1/translation/lang');
         $request = new ServerRequest($this->defaultRequestConfig + compact('uri'));
         $this->controller = new TranslationsController($request);
-        $reflectionClass = new \ReflectionClass($this->controller);
+        $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('typeFromUrl');
         $method->setAccessible(true);
         $expected = 'documents';
@@ -500,7 +504,7 @@ class TranslationsControllerTest extends TestCase
         $request = new ServerRequest($this->defaultRequestConfig);
         $this->controller = new TranslationsController($request);
         $this->controller->setObjectType('dummies');
-        $reflectionClass = new \ReflectionClass($this->controller);
+        $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('typeFromUrl');
         $method->setAccessible(true);
         $expected = 'dummies';
@@ -595,7 +599,7 @@ class TranslationsControllerTest extends TestCase
     {
         $o = $this->getTestObject();
         if ($o == null) {
-            $response = $this->client->restoreObject($id, $type);
+            $this->client->restoreObject($id, $type);
         }
     }
 
@@ -616,7 +620,6 @@ class TranslationsControllerTest extends TestCase
      * Test `index` method
      *
      * @return void
-     * @covers ::index()
      */
     public function testIndex(): void
     {

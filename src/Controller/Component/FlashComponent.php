@@ -17,6 +17,7 @@ use BEdita\SDK\BEditaClientException;
 use Cake\Controller\Component\FlashComponent as CakeFlashComponent;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
+use Exception;
 
 /**
  * Extends CakePHP FlashComponent setting exception attributes.
@@ -29,7 +30,7 @@ class FlashComponent extends CakeFlashComponent
     public function set($message, array $options = []): void
     {
         $error = Hash::get($options, 'params');
-        if ($error && ($error instanceof \Exception)) {
+        if ($error && ($error instanceof Exception)) {
             $options['params'] = [
                 'title' => $error->getMessage(),
                 // exception error code is HTTP status as default

@@ -16,12 +16,18 @@ namespace App\Test\TestCase\View\Helper;
 use App\View\Helper\AdminHelper;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\View\Helper\AdminHelper} Test Case
- *
- * @coversDefaultClass \App\View\Helper\AdminHelper
  */
+#[CoversClass(AdminHelper::class)]
+#[CoversMethod(AdminHelper::class, 'control')]
+#[CoversMethod(AdminHelper::class, 'getDictionary')]
+#[CoversMethod(AdminHelper::class, 'initialize')]
+#[CoversMethod(AdminHelper::class, 'setDictionary')]
 class AdminHelperTest extends TestCase
 {
     /**
@@ -29,7 +35,7 @@ class AdminHelperTest extends TestCase
      *
      * @return array
      */
-    public function controlProvider(): array
+    public static function controlProvider(): array
     {
         return [
             'text value null' => [
@@ -103,10 +109,8 @@ class AdminHelperTest extends TestCase
      * @param mixed $value The value
      * @param string $expected The expected result
      * @return void
-     * @dataProvider controlProvider()
-     * @covers ::control()
-     * @covers ::initialize()
      */
+    #[DataProvider('controlProvider')]
     public function testControl(string $type, string $property, $value, string $expected = ''): void
     {
         $view = new View(null, null, null, []);
@@ -121,7 +125,7 @@ class AdminHelperTest extends TestCase
      *
      * @return array
      */
-    public function controlProviderReadonly(): array
+    public static function controlProviderReadonly(): array
     {
         return [
             'readonly' => [
@@ -150,9 +154,8 @@ class AdminHelperTest extends TestCase
      * @param mixed $value The value
      * @param string $expected The expected result
      * @return void
-     * @dataProvider controlProviderReadonly()
-     * @covers ::control()
      */
+    #[DataProvider('controlProviderReadonly')]
     public function testControlReadonly(bool $readonly, array $resource, string $property, $value, string $expected = ''): void
     {
         $view = new View(null, null, null, []);
@@ -171,8 +174,6 @@ class AdminHelperTest extends TestCase
      * Test `getDictionary` and `setDictionary` methods.
      *
      * @return void
-     * @covers ::getDictionary()
-     * @covers ::setDictionary()
      */
     public function testDictionary(): void
     {

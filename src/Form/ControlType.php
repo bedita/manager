@@ -165,7 +165,7 @@ class ControlType
      */
     public static function fromArray(array $schema): string
     {
-        return 'checkbox';
+        return Hash::get($schema, '$id') === '#/properties/roles' ? 'enum' : 'checkbox';
     }
 
     /**

@@ -1,8 +1,10 @@
+@use "../../../resources/styles/variables";
+
 // override default layout
 body.view-login {
     height: 100vh;
-    background-color: $defaultBackground;
-    background-image: linear-gradient(to bottom right, $gray-600 0%, $black 100%);
+    background-color: variables.$defaultBackground;
+    background-image: linear-gradient(to bottom right, variables.$gray-600 0%, variables.$black 100%);
     background-attachment: fixed;
     background-repeat: no-repeat;
 
@@ -17,7 +19,7 @@ body.view-login {
         .login {
             position: relative;
             display: grid;
-            column-gap: $gutter * 2;
+            column-gap: variables.$gutter * 2;
             grid-template: "login-title login-form" "login-footer login-form";
 
             .logo {
@@ -28,29 +30,29 @@ body.view-login {
                 width: 62px;
                 height: 50px;
                 opacity: .2;
-                margin-bottom:$gutter;
+                margin-bottom:variables.$gutter;
             }
             .login-title {
                 grid-area: login-title;
                 font-size:1.5em;
                 line-height: 1.375em;
                 width:176px;
-                font-family: $font-family-serif;
+                font-family: variables.$font-family-serif;
             }
             .login-form {
                 width:264px;
                 grid-area: login-form;
-                padding-top: $gutter * .25;
-                padding-bottom:$gutter;
+                padding-top: variables.$gutter * .25;
+                padding-bottom:variables.$gutter;
                 form {
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
 
                     label {
-                        color: $white;
+                        color: variables.$white;
                         font-weight: normal;
-                        margin: $gutter 0 $gutter * .25 0;
+                        margin: variables.$gutter 0 variables.$gutter * .25 0;
                     }
 
                     label, input {
@@ -58,15 +60,15 @@ body.view-login {
                         width: 100%;
 
                         &[type='submit'] {
-                            margin-top: $gutter * 2;
-                            margin-bottom: $gutter;
+                            margin-top: variables.$gutter * 2;
+                            margin-bottom: variables.$gutter;
                             color: black;
-                            border-color: $gray-300;
+                            border-color: variables.$gray-300;
                             width:96px;
                             &:focus,
                             &:hover {
-                                color: $white;
-                                background-color: $gray-900;
+                                color: variables.$white;
+                                background-color: variables.$gray-900;
                             }
                         }
                     }
@@ -75,7 +77,7 @@ body.view-login {
             footer {
                 grid-area: login-footer;
                 width:176px;
-                padding-top: $gutter;
+                padding-top: variables.$gutter;
             }
             @media screen and (max-width: 780px) {
                 grid-template: "login-title" "login-form" "login-footer";
@@ -88,14 +90,14 @@ body.view-login {
         position: static;
         display: block;
         .message {
-            background-color: $error;
+            background-color: variables.$error;
             color: #fff;
             max-width: 100%;
             h2 {
                 margin: 0; padding: 0;
-                font-family: $font-family-sans-serif;
-                font-size: $font-size-sm;
-                line-height: $line-height-base;
+                font-family: variables.$font-family-sans-serif;
+                font-size: variables.$font-size-sm;
+                line-height: variables.$line-height-base;
             }
             // no multiple messages
             display: none;

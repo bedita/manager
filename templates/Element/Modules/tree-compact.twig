@@ -1,0 +1,20 @@
+{% set limit = config('UI.tree_compact_view_limit', 100) %}
+{% set count = meta.pagination.count %}
+{% if count > limit %}
+	<section class="px-1">
+		<header>
+			<h1>{{ __('You cannot see folders in tree-compact view') }}</h1>
+		</header>
+		<div>
+			<p class="my-1">
+				{{ __('The number of folders is too high to be displayed in tree-compact view') }}.
+				{{ __('Number of folders') }}:
+				{{ count }}.
+				{{ __('Limit') }}:
+				{{ limit }}.
+			</p>
+		</div>
+	</section>
+{% else %}
+	<tree-compact :can-save-map="{{ Perms.canSaveMap()|json_encode }}" :count="{{ count }}" :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}" :schema="{{ schema|json_encode }}"></tree-compact>
+{% endif %}

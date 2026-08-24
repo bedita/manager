@@ -35,7 +35,7 @@ class ImportController extends AppController
     {
         parent::initialize();
 
-        $this->Security->setConfig('unlockedActions', ['file']);
+        $this->FormProtection->setConfig('unlockedActions', ['file']);
     }
 
     /**
@@ -43,7 +43,7 @@ class ImportController extends AppController
      *
      * @var array
      */
-    protected $services = [];
+    protected array $services = [];
 
     /**
      * @inheritDoc
@@ -69,7 +69,7 @@ class ImportController extends AppController
         $user = $this->Authentication->getIdentity();
         $this->set(
             'jobsAllow',
-            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow')
+            (array)Hash::extract($this->getMeta($user), 'resources./async_jobs.hints.allow'),
         );
     }
 
@@ -112,7 +112,7 @@ class ImportController extends AppController
             $result = $importFilter->import(
                 $file->getClientFileName(),
                 $file->getStream()->getMetadata('uri'),
-                $this->getRequest()->getData('filter_options')
+                $this->getRequest()->getData('filter_options'),
             );
             $this->getRequest()->getSession()->write(['Import.result' => $result]);
         } catch (Exception $e) {
@@ -173,7 +173,7 @@ class ImportController extends AppController
      * @param string $filterClass Filter class
      * @return void
      */
-    protected function updateServiceList($filterClass): void
+    protected function updateServiceList(string $filterClass): void
     {
         $service = call_user_func([$filterClass, 'getServiceName']);
         if (!empty($service) && !in_array($service, $this->services)) {
@@ -188,23 +188,22 @@ class ImportController extends AppController
      */
     protected function loadAsyncJobs(): void
     {
-        if (empty($this->services)) {
-            $this->set('jobs', []);
-
-            return;
+        $jobs = [];
+        $service = $this->getRequest()->getQuery('service');
+        if (!empty($this->services) && !empty($service)) {
+            $query = [
+                'sort' => '-created',
+                'filter' => ['service' => $service],
+            ];
+            try {
+                $response = $this->apiClient->get('/async_jobs', $query);
+                $jobs = (array)Hash::get($response, 'data', []);
+            } catch (BEditaClientException $e) {
+                $this->log($e->getMessage(), 'error');
+                $this->Flash->error($e->getMessage(), ['params' => $e]);
+            }
         }
-        $query = [
-            'sort' => '-created',
-            'filter' => ['service' => implode(',', $this->services)],
-        ];
-        try {
-            $response = $this->apiClient->get('/async_jobs', $query);
-        } catch (BEditaClientException $e) {
-            $this->log($e->getMessage(), 'error');
-            $this->Flash->error($e->getMessage(), ['params' => $e]);
-            $response = [];
-        }
 
-        $this->set('jobs', (array)Hash::get($response, 'data'));
+        $this->set('jobs', $jobs);
     }
 }

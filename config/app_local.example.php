@@ -17,6 +17,17 @@ return [
      */
     // 'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
 
+    /*
+     * Development Mode:
+     *
+     * Production Mode:
+     * false: Development mode is off.
+     *
+     * Development Mode:
+     * true: Development mode is on.
+     */
+    // 'development' => filter_var(env('DEVELOPMENT', true), FILTER_VALIDATE_BOOLEAN),
+
     /**
      * Modules accesses per role(s)
      */
@@ -365,6 +376,14 @@ return [
     // 'OAuth2Providers.github.setup' => [
     //     'clientId' => '####',
     //     'clientSecret' => '####',
+    // ],
+
+    /**
+     * OTP authentication setup
+     */
+    // 'Otp' => [
+    //     'send' => '/otp',
+    //     'users_skip_otp' => [], // array of usernames to skip OTP authentication
     // ],
 
     /**
@@ -740,6 +759,7 @@ return [
     // ],
     // 'uploadMaxResolution' => '1920x1080',
     // 'uploadMaxSize' => -1, // -1 means no limit, otherwise set a limit in bytes
+    // 'uploadTimeout' => 30000, // in milliseconds
 
     /**
      * Configuration for "Children" association parameters.

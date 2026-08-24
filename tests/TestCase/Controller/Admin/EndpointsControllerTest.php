@@ -2,25 +2,26 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\EndpointsController;
+use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * {@see \App\Controller\Admin\EndpointsController} Test Case
- *
- * @coversDefaultClass \App\Controller\Admin\EndpointsController
  */
+#[CoversClass(EndpointsController::class)]
 class EndpointsControllerTest extends TestCase
 {
-    public $EndsController;
+    public EndpointsController $EndsController;
 
     /**
      * Test request config
      *
      * @var array
      */
-    public $defaultRequestConfig = [
+    public array $defaultRequestConfig = [
         'environment' => [
             'REQUEST_METHOD' => 'GET',
         ],
@@ -34,7 +35,7 @@ class EndpointsControllerTest extends TestCase
      *
      * @var \BEdita\SDK\BEditaClient
      */
-    protected $client;
+    protected BEditaClient $client;
 
     /**
      * @inheritDoc
@@ -47,8 +48,8 @@ class EndpointsControllerTest extends TestCase
         $request = new ServerRequest($config);
         $this->EndsController = new class ($request) extends EndpointsController
         {
-            protected $resourceType = 'endpoints';
-            protected $properties = ['name'];
+            protected string|null $resourceType = 'endpoints';
+            protected array $properties = ['name'];
         };
         $this->client = ApiClientProvider::getApiClient();
         $adminUser = getenv('BEDITA_ADMIN_USR');

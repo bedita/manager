@@ -38,6 +38,9 @@ export function utf8ToBase64(value = 'undefined') {
  * @returns {string} decoded string
  */
 export function base64ToUtf8(value) {
+    if (!value) {
+        return '';
+    }
     const binaryString = atob(value);
     const bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
 

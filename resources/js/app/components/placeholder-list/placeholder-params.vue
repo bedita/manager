@@ -51,7 +51,7 @@
     </div>
 </template>
 <script>
-import { EventBus } from 'app/components/event-bus';
+import { PlaceholderBus as placeholderBus } from 'app/components/placeholder-bus';
 
 export default {
     name: 'PlaceholderParams',
@@ -89,7 +89,7 @@ export default {
         this.$nextTick(() => {
             this.parameters = BEDITA?.placeholdersConfig?.[this.type] || {};
             const decoded = this.$helpers.base64ToUtf8(this.value);
-            if (decoded === 'undefined') {
+            if (decoded === 'undefined' || decoded === '') {
                 this.newValue = this.$helpers.utf8ToBase64('undefined');
 
                 return;
@@ -105,7 +105,7 @@ export default {
         changeParams() {
             this.oldValue = this.newValue || this.value;
             this.newValue = this.$helpers.utf8ToBase64(JSON.stringify(this.decodedValue));
-            EventBus.send('replace-placeholder', {
+            placeholderBus.send('replace-placeholder', {
                 id: this.id,
                 field: this.field,
                 oldParams: this.oldValue,

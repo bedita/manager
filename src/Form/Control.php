@@ -103,7 +103,7 @@ class Control
             (array)Hash::get($schema, 'oneOf'),
             function ($item) {
                 return !empty($item) && Hash::get($item, 'type') !== 'null';
-            }
+            },
         );
 
         return (array)Hash::get(array_values($oneOf), 0);
@@ -213,7 +213,7 @@ class Control
             (array)Hash::get($schema, 'categories'),
             function ($category) {
                 return (bool)Hash::get($category, 'enabled');
-            }
+            },
         ));
         $options = array_map(
             function ($category) {
@@ -222,7 +222,7 @@ class Control
                     'text' => empty($category['label']) ? $category['name'] : $category['label'],
                 ];
             },
-            $categories
+            $categories,
         );
 
         $checked = [];
@@ -316,7 +316,7 @@ class Control
             function ($item) {
                 return ['value' => $item, 'text' => Inflector::humanize($item)];
             },
-            (array)Hash::extract($one, 'items.enum')
+            (array)Hash::extract($one, 'items.enum'),
         );
     }
 
@@ -341,6 +341,9 @@ class Control
                 }
             }
         }
+        if (empty($schema['enum']) && !empty($schema['items']['enum'])) {
+            $schema['enum'] = $schema['items']['enum'];
+        }
 
         return [
             'type' => 'select',
@@ -350,7 +353,7 @@ class Control
 
                     return compact('text', 'value');
                 },
-                $schema['enum']
+                $schema['enum'],
             ),
             'value' => $value,
         ];

@@ -12,6 +12,7 @@
         {{ Form.create({'defaults': object.attributes, 'schema': {}}, {
             'url': {'_name': 'trash:list'},
             'id': 'form-main',
+            'class': 'object-form',
         })|raw }}
 
             <div class="main-view-column">

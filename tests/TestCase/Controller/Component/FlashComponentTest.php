@@ -15,13 +15,16 @@ namespace App\Test\TestCase\Controller\Component;
 use App\Controller\AppController;
 use App\Controller\Component\FlashComponent;
 use BEdita\SDK\BEditaClientException;
+use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see \App\Controller\Component\FlashComponent} Test Case
- *
- * @coversDefaultClass \App\Controller\Component\FlashComponent
  */
+#[CoversClass(FlashComponent::class)]
+#[CoversMethod(FlashComponent::class, 'set')]
 class FlashComponentTest extends TestCase
 {
     /**
@@ -29,21 +32,21 @@ class FlashComponentTest extends TestCase
      *
      * @var \App\Controller\Component\FlashComponent
      */
-    public $Flash;
+    public FlashComponent $Flash;
 
     /**
      * Test controller
      *
      * @var \App\Controller\AppController
      */
-    public $controller;
+    public AppController $controller;
 
     /**
      * @inheritDoc
      */
     public function setUp(): void
     {
-        $this->controller = new AppController();
+        $this->controller = new AppController(new ServerRequest());
         $registry = $this->controller->components();
         /** @var \App\Controller\Component\FlashComponent $component */
         $component = $registry->load(FlashComponent::class);
@@ -66,7 +69,6 @@ class FlashComponentTest extends TestCase
      * Test `set()` method.
      *
      * @return void
-     * @covers ::set()
      */
     public function testSet(): void
     {

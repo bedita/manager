@@ -26,15 +26,19 @@ use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Hash;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * {@see \App\Controller\RolesController} Test Case
- *
- * @coversDefaultClass \App\Controller\RolesController
- * @uses \App\Controller\RolesController
+ * {@see \App\Controller\RolesController} test Case
  */
+#[CoversClass(RolesController::class)]
+#[CoversMethod(RolesController::class, 'allowed')]
+#[CoversMethod(RolesController::class, 'beforeFilter')]
+#[CoversMethod(RolesController::class, 'list')]
 class RolesControllerTest extends TestCase
 {
     /**
@@ -78,7 +82,7 @@ class RolesControllerTest extends TestCase
      *
      * @return array
      */
-    public function unauthorizedExceptionProvider(): array
+    public static function unauthorizedExceptionProvider(): array
     {
         return [
             'no same origin' => [
@@ -120,10 +124,8 @@ class RolesControllerTest extends TestCase
      *
      * @param array $config Request configuration.
      * @return void
-     * @dataProvider unauthorizedExceptionProvider
-     * @covers ::beforeFilter()
-     * @covers ::allowed()
      */
+    #[DataProvider('unauthorizedExceptionProvider')]
     public function testUnauthorizedException(array $config): void
     {
         $expected = new UnauthorizedException(__('You are not authorized to access this resource'));
@@ -139,8 +141,6 @@ class RolesControllerTest extends TestCase
      * Test unauthorized role
      *
      * @return void
-     * @covers ::beforeFilter()
-     * @covers ::allowed()
      */
     public function testUnauthorizedRole(): void
     {
@@ -168,9 +168,6 @@ class RolesControllerTest extends TestCase
      * Test for authorized admin
      *
      * @return void
-     * @covers ::beforeFilter()
-     * @covers ::allowed()
-     * @covers ::list()
      */
     public function testAuthorizeAdmin(): void
     {
@@ -188,9 +185,6 @@ class RolesControllerTest extends TestCase
         $this->RolesController->setRequest($this->RolesController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->RolesController->Authentication->setIdentity($user);
         $this->RolesController->dispatchEvent('Controller.initialize');
-        $actual = $this->RolesController->Security->getConfig('unlockedActions');
-        $expected = [];
-        static::assertEquals($expected, $actual);
         $response = $this->RolesController->list();
         static::assertNull($response);
         $data = $this->RolesController->viewBuilder()->getVars();
@@ -206,7 +200,7 @@ class RolesControllerTest extends TestCase
         $apiClient->method('get')
             ->withAnyParameters()
             ->willThrowException(new BEditaClientException('API error'));
-        $controller = new class () extends RolesController {
+        $controller = new class (new ServerRequest()) extends RolesController {
             public function setApiClient($client): void
             {
                 $this->apiClient = $client;
@@ -219,7 +213,7 @@ class RolesControllerTest extends TestCase
             }
         };
         $controller->setApiClient($apiClient);
-        $response = $controller->list();
+        $controller->list();
         $data = $controller->viewBuilder()->getVars();
         $error = Hash::get($data, 'error');
         static::assertNotEmpty($error);
@@ -232,8 +226,6 @@ class RolesControllerTest extends TestCase
      * Test for authorized user
      *
      * @return void
-     * @covers ::beforeFilter()
-     * @covers ::allowed()
      */
     public function testUserAllowed(): void
     {
@@ -252,9 +244,10 @@ class RolesControllerTest extends TestCase
         $this->RolesController->setRequest($this->RolesController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
         $this->RolesController->Authentication->setIdentity($user);
         $this->RolesController->dispatchEvent('Controller.initialize');
-        $actual = $this->RolesController->Security->getConfig('unlockedActions');
-        $expected = [];
-        static::assertEquals($expected, $actual);
+        $response = $this->RolesController->list();
+        static::assertNull($response);
+        $data = $this->RolesController->viewBuilder()->getVars();
+        static::assertIsArray($data);
     }
 
     /**

@@ -22,7 +22,7 @@ use Cake\Utility\Inflector;
 /**
  * Appearance Controller
  *
- * @property \App\Controller\Component\ConfigComponent $Config
+ * @property \App\Controller\Component\ProjectConfigurationComponent $Config
  */
 class AppearanceController extends AdministrationBaseController
 {
@@ -31,14 +31,14 @@ class AppearanceController extends AdministrationBaseController
     /**
      * Resource type in use
      *
-     * @var string
+     * @var string|null
      */
-    protected $resourceType = 'config';
+    protected ?string $resourceType = 'config';
 
     /**
      * @inheritDoc
      */
-    protected $readonly = false;
+    protected bool $readonly = false;
 
     /**
      * @inheritDoc
@@ -47,7 +47,7 @@ class AppearanceController extends AdministrationBaseController
     {
         parent::initialize();
 
-        $this->Security->setConfig('unlockedActions', ['save']);
+        $this->FormProtection->setConfig('unlockedActions', ['save']);
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2024 Atlas Srl, Chialab Srl
@@ -22,9 +23,9 @@ class MultiuploadController extends AppController
     /**
      * Object type currently used
      *
-     * @var string
+     * @var string|null
      */
-    protected $objectType = null;
+    protected ?string $objectType = null;
 
     /**
      * @inheritDoc

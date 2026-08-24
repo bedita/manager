@@ -1,6 +1,8 @@
+@use "../../../resources/styles/variables";
+
 #data-import {
     .fieldset {
-        margin-bottom: $gutter * 1.5;
+        margin-bottom: variables.$gutter * 1.5;
 
         .tab {
             cursor: auto;
@@ -12,14 +14,14 @@
             display: block;
             cursor: pointer;
             & ~ label {
-                margin-top: $gutter * .5;
+                margin-top: variables.$gutter * .5;
             }
         }
     }
 
     button.submit {
-        padding-left:  3 * $gutter;
-        padding-right: 3 * $gutter;
+        padding-left:  3 * variables.$gutter;
+        padding-right: 3 * variables.$gutter;
     }
 }
 
@@ -29,11 +31,11 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 50px;
 
     .table-header {
-        border-bottom: 1px solid $gray-700;
+        border-bottom: 1px solid variables.$gray-700;
     }
 
     > div {
-        padding: $gutter * .5;
+        padding: variables.$gutter * .5;
 
         &.job-payload {
             grid-column: span 7;
@@ -51,19 +53,19 @@
         }
 
         &.completed {
-            color: $success;
+            color: variables.$success;
         }
 
         &.failed {
-            color: $danger;
+            color: variables.$danger;
         }
 
         &.locked, &.pending {
-            color: $pending;
+            color: variables.$pending;
         }
 
         &.planned {
-            color: $info;
+            color: variables.$info;
         }
     }
 }

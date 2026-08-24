@@ -1,23 +1,21 @@
-/**
- * Templates that uses this component (directly or indirectly):
- *  ...
- *
- * <map-view> component used for ModulesPage -> View
- *
- * Handle maps
- *
- * @prop {String} lat
- * @prop {String} lng
- * @prop {String} popupHtml
- * @prop {String} mapToken (mapBox accessToken)
- */
-
+<template>
+    <div class="map-container">
+    </div>
+</template>
+<script>
 import mapbox from 'mapbox-gl';
 import Compare from 'mapbox-gl-compare';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default {
-    template: '<div class="map-container"></div>',
+    name: 'MapView',
+
+    inject: {
+        onCoordinatesUpdate: {
+            from: 'onCoordinatesUpdate',
+            default: null,
+        },
+    },
 
     props: {
         lng: {
@@ -36,10 +34,6 @@ export default {
             type: String,
             default: '',
         }
-    },
-
-    data() {
-        return {}
     },
 
     async mounted() {
@@ -104,8 +98,13 @@ export default {
             }
 
             marker.on('dragend', () => {
-                this.$eventBus.$emit('updatecoords', marker.getLngLat());
+                const coords = marker.getLngLat();
+                // Call provided callback if available
+                if (this.onCoordinatesUpdate) {
+                    this.onCoordinatesUpdate(coords);
+                }
             });
         }
     }
 }
+</script>

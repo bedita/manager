@@ -33,9 +33,9 @@ class SchemaHelper extends Helper
     /**
      * {@inheritDoc}
      *
-     * @var array
+     * @var array<int|string, string|array<string, mixed>>
      */
-    public $helpers = ['Perms', 'Time'];
+    public array $helpers = ['Perms', 'Time'];
 
     /**
      * Default translatable fields to be prepended in translations
@@ -59,9 +59,9 @@ class SchemaHelper extends Helper
      * @param array|null $schema Property schema.
      * @return array
      */
-    public function controlOptions(string $name, $value, ?array $schema = null): array
+    public function controlOptions(string $name, mixed $value, ?array $schema = null): array
     {
-        $options = Options::customControl($name, $value);
+        $options = Options::customControl($name, $value, $schema);
         $objectType = (string)$this->_View->get('objectType');
         $ctrlOptionsPath = sprintf('Properties.%s.options.%s', $objectType, $name);
         $ctrlOptions = (array)Configure::read($ctrlOptionsPath);
@@ -114,7 +114,7 @@ class SchemaHelper extends Helper
      * @param array $options Control options
      * @return void
      */
-    protected function updateRicheditorOptions(string $name, bool $placeholders, array &$options)
+    protected function updateRicheditorOptions(string $name, bool $placeholders, array &$options): void
     {
         $uiRichtext = (array)Configure::read(sprintf('UI.richeditor.%s.toolbar', $name));
         if (empty($uiRichtext)) {
@@ -136,7 +136,7 @@ class SchemaHelper extends Helper
      * @param array $options Control options.
      * @return array|null
      */
-    protected function customControl($name, $value, array $options): ?array
+    protected function customControl(string $name, mixed $value, array $options): ?array
     {
         $handlerClass = Hash::get($options, 'handler');
         if (empty($handlerClass)) {
@@ -152,10 +152,10 @@ class SchemaHelper extends Helper
      * Display a formatted property value using schema.
      *
      * @param mixed $value Property value.
-     * @param array $schema Property schema array.
+     * @param array|null $schema Property schema array.
      * @return string
      */
-    public function format($value, $schema = []): string
+    public function format(mixed $value, ?array $schema = []): string
     {
         $type = static::typeFromSchema((array)$schema);
         $type = Inflector::variable(str_replace('-', '_', $type));
@@ -176,7 +176,7 @@ class SchemaHelper extends Helper
      * @param mixed $value Property value.
      * @return string
      */
-    public function formatByte($value): string
+    public function formatByte(mixed $value): string
     {
         return Number::toReadableSize((int)$value);
     }
@@ -187,7 +187,7 @@ class SchemaHelper extends Helper
      * @param mixed $value Property value.
      * @return string
      */
-    public function formatBoolean($value): string
+    public function formatBoolean(mixed $value): string
     {
         $res = filter_var($value, FILTER_VALIDATE_BOOLEAN);
 
@@ -200,7 +200,7 @@ class SchemaHelper extends Helper
      * @param mixed $value Property value.
      * @return string
      */
-    public function formatDate($value): string
+    public function formatDate(mixed $value): string
     {
         if (empty($value)) {
             return '';
@@ -215,7 +215,7 @@ class SchemaHelper extends Helper
      * @param mixed $value Property value.
      * @return string
      */
-    public function formatDateTime($value): string
+    public function formatDateTime(mixed $value): string
     {
         return $this->formatDate($value);
     }
@@ -265,6 +265,7 @@ class SchemaHelper extends Helper
      */
     public function translatableFields(array $schema): array
     {
+        $translatableForced = (array)Configure::read(sprintf('Properties.%s.translatable', $this->_View->get('objectType')));
         if (isset($schema['translatable'])) {
             $priorityFields = array_intersect(static::DEFAULT_TRANSLATABLE, (array)$schema['translatable']);
             $otherFields = array_diff((array)$schema['translatable'], $priorityFields);
@@ -273,11 +274,11 @@ class SchemaHelper extends Helper
             $priorityFields = array_intersect(static::DEFAULT_TRANSLATABLE, array_keys($properties));
             $otherFields = array_keys(array_filter(
                 array_diff_key($properties, array_flip($priorityFields)),
-                [$this, 'translatableType']
+                [$this, 'translatableType'],
             ));
         }
 
-        return array_unique(array_values(array_merge($priorityFields, $otherFields)));
+        return array_unique(array_values(array_merge($priorityFields, $otherFields, $translatableForced)));
     }
 
     /**
@@ -297,7 +298,7 @@ class SchemaHelper extends Helper
                     }
 
                     return $this->translatableType((array)$item);
-                }
+                },
             );
         }
         // accept as translatable 'string' type having text/html or tex/plain 'contentMediaType'
@@ -375,6 +376,25 @@ class SchemaHelper extends Helper
             $schemaProperties = array_key_exists('properties', (array)$schemaProperties) ? $schemaProperties['properties'] : $schemaProperties;
             $schemaProperties = $schemaProperties !== false ? $schemaProperties : null;
             $list[$type] = self::filterList($filters, $schemaProperties);
+        }
+
+        return $list;
+    }
+
+    /**
+     * Get minimal objects list (id and type only) from full objects array
+     *
+     * @param array $objects Full objects array
+     * @return array
+     */
+    public function minimalObjectsList(array $objects): array
+    {
+        $list = [];
+        foreach ($objects as $obj) {
+            $list[] = [
+                'id' => Hash::get($obj, 'id'),
+                'type' => Hash::get($obj, 'type'),
+            ];
         }
 
         return $list;

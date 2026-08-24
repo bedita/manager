@@ -39,9 +39,10 @@
 
     <div class="sidebar-body">
 
+        {% set devMode = config('development') %}
         {% if I18n.getLanguages|length > 1 %}
-            <div>
-                <p class="has-text-size-smaller">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p class="has-text-size-smaller" style="margin: 0;">
                 {% for code, name in I18n.getLanguages() %}
                     {% if code != I18n.getLang() %}
                         <a href="{{ I18n.changeUrlLang(code, config('I18n.switchLangUrl')) }}">{{ name[:3] | upper }}</a>
@@ -51,6 +52,17 @@
                     {% if not loop.last %} | {% endif %}
                 {% endfor %}
                 </p>
+                {% if devMode %}
+                <a href="{{ Url.build({'_name': 'playground'}) }}" style="font-size: 0.75em; text-decoration: none; color: #999; opacity: 0.6;" title="Playground">
+                    🧪 Playground
+                </a>
+                {% endif %}
+            </div>
+        {% elseif devMode %}
+            <div>
+                <a href="{{ Url.build({'_name': 'playground'}) }}" style="font-size: 0.75em; text-decoration: none; color: #999; opacity: 0.6;">
+                    🧪 Playground
+                </a>
             </div>
         {% endif %}
 

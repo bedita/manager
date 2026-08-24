@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2022 ChannelWeb Srl, Chialab Srl
@@ -15,13 +17,15 @@ namespace App;
 use App\Event\TreeCacheEventHandler;
 use App\Identifier\ApiIdentifier;
 use App\Middleware\ConfigurationMiddleware;
+use App\Middleware\OtpMiddleware;
 use App\Middleware\ProjectMiddleware;
 use App\Middleware\RecoveryMiddleware;
 use App\Middleware\StatusMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
-use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identifier\AbstractIdentifier;
+use Authentication\Identifier\TokenIdentifier;
 use Authentication\Middleware\AuthenticationMiddleware;
 use BEdita\I18n\Middleware\I18nMiddleware;
 use BEdita\WebTools\Middleware\OAuth2Middleware;
@@ -107,8 +111,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         foreach ($plugins as $plugin => $options) {
             $options = array_merge(static::PLUGIN_DEFAULTS, $options);
             if (!$options['debugOnly'] || Configure::read('debug')) {
-                $this->addPlugin($plugin, $options);
-                $this->plugins->get($plugin)->bootstrap($this);
+                if (!$this->getPlugins()->has($plugin)) {
+                    $this->addPlugin($plugin, $options);
+                    $this->plugins->get($plugin)->bootstrap($this);
+                }
             }
         }
     }
@@ -130,9 +136,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // Provides a `GET /status` endpoint. This must be
             ->add(new StatusMiddleware())
 
-            // Load configuration from API for the current project.
-            ->add(new ConfigurationMiddleware())
-
             // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
@@ -153,8 +156,14 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // Authentication middleware.
             ->add(new AuthenticationMiddleware($this))
 
+            // Otp middleware.
+            ->add(new OtpMiddleware())
+
             // Authentication middleware.
             ->add(new OAuth2Middleware())
+
+            // Load configuration from API for the current project.
+            ->add(new ConfigurationMiddleware())
 
             // Recovery middleware
             ->add(new RecoveryMiddleware())
@@ -221,8 +230,13 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $query = $request->getQueryParams();
         if (strpos($path, '/ext/login') === 0) {
             $providers = (array)Configure::read('OAuth2Providers');
-            $service->loadIdentifier('BEdita/WebTools.OAuth2', compact('providers'));
-            $service->loadAuthenticator('BEdita/WebTools.OAuth2', compact('providers') + [
+            $service->loadAuthenticator('BEdita/WebTools.OAuth2', [
+                'identifier' => [
+                    'BEdita/WebTools.OAuth2' => [
+                        'providers' => $providers,
+                    ],
+                ],
+                'providers' => $providers,
                 'redirect' => ['_name' => 'login:oauth2'],
             ]);
 
@@ -232,22 +246,23 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         }
 
         $service->loadAuthenticator('Authentication.Session', [
+            'identifier' => [
+                ApiIdentifier::class => [
+                    'timezoneField' => 'timezone',
+                ],
+            ],
             'sessionKey' => 'BEditaManagerAuth',
             'fields' => [
-                IdentifierInterface::CREDENTIAL_TOKEN => 'token',
+                TokenIdentifier::CREDENTIAL_TOKEN => 'token',
             ],
-        ]);
-
-        $service->loadIdentifier(ApiIdentifier::class, [
-                'timezoneField' => 'timezone',
         ]);
 
         if ($path === '/login') {
             $service->loadAuthenticator('Authentication.Form', [
                 'loginUrl' => '/login',
                 'fields' => [
-                    IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-                    IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
+                    AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+                    AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
                     'timezone' => 'timezone_offset',
                 ],
             ]);

@@ -13,16 +13,21 @@
 
 namespace App\Test\TestCase\Core\Filter;
 
+use App\Core\Filter\ImportFilter;
 use App\Core\Result\ImportResult;
 use BEdita\SDK\BEditaClient;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\TestSuite\TestCase;
+use LogicException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * {@see \App\Core\Filter\ImportFilter} Test Case
- *
- * @coversDefaultClass \App\Core\Filter\ImportFilter
  */
+#[CoversClass(ImportFilter::class)]
+#[CoversMethod(ImportFilter::class, 'createAsyncJob')]
 class ImportFilterTest extends TestCase
 {
     /**
@@ -44,11 +49,10 @@ class ImportFilterTest extends TestCase
      *
      * @return array
      */
-    public function createAsyncJobProvider(): array
+    public static function createAsyncJobProvider(): array
     {
         $result = new ImportResult();
         $filename = 'import.csv';
-        $result->addMessage('info', (string)__('Job {0} to import file "{1}" scheduled.', $this->asyncJobId, $filename)); // almost the same info set by ImportFilter on createAsyncJob
 
         return [
             'logic exception: service name not defined' => [
@@ -56,7 +60,7 @@ class ImportFilterTest extends TestCase
                 '',
                 '',
                 [],
-                new \LogicException('Cannot create async job without service name defined.'),
+                new LogicException('Cannot create async job without service name defined.'),
             ],
             'job to import file scheduled' => [
                 'App\Test\Utils\MyDummyImportFilter',
@@ -77,15 +81,16 @@ class ImportFilterTest extends TestCase
      * @param array $options The async job options
      * @param \LogicException|\App\Core\Result\ImportResult $expected The result expected
      * @return void
-     * @dataProvider createAsyncJobProvider
-     * @covers ::createAsyncJob()
      */
+    #[DataProvider('createAsyncJobProvider')]
     public function testCreateAsyncJob($filterClassName, $filename, $filepath, $options, $expected): void
     {
-        if ($expected instanceof \LogicException) {
+        if ($expected instanceof LogicException) {
             $this->expectException(get_class($expected));
             $this->expectExceptionCode($expected->getCode());
             $this->expectExceptionMessage($expected->getMessage());
+        } else {
+            $expected->addMessage('info', (string)__('Job {0} to import file "{1}" scheduled.', $this->asyncJobId, $filename)); // almost the same info set by ImportFilter on createAsyncJob
         }
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.com'])

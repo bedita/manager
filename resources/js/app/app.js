@@ -1,13 +1,11 @@
 import Vue from 'vue';
 
-import 'libs/filters';
 import 'config/config';
 
 import '../../style.scss';
 
 import { BELoader } from 'libs/bedita';
 
-import { EventBus } from 'app/components/event-bus';
 import { PanelView, PanelEvents } from 'app/components/panel-view';
 import { confirm, error, info, success, prompt, warning } from 'app/components/dialog/dialog';
 
@@ -32,7 +30,6 @@ const _vueInstance = new Vue({
     el: 'main',
 
     components: {
-        EventBus,
         PanelView,
         Autocomplete,
         LoginPassword: () => import(/* webpackChunkName: "login-password" */'app/components/login-password/login-password'),
@@ -49,6 +46,7 @@ const _vueInstance = new Vue({
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
         TreeSlug: () => import(/* webpackChunkName: "tree-slug" */'app/components/tree-slug/tree-slug'),
+        TreeCompact: () => import(/* webpackChunkName: "tree-compact" */'app/components/tree-compact/tree-compact'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
         ModulesIndex: () => import(/* webpackChunkName: "modules-index" */'app/pages/modules/index'),
         ModulesView: () => import(/* webpackChunkName: "modules-view" */'app/pages/modules/view'),
@@ -59,16 +57,19 @@ const _vueInstance = new Vue({
         TrashIndex: () => import(/* webpackChunkName: "trash-index" */'app/pages/trash/index'),
         TrashView: () => import(/* webpackChunkName: "trash-view" */'app/pages/trash/view'),
         ImportIndex: () => import(/* webpackChunkName: "import-index" */'app/pages/import/index'),
-        ImportJobs: () => import(/* webpackChunkName: "import-jobs" */'app/components/import/jobs'),
         ImportResult: () => import(/* webpackChunkName: "import-result" */'app/components/import/result'),
+        ImportJobList: () => import(/* webpackChunkName: "import-job-list" */'app/components/import/job'),
+        AdminJobList: () => import(/* webpackChunkName: "admin-job-list" */'app/components/admin-job-list/admin-job-list'),
         JsonEditor: () => import(/* webpackChunkName: "json-editor" */'app/components/json-editor/json-editor'),
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
+        ModelSchema: () => import(/* webpackChunkName: "model-schema" */'app/pages/model/schema.vue'),
         AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
         AdminAppearance: () => import(/* webpackChunkName: "admin-appearance" */'app/pages/admin/appearance'),
         AdminStatistics: () => import(/* webpackChunkName: "admin-statistics" */'app/pages/admin/statistics'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
         EditChildrenParams: () => import(/* webpackChunkName: "edit-children-params" */'app/components/edit-children-params'),
         EditRelationParams: () => import(/* webpackChunkName: "edit-relation-params" */'app/components/edit-relation-params'),
+        ViewChildrenParams: () => import(/* webpackChunkName: "view-children-params" */'app/components/view-children-params'),
         HistoryInfo: () => import(/* webpackChunkName: "history-info" */'app/components/history/history-info'),
         FilterBoxView: () => import(/* webpackChunkName: "filter-box-view" */'app/components/filter-box'),
         MainMenu: () => import(/* webpackChunkName: "menu" */'app/components/menu'),
@@ -103,13 +104,17 @@ const _vueInstance = new Vue({
         FieldGeoCoordinates: () => import(/* webpackChunkName: "field-geo-coordinates" */'app/components/form/field-geo-coordinates'),
         FieldInteger: () => import(/* webpackChunkName: "field-integer" */'app/components/form/field-integer'),
         FieldJson: () => import(/* webpackChunkName: "field-json" */'app/components/form/field-json'),
+        FieldMultipleCheckboxes: () => import(/* webpackChunkName: "field-multiple-checkboxes" */'app/components/form/field-multiple-checkboxes'),
         FieldNumber: () => import(/* webpackChunkName: "field-number" */'app/components/form/field-number'),
+        FieldPassword: () => import(/* webpackChunkName: "field-password" */'app/components/form/field-password'),
         FieldPlaintext: () => import(/* webpackChunkName: "field-plaintext" */'app/components/form/field-plaintext'),
         FieldRadio: () => import(/* webpackChunkName: "field-radio" */'app/components/form/field-radio'),
         FieldSelect: () => import(/* webpackChunkName: "field-select" */'app/components/form/field-select'),
         FieldString: () => import(/* webpackChunkName: "field-string" */'app/components/form/field-string'),
         FieldTextarea: () => import(/* webpackChunkName: "field-textarea" */'app/components/form/field-textarea'),
         FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
+        CalendarView: () => import(/* webpackChunkName: "calendar-view" */'app/components/calendar-view/calendar-view'),
+        ComponentsPlayground: () => import(/* webpackChunkName: "components-playground" */'app/components/components-playground'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
         RelatedObjectsFilter: () => import(/* webpackChunkName: "related-objects-filter" */'app/components/related-objects-filter/related-objects-filter'),
         ModuleProperties: () => import(/* webpackChunkName: "module-properties" */'app/components/module/module-properties'),
@@ -117,6 +122,8 @@ const _vueInstance = new Vue({
         AddRelatedById: () => import(/* webpackChunkName: "add-related-by-id" */'app/components/add-related-by-id/add-related-by-id'),
         UploadedObject: () => import(/* webpackChunkName: "uploaded-object" */'app/components/uploaded-object/uploaded-object.vue'),
         RibbonItem: () => import(/* webpackChunkName: "ribbon-item" */'./components/ribbon-item/ribbon-item.vue'),
+        MailPreview: () => import(/* webpackChunkName: "mail-preview" */'./components/mail-preview/mail-preview.vue'),
+        ObjectAnnotations: () => import(/* webpackChunkName: "object-annotations" */'./components/object-annotations/object-annotations.vue'),
         AppIcon,
     },
 
@@ -212,8 +219,6 @@ const _vueInstance = new Vue({
         this.$on('filter-update-page-size', this.onUpdatePageSize);
         this.$on('filter-update-current-page', this.onUpdateCurrentPage);
         this.$on('resource-changed', this.onResourceChanged);
-
-        Vue.prototype.$eventBus = new Vue();
     },
 
     mounted: function () {
@@ -625,6 +630,7 @@ window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
 Vue.component('AppIcon', AppIcon);
+Vue.component('CalendarView', _vueInstance.$options.components.CalendarView);
 Vue.component('ClipboardItem', _vueInstance.$options.components.ClipboardItem);
 Vue.component('DateRangesView', _vueInstance.$options.components.DateRangesView);
 Vue.component('FieldCheckbox', _vueInstance.$options.components.FieldCheckbox);
@@ -632,7 +638,9 @@ Vue.component('FieldGeoCoordinates', _vueInstance.$options.components.FieldGeoCo
 Vue.component('FieldDate', _vueInstance.$options.components.FieldDate);
 Vue.component('FieldInteger', _vueInstance.$options.components.FieldInteger);
 Vue.component('FieldJson', _vueInstance.$options.components.FieldJson);
+Vue.component('FieldMultipleCheckboxes', _vueInstance.$options.components.FieldMultipleCheckboxes);
 Vue.component('FieldNumber', _vueInstance.$options.components.FieldNumber);
+Vue.component('FieldPassword', _vueInstance.$options.components.FieldPassword);
 Vue.component('FieldPlaintext', _vueInstance.$options.components.FieldPlaintext);
 Vue.component('FieldRadio', _vueInstance.$options.components.FieldRadio);
 Vue.component('FieldSelect', _vueInstance.$options.components.FieldSelect);
@@ -648,4 +656,6 @@ Vue.component('ObjectInfo', _vueInstance.$options.components.ObjectInfo);
 Vue.component('RelatedObjectsFilter', _vueInstance.$options.components.RelatedObjectsFilter);
 Vue.component('Thumbnail', _vueInstance.$options.components.Thumbnail);
 Vue.component('RibbonItem', _vueInstance.$options.components.RibbonItem);
+Vue.component('ViewChildrenParams', _vueInstance.$options.components.ViewChildrenParams);
 Vue.component('UploadedObject', _vueInstance.$options.components.UploadedObject);
+Vue.component('ObjectAnnotations', _vueInstance.$options.components.ObjectAnnotations);
