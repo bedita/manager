@@ -43,9 +43,10 @@
                             name="selectedCategories[]"
                             :value="child.name"
                             :checked="child.name in selected"
+                            :disabled="!enabled.includes(child.name)"
                             v-model="selected"
                         >
-                        <span v-html="title(child)"></span>
+                        <span :class="{'disabled': !enabled.includes(child.name)}" v-html="title(child)"></span>
                     </label>
                 </div>
             </div>
@@ -73,9 +74,10 @@
                             name="selectedCategories[]"
                             :value="child.name"
                             :checked="child.name in selected"
+                            :disabled="!enabled.includes(child.name)"
                             v-model="selected"
                         >
-                        <span v-html="title(child)"></span>
+                        <span :class="{'disabled': !enabled.includes(child.name)}" v-html="title(child)"></span>
                     </label>
                 </div>
             </div>
@@ -104,6 +106,7 @@ export default {
         return {
             children: {},
             common: [],
+            enabled: [],
             forceOpen: false,
             root: [],
             searchInCategories: '',
@@ -162,6 +165,11 @@ export default {
             let groupsNumber = Object.keys(this.children).length;
             groupsNumber += this.common.length > 0 ? 1 : 0;
             this.forceOpen = groupsNumber <= 3 || this.modelCategories.length <= 20;
+            for (const item of this.modelCategories) {
+                if (item.enabled) {
+                    this.enabled.push(item.name);
+                }
+            }
         });
     },
     methods: {
@@ -263,5 +271,9 @@ export default {
 
 .object-categories .checkbox > label {
     cursor: pointer;
+}
+.object-categories .checkbox > label > span.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 </style>

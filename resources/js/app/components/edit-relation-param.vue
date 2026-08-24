@@ -17,6 +17,7 @@
 
         <!-- String (date, enum, string, text) --->
         <div
+            :id="`container-${propertyKey}`"
             :class="{ datepicker: ['date', 'date-time'].includes(propertyFormat) }"
             v-if="propertyType == 'string'"
         >
@@ -41,6 +42,14 @@
                     {{ item }}
                 </option>
             </select>
+            <json-editor
+                :name="propertyKey"
+                :options="jsonEditorOptions"
+                :target="`container-${propertyKey}`"
+                :text="value"
+                @change="updateJsonEditor"
+                v-else-if="propertyFormat === 'json'"
+            />
             <input
                 type="text"
                 :value="value"
@@ -52,7 +61,7 @@
             <textarea
                 :value="value"
                 @change="update($event.target.value)"
-            ></textarea>
+            />
         </div>
 
         <!-- Number --->
@@ -80,6 +89,11 @@
 <script>
 export default {
     name: 'PropertyField',
+
+    components: {
+        JsonEditor: () => import(/* webpackChunkName: "json-editor" */'app/components/json-editor/json-editor'),
+    },
+
     props: {
         property: {
             type: Object,
@@ -93,6 +107,18 @@ export default {
             type: [String, Number, Boolean],
             default: null,
         },
+    },
+
+    data() {
+        return {
+            jsonEditorOptions: {
+                mainMenuBar: true,
+                mode: 'text',
+                navigationBar: false,
+                statusBar: false,
+                readOnly: false,
+            }
+        };
     },
 
     computed: {
@@ -131,7 +157,12 @@ export default {
     methods: {
         update(value) {
             this.$emit('input', value);
-        }
+        },
+        updateJsonEditor(field, val, prevVal, validation) {
+            if (validation?.validationErrors?.length === 0) {
+                this.$emit('input', val?.text);
+            }
+        },
     },
 }
 </script>

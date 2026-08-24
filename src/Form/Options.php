@@ -43,11 +43,15 @@ class Options
      *
      * @param string $name The field name.
      * @param mixed|null $value The field value.
+     * @param array|null $schema Property schema.
      * @return array
      */
-    public static function customControl(string $name, mixed $value): array
+    public static function customControl(string $name, mixed $value, ?array $schema = null): array
     {
         if (!in_array($name, Options::CUSTOM_CONTROLS)) {
+            return [];
+        }
+        if (in_array($name, ['start_date', 'end_date'], true) && !self::useDateTimeControl($schema)) {
             return [];
         }
         $method = Form::getMethod(Options::class, $name);
@@ -55,6 +59,21 @@ class Options
         ksort($options);
 
         return $options;
+    }
+
+    /**
+     * Use datetime custom control for date fields only when schema type is date-time.
+     *
+     * @param array|null $schema Property schema.
+     * @return bool
+     */
+    protected static function useDateTimeControl(?array $schema): bool
+    {
+        if ($schema === null || $schema === []) {
+            return true;
+        }
+
+        return ControlType::fromSchema($schema) === 'date-time';
     }
 
     /**
