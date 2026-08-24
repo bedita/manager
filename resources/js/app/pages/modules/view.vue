@@ -4,6 +4,8 @@ import Vue from 'vue';
 import { t } from 'ttag';
 
 export default {
+    name: 'ModuleView',
+
     components: {
         AjaxLogin,
         CoordinatesView: () => import(/* webpackChunkName: "coordinates-view" */'app/components/coordinates-view'),

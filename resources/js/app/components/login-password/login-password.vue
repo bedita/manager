@@ -18,7 +18,7 @@
             <div>
                 <button
                     style="min-width: 32px; border-top-left-radius: 0; border-bottom-left-radius: 0;"
-                    :disabled="!this.password || this.password.length == 0"
+                    :disabled="!password || password.length == 0"
                     class="button button-primary"
                     @click.prevent.stop="toggleShow"
                 >

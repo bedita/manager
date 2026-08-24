@@ -6,15 +6,30 @@
 
         <div role="search">
             <div role="textsearch">
-                <input type="text" v-model="searchString" v-on:keydown.stop="captureKeys">
-                <button ref="searchSubmit" :disabled="!searchString || searchString.length < 3" v-on:click="searchObjects">
-                    <app-icon icon="carbon:search"></app-icon>
+                <input
+                    type="text"
+                    v-model="searchString"
+                    @keydown.stop="captureKeys"
+                >
+                <button
+                    ref="searchSubmit"
+                    :disabled="!searchString || searchString.length < 3"
+                    @click="searchObjects"
+                >
+                    <app-icon icon="carbon:search" />
                     {{ msgSearch }}
                 </button>
             </div>
             <div role="idsearch">
-                <input type="text" :placeholder="msgIdOrUname" v-model="searchId">
-                <button @click.prevent="goToID()" :disabled="!searchId">
+                <input
+                    type="text"
+                    :placeholder="msgIdOrUname"
+                    v-model="searchId"
+                >
+                <button
+                    :disabled="!searchId"
+                    @click.prevent="goToID()"
+                >
                     {{ msgId }}
                 </button>
             </div>

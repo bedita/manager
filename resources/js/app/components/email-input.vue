@@ -20,10 +20,17 @@ export default {
         },
     },
 
+    data() {
+        return {
+            element: this.el,
+            valid: this.isValid,
+        };
+    },
+
     async mounted() {
-        if (this.el.value === 'null') {
-            this.el.value = '';
-            this.isValid = true;
+        if (this.element.value === 'null') {
+            this.element.value = '';
+            this.valid = true;
         }
         const span = document.createElement('span');
         span.title = t`Mail to`;
@@ -32,12 +39,12 @@ export default {
         span.addEventListener('click', (ev) => {
             ev.preventDefault()
             ev.stopPropagation();
-            if (this.el.value.length < 8) {
+            if (this.element.value.length < 8) {
                 return;
             }
-            window.open(`mailto:${this.el.value}`);
+            window.open(`mailto:${this.element.value}`);
         });
-        this.el.parentElement.appendChild(span);
+        this.element.parentElement.appendChild(span);
     },
 };
 </script>
