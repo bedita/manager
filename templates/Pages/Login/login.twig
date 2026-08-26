@@ -20,6 +20,7 @@
 
         {{ Form.create(null, {
             'url': {'_name': 'login', '?': {'redirect': _view.request.getQuery('redirect')}},
+            'onsubmit': "document.getElementById('login-button').disabled = true;document.getElementById('login-button').classList.add('is-loading-spinner');return true;",
         })|raw }}
 
         {% if projects %}
@@ -51,7 +52,7 @@
             'style': 'display: none'
         })|raw }}
 
-        <button type="submit" class="button button-primary mt-2">
+        <button type="submit" class="button button-primary mt-2" id="login-button">
             <app-icon icon="carbon:login"></app-icon>
             <span class="ml-05">{{ __('Sign in') }}</span>
         </button>
