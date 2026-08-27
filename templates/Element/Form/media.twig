@@ -63,7 +63,7 @@
                 {% set streamAttributesByVersion = {} %}
                 {% for s in streams %}
                     {% set streamVersion = s.attributes.version|default(s.meta.version|default(__('Default'))) %}
-                    {% set versionKey = streamVersion ~ '' %}
+                    {% set versionKey = 'v' ~ streamVersion %}
                     {% if streamAttributesByVersion[versionKey] is not defined %}
                         {% set streamAttributesByVersion = streamAttributesByVersion|merge({
                             (versionKey): {
