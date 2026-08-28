@@ -21,6 +21,7 @@ import uri from 'app/directives/uri';
 import viewHelper from 'app/helpers/view';
 import autoTranslation from 'app/helpers/api-translation';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
+import { humanizeString } from 'app/helpers/text-helper';
 
 import merge from 'deepmerge';
 import { t } from 'ttag';
@@ -29,6 +30,8 @@ import { buildSearchParams } from '../libs/urlUtils.js';
 import vTitle from 'vuejs-title';
 
 import { Icon as AppIcon } from '@iconify/vue2';
+
+Vue.filter('humanize', humanizeString);
 
 const _vueInstance = new Vue({
     el: 'main',

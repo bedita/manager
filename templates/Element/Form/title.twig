@@ -1,12 +1,14 @@
 {% if object.id %}
 	<h1 untitled-label="{{ __('Untitled') }}">
 		<b v-html="{{ object.attributes.title|json_encode }}"></b>
+		{% set firstStreamShown = false %}
 		{% for obj in included %}
-			{% if obj.type == 'streams' %}
+			{% if obj.type == 'streams' and not firstStreamShown %}
 				<a class="button button-outlined mx-1" href="{{ obj.meta.url }}" target="_blank">
 					<app-icon icon="carbon:launch"></app-icon>
 					<span class="ml-05">{{ __('Open File') }}</span>
 				</a>
+				{% set firstStreamShown = true %}
 			{% endif %}
 		{% endfor %}
 	</h1>

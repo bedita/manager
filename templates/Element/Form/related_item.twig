@@ -119,7 +119,16 @@
                 <div class="term-container">
                     <dt class="is-capitalized"><: key|humanize :></dt>
                     <dd>
-                        <span v-if="getParamHelper(related, key)"><: formatParam(key, getParamHelper(related, key)) :></span>
+                        <span v-if="getParamHelper(related, key)">
+                            <template v-if="param.format === 'json'">
+                                <button @click.prevent.stop="openModal(formatParam(key, getParamHelper(related, key)))" class="button is-small icon-code has-text-weight-bold">
+                                    {{ __('Json') }}
+                                </button>
+                            </template>
+                            <template v-else>
+                                <: formatParam(key, getParamHelper(related, key)) :>
+                            </template>
+                        </span>
                         <span v-else>-</span>
                     </dd>
                 </div>

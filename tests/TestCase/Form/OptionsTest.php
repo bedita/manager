@@ -171,6 +171,16 @@ class OptionsTest extends TestCase
                     ],
                 ],
             ],
+            'start_date date schema' => [
+                'start_date',
+                '2020-10-14',
+                [],
+                [],
+                [
+                    'type' => 'string',
+                    'format' => 'date',
+                ],
+            ],
             'end_date' => [
                 'end_date',
                 '2020-10-15',
@@ -243,15 +253,16 @@ class OptionsTest extends TestCase
      * @param mixed|null $value The field value.
      * @param array $expected Expected result.
      * @param array $config Configuration.
+     * @param array|null $schema Property schema.
      * @return void
      */
     #[DataProvider('customControlProvider')]
-    public function testCustomControl(string $name, $value, array $expected, array $config = []): void
+    public function testCustomControl(string $name, $value, array $expected, array $config = [], ?array $schema = null): void
     {
         if (!empty($config)) {
             Configure::write($config);
         }
-        $actual = Options::customControl($name, $value);
+        $actual = Options::customControl($name, $value, $schema);
         ksort($expected);
         static::assertSame($expected, $actual);
     }

@@ -26,7 +26,7 @@ class CategoriesHelper extends Helper
     /**
      * Helpers
      *
-     * @var array
+     * @var array<int|string, string|array<string, mixed>>
      */
     public array $helpers = ['Form', 'Property'];
 
