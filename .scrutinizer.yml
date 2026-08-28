@@ -10,7 +10,7 @@ filter:
     - 'tests/*'
 
 build:
-  image: default-jammy
+  image: default-noble
   environment:
     node: v22
   nodes:
