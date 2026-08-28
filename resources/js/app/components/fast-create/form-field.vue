@@ -114,6 +114,15 @@
                 @change="update"
                 v-if="fieldType === 'geo-coordinates'"
             />
+            <!-- input password -->
+            <template v-if="fieldType === 'string' && field === 'password'">
+                <field-password
+                    :id="`fast-create-${field}`"
+                    :name="`fast-${objectType}-${field}`"
+                    :reference="`fast-create-${objectType}`"
+                    @change="update"
+                />
+            </template>
             <!-- input text -->
             <field-string
                 :id="`fast-create-${field}`"
@@ -121,7 +130,7 @@
                 :reference="`fast-create-${objectType}`"
                 :value="value"
                 @change="update"
-                v-if="fieldType === 'string'"
+                v-if="fieldType === 'string' && field !== 'password'"
             />
             <!-- captions -->
             <object-captions
@@ -141,6 +150,16 @@
                 :value="value"
                 @change="update"
                 v-if="fieldType === 'json'"
+            />
+            <!-- multiple checkboxes -->
+            <field-multiple-checkboxes
+                :id="`fast-create-${field}`"
+                :json-schema="jsonSchema"
+                :name="`fast-${objectType}-${field}`"
+                :reference="`fast-create-${objectType}`"
+                :value="value"
+                @change="update"
+                v-if="fieldType === 'multiple-checkboxes'"
             />
         </div>
     </div>
@@ -227,6 +246,9 @@ export default {
             }
             if (this.field === 'date_ranges') {
                 return 'calendar';
+            }
+            if (this.jsonSchema?.type === 'array' && this.jsonSchema?.items?.type === 'string' && this.jsonSchema?.items?.enum?.length > 0) {
+                return 'multiple-checkboxes';
             }
             if (this.field === 'extra' || ['array','object'].includes(this.jsonSchema?.type) || this.jsonSchema?.oneOf?.filter(one => ['array','object'].includes(one?.type))?.length > 0) {
                 return 'json';
