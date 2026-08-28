@@ -22,14 +22,16 @@
 *
 */
 
-import Vue from 'vue';
-
 /**
  * Event bus to communicate from/to PanelView
  */
-export const PanelEvents = new Vue({
+const listeners = new Map();
 
-    methods: {
+export const PanelEvents = {
+    emit(evtName, payload) {
+        listeners.get(evtName)?.forEach((callback) => callback(payload));
+    },
+
         /**
          * set listener for events and if "from" is set, it extract its _uid and use it to match the evant signature
          *
@@ -42,7 +44,10 @@ export const PanelEvents = new Vue({
         listen(evtName, from, callback) {
             // listen to eventName@component-unique-identifier (if passed)
             const senderSign = from ? `@${from._uid}` : '';
-            this.$on(`${evtName}${senderSign}`, callback);
+            const eventName = `${evtName}${senderSign}`;
+            const eventListeners = listeners.get(eventName) || new Set();
+            eventListeners.add(callback);
+            listeners.set(eventName, eventListeners);
         },
 
         /**
@@ -56,7 +61,12 @@ export const PanelEvents = new Vue({
         */
         stop(evtName, from, callback) {
             const senderSign = from ? `@${from._uid}` : '';
-            this.$off(`${evtName}${senderSign}`, callback);
+            const eventName = `${evtName}${senderSign}`;
+            const eventListeners = listeners.get(eventName);
+            eventListeners?.delete(callback);
+            if (eventListeners?.size === 0) {
+                listeners.delete(eventName);
+            }
         },
 
         /**
@@ -68,7 +78,7 @@ export const PanelEvents = new Vue({
         * @returns {void}
         */
         sendBack(evtName, data) {
-            this.$emit('panel:send', { action: evtName , data });
+            this.emit('panel:send', { action: evtName , data });
         },
 
         /**
@@ -82,7 +92,7 @@ export const PanelEvents = new Vue({
         */
         send(evtName, to, payload = {}) {
             const recipientSign = to ? `@${to._uid}` : '';
-            this.$emit(`${evtName}${recipientSign}`, payload);
+            this.emit(`${evtName}${recipientSign}`, payload);
         },
 
         /**
@@ -93,7 +103,7 @@ export const PanelEvents = new Vue({
         * @returns {void}
         */
         requestPanel(request) {
-            this.$emit('panel:request', request);
+            this.emit('panel:request', request);
         },
 
         /**
@@ -102,10 +112,9 @@ export const PanelEvents = new Vue({
          * @returns {void}
          */
         closePanel() {
-            this.$emit('panel:close');
+            this.emit('panel:close');
         },
-    }
-});
+};
 
 /**
  *
@@ -222,7 +231,7 @@ export const PanelView = {
                 this.isOpen = true;
             } else {
                 this.isOpen = false;
-                PanelEvents.$emit('panel:closed', last);
+                PanelEvents.emit('panel:closed', last);
             }
         },
 
@@ -234,7 +243,7 @@ export const PanelView = {
         * @return {void}
         */
         save(data) {
-            PanelEvents.$emit('panel:save', data);
+            PanelEvents.emit('panel:save', data);
         },
 
         /**
@@ -243,7 +252,7 @@ export const PanelView = {
         * @return {void}
         */
         close() {
-            PanelEvents.$emit('panel:close');
+            PanelEvents.emit('panel:close');
         },
     }
 }
