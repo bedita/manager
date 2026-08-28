@@ -1,13 +1,16 @@
 # Vue 2 to Vue 3 Upgrade Roadmap
 
 ## Current State Analysis
-- **Last verified**: 2026-02-26
+- **Last verified**: 2026-08-28
 - **Vue version**: 3.5.x with `@vue/compat` enabled (MODE: 2)
 - **Build tool**: Webpack 5 (good, already modern)
 - **Vue components**: ~95 .vue files
 - **Key dependencies**: FullCalendar, Chart.js, vue-chartjs, Treeselect, Autocomplete
-- **Migration blockers still present**: `Vue.use`, `Vue.component`, `Vue.directive`, `Vue.mixin`, `Vue.prototype`, `new Vue()` event buses, `this.$on/$off/$once`, `$children`
+- **Build status**: `yarn webpack --mode production` passes (last run: 2026-08-28; existing three webpack warnings remain)
+- **Migration blockers still present**: root `new Vue()`, `Vue.use`, `Vue.filter`, `Vue.prototype`, `this.$on/$off/$once`, `inline-template`, `.sync`, legacy scoped slots, and Vue 2-only dependencies
 - **Incompatible libraries still in use**: `@riophae/vue-treeselect`, `@trevoreyre/autocomplete-vue`, `vuejs-title`, `@iconify/vue2`
+- **Compiler dependency cleanup pending**: `vue-template-compiler` is still in `devDependencies`; remove it only after legacy Vue 2 dependencies no longer require it.
+- **Current live diagnosis**: Dashboard renders. `ModulesIndex` is temporarily replaced by `DEBUG: modules-index...` in `templates/Pages/Modules/index.twig`; this confirms the root app mounts and isolates the module page failure to its component/template boundary.
 
 ---
 
@@ -50,7 +53,8 @@ Check Vue 3 compatibility for:
 
 ### 2.2 Build Tool Updates
 - [x] Update `vue-loader` from v15 to v17
-- [x] Remove `vue-template-compiler`, add `@vue/compiler-sfc` and `@vue/compat`
+- [x] Add `@vue/compiler-sfc` and `@vue/compat`
+- [ ] Remove `vue-template-compiler` after replacing remaining Vue 2-only dependencies
 - [x] Update webpack config for Vue 3 loader and compat alias
 - [x] Configure compat mode settings (start with `MODE: 2`)
 - [x] Test build process (production webpack build passes)
@@ -71,7 +75,7 @@ Check Vue 3 compatibility for:
 - [x] Both components have backward compatibility fallbacks to EventBus
 - [x] Remove legacy `event-bus.vue` component
 - [ ] Replace remaining `new Vue()` buses and root-instance listeners:
-  - `resources/js/app/components/panel-view.js` (`PanelEvents`)
+  - [x] `resources/js/app/components/panel-view.js` (`PanelEvents`): replaced the Vue-instance bus with a module-local emitter while preserving the existing `listen`, `stop`, and send helper API
   - `resources/js/app/components/placeholder-bus.vue` (`PlaceholderBus`)
   - `resources/js/app/components/permission-toggle/permission-toggle.vue` (`PermissionEvents`)
   - root `this.$on(...)` listeners in `resources/js/app/app.js`
@@ -498,6 +502,36 @@ export const useMainStore = defineStore('main', {
 - [ ] Start dependency replacements: treeselect + autocomplete + title plugin + iconify package
 
 **Exit criteria:** no critical runtime reliance on removed Vue 2 APIs; core workflows manually validated.
+
+### Inline Template Migration Inventory
+
+`inline-template` is removed in Vue 3. Migrate each owner by moving its Twig-provided markup into the corresponding Vue component, then replace the Twig usage with props, events, and slots. Validate each component in `ComponentsPlayground` where its dependencies can be supplied without page-specific data.
+
+**Priority 1 - currently blocking module index**
+- [ ] `ModulesIndex`: `templates/Pages/Modules/index.twig`, `templates/Pages/Translations/index.twig`, `templates/Element/Form/multiupload.twig`
+- [ ] `FilterBoxView`: `templates/Element/Modules/index_header.twig`, `templates/Element/Modules/list.twig`, `templates/Element/Panel/relations_add.twig`, plus its embedded uses in page/form templates
+
+**Priority 2 - shared page shells and panels**
+- [ ] `PanelView` scoped slot: `templates/Element/Panel/panel.twig` (`slot-scope` to `v-slot`)
+- [ ] `MainMenu`: `templates/Element/Menu/menu.twig`
+- [ ] `Dashboard`: `templates/Pages/Dashboard/index.twig`
+- [ ] `AdminIndex`: `templates/Element/Admin/index_content.twig`, `templates/Pages/Admin/RolesModules/index.twig`
+- [ ] `ModulesView`: `templates/Element/translation.twig`, `templates/Pages/Model/ObjectTypes/view.twig`, `templates/Pages/Model/Relations/view.twig`, `templates/Pages/Modules/view.twig`, `templates/Pages/UserProfile/view.twig`
+- [ ] `TrashIndex` and `TrashView`: `templates/Pages/Trash/index.twig`, `templates/Pages/Trash/view.twig`
+- [ ] `ModelIndex`: `templates/Pages/Model/PropertyTypes/index.twig`, `templates/Pages/Model/Tags/index.twig`
+
+**Priority 3 - form and relation components**
+- [ ] `PropertyView`: `templates/Element/Form/{advanced_properties,annotations,calendar,captions,categories,core_properties,history,map,media,meta,other_properties,permissions,publish_properties,related_translations,relations,resource_relations,roles,tags,trees}.twig`, `templates/Pages/Admin/RolesModules/index.twig`, `templates/Pages/Model/ObjectTypes/view.twig`, `templates/Pages/UserProfile/view.twig`
+- [ ] `RelationView`: `templates/Element/Form/relation.twig`, `templates/Element/Form/related_translations.twig`
+- [ ] `ResourceRelationView`: `templates/Element/Form/resource_relations.twig`
+- [ ] `FormFileUpload`: `templates/Element/Form/form_file_upload.twig`
+- [ ] Remaining embedded owners: `templates/Element/Form/upload.twig`, `templates/Element/Form/roles.twig`, `templates/Pages/Translations/index.twig`
+
+**Per-component workflow**
+1. Add the component's template to its `.vue` file, retaining Twig-only strings and server data as props or slots.
+2. Replace the Twig `inline-template` block with the component invocation.
+3. Add a minimal `ComponentsPlayground` fixture when the component can be initialized without a page request.
+4. Rebuild, test the original route, and clear that component's Vue 3 warnings before moving on.
 
 ---
 
