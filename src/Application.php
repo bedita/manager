@@ -153,11 +153,11 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // Csrf Middleware
             ->add($this->csrfMiddleware())
 
-            // Authentication middleware.
-            ->add(new AuthenticationMiddleware($this))
-
             // Otp middleware.
             ->add(new OtpMiddleware())
+
+            // Authentication middleware.
+            ->add(new AuthenticationMiddleware($this))
 
             // Authentication middleware.
             ->add(new OAuth2Middleware())
