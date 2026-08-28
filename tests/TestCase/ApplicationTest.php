@@ -76,9 +76,9 @@ class ApplicationTest extends TestCase
         $middleware->next();
         static::assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->current());
         $middleware->next();
-        static::assertInstanceOf(AuthenticationMiddleware::class, $middleware->current());
-        $middleware->next();
         static::assertInstanceOf(OtpMiddleware::class, $middleware->current());
+        $middleware->next();
+        static::assertInstanceOf(AuthenticationMiddleware::class, $middleware->current());
         $middleware->next();
         static::assertInstanceOf(OAuth2Middleware::class, $middleware->current());
         $middleware->next();
