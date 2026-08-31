@@ -73,6 +73,7 @@ module.exports = defineConfig([{
         'vue/no-unused-components': ['warn'],
         'vue/no-use-v-if-with-v-for': ['warn'],
         'vue/no-v-html': ['off'],
+        'vue/no-v-for-template-key-on-child': ['off'],
 
         'vue/order-in-components': ['warn', {
             'order': [
