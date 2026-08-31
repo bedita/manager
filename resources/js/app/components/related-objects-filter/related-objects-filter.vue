@@ -20,11 +20,11 @@
                         <span class="tag relation">{{ tr(relationName) }}</span>
                         <template
                             v-for="relatedId in filter[relationName]"
+                            :key="relatedId"
                         >
                             <div
                                 class="tag"
                                 :class="moduleClass(relatedId)"
-                                :key="relatedId"
                             >
                                 [{{ relatedId }}] {{ objectsMap?.[relatedId]?.title }}
                                 <a
