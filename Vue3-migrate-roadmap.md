@@ -7,7 +7,7 @@
 - **Vue components**: ~95 .vue files
 - **Key dependencies**: FullCalendar, Chart.js, vue-chartjs, Treeselect, Autocomplete
 - **Build status**: `yarn webpack --mode production` passes (last run: 2026-08-28; existing three webpack warnings remain)
-- **Migration blockers still present**: root `new Vue()`, `Vue.use`, `Vue.filter`, `Vue.prototype`, `this.$on/$off/$once`, `inline-template`, `.sync`, legacy scoped slots, and Vue 2-only dependencies
+- **Migration blockers still present**: dynamic `new Vue()` factories, `inline-template`, `.sync`, legacy scoped slots, and Vue 2-only dependencies
 - **Incompatible libraries still in use**: `@riophae/vue-treeselect`, `@trevoreyre/autocomplete-vue`, `vuejs-title`, `@iconify/vue2`
 - **Compiler dependency cleanup pending**: `vue-template-compiler` is still in `devDependencies`; remove it only after legacy Vue 2 dependencies no longer require it.
 - **Current live diagnosis**: Dashboard renders. `ModulesIndex` is temporarily replaced by `DEBUG: modules-index...` in `templates/Pages/Modules/index.twig`; this confirms the root app mounts and isolates the module page failure to its component/template boundary.
@@ -76,9 +76,14 @@ Check Vue 3 compatibility for:
 - [x] Remove legacy `event-bus.vue` component
 - [ ] Replace remaining `new Vue()` buses and root-instance listeners:
   - [x] `resources/js/app/components/panel-view.js` (`PanelEvents`): replaced the Vue-instance bus with a module-local emitter while preserving the existing `listen`, `stop`, and send helper API
-  - `resources/js/app/components/placeholder-bus.vue` (`PlaceholderBus`)
-  - `resources/js/app/components/permission-toggle/permission-toggle.vue` (`PermissionEvents`)
-  - root `this.$on(...)` listeners in `resources/js/app/app.js`
+  - [x] `resources/js/app/components/placeholder-bus.vue` (`PlaceholderBus`): replaced the Vue-instance bus with a module-local emitter while preserving the existing `listen` and `send` helper API
+  - [x] `resources/js/app/components/permission-toggle/permission-toggle.vue` (`PermissionEvents`): replaced with the shared `AppEvents` emitter
+  - [x] root `this.$on(...)` listeners in `resources/js/app/app.js`: replaced with the shared `AppEvents` emitter used by module pagination, resource changes, and flash-message cleanup
+
+- [x] Migrated `locations-view.vue` and `location-view.vue` from `$on`/`$parent.$emit` to explicit child events (`removed`, `updated`)
+- [x] Migrated `relation-view.vue` self-listeners for `drop`, `drop-files`, and `sort-end` to direct handlers in `DragdropMixin` and `relation-view.vue`
+- [x] Migrated `relationships-view.js` `$parent.$emit('loading', ...)` to an explicit `loading` event
+- [x] Migrated `model/index.js` `$children` traversal to explicit refs for `autosize-textarea` editors
 
 **Example migration to mitt:**
 ```javascript
@@ -135,6 +140,7 @@ Found in `resources/js/libs/filters.js`:
 - [x] Convert `capitalize` filter to method/composable (not used in Vue templates)
 - [x] Update all Vue template usages (`{{ value | filter }}` → `{{ filter(value) }}`)
 - [x] Confirm Vue template filter-pipe syntax removed; Twig filters are separate and unaffected
+- [x] Removed `Vue.filter('humanize', ...)` from `resources/js/app/app.js` and replaced the remaining five Vue template filter expressions with `$helpers.humanize(...)` (verified 2026-09-03)
 
 **Completed:** Updated 2 Vue components:
 - `resources/js/app/components/json-fields/string-list.vue`
@@ -164,8 +170,8 @@ export default {
 ```
 
 ### 3.3 Update Global APIs
-- [ ] Replace `Vue.prototype.$helpers` with app.config.globalProperties or composables
-- [ ] Convert global mixin to composables where possible
+- [x] Replace `Vue.prototype.$helpers` with `app.config.globalProperties.$helpers` in the helper plugins
+- [x] Move the global mixin and Vue config/options to the Vue 3 app instance
 - [ ] Review all `Vue.directive()` calls - update lifecycle hooks:
   - `bind` → `beforeMount`
   - `inserted` → `mounted`
@@ -496,8 +502,9 @@ export const useMainStore = defineStore('main', {
 3. Normalize `DefinePlugin` env value wiring in webpack config.
 
 ### Sprint B (remove major Vue 2 APIs)
-- [ ] Refactor bootstrap from `new Vue(...)` toward `createApp(...)` entry strategy
-- [ ] Replace `Vue.use`, `Vue.component`, `Vue.directive`, `Vue.mixin`, `Vue.prototype` usages
+- [x] Refactor bootstrap from `new Vue(...)` toward `createApp(...)` entry strategy
+- [x] Replace `Vue.use`, `Vue.component`, `Vue.filter`, `Vue.mixin`, and `Vue.prototype` usages in the main app path
+- [ ] Replace dynamic `new Vue(...)` factories in `modules/view.vue`, `dialog.vue`, and `ajax-login.js`
 - [ ] Replace `$on/$off/$once` and `$children` usages in remaining components/pages
 - [ ] Start dependency replacements: treeselect + autocomplete + title plugin + iconify package
 
@@ -508,6 +515,8 @@ export const useMainStore = defineStore('main', {
 `inline-template` is removed in Vue 3. Migrate each owner by moving its Twig-provided markup into the corresponding Vue component, then replace the Twig usage with props, events, and slots. Validate each component in `ComponentsPlayground` where its dependencies can be supplied without page-specific data.
 
 **Priority 1 - currently blocking module index**
+- [ ] Migrate the outer `ModulesView` owner first: move the page markup from `templates/Pages/Modules/view.twig` into a Vue-owned template/component and remove its `inline-template` attribute
+- [ ] After the outer owner is migrated, migrate nested `PropertyView` owners one at a time, starting with `templates/Element/Form/core_properties.twig` (`General` section), to prevent duplicate server-rendered sections
 - [ ] `ModulesIndex`: `templates/Pages/Modules/index.twig`, `templates/Pages/Translations/index.twig`, `templates/Element/Form/multiupload.twig`
 - [ ] `FilterBoxView`: `templates/Element/Modules/index_header.twig`, `templates/Element/Modules/list.twig`, `templates/Element/Panel/relations_add.twig`, plus its embedded uses in page/form templates
 

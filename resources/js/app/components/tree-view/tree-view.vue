@@ -199,7 +199,7 @@
  * @property {boolean} multipleChoice Should handle multiple relations.
  * @property {Array} parents The list of current item parents.
  */
-import { PermissionEvents } from '../permission-toggle/permission-toggle.vue';
+import { AppEvents } from 'app/app-events';
 import { t } from 'ttag';
 
 const API_URL = new URL(BEDITA.base).pathname;
@@ -313,7 +313,7 @@ export default {
             this.originalParents = this.parents.map(p => p.id);
         }
         this.isOpen = !!this.node.children;
-        PermissionEvents.$on('toggle-forbidden', (value) => this.showForbidden = value);
+        AppEvents.on('toggle-forbidden', (value) => this.showForbidden = value);
         if (this.node.meta && !this.node.meta?.relation) {
             this.node.meta.relation = {menu: false, canonical: false};
         }

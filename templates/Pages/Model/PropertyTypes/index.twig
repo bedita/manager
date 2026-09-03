@@ -54,6 +54,7 @@
                                 <autosize-textarea
                                     placeholder="params..."
                                     @input="editPropParams({{ resource.id }}, ...arguments)"
+                                    :ref="setParamsEditor"
                                     {# :reset-value="formatParams(propertyTypes[{{ propIndex }}])" #}
                                     :value="propertyTypes[{{ propIndex }}] ? formatParams(propertyTypes[{{ propIndex }}]) : {{ propVal|json_encode }}">
                                 </autosize-textarea>
@@ -95,6 +96,7 @@
                     <autosize-textarea
                         placeholder="params..."
                         @input="editPropParams(propertyType.id, ...arguments)"
+                        :ref="setParamsEditor"
                         :value="formatParams(propertyType)">
                     </autosize-textarea>
                 </div>

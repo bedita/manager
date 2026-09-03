@@ -135,6 +135,8 @@ const options = {
 };
 
 export default {
+    emits: ['removed', 'updated'],
+
     props: {
         index: {
             type: Number,
@@ -206,7 +208,7 @@ export default {
             this.location.meta.relation.params.pitch = `${this.getParamValue(this.pitch)}`;
             this.location.meta.relation.params.bearing = `${this.getParamValue(this.bearing)}`;
 
-            this.$parent.$emit('updated', this.index, this.location);
+            this.$emit('updated', this.index, this.location);
         },
         onAutocompleteSubmit(result) {
             if (!result) {
@@ -232,7 +234,7 @@ export default {
             this.address = this.cleanAddress(event.target.value);
         },
         onRemove() {
-            this.$parent.$emit('removed', this.index);
+            this.$emit('removed', this.index);
         },
         async searchTitle(input) {
             const results = [];

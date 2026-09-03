@@ -1,6 +1,5 @@
 // Vue configs...
 
-import Vue from 'vue';
 import Locale from 'app/locales';
 import { t } from 'ttag';
 
@@ -15,24 +14,6 @@ export const VueOptions = {
 // Polyfill
 import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only';
 
-// merge vue options and configs
-for (let property in VueConfig) {
-    if (Object.prototype.hasOwnProperty.call(VueConfig, property)) {
-        Vue.config[property] = VueConfig[property];
-    }
-}
-
-for (let property in VueOptions) {
-    if (Object.prototype.hasOwnProperty.call(VueOptions, property)) {
-        Vue.options[property] = VueOptions[property];
-    }
-}
-
-if (!Vue.config.compilerOptions) {
-    Vue.config.compilerOptions = {};
-}
-Vue.config.compilerOptions.delimiters = VueOptions.delimiters;
-
 Locale(BEDITA.locale);
 
 // General Configs
@@ -42,7 +23,7 @@ export const ACCEPTABLE_MEDIA = BEDITA.uploadable;
 
 // Global mixins
 
-Vue.mixin({
+export const GlobalMixin = {
     methods: {
         /**
          * ttag helper method for string literal template
@@ -72,4 +53,4 @@ Vue.mixin({
             return str.charAt(0).toUpperCase() + str.slice(1);
         },
     }
-});
+};

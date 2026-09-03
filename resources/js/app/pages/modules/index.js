@@ -6,6 +6,7 @@
  *
  */
 import { confirm } from 'app/components/dialog/dialog';
+import { AppEvents } from 'app/app-events';
 import { t } from 'ttag';
 
 export default {
@@ -233,11 +234,11 @@ export default {
         },
 
         onUpdatePageSize(event) {
-            window._vueInstance.$emit('filter-update-page-size', event);
+            AppEvents.emit('filter-update-page-size', event);
         },
 
         onUpdateCurrentPage(event) {
-            window._vueInstance.$emit('filter-update-current-page', event);
+            AppEvents.emit('filter-update-current-page', event);
         },
 
         goto(url) {

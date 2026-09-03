@@ -3,8 +3,8 @@ import { warning } from 'app/components/dialog/dialog';
 import { humanizeString, utf8ToBase64, base64ToUtf8 } from 'app/helpers/text-helper.js';
 
 export default {
-    install (Vue) {
-        Vue.prototype.$helpers = {
+    install (app) {
+        app.config.globalProperties.$helpers = {
 
             /**
             * Build view url using object ID
