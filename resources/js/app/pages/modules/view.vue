@@ -1,5 +1,6 @@
 <script>
 import { AjaxLogin } from '../../components/ajax-login/ajax-login.js';
+import { AppEvents } from 'app/app-events';
 import Vue from 'vue';
 import { t } from 'ttag';
 
@@ -57,7 +58,7 @@ export default {
         window.addEventListener('keydown', this.toggleTabs);
         if (this.$refs.formMain) {
             this.submitListener = this.$refs.formMain.addEventListener('submit', this.submitForm);
-            this.changeListener = this.$refs.formMain.addEventListener('change', () => window._vueInstance.$emit('resource-changed'));
+            this.changeListener = this.$refs.formMain.addEventListener('change', () => AppEvents.emit('resource-changed'));
         }
     },
 
@@ -164,7 +165,7 @@ export default {
                 },
             });
             // cleanup on flash message close
-            window._vueInstance.$once('flash-message:closed', () => {
+            AppEvents.once('flash-message:closed', () => {
                 flashInstance.$destroy();
                 element.remove();
             });

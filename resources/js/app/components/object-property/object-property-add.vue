@@ -8,11 +8,11 @@
         >
         <select v-model="propType">
             <option
-                v-for="(t,idx) in propTypes"
-                :value="t.value"
+                v-for="(item, idx) in propTypes"
+                :value="getPropTypeValue(item)"
                 :key="idx"
             >
-                {{ t.text }}
+                {{ getPropTypeText(item) }}
             </option>
         </select>
         <input
@@ -51,6 +51,30 @@ export default {
     },
 
     methods: {
+        getPropTypeText(item) {
+            if (!item) {
+                return '';
+            }
+
+            if (typeof item === 'string') {
+                return item;
+            }
+
+            return item.text || item.label || item.value || '';
+        },
+
+        getPropTypeValue(item) {
+            if (!item) {
+                return '';
+            }
+
+            if (typeof item === 'string') {
+                return item;
+            }
+
+            return item.value || item.text || item.label || '';
+        },
+
         add() {
             this.updateAdded();
             this.$emit('prop-added', {

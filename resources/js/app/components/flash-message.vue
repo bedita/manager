@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { AppEvents } from 'app/app-events';
 import { t } from 'ttag';
 import { error, warning, info, success } from 'app/components/dialog/dialog';
 
@@ -156,7 +157,7 @@ export default {
             this.isVisible = !this.isVisible;
             setTimeout(() => {
                 this.$refs.flashMessagesContainer.remove();
-                window._vueInstance.$emit('flash-message:closed');
+                AppEvents.emit('flash-message:closed');
             }, this.waitPanelAnimation * 1000);
         },
     },

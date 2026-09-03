@@ -60,14 +60,14 @@
                     <div class="type-cell"><span :class="`tag has-background-module-${item.object_type}`">{{ t(item.object_type || '?') }}</span></div>
                     <div class="narrow">{{ item.meta.user_action }}</div>
                     <div class="narrow" :title="changes(item, false)">{{ changes(item) }}</div>
-                    <div class="narrow">{{ $helpers.formatDate(item.meta.created) }}</div>
+                    <div class="narrow">{{ formatDate(item.meta.created) }}</div>
                 </a>
                 <div class="table-row object-status-deleted" v-else>
                     <div class="narrow">{{ title(item) }}</div>
                     <div class="type-cell"><span :class="`tag`">?</span></div>
                     <div class="narrow">{{ item.meta.user_action }}</div>
                     <div class="narrow" :title="changes(item, false)">{{ changes(item) }}</div>
-                    <div class="narrow">{{ $helpers.formatDate(item.meta.created) }}</div>
+                    <div class="narrow">{{ formatDate(item.meta.created) }}</div>
                 </div>
             </template>
         </div>
@@ -136,12 +136,26 @@ export default {
         async changePage(page = 1) {
             await this.fetchObjects(this.userId, page, this.pageSize);
         },
-        changes(item, truncate = true) {
-            if (truncate) {
-                return this.$helpers.truncate(Object.keys(item.meta.changed).join(', '), 50);
+        truncateText(value, maxLength) {
+            const text = (value || '').toString();
+            if (text.length <= maxLength) {
+                return text;
             }
 
-            return Object.keys(item.meta.changed).join(', ');
+            return `${text.substring(0, maxLength)}...`;
+        },
+        changes(item, truncate = true) {
+            const changed = Object.keys(item?.meta?.changed || {}).join(', ');
+            if (truncate) {
+                return this.truncateText(changed, 50);
+            }
+
+            return changed;
+        },
+        formatDate(d) {
+            const locale = BEDITA?.locale?.slice(0, 2) || 'en';
+
+            return d ?  new Date(d).toLocaleDateString(locale) + ' ' + new Date(d).toLocaleTimeString(locale, {hour: '2-digit', minute:'2-digit'}) : '';
         },
         async fetchObjects(userId, page, pageSize) {
             try {
@@ -184,10 +198,10 @@ export default {
             if (item.object_title) {
                 const text = this.getTextFromHtml(item.object_title);
 
-                return this.$helpers.truncate(text, 100);
+                return this.truncateText(text, 100);
             }
             const id = `#${item.meta.resource_id}`;
-            const uname = item.object_uname ? this.$helpers.truncate(item.object_uname, 100) : t`(deleted)`;
+            const uname = item.object_uname ? this.truncateText(item.object_uname, 100) : t`(deleted)`;
 
             return `${id} ${uname}`;
         },

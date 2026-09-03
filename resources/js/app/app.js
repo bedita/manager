@@ -1,12 +1,17 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
+import { configureCompat } from 'vue';
+import { GlobalMixin, VueConfig, VueOptions } from 'config/config';
 
-import 'config/config';
+if (typeof configureCompat === 'function') {
+    configureCompat({ MODE: 2 });
+}
 
 import '../../style.scss';
 
 import { BELoader } from 'libs/bedita';
 
 import { PanelView, PanelEvents } from 'app/components/panel-view';
+import { AppEvents } from 'app/app-events';
 import { confirm, error, info, success, prompt, warning } from 'app/components/dialog/dialog';
 
 import datepicker from 'app/directives/datepicker';
@@ -17,7 +22,6 @@ import uri from 'app/directives/uri';
 import viewHelper from 'app/helpers/view';
 import autoTranslation from 'app/helpers/api-translation';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
-import { humanizeString } from 'app/helpers/text-helper';
 
 import merge from 'deepmerge';
 import { t } from 'ttag';
@@ -27,10 +31,8 @@ import vTitle from 'vuejs-title';
 
 import { Icon as AppIcon } from '@iconify/vue2';
 
-Vue.filter('humanize', humanizeString);
-
-const _vueInstance = new Vue({
-    el: 'main',
+const rootOptions = {
+    delimiters: ['<:', ':>'],
 
     components: {
         PanelView,
@@ -179,27 +181,6 @@ const _vueInstance = new Vue({
      *
      * @return {void}
      */
-    beforeCreate() {
-        // Register directives
-        Vue.use(jsoneditor);
-        Vue.use(datepicker);
-        Vue.use(richeditor);
-        Vue.use(email);
-        Vue.use(uri);
-
-        // Register helpers
-        Vue.use(viewHelper);
-        Vue.use(autoTranslation);
-        Vue.use(Autocomplete);
-
-        Vue.use(vTitle, {
-            bgColor: '#000000'
-        });
-
-        // load BEplugins's components
-        BELoader.loadBeditaPlugins();
-    },
-
     created() {
         this.vueLoaded = true;
         this.dataChanged = new Map();
@@ -218,10 +199,9 @@ const _vueInstance = new Vue({
             rootEl.classList.remove('is-clipped');
         });
 
-        // listen events emitted on this vue instance
-        this.$on('filter-update-page-size', this.onUpdatePageSize);
-        this.$on('filter-update-current-page', this.onUpdateCurrentPage);
-        this.$on('resource-changed', this.onResourceChanged);
+        AppEvents.on('filter-update-page-size', this.onUpdatePageSize);
+        AppEvents.on('filter-update-current-page', this.onUpdateCurrentPage);
+        AppEvents.on('resource-changed', this.onResourceChanged);
     },
 
     mounted: function () {
@@ -627,38 +607,30 @@ const _vueInstance = new Vue({
             }
         }
     }
+};
+
+const app = createApp(rootOptions);
+app.config.devtools = VueConfig.devtools;
+app.config.compilerOptions.delimiters = VueOptions.delimiters;
+app.mixin(GlobalMixin);
+app.use(jsoneditor);
+app.use(datepicker);
+app.use(richeditor);
+app.use(email);
+app.use(uri);
+app.use(viewHelper);
+app.use(autoTranslation);
+app.use(Autocomplete);
+app.use(vTitle, { bgColor: '#000000' });
+BELoader.loadBeditaPlugins(app);
+
+Object.entries(rootOptions.components).forEach(([name, component]) => {
+    app.component(name, component);
 });
+
+const _vueInstance = app.mount('main');
 
 window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
-Vue.component('AppIcon', AppIcon);
-Vue.component('CalendarView', _vueInstance.$options.components.CalendarView);
-Vue.component('ClipboardItem', _vueInstance.$options.components.ClipboardItem);
-Vue.component('DateRangesView', _vueInstance.$options.components.DateRangesView);
-Vue.component('FieldCheckbox', _vueInstance.$options.components.FieldCheckbox);
-Vue.component('FieldGeoCoordinates', _vueInstance.$options.components.FieldGeoCoordinates);
-Vue.component('FieldDate', _vueInstance.$options.components.FieldDate);
-Vue.component('FieldInteger', _vueInstance.$options.components.FieldInteger);
-Vue.component('FieldJson', _vueInstance.$options.components.FieldJson);
-Vue.component('FieldMultipleCheckboxes', _vueInstance.$options.components.FieldMultipleCheckboxes);
-Vue.component('FieldNumber', _vueInstance.$options.components.FieldNumber);
-Vue.component('FieldPassword', _vueInstance.$options.components.FieldPassword);
-Vue.component('FieldPlaintext', _vueInstance.$options.components.FieldPlaintext);
-Vue.component('FieldRadio', _vueInstance.$options.components.FieldRadio);
-Vue.component('FieldSelect', _vueInstance.$options.components.FieldSelect);
-Vue.component('FieldString', _vueInstance.$options.components.FieldString);
-Vue.component('FieldTextarea', _vueInstance.$options.components.FieldTextarea);
-Vue.component('FieldTitle', _vueInstance.$options.components.FieldTitle);
-Vue.component('FileUpload', _vueInstance.$options.components.FileUpload);
-Vue.component('ModuleProperties', _vueInstance.$options.components.ModuleProperties);
-Vue.component('ModuleSetup', _vueInstance.$options.components.ModuleSetup);
-Vue.component('ObjectCategories', _vueInstance.$options.components.ObjectCategories);
-Vue.component('ObjectCaptions', _vueInstance.$options.components.ObjectCaptions);
-Vue.component('ObjectInfo', _vueInstance.$options.components.ObjectInfo);
-Vue.component('RelatedObjectsFilter', _vueInstance.$options.components.RelatedObjectsFilter);
-Vue.component('Thumbnail', _vueInstance.$options.components.Thumbnail);
-Vue.component('RibbonItem', _vueInstance.$options.components.RibbonItem);
-Vue.component('ViewChildrenParams', _vueInstance.$options.components.ViewChildrenParams);
-Vue.component('UploadedObject', _vueInstance.$options.components.UploadedObject);
-Vue.component('ObjectAnnotations', _vueInstance.$options.components.ObjectAnnotations);
+app.component('AppIcon', AppIcon);

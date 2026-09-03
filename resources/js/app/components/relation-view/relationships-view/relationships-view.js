@@ -11,6 +11,8 @@ import { PaginatedContentMixin } from 'app/mixins/paginated-content';
 export default {
     mixins: [ PaginatedContentMixin ],
 
+    emits: ['loading', 'visibility-setter', 'append-relations'],
+
     // props used by parent
     props: {
         relationName: {
@@ -122,7 +124,7 @@ export default {
         },
 
         loading(value) {
-            this.$parent.$emit('loading', value);
+            this.$emit('loading', value);
         }
     },
 

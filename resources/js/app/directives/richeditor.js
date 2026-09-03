@@ -61,9 +61,9 @@ const emit = (vnode, name, data) => {
  *
  */
 export default {
-    install(Vue) {
-        Vue.directive('richeditor', {
-            bind(element, binding, vnode) {
+    install(app) {
+        app.directive('richeditor', {
+            beforeMount(element, binding, vnode) {
                 element.addEventListener('change', (event) => {
                     emit(vnode, 'input', event);
                     if (BEDITA?.richeditorConfig?.cleanup_regex_pattern) {
@@ -90,7 +90,7 @@ export default {
                 });
             },
 
-            unbind(element) {
+            unmounted(element) {
                 tinymce.remove(element.editor);
             },
 
@@ -99,7 +99,7 @@ export default {
              *
              * @param {Object} element DOM object
              */
-            async inserted(element, binding) {
+            async mounted(element, binding) {
                 let elementName = element?.name || '';
                 if (elementName.indexOf('fast-') === 0) {
                     const lastPos = elementName.lastIndexOf('-');
@@ -215,7 +215,7 @@ export default {
                 });
             },
 
-            update(element) {
+            updated(element) {
                 const editor = element.editor;
                 if (!editor) {
                     return;

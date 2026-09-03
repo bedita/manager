@@ -41,6 +41,7 @@ export default {
             removePropertyTypes: [],    // stage property_type objects to REMOVE
             editPropertyTypes: [],  // stage property_type objects to EDIT
             dialog: null,
+            paramsEditors: [],
         };
     },
 
@@ -254,7 +255,7 @@ export default {
                     });
 
                     // clean up wrong jsons an restore original value
-                    this.$children.forEach((component) => {
+                    this.paramsEditors.forEach((component) => {
                         try {
                             JSON.parse(component.text);
                         } catch (error) {
@@ -355,6 +356,11 @@ export default {
                 }
                 return element === id
             }).length;
+        },
+        setParamsEditor(component) {
+            if (component && !this.paramsEditors.includes(component)) {
+                this.paramsEditors.push(component);
+            }
         },
     }
 };

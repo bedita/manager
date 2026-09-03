@@ -56,7 +56,7 @@ const methods = {
 }
 
 export default {
-    install (Vue) {
-        Vue.prototype.$helpers.autoTranslate = methods.autoTranslate;
+    install (app) {
+        app.config.globalProperties.$helpers.autoTranslate = methods.autoTranslate;
     }
 };

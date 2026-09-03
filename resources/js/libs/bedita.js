@@ -1,6 +1,4 @@
 
-import Vue from 'vue';
-
 /**
  * BEdita Helper Object
  */
@@ -11,7 +9,7 @@ const BELoader = {
      *
      * @return {void}
      */
-    loadBeditaPlugins() {
+    loadBeditaPlugins(app) {
         const plugins = BEDITA.plugins;
 
         plugins.forEach(element => {
@@ -23,7 +21,7 @@ const BELoader = {
 
             Object.keys(BEPlugins).forEach(componentName => {
                 if (typeof BEPlugins[componentName] === 'object') {
-                    Vue.component(componentName, BEPlugins[componentName]);
+                    app.component(componentName, BEPlugins[componentName]);
 
                     console.debug(
                         `%c[${componentName}]%c component succesfully registred from %c${element}%c Plugin`,
