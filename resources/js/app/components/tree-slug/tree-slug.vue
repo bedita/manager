@@ -5,7 +5,12 @@
         </template>
         <template v-if="mode === 'edit'">
             <template v-if="!editing && v === slugOriginalContent">
-                <span :title="`${slugPathCompact}/${v}`" class="slug-path">{{ slugPathCompact }}/{{ v }}</span>
+                <div :title="`${slugPathCompact}/${v}`"
+                     class="slug-path"
+                >
+                    <span class="slug-path-parents">{{ slugPathCompact }}</span>
+                    <span class="slug-path-leaf">/{{ v }}</span>
+                </div>
                 <div class="button-wrapper">
                     <button
                         class="button button-outlined"
@@ -16,7 +21,12 @@
                 </div>
             </template>
             <template v-if="!editing && v !== slugOriginalContent">
-                <span :title="`${slugPathCompact}/${v}`" class="slug-path">{{ slugPathCompact }}/{{ v }}</span>
+                <div :title="`${slugPathCompact}/${v}`"
+                     class="slug-path"
+                >
+                    <span class="slug-path-parents">{{ slugPathCompact }}</span>
+                    <span class="slug-path-leaf">/{{ v }}</span>
+                </div>
                 <div class="button-wrapper">
                     <button
                         class="button button-outlined"
@@ -38,12 +48,12 @@
                 </div>
             </template>
             <template v-if="editing">
-                <div>
-                    <span :title="`${slugPathCompact}/${v}`" class="slug-path">{{ slugPathCompact }}/</span>
-                    <input
+                <div class="slug-path slug-path-expanded">
+                    <span class="slug-path-parents">{{ slugPathCompact }}</span>
+                    <span class="slug-path-leaf">/<input
                         type="text"
                         v-model="v"
-                    >
+                    ></span>
                 </div>
                 <div class="button-wrapper">
                     <button
@@ -146,19 +156,38 @@ export default {
     flex-wrap: wrap;
 }
 .tree-slug .slug-path {
-    display: inline-block;
+    display: flex;
+    align-items: baseline;
     width: fit-content;
     max-width: 100%;
     border-bottom: 1px dotted #ccc;
+}
+.tree-slug .slug-path-parents {
+    min-width: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.tree-slug .slug-path-leaf {
+    flex: none;
+    white-space: nowrap;
+}
+.tree-slug .slug-path-expanded {
+    display: block;
+}
+.tree-slug .slug-path-expanded .slug-path-parents,
+.tree-slug .slug-path-expanded .slug-path-leaf {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 .tree-slug input {
     border: 1px solid #ccc;
     background-color: #cccc;
     border-radius: 4px;
     height: 1rem;
+    margin-left: 0.25rem;
     width: fit-content !important;
     field-sizing: content;
 }
