@@ -5,7 +5,7 @@
         </template>
         <template v-if="mode === 'edit'">
             <template v-if="!editing && v === slugOriginalContent">
-                <span class="slug-path">{{ slugPathCompact }}/{{ v }}</span>
+                <span :title="`${slugPathCompact}/${v}`" class="slug-path">{{ slugPathCompact }}/{{ v }}</span>
                 <div class="button-wrapper">
                     <button
                         class="button button-outlined"
@@ -16,7 +16,7 @@
                 </div>
             </template>
             <template v-if="!editing && v !== slugOriginalContent">
-                <span class="slug-path">{{ slugPathCompact }}/{{ v }}</span>
+                <span :title="`${slugPathCompact}/${v}`" class="slug-path">{{ slugPathCompact }}/{{ v }}</span>
                 <div class="button-wrapper">
                     <button
                         class="button button-outlined"
@@ -39,7 +39,7 @@
             </template>
             <template v-if="editing">
                 <div>
-                    <span class="slug-path">{{ slugPathCompact }}/</span>
+                    <span :title="`${slugPathCompact}/${v}`" class="slug-path">{{ slugPathCompact }}/</span>
                     <input
                         type="text"
                         v-model="v"
@@ -146,8 +146,13 @@ export default {
     flex-wrap: wrap;
 }
 .tree-slug .slug-path {
+    display: inline-block;
     width: fit-content;
+    max-width: 100%;
     border-bottom: 1px dotted #ccc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .tree-slug input {
     border: 1px solid #ccc;
