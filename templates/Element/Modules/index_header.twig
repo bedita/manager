@@ -12,7 +12,7 @@
 
         config-paginate-sizes="{{ config('Pagination.sizeAvailable')|json_encode|escape('html_attr') }}"
         placeholder="{{ __('Search') }}"
-        objects-label="{{ resourceType ? __(resourceType|humanize) : __(currentModule.name|humanize) }}"
+        objects-label="{{ resourceType ? __(resourceType|default('')|humanize) : __(currentModule.name|default('')|humanize) }}"
         page-size="{{ meta.pagination.page_size }}"
 
         @filter-objects="onFilterObjects"
