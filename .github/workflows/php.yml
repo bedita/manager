@@ -39,13 +39,13 @@ jobs:
   unit-5:
     uses: bedita/github-workflows/.github/workflows/php-unit.yml@v2
     with:
-      php_versions: '["8.4"]'
+      php_versions: '["8.3","8.4"]'
       bedita_version: '5.48.0'
       coverage_min_percentage: 98
 
   unit-6:
     uses: bedita/github-workflows/.github/workflows/php-unit.yml@v2
     with:
-      php_versions: '["8.5"]'
+      php_versions: '["8.4","8.5"]'
       bedita_version: '6'
       coverage_min_percentage: 98
