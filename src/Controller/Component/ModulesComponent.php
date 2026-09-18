@@ -183,12 +183,19 @@ class ModulesComponent extends Component
      */
     public function translationsEnabled(array $types): bool
     {
-        foreach ($types as $objectType) {
-            $schema = (array)$this->Schema->getSchema($objectType);
-            $translatable = (array)Hash::get($schema, 'translatable');
-            if (count($translatable) > 0) {
-                return true;
+        $internalSchema = $this->Schema->getConfig('internalSchema');
+        $this->Schema->setConfig('internalSchema', false);
+
+        try {
+            foreach ($types as $objectType) {
+                $schema = (array)$this->Schema->getSchema($objectType);
+                $translatable = (array)Hash::get($schema, 'translatable');
+                if (count($translatable) > 0) {
+                    return true;
+                }
             }
+        } finally {
+            $this->Schema->setConfig('internalSchema', $internalSchema);
         }
 
         return false;
