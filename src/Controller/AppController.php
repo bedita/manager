@@ -311,7 +311,7 @@ class AppController extends Controller
         if (!empty($data['relations'])) {
             $api = [];
             foreach ($data['relations'] as $relation => $relationData) {
-                $id = $data['id'];
+                $id = (string)Hash::get($data, 'id');
                 foreach ($relationData as $method => $ids) {
                     $relatedIds = $this->relatedIds($ids);
                     if ($method === 'replaceRelated' || !empty($relatedIds)) {
