@@ -16,7 +16,9 @@ namespace App\Test\TestCase\View\Helper;
 use App\Application;
 use App\Test\TestCase\Controller\AppControllerTest;
 use App\View\Helper\LinkHelper;
+use Cake\Core\BasePlugin;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
@@ -485,8 +487,8 @@ class LinkHelperTest extends TestCase
         mkdir(getcwd() . '/plugins/Dummy/webroot');
         mkdir(getcwd() . '/plugins/Dummy/webroot/js');
         file_put_contents(getcwd() . '/plugins/Dummy/webroot/js/Dummy.plugin.js', '');
-        Configure::write('Plugins', ['Dummy' => ['debugOnly' => true]]);
-        $app->loadPluginsFromConfig();
+        // register plugin directly to avoid deprecated class-less plugin loading
+        Plugin::getCollection()->add(new BasePlugin(['name' => 'Dummy', 'path' => getcwd() . '/plugins/Dummy/']));
         $actual = $link->pluginAsset('Dummy', 'js');
         static::assertEquals('<script src="/dummy/js/Dummy.plugin.js"></script>', $actual);
         array_map('unlink', glob(getcwd() . '/plugins/Dummy/webroot/js/*.*'));

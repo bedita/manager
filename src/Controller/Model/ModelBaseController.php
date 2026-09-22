@@ -63,13 +63,12 @@ abstract class ModelBaseController extends AppController
      * Restrict `model` module access to `admin` for now
      *
      * @param \Cake\Event\EventInterface $event An Event instance
-     * @return \Cake\Http\Response|null
      */
-    public function beforeFilter(EventInterface $event): ?Response
+    public function beforeFilter(EventInterface $event): void
     {
         $res = parent::beforeFilter($event);
         if ($res !== null) {
-            return $res;
+            return;
         }
 
         /** @var \Authentication\Identity|null $user */
@@ -77,8 +76,6 @@ abstract class ModelBaseController extends AppController
         if (empty($user->get('roles')) || !in_array('admin', $user->get('roles'))) {
             throw new UnauthorizedException(__('Module access not authorized'));
         }
-
-        return null;
     }
 
     /**

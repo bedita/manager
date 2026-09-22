@@ -102,12 +102,9 @@ abstract class AdministrationBaseController extends AppController
      *
      * Restrict `model` module access to `admin`
      */
-    public function beforeFilter(EventInterface $event): ?Response
+    public function beforeFilter(EventInterface $event): void
     {
-        $res = parent::beforeFilter($event);
-        if ($res !== null) {
-            return $res;
-        }
+        parent::beforeFilter($event);
 
         /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
@@ -115,8 +112,6 @@ abstract class AdministrationBaseController extends AppController
         if (empty($roles) || !in_array('admin', $roles)) {
             throw new UnauthorizedException(__('Module access not authorized'));
         }
-
-        return null;
     }
 
     /**

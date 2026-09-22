@@ -36,16 +36,16 @@ class PasswordController extends AppController
      * {@inheritDoc}
      * {@codeCoverageIgnore}
      */
-    public function beforeFilter(EventInterface $event): ?Response
+    public function beforeFilter(EventInterface $event): void
     {
         /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
         if (empty($user) || empty($user->get('tokens'))) {
-            return null;
+            return;
         }
 
         // if authenticated, redirect to dashboard
-        return $this->redirect(['_name' => 'dashboard']);
+        $this->redirect(['_name' => 'dashboard']);
     }
 
     /**

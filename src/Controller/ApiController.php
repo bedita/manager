@@ -18,7 +18,6 @@ use BEdita\WebTools\Controller\ApiProxyTrait;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\UnauthorizedException;
-use Cake\Http\Response;
 use Cake\Utility\Hash;
 
 /**
@@ -35,15 +34,13 @@ class ApiController extends AppController
     /**
      * @inheritDoc
      */
-    public function beforeFilter(EventInterface $event): ?Response
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         if (!$this->allowed()) {
             throw new UnauthorizedException(__('You are not authorized to access this resource'));
         }
         $this->FormProtection->setConfig('unlockedActions', ['post', 'patch', 'delete']);
-
-        return null;
     }
 
     /**

@@ -13,7 +13,6 @@
 namespace App\Controller\Admin;
 
 use Cake\Event\EventInterface;
-use Cake\Http\Response;
 use Cake\Utility\Hash;
 
 /**
@@ -53,12 +52,10 @@ class ConfigController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
-    public function beforeFilter(EventInterface $event): ?Response
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->set('applications', $this->fetchApplications());
-
-        return null;
     }
 
     /**
