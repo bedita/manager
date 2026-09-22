@@ -183,7 +183,8 @@ class AdministrationBaseControllerTest extends TestCase
         }
 
         $event = $controller->dispatchEvent('Controller.beforeFilter');
-        $result = $controller->beforeFilter($event);
+        $controller->beforeFilter($event);
+        $result = $event->getResult();
 
         if (is_string($expected)) {
             static::assertInstanceOf($expected, $result);

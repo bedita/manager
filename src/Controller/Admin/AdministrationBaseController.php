@@ -105,6 +105,9 @@ abstract class AdministrationBaseController extends AppController
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
+        if ($event->getResult() !== null) {
+            return;
+        }
 
         /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();

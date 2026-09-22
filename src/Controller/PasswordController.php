@@ -45,7 +45,7 @@ class PasswordController extends AppController
         }
 
         // if authenticated, redirect to dashboard
-        $this->redirect(['_name' => 'dashboard']);
+        $event->setResult($this->redirect(['_name' => 'dashboard']));
     }
 
     /**

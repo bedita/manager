@@ -66,8 +66,8 @@ abstract class ModelBaseController extends AppController
      */
     public function beforeFilter(EventInterface $event): void
     {
-        $res = parent::beforeFilter($event);
-        if ($res !== null) {
+        parent::beforeFilter($event);
+        if ($event->getResult() !== null) {
             return;
         }
 
