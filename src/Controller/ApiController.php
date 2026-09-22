@@ -76,7 +76,7 @@ class ApiController extends AppController
             'objects' => ['GET', 'POST', 'PATCH', 'DELETE'],
             'users' => ['GET', 'POST', 'PATCH', 'DELETE'],
         ]);
-        $blocked = in_array($method, $blockedMethods[$action] ?? []);
+        $blocked = in_array($method, $blockedMethods[$action ?? ''] ?? []);
         $modules = $this->viewBuilder()->getVar('modules');
         $modules = array_values($modules);
         $modules = array_merge(

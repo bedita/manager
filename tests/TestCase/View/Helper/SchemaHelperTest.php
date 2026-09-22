@@ -537,6 +537,8 @@ class SchemaHelperTest extends TestCase
         $view = new View($request, null, null, []);
         $view->set('objectType', 'dummies');
         $helper = new class ($view) extends SchemaHelper {
+            public PermsHelper $Perms;
+
             public function updateREopts(string $name, bool $placeholders, array &$options): array
             {
                 $this->updateRicheditorOptions($name, $placeholders, $options);
