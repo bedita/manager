@@ -115,7 +115,6 @@ class LockControllerTest extends TestCase
     {
         $reflectionClass = new ReflectionClass($this->LockController);
         $method = $reflectionClass->getMethod('lock');
-        $method->setAccessible(true);
         $method->invokeArgs($this->LockController, [true]);
         $response = $this->ApiClient->getObject($this->documentId);
         $actual = (bool)Hash::get($response, 'data.meta.locked');
@@ -143,7 +142,6 @@ class LockControllerTest extends TestCase
         );
         $reflectionClass = new ReflectionClass($this->LockController);
         $method = $reflectionClass->getMethod('lock');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->LockController, [true]);
         $expected = false;
         static::assertEquals($expected, $actual);

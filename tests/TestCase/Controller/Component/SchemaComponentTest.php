@@ -256,7 +256,6 @@ class SchemaComponentTest extends TestCase
         // null
         $reflectionClass = new ReflectionClass($this->Schema);
         $method = $reflectionClass->getMethod('loadWithRevision');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
         static::assertNull($actual);
 
@@ -267,7 +266,6 @@ class SchemaComponentTest extends TestCase
         $key = CacheTools::cacheKey($type);
         Cache::write($key, $schema, SchemaComponent::CACHE_CONFIG);
         $method = $reflectionClass->getMethod('loadWithRevision');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Schema, [$type, $revision]);
         static::assertEquals($schema, $actual);
 
@@ -449,7 +447,6 @@ class SchemaComponentTest extends TestCase
     {
         $reflectionClass = new ReflectionClass($this->Schema);
         $method = $reflectionClass->getMethod('concreteTypes');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Schema, [$types, $descendants]);
         static::assertEquals($expected, $actual);
     }

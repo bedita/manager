@@ -220,7 +220,6 @@ class BulkControllerTest extends BaseControllerTest
 
         $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('remapCategories');
-        $method->setAccessible(true);
         $input = ['Category 1', 'Category 2'];
         $actual = $method->invokeArgs($this->controller, [$input]);
         $expected = [
@@ -308,14 +307,12 @@ class BulkControllerTest extends BaseControllerTest
         $o = $this->getTestObject();
         // set $this->controller->objects
         $property = new ReflectionProperty(BulkController::class, 'objects');
-        $property->setAccessible(true);
         $property->setValue($this->controller, [['id' => $o['id'], 'type' => $o['type']]]);
         $attributes = ['status' => 'draft'];
 
         // do controller call
         $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('saveAttribute');
-        $method->setAccessible(true);
         $method->invokeArgs($this->controller, [$attributes]);
 
         // check empty errors
@@ -324,7 +321,6 @@ class BulkControllerTest extends BaseControllerTest
         // do controller call
         // set $this->controller->objects
         $property = new ReflectionProperty(BulkController::class, 'objects');
-        $property->setAccessible(true);
         $property->setValue($this->controller, [['id' => 1, 'type' => 'users']]);
         $method->invokeArgs($this->controller, [$attributes]);
 
@@ -353,7 +349,6 @@ class BulkControllerTest extends BaseControllerTest
 
         // set $this->controller->categories
         $property = new ReflectionProperty(BulkController::class, 'categories');
-        $property->setAccessible(true);
         $property->setValue($controller, '123,456,789');
 
         // mock schema component
@@ -376,10 +371,8 @@ class BulkControllerTest extends BaseControllerTest
         // do controller call
         $reflectionClass = new ReflectionClass($controller);
         $method = $reflectionClass->getMethod('loadCategories');
-        $method->setAccessible(true);
         $method->invokeArgs($controller, []);
         $property = new ReflectionProperty($controller, 'categories');
-        $property->setAccessible(true);
         $expected = ['Cat 1', 'Cat 2', 'Cat 3'];
         $actual = $property->getValue($controller);
         static::assertEquals($expected, $actual);
@@ -398,13 +391,11 @@ class BulkControllerTest extends BaseControllerTest
         // get object for test
         $o = $this->getTestObject();
         $property = new ReflectionProperty(BulkController::class, 'ids');
-        $property->setAccessible(true);
         $property->setValue($this->controller, [$o['id']]);
 
         // do controller call
         $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('saveCategories');
-        $method->setAccessible(true);
         $method->invokeArgs($this->controller, []);
 
         // check empty errors
@@ -413,7 +404,6 @@ class BulkControllerTest extends BaseControllerTest
         // do controller call
         // set $this->controller->ids
         $property = new ReflectionProperty(BulkController::class, 'ids');
-        $property->setAccessible(true);
         $property->setValue($this->controller, ['123456789']);
         $method->invokeArgs($this->controller, []);
 
@@ -435,7 +425,6 @@ class BulkControllerTest extends BaseControllerTest
         $o = $this->getTestObject();
         // set $this->controller->ids
         $property = new ReflectionProperty(BulkController::class, 'ids');
-        $property->setAccessible(true);
         $property->setValue($this->controller, [$o['id']]);
 
         // get folder for test
@@ -444,7 +433,6 @@ class BulkControllerTest extends BaseControllerTest
         // do controller call
         $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('copyToPosition');
-        $method->setAccessible(true);
         $method->invokeArgs($this->controller, [$f['id']]);
 
         // check empty errors
@@ -471,7 +459,6 @@ class BulkControllerTest extends BaseControllerTest
         $o = $this->getTestObject();
         // set $this->controller->ids
         $property = new ReflectionProperty(BulkController::class, 'ids');
-        $property->setAccessible(true);
         $property->setValue($this->controller, [$o['id']]);
 
         // get folder for test
@@ -480,7 +467,6 @@ class BulkControllerTest extends BaseControllerTest
         // do controller call
         $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('moveToPosition');
-        $method->setAccessible(true);
         $method->invokeArgs($this->controller, [$f['id']]);
 
         // check empty errors
@@ -584,11 +570,9 @@ class BulkControllerTest extends BaseControllerTest
         // empty
         // set $this->controller->errors
         $property = new ReflectionProperty(BulkController::class, 'errors');
-        $property->setAccessible(true);
         $property->setValue($this->controller, []);
         $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('showResult');
-        $method->setAccessible(true);
         $method->invokeArgs($this->controller, []);
         $message = $this->controller->getRequest()->getSession()->read('Flash');
         static::assertEquals(1, count($message['flash']));
@@ -598,7 +582,6 @@ class BulkControllerTest extends BaseControllerTest
         // not empty
         // set $this->controller->errors
         $property = new ReflectionProperty(BulkController::class, 'errors');
-        $property->setAccessible(true);
         $property->setValue($this->controller, ['something bad happened']);
         $method->invokeArgs($this->controller, []);
         $message = $this->controller->getRequest()->getSession()->read('Flash');
@@ -625,7 +608,6 @@ class BulkControllerTest extends BaseControllerTest
         ]);
         $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('getType');
-        $method->setAccessible(true);
         $media = $this->getTestMedia();
         $expected = $media['type'];
         $id = $media['id'];
@@ -643,7 +625,6 @@ class BulkControllerTest extends BaseControllerTest
         ]);
         $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('getType');
-        $method->setAccessible(true);
         $media = $this->getTestMedia();
         $expected = $media['type'];
         $id = $media['id'];
