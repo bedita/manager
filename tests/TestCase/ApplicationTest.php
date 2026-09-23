@@ -110,7 +110,6 @@ class ApplicationTest extends TestCase
             $middleware->next();
         }
         $property = new ReflectionProperty($current, 'skipCheckCallback');
-        $property->setAccessible(true);
         $method = $property->getValue($current);
         $actual = $method(
             new ServerRequest(

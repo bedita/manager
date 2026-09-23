@@ -266,7 +266,6 @@ class AppControllerTest extends TestCase
         $this->setupController($config);
         $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('loginRedirectRoute');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->AppController, []);
         static::assertEquals($expected, $actual);
     }
@@ -342,7 +341,6 @@ class AppControllerTest extends TestCase
 
         // set $this->AppController->apiClient
         $property = new ReflectionProperty(AppController::class, 'apiClient');
-        $property->setAccessible(true);
         $property->setValue($this->AppController, $apiClient);
 
         $this->AppController->dispatchEvent('Controller.beforeRender');
@@ -948,7 +946,6 @@ class AppControllerTest extends TestCase
     {
         $reflection = new ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
     }
@@ -964,7 +961,6 @@ class AppControllerTest extends TestCase
     {
         $reflection = new ReflectionClass(get_class($object));
         $property = $reflection->getProperty($propertyName);
-        $property->setAccessible(true);
 
         return $property->getValue($object);
     }
@@ -1067,7 +1063,6 @@ class AppControllerTest extends TestCase
         // do controller call
         $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('applySessionFilter');
-        $method->setAccessible(true);
         $result = $method->invokeArgs($this->AppController, []);
 
         // verify session data and http status code
@@ -1181,7 +1176,6 @@ class AppControllerTest extends TestCase
         // do controller call
         $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('setObjectNav');
-        $method->setAccessible(true);
         $method->invokeArgs($this->AppController, [ $objects ]);
 
         // verify session data
@@ -1238,7 +1232,6 @@ class AppControllerTest extends TestCase
         // set objectNav data
         $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('setObjectNav');
-        $method->setAccessible(true);
         $method->invokeArgs($this->AppController, [ $objects ]);
 
         // get session data
@@ -1248,7 +1241,6 @@ class AppControllerTest extends TestCase
         foreach ($objects as $object) {
             // do controller call
             $method = $reflectionClass->getMethod('getObjectNav');
-            $method->setAccessible(true);
             $result = $method->invokeArgs($this->AppController, [ (string)$object['id'] ]);
 
             // verify objectNav data for id
@@ -1272,7 +1264,6 @@ class AppControllerTest extends TestCase
         // set objectNav data to empty array
         $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('setObjectNav');
-        $method->setAccessible(true);
         $method->invokeArgs($this->AppController, [ [] ]);
 
         // get session data
@@ -1281,7 +1272,6 @@ class AppControllerTest extends TestCase
 
         // do controller call
         $method = $reflectionClass->getMethod('getObjectNav');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->AppController, [ '' ]);
 
         static::assertSame($expected, $actual);
@@ -1345,7 +1335,6 @@ class AppControllerTest extends TestCase
         $this->setupController();
         $reflectionClass = new ReflectionClass($this->AppController);
         $method = $reflectionClass->getMethod('relatedIds');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->AppController, [$items]);
         $this->assertEquals($expected, $actual);
     }

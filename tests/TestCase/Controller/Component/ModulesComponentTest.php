@@ -767,20 +767,17 @@ class ModulesComponentTest extends TestCase
 
         // set $this->Modules->modules
         $property = new ReflectionProperty(ModulesComponent::class, 'modules');
-        $property->setAccessible(true);
         $property->setValue($this->Modules, $modules);
         // set AccessControl
         Configure::write('AccessControl', $accessControl);
         // call modulesByAccessControl
         $reflectionClass = new ReflectionClass($this->Modules);
         $method = $reflectionClass->getMethod('modulesByAccessControl');
-        $method->setAccessible(true);
         $this->Modules->Authentication->setIdentity(new Identity($user));
         $method->invokeArgs($this->Modules, []);
 
         // get $this->Modules->modules
         $property = new ReflectionProperty(ModulesComponent::class, 'modules');
-        $property->setAccessible(true);
         $actual = $property->getValue($this->Modules);
         static::assertEquals($expected, $actual);
     }

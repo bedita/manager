@@ -183,7 +183,8 @@ class AdministrationBaseControllerTest extends TestCase
         }
 
         $event = $controller->dispatchEvent('Controller.beforeFilter');
-        $result = $controller->beforeFilter($event);
+        $controller->beforeFilter($event);
+        $result = $event->getResult();
 
         if (is_string($expected)) {
             static::assertInstanceOf($expected, $result);
@@ -374,7 +375,6 @@ class AdministrationBaseControllerTest extends TestCase
         );
         $reflectionClass = new ReflectionClass($this->RlsController);
         $method = $reflectionClass->getMethod('endpoint');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->RlsController, []);
         static::assertEquals('/roles', $actual);
 
@@ -386,7 +386,6 @@ class AdministrationBaseControllerTest extends TestCase
         };
         $reflectionClass = new ReflectionClass($controller);
         $method = $reflectionClass->getMethod('endpoint');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($controller, []);
         static::assertEquals('/admin/applications', $actual);
     }
@@ -414,7 +413,6 @@ class AdministrationBaseControllerTest extends TestCase
         );
         $reflectionClass = new ReflectionClass($this->RlsController);
         $method = $reflectionClass->getMethod('loadData');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->RlsController, []);
         static::assertNotEmpty($actual);
     }
