@@ -1,36 +1,73 @@
 <template>
     <div class="mail-preview">
-        <div class="text-preview mt-05">
-            <div :value="text"
-                 v-html="text"
-            />
+        <div class="preview-fields">
+            <section
+                class="template-fields"
+                v-if="placeholders.length"
+            >
+                <h3>{{ msgTemplateValues }}</h3>
+                <div class="variables-grid">
+                    <div
+                        v-for="placeholder in placeholders"
+                        :key="placeholder"
+                        class="input text"
+                    >
+                        <label :for="`mail-variable-${placeholder}`">{{ formatPlaceholder(placeholder) }}</label>
+                        <input
+                            :id="`mail-variable-${placeholder}`"
+                            type="text"
+                            :placeholder="placeholder"
+                            v-model="variables[placeholder]"
+                        >
+                    </div>
+                </div>
+            </section>
+
+            <section class="preview-section">
+                <h3>{{ msgPreview }}</h3>
+                <div class="text-preview">
+                    <div v-html="previewText" />
+                </div>
+            </section>
         </div>
 
-        <div class="input text mt-05"
-             v-for="placeholder in placeholders"
-             :key="placeholder"
-        >
-            <input type="text"
-                   :placeholder="placeholder"
-                   v-model="variables[placeholder]"
-            >
-        </div>
-
-        <div class="mt-05 send">
-            <input type="text"
-                   placeholder="gustavo@bedita.net"
-                   v-model="destination"
-            >
-            <button
-                class="button button-outlined"
-                :class="{ 'is-loading-spinner': loading }"
-                :disabled="!destination"
-                @click.prevent.stop="send"
-            >
-                <app-icon icon="carbon:email" />
-                <span class="ml-05">{{ msgSend }}</span>
-            </button>
-        </div>
+        <section class="delivery-section">
+            <h3>{{ msgDelivery }}</h3>
+            <div class="delivery-fields">
+                <div class="input">
+                    <label for="mail-preview-transport">{{ msgTransport }}</label>
+                    <select
+                        id="mail-preview-transport"
+                        :disabled="!transports.length"
+                        v-model="transport"
+                    >
+                        <option
+                            v-for="availableTransport in availableTransports"
+                            :key="availableTransport"
+                            :value="availableTransport"
+                        >{{ availableTransport }}</option>
+                    </select>
+                </div>
+                <div class="input text">
+                    <label for="mail-preview-destination">{{ msgRecipient }}</label>
+                    <input
+                        id="mail-preview-destination"
+                        type="email"
+                        autocomplete="email"
+                        v-model="destination"
+                    >
+                </div>
+                <button
+                    class="button button-outlined"
+                    :class="{ 'is-loading-spinner': loading }"
+                    :disabled="!destination"
+                    @click.prevent.stop="send"
+                >
+                    <app-icon icon="carbon:email" />
+                    <span class="ml-05">{{ msgSend }}</span>
+                </button>
+            </div>
+        </section>
     </div>
 </template>
 <script>
@@ -42,6 +79,10 @@ export default {
             type: String,
             required: true
         },
+        transports: {
+            type: Array,
+            required: true
+        },
         uname: {
             type: String,
             required: true
@@ -49,24 +90,56 @@ export default {
     },
     data() {
         return {
+            availableTransports: [],
             destination: '',
             loading: false,
             msgSend: t`Send`,
+            msgPreview: t`Preview`,
+            msgTemplateValues: t`Template values`,
+            msgDelivery: t`Delivery`,
+            msgTransport: t`Transport`,
+            msgRecipient: t`Recipient email`,
             placeholders: [],
+            transport: this.transports[0] || '',
             variables: {},
+        }
+    },
+    computed: {
+        previewText() {
+            return this.text.replace(/{{(.*?)}}/g, (placeholder, name) => {
+                const value = this.variables[name.trim().toLowerCase()];
+                if (value === undefined || value === '') {
+                    return placeholder;
+                }
+                return String(value).replace(/[&<>"']/g, character => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                })[character]);
+            });
         }
     },
     mounted() {
         this.$nextTick(() => {
-            this.placeholders = this.text.match(/{{(.*?)}}/g).map(placeholder => placeholder.replace(/{{|}}/g, '').trim().toLowerCase());
-            this.placeholders.sort();
+            this.placeholders = (this.text.match(/{{(.*?)}}/g) || []).map(placeholder => placeholder.replace(/{{|}}/g, '').trim().toLowerCase());
             this.placeholders = [...new Set(this.placeholders)];
             this.placeholders.forEach((placeholder) => {
                 this.$set(this.variables, placeholder, '');
             });
+            this.availableTransports = [];
+            for (const transport of this.transports) {
+                if (!this.availableTransports.includes(transport)) {
+                    this.availableTransports.push(transport);
+                }
+            }
         });
     },
     methods: {
+        formatPlaceholder(placeholder) {
+            return placeholder.replace(/[_-]+/g, ' ').replace(/\b\w/g, character => character.toUpperCase());
+        },
         async send() {
             try {
                 this.loading = true;
@@ -81,6 +154,7 @@ export default {
                         data: this.variables,
                         config: {
                             to: this.destination,
+                            transport: this.transport,
                         }
                     })
                 });
@@ -98,16 +172,51 @@ export default {
 }
 </script>
 <style>
-div.mail-preview > .send {
-    display: grid;
-    grid-template-columns: 1fr 100px;
+div.mail-preview > section {
+    margin-top: 1rem;
 }
-div.mail-preview > .text-preview {
-    border: 1px dotted #ccc;
+div.mail-preview .preview-fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+}
+div.mail-preview h3 {
+    font-size: 1rem;
+    margin: 0 0 0.5rem;
+}
+div.mail-preview .variables-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem 1rem;
+}
+div.mail-preview .delivery-fields {
+    display: flex;
+    align-items: end;
+    gap: 0.75rem;
+}
+div.mail-preview .delivery-fields > .input:first-child {
+    flex: 1 1 12rem;
+    max-width: 18rem;
+}
+div.mail-preview .delivery-fields > .input:first-child select {
+    width: 100%;
+}
+div.mail-preview .delivery-fields > .input:nth-child(2) {
+    flex: 0 1 18rem;
+}
+div.mail-preview .input label {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+div.mail-preview .text-preview {
+    max-height: 24rem;
+    overflow: auto;
+    border: 1px solid #ccc;
     color: #000;
     background-color: #FFF;
     border-radius: 5px;
-    padding: 2rem 2rem;
+    padding: 1.5rem;
     font-size: medium;
 }
 div.mail-preview > .text-preview > div {
@@ -118,5 +227,16 @@ div.mail-preview > .text-preview > div > p {
 }
 div.mail-preview > .text-preview > div > p > a {
     color: #007bff;
+}
+@media (max-width: 600px) {
+    div.mail-preview .preview-fields,
+    div.mail-preview .variables-grid,
+    div.mail-preview .delivery-fields {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    div.mail-preview .delivery-fields {
+        align-items: stretch;
+        flex-direction: column;
+    }
 }
 </style>

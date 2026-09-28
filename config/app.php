@@ -436,6 +436,13 @@ return [
     ],
 
     /**
+     * Available mail templates transports (depending on the API configuration).
+     */
+    'MailTemplatesTransports' => [
+        'default',
+    ],
+
+    /**
      * External OAuth2 Providers configuration
      */
     'OAuth2Providers' => [
