@@ -35,17 +35,17 @@
             <h3>{{ msgDelivery }}</h3>
             <div class="delivery-fields">
                 <div class="input">
-                    <label for="mail-preview-transport">{{ msgTransport }}</label>
+                    <label for="mail-preview-profile">{{ msgProfile }}</label>
                     <select
-                        id="mail-preview-transport"
-                        :disabled="!transports.length"
-                        v-model="transport"
+                        id="mail-preview-profile"
+                        :disabled="!profiles.length"
+                        v-model="profile"
                     >
                         <option
-                            v-for="availableTransport in availableTransports"
-                            :key="availableTransport"
-                            :value="availableTransport"
-                        >{{ availableTransport }}</option>
+                            v-for="availableProfile in availableProfiles"
+                            :key="availableProfile"
+                            :value="availableProfile"
+                        >{{ availableProfile }}</option>
                     </select>
                 </div>
                 <div class="input text">
@@ -79,7 +79,7 @@ export default {
             type: String,
             required: true
         },
-        transports: {
+        profiles: {
             type: Array,
             required: true
         },
@@ -90,17 +90,17 @@ export default {
     },
     data() {
         return {
-            availableTransports: [],
+            availableProfiles: [],
             destination: '',
             loading: false,
             msgSend: t`Send`,
             msgPreview: t`Preview`,
             msgTemplateValues: t`Template values`,
             msgDelivery: t`Delivery`,
-            msgTransport: t`Transport`,
+            msgProfile: t`Profile`,
             msgRecipient: t`Recipient email`,
             placeholders: [],
-            transport: this.transports[0] || '',
+            profile: this.profiles[0] || '',
             variables: {},
         }
     },
@@ -128,10 +128,10 @@ export default {
             this.placeholders.forEach((placeholder) => {
                 this.$set(this.variables, placeholder, '');
             });
-            this.availableTransports = [];
-            for (const transport of this.transports) {
-                if (!this.availableTransports.includes(transport)) {
-                    this.availableTransports.push(transport);
+            this.availableProfiles = [];
+            for (const profile of this.profiles) {
+                if (!this.availableProfiles.includes(profile)) {
+                    this.availableProfiles.push(profile);
                 }
             }
         });
@@ -154,7 +154,7 @@ export default {
                         data: this.variables,
                         config: {
                             to: this.destination,
-                            transport: this.transport,
+                            transport: this.profile,
                         }
                     })
                 });

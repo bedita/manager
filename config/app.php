@@ -438,7 +438,7 @@ return [
     /**
      * Available mail templates transports (depending on the API configuration).
      */
-    'MailTemplatesTransports' => [
+    'EmailProfiles' => [
         'default',
     ],
 

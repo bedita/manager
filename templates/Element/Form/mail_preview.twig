@@ -1,7 +1,7 @@
-{% set transports = config('MailTemplatesTransports') %}
+{% set profiles = config('EmailProfiles') %}
 <mail-preview
     :text="{{ object.attributes.body|json_encode }}"
-    :transports="{{ transports|json_encode }}"
+    :profiles="{{ profiles|json_encode }}"
     uname="{{ object.attributes.uname }}"
 >
 </mail-preview>
