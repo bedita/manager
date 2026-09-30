@@ -38,6 +38,19 @@
                         @input="debounceFilterUpdate"
                     >
                 </div>
+                <div class="created-filter">
+                    <span class="datepicker">
+                        <input
+                            ref="createdDateInput"
+                            type="text"
+                            date="true"
+                            :placeholder="msgCreatedOn"
+                            :value="createdDate"
+                            v-datepicker
+                            @change="onCreatedDateChange($event.target.value)"
+                        >
+                    </span>
+                </div>
                 <div class="paginationContainer">
                     <PaginationNavigation
                         :pagination="pagination"
@@ -57,10 +70,17 @@
             >
                 <div id="list-jobs">
                     <div
-                        v-for="job in jobs"
+                        v-for="(job, index) in jobs"
                         :key="job.id"
                         class="job-row"
                     >
+                        <div
+                            class="job-day-separator"
+                            v-if="isNewDay(index)"
+                        >
+                            <span>{{ fmtDay(job.meta.created) }}</span>
+                            <span class="tag is-smallest is-black mx-05">{{ dayCounts[dayKey(job.meta.created)] }}</span>
+                        </div>
                         <div class="job-summary">
                             <div class="job-summary-primary">
                                 <div class="job-identifier-cell">
@@ -222,6 +242,7 @@ export default {
     data() {
         return {
             columnFile: false,
+            createdDate: this.parseCreatedFilter(this.queryFilter?.created),
             filterDebounceTimer: null,
             isOpen: false,
             jobs: [],
@@ -259,9 +280,21 @@ export default {
             msgService: t`Service`,
             msgShowJobDetails: t`Show job details`,
             msgStatus: t`Status`,
+            msgToday: t`Today`,
             msgUuid: t`UUID`,
             msgHideJobDetails: t`Hide job details`,
         };
+    },
+
+    computed: {
+        dayCounts() {
+            return this.jobs.reduce((counts, job) => {
+                const key = this.dayKey(job.meta.created);
+                counts[key] = (counts[key] || 0) + 1;
+
+                return counts;
+            }, {});
+        },
     },
 
     async mounted() {
@@ -292,6 +325,55 @@ export default {
 
         changePageSize(pageSize) {
             this.updateJobs(1, pageSize);
+        },
+
+        clearCreatedFilter() {
+            const picker = this.$refs.createdDateInput?._flatpickr;
+            if (picker) {
+                // flatpickr fires change, which resets the filter
+                picker.clear();
+
+                return;
+            }
+            this.onCreatedDateChange('');
+        },
+
+        onCreatedDateChange(value) {
+            if (value === this.createdDate) {
+                return;
+            }
+            this.createdDate = value;
+            this.updateJobs(1);
+        },
+
+        parseCreatedFilter(value) {
+            const raw = value && typeof value === 'object' ? value.eq : value;
+            if (!raw) {
+                return '';
+            }
+            const date = moment(String(raw), ['YYYYMMDD', 'YYYY-MM-DD'], true);
+
+            return date.isValid() ? date.format('YYYY-MM-DD') : '';
+        },
+
+        dayKey(d) {
+            return d ? moment(d).format('YYYY-MM-DD') : '';
+        },
+
+        isNewDay(index) {
+            if (index === 0) {
+                return true;
+            }
+
+            return this.dayKey(this.jobs[index].meta.created) !== this.dayKey(this.jobs[index - 1].meta.created);
+        },
+
+        fmtDay(d) {
+            if (!d) {
+                return '';
+            }
+
+            return moment(d).locale(BEDITA.locale.slice(0, 2)).format('dddd D MMMM YYYY');
         },
 
         fmt(d) {
@@ -339,6 +421,10 @@ export default {
             }
             if (uuid) {
                 query += `&filter[uuid]=${uuid}`;
+            }
+            if (this.createdDate) {
+                query += `&filter[created][gte]=${this.createdDate}`;
+                query += `&filter[created][lt]=${moment(this.createdDate).add(1, 'day').format('YYYY-MM-DD')}`;
             }
             let requestUrl = `${BEDITA.base}/admin/async_jobs/jobs?${query}`;
             const options =  {
@@ -401,14 +487,44 @@ export default {
     flex-direction: column;
     max-width: 1500px;
 }
+.created-filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+.created-filter label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
 .job-row {
     width: 100%;
-    padding: 0.75rem;
     border-bottom: 1px solid rgba(128, 128, 128, 0.35);
     box-sizing: border-box;
 }
-.job-row:nth-child(even) {
+.job-summary {
+    padding: 0.75rem;
+}
+.job-row:nth-child(even) > .job-summary,
+.job-row:nth-child(even) > .job-payload {
     background-color: rgba(128, 128, 128, 0.12);
+}
+.job-day-separator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    padding: 0.5rem 0.75rem;
+    border-left: 4px solid #3d8bfd;
+    background-color: rgba(61, 139, 253, 0.18);
+    font-size: 1.1em;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: capitalize;
+}
+.job-row:first-child > .job-day-separator {
+    margin-top: 0;
 }
 .tab-container {
     max-width: 100%;
@@ -513,7 +629,7 @@ export default {
 .job-payload {
     width: 100%;
     min-width: 0;
-    padding-top: 0.75rem;
+    padding: 0.75rem;
     border-top: 1px solid #b8bec7;
     box-sizing: border-box;
 }
