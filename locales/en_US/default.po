@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-03-24 09:17:38 \n"
+"POT-Creation-Date: 2026-09-30 09:57:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -250,6 +250,9 @@ msgstr ""
 msgid "Deathdate"
 msgstr ""
 
+msgid "Default"
+msgstr ""
+
 msgid "Delete"
 msgstr ""
 
@@ -445,6 +448,9 @@ msgstr ""
 msgid "Job {0} to import file \"{1}\" scheduled."
 msgstr ""
 
+msgid "Json"
+msgstr ""
+
 msgid "Label"
 msgstr ""
 
@@ -527,6 +533,9 @@ msgid "Missing import file"
 msgstr ""
 
 msgid "Missing thumb url"
+msgstr ""
+
+msgid "Model schema"
 msgstr ""
 
 msgid "Modified"
@@ -741,6 +750,9 @@ msgstr ""
 msgid "Project"
 msgstr ""
 
+msgid "Project model schema"
+msgstr ""
+
 msgid "Properties"
 msgstr ""
 
@@ -853,6 +865,9 @@ msgid "Save object to apply order change"
 msgstr ""
 
 msgid "Scheduled_from"
+msgstr ""
+
+msgid "Schema"
 msgstr ""
 
 msgid "Search"
@@ -1297,21 +1312,17 @@ msgstr ""
 msgid "Add placeholder"
 msgstr ""
 
+msgid "Accordion title"
+msgstr ""
+
 msgid "Accordion content"
 msgstr ""
 
 msgid "Remove accordion"
 msgstr ""
 
-msgid "Accordion title"
-msgstr ""
-
 #, javascript-format
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
-msgstr ""
-
-#, javascript-format
-msgid "Moving ${ number } item(s) to trash. Are you sure?"
 msgstr ""
 
 #, javascript-format
@@ -1328,6 +1339,10 @@ msgid "OOOPS! Something went wrong"
 msgstr ""
 
 #, javascript-format
+msgid "Moving ${ number } item(s) to trash. Are you sure?"
+msgstr ""
+
+#, javascript-format
 msgid "Do you really want to remove these property types? ${ types }"
 msgstr ""
 
@@ -1341,15 +1356,6 @@ msgid "No options for this file type"
 msgstr ""
 
 msgid "Options"
-msgstr ""
-
-msgid "Configuration key"
-msgstr ""
-
-msgid "See wiki for help"
-msgstr ""
-
-msgid "Remove item. Are you sure?"
 msgstr ""
 
 msgid "All days"
@@ -1433,6 +1439,15 @@ msgstr ""
 msgid "All weeks"
 msgstr ""
 
+msgid "Remove item. Are you sure?"
+msgstr ""
+
+msgid "Configuration key"
+msgstr ""
+
+msgid "See wiki for help"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
@@ -1474,49 +1489,19 @@ msgstr ""
 msgid "At least ${ len } characters"
 msgstr ""
 
-msgid "GET"
+msgid "Open Uri"
 msgstr ""
 
-msgid ""
-"Missing data to search coordinates: insert at least \"Address\" and "
-"\"Locality\" (optional: \"Zipcode\", \"Country\", \"Region\")"
+msgid "Uri is valid"
 msgstr ""
 
-#.  Map of all axios cancel token
-msgid "Cancelled"
+msgid "Uri is not valid"
 msgstr ""
 
-msgid "Done"
+msgid "code"
 msgstr ""
 
-msgid "Stop"
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
-msgid "Canonical"
-msgstr ""
-
-msgid "In relation with"
-msgstr ""
-
-msgid "Menu"
-msgstr ""
-
-msgid "Relation parameters"
-msgstr ""
-
-msgid "(empty)"
-msgstr ""
-
-msgid "(not available)"
-msgstr ""
-
-msgid "Priority"
-msgstr ""
-
-msgid "Mail to"
+msgid "details"
 msgstr ""
 
 msgid "Txt"
@@ -1535,19 +1520,49 @@ msgstr ""
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr ""
 
-msgid "code"
+msgid "Mail to"
 msgstr ""
 
-msgid "details"
+msgid "Cancel"
 msgstr ""
 
-msgid "Open Uri"
+msgid "In relation with"
 msgstr ""
 
-msgid "Uri is valid"
+msgid "Priority"
 msgstr ""
 
-msgid "Uri is not valid"
+msgid "Relation parameters"
+msgstr ""
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Menu"
+msgstr ""
+
+msgid "(empty)"
+msgstr ""
+
+msgid "(not available)"
+msgstr ""
+
+#.  Map of all axios cancel token
+msgid "Cancelled"
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid "GET"
+msgstr ""
+
+msgid ""
+"Missing data to search coordinates: insert at least \"Address\" and "
+"\"Locality\" (optional: \"Zipcode\", \"Country\", \"Region\")"
 msgstr ""
 
 msgid "Accesses"
@@ -1598,19 +1613,10 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-msgid "New content"
-msgstr ""
-
-msgid "New folder"
-msgstr ""
-
-msgid "Open in new tab"
-msgstr ""
-
-msgid "Undo"
-msgstr ""
-
 msgid "Choose object type"
+msgstr ""
+
+msgid "New content"
 msgstr ""
 
 msgid "Object type"
@@ -1620,6 +1626,15 @@ msgid "Parent folder"
 msgstr ""
 
 msgid "/ (root)"
+msgstr ""
+
+msgid "Open in new tab"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "New folder"
 msgstr ""
 
 msgid "Add new tag"
@@ -1681,9 +1696,6 @@ msgstr ""
 msgid "Error while creating new object."
 msgstr ""
 
-msgid "Edit related objects"
-msgstr ""
-
 msgid "Choose relation"
 msgstr ""
 
@@ -1691,6 +1703,9 @@ msgid "Filter to apply"
 msgstr ""
 
 msgid "Search related objects"
+msgstr ""
+
+msgid "Edit related objects"
 msgstr ""
 
 msgid "Action"
@@ -1840,6 +1855,24 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
+msgid "Preview"
+msgstr ""
+
+msgid "Template values"
+msgstr ""
+
+msgid "Delivery"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid "Recipient email"
+msgstr ""
+
+msgid "add new"
+msgstr ""
+
 msgid "Address"
 msgstr ""
 
@@ -1855,10 +1888,25 @@ msgstr ""
 msgid "Zoom"
 msgstr ""
 
-msgid "add new"
+msgid "The main language is"
 msgstr ""
 
-msgid "The main language is"
+msgid "Import error"
+msgstr ""
+
+msgid "Import warn"
+msgstr ""
+
+msgid "Number of created resources"
+msgstr ""
+
+msgid "Number of updated resources"
+msgstr ""
+
+msgid "Number of errors"
+msgstr ""
+
+msgid "Result"
 msgstr ""
 
 msgid "Completed on"
@@ -1879,22 +1927,13 @@ msgstr ""
 msgid "Service name"
 msgstr ""
 
-msgid "Import error"
+msgid "date"
 msgstr ""
 
-msgid "Import warn"
+msgid "Trashed"
 msgstr ""
 
-msgid "Number of created resources"
-msgstr ""
-
-msgid "Number of updated resources"
-msgstr ""
-
-msgid "Number of errors"
-msgstr ""
-
-msgid "Result"
+msgid "version by"
 msgstr ""
 
 msgid "clone"
@@ -1917,15 +1956,6 @@ msgstr ""
 msgid ""
 "Restored data will replace current data (you can still check the data before "
 "saving). Are you sure?"
-msgstr ""
-
-msgid "date"
-msgstr ""
-
-msgid "Trashed"
-msgstr ""
-
-msgid "version by"
 msgstr ""
 
 msgid "Latitude"
@@ -1961,6 +1991,9 @@ msgstr ""
 msgid "Create new for"
 msgstr ""
 
+msgid "Add multiple"
+msgstr ""
+
 msgid "Add multiple date ranges"
 msgstr ""
 
@@ -1980,9 +2013,6 @@ msgid "Required"
 msgstr ""
 
 msgid "Year"
-msgstr ""
-
-msgid "Add multiple"
 msgstr ""
 
 msgid "Insert date(s)"
@@ -2015,6 +2045,9 @@ msgstr ""
 msgid "Created on"
 msgstr ""
 
+msgid "Copy"
+msgstr ""
+
 msgid "Expires"
 msgstr ""
 
@@ -2024,6 +2057,9 @@ msgstr ""
 msgid "Max attempts"
 msgstr ""
 
+msgid "Other service"
+msgstr ""
+
 msgid "Payload"
 msgstr ""
 
@@ -2031,6 +2067,15 @@ msgid "Results"
 msgstr ""
 
 msgid "Service"
+msgstr ""
+
+msgid "Show job details"
+msgstr ""
+
+msgid "UUID"
+msgstr ""
+
+msgid "Hide job details"
 msgstr ""
 
 msgid "Allowed types"
