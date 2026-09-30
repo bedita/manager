@@ -1,0 +1,5 @@
+<calendar-view
+    :languages="{{ config('Project.config.I18n.languages')|default([])|json_encode|escape('html_attr') }}"
+    :schema="{{ schema|json_encode }}"
+    :object-type="{{ objectType|json_encode }}"
+/>
