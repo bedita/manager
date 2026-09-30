@@ -48,7 +48,7 @@
     "jszip": "^3.10.1",
     "mapbox-gl": "^2.12.1",
     "mapbox-gl-compare": "^0.4.0",
-    "moment": "^2.29.4",
+    "moment": "^2.31.0",
     "sleep-promise": "^9.1.0",
     "tinymce": "^5.10.9",
     "ttag": "^1.8.12",
