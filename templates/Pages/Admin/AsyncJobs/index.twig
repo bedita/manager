@@ -1,2 +1,7 @@
+{{ element('Admin/sidebar') }}
+
+{% do _view.assign('title', __('Administration') ~ ' ' ~ __('Async Jobs')) %}
+{% do _view.assign('bodyViewClass',  'view-module view-admin') %}
+
 {% set queryFilter = _view.getRequest().getQuery('filter') %}
 <admin-job-list :query-filter="{{ queryFilter|json_encode }}"></admin-job-list>
