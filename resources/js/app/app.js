@@ -67,6 +67,7 @@ const _vueInstance = new Vue({
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
         ModelSchema: () => import(/* webpackChunkName: "model-schema" */'app/pages/model/schema.vue'),
         AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
+        UserFilter: () => import(/* webpackChunkName: "user-filter" */'app/components/user-filter/user-filter.vue'),
         AdminAppearance: () => import(/* webpackChunkName: "admin-appearance" */'app/pages/admin/appearance'),
         AdminStatistics: () => import(/* webpackChunkName: "admin-statistics" */'app/pages/admin/statistics'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
@@ -662,3 +663,4 @@ Vue.component('RibbonItem', _vueInstance.$options.components.RibbonItem);
 Vue.component('ViewChildrenParams', _vueInstance.$options.components.ViewChildrenParams);
 Vue.component('UploadedObject', _vueInstance.$options.components.UploadedObject);
 Vue.component('ObjectAnnotations', _vueInstance.$options.components.ObjectAnnotations);
+Vue.component('UserFilter', _vueInstance.$options.components.UserFilter);

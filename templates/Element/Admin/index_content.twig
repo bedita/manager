@@ -18,6 +18,14 @@
         {% for field, type in filters %}
             {% if type == 'string' %}
                 <input type="text" class="mr-05" name="filter[{{ field }}]" value="{{ activeFilter[field]|default('') }}" placeholder="{{ __(field)|humanize }}" />
+            {% elseif type == 'users' %}
+                <user-filter
+                    class="mr-05"
+                    name="filter[user_id]"
+                    initial-id="{{ activeFilter[field]|default('') }}"
+                    initial-label="{{ users[activeFilter[field]|default('')]|default('') }}"
+                    placeholder="{{ __('User') }}"
+                ></user-filter>
             {% else %}
                 <select class="mr-05" name="filter[{{ field }}]" title="{{ __(field)|humanize }}">
                     <option value="">{{ allLabels[type]|default(__('All')) }}</option>
@@ -119,22 +127,26 @@
                         {% endfor %}
                         {% if not readonly and not resource.meta.unchangeable %}
                             <div class="buttons-cell narrow">
-                                <button form="form-{{ resource.id }}" class="button button-text-white is-width-auto" title="{{ __('Save') ~ ' ' ~ resource.attributes.name }}">
-                                    <app-icon icon="carbon:save"></app-icon>
-                                    <span class="ml-05">{{ __('Save') }}</span>
-                                </button>
+                                <div class="buttons-wrap">
+                                    <button form="form-{{ resource.id }}" class="button button-text-white is-width-auto" title="{{ __('Save') ~ ' ' ~ resource.attributes.name }}">
+                                        <app-icon icon="carbon:save"></app-icon>
+                                        <span class="ml-05">{{ __('Save') }}</span>
+                                    </button>
 
-                                <button form="form-remove-{{ resource.id }}" class="button button-text-white is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
-                                    <app-icon icon="carbon:trash-can"></app-icon>
-                                    <span class="ml-05">{{ __('Remove') }}</span>
-                                </button>
+                                    <button form="form-remove-{{ resource.id }}" class="button button-text-white is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
+                                        <app-icon icon="carbon:trash-can"></app-icon>
+                                        <span class="ml-05">{{ __('Remove') }}</span>
+                                    </button>
+                                </div>
                             </div>
                         {% elseif deleteonly %}
                             <div class="buttons-cell narrow">
-                                <button form="form-remove-{{ resource.id }}" class="button button-text-white is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
-                                    <app-icon icon="carbon:trash-can"></app-icon>
-                                    <span class="ml-05">{{ __('Remove') }}</span>
-                                </button>
+                                <div class="buttons-wrap">
+                                    <button form="form-remove-{{ resource.id }}" class="button button-text-white is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
+                                        <app-icon icon="carbon:trash-can"></app-icon>
+                                        <span class="ml-05">{{ __('Remove') }}</span>
+                                    </button>
+                                </div>
                             </div>
                         {% endif %}
 
@@ -172,10 +184,12 @@
                             <div class="narrow">-</div>
                         {% endfor %}
                         <div class="buttons-cell narrow">
-                            <button form="form-create" class="button button-text-white is-width-auto" title="{{ __('Create') ~ ' ' ~ resourceType }}">
-                                <app-icon icon="carbon:save"></app-icon>
-                                <span class="ml-05">{{ __('Create') }}</span>
-                            </button>
+                            <div class="buttons-wrap">
+                                <button form="form-create" class="button button-text-white is-width-auto" title="{{ __('Create') ~ ' ' ~ resourceType }}">
+                                    <app-icon icon="carbon:save"></app-icon>
+                                    <span class="ml-05">{{ __('Create') }}</span>
+                                </button>
+                            </div>
                         </div>
                     {{ Form.end()|raw }}
                 {% endif %}

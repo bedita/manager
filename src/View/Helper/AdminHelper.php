@@ -137,7 +137,7 @@ class AdminHelper extends Helper
     protected function textOptions(string $property): array
     {
         $options = $this->options['text'];
-        if (in_array($property, ['description', 'url'])) {
+        if (in_array($property, ['description', 'url', 'user_id'])) {
             $options['size'] = 60;
         }
 
