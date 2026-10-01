@@ -12,6 +12,7 @@
  */
 namespace App\Controller\Admin;
 
+use BEdita\SDK\BEditaClientException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 
@@ -36,7 +37,7 @@ class ExternalAuthController extends AdministrationBaseController
      * @inheritDoc
      */
     protected array $properties = [
-        'user_id' => 'string',
+        'user_id' => 'users',
         'auth_provider_id' => 'auth_providers',
         'provider_username' => 'string',
         'params' => 'json',
@@ -60,6 +61,29 @@ class ExternalAuthController extends AdministrationBaseController
     protected ?string $sortBy = 'auth_provider_id';
 
     /**
+     * @inheritDoc
+     */
+    protected bool $paginated = true;
+
+    /**
+     * @inheritDoc
+     */
+    protected array $filters = [
+        'auth_provider_id' => 'auth_providers',
+    ];
+
+    /**
+     * @inheritDoc
+     */
+    protected function labels(): array
+    {
+        return [
+            'user_id' => __('User'),
+            'auth_provider_id' => __('Auth provider'),
+        ];
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null
@@ -67,13 +91,46 @@ class ExternalAuthController extends AdministrationBaseController
     public function index(): ?Response
     {
         parent::index();
-        $authProviders = $this->apiClient->get('/admin/auth_providers', []);
+        $authProviders = $this->apiClient->get('/admin/auth_providers', ['page_size' => 100]);
         $authProviders = Hash::combine((array)$authProviders, 'data.{n}.id', 'data.{n}.attributes.name');
         $this->set('auth_providers', $authProviders);
         if (empty($authProviders)) {
             $this->Flash->warning(__('No auth providers found: you cannot create external auth entries. Create at least one auth provider first'));
         }
+        $this->set('users', $this->usersLabels((array)$this->viewBuilder()->getVar('resources')));
 
         return null;
+    }
+
+    /**
+     * Get "<name> <surname> (<username>)" labels of users referenced by resources, keyed by user id.
+     *
+     * @param array $resources External auth resources
+     * @return array<string, string>
+     */
+    protected function usersLabels(array $resources): array
+    {
+        $ids = array_values(array_unique(array_filter(Hash::extract($resources, '{n}.attributes.user_id'))));
+        if (empty($ids)) {
+            return [];
+        }
+        try {
+            $response = (array)$this->apiClient->get('/users', [
+                'filter' => ['id' => $ids],
+                'fields' => 'name,surname,username',
+                'page_size' => count($ids),
+            ]);
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), 'error');
+
+            return [];
+        }
+        $labels = [];
+        foreach ((array)Hash::get($response, 'data') as $user) {
+            $name = trim(sprintf('%s %s', Hash::get($user, 'attributes.name'), Hash::get($user, 'attributes.surname')));
+            $labels[(string)$user['id']] = trim(sprintf('%s (%s)', $name, Hash::get($user, 'attributes.username')));
+        }
+
+        return $labels;
     }
 }

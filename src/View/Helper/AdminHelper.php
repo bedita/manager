@@ -100,12 +100,22 @@ class AdminHelper extends Helper
             return $this->Schema->format($value, (array)Hash::get($schema, sprintf('properties.%s', $property)));
         }
 
+        if ($type === 'users' && $value !== null) {
+            $label = Hash::get((array)$this->_View->get('users'), (string)$value, (string)$value);
+
+            return h($label) . $this->Form->hidden($property, compact('value'));
+        }
+
         if (in_array($type, ['bool', 'json', 'text'])) {
             if ($type === 'json' && is_array($value)) {
                 $value = json_encode($value);
             }
+            $options = $this->options[$type];
+            if ($type === 'text') {
+                $options = $this->textOptions($property);
+            }
 
-            return $this->Form->control($property, $this->options[$type] + compact('value'));
+            return $this->Form->control($property, $options + compact('value'));
         }
 
         if (in_array($type, ['applications', 'auth_providers', 'endpoints', 'roles'])) {
@@ -115,7 +125,23 @@ class AdminHelper extends Helper
             return $this->Form->control($property, $this->options['combo'] + compact('options', 'value'));
         }
 
-        return $this->Property->control($property, $value, $this->options['text']);
+        return $this->Property->control($property, $value, $this->textOptions($property));
+    }
+
+    /**
+     * Text input options, wider for long-content properties.
+     *
+     * @param string $property The property
+     * @return array
+     */
+    protected function textOptions(string $property): array
+    {
+        $options = $this->options['text'];
+        if (in_array($property, ['description', 'url'])) {
+            $options['size'] = 60;
+        }
+
+        return $options;
     }
 
     /**

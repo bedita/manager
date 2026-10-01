@@ -52,6 +52,20 @@ class ConfigController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
+    protected bool $paginated = true;
+
+    /**
+     * @inheritDoc
+     */
+    protected array $filters = [
+        'name' => 'string',
+        'context' => 'string',
+        'application_id' => 'applications',
+    ];
+
+    /**
+     * @inheritDoc
+     */
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);

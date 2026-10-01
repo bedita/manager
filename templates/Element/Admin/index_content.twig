@@ -6,11 +6,62 @@
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
 {% set allProperties = properties|keys|merge(propertiesSecrets) %}
 
-{# {{ element('Modules/index_header', { 'meta': meta, 'hideFilter': 1, 'Schema': Schema, 'hidePagination': treeView}) }} #}
+{% set adminFilters %}
+{% if filters is not empty %}
+    {% set allLabels = {
+        'applications': __('All applications'),
+        'auth_providers': __('All auth providers'),
+        'endpoints': __('All endpoints'),
+        'roles': __('All roles'),
+    } %}
+    <form method="get" class="admin-filters">
+        {% for field, type in filters %}
+            {% if type == 'string' %}
+                <input type="text" class="mr-05" name="filter[{{ field }}]" value="{{ activeFilter[field]|default('') }}" placeholder="{{ __(field)|humanize }}" />
+            {% else %}
+                <select class="mr-05" name="filter[{{ field }}]" title="{{ __(field)|humanize }}">
+                    <option value="">{{ allLabels[type]|default(__('All')) }}</option>
+                    {% for id, label in _context[type]|default([])|sort((a, b) => a|lower <=> b|lower) %}
+                        {% if id is not same as('') and id is not same as('-') %}
+                            <option value="{{ id }}" {{ activeFilter[field]|default('') == id ? 'selected' : '' }}>{{ label }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            {% endif %}
+        {% endfor %}
+        {% for param in ['sort', 'page_size'] %}
+            {% if _view.request.getQuery(param) %}
+                <input type="hidden" name="{{ param }}" value="{{ _view.request.getQuery(param) }}" />
+            {% endif %}
+        {% endfor %}
+        <button type="submit" class="button button-primary button-primary-hover-module-admin is-width-auto">
+            <app-icon icon="carbon:search"></app-icon>
+            <span class="ml-05">{{ __('Search') }}</span>
+        </button>
+        {% if activeFilter is not empty %}
+            <a href="{{ Url.build({'_name': 'admin:list:' ~ resourceType}) }}" class="button button-outlined is-width-auto ml-05">{{ __('Reset') }}</a>
+        {% endif %}
+    </form>
+{% endif %}
+{% endset %}
+
+<div class="admin-index-content">
+{% if paginated %}
+    {{ element('Modules/index_header', { 'meta': meta, 'hideFilter': 1, 'Schema': Schema, 'filterContent': adminFilters }) }}
+{% endif %}
 
 <admin-index inline-template>
 
     <div class="module-index">
+        {% if not readonly %}
+            <div class="admin-create-toggle mb-1">
+                <button type="button" class="button button-text-white is-width-auto" @click.prevent="toggleCreate">
+                    <app-icon :icon="showCreate ? 'carbon:close' : 'carbon:add'"></app-icon>
+                    <span class="ml-05" v-if="!showCreate">{{ __('New') }}</span>
+                    <span class="ml-05" v-else>{{ __('Cancel') }}</span>
+                </button>
+            </div>
+        {% endif %}
         <div class="table-container">
             <div class="list-objects">
 
@@ -18,8 +69,8 @@
                 <nav class="table-header has-border-black">
                     <div>{{ __('Id') }}</div>
                     {% for key in allProperties %}
-                        {% set label = key %}
-                        <div class="{{ Link.sortClass(key) }} {{ key }}"><a href="{{ Link.sortUrl(key) }}">{{ __(label)|humanize }}</a></div>
+                        {% set label = labels[key] is defined ? labels[key] : __(key)|humanize %}
+                        <div class="{{ Link.sortClass(key) }} {{ key }}"><a href="{{ Link.sortUrl(key) }}">{{ label }}</a></div>
                     {% endfor %}
                     {% for key in metaColumns %}
                         <div>{{ __(key) }}</div>
@@ -44,7 +95,7 @@
                         </div>
                         {% for property,type in properties %}
                             {% set val = resource.attributes[property] %}
-                            <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                            <div class="{{ property }}-cell{{ type == 'json' ? ' json-cell' : '' }}" untitled-label="{{ __('Untitled') }}">
                                 {% if type == 'json' %}
                                     <show-hide field="field-{{ resource.id }}"></show-hide>
                                     <div id="field-{{ resource.id }}" class="mt-05">
@@ -68,19 +119,19 @@
                         {% endfor %}
                         {% if not readonly and not resource.meta.unchangeable %}
                             <div class="buttons-cell narrow">
-                                <button form="form-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Save') ~ ' ' ~ resource.attributes.name }}">
+                                <button form="form-{{ resource.id }}" class="button button-text-white is-width-auto" title="{{ __('Save') ~ ' ' ~ resource.attributes.name }}">
                                     <app-icon icon="carbon:save"></app-icon>
                                     <span class="ml-05">{{ __('Save') }}</span>
                                 </button>
 
-                                <button form="form-remove-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
+                                <button form="form-remove-{{ resource.id }}" class="button button-text-white is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
                                     <app-icon icon="carbon:trash-can"></app-icon>
                                     <span class="ml-05">{{ __('Remove') }}</span>
                                 </button>
                             </div>
                         {% elseif deleteonly %}
                             <div class="buttons-cell narrow">
-                                <button form="form-remove-{{ resource.id }}" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
+                                <button form="form-remove-{{ resource.id }}" class="button button-text-white is-width-auto" title="{{ __('Remove') ~ ' ' ~ resource.attributes.name }}" @click.prevent="remove">
                                     <app-icon icon="carbon:trash-can"></app-icon>
                                     <span class="ml-05">{{ __('Remove') }}</span>
                                 </button>
@@ -104,10 +155,11 @@
                         'id': 'form-create',
                         'url': {'_name': 'admin:save:' ~ resourceType},
                         'class': 'table-row new-record mt-1',
+                        'v-show': 'showCreate',
                     })|raw }}
                         <div>{{ __('NEW') }}</div>
                         {% for property,type in properties %}
-                            <div class="{{ property }}-cell" untitled-label="{{ __('Untitled') }}">
+                            <div class="{{ property }}-cell{{ type == 'json' ? ' json-cell' : '' }}" untitled-label="{{ __('Untitled') }}">
                                 {{ Admin.control(type, property, null)|raw }}
                             </div>
                         {% endfor %}
@@ -120,7 +172,7 @@
                             <div class="narrow">-</div>
                         {% endfor %}
                         <div class="buttons-cell narrow">
-                            <button form="form-create" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Create') ~ ' ' ~ resourceType }}">
+                            <button form="form-create" class="button button-text-white is-width-auto" title="{{ __('Create') ~ ' ' ~ resourceType }}">
                                 <app-icon icon="carbon:save"></app-icon>
                                 <span class="ml-05">{{ __('Create') }}</span>
                             </button>
@@ -131,3 +183,4 @@
         </div>
     </div>
 </admin-index>
+</div>

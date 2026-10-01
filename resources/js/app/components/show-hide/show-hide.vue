@@ -1,11 +1,19 @@
 <template>
     <div class="show-hide">
-        <button class="button button-outlined is-expanded" v-if="!visible" @click.prevent.stop="show">
-            <app-icon icon="carbon:add"></app-icon>
+        <button
+            class="button button-outlined is-expanded"
+            @click.prevent.stop="show"
+            v-if="!visible"
+        >
+            <app-icon icon="carbon:add" />
             <span class="ml-05">{{ msgShow }}</span>
         </button>
-        <button class="button button-outlined is-expanded" v-if="visible" @click.prevent.stop="hide">
-            <app-icon icon="carbon:subtract"></app-icon>
+        <button
+            class="button button-outlined is-expanded"
+            @click.prevent.stop="hide"
+            v-if="visible"
+        >
+            <app-icon icon="carbon:subtract" />
             <span class="ml-05">{{ msgHide }}</span>
         </button>
     </div>
@@ -56,5 +64,10 @@ div.show-hide {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    width: 150px;
+}
+div.show-hide > button {
+    margin-right: 0.5rem;
+    border: none;
 }
 </style>

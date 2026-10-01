@@ -55,6 +55,18 @@ class RolesController extends AdministrationBaseController
     /**
      * @inheritDoc
      */
+    protected bool $paginated = true;
+
+    /**
+     * @inheritDoc
+     */
+    protected array $filters = [
+        'name' => 'string',
+    ];
+
+    /**
+     * @inheritDoc
+     */
     public function save(): ?Response
     {
         Cache::delete(self::CACHE_KEY_ROLES);
