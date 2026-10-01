@@ -100,7 +100,7 @@ class ExternalAuthController extends AdministrationBaseController
         }
         $resources = (array)$this->viewBuilder()->getVar('resources');
         $ids = Hash::extract($resources, '{n}.attributes.user_id');
-        $activeFilterUserId = (string)Hash::get((array)$this->viewBuilder()->getVar('activeFilter'), 'user_id', '');
+        $activeFilterUserId = (string)$this->getRequest()->getQuery('filter.user_id', '');
         if ($activeFilterUserId !== '') {
             $ids[] = $activeFilterUserId;
         }
@@ -110,14 +110,13 @@ class ExternalAuthController extends AdministrationBaseController
     }
 
     /**
-     * Get "<name> <surname> (<username>)" labels of users by id, keyed by user id.
+     * Get "<name> <surname> (<username>)" labels of users referenced by resources, keyed by user id.
      *
-     * @param array<int> $ids User ids
+     * @param array<int> $ids The ids
      * @return array<string, string>
      */
     protected function usersLabels(array $ids): array
     {
-        $ids = array_values(array_unique(array_filter($ids)));
         if (empty($ids)) {
             return [];
         }

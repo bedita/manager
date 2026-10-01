@@ -83,6 +83,8 @@ class ExternalAuthControllerTest extends TestCase
             'schema',
             'readonly',
             'deleteonly',
+            'auth_providers',
+            'users',
         ];
         $viewVars = (array)$this->ExternalAuthController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
@@ -93,6 +95,20 @@ class ExternalAuthControllerTest extends TestCase
         $flash = $this->ExternalAuthController->getRequest()->getSession()->read('Flash');
         $expected = 'No auth providers found: you cannot create external auth entries. Create at least one auth provider first';
         static::assertEquals($expected, $flash['flash'][0]['message']);
+    }
+
+    /**
+     * Test `index` method on activeFilter.user_id passed.
+     *
+     * @return void
+     */
+    public function testIndexActiveFilterUserId(): void
+    {
+        $request = $this->ExternalAuthController->getRequest()->withQueryParams(['filter' => ['user_id' => 1]]);
+        $this->ExternalAuthController->setRequest($request);
+        $this->ExternalAuthController->index();
+        $actual = (array)$this->ExternalAuthController->viewBuilder()->getVar('users');
+        static::assertEquals(['1' => '(admin)'], $actual);
     }
 
     /**
