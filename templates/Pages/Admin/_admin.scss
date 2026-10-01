@@ -11,9 +11,41 @@ body.view-admin {
         font-weight: bold;
         color: white;
     }
+    // shrink to content: full width spreads columns apart on large screens
+    .module-index .table-container .list-objects {
+        min-width: 0;
+    }
     .table-row {
         &.new-record > * {
             padding-top: calc(variables.$gutter * 4) !important;
+        }
+
+        // fixed width: json editor otherwise grows with its longest line
+        > .json-cell {
+            white-space: normal;
+
+            .jsoneditor-container {
+                width: clamp(300px, 40vw, 600px);
+            }
+        }
+    }
+    // header and table share the content width, so pagination aligns with the table right edge
+    .admin-index-content {
+        width: fit-content;
+        max-width: 100%;
+    }
+    .filter-box {
+        align-items: center;
+        gap: variables.$gutter;
+    }
+    .admin-filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: calc(variables.$gutter * .5);
+
+        > * {
+            margin: 0 !important;
         }
     }
 }

@@ -24,11 +24,13 @@ use ReflectionClass;
  * {@see \App\Controller\Admin\AdministrationBaseController} Test Case
  */
 #[CoversClass(AdministrationBaseController::class)]
+#[CoversMethod(AdministrationBaseController::class, 'activeFilter')]
 #[CoversMethod(AdministrationBaseController::class, 'beforeFilter')]
 #[CoversMethod(AdministrationBaseController::class, 'endpoint')]
 #[CoversMethod(AdministrationBaseController::class, 'index')]
 #[CoversMethod(AdministrationBaseController::class, 'initialize')]
 #[CoversMethod(AdministrationBaseController::class, 'loadData')]
+#[CoversMethod(AdministrationBaseController::class, 'loadPaginatedData')]
 #[CoversMethod(AdministrationBaseController::class, 'prepareBody')]
 #[CoversMethod(AdministrationBaseController::class, 'remove')]
 #[CoversMethod(AdministrationBaseController::class, 'save')]
@@ -415,5 +417,80 @@ class AdministrationBaseControllerTest extends TestCase
         $method = $reflectionClass->getMethod('loadData');
         $actual = $method->invokeArgs($this->RlsController, []);
         static::assertNotEmpty($actual);
+    }
+
+    /**
+     * Test `loadData` method with pagination enabled
+     *
+     * @return void
+     */
+    public function testLoadPaginatedData(): void
+    {
+        $config = array_merge($this->defaultRequestConfig, ['query' => ['page' => 1, 'page_size' => 1]]);
+        $request = new ServerRequest($config);
+        $controller = new class ($request) extends AdministrationBaseController
+        {
+            protected ?string $resourceType = 'applications';
+            protected ?string $sortBy = 'name';
+            protected bool $paginated = true;
+        };
+        $reflectionClass = new ReflectionClass($controller);
+        $method = $reflectionClass->getMethod('loadData');
+        $actual = $method->invokeArgs($controller, []);
+        static::assertLessThanOrEqual(1, count($actual['data']));
+        static::assertEquals(1, $actual['meta']['pagination']['page']);
+        static::assertEquals(1, $actual['meta']['pagination']['page_size']);
+    }
+
+    /**
+     * Data provider for `testActiveFilter`
+     *
+     * @return array
+     */
+    public static function activeFilterProvider(): array
+    {
+        return [
+            'not paginated' => [false, ['name' => 'foo'], []],
+            'no filter' => [true, null, []],
+            'not an array' => [true, 'foo', []],
+            'allowed only, trimmed, non empty' => [
+                true,
+                ['name' => ' foo ', 'context' => '', 'content' => 'bar', 'application_id' => ['x']],
+                ['name' => 'foo'],
+            ],
+            'application' => [true, ['application_id' => '2'], ['application_id' => '2']],
+        ];
+    }
+
+    /**
+     * Test `activeFilter` method
+     *
+     * @param bool $paginated Paginated flag
+     * @param mixed $filter Filter query
+     * @param array $expected Expected result
+     * @return void
+     */
+    #[DataProvider('activeFilterProvider')]
+    public function testActiveFilter(bool $paginated, mixed $filter, array $expected): void
+    {
+        $query = $filter === null ? [] : compact('filter');
+        $request = new ServerRequest(array_merge($this->defaultRequestConfig, compact('query')));
+        $controller = new class ($request) extends AdministrationBaseController
+        {
+            protected ?string $resourceType = 'config';
+            protected array $filters = ['name' => 'string', 'context' => 'string', 'application_id' => 'applications'];
+
+            public function setPaginated(bool $paginated): void
+            {
+                $this->paginated = $paginated;
+            }
+
+            public function activeFilter(): array
+            {
+                return parent::activeFilter();
+            }
+        };
+        $controller->setPaginated($paginated);
+        static::assertSame($expected, $controller->activeFilter());
     }
 }

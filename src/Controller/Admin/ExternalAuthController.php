@@ -60,6 +60,18 @@ class ExternalAuthController extends AdministrationBaseController
     protected ?string $sortBy = 'auth_provider_id';
 
     /**
+     * @inheritDoc
+     */
+    protected bool $paginated = true;
+
+    /**
+     * @inheritDoc
+     */
+    protected array $filters = [
+        'auth_provider_id' => 'auth_providers',
+    ];
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null
@@ -67,7 +79,7 @@ class ExternalAuthController extends AdministrationBaseController
     public function index(): ?Response
     {
         parent::index();
-        $authProviders = $this->apiClient->get('/admin/auth_providers', []);
+        $authProviders = $this->apiClient->get('/admin/auth_providers', ['page_size' => 100]);
         $authProviders = Hash::combine((array)$authProviders, 'data.{n}.id', 'data.{n}.attributes.name');
         $this->set('auth_providers', $authProviders);
         if (empty($authProviders)) {

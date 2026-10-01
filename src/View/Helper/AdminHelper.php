@@ -104,8 +104,12 @@ class AdminHelper extends Helper
             if ($type === 'json' && is_array($value)) {
                 $value = json_encode($value);
             }
+            $options = $this->options[$type];
+            if ($type === 'text' && $property === 'description') {
+                $options['size'] = 60;
+            }
 
-            return $this->Form->control($property, $this->options[$type] + compact('value'));
+            return $this->Form->control($property, $options + compact('value'));
         }
 
         if (in_array($type, ['applications', 'auth_providers', 'endpoints', 'roles'])) {
