@@ -170,8 +170,19 @@ abstract class AdministrationBaseController extends AppController
         $this->set('paginated', $this->paginated);
         $this->set('filters', $this->paginated ? $this->filters : []);
         $this->set('activeFilter', $this->activeFilter());
+        $this->set('labels', $this->labels());
 
         return null;
+    }
+
+    /**
+     * Translated index column labels, as `property => label`; missing properties use the humanized property name.
+     *
+     * @return array<string, string>
+     */
+    protected function labels(): array
+    {
+        return [];
     }
 
     /**

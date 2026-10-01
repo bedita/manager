@@ -17,9 +17,21 @@ export default {
     data() {
         return {
             tabsOpen: true,
+            showCreate: false,
         };
     },
     methods: {
+        toggleCreate() {
+            this.showCreate = !this.showCreate;
+            if (!this.showCreate) {
+                return;
+            }
+            this.$nextTick(() => {
+                const form = document.getElementById('form-create');
+                form?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                form?.querySelector('input:not([type=hidden]), select, textarea')?.focus({ preventScroll: true });
+            });
+        },
         remove(e) {
             const message = t`Remove item. Are you sure?`;
             const formId = e.target.closest('button').getAttribute('form');

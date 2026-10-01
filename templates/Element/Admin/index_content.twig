@@ -53,6 +53,15 @@
 <admin-index inline-template>
 
     <div class="module-index">
+        {% if not readonly %}
+            <div class="admin-create-toggle mb-1">
+                <button type="button" class="button button-text-white is-width-auto" @click.prevent="toggleCreate">
+                    <app-icon :icon="showCreate ? 'carbon:close' : 'carbon:add'"></app-icon>
+                    <span class="ml-05" v-if="!showCreate">{{ __('New') }}</span>
+                    <span class="ml-05" v-else>{{ __('Cancel') }}</span>
+                </button>
+            </div>
+        {% endif %}
         <div class="table-container">
             <div class="list-objects">
 
@@ -60,8 +69,8 @@
                 <nav class="table-header has-border-black">
                     <div>{{ __('Id') }}</div>
                     {% for key in allProperties %}
-                        {% set label = key %}
-                        <div class="{{ Link.sortClass(key) }} {{ key }}"><a href="{{ Link.sortUrl(key) }}">{{ __(label)|humanize }}</a></div>
+                        {% set label = labels[key] is defined ? labels[key] : __(key)|humanize %}
+                        <div class="{{ Link.sortClass(key) }} {{ key }}"><a href="{{ Link.sortUrl(key) }}">{{ label }}</a></div>
                     {% endfor %}
                     {% for key in metaColumns %}
                         <div>{{ __(key) }}</div>
@@ -146,6 +155,7 @@
                         'id': 'form-create',
                         'url': {'_name': 'admin:save:' ~ resourceType},
                         'class': 'table-row new-record mt-1',
+                        'v-show': 'showCreate',
                     })|raw }}
                         <div>{{ __('NEW') }}</div>
                         {% for property,type in properties %}
