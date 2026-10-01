@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-09-30 09:57:25 \n"
+"POT-Creation-Date: 2026-10-01 09:05:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -61,13 +61,25 @@ msgstr ""
 msgid "All Types"
 msgstr ""
 
+msgid "All applications"
+msgstr ""
+
+msgid "All auth providers"
+msgstr ""
+
 msgid "All day"
+msgstr ""
+
+msgid "All endpoints"
 msgstr ""
 
 msgid "All media"
 msgstr ""
 
 msgid "All objects"
+msgstr ""
+
+msgid "All roles"
 msgstr ""
 
 msgid "An extension stopped the file upload"
@@ -89,6 +101,9 @@ msgid "Async Jobs"
 msgstr ""
 
 msgid "Auth Providers"
+msgstr ""
+
+msgid "Auth provider"
 msgstr ""
 
 msgid "Auto-translate"
@@ -122,6 +137,9 @@ msgid "Calendar"
 msgstr ""
 
 msgid "Calendar view"
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "Cannot create abstract objects or objects without schema"
@@ -577,6 +595,9 @@ msgstr ""
 msgid "National Id Number"
 msgstr ""
 
+msgid "New"
+msgstr ""
+
 msgid "New entry in"
 msgstr ""
 
@@ -1015,6 +1036,9 @@ msgid "Upload local file"
 msgstr ""
 
 msgid "Upload multiple"
+msgstr ""
+
+msgid "User"
 msgstr ""
 
 msgid "User Accesses"
@@ -1523,9 +1547,6 @@ msgstr ""
 msgid "Mail to"
 msgstr ""
 
-msgid "Cancel"
-msgstr ""
-
 msgid "In relation with"
 msgstr ""
 
@@ -1572,9 +1593,6 @@ msgid "Date"
 msgstr ""
 
 msgid "Starting date"
-msgstr ""
-
-msgid "User"
 msgstr ""
 
 #, javascript-format
@@ -1681,9 +1699,6 @@ msgid "Expired"
 msgstr ""
 
 msgid "Future"
-msgstr ""
-
-msgid "New"
 msgstr ""
 
 msgid "Uploaded"
@@ -2042,13 +2057,22 @@ msgstr ""
 msgid "Create new"
 msgstr ""
 
+msgid "All statuses"
+msgstr ""
+
 msgid "Created on"
+msgstr ""
+
+msgid "Completed"
 msgstr ""
 
 msgid "Copy"
 msgstr ""
 
 msgid "Expires"
+msgstr ""
+
+msgid "Failed"
 msgstr ""
 
 msgid "Job"
@@ -2063,6 +2087,9 @@ msgstr ""
 msgid "Payload"
 msgstr ""
 
+msgid "Pending"
+msgstr ""
+
 msgid "Results"
 msgstr ""
 
@@ -2070,6 +2097,9 @@ msgid "Service"
 msgstr ""
 
 msgid "Show job details"
+msgstr ""
+
+msgid "Today"
 msgstr ""
 
 msgid "UUID"

@@ -30,6 +30,25 @@
                     >
                 </div>
                 <div>
+                    <select
+                        v-model="selectedStatus"
+                        @change="updateJobs(1)"
+                    >
+                        <option value="-">
+                            {{ msgAllStatuses }}
+                        </option>
+                        <option value="completed">
+                            {{ msgCompleted }}
+                        </option>
+                        <option value="failed">
+                            {{ msgFailed }}
+                        </option>
+                        <option value="pending">
+                            {{ msgPending }}
+                        </option>
+                    </select>
+                </div>
+                <div>
                     <input
                         :placeholder="msgUuid"
                         class="uuid-filter"
@@ -83,7 +102,16 @@
                         </div>
                         <div class="job-summary">
                             <div class="job-summary-primary">
+                                <div class="job-service-cell">
+                                    <span class="mobile-field-label">
+                                        {{ msgService }}:
+                                    </span>
+                                    {{ job.attributes.service }}
+                                </div>
                                 <div class="job-identifier-cell">
+                                    <span class="mobile-field-label">
+                                        {{ msgUuid }}:
+                                    </span>
                                     <span
                                         class="job-identifier"
                                         :title="job.id"
@@ -100,7 +128,7 @@
                                             'job-status-pending': job.meta.status === 'pending',
                                         }"
                                     >
-                                        {{ job.meta.status }}
+                                        {{ formatStatus(job.meta.status) }}
                                     </span>
                                 </div>
                                 <div class="job-actions-cell">
@@ -117,17 +145,20 @@
                                 </div>
                             </div>
                             <div class="job-summary-secondary">
-                                <div class="job-service-cell">
-                                    <span class="mobile-field-label">
-                                        {{ msgService }}:
-                                    </span>
-                                    {{ job.attributes.service }}
-                                </div>
                                 <div class="job-created-cell">
                                     <span class="mobile-field-label">
                                         {{ msgCreatedOn }}:
                                     </span>
                                     {{ fmt(job.meta.created) }}
+                                </div>
+                                <div
+                                    class="job-completed-cell"
+                                    v-if="job.meta.completed"
+                                >
+                                    <span class="mobile-field-label">
+                                        {{ msgCompletedOn }}:
+                                    </span>
+                                    {{ fmt(job.meta.completed) }}
                                 </div>
                             </div>
                         </div>
@@ -145,10 +176,6 @@
                                     >
                                         {{ job.attributes.payload && job.attributes.payload.filename }}
                                     </dd>
-                                </div>
-                                <div v-if="job.meta.completed">
-                                    <dt>{{ msgCompletedOn }}</dt>
-                                    <dd>{{ fmt(job.meta.completed) }}</dd>
                                 </div>
                                 <div v-if="job.attributes.scheduled_from">
                                     <dt>{{ msgScheduledFrom }}</dt>
@@ -251,6 +278,7 @@ export default {
             },
             loading: false,
             otherService: '',
+            selectedStatus: '-',
             pagination: {
                 page: 1,
                 page_size: 20,
@@ -263,18 +291,22 @@ export default {
             showPayloadId: null,
             uuidFilter: '',
             msgAll: t`All`,
+            msgAllStatuses: t`All statuses`,
             msgAsyncJobs: t`Async Jobs`,
             msgCreatedOn: t`Created on`,
+            msgCompleted: t`Completed`,
             msgCompletedOn: t`Completed on`,
             msgCopy: t`Copy`,
             msgExpires: t`Expires`,
             msgFileName: t`File name`,
+            msgFailed: t`Failed`,
             msgJob: t`Job`,
             msgJobs: t`Jobs`,
             msgMaxAttempts: t`Max attempts`,
             msgNoJobs: t`No Jobs`,
             msgOtherService: t`Other service`,
             msgPayload: t`Payload`,
+            msgPending: t`Pending`,
             msgResults: t`Results`,
             msgScheduledFrom: t`Scheduled from`,
             msgService: t`Service`,
@@ -384,6 +416,16 @@ export default {
             return moment(d).locale(BEDITA.locale.slice(0, 2)).format('D MMM YYYY kk:mm');
         },
 
+        formatStatus(status) {
+            const translatedStatuses = {
+                completed: this.msgCompleted,
+                failed: this.msgFailed,
+                pending: this.msgPending,
+            };
+
+            return translatedStatuses[status] || status;
+        },
+
         formatJson(value) {
             const formatted = JSON.stringify(value, null, 2);
 
@@ -415,6 +457,9 @@ export default {
             const serviceFilter = this.service !== 'all' ? this.service : this.selectedService;
             if (serviceFilter && serviceFilter !== 'all') {
                 query += `&filter[service]=${serviceFilter}`;
+            }
+            if (this.selectedStatus && this.selectedStatus !== '-') {
+                query += `&filter[${this.selectedStatus}]=1`;
             }
             if (this.otherService) {
                 query += `&filter[service]=${this.otherService}`;
@@ -472,10 +517,21 @@ export default {
     gap: 0.5rem;
 }
 .service-filter select {
-    min-width: 220px;
+    width: 180px;
+    min-width: 0;
+}
+.service-filter input {
+    width: 160px;
 }
 .uuid-filter {
-    min-width: 300px;
+    width: 240px;
+    min-width: 0;
+}
+.toolbar > div > select {
+    width: 150px;
+}
+.created-filter input {
+    width: 150px;
 }
 .paginationContainer {
     display: flex;
@@ -530,7 +586,10 @@ export default {
     max-width: 100%;
 }
 .job-identifier-cell {
-    flex: 1 1 auto;
+    display: inline-flex;
+    flex: 0 1 auto;
+    align-items: baseline;
+    gap: 0.25rem;
     min-width: 0;
 }
 .job-summary-primary {
@@ -539,11 +598,15 @@ export default {
     gap: 0.75rem;
 }
 .job-identifier {
-    display: block;
+    display: inline-block;
     overflow: hidden;
     font-family: monospace;
+    font-size: 0.75rem;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+.job-service-cell {
+    flex: 0 1 auto;
 }
 .job-summary-secondary {
     display: flex;
@@ -560,8 +623,11 @@ export default {
 .job-actions-cell {
     flex: 0 0 auto;
 }
-.job-actions-cell {
+.job-status-cell {
     margin-left: auto;
+}
+.job-actions-cell {
+    margin-left: 0;
 }
 .mobile-field-label {
     font-weight: 600;
@@ -590,12 +656,12 @@ export default {
 }
 .job-status {
     display: inline-block;
-    padding: 0.15rem 0.5rem;
+    padding: 0.25rem 0.65rem;
     border: 1px solid #b8bec7;
     border-radius: 999px;
     background-color: #e6e8eb;
     color: #252a31;
-    font-size: 0.875em;
+    font-size: 1rem;
     font-weight: 600;
     line-height: 1.4;
     white-space: nowrap;
@@ -668,7 +734,9 @@ export default {
     }
     .service-filter select,
     .service-filter input,
-    .toolbar > div > .uuid-filter {
+    .toolbar > div > select,
+    .toolbar > div > .uuid-filter,
+    .created-filter input {
         width: 100%;
         min-width: 0;
         box-sizing: border-box;
