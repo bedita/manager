@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-09-30 09:57:25 \n"
+"POT-Creation-Date: 2026-10-01 09:05:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -63,14 +63,26 @@ msgstr "Tutti"
 msgid "All Types"
 msgstr "Tutti i tipi"
 
+msgid "All applications"
+msgstr "Tutte le applicazioni"
+
+msgid "All auth providers"
+msgstr "Tutti i provider"
+
 msgid "All day"
 msgstr "Tutto il giorno"
+
+msgid "All endpoints"
+msgstr "Tutti gli endpoint"
 
 msgid "All media"
 msgstr "Tutti i media"
 
 msgid "All objects"
 msgstr "Tutti gli oggetti"
+
+msgid "All roles"
+msgstr "Tutti i ruoli"
 
 msgid "An extension stopped the file upload"
 msgstr "Un'estensione ha fermato il caricamento del file"
@@ -91,6 +103,9 @@ msgid "Async Jobs"
 msgstr "Processi asincroni"
 
 msgid "Auth Providers"
+msgstr "Provider di autenticazione"
+
+msgid "Auth provider"
 msgstr "Provider di autenticazione"
 
 msgid "Auto-translate"
@@ -125,6 +140,9 @@ msgstr "Calendario"
 
 msgid "Calendar view"
 msgstr "Vista calendario"
+
+msgid "Cancel"
+msgstr "Annulla"
 
 msgid "Cannot create abstract objects or objects without schema"
 msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
@@ -580,6 +598,9 @@ msgstr "Nome"
 msgid "National Id Number"
 msgstr "Numero Id. Nazionale"
 
+msgid "New"
+msgstr "Nuovo"
+
 msgid "New entry in"
 msgstr "Nuova voce in"
 
@@ -1026,6 +1047,9 @@ msgstr "Carica file locale"
 
 msgid "Upload multiple"
 msgstr "Upload multiplo"
+
+msgid "User"
+msgstr "Utente"
 
 msgid "User Accesses"
 msgstr "Accessi utente"
@@ -1542,9 +1566,6 @@ msgstr "Testo troppo breve. Lunghezza minima 3 caratteri. Riprova"
 msgid "Mail to"
 msgstr "Invia mail a"
 
-msgid "Cancel"
-msgstr "Annulla"
-
 msgid "In relation with"
 msgstr "In relazione con"
 
@@ -1594,9 +1615,6 @@ msgstr "Data"
 
 msgid "Starting date"
 msgstr "Data di inizio"
-
-msgid "User"
-msgstr "Utente"
 
 #, javascript-format
 msgid "Created on ${ created }."
@@ -1703,9 +1721,6 @@ msgstr "Scaduto"
 
 msgid "Future"
 msgstr "Futuro"
-
-msgid "New"
-msgstr "Nuovo"
 
 msgid "Uploaded"
 msgstr "Caricato"
@@ -2069,14 +2084,23 @@ msgstr "Errore durante l'eliminazione della categoria"
 msgid "Create new"
 msgstr "Crea nuovo"
 
+msgid "All statuses"
+msgstr "Tutti gli stati"
+
 msgid "Created on"
 msgstr "Creato il"
+
+msgid "Completed"
+msgstr "Completato"
 
 msgid "Copy"
 msgstr "Copia"
 
 msgid "Expires"
 msgstr "Scade il"
+
+msgid "Failed"
+msgstr "Fallito"
 
 msgid "Job"
 msgstr "Processo"
@@ -2090,6 +2114,9 @@ msgstr "Altro servizio"
 msgid "Payload"
 msgstr ""
 
+msgid "Pending"
+msgstr "Pendente"
+
 msgid "Results"
 msgstr "Risultati"
 
@@ -2098,6 +2125,9 @@ msgstr "Servizio"
 
 msgid "Show job details"
 msgstr "Mostra dettagli processo"
+
+msgid "Today"
+msgstr ""
 
 msgid "UUID"
 msgstr ""
