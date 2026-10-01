@@ -112,7 +112,7 @@ class ExternalAuthController extends AdministrationBaseController
     /**
      * Get "<name> <surname> (<username>)" labels of users by id, keyed by user id.
      *
-     * @param array $ids User ids
+     * @param array<int> $ids User ids
      * @return array<string, string>
      */
     protected function usersLabels(array $ids): array

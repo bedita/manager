@@ -104,9 +104,12 @@ class ExternalAuthControllerTest extends TestCase
     {
         $controller = new class ($this->ExternalAuthController->getRequest()) extends ExternalAuthController
         {
-            public function usersLabels(array $resources): array
+            /**
+             * @inheritDoc
+             */
+            public function usersLabels(array $ids): array
             {
-                return parent::usersLabels($resources);
+                return parent::usersLabels($ids);
             }
         };
         $result = $controller->usersLabels([]);
@@ -122,13 +125,16 @@ class ExternalAuthControllerTest extends TestCase
     {
         $controller = new class ($this->ExternalAuthController->getRequest()) extends ExternalAuthController
         {
-            public function usersLabels(array $resources): array
+            /**
+             * @inheritDoc
+             */
+            public function usersLabels(array $ids): array
             {
-                return parent::usersLabels($resources);
+                return parent::usersLabels($ids);
             }
         };
-        $resources = [['attributes' => ['user_id' => 1]]];
-        $result = $controller->usersLabels($resources);
+        $ids = [1];
+        $result = $controller->usersLabels($ids);
         static::assertNotEmpty($result);
         static::assertSame([1 => '(admin)'], $result);
     }
@@ -147,16 +153,19 @@ class ExternalAuthControllerTest extends TestCase
                 $this->apiClient = $apiClient;
             }
 
-            public function usersLabels(array $resources): array
+            /**
+             * @inheritDoc
+             */
+            public function usersLabels(array $ids): array
             {
-                return parent::usersLabels($resources);
+                return parent::usersLabels($ids);
             }
         };
         // mock
         $apiClientMock = $this->createMock(BEditaClient::class);
         $apiClientMock->method('get')->willThrowException(new BEditaClientException('API error'));
         $controller->setApiClient($apiClientMock);
-        $result = $controller->usersLabels([['attributes' => ['user_id' => 1]]]);
+        $result = $controller->usersLabels([1]);
         static::assertEmpty($result);
     }
 }
