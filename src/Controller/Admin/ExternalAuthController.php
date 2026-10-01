@@ -70,6 +70,7 @@ class ExternalAuthController extends AdministrationBaseController
      */
     protected array $filters = [
         'auth_provider_id' => 'auth_providers',
+        'user_id' => 'users',
     ];
 
     /**
@@ -97,7 +98,13 @@ class ExternalAuthController extends AdministrationBaseController
         if (empty($authProviders)) {
             $this->Flash->warning(__('No auth providers found: you cannot create external auth entries. Create at least one auth provider first'));
         }
-        $this->set('users', $this->usersLabels((array)$this->viewBuilder()->getVar('resources')));
+        $resources = (array)$this->viewBuilder()->getVar('resources');
+        $ids = Hash::extract($resources, '{n}.attributes.user_id');
+        $activeFilterUserId = (string)$this->getRequest()->getQuery('filter.user_id', '');
+        if ($activeFilterUserId !== '') {
+            $ids[] = $activeFilterUserId;
+        }
+        $this->set('users', $this->usersLabels($ids));
 
         return null;
     }
@@ -105,12 +112,11 @@ class ExternalAuthController extends AdministrationBaseController
     /**
      * Get "<name> <surname> (<username>)" labels of users referenced by resources, keyed by user id.
      *
-     * @param array $resources External auth resources
+     * @param array<int> $ids The ids
      * @return array<string, string>
      */
-    protected function usersLabels(array $resources): array
+    protected function usersLabels(array $ids): array
     {
-        $ids = array_values(array_unique(array_filter(Hash::extract($resources, '{n}.attributes.user_id'))));
         if (empty($ids)) {
             return [];
         }

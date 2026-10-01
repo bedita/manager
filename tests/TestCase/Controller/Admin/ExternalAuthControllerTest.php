@@ -83,6 +83,8 @@ class ExternalAuthControllerTest extends TestCase
             'schema',
             'readonly',
             'deleteonly',
+            'auth_providers',
+            'users',
         ];
         $viewVars = (array)$this->ExternalAuthController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
@@ -96,6 +98,20 @@ class ExternalAuthControllerTest extends TestCase
     }
 
     /**
+     * Test `index` method on activeFilter.user_id passed.
+     *
+     * @return void
+     */
+    public function testIndexActiveFilterUserId(): void
+    {
+        $request = $this->ExternalAuthController->getRequest()->withQueryParams(['filter' => ['user_id' => 1]]);
+        $this->ExternalAuthController->setRequest($request);
+        $this->ExternalAuthController->index();
+        $actual = (array)$this->ExternalAuthController->viewBuilder()->getVar('users');
+        static::assertEquals(['1' => '(admin)'], $actual);
+    }
+
+    /**
      * Test `usersLabels` method.
      *
      * @return void
@@ -104,9 +120,12 @@ class ExternalAuthControllerTest extends TestCase
     {
         $controller = new class ($this->ExternalAuthController->getRequest()) extends ExternalAuthController
         {
-            public function usersLabels(array $resources): array
+            /**
+             * @inheritDoc
+             */
+            public function usersLabels(array $ids): array
             {
-                return parent::usersLabels($resources);
+                return parent::usersLabels($ids);
             }
         };
         $result = $controller->usersLabels([]);
@@ -122,13 +141,16 @@ class ExternalAuthControllerTest extends TestCase
     {
         $controller = new class ($this->ExternalAuthController->getRequest()) extends ExternalAuthController
         {
-            public function usersLabels(array $resources): array
+            /**
+             * @inheritDoc
+             */
+            public function usersLabels(array $ids): array
             {
-                return parent::usersLabels($resources);
+                return parent::usersLabels($ids);
             }
         };
-        $resources = [['attributes' => ['user_id' => 1]]];
-        $result = $controller->usersLabels($resources);
+        $ids = [1];
+        $result = $controller->usersLabels($ids);
         static::assertNotEmpty($result);
         static::assertSame([1 => '(admin)'], $result);
     }
@@ -147,16 +169,19 @@ class ExternalAuthControllerTest extends TestCase
                 $this->apiClient = $apiClient;
             }
 
-            public function usersLabels(array $resources): array
+            /**
+             * @inheritDoc
+             */
+            public function usersLabels(array $ids): array
             {
-                return parent::usersLabels($resources);
+                return parent::usersLabels($ids);
             }
         };
         // mock
         $apiClientMock = $this->createMock(BEditaClient::class);
         $apiClientMock->method('get')->willThrowException(new BEditaClientException('API error'));
         $controller->setApiClient($apiClientMock);
-        $result = $controller->usersLabels([['attributes' => ['user_id' => 1]]]);
+        $result = $controller->usersLabels([1]);
         static::assertEmpty($result);
     }
 }

@@ -47,6 +47,27 @@ body.view-admin {
         > * {
             margin: 0 !important;
         }
+
+        .user-filter {
+            position: relative;
+        }
+
+        .user-filter-autocomplete-results {
+            background-color: white;
+            border: 1px solid variables.$gray-500;
+            max-height: 15em;
+            overflow: auto;
+            margin: 0;
+            padding: 0;
+            z-index: 1;
+
+            li {
+                list-style-type: none;
+                color: variables.$defaultBackground;
+                padding: calc(variables.$gutter * .25) calc(variables.$gutter * .5);
+                border-bottom: 1px solid variables.$gray-500;
+            }
+        }
     }
 }
 
