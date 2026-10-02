@@ -162,7 +162,7 @@
             {% if object.id and Perms.canCreate() %}
                 {% do _view.append(
                     'app-module-buttons',
-                    '<a href="' ~ Url.build({'_name': 'modules:create', 'object_type': objectType}) ~ '" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ '"><app-icon icon="carbon:add" /><span class="ml-05">' ~ __('Create') ~ '</span></a>'
+                    '<a href="' ~ Url.build({'_name': 'modules:create', 'object_type': objectType}) ~ '" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ '"><app-icon icon="carbon:add"></app-icon><span class="ml-05">' ~ __('Create') ~ '</span></a>'
                 ) %}
             {% endif %}
 
