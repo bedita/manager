@@ -1,17 +1,37 @@
 // TODO: refactor
 .fieldset#publish-properties {
     .tab-container {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 1em;
+
+        @media screen and (min-width: 1440px) {
+            grid-template-columns: minmax(max-content, 1fr) 1fr 1fr;
+        }
 
         > div {
-            width: calc(50% - 1em);
+            &:first-child { grid-column: 1 / -1; }
 
-            &:first-child { width: 100%; }
-
-            &.input.status {
-                width: 100%;
+            &.input.radio {
+                grid-column: 1 / -1;
                 margin-bottom: 0;
+
+                @media screen and (min-width: 1440px) {
+                    grid-column: auto;
+                }
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                column-gap: 1.5em;
+
+                > label:not(:first-child) {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: .25em;
+                    flex: 0 0 auto;
+                    margin-right: 0;
+                    white-space: nowrap;
+                }
             }
         }
     }
