@@ -496,7 +496,6 @@ class TranslationsControllerTest extends TestCase
         $this->controller = new TranslationsController($request);
         $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('typeFromUrl');
-        $method->setAccessible(true);
         $expected = 'documents';
         $actual = $method->invokeArgs($this->controller, []);
         static::assertEquals($expected, $actual);
@@ -506,7 +505,6 @@ class TranslationsControllerTest extends TestCase
         $this->controller->setObjectType('dummies');
         $reflectionClass = new ReflectionClass($this->controller);
         $method = $reflectionClass->getMethod('typeFromUrl');
-        $method->setAccessible(true);
         $expected = 'dummies';
         $actual = $method->invokeArgs($this->controller, []);
         static::assertEquals($expected, $actual);

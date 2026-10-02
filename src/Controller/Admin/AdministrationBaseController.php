@@ -89,6 +89,28 @@ abstract class AdministrationBaseController extends AppController
     protected ?string $sortBy = null;
 
     /**
+     * Use API pagination in index instead of loading all results
+     *
+     * @var bool
+     */
+    protected bool $paginated = false;
+
+    /**
+     * Default page size, used when `$paginated` is true
+     *
+     * @var int
+     */
+    protected int $pageSize = 20;
+
+    /**
+     * Fields filterable via `filter[<field>]` query, as `field => type`, used when `$paginated` is true.
+     * Type `string` renders a text input, other types (i.e. `applications`) a select using the view var with the same name.
+     *
+     * @var array<string, string>
+     */
+    protected array $filters = [];
+
+    /**
      * @inheritDoc
      */
     public function initialize(): void
@@ -102,11 +124,11 @@ abstract class AdministrationBaseController extends AppController
      *
      * Restrict `model` module access to `admin`
      */
-    public function beforeFilter(EventInterface $event): ?Response
+    public function beforeFilter(EventInterface $event): void
     {
-        $res = parent::beforeFilter($event);
-        if ($res !== null) {
-            return $res;
+        parent::beforeFilter($event);
+        if ($event->getResult() !== null) {
+            return;
         }
 
         /** @var \Authentication\Identity|null $user */
@@ -115,8 +137,6 @@ abstract class AdministrationBaseController extends AppController
         if (empty($roles) || !in_array('admin', $roles)) {
             throw new UnauthorizedException(__('Module access not authorized'));
         }
-
-        return null;
     }
 
     /**
@@ -147,8 +167,22 @@ abstract class AdministrationBaseController extends AppController
         $this->set('schema', (array)$this->Schema->getSchema($this->resourceType));
         $this->set('readonly', $this->readonly);
         $this->set('deleteonly', $this->deleteonly);
+        $this->set('paginated', $this->paginated);
+        $this->set('filters', $this->paginated ? $this->filters : []);
+        $this->set('activeFilter', $this->activeFilter());
+        $this->set('labels', $this->labels());
 
         return null;
+    }
+
+    /**
+     * Translated index column labels, as `property => label`; missing properties use the humanized property name.
+     *
+     * @return array<string, string>
+     */
+    protected function labels(): array
+    {
+        return [];
     }
 
     /**
@@ -175,7 +209,7 @@ abstract class AdministrationBaseController extends AppController
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
-        return $this->redirect(['_name' => sprintf('admin:list:%s', $this->resourceType)]);
+        return $this->redirect($this->referer(['_name' => sprintf('admin:list:%s', $this->resourceType)]));
     }
 
     /**
@@ -194,7 +228,7 @@ abstract class AdministrationBaseController extends AppController
             $this->Flash->error($e->getMessage(), ['params' => $e]);
         }
 
-        return $this->redirect(['_name' => sprintf('admin:list:%s', $this->resourceType)]);
+        return $this->redirect($this->referer(['_name' => sprintf('admin:list:%s', $this->resourceType)]));
     }
 
     /**
@@ -220,6 +254,9 @@ abstract class AdministrationBaseController extends AppController
      */
     protected function loadData(): array
     {
+        if ($this->paginated) {
+            return $this->loadPaginatedData();
+        }
         $resourceEndpoint = sprintf('%s/%s', $this->endpoint, $this->resourceType);
         $endpoint = $this->resourceType === 'roles' ? 'roles' : $resourceEndpoint;
         $resultResponse = ['data' => []];
@@ -254,6 +291,42 @@ abstract class AdministrationBaseController extends AppController
         }
 
         return $resultResponse;
+    }
+
+    /**
+     * Get a single page of results, using `page`, `page_size` and `sort` from request query.
+     *
+     * @return array
+     */
+    protected function loadPaginatedData(): array
+    {
+        $request = $this->getRequest();
+        $query = array_filter([
+            'page' => (int)$request->getQuery('page', 1),
+            'page_size' => (int)$request->getQuery('page_size', $this->pageSize),
+            'sort' => (string)$request->getQuery('sort', (string)$this->sortBy),
+            'filter' => $this->activeFilter(),
+        ]);
+        $response = (array)$this->apiClient->get($this->endpoint(), $query);
+
+        return ApiTools::cleanResponse($response);
+    }
+
+    /**
+     * Get non-empty `filter` query values restricted to `$filters` fields.
+     *
+     * @return array<string, string>
+     */
+    protected function activeFilter(): array
+    {
+        $filter = $this->getRequest()->getQuery('filter');
+        if (!$this->paginated || !is_array($filter)) {
+            return [];
+        }
+        $filter = array_intersect_key($filter, $this->filters);
+        $filter = array_map(fn($value) => is_scalar($value) ? trim((string)$value) : '', $filter);
+
+        return array_filter($filter, fn($value) => $value !== '');
     }
 
     /**

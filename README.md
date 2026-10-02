@@ -17,7 +17,7 @@ Backend Manager for [BEdita API](https://gihub.com/bedita/bedita).
 
 * [PHP](https://www.php.net/) >= 8.3
 * [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
-* [Node](https://nodejs.org) >= 20
+* [Node](https://nodejs.org) >= 22
 * [Yarn](https://yarnpkg.com) >= 1.15
 
 ## Install

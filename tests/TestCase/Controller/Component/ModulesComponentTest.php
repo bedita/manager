@@ -16,6 +16,7 @@ namespace App\Test\TestCase\Controller\Component;
 
 use App\Controller\AppController;
 use App\Controller\Component\ModulesComponent;
+use App\Controller\Component\SchemaComponent;
 use App\Core\Exception\UploadException;
 use App\Test\TestCase\Controller\AppControllerTest;
 use App\Utility\CacheTools;
@@ -611,6 +612,66 @@ class ModulesComponentTest extends TestCase
     }
 
     /**
+     * Test `getModules()` method keeps translations when schema component uses internal schemas.
+     *
+     * @return void
+     */
+    public function testGetModulesKeepsTranslationsWithInternalSchema(): void
+    {
+        Cache::clear(SchemaComponent::CACHE_CONFIG);
+        Configure::write('Modules', []);
+
+        /** @var \App\Controller\ModulesController $appController */
+        $appController = $this->Modules->getController();
+        $request = $appController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock());
+        $appController->setRequest($request);
+        $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
+        $this->Modules->Schema->setConfig('internalSchema', true);
+
+        $meta = [
+            'resources' => [
+                [
+                    'name' => 'bedita',
+                    'hints' => [
+                        'object_type' => true,
+                    ],
+                ],
+                [
+                    'name' => 'translations',
+                ],
+            ],
+        ];
+
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $apiClient->method('get')
+            ->willReturnCallback(function (string $path) use ($meta) {
+                if ($path === '/config') {
+                    return [];
+                }
+
+                return compact('meta');
+            });
+        $apiClient->method('schema')
+            ->willReturnCallback(function (string $type) {
+                if ($type === 'bedita') {
+                    return [
+                        'translatable' => ['title', 'body'],
+                    ];
+                }
+
+                return [];
+            });
+        ApiClientProvider::setApiClient($apiClient);
+
+        $actual = Hash::extract($this->Modules->getModules(), '{*}.name');
+
+        static::assertSame(['bedita', 'translations'], $actual);
+        static::assertTrue($this->Modules->Schema->getConfig('internalSchema'));
+    }
+
+    /**
      * Data provider for `testModulesByAccessControl`.
      *
      * @return array
@@ -706,20 +767,17 @@ class ModulesComponentTest extends TestCase
 
         // set $this->Modules->modules
         $property = new ReflectionProperty(ModulesComponent::class, 'modules');
-        $property->setAccessible(true);
         $property->setValue($this->Modules, $modules);
         // set AccessControl
         Configure::write('AccessControl', $accessControl);
         // call modulesByAccessControl
         $reflectionClass = new ReflectionClass($this->Modules);
         $method = $reflectionClass->getMethod('modulesByAccessControl');
-        $method->setAccessible(true);
         $this->Modules->Authentication->setIdentity(new Identity($user));
         $method->invokeArgs($this->Modules, []);
 
         // get $this->Modules->modules
         $property = new ReflectionProperty(ModulesComponent::class, 'modules');
-        $property->setAccessible(true);
         $actual = $property->getValue($this->Modules);
         static::assertEquals($expected, $actual);
     }

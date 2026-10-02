@@ -162,8 +162,7 @@ class TagsController extends ModelTagsController
      *
      * @codeCoverageIgnore
      */
-    public function beforeFilter(EventInterface $event): ?Response
+    public function beforeFilter(EventInterface $event): void
     {
-        return null;
     }
 }

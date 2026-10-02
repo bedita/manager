@@ -56,7 +56,9 @@ class ErrorControllerTest extends TestCase
     {
         $this->setupController();
         $event = new Event('Controller.beforeFilter');
-        $this->assertNull($this->ErrorController->beforeFilter($event));
+        $this->ErrorController->beforeFilter($event);
+        $actual = $event->getResult();
+        $this->assertNull($actual);
     }
 
     /**

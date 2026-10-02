@@ -199,7 +199,6 @@ class RolesModulesControllerTest extends TestCase
     {
         $reflection = new ReflectionClass(get_class($this->RlsController));
         $method = $reflection->getMethod('allowedRoles');
-        $method->setAccessible(true);
 
         // empty endpoint permissions
         $expected = [['id' => 2, 'attributes' => ['name' => 'manager']], ['id' => 3, 'attributes' => ['name' => 'guest']]];

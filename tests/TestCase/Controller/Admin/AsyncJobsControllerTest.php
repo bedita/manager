@@ -97,7 +97,7 @@ class AsyncJobsControllerTest extends TestCase
             'page' => 2,
             'page_size' => 50,
             'sort' => 'created',
-            'service' => 'mail',
+            'filter' => ['service' => 'mail'],
         ]);
         $this->AsyncJobsController = new class ($request) extends AsyncJobsController {
             public function loadAsyncJobs(): void

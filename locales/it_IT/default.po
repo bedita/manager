@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-03-24 09:17:38 \n"
+"POT-Creation-Date: 2026-10-01 09:05:25 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -63,14 +63,26 @@ msgstr "Tutti"
 msgid "All Types"
 msgstr "Tutti i tipi"
 
+msgid "All applications"
+msgstr "Tutte le applicazioni"
+
+msgid "All auth providers"
+msgstr "Tutti i provider"
+
 msgid "All day"
 msgstr "Tutto il giorno"
+
+msgid "All endpoints"
+msgstr "Tutti gli endpoint"
 
 msgid "All media"
 msgstr "Tutti i media"
 
 msgid "All objects"
 msgstr "Tutti gli oggetti"
+
+msgid "All roles"
+msgstr "Tutti i ruoli"
 
 msgid "An extension stopped the file upload"
 msgstr "Un'estensione ha fermato il caricamento del file"
@@ -91,6 +103,9 @@ msgid "Async Jobs"
 msgstr "Processi asincroni"
 
 msgid "Auth Providers"
+msgstr "Provider di autenticazione"
+
+msgid "Auth provider"
 msgstr "Provider di autenticazione"
 
 msgid "Auto-translate"
@@ -125,6 +140,9 @@ msgstr "Calendario"
 
 msgid "Calendar view"
 msgstr "Vista calendario"
+
+msgid "Cancel"
+msgstr "Annulla"
 
 msgid "Cannot create abstract objects or objects without schema"
 msgstr "Impossibile creare oggetti astratti o oggetti senza schema"
@@ -251,6 +269,9 @@ msgstr "Modellazione"
 
 msgid "Deathdate"
 msgstr "Data di morte"
+
+msgid "Default"
+msgstr ""
 
 msgid "Delete"
 msgstr "Elimina"
@@ -448,6 +469,9 @@ msgstr "Astratto"
 msgid "Job {0} to import file \"{1}\" scheduled."
 msgstr "Il processo {0} per importare il file \"{1}\" è stato avviato"
 
+msgid "Json"
+msgstr ""
+
 msgid "Label"
 msgstr "Etichetta"
 
@@ -532,6 +556,9 @@ msgstr "File di importazione mancante"
 msgid "Missing thumb url"
 msgstr "Url miniatura mancante"
 
+msgid "Model schema"
+msgstr ""
+
 msgid "Modified"
 msgstr "Modificato"
 
@@ -570,6 +597,9 @@ msgstr "Nome"
 
 msgid "National Id Number"
 msgstr "Numero Id. Nazionale"
+
+msgid "New"
+msgstr "Nuovo"
 
 msgid "New entry in"
 msgstr "Nuova voce in"
@@ -748,6 +778,9 @@ msgstr "Profili"
 msgid "Project"
 msgstr "Progetto"
 
+msgid "Project model schema"
+msgstr ""
+
 msgid "Properties"
 msgstr "Proprietà"
 
@@ -861,6 +894,9 @@ msgstr "Salva per applicare cambiamenti di ordinamento"
 
 msgid "Scheduled_from"
 msgstr "Partenza"
+
+msgid "Schema"
+msgstr ""
 
 msgid "Search"
 msgstr "Cerca"
@@ -1011,6 +1047,9 @@ msgstr "Carica file locale"
 
 msgid "Upload multiple"
 msgstr "Upload multiplo"
+
+msgid "User"
+msgstr "Utente"
 
 msgid "User Accesses"
 msgstr "Accessi utente"
@@ -1308,22 +1347,18 @@ msgstr "Ci sono delle modifiche non salvate, vuoi comunque lasciare la pagina?"
 msgid "Add placeholder"
 msgstr "Aggiungi placeholder"
 
+msgid "Accordion title"
+msgstr "Titolo accordion"
+
 msgid "Accordion content"
 msgstr "Contenuto accordion"
 
 msgid "Remove accordion"
 msgstr "Cancella accordion"
 
-msgid "Accordion title"
-msgstr "Titolo accordion"
-
 #, javascript-format
 msgid "Do you confirm the deletion of ${ number } item from the trash?"
 msgstr "Confermi la cancellazione di ${ number } elementi dal cestino?"
-
-#, javascript-format
-msgid "Moving ${ number } item(s) to trash. Are you sure?"
-msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
 
 #, javascript-format
 msgid "Error translating from \"${ from }\" to \"${ to }\""
@@ -1341,6 +1376,10 @@ msgid "OOOPS! Something went wrong"
 msgstr "OOOPS! Qualcosa è andato storto"
 
 #, javascript-format
+msgid "Moving ${ number } item(s) to trash. Are you sure?"
+msgstr "Stai per spostare ${ number } elementi nel cestino. Vuoi procedere?"
+
+#, javascript-format
 msgid "Do you really want to remove these property types? ${ types }"
 msgstr "Vuoi davvero cancellare questi tipi di proprietà? ${ types }"
 
@@ -1355,15 +1394,6 @@ msgstr "Nessuna opzione per questo tipo di file"
 
 msgid "Options"
 msgstr "Opzioni"
-
-msgid "Configuration key"
-msgstr "Chiave configurazione"
-
-msgid "See wiki for help"
-msgstr "Vedi pagina Wiki per informazioni"
-
-msgid "Remove item. Are you sure?"
-msgstr "Stai per eliminare l'elemento. Vuoi procedere?"
 
 msgid "All days"
 msgstr "Tutti i giorni"
@@ -1446,6 +1476,15 @@ msgstr "Tutti i mesi"
 msgid "All weeks"
 msgstr "Tutte le settimane"
 
+msgid "Remove item. Are you sure?"
+msgstr "Stai per eliminare l'elemento. Vuoi procedere?"
+
+msgid "Configuration key"
+msgstr "Chiave configurazione"
+
+msgid "See wiki for help"
+msgstr "Vedi pagina Wiki per informazioni"
+
 #, javascript-format
 msgid ""
 "File \"${ filename }\" too big (${ fileSizeMb } MB), please select a file "
@@ -1493,52 +1532,20 @@ msgstr "Tipi consentiti"
 msgid "At least ${ len } characters"
 msgstr "Almeno ${ len } caratteri"
 
-msgid "GET"
-msgstr ""
+msgid "Open Uri"
+msgstr "Apri indirizzo"
 
-msgid ""
-"Missing data to search coordinates: insert at least \"Address\" and "
-"\"Locality\" (optional: \"Zipcode\", \"Country\", \"Region\")"
-msgstr ""
-"Dati mancanti per la ricerca delle coordinate: inserire almeno \"Indirizzo\" "
-"e \"Località\" (opzionali: \"CAP\", \"Paese\", \"Regione\")"
+msgid "Uri is valid"
+msgstr "Indirizzo valido"
 
-#.  Map of all axios cancel token
-msgid "Cancelled"
-msgstr "Annullato"
+msgid "Uri is not valid"
+msgstr "Indirizzo non valido"
 
-msgid "Done"
-msgstr "Fatto"
+msgid "code"
+msgstr "codice"
 
-msgid "Stop"
-msgstr "Interrompi"
-
-msgid "Cancel"
-msgstr "Annulla"
-
-msgid "Canonical"
-msgstr "Canonica"
-
-msgid "In relation with"
-msgstr "In relazione con"
-
-msgid "Menu"
-msgstr "Menù"
-
-msgid "Relation parameters"
-msgstr "Parametri della relazione"
-
-msgid "(empty)"
-msgstr "(vuoto)"
-
-msgid "(not available)"
-msgstr "(non disponibile)"
-
-msgid "Priority"
-msgstr "Priorità"
-
-msgid "Mail to"
-msgstr "Invia mail a"
+msgid "details"
+msgstr "dettagli"
 
 msgid "Txt"
 msgstr "Testuale"
@@ -1556,20 +1563,49 @@ msgstr ""
 msgid "Search text too short. Minimum length is 3. Retry"
 msgstr "Testo troppo breve. Lunghezza minima 3 caratteri. Riprova"
 
-msgid "code"
-msgstr "codice"
+msgid "Mail to"
+msgstr "Invia mail a"
 
-msgid "details"
-msgstr "dettagli"
+msgid "In relation with"
+msgstr "In relazione con"
 
-msgid "Open Uri"
-msgstr "Apri indirizzo"
+msgid "Priority"
+msgstr "Priorità"
 
-msgid "Uri is valid"
-msgstr "Indirizzo valido"
+msgid "Relation parameters"
+msgstr "Parametri della relazione"
 
-msgid "Uri is not valid"
-msgstr "Indirizzo non valido"
+msgid "Canonical"
+msgstr "Canonica"
+
+msgid "Menu"
+msgstr "Menù"
+
+msgid "(empty)"
+msgstr "(vuoto)"
+
+msgid "(not available)"
+msgstr "(non disponibile)"
+
+#.  Map of all axios cancel token
+msgid "Cancelled"
+msgstr "Annullato"
+
+msgid "Done"
+msgstr "Fatto"
+
+msgid "Stop"
+msgstr "Interrompi"
+
+msgid "GET"
+msgstr ""
+
+msgid ""
+"Missing data to search coordinates: insert at least \"Address\" and "
+"\"Locality\" (optional: \"Zipcode\", \"Country\", \"Region\")"
+msgstr ""
+"Dati mancanti per la ricerca delle coordinate: inserire almeno \"Indirizzo\" "
+"e \"Località\" (opzionali: \"CAP\", \"Paese\", \"Regione\")"
 
 msgid "Accesses"
 msgstr "Accessi"
@@ -1579,9 +1615,6 @@ msgstr "Data"
 
 msgid "Starting date"
 msgstr "Data di inizio"
-
-msgid "User"
-msgstr "Utente"
 
 #, javascript-format
 msgid "Created on ${ created }."
@@ -1619,20 +1652,11 @@ msgstr "pagina"
 msgid "View"
 msgstr "Vedi"
 
-msgid "New content"
-msgstr "Nuovo contenuto"
-
-msgid "New folder"
-msgstr "Nuova cartella"
-
-msgid "Open in new tab"
-msgstr "Apri in una nuova scheda"
-
-msgid "Undo"
-msgstr "Annulla"
-
 msgid "Choose object type"
 msgstr "Scegli il tipo di oggetto"
+
+msgid "New content"
+msgstr "Nuovo contenuto"
 
 msgid "Object type"
 msgstr "Tipo di oggetto"
@@ -1642,6 +1666,15 @@ msgstr "Cartella genitore"
 
 msgid "/ (root)"
 msgstr "/ (radice)"
+
+msgid "Open in new tab"
+msgstr "Apri in una nuova scheda"
+
+msgid "Undo"
+msgstr "Annulla"
+
+msgid "New folder"
+msgstr "Nuova cartella"
 
 msgid "Add new tag"
 msgstr "Aggiungi un nuovo tag"
@@ -1689,9 +1722,6 @@ msgstr "Scaduto"
 msgid "Future"
 msgstr "Futuro"
 
-msgid "New"
-msgstr "Nuovo"
-
 msgid "Uploaded"
 msgstr "Caricato"
 
@@ -1702,9 +1732,6 @@ msgstr "Dato obbligatorio mancante \"${ required }\". Riprovare"
 msgid "Error while creating new object."
 msgstr "Si è verificato un errore durante la creazione del nuovo oggetto."
 
-msgid "Edit related objects"
-msgstr "Modifica oggetti correlati"
-
 msgid "Choose relation"
 msgstr "Scegli la relazione"
 
@@ -1713,6 +1740,9 @@ msgstr "Filtro da applicare"
 
 msgid "Search related objects"
 msgstr "Cerca oggetti correlati"
+
+msgid "Edit related objects"
+msgstr "Modifica oggetti correlati"
 
 msgid "Action"
 msgstr "Azione"
@@ -1865,6 +1895,24 @@ msgstr "Vedi originale"
 msgid "Send"
 msgstr "Invia"
 
+msgid "Preview"
+msgstr "Anteprima"
+
+msgid "Template values"
+msgstr "Valori template"
+
+msgid "Delivery"
+msgstr "Consegna"
+
+msgid "Profile"
+msgstr "Profilo"
+
+msgid "Recipient email"
+msgstr "Email del destinatario"
+
+msgid "add new"
+msgstr "aggiungi nuovo"
+
 msgid "Address"
 msgstr "Indirizzo"
 
@@ -1880,11 +1928,26 @@ msgstr ""
 msgid "Zoom"
 msgstr ""
 
-msgid "add new"
-msgstr "aggiungi nuovo"
-
 msgid "The main language is"
 msgstr "La lingua principale è"
+
+msgid "Import error"
+msgstr "Errore in importazione"
+
+msgid "Import warn"
+msgstr "Avviso in importazione"
+
+msgid "Number of created resources"
+msgstr "Numero di risorse create"
+
+msgid "Number of updated resources"
+msgstr "Numero di risorse aggiornate"
+
+msgid "Number of errors"
+msgstr "Numero di errori"
+
+msgid "Result"
+msgstr "Risultato"
 
 msgid "Completed on"
 msgstr "Completato il"
@@ -1904,23 +1967,14 @@ msgstr "Programmato da"
 msgid "Service name"
 msgstr "Nome del servizio"
 
-msgid "Import error"
-msgstr "Errore in importazione"
+msgid "date"
+msgstr "data"
 
-msgid "Import warn"
-msgstr "Avviso in importazione"
+msgid "Trashed"
+msgstr "Rimosso"
 
-msgid "Number of created resources"
-msgstr "Numero di risorse create"
-
-msgid "Number of updated resources"
-msgstr "Numero di risorse aggiornate"
-
-msgid "Number of errors"
-msgstr "Numero di errori"
-
-msgid "Result"
-msgstr "Risultato"
+msgid "version by"
+msgstr "versione di"
 
 msgid "clone"
 msgstr "clona"
@@ -1945,15 +1999,6 @@ msgid ""
 msgstr ""
 "I dati recuperati sostiruiranno quelli attuali (potrai comunque controllarli "
 "prima di salvare). Vuoi procedere?"
-
-msgid "date"
-msgstr "data"
-
-msgid "Trashed"
-msgstr "Rimosso"
-
-msgid "version by"
-msgstr "versione di"
 
 msgid "Latitude"
 msgstr "Latitudine"
@@ -1988,6 +2033,9 @@ msgstr "Selezionare un tipo"
 msgid "Create new for"
 msgstr "Crea nuovo per"
 
+msgid "Add multiple"
+msgstr "Aggiungi multiplo"
+
 msgid "Add multiple date ranges"
 msgstr "Aggiungi intervalli multipli di date"
 
@@ -2008,9 +2056,6 @@ msgstr "Obbligatorio"
 
 msgid "Year"
 msgstr "Anno"
-
-msgid "Add multiple"
-msgstr "Aggiungi multiplo"
 
 msgid "Insert date(s)"
 msgstr "Inserire data(e)"
@@ -2039,11 +2084,23 @@ msgstr "Errore durante l'eliminazione della categoria"
 msgid "Create new"
 msgstr "Crea nuovo"
 
+msgid "All statuses"
+msgstr "Tutti gli stati"
+
 msgid "Created on"
 msgstr "Creato il"
 
+msgid "Completed"
+msgstr "Completato"
+
+msgid "Copy"
+msgstr "Copia"
+
 msgid "Expires"
 msgstr "Scade il"
+
+msgid "Failed"
+msgstr "Fallito"
 
 msgid "Job"
 msgstr "Processo"
@@ -2051,14 +2108,32 @@ msgstr "Processo"
 msgid "Max attempts"
 msgstr "Tentativi rimasti"
 
+msgid "Other service"
+msgstr "Altro servizio"
+
 msgid "Payload"
 msgstr ""
+
+msgid "Pending"
+msgstr "Pendente"
 
 msgid "Results"
 msgstr "Risultati"
 
 msgid "Service"
 msgstr "Servizio"
+
+msgid "Show job details"
+msgstr "Mostra dettagli processo"
+
+msgid "Today"
+msgstr ""
+
+msgid "UUID"
+msgstr ""
+
+msgid "Hide job details"
+msgstr "Nascondi dettagli processo"
 
 msgid "Allowed types"
 msgstr "Tipi consentiti"

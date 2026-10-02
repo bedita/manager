@@ -98,6 +98,12 @@ class AdminHelperTest extends TestCase
                 'something',
                 '<div class="input text"><input type="text" name="dummy" size="25" id="dummy" value="something"></div>',
             ],
+            'type users value not null' => [
+                'users',
+                'users',
+                '1',
+                '1<input type="hidden" name="users" value="1">',
+            ],
         ];
     }
 
@@ -186,5 +192,24 @@ class AdminHelperTest extends TestCase
         $actual = json_decode($helper->getDictionary());
         $expected = ['Module1', 'Module 2'];
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test
+     *
+     * @return void
+     */
+    public function testTextOptions(): void
+    {
+        $view = new View(null, null, null, []);
+        $helper = new class ($view) extends AdminHelper {
+            public function textopts(string $property): array
+            {
+                return parent::textOptions($property);
+            }
+        };
+        $options = $helper->textopts('description');
+        static::assertArrayHasKey('size', $options);
+        static::assertEquals(60, $options['size']);
     }
 }

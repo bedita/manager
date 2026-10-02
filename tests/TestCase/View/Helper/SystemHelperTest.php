@@ -163,7 +163,6 @@ class SystemHelperTest extends TestCase
         // empty config, defaultUploadAccepted
         $reflectionClass = new ReflectionClass($this->System);
         $property = $reflectionClass->getProperty('defaultPlaceholders');
-        $property->setAccessible(true);
         $expected = $property->getValue($this->System);
         $actual = $this->System->placeholdersConfig();
         static::assertSame($expected, $actual);
@@ -179,19 +178,14 @@ class SystemHelperTest extends TestCase
         // empty config, defaultUploadAccepted
         $reflectionClass = new ReflectionClass($this->System);
         $property = $reflectionClass->getProperty('defaultUploadAccepted');
-        $property->setAccessible(true);
         $accepted = $property->getValue($this->System);
         $property = $reflectionClass->getProperty('defaultUploadForbidden');
-        $property->setAccessible(true);
         $forbidden = $property->getValue($this->System);
         $property = $reflectionClass->getProperty('defaultUploadMaxResolution');
-        $property->setAccessible(true);
         $maxResolution = $property->getValue($this->System);
         $property = $reflectionClass->getProperty('defaultUploadMaxSize');
-        $property->setAccessible(true);
         $maxSize = $property->getValue($this->System);
         $property = $reflectionClass->getProperty('defaultUploadTimeout');
-        $property->setAccessible(true);
         $timeout = $property->getValue($this->System);
         $expected = compact('accepted', 'forbidden', 'maxResolution', 'maxSize', 'timeout');
         $actual = $this->System->uploadConfig();

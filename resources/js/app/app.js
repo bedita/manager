@@ -69,6 +69,7 @@ const rootOptions = {
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
         ModelSchema: () => import(/* webpackChunkName: "model-schema" */'app/pages/model/schema.vue'),
         AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
+        UserFilter: () => import(/* webpackChunkName: "user-filter" */'app/components/user-filter/user-filter.vue'),
         AdminAppearance: () => import(/* webpackChunkName: "admin-appearance" */'app/pages/admin/appearance'),
         AdminStatistics: () => import(/* webpackChunkName: "admin-statistics" */'app/pages/admin/statistics'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
@@ -634,3 +635,33 @@ window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
 app.component('AppIcon', AppIcon);
+app.component('CalendarView', _vueInstance.$options.components.CalendarView);
+app.component('ClipboardItem', _vueInstance.$options.components.ClipboardItem);
+app.component('DateRangesView', _vueInstance.$options.components.DateRangesView);
+app.component('FieldCheckbox', _vueInstance.$options.components.FieldCheckbox);
+app.component('FieldGeoCoordinates', _vueInstance.$options.components.FieldGeoCoordinates);
+app.component('FieldDate', _vueInstance.$options.components.FieldDate);
+app.component('FieldInteger', _vueInstance.$options.components.FieldInteger);
+app.component('FieldJson', _vueInstance.$options.components.FieldJson);
+app.component('FieldMultipleCheckboxes', _vueInstance.$options.components.FieldMultipleCheckboxes);
+app.component('FieldNumber', _vueInstance.$options.components.FieldNumber);
+app.component('FieldPassword', _vueInstance.$options.components.FieldPassword);
+app.component('FieldPlaintext', _vueInstance.$options.components.FieldPlaintext);
+app.component('FieldRadio', _vueInstance.$options.components.FieldRadio);
+app.component('FieldSelect', _vueInstance.$options.components.FieldSelect);
+app.component('FieldString', _vueInstance.$options.components.FieldString);
+app.component('FieldTextarea', _vueInstance.$options.components.FieldTextarea);
+app.component('FieldTitle', _vueInstance.$options.components.FieldTitle);
+app.component('FileUpload', _vueInstance.$options.components.FileUpload);
+app.component('ModuleProperties', _vueInstance.$options.components.ModuleProperties);
+app.component('ModuleSetup', _vueInstance.$options.components.ModuleSetup);
+app.component('ObjectCategories', _vueInstance.$options.components.ObjectCategories);
+app.component('ObjectCaptions', _vueInstance.$options.components.ObjectCaptions);
+app.component('ObjectInfo', _vueInstance.$options.components.ObjectInfo);
+app.component('RelatedObjectsFilter', _vueInstance.$options.components.RelatedObjectsFilter);
+app.component('Thumbnail', _vueInstance.$options.components.Thumbnail);
+app.component('RibbonItem', _vueInstance.$options.components.RibbonItem);
+app.component('ViewChildrenParams', _vueInstance.$options.components.ViewChildrenParams);
+app.component('UploadedObject', _vueInstance.$options.components.UploadedObject);
+app.component('ObjectAnnotations', _vueInstance.$options.components.ObjectAnnotations);
+app.component('UserFilter', _vueInstance.$options.components.UserFilter);

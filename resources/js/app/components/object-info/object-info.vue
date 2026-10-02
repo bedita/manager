@@ -38,12 +38,16 @@ export default {
             labelsMap: new Map(),
             msgShowObjectInfo: t`Show object info`,
             reloadedData: this.objectData || {},
-            styles: {
-                borderColor: this.borderColor,
-                color: this.color,
-            },
             values: {},
         };
+    },
+    computed: {
+        styles() {
+            return {
+                borderColor: this.borderColor,
+                color: this.color,
+            };
+        },
     },
     mounted() {
         this.$nextTick(() => {

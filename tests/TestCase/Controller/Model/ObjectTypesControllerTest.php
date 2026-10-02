@@ -238,7 +238,6 @@ class ObjectTypesControllerTest extends TestCase
         $resource = ['meta' => ['core_type' => true]];
         $reflectionClass = new ReflectionClass($this->ModelController);
         $method = $reflectionClass->getMethod('updateSchema');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->ModelController, [$schema, $resource]);
         static::assertSame($expected, $actual);
 
@@ -365,7 +364,6 @@ class ObjectTypesControllerTest extends TestCase
         $this->setupController();
         $reflectionClass = new ReflectionClass($this->ModelController);
         $method = $reflectionClass->getMethod('tables');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->ModelController, [['attributes' => ['table' => 'dummy']]]);
         static::assertSame($expected, $actual);
     }

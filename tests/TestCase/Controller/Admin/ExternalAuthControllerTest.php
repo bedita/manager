@@ -2,6 +2,8 @@
 namespace App\Test\TestCase\Controller\Admin;
 
 use App\Controller\Admin\ExternalAuthController;
+use BEdita\SDK\BEditaClient;
+use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
@@ -81,6 +83,8 @@ class ExternalAuthControllerTest extends TestCase
             'schema',
             'readonly',
             'deleteonly',
+            'auth_providers',
+            'users',
         ];
         $viewVars = (array)$this->ExternalAuthController->viewBuilder()->getVars();
         foreach ($keys as $expectedKey) {
@@ -91,5 +95,93 @@ class ExternalAuthControllerTest extends TestCase
         $flash = $this->ExternalAuthController->getRequest()->getSession()->read('Flash');
         $expected = 'No auth providers found: you cannot create external auth entries. Create at least one auth provider first';
         static::assertEquals($expected, $flash['flash'][0]['message']);
+    }
+
+    /**
+     * Test `index` method on activeFilter.user_id passed.
+     *
+     * @return void
+     */
+    public function testIndexActiveFilterUserId(): void
+    {
+        $request = $this->ExternalAuthController->getRequest()->withQueryParams(['filter' => ['user_id' => 1]]);
+        $this->ExternalAuthController->setRequest($request);
+        $this->ExternalAuthController->index();
+        $actual = (array)$this->ExternalAuthController->viewBuilder()->getVar('users');
+        static::assertEquals(['1' => '(admin)'], $actual);
+    }
+
+    /**
+     * Test `usersLabels` method.
+     *
+     * @return void
+     */
+    public function testUsersLabelsEmpty(): void
+    {
+        $controller = new class ($this->ExternalAuthController->getRequest()) extends ExternalAuthController
+        {
+            /**
+             * @inheritDoc
+             */
+            public function usersLabels(array $ids): array
+            {
+                return parent::usersLabels($ids);
+            }
+        };
+        $result = $controller->usersLabels([]);
+        static::assertEmpty($result);
+    }
+
+    /**
+     * Test `usersLabels` method with non-empty resources.
+     *
+     * @return void
+     */
+    public function testUsersLabelsNonEmpty(): void
+    {
+        $controller = new class ($this->ExternalAuthController->getRequest()) extends ExternalAuthController
+        {
+            /**
+             * @inheritDoc
+             */
+            public function usersLabels(array $ids): array
+            {
+                return parent::usersLabels($ids);
+            }
+        };
+        $ids = [1];
+        $result = $controller->usersLabels($ids);
+        static::assertNotEmpty($result);
+        static::assertSame([1 => '(admin)'], $result);
+    }
+
+    /**
+     * Test `usersLabels` method when BEditaClient throws an exception.
+     *
+     * @return void
+     */
+    public function testUsersLabelsBEditaClientException(): void
+    {
+        $controller = new class ($this->ExternalAuthController->getRequest()) extends ExternalAuthController
+        {
+            public function setApiClient(BEditaClient $apiClient): void
+            {
+                $this->apiClient = $apiClient;
+            }
+
+            /**
+             * @inheritDoc
+             */
+            public function usersLabels(array $ids): array
+            {
+                return parent::usersLabels($ids);
+            }
+        };
+        // mock
+        $apiClientMock = $this->createMock(BEditaClient::class);
+        $apiClientMock->method('get')->willThrowException(new BEditaClientException('API error'));
+        $controller->setApiClient($apiClientMock);
+        $result = $controller->usersLabels([1]);
+        static::assertEmpty($result);
     }
 }
