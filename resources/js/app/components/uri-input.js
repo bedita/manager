@@ -66,10 +66,18 @@ export default {
         },
 
         isURLValid(url) {
-            // eslint-disable-next-line
-            const regex = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+            try {
+                const parsed = new URL(url);
+                if (!['http:', 'https:'].includes(parsed.protocol)) {
+                    return false;
+                }
 
-            return regex.test(url);
+                // hostname must have at least one dot and a TLD of 2+ letters (no length upper bound, e.g. ".investments")
+                // or a punycode TLD (IDN hostnames are converted by URL, e.g. ".рф" => ".xn--p1ai")
+                return /^([a-z0-9-]+\.)+([a-z]{2,}|xn--[a-z0-9-]+)$/i.test(parsed.hostname);
+            } catch {
+                return false;
+            }
         }
     }
 };
