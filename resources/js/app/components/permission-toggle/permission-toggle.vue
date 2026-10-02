@@ -10,10 +10,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
+import { AppEvents } from 'app/app-events';
 import { t } from 'ttag';
-
-export const PermissionEvents = new Vue();
 
 export default {
     name: 'permission-toggle',
@@ -35,15 +33,15 @@ export default {
         };
     },
 
-    async created() {
-        this.showForbidden = await this.getShowForbidden();
-        PermissionEvents.$emit('toggle-forbidden', this.showForbidden);
-    },
-
     computed: {
         msgForbidden() {
             return this.showForbidden ? t`Show all folders` : t`Hide forbidden folders`;
         },
+    },
+
+    async created() {
+        this.showForbidden = await this.getShowForbidden();
+        AppEvents.emit('toggle-forbidden', this.showForbidden);
     },
 
     methods: {
@@ -61,7 +59,7 @@ export default {
 
         toggleShowForbidden() {
             this.showForbidden = !this.showForbidden;
-            PermissionEvents.$emit('toggle-forbidden', this.showForbidden);
+            AppEvents.emit('toggle-forbidden', this.showForbidden);
             const options = {
                 method: 'POST',
                 credentials: 'same-origin',

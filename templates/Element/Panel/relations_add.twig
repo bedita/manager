@@ -79,7 +79,7 @@
                 <app-icon icon="carbon:add"></app-icon>
                 <span class="ml-05">{{ __('Add') }}</span>
                 <span v-if="selectedObjects.length" class="mx-025 has-font-weight-bold"><: selectedObjects.length :></span>
-                {{ __('objects to') }} <: relationName | humanize :>
+                {{ __('objects to') }} <: $helpers.humanize(relationName) :>
             </button>
 
             <button class="mx-1" href="#" :disabled="saving" @click.prevent="closePanel()">

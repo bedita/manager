@@ -10,7 +10,9 @@
                 :api-key="apiKey"
                 :api-url="apiUrl"
                 :relation-name="relationName"
-                :relation-label="relationLabel" />
+                :relation-label="relationLabel"
+                @removed="onLocationRemoved"
+                @updated="onLocationUpdated" />
         </div>
         <div v-if="locations" class="is-flex mt-1">
             <button @click.prevent @click="onAddNew">{{ msgAddNew }}</button>
@@ -38,6 +40,8 @@ export default {
         relationName: String,
         relationLabel: String,
     },
+
+    emits: ['removed', 'updated'],
 
     data() {
         return {
@@ -68,12 +72,12 @@ export default {
         });
     },
 
-    async mounted() {
-        this.$on('removed', (index) => {
+    methods: {
+        onLocationRemoved(index) {
             this.locations.splice(index, 1);
             this.markChanged();
-        });
-        this.$on('updated', (index, location) => {
+        },
+        onLocationUpdated(index, location) {
             if (!location.meta || !location.meta.relation || !location.meta.relation.params) {
                 location.meta = {
                     relation: {
@@ -83,10 +87,7 @@ export default {
             }
             this.locations.splice(index, 1, location);
             this.markChanged();
-        });
-    },
-
-    methods: {
+        },
         onAddNew() {
             // create new empty location
             const newLocation = {

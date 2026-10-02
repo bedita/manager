@@ -1,3 +1,5 @@
+import { createApp } from 'vue';
+
 /**
  *
  * v-jsoneditor directive to activate jsoneditor on element
@@ -5,25 +7,30 @@
  */
 
 export default {
-    install(Vue) {
-        Vue.directive('jsoneditor', {
+    install(app) {
+        app.directive('jsoneditor', {
             /**
              * dynamic load json-editor-input component and mount it
              *
              * @param {Object} element DOM object
              */
-            inserted (el) {
+            mounted(el) {
                 import(/* webpackChunkName: "json-editor-input" */'app/components/json-editor-input')
                     .then(module => module.default)
                     .then((component) => {
-                        const Constructor = Vue.extend(component);
-                        const vm = new Constructor({
-                            propsData: {
-                                el,
-                            }
+                        const directiveApp = createApp(component, {
+                            el,
                         });
-                        vm.$mount();
+                        directiveApp.mount(document.createElement('div'));
+                        el.__jsonEditorDirectiveApp = directiveApp;
                     });
+            },
+
+            unmounted(el) {
+                if (el.__jsonEditorDirectiveApp) {
+                    el.__jsonEditorDirectiveApp.unmount();
+                    delete el.__jsonEditorDirectiveApp;
+                }
             },
         })
     }

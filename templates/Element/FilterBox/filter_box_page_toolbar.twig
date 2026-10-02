@@ -2,13 +2,13 @@
 
 <nav class="pagination has-text-size-smallest">
     <div class="count-items" v-if="pagination.count">
-        <span class="has-font-weight-bold"><: pagination.count :></span> <span><: label :></span>
+        <span class="has-font-weight-bold" v-text="pagination.count"></span> <span v-text="label"></span>
     </div>
 
     <div class="page-size" v-show="pagination.count > paginateSizes[0]">
         <span>{{ __('Size') }}</span>
         <select form="_pagination" class="page-size-selector {{ selectBaseClasses }}" v-model="pageSize">
-            <option v-for="size in paginateSizes"><: size :></option>
+            <option v-for="size in paginateSizes" v-text="size"></option>
         </select>
     </div>
 
@@ -17,26 +17,26 @@
             <button
                 v-for="i in pagination.page_count" :key="i"
                 :class="pagination.page == i ? 'current-page' : 'button-outlined button-outlined-hover-module-{{currentModule.name }}'"
-                class="button is-width-auto has-text-size-smallest" @click.prevent="onChangePage(i)"><: i :>
+                class="button is-width-auto has-text-size-smallest" @click.prevent="onChangePage(i)" v-text="i">
             </button>
         </div>
 
         {% set pageButton = 'has-text-size-smallest button is-width-auto button-outlined button-outlined-hover-module-' ~ currentModule.name %}
         <div v-if="!isFullPaginationLayout">
             {# first page #}
-            <button v-if="pagination.page > 1" class="{{ pageButton }}" @click.prevent="onChangePage(1)"><: 1 :></button>
+            <button v-if="pagination.page > 1" class="{{ pageButton }}" @click.prevent="onChangePage(1)">1</button>
             {# delimiter #}
             <span v-if="pagination.page > 3" class="pages-delimiter"></span>
             {# prev page #}
-            <button v-if="pagination.page > 2" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page - 1)"><: pagination.page - 1:></button>
+            <button v-if="pagination.page > 2" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page - 1)" v-text="pagination.page - 1"></button>
             {# current page #}
             <input size="2" class="ml-05" :class="pagination.page === 1 ? 'mr-05' : 'ml-05'" :value="pagination.page" @change="onChangePageNumber($event)" @keydown="onPageKeydown($event)"/>
             {# next page #}
-            <button v-if="pagination.page < pagination.page_count-1" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page + 1)"><: pagination.page + 1:></button>
+            <button v-if="pagination.page < pagination.page_count-1" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page + 1)" v-text="pagination.page + 1"></button>
             {# delimiter #}
             <span v-if="pagination.page < pagination.page_count-2" class="pages-delimiter"></span>
             {# last page #}
-            <button v-if="pagination.page < pagination.page_count" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page_count)"><: pagination.page_count :></button>
+            <button v-if="pagination.page < pagination.page_count" class="{{ pageButton }}" @click.prevent="onChangePage(pagination.page_count)" v-text="pagination.page_count"></button>
         </div>
     </div>
 </nav>

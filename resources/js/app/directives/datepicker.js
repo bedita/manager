@@ -1,43 +1,54 @@
+import { createApp } from 'vue';
+
+const getAttrs = (vnode) => {
+    if (vnode?.props) {
+        return vnode.props;
+    }
+
+    return vnode?.data?.attrs || {};
+};
+
 /**
  * Datepicker vue directive
  */
 export default {
-    install(Vue) {
-        Vue.directive('datepicker', {
+    install(app) {
+        app.directive('datepicker', {
             /**
              * create flatpicker instance when element is binded
              */
-            inserted(el, binding, vnode) {
-                const attrs = vnode.data && vnode.data.attrs;
+            mounted(el, binding, vnode) {
+                const attrs = getAttrs(vnode);
                 import(/* webpackChunkName: "date-input" */'app/components/date-input')
                     .then(module => module.default)
                     .then((component) => {
-                        const Constructor = Vue.extend(component);
-                        const vm = el.vm = new Constructor({
-                            propsData: {
-                                attrs,
-                                el,
-                            }
+                        const directiveApp = createApp(component, {
+                            attrs,
+                            el,
                         });
-                        vm.$mount();
+                        el.__datepickerDirectiveApp = directiveApp;
+                        el.vm = directiveApp.mount(document.createElement('div'));
                     });
             },
 
             /**
              * update component value
              */
-            componentUpdated(el, binding, vnode) {
+            updated(el, binding, vnode) {
                 if (!el.vm) {
                     return;
                 }
-                if (JSON.stringify(el.vm.attrs) === JSON.stringify(vnode.data.attrs)) {
+                const attrs = getAttrs(vnode);
+
+                if (JSON.stringify(el.vm.attrs) === JSON.stringify(attrs)) {
                     // no change in attributes, nothing to do
                     return;
                 }
-                el.vm.attrs = vnode.data.attrs;
-                if (vnode.data && vnode.data.attrs && vnode.data.attrs.value) {
-                    el.vm.setDate(new Date(vnode.data.attrs.value));
-                } else if (vnode.data && vnode.data.domProps && vnode.data.domProps.value) {
+
+                el.vm.attrs = attrs;
+                if (attrs.value) {
+                    el.vm.setDate(new Date(attrs.value));
+                } else if (vnode?.data?.domProps?.value) {
                     el.vm.setDate(new Date(vnode.data.domProps.value));
                 } else {
                     el.vm.setDate(null);
@@ -47,9 +58,13 @@ export default {
             /**
              * destroy instance
              */
-            unbind(el) {
+            unmounted(el) {
+                if (el.__datepickerDirectiveApp) {
+                    el.__datepickerDirectiveApp.unmount();
+                    delete el.__datepickerDirectiveApp;
+                }
+
                 if (el.vm) {
-                    el.vm.$destroy();
                     delete el.vm;
                 }
             },

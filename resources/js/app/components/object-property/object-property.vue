@@ -9,40 +9,42 @@
                     </i>
                 </span>
                 <table>
-                    <tr>
-                        <td class="column-header">{{ msgLabel }}</td>
-                        <td>{{ prop.attributes.label }}</td>
-                    </tr>
-                    <tr>
-                        <td class="column-header">{{ msgType }}</td>
-                        <td class="property-val">{{ prop.attributes.property_type_name }}</td>
-                    </tr>
-                    <tr>
-                        <td class="column-header">{{ msgReadonly }}</td>
-                        <td class="property-val">{{ readonly }}</td>
-                    </tr>
-                    <tr>
-                        <td class="column-header">{{ msgHidden }}</td>
-                        <td>
-                            <select v-model="hidden" @change="updateHidden()">
-                                <option :value="true">{{ msgYes }}</option>
-                                <option :value="false">{{ msgNo }}</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="column-header">{{ msgTranslatable }}</td>
-                        <td>
-                            <select v-model="translatable" @change="updateTranslationRules()">
-                                <option value="true">{{ msgYes }}</option>
-                                <option value="false">{{ msgNo }}</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr v-if="type === 'inherited'">
-                        <td v-if="type === 'inherited'" class="column-header">{{ msgInheritedFrom }}</td>
-                        <td v-if="type === 'inherited'">{{ prop.attributes.object_type_name }}</td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td class="column-header">{{ msgLabel }}</td>
+                            <td>{{ prop.attributes.label }}</td>
+                        </tr>
+                        <tr>
+                            <td class="column-header">{{ msgType }}</td>
+                            <td class="property-val">{{ prop.attributes.property_type_name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="column-header">{{ msgReadonly }}</td>
+                            <td class="property-val">{{ readonly }}</td>
+                        </tr>
+                        <tr>
+                            <td class="column-header">{{ msgHidden }}</td>
+                            <td>
+                                <select v-model="hidden" @change="updateHidden()">
+                                    <option :value="true">{{ msgYes }}</option>
+                                    <option :value="false">{{ msgNo }}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="column-header">{{ msgTranslatable }}</td>
+                            <td>
+                                <select v-model="translatable" @change="updateTranslationRules()">
+                                    <option value="true">{{ msgYes }}</option>
+                                    <option value="false">{{ msgNo }}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr v-if="type === 'inherited'">
+                            <td class="column-header">{{ msgInheritedFrom }}</td>
+                            <td>{{ prop.attributes.object_type_name }}</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             <div v-if="!nobuttonsfor.includes(prop.attributes.name)" class="column is-narrow">

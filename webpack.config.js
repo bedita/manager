@@ -64,7 +64,10 @@ const sassLoaderOptions = {
 // Common Plugins
 let webpackPlugins = [
     new webpack.DefinePlugin({
-        'process.env.NODE_ENV': `${JSON.stringify(ENVIRONMENT.mode)}`
+        'process.env.NODE_ENV': ENVIRONMENT.mode,
+        __VUE_OPTIONS_API__: true,
+        __VUE_PROD_DEVTOOLS__: false,
+        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
     }),
 
     new MiniCssExtractPlugin({
@@ -238,7 +241,9 @@ module.exports = {
 
     resolve: {
         // aliases for import
-        alias: SRC_TEMPLATE_ALIAS,
+        alias: Object.assign({}, SRC_TEMPLATE_ALIAS, {
+            vue: '@vue/compat',
+        }),
         extensions: ['.js', '.vue', '.json', '.scss', '.css', 'po'],
     },
 

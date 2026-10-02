@@ -40,10 +40,10 @@
                                 v-for="item in objectTypes"
                                 :key="item.value"
                                 :value="item.value"
+                                class="tag"
+                                :class="`has-background-module-${item.value}`"
                             >
-                                <span class="tag" :class="`has-background-module-${item.value}`">
-                                    {{ item.label }}
-                                </span>
+                                {{ item.label }}
                             </option>
                         </select>
                     </div>
@@ -117,23 +117,22 @@
                                 />
                             </template>
                         </div>
-                        <template v-for="field in fieldsOther">
-                            <form-field
-                                :key="field"
-                                :field="fieldKey(field)"
-                                :render-as="fieldType(field)"
-                                :json-schema="schema?.properties?.[fieldKey(field)] || {}"
-                                :is-uploadable="false"
-                                :languages="languages"
-                                :object-type="objectTypeForm"
-                                :required="fieldsRequired?.includes(fieldKey(field))"
-                                :val="obj?.attributes?.[fieldKey(field)] || schema?.[fieldKey(field)] || null"
-                                v-model="formFieldProperties[objectTypeForm][fieldKey(field)]"
-                                @error="fieldError"
-                                @update="fieldUpdate"
-                                @success="fieldSuccess"
-                            />
-                        </template>
+                        <form-field
+                            v-for="field in fieldsOther"
+                            :key="field"
+                            :field="fieldKey(field)"
+                            :render-as="fieldType(field)"
+                            :json-schema="schema?.properties?.[fieldKey(field)] || {}"
+                            :is-uploadable="false"
+                            :languages="languages"
+                            :object-type="objectTypeForm"
+                            :required="fieldsRequired?.includes(fieldKey(field))"
+                            :val="obj?.attributes?.[fieldKey(field)] || schema?.[fieldKey(field)] || null"
+                            v-model="formFieldProperties[objectTypeForm][fieldKey(field)]"
+                            @error="fieldError"
+                            @update="fieldUpdate"
+                            @success="fieldSuccess"
+                        />
                         <div class="buttons">
                             <button
                                 class="button button-primary"

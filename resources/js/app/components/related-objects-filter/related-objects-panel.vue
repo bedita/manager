@@ -154,6 +154,7 @@
     </div>
 </template>
 <script>
+import { humanizeString } from 'app/helpers/text-helper.js';
 import { t } from 'ttag';
 export default {
     name: 'RelatedObjectsPanel',
@@ -208,7 +209,7 @@ export default {
         this.$nextTick(() => {
             for (const [key, value] of Object.entries(this.relationsSchema)) {
                 this.relations.push({
-                    label: this.$helpers.humanize(value?.label || key),
+                    label: humanizeString(value?.label || key),
                     name: key,
                     types: value?.types || [],
                 });
@@ -325,6 +326,18 @@ export default {
             this.updateFilter();
         },
         tr(item) {
+            if (item === null || item === undefined) {
+                return '';
+            }
+
+            if (typeof item !== 'string') {
+                return String(item);
+            }
+
+            if (!item.trim()) {
+                return '';
+            }
+
             return BEDITA_I18N?.[item] || this.t(item) || item;
         },
         updateFilter() {

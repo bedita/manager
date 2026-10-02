@@ -1,21 +1,28 @@
+import { createApp } from 'vue';
+
 /**
  * Uri vue directive
  */
 export default {
-    install(Vue) {
-        Vue.directive('email', {
-            inserted (el) {
+    install(app) {
+        app.directive('email', {
+            mounted(el) {
                 import(/* webpackChunkName: "email-input" */'app/components/email-input')
                     .then(module => module.default)
                     .then((component) => {
-                        const Constructor = Vue.extend(component);
-                        const vm = new Constructor({
-                            propsData: {
-                                el,
-                            }
+                        const directiveApp = createApp(component, {
+                            el,
                         });
-                        vm.$mount();
+                        directiveApp.mount(document.createElement('div'));
+                        el.__emailDirectiveApp = directiveApp;
                     });
+            },
+
+            unmounted(el) {
+                if (el.__emailDirectiveApp) {
+                    el.__emailDirectiveApp.unmount();
+                    delete el.__emailDirectiveApp;
+                }
             },
         });
     }

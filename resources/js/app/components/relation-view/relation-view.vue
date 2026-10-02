@@ -187,39 +187,7 @@ export default {
             await this.loadRelatedObjects();
         }
 
-        // check if relation is related to media objects
-        if (this.relationTypes && this.relationTypes.right) {
-            // if true setup drop event that handles file upload
-
-            if (this.isRelationWithMedia) {
-                this.$on('drop-files', (ev, transfer) => {
-                    let files = transfer.files;
-                    if (files) {
-                        // on drop-file event request panelView with action upload-files
-                        this.disableDrop();
-                        PanelEvents.requestPanel({
-                            action: 'upload-files',
-                            from: this,
-                            data: { files },
-                        });
-                    }
-                });
-            }
-        }
-
-        // enable related objects drop
-        this.$on('drop', (ev, transfer) => {
-            let object = transfer.data;
-            if (object) {
-                this.appendRelations([object]);
-                PanelEvents.send('relations-view:add-already-in-view', null, object );
-            }
-        });
-
         this.updateOriginalData();
-
-        // enable related objects drop
-        this.$on('sort-end', this.onSort);
     },
 
     beforeDestroy() {
@@ -231,6 +199,30 @@ export default {
     },
 
     methods: {
+        onDropFiles(ev, transfer) {
+            if (!this.isRelationWithMedia) {
+                return;
+            }
+            this.disableDrop();
+            PanelEvents.requestPanel({
+                action: 'upload-files',
+                from: this,
+                data: { files: transfer.files },
+            });
+        },
+
+        onDropEvent(ev, transfer) {
+            const object = transfer.data;
+            if (object) {
+                this.appendRelations([object]);
+                PanelEvents.send('relations-view:add-already-in-view', null, object );
+            }
+        },
+
+        onSortEnd(transfer) {
+            this.onSort(transfer);
+        },
+
         addRelated(related) {
             this.appendRelations([related]);
         },

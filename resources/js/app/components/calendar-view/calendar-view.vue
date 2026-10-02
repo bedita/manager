@@ -41,7 +41,7 @@
                         />
                         <template v-for="field in fieldsOther">
                             <div
-                                :key="field"
+                                :key="`date-ranges-${field}`"
                                 v-if="fieldKey(field) === 'date_ranges'"
                             >
                                 <date-ranges-view
@@ -51,7 +51,7 @@
                                 />
                             </div>
                             <form-field
-                                :key="field"
+                                :key="`field-${field}`"
                                 :field="fieldKey(field)"
                                 :render-as="fieldType(field)"
                                 :json-schema="schema?.properties?.[fieldKey(field)] || {}"

@@ -319,6 +319,7 @@ export const DragdropMixin = {
             if (this._sortEnabled) {
                 if (draggedElement && draggedElement.classList) {
                     draggedElement.classList.remove('sorting');
+                    this.onSortEnd?.(dragdropPayload);
                     this.$emit('sort-end', dragdropPayload);
                 }
             }
@@ -338,8 +339,10 @@ export const DragdropMixin = {
             if (files.length) {
                 // add files to payload
                 dragdropPayload.files = files;
+                this.onDropFiles?.(ev, dragdropPayload);
                 this.$emit('drop-files', ev, dragdropPayload);
             } else {
+                this.onDropEvent?.(ev, dragdropPayload);
                 this.$emit('drop', ev, dragdropPayload);
             }
 
