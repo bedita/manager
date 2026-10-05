@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-03-24 09:25:54 \n"
+"POT-Creation-Date: 2026-10-05 12:37:32 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -439,6 +439,9 @@ msgstr ""
 msgid "Job {0} to import file \"{1}\" scheduled."
 msgstr ""
 
+msgid "Json"
+msgstr ""
+
 msgid "Label"
 msgstr ""
 
@@ -494,6 +497,9 @@ msgid "Login required"
 msgstr ""
 
 msgid "Long Lat Coordinates"
+msgstr ""
+
+msgid "Maintenance in Progress"
 msgstr ""
 
 msgid "Map"
@@ -1018,6 +1024,11 @@ msgid "Videos"
 msgstr ""
 
 msgid "View file"
+msgstr ""
+
+msgid ""
+"We're currently performing some updates to improve your experience. We'll be "
+"back shortly!"
 msgstr ""
 
 msgid "Website"
