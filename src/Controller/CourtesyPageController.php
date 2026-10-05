@@ -30,7 +30,7 @@ class CourtesyPageController extends Controller
     {
         $message = Configure::read(
             'Maintenance.message',
-            __('We\'re currently performing some updates to improve your experience. We\'ll be back shortly!')
+            __('We\'re currently performing some updates to improve your experience. We\'ll be back shortly!'),
         );
         $this->set(compact('message'));
 
