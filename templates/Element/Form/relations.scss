@@ -208,8 +208,8 @@
             }
         }
 
-        footer {
-            a:last-child {
+        footer.last-child-auto {
+            > :last-child {
                 margin-left: auto;
             }
         }

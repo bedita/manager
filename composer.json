@@ -83,6 +83,11 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "phpstan/extension-installer": true,
             "php-http/discovery": true
+        },
+        "policy": {
+            "advisories": {
+                "block": false
+            }
         }
     },
     "extra": {

@@ -1,7 +1,7 @@
 <template>
     <div id="data-import">
         <div class="columns">
-            <div class="column">
+            <div class="column is-narrow">
                 <section class="fieldset">
                     <header>
                         <h2>{{ msgFileType }}</h2>
@@ -9,7 +9,14 @@
                     <div class="tab-container mt-05">
                         <div class="input" v-for="filter in filters" :key="filter.name">
                             <label>
-                                <input type="radio" :id="filter.name" name="filter" v-model="activeFilter" :value="filter.value" />
+                                <input
+                                    :id="filter.name"
+                                    type="radio"
+                                    name="filter"
+                                    :value="filter.value"
+                                    v-model="activeFilter"
+                                    @change="onFilterChange(filter)"
+                                >
                                 {{ filter.text }}
                             </label>
                         </div>
@@ -22,23 +29,44 @@
                         <h2>{{ msgOptions }}</h2>
                     </header>
                     <div class="tab-container mt-05">
-                        <div v-for="filter in filters" :key="filter.name">
-                            <div v-if="!filter.options">
-                                <span class="has-text-gray-600">{{ msgNoOptions }}</span>
-                            </div>
-                            <template v-if="filter.options && activeFilter == filter.value">
-                                <div class="mt-15" v-for="optionsData,optionsKey in filter.options" :key="optionsKey">
-                                    <label>{{ optionsData.label }}
-                                        <div v-if="optionsData.dataType === 'boolean'">
-                                            <input type="checkbox" :name="`filter_options[${optionsKey}]`" :checked="filterOptions[filter.name][optionsKey] === true" v-model="filterOptions[filter.name][optionsKey]" />
+                        <div>
+                            <template v-if="Object.keys(activeFilterOptions).length === 0">
+                                <p>{{ msgNoOptions }}</p>
+                            </template>
+                            <template v-else>
+                                <div
+                                    v-for="key in activeFilterOptionsKeys"
+                                    class="mt-15"
+                                    :key="key"
+                                >
+                                    <label>{{ activeFilterOptions[key].label }}
+                                        <div v-if="activeFilterOptions[key].dataType === 'boolean'">
+                                            <input
+                                                type="checkbox"
+                                                :name="`filter_options[${key}]`"
+                                                v-model="filterOptions[activeFilterName][key]"
+                                            >
                                         </div>
-                                        <div v-if="optionsData.dataType === 'options'">
-                                            <select :name="`filter_options[${optionsKey}]`" v-model="filterOptions[filter.name][optionsKey]">
-                                                <option v-for="val,key in optionsData.values" :key="key">{{ val }}</option>
+                                        <div v-if="activeFilterOptions[key].dataType === 'options'">
+                                            <select
+                                                :name="`filter_options[${key}]`"
+                                                v-model="filterOptions[activeFilterName][key]"
+                                            >
+                                                <option
+                                                    v-for="(val, optKey) in activeFilterOptions[key].values"
+                                                    :key="optKey"
+                                                    :value="val"
+                                                >
+                                                    {{ val }}
+                                                </option>
                                             </select>
                                         </div>
-                                        <div v-if="optionsData.dataType === 'text'">
-                                            <input type="text" :name="`filter_options[${optionsKey}]`" v-model="filterOptions[filter.name][optionsKey]" />
+                                        <div v-if="activeFilterOptions[key].dataType === 'text'">
+                                            <input
+                                                type="text"
+                                                :name="`filter_options[${key}]`"
+                                                v-model="filterOptions[activeFilterName][key]"
+                                            >
                                         </div>
                                     </label>
                                 </div>
@@ -51,20 +79,38 @@
         <section class="fieldset">
             <div class="file has-name">
                 <label class="file-label">
-                    <input type="file" class="file-input" name="file" :accept="accept()" @change="onFileChange" />
+                    <input
+                        type="file"
+                        class="file-input"
+                        name="file"
+                        :accept="accept()"
+                        @change="onFileChange"
+                    >
                     <span class="file-cta">
-                        <app-icon icon="carbon:upload"></app-icon>
+                        <app-icon icon="carbon:upload" />
                         <span class="ml-05">{{ msgChooseFile }}</span>
                     </span>
                     <span class="file-name">
-                        <span :data-empty-label="msgEmpty" v-bind:title="fileName">{{ fileName }}</span>
+                        <span
+                            :data-empty-label="msgEmpty"
+                            v-bind:title="fileName"
+                        >
+                            {{ fileName }}
+                        </span>
                     </span>
                 </label>
             </div>
         </section>
 
         <section class="fieldset">
-            <button class="submit" :class="loading ? 'is-loading-spinner' : ''" @click.prevent="doImport" v-if="fileName">{{ msgImport }}</button>
+            <button
+                class="submit"
+                :class="loading ? 'is-loading-spinner' : ''"
+                @click.prevent="doImport"
+                v-if="fileName"
+            >
+                {{ msgImport }}
+            </button>
         </section>
     </div>
 </template>
@@ -72,7 +118,7 @@
 import { t } from 'ttag';
 
 export default {
-    name: 'import-index',
+    name: 'ImportIndex',
 
     props: {
         filters: {
@@ -84,6 +130,9 @@ export default {
     data() {
         return {
             activeFilter: '',
+            activeFilterName: '',
+            activeFilterOptions: {},
+            activeFilterOptionsKeys: [],
             fileName: '',
             filterOptions: {},
             loading: false,
@@ -96,8 +145,22 @@ export default {
         };
     },
 
+    watch: {
+        activeFilter(newValue) {
+            const filter = this.filters?.find((f) => f.value === newValue);
+            if (filter) {
+                this.activeFilterName = filter.name;
+                this.activeFilterOptions = filter.options || {};
+                this.activeFilterOptionsKeys = Object.keys(filter.options || {});
+            }
+        },
+    },
+
     mounted() {
         this.activeFilter = this.filters?.[0].value || '';
+        this.activeFilterName = this.filters?.[0].name || '';
+        this.activeFilterOptions = this.filters?.[0].options || {};
+        this.activeFilterOptionsKeys = Object.keys(this.filters?.[0].options || {});
         for (const filter of this.filters) {
             if (filter.options === undefined) {
                 continue;
@@ -131,6 +194,12 @@ export default {
             }
 
             this.fileName = e.target.files[0].name;
+        },
+
+        onFilterChange(filter) {
+            this.activeFilterName = filter.name;
+            this.activeFilterOptions = filter.options || {};
+            this.activeFilterOptionsKeys = Object.keys(filter.options || {});
         },
     },
 }

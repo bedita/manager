@@ -219,4 +219,43 @@ class QueryComponentTest extends TestCase
         $actual = $this->Query->prepare($query);
         static::assertEquals($expected, $actual);
     }
+
+    /**
+     * Test `handleSavedByRefs` method.
+     *
+     * @return void
+     * @covers ::handleSavedByRefs()
+     */
+    public function testHandleSavedByRefs(): void
+    {
+        $controller = new Controller(
+            new ServerRequest(
+                [
+                    'query' => [],
+                    'environment' => [
+                        'REQUEST_METHOD' => 'GET',
+                    ],
+                    'params' => [
+                        'object_type' => 'test',
+                    ],
+                ]
+            )
+        );
+        $registry = $controller->components();
+        $component = new class ($registry) extends QueryComponent {
+            public function handleSavedByRefs(array $query): array
+            {
+                return parent::handleSavedByRefs($query);
+            }
+        };
+        Configure::write('Properties.test.index', [
+            'title',
+            'created_by_user',
+            'modified_by_user',
+        ]);
+        $query = [];
+        $actual = $component->handleSavedByRefs($query);
+        $expected = ['saved_by_refs' => 1];
+        static::assertEquals($expected, $actual);
+    }
 }

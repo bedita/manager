@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2025-08-26 08:17:45 \n"
+"POT-Creation-Date: 2026-03-24 09:25:54 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -202,6 +202,9 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
+msgid "Created By User"
+msgstr ""
+
 msgid "Created ↑ Oldest on top"
 msgstr ""
 
@@ -317,6 +320,9 @@ msgid "Export Filtered"
 msgstr ""
 
 msgid "External Auth"
+msgstr ""
+
+msgid "Failed to send OTP code. Please try again later."
 msgstr ""
 
 msgid "Failed to write file to disk"
@@ -517,6 +523,9 @@ msgstr ""
 msgid "Modified"
 msgstr ""
 
+msgid "Modified By User"
+msgstr ""
+
 msgid "Modified ↑ Oldest on top"
 msgstr ""
 
@@ -597,6 +606,9 @@ msgstr ""
 msgid "Number of updated objects"
 msgstr ""
 
+msgid "OTP code is expired or invalid"
+msgstr ""
+
 msgid "Object Types"
 msgstr ""
 
@@ -631,6 +643,9 @@ msgid "Old Password"
 msgstr ""
 
 msgid "On"
+msgstr ""
+
+msgid "One Time Password"
 msgstr ""
 
 msgid "Only my contents"
@@ -781,6 +796,9 @@ msgid "Remove"
 msgstr ""
 
 msgid "Request password"
+msgstr ""
+
+msgid "Resend OTP"
 msgstr ""
 
 msgid "Reset"
@@ -997,6 +1015,9 @@ msgid "Vat Number"
 msgstr ""
 
 msgid "Verified"
+msgstr ""
+
+msgid "Verify"
 msgstr ""
 
 msgid "Version"

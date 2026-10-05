@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2025-08-26 08:17:45 \n"
+"POT-Creation-Date: 2026-03-24 09:25:54 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -207,6 +207,9 @@ msgstr "Crea nuovo tag"
 msgid "Created"
 msgstr "Creato"
 
+msgid "Created By User"
+msgstr "Creato da"
+
 msgid "Created ↑ Oldest on top"
 msgstr "Creazione ↑ Meno recenti in testa"
 
@@ -323,6 +326,9 @@ msgstr "Esporta Filtrati"
 
 msgid "External Auth"
 msgstr "Autenticazioni esterne"
+
+msgid "Failed to send OTP code. Please try again later."
+msgstr "Codice OTP non inviato. Riprova più tardi."
 
 msgid "Failed to write file to disk"
 msgstr "Scrittura file su disco fallita"
@@ -523,6 +529,9 @@ msgstr "Url miniatura mancante"
 msgid "Modified"
 msgstr "Modificato"
 
+msgid "Modified By User"
+msgstr "Modificato da"
+
 msgid "Modified ↑ Oldest on top"
 msgstr "Data di modifica ↑ Meno recenti in testa"
 
@@ -605,6 +614,9 @@ msgstr "Numero di errori di accesso"
 msgid "Number of updated objects"
 msgstr "Numero di oggetti aggiornati"
 
+msgid "OTP code is expired or invalid"
+msgstr "Codice OTP è scaduto o non valido"
+
 msgid "Object Types"
 msgstr "Tipi di Oggetto"
 
@@ -640,6 +652,9 @@ msgstr "Vecchia Password"
 
 msgid "On"
 msgstr ""
+
+msgid "One Time Password"
+msgstr "Codice monouso"
 
 msgid "Only my contents"
 msgstr "Solo i miei contenuti"
@@ -792,6 +807,9 @@ msgstr "Rimuovi"
 
 msgid "Request password"
 msgstr "Reimposta password"
+
+msgid "Resend OTP"
+msgstr "Invia nuovamente OTP"
 
 msgid "Reset"
 msgstr "Resetta"
@@ -1009,6 +1027,9 @@ msgstr "Partita Iva"
 
 msgid "Verified"
 msgstr "Verificato"
+
+msgid "Verify"
+msgstr "Verifica"
 
 msgid "Version"
 msgstr "Versione"

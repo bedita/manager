@@ -172,12 +172,14 @@ class TrashController extends AppController
     protected function listQuery(): array
     {
         $query = $this->getRequest()->getData('query');
-        if (empty($query)) {
+        if (!is_string($query) || $query === '') {
             return [];
         }
         $query = htmlspecialchars_decode($query);
 
-        return (array)unserialize($query);
+        $decoded = json_decode($query, true);
+
+        return is_array($decoded) ? $decoded : [];
     }
 
     /**

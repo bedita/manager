@@ -30,6 +30,8 @@
 //  __('title');
 //  __('All media');
 //  __('Created');
+//  __('Created By User');
+//  __('Modified By User');
 //  __('Updated');
 //  __('Trashd');
 //  __('Restored');

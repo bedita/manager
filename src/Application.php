@@ -15,6 +15,7 @@ namespace App;
 use App\Event\TreeCacheEventHandler;
 use App\Identifier\ApiIdentifier;
 use App\Middleware\ConfigurationMiddleware;
+use App\Middleware\OtpMiddleware;
 use App\Middleware\ProjectMiddleware;
 use App\Middleware\RecoveryMiddleware;
 use App\Middleware\StatusMiddleware;
@@ -146,6 +147,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
             // Csrf Middleware
             ->add($this->csrfMiddleware())
+
+            // Otp middleware.
+            ->add(new OtpMiddleware())
 
             // Authentication middleware.
             ->add(new AuthenticationMiddleware($this))

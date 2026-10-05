@@ -57,7 +57,7 @@
                 <span class="tag is-dark"><: related.attributes.lang :></span>
             {% else %}
                 <template v-if="dataList">
-                    <span class="tag ml-2" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                    <span class="tag ml-2" v-bind:class="'has-background-module-' + related.type" style="min-width: 7em;"><: related.type :></span>
                 </template>
                 <template v-else>
                     <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
@@ -65,7 +65,7 @@
 
                 <span class="icon-calendar-check-o" v-title="datesInfo(related)"></span>
             {% endif %}
-            <span class="status is-uppercase has-text-size-smallest" :class="related.attributes.status" v-if="related.attributes.status"><: related.attributes.status :></span>
+            <span class="status is-uppercase has-text-size-smallest" :class="related.attributes.status" style="min-width: 5em;" v-if="related.attributes.status"><: related.attributes.status :></span>
 
         </div>
 
@@ -77,12 +77,12 @@
         <header class="is-flex space-between mt-05">
             <div>
 
-                <h3 class="title m-0 has-text-size-small" style="padding-bottom: 7px;">
+                <h3 class="title m-0 has-text-size-small" style="min-width: 17em; padding-bottom: 7px;">
                     {% if translation %}
-                        <span v-html="truncate(related.attributes.translated_fields.title, 50)" :title=" related.attributes.translated_fields.title" v-if=" related.attributes.translated_fields && related.attributes.translated_fields.title ">
+                        <span v-html="truncate(related.attributes.translated_fields.title, 100)" :title=" related.attributes.translated_fields.title" v-if=" related.attributes.translated_fields && related.attributes.translated_fields.title ">
                         </span>
                     {% else %}
-                        <span v-html="truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 50)" :title=" related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-' ">
+                        <span v-html="truncate(related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-', 100)" :title=" related?.attributes?.title || related?.attributes?.name || related?.attributes?.uname || '-' ">
                         </span>
                     {% endif %}
                 </h3>
@@ -119,7 +119,16 @@
                 <div class="term-container">
                     <dt class="is-capitalized"><: key|humanize :></dt>
                     <dd>
-                        <span v-if="getParamHelper(related, key)"><: formatParam(key, getParamHelper(related, key)) :></span>
+                        <span v-if="getParamHelper(related, key)">
+                            <template v-if="param.format === 'json'">
+                                <button @click.prevent.stop="openModal(formatParam(key, getParamHelper(related, key)))" class="button is-small icon-code has-text-weight-bold">
+                                    {{ __('Json') }}
+                                </button>
+                            </template>
+                            <template v-else>
+                                <: formatParam(key, getParamHelper(related, key)) :>
+                            </template>
+                        </span>
                         <span v-else>-</span>
                     </dd>
                 </div>
@@ -142,6 +151,13 @@
         {% endif %}
     </div>
     {% endif %}
+    {% if children and config('ChildrenParams') %}
+    <view-children-params
+        :related="related"
+        :relation-schema="{{ config('ChildrenParams')|json_encode }}"
+    >
+    </view-children-params>
+    {% endif %}
     {% if not readonly and children and config('ChildrenParams') %}
     <div class="params p-05 has-text-size-smaller">
         <button
@@ -161,7 +177,7 @@
 
     {# BUTTONS #}
     {% if Perms.canSave() %}
-    <footer class="is-flex space-between mt-05 p-05">
+    <footer class="is-flex mt-05 p-05" :class="{ 'last-child-auto': !dataList }">
         {% if stage %}
             <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">
                 <app-icon icon="carbon:launch"></app-icon>
