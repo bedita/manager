@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-10-01 09:05:25 \n"
+"POT-Creation-Date: 2026-10-05 13:00:57 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -527,6 +527,9 @@ msgid "Login required"
 msgstr ""
 
 msgid "Long Lat Coordinates"
+msgstr ""
+
+msgid "Maintenance in Progress"
 msgstr ""
 
 msgid "Map"
@@ -1078,6 +1081,11 @@ msgid "Videos"
 msgstr ""
 
 msgid "View file"
+msgstr ""
+
+msgid ""
+"We're currently performing some updates to improve your experience. We'll be "
+"back shortly!"
 msgstr ""
 
 msgid "Website"
