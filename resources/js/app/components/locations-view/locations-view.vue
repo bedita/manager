@@ -1,6 +1,7 @@
 <template>
     <div class="locations">
-        <input type="hidden" :name="'relations[' + relationName + '][replaceRelated]'" :value="locationsData" />
+        <input type="hidden" :name="'relations[' + relationName + '][addRelated]'" :value="addRelatedData" />
+        <input type="hidden" :name="'relations[' + relationName + '][removeRelated]'" :value="removeRelatedData" />
         <div v-if="!locations" class="is-loading-spinner"></div>
         <div v-else v-for="(location, index) in locations">
             <location-view
@@ -42,6 +43,7 @@ export default {
     data() {
         return {
             locations: null,
+            originalParams: {},
             msgAddNew: t`add new`,
         }
     },
@@ -66,6 +68,10 @@ export default {
                 };
             }
         });
+        // serialized to keep it unaffected by in-place edits of locations params
+        this.originalParams = Object.fromEntries(
+            this.locations.map((location) => [String(location.id), this.serializeParams(location)])
+        );
     },
 
     async mounted() {
@@ -111,6 +117,14 @@ export default {
             return Symbol(location);
         },
         /**
+         * Serialize relation params of a location
+         * @param {Object} location
+         * @return {String}
+         */
+        serializeParams(location) {
+            return JSON.stringify(location?.meta?.relation?.params || {});
+        },
+        /**
          * Let the app know that something has changed here.
          * @return {void}
          */
@@ -126,9 +140,23 @@ export default {
     },
 
     computed: {
-        locationsData() {
-            return JSON.stringify(this.locations);
-        }
+        addRelatedData() {
+            const added = (this.locations || []).filter((location) => {
+                const id = String(location.id);
+
+                return !location.id || !(id in this.originalParams) || this.originalParams[id] !== this.serializeParams(location);
+            });
+
+            return JSON.stringify(added);
+        },
+        removeRelatedData() {
+            const ids = (this.locations || []).map((location) => String(location.id));
+            const removed = Object.keys(this.originalParams)
+                .filter((id) => !ids.includes(id))
+                .map((id) => ({ id, type: 'locations' }));
+
+            return JSON.stringify(removed);
+        },
     }
 }
 </script>
