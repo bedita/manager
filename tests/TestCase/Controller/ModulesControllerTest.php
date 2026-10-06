@@ -23,6 +23,7 @@ use Authentication\Identity;
 use Authentication\IdentityInterface;
 use BEdita\SDK\BEditaClient;
 use BEdita\SDK\BEditaClientException;
+use BEdita\WebTools\ApiClientProvider;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -1545,6 +1546,79 @@ class ModulesControllerTest extends BaseControllerTest
         static::assertFalse($this->controller->savePerms, 'Controller save permissions should not be called');
         static::assertTrue($apiClient->getSave(), 'ApiClient save method should be called when no post data is provided');
         static::assertFalse($apiClient->getLoad(), 'ApiClient load method should not be called to load object');
+    }
+
+    /**
+     * Test `save` method on a new object with locations, as sent by `locations-view`
+     *
+     * @return void
+     * @covers ::save()
+     */
+    public function testSaveNewObjectLocations(): void
+    {
+        $config = [
+            'environment' => ['REQUEST_METHOD' => 'POST'],
+            'post' => [
+                'id' => '',
+                'title' => 'New event',
+                'relations' => [
+                    'has_location' => [
+                        'addRelated' => json_encode([['id' => '5', 'type' => 'locations']]),
+                        'removeRelated' => json_encode([]),
+                    ],
+                ],
+            ],
+            'params' => ['object_type' => 'events'],
+        ];
+        $this->controller = new ModulesControllerSample(new ServerRequest($config));
+        $this->controller->setRequest($this->controller->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock()));
+        $this->controller->Authentication->setIdentity(new Identity(['id' => 'dummy']));
+        $this->controller->Schema->setConfig('internalSchema', true);
+
+        $apiClient = new class ('https://api.example.com') extends BEditaClient
+        {
+            public array $calls = [];
+
+            public function save(string $type, array $data, ?array $headers = null): ?array
+            {
+                $this->calls[] = sprintf('save %s', $type);
+
+                return ['data' => ['id' => '999', 'type' => $type, 'attributes' => []]];
+            }
+
+            public function getRelated(string|int $id, string $type, string $relation, ?array $query = null, ?array $headers = null): ?array
+            {
+                $this->calls[] = sprintf('GET /%s/%s/%s', $type, $id, $relation);
+                if ((string)$id === '') {
+                    throw new BEditaClientException(sprintf('A route matching "/%s/%s/%s" could not be found.', $type, $id, $relation), 404);
+                }
+
+                return ['data' => []];
+            }
+
+            public function addRelated(string|int $id, string $type, string $relation, array $data, ?array $headers = null): ?array
+            {
+                $this->calls[] = sprintf('POST /%s/%s/relationships/%s', $type, $id, $relation);
+
+                return null;
+            }
+
+            public function removeRelated(string|int $id, string $type, string $relation, array $data, ?array $headers = null): ?array
+            {
+                $this->calls[] = sprintf('DELETE /%s/%s/relationships/%s', $type, $id, $relation);
+
+                return null;
+            }
+        };
+        $safeClient = ApiClientProvider::getApiClient();
+        ApiClientProvider::setApiClient($apiClient);
+        $this->controller->setApiClient($apiClient);
+
+        $this->controller->save();
+        ApiClientProvider::setApiClient($safeClient);
+
+        static::assertNull($this->controller->viewBuilder()->getVar('error'));
+        static::assertSame(['save events', 'POST /events/999/relationships/has_location'], $apiClient->calls);
     }
 
     /**
