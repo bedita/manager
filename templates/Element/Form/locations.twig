@@ -4,6 +4,5 @@
     api-url="{{ config('Location.google.url') }}"
     relation-name="{{ relationName }}"
     relation-label="{{ Layout.tr(relationName) }}"
+    @update-related="setRelatedData"
 ></locations-view>
-{% do Form.unlockField('relations.' ~ relationName ~ '.addRelated') %}
-{% do Form.unlockField('relations.' ~ relationName ~ '.removeRelated') %}
