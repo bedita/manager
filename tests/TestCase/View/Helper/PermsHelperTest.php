@@ -177,6 +177,22 @@ class PermsHelperTest extends TestCase
     }
 
     /**
+     * Test `canSaveMap` method
+     *
+     * @return void
+     * @covers ::canSaveMap()
+     */
+    public function testCanSaveMap(): void
+    {
+        $result = $this->Perms->canSaveMap();
+        static::assertIsArray($result);
+        static::assertArrayHasKey('documents', $result);
+        static::assertTrue($result['documents']);
+        static::assertArrayHasKey('profiles', $result);
+        static::assertFalse($result['profiles']);
+    }
+
+    /**
      * Test `canDelete` method
      *
      * @return void

@@ -54,6 +54,49 @@ class TreeController extends AppController
     }
 
     /**
+     * Get all tree data.
+     * Use cache to store data.
+     *
+     * @return void
+     */
+    public function loadAll(): void
+    {
+        $this->getRequest()->allowMethod(['get']);
+        $this->viewBuilder()->setClassName('Json');
+        $data = $this->compactTreeData();
+        $this->set('data', $data);
+        $this->setSerialize(['data']);
+    }
+
+    /**
+     * Get children of a folder by ID.
+     * Use cache to store data.
+     *
+     * @param string $id The ID.
+     * @return void
+     */
+    public function children(string $id): void
+    {
+        $this->getRequest()->allowMethod(['get']);
+        $this->viewBuilder()->setClassName('Json');
+        $data = $meta = [];
+        try {
+            $query = $this->getRequest()->getQueryParams();
+            $response = $this->apiClient->get(sprintf('/folders/%s/children', $id), $query);
+            $data = (array)Hash::get($response, 'data');
+            foreach ($data as &$item) {
+                $item = $this->minimalDataWithMeta((array)$item);
+            }
+            $meta = (array)Hash::get($response, 'meta');
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), LogLevel::ERROR);
+        }
+        $this->set('data', $data);
+        $this->set('meta', $meta);
+        $this->setSerialize(['data', 'meta']);
+    }
+
+    /**
      * Get node by ID.
      * Use cache to store data.
      *
@@ -104,6 +147,8 @@ class TreeController extends AppController
 
     /**
      * Saves the current slug
+     *
+     * @return \Cake\Http\Response|null
      */
     public function slug(): ?Response
     {
@@ -141,6 +186,36 @@ class TreeController extends AppController
         $this->setSerialize(['response', 'error']);
 
         return null;
+    }
+
+    /**
+     * Get compact tree data.
+     * Use cache to store data.
+     *
+     * @return array
+     */
+    public function compactTreeData(): array
+    {
+        $objectType = $this->getRequest()->getParam('object_type');
+        $key = CacheTools::cacheKey(sprintf('compact-tree-%s', $objectType));
+        $noCache = (bool)$this->getRequest()->getQuery('no_cache');
+        if ($noCache === true) {
+            Cache::clearGroup('tree', TreeCacheEventHandler::CACHE_CONFIG);
+        }
+        $data = [];
+        try {
+            $data = Cache::remember(
+                $key,
+                function () {
+                    return $this->fetchCompactTreeData();
+                },
+                TreeCacheEventHandler::CACHE_CONFIG
+            );
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), LogLevel::ERROR);
+        }
+
+        return $data;
     }
 
     /**
@@ -282,6 +357,88 @@ class TreeController extends AppController
     }
 
     /**
+     * Fetch compact tree data from API.
+     * Retrieve minimal data for folders: id, status, title, meta.
+     * Return tree and folders.
+     * Return an array with 'tree' and 'folders' keys.
+     *
+     * @return array
+     */
+    protected function fetchCompactTreeData(): array
+    {
+        $done = false;
+        $page = 1;
+        $pageSize = 100;
+        $folders = [];
+        $paths = [];
+        while (!$done) {
+            $response = ApiClientProvider::getApiClient()->get('/folders', [
+                'page_size' => $pageSize,
+                'page' => $page,
+            ]);
+            $data = (array)Hash::get($response, 'data');
+            foreach ($data as $item) {
+                $folders[$item['id']] = $this->minimalDataWithMeta((array)$item);
+                $path = (string)Hash::get($item, 'meta.path');
+                $paths[$path] = $item['id'];
+            }
+            $page++;
+            $meta = (array)Hash::get($response, 'meta');
+            if ($page > (int)Hash::get($meta, 'pagination.page_count')) {
+                $done = true;
+            }
+        }
+        // organize the tree as roots and children
+        $tree = [];
+        foreach ($paths as $path => $id) {
+            $countSlash = substr_count($path, '/');
+            if ($countSlash === 1) {
+                $tree[$id] = compact('id');
+                continue;
+            }
+
+            $parentPath = substr($path, 0, strrpos($path, '/'));
+            $parentId = $paths[$parentPath];
+            if (!empty($parentId)) {
+                $this->pushIntoTree($tree, $parentId, $id, 'subfolders');
+            }
+        }
+
+        return compact('tree', 'folders');
+    }
+
+    /**
+     * Push child into tree, searching parent inside the tree structure.
+     *
+     * @param array $tree The tree.
+     * @param string $searchParentId The parent ID.
+     * @param string $childId The child ID.
+     * @param string $subtreeKey The subtree key.
+     * @return bool
+     */
+    public function pushIntoTree(array &$tree, string $searchParentId, string $childId, string $subtreeKey): bool
+    {
+        if (Hash::check($tree, $searchParentId)) {
+            $tree[$searchParentId][$subtreeKey][$childId] = ['id' => $childId];
+
+            return true;
+        }
+        foreach ($tree as &$node) {
+            $subtree = (array)Hash::get($node, $subtreeKey);
+            if (empty($subtree)) {
+                continue;
+            }
+            if ($this->pushIntoTree($subtree, $searchParentId, $childId, $subtreeKey)) {
+                $node[$subtreeKey] = $subtree;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Fetch tree data from API.
      * Retrieve minimal data for folders: id, status, title.
      * Return data and meta (no links, no included).
@@ -344,9 +501,12 @@ class TreeController extends AppController
             'type' => (string)Hash::get($fullData, 'type'),
             'attributes' => [
                 'title' => (string)Hash::get($fullData, 'attributes.title'),
+                'uname' => (string)Hash::get($fullData, 'attributes.uname'),
+                'lang' => (string)Hash::get($fullData, 'attributes.lang'),
                 'status' => (string)Hash::get($fullData, 'attributes.status'),
             ],
             'meta' => [
+                'modified' => (string)Hash::get($fullData, 'meta.modified'),
                 'path' => (string)Hash::get($fullData, 'meta.path'),
                 'slug_path' => (array)Hash::get($fullData, 'meta.slug_path'),
                 'slug_path_compact' => $this->slugPathCompact((array)Hash::get($fullData, 'meta.slug_path')),
