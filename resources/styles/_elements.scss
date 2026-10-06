@@ -350,3 +350,54 @@ nav.pagination {
     right: 6px;
     font-size: 11px;
 }
+
+// fullcalendar
+.fc {
+    .fc-list-day-cushion {
+        background-color: #154362 !important;
+    }
+    .fc-list-event:hover td {
+        background-color: #5389ae !important;
+    }
+}
+:root {
+    --fc-small-font-size: .75em;
+    --fc-highlight-color: #bcd6f14d;
+    --fc-today-bg-color: #002732;
+    --fc-event-bg-color: #4871ed;
+}
+.fc-toolbar-chunk .fc-datePicker-button input[type="month"],
+.fc-toolbar-chunk .fc-datePicker-button input[type="date"] {
+    background: #fff !important;
+    color: #222 !important;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: none !important;
+    padding: 2px 6px;
+    font-size: 1em;
+    outline: none;
+    margin: 0 4px;
+    min-width: 120px;
+    height: 2em;
+}
+.fc-toolbar-chunk .fc-datePicker-button input[type="month"]:focus,
+.fc-toolbar-chunk .fc-datePicker-button input[type="date"]:focus {
+    border-color: #888;
+}
+.fc-toolbar-chunk .fc-datePicker-button {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+.fc-toolbar-chunk .fc-datePicker-button,
+.fc-toolbar-chunk .fc-datePicker-button.fc-button {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    min-width: 0 !important;
+    height: auto !important;
+    display: flex;
+    align-items: center;
+    cursor: default;
+}
