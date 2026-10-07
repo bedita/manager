@@ -86,7 +86,7 @@
             {# RELATED OBJECTS #}
             <div class="ml-05 mb-1" v-if="loading">{{ __('Loading ...') }}</div>
             <div class="ml-05 mb-1" v-if="!loading && objects.length === 0" v-if="addedRelations.length == 0">{{ __('No items found') }}</div>
-            <div class="related-objects mb-1" v-show="objects.length || addedRelations.length">
+            <div class="related-objects mb-1" :class="{ 'is-data-list': dataList }" v-show="objects.length || addedRelations.length">
                 <div :data-list="dataList" class="columns" {%- if dragAndDrop %}droppable sortable{%- endif %}>
                     <div
                         class="related-item-column column is-3 is-one-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-sixth-fullhd"
