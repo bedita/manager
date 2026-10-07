@@ -1,5 +1,15 @@
 .relation-view {
     .related-list-container {
+        // list rows can't shrink below their content: scroll instead of spilling over the side column
+        .related-objects.is-data-list {
+            overflow-x: auto;
+
+            > .columns {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+
         .columns {
             &.isLoading {
                 opacity: .2;
@@ -169,6 +179,11 @@
         &.unselectable {
             pointer-events: none;
             opacity: .4;
+        }
+
+        header h3 {
+            min-width: 17em;
+            word-break: break-word;
         }
 
         header h1 {
