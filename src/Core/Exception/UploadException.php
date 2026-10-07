@@ -42,8 +42,8 @@ class UploadException extends CakeException
      */
     public function __construct(?string $message, int $code, $previous = null)
     {
-        $message = $this->codeToMessage($code);
-        parent::__construct($message, $code, $previous);
+        $msg = $message != null ? $message : $this->codeToMessage($code);
+        parent::__construct($msg, $code, $previous);
     }
 
     /**
