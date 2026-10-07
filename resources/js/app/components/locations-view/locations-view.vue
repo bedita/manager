@@ -1,7 +1,5 @@
 <template>
     <div class="locations">
-        <input type="hidden" :name="'relations[' + relationName + '][addRelated]'" :value="addRelatedData" />
-        <input type="hidden" :name="'relations[' + relationName + '][removeRelated]'" :value="removeRelatedData" />
         <div v-if="!locations" class="is-loading-spinner"></div>
         <div v-else v-for="(location, index) in locations">
             <location-view
@@ -157,6 +155,18 @@ export default {
 
             return JSON.stringify(removed);
         },
-    }
+        relatedData() {
+            return {
+                addRelated: this.addRelatedData,
+                removeRelated: this.removeRelatedData,
+            };
+        },
+    },
+
+    watch: {
+        relatedData(data) {
+            this.$emit('update-related', data);
+        },
+    },
 }
 </script>
