@@ -558,6 +558,7 @@ class ModulesComponent extends Component
         $type = $this->getController()->getRequest()->getParam('object_type');
         $rr = $relatedData;
         foreach ($rr as $method => $data) {
+            // $id is empty on new objects, so this fails with 404: forms must not send replaceRelated on create
             $actualRelated = (array)ApiClientProvider::getApiClient()->getRelated($id, $type, $data['relation']);
             $actualRelated = (array)Hash::get($actualRelated, 'data');
             $actualRelated = RelationsTools::toString($actualRelated);
@@ -801,7 +802,7 @@ class ModulesComponent extends Component
             $relatedObjects[] = [
                 'id' => Hash::get($response, 'data.id'),
                 'type' => Hash::get($response, 'data.type'),
-                'meta' => (array)Hash::get($response, 'data.meta'),
+                'meta' => (array)Hash::get($response, 'data.meta'), // object meta, not relation: form params (e.g. location zoom) are lost on create
             ];
         }
 
