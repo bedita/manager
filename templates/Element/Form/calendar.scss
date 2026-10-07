@@ -6,19 +6,30 @@
     margin-bottom: variables.$gutter;
 
     .date-ranges-item {
-        display: grid;
-        grid-template-columns: 250px 250px 1fr 1fr 1fr;
+        display: flex;
+        flex-wrap: wrap;
         gap: variables.$gutter;
         margin-bottom: variables.$gutter * .5;
         align-items: flex-end;
 
+        >div:nth-child(-n + 2) {
+            flex: 0 1 250px;
+            min-width: 0;
+
+            input {
+                max-width: 100%;
+            }
+        }
+
         .weekdays {
-            grid-column-start: 1;
-            grid-column-gap: variables.$gutter * .5;
-            grid-column-end: 5;
+            display: flex;
+            flex-wrap: wrap;
+            flex: 0 1 100%;
+            min-width: 0;
+            gap: variables.$gutter * .5;
 
             label {
-                display: inline !important;
+                display: inline-flex !important;
             }
         }
     }
