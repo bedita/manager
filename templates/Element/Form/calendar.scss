@@ -3,13 +3,13 @@
 .date-ranges-list {
     display: flex;
     flex-direction: column;
-    margin-bottom: $gutter;
+    margin-bottom: variables.$gutter;
 
     .date-ranges-item {
         display: flex;
         flex-wrap: wrap;
-        gap: $gutter;
-        margin-bottom: $gutter * .5;
+        gap: variables.$gutter;
+        margin-bottom: variables.$gutter * .5;
         align-items: flex-end;
 
         >div:nth-child(-n + 2) {
@@ -26,7 +26,7 @@
             flex-wrap: wrap;
             flex: 0 1 100%;
             min-width: 0;
-            gap: $gutter * .5;
+            gap: variables.$gutter * .5;
 
             label {
                 display: inline-flex !important;
