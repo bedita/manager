@@ -158,6 +158,132 @@
 }
 
 // related item (relate-item-twig)
+.relation-view .related-list-container,
+.main-panel-container .relations-add {
+    container: related-items / inline-size;
+
+    .columns[data-list='true'] {
+        display: block;
+        min-width: 0;
+        width: 100%;
+
+        .related-item-column {
+            display: block;
+            min-width: 0;
+
+            .box {
+                align-items: center;
+                min-width: 0;
+
+                .box-body {
+                    align-items: center;
+                    flex: 1 1 0;
+                    min-width: 0;
+
+                    > div {
+                        flex-wrap: wrap;
+                        gap: .25rem;
+                        min-width: 0;
+                    }
+
+                    .related-identifiers {
+                        flex-shrink: 0;
+                    }
+
+                    header {
+                        align-items: center;
+                        flex: 1 1 8rem;
+                        min-width: 0;
+                        width: auto;
+
+                        > div {
+                            min-width: 0;
+                            width: 100%;
+                        }
+
+                        .title {
+                            min-width: 0;
+                            padding-bottom: 0;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
+
+            footer {
+                flex-shrink: 0;
+            }
+        }
+    }
+}
+
+.related-item {
+    min-width: 0;
+
+    .box-body,
+    header,
+    header > div {
+        min-width: 0;
+    }
+
+    .title {
+        overflow-wrap: anywhere;
+        padding-bottom: 7px;
+    }
+
+    footer {
+        flex-wrap: wrap;
+        gap: .25rem;
+    }
+}
+
+@container related-items (max-width: 60rem) {
+    .related-item footer .related-button-label {
+        display: none;
+    }
+}
+
+@container related-items (max-width: 55rem) {
+    .columns[data-list='true'] .related-item .box-body .status {
+        display: none;
+    }
+}
+
+@container related-items (max-width: 50rem) {
+    .columns[data-list='true'] .related-item .box-body .related-type {
+        display: none;
+    }
+}
+
+@container related-items (max-width: 45rem) {
+    .related-item .box-body .related-identifiers {
+        display: none;
+    }
+}
+
+@container related-items (max-width: 30rem) {
+    .columns[data-list='true'] .related-item-column .box {
+        flex-wrap: wrap;
+
+        .box-body {
+            flex-basis: 100%;
+            flex-wrap: wrap;
+            margin-left: 0;
+        }
+
+        .params {
+            width: 100%;
+            overflow-wrap: anywhere;
+        }
+
+        footer {
+            margin-left: auto;
+        }
+    }
+}
+
 .related-item-column {
     &.sorting {
         opacity: 0.2;
