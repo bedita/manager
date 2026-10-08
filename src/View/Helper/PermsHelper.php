@@ -47,7 +47,7 @@ class PermsHelper extends Helper
      *
      * Init API and WebAPP base URL
      *
-     * @return  void
+     * @return void
      */
     public function initialize(array $config): void
     {

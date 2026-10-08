@@ -13,7 +13,9 @@
 namespace App\Controller;
 
 use App\Core\Bulk\CustomBulkActionInterface;
+use App\Event\TreeCacheEventHandler;
 use BEdita\SDK\BEditaClientException;
+use Cake\Cache\Cache;
 use Cake\Core\App;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
@@ -186,6 +188,7 @@ class BulkController extends AppController
         } else { // move
             $this->moveToPosition($folder);
         }
+        Cache::clearGroup('tree', TreeCacheEventHandler::CACHE_CONFIG);
         $this->showResult();
 
         return $this->modulesListRedirect();

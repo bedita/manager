@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-10-05 13:00:57 \n"
+"POT-Creation-Date: 2026-10-06 14:36:36 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1097,8 +1097,8 @@ msgid ""
 "We're currently performing some updates to improve your experience. We'll be "
 "back shortly!"
 msgstr ""
-"Stiamo attualmente eseguendo alcuni aggiornamenti per migliorare la tua esperienza. "
-"Torneremo a breve!"
+"Stiamo attualmente eseguendo alcuni aggiornamenti per migliorare la tua "
+"esperienza. Torneremo a breve!"
 
 msgid "Website"
 msgstr "Sito Web"
@@ -2094,6 +2094,27 @@ msgstr "Errore durante l'eliminazione della categoria"
 msgid "Create new"
 msgstr "Crea nuovo"
 
+msgid "Copy"
+msgstr "Copia"
+
+msgid "Copy to folder"
+msgstr "Copia nella cartella"
+
+msgid "Move"
+msgstr "Sposta"
+
+msgid "Move to folder"
+msgstr "Sposta nella cartella"
+
+msgid "Set status \"draft\""
+msgstr "Imposta stato \"draft\""
+
+msgid "Set status \"off\""
+msgstr "Imposta stato \"off\""
+
+msgid "Set status \"on\""
+msgstr "Imposta stato \"on\""
+
 msgid "All statuses"
 msgstr "Tutti gli stati"
 
@@ -2102,9 +2123,6 @@ msgstr "Creato il"
 
 msgid "Completed"
 msgstr "Completato"
-
-msgid "Copy"
-msgstr "Copia"
 
 msgid "Expires"
 msgstr "Scade il"
