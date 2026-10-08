@@ -12,7 +12,7 @@
     {% set positionInUse = children and object.attributes.children_order in [null, 'position', '-position'] %}
 {% endif %}
 
-<article class="box"
+<article class="box related-item"
     {%- if add %}
         :class="selectClasses(related)"
         @click="toggle(related, $event)"
@@ -57,10 +57,10 @@
                 <span class="tag is-dark"><: related.attributes.lang :></span>
             {% else %}
                 <template v-if="dataList">
-                    <span class="tag ml-2" v-bind:class="'has-background-module-' + related.type" style="min-width: 7em;"><: related.type :></span>
+                    <span class="tag related-type ml-2" v-bind:class="'has-background-module-' + related.type" style="min-width: 7em;"><: related.type :></span>
                 </template>
                 <template v-else>
-                    <span class="tag" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
+                    <span class="tag related-type" v-bind:class="'has-background-module-' + related.type"><: related.type :></span>
                 </template>
 
                 <span class="icon-calendar-check-o" v-title="datesInfo(related)"></span>
@@ -69,7 +69,7 @@
 
         </div>
 
-        <div class="is-flex space-between align-center">
+        <div class="related-identifiers is-flex space-between align-center">
             <clipboard-item label="ID" :text="related.id"></clipboard-item>
             <clipboard-item label="uname" :text="related.attributes.uname"></clipboard-item>
         </div>
@@ -77,7 +77,7 @@
         <header class="is-flex space-between mt-05">
             <div>
 
-                <h3 class="title m-0 has-text-size-small" style="min-width: 17em; padding-bottom: 7px;">
+                <h3 class="title m-0 has-text-size-small">
                     {% if translation %}
                         <span v-html="truncate(related.attributes.translated_fields.title, 100)" :title=" related.attributes.translated_fields.title" v-if=" related.attributes.translated_fields && related.attributes.translated_fields.title ">
                         </span>
@@ -179,56 +179,59 @@
     {% if Perms.canSave() %}
     <footer class="is-flex mt-05 p-05" :class="{ 'last-child-auto': !dataList }">
         {% if stage %}
-            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank">
+            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" title="{{ __('Edit') }}" aria-label="{{ __('Edit') }}">
                 <app-icon icon="carbon:launch"></app-icon>
-                <span class="ml-05">{{ __('Edit') }}</span>
+                <span class="related-button-label ml-05">{{ __('Edit') }}</span>
             </a>
             {% if not readonly %}
-            <a class="button button-outlined-white is-small" @click.prevent="removeAddedRelations(related.id)">
+            <a class="button button-outlined-white is-small" @click.prevent="removeAddedRelations(related.id)" title="{{ __('Remove') }}" aria-label="{{ __('Remove') }}">
                 <app-icon icon="carbon:trash-can"></app-icon>
-                <span class="ml-05">{{ __('Remove') }}</span>
+                <span class="related-button-label ml-05">{{ __('Remove') }}</span>
             </a>
             {% endif %}
 
         {% elseif add %}
             <button class="is-small has-font-weight-bold mr-1"
-                v-html="(selectedObjects.indexOf(related) !== -1)? '{{ __('Discard') }}' : '{{ __('Pick') }}'"
-                :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check button-secondary' : 'button-outlined-white button-text icon-check-empty'"></button>
+                :title="(selectedObjects.indexOf(related) !== -1)? '{{ __('Discard') }}' : '{{ __('Pick') }}'"
+                :aria-label="(selectedObjects.indexOf(related) !== -1)? '{{ __('Discard') }}' : '{{ __('Pick') }}'"
+                :class="(selectedObjects.indexOf(related) !== -1)? 'icon-check button-secondary' : 'button-outlined-white button-text icon-check-empty'">
+                <span class="related-button-label" v-text="(selectedObjects.indexOf(related) !== -1)? '{{ __('Discard') }}' : '{{ __('Pick') }}'"></span>
+            </button>
             <object-info :object-data="related"></object-info>
-            <a class="button button-outlined-white is-small" @click.stop :href="$helpers.buildViewUrl(related.id)" target="_blank">
+            <a class="button button-outlined-white is-small" @click.stop :href="$helpers.buildViewUrl(related.id)" target="_blank" title="{{ __('Open') }}" aria-label="{{ __('Open') }}">
                 <app-icon icon="carbon:launch"></app-icon>
-                <span class="ml-05">{{ __('Open') }}</span>
+                <span class="related-button-label ml-05">{{ __('Open') }}</span>
             </a>
 
         {% elseif translation %}
             {% set baseUrl= Url.build({ '_name': 'translations:edit', 'object_type': object.type, 'id': object.id, 'lang': ''}, {'fullBase': true}) %}
-            <a class="button button-outlined-white is-small mr-1" :href="`{{ baseUrl }}${related.attributes.lang}`" target="_blank">
+            <a class="button button-outlined-white is-small mr-1" :href="`{{ baseUrl }}${related.attributes.lang}`" target="_blank" title="{{ __('Open') }}" aria-label="{{ __('Open') }}">
                 <app-icon icon="carbon:launch"></app-icon>
-                <span class="ml-05">{{ __('Open') }}</span>
+                <span class="related-button-label ml-05">{{ __('Open') }}</span>
             </a>
-            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-if="containsId(removedRelated, related.id)">
+            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-if="containsId(removedRelated, related.id)" title="{{ __('undo remove') }}" aria-label="{{ __('undo remove') }}">
                 <app-icon icon="carbon:undo"></app-icon>
-                <span class="ml-05">{{ __('undo remove') }}</span>
+                <span class="related-button-label ml-05">{{ __('undo remove') }}</span>
             </a>
-            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-else>
+            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-else title="{{ __('remove') }}" aria-label="{{ __('remove') }}">
                 <app-icon icon="carbon:unlink"></app-icon>
-                <span class="ml-05">{{ __('remove') }}</span>
+                <span class="related-button-label ml-05">{{ __('remove') }}</span>
             </a>
 
         {% else %}
             <object-info :object-data="related"></object-info>
-            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)">
+            <a class="button button-outlined-white is-small mr-1" :href="$helpers.buildViewUrl(related.id)" target="_blank" v-show="moduleAvailable(related.type)" title="{{ __('Edit') }}" aria-label="{{ __('Edit') }}">
                 <app-icon icon="carbon:launch"></app-icon>
-                <span class="ml-05">{{ __('Edit') }}</span>
+                <span class="related-button-label ml-05">{{ __('Edit') }}</span>
             </a>
             {% if not readonly %}
-            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-if="containsId(removedRelated, related.id)">
+            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-if="containsId(removedRelated, related.id)" title="{{ __('undo') }}" aria-label="{{ __('undo') }}">
                 <app-icon icon="carbon:undo"></app-icon>
-                <span class="ml-05">{{ __('undo') }}</span>
+                <span class="related-button-label ml-05">{{ __('undo') }}</span>
             </a>
-            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-else>
+            <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-else title="{{ __('remove') }}" aria-label="{{ __('remove') }}">
                 <app-icon icon="carbon:unlink"></app-icon>
-                <span class="ml-05">{{ __('remove') }}</span>
+                <span class="related-button-label ml-05">{{ __('remove') }}</span>
             </a>
             {% endif %}
         {% endif %}
