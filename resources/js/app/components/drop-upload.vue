@@ -313,7 +313,9 @@ export default {
 </script>
 <style scoped>
 div.drop-upload {
-    min-width: 800px;
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
     max-width: 1000px;
 }
 </style>
