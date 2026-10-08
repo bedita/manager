@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-10-06 14:36:36 \n"
+"POT-Creation-Date: 2026-10-08 13:52:04 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1766,6 +1766,12 @@ msgstr "Attività"
 msgid "Changed"
 msgstr "Cambiamento"
 
+msgid "Deleted"
+msgstr "Eliminato"
+
+msgid "Loading"
+msgstr "Caricamento in corso"
+
 msgid "No activity found"
 msgstr "Nessuna attività"
 
@@ -1773,7 +1779,7 @@ msgid "Your recent activity"
 msgstr "La tua attività recente"
 
 msgid "Title or #id uname"
-msgstr "Titolo o #id nome univoco"
+msgstr "Titolo o #id univoco"
 
 msgid "(deleted)"
 msgstr "(eliminato)"
@@ -1868,9 +1874,6 @@ msgstr "Parametri"
 
 msgid "Valid"
 msgstr "Valido"
-
-msgid "Loading"
-msgstr "Caricamento in corso"
 
 msgid "Module"
 msgstr ""
