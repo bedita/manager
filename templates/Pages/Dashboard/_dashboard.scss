@@ -247,12 +247,4 @@ body.view-dashboard {
     }
 
 
-    .dashboard-area {
-        @media (min-width: 1280px) {
-            grid-template-columns: (variables.$dashboard-item-width * 4 + variables.$gutter * 3) auto;
-            display:grid;
-            grid-gap: variables.$gutter;
-        }
-    }
-
 }
