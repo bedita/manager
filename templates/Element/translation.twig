@@ -44,6 +44,7 @@
                                         }
                                     }) %}
                                 {% endfor %}
+                            {% if Perms.canSave('translations') %}
                             <div>
                                 <div class="input">
                                     <label>{{ __('Auto-translate all fields') }}</label>
@@ -53,6 +54,7 @@
                                     </a>
                                 </div>
                             </div>
+                            {% endif %}
                             {% endif %}
                         </div>
                     </div>
@@ -86,6 +88,7 @@
                     <div class="column">
                         {{ Property.translationControl(key, translation.attributes.translated_fields[key], {'ref': key})|raw }}
 
+                        {% if Perms.canSave('translations') %}
                         {# automatic translate button #}
                         {% if config('Translators') %}
                             {% set translationParams = {
@@ -98,6 +101,7 @@
                                 <app-icon icon="carbon:translate"></app-icon>
                                 <span class="ml-05 has-text-size-smallest">{{ __('Auto-translate') }} {{ key }}</span>
                             </button>
+                        {% endif %}
                         {% endif %}
                     </div>
                     <div class="column">
@@ -129,9 +133,11 @@
             {% endif %}
 
             {# Append "Save" to sidebar #}
+            {% if Perm.canSave('translations') %}
             {% do _view.append('app-module-buttons',
                 '<button form="form-translate" class="button button-primary button-primary-hover-module-' ~ currentModule.name ~ ' is-width-auto" onclick="this.classList.add(\'is-loading-spinner\')"><app-icon icon="carbon:save"></app-icon><span class="ml-05">' ~ __('Save') ~ '</span></button>'
             ) %}
+            {% endif %}
 
         {{ Form.end()|raw }}
 
@@ -142,10 +148,12 @@
                 {{ Form.hidden('lang', {'value': translation.attributes.lang})|raw }}
             {{ Form.end()|raw }}
             {# Append "Remove" to sidebar #}
+            {% if Perm.canDelete('translations') %}
             {% do _view.append(
                 'app-module-buttons',
                 '<button form="form-delete-translation" class="button button-outlined button-outlined-hover-module-' ~ currentModule.name ~ ' is-width-auto"><app-icon icon="carbon:trash-can"></app-icon><span class="ml-05">' ~ __('Remove') ~ '</span></button>'
             ) %}
+            {% endif %}
         {% endif %}
 
     </div>
