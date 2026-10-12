@@ -84,7 +84,6 @@ class PasswordControllerTest extends TestCase
         }
         // set $this->Password->apiClient
         $property = new ReflectionProperty(PasswordController::class, 'apiClient');
-        $property->setAccessible(true);
         $property->setValue($this->Password, $this->client);
     }
 

@@ -1,6 +1,8 @@
 <?php
 namespace App\Test\Utils;
 
+use App\Controller\Component\ModulesComponent;
+use App\Controller\Component\SchemaComponent;
 use App\Controller\ModulesController;
 use BEdita\SDK\BEditaClient;
 
@@ -12,6 +14,20 @@ use BEdita\SDK\BEditaClient;
 class ModulesControllerSample extends ModulesController
 {
     public ?BEditaClient $apiClient;
+
+    public SchemaComponent $Schema;
+
+    public ModulesComponent $Modules;
+
+    /**
+     * @inheritDoc
+     */
+    public function initialize(): void
+    {
+        $this->Schema = new SchemaComponent($this->components());
+        $this->Modules = new ModulesComponent($this->components());
+        parent::initialize();
+    }
 
     /**
      * Public version of parent function (protected) descendants

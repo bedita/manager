@@ -95,11 +95,11 @@ class TrashController extends AppController
     /**
      * View single deleted resource.
      *
-     * @param mixed $id Resource ID.
+     * @param string|int $id Resource ID.
      * @return \Cake\Http\Response|null
      * @codeCoverageIgnore
      */
-    public function view(mixed $id): ?Response
+    public function view(string|int $id): ?Response
     {
         $this->getRequest()->allowMethod(['get']);
 

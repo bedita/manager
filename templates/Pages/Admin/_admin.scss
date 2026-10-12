@@ -11,9 +11,62 @@ body.view-admin {
         font-weight: bold;
         color: white;
     }
+    // shrink to content: full width spreads columns apart on large screens
+    .module-index .table-container .list-objects {
+        min-width: 0;
+    }
     .table-row {
         &.new-record > * {
             padding-top: calc(variables.$gutter * 4) !important;
+        }
+
+        // fixed width: json editor otherwise grows with its longest line
+        > .json-cell {
+            white-space: normal;
+
+            .jsoneditor-container {
+                width: clamp(300px, 40vw, 600px);
+            }
+        }
+    }
+    // header and table share the content width, so pagination aligns with the table right edge
+    .admin-index-content {
+        width: fit-content;
+        max-width: 100%;
+    }
+    .filter-box {
+        align-items: center;
+        gap: variables.$gutter;
+    }
+    .admin-filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: calc(variables.$gutter * .5);
+
+        > * {
+            margin: 0 !important;
+        }
+
+        .user-filter {
+            position: relative;
+        }
+
+        .user-filter-autocomplete-results {
+            background-color: white;
+            border: 1px solid variables.$gray-500;
+            max-height: 15em;
+            overflow: auto;
+            margin: 0;
+            padding: 0;
+            z-index: 1;
+
+            li {
+                list-style-type: none;
+                color: variables.$defaultBackground;
+                padding: calc(variables.$gutter * .25) calc(variables.$gutter * .5);
+                border-bottom: 1px solid variables.$gray-500;
+            }
         }
     }
 }

@@ -47,4 +47,16 @@ class ApplicationsController extends AdministrationBaseController
      * @inheritDoc
      */
     protected ?string $sortBy = 'name';
+
+    /**
+     * @inheritDoc
+     */
+    protected bool $paginated = true;
+
+    /**
+     * @inheritDoc
+     */
+    protected array $filters = [
+        'name' => 'string',
+    ];
 }

@@ -28,7 +28,10 @@ class CourtesyPageController extends Controller
      */
     public function index(): ?Response
     {
-        $message = Configure::read('Maintenance.message');
+        $message = Configure::read(
+            'Maintenance.message',
+            __('We\'re currently performing some updates to improve your experience. We\'ll be back shortly!'),
+        );
         $this->set(compact('message'));
 
         return null;

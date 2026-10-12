@@ -93,7 +93,7 @@ class AppController extends Controller
     /**
      * @inheritDoc
      */
-    public function beforeFilter(EventInterface $event): ?Response
+    public function beforeFilter(EventInterface $event): void
     {
         /** @var \Authentication\Identity|null $identity */
         $identity = $this->Authentication->getIdentity();
@@ -101,12 +101,12 @@ class AppController extends Controller
             $route = $this->loginRedirectRoute();
             $this->Flash->error(__('Login required'));
 
-            return $this->redirect($route);
+            $event->setResult($this->redirect($route));
+
+            return;
         }
         $this->setupOutputTimezone();
         $this->FormProtection->setConfig('blackHoleCallback', 'blackhole');
-
-        return null;
     }
 
     /**

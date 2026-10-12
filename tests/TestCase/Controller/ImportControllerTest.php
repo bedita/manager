@@ -158,7 +158,6 @@ class ImportControllerTest extends TestCase
         };
         $reflectionClass = new ReflectionClass($import);
         $method = $reflectionClass->getMethod('loadFilters');
-        $method->setAccessible(true);
         $method->invokeArgs($import, []);
         static::assertTrue(is_array($import->viewBuilder()->getVar('filters')));
         $expected = [
@@ -193,10 +192,8 @@ class ImportControllerTest extends TestCase
         };
         $reflectionClass = new ReflectionClass($import);
         $method = $reflectionClass->getMethod('updateServiceList');
-        $method->setAccessible(true);
         $method->invokeArgs($import, ['App\Test\Utils\ImportFilterSample']);
         $property = $reflectionClass->getProperty('services');
-        $property->setAccessible(true);
         $actual = $property->getValue($import);
         $expected = ['ImportFilterSampleService'];
         static::assertEquals($expected, $actual);
@@ -221,7 +218,6 @@ class ImportControllerTest extends TestCase
         };
         $reflectionClass = new ReflectionClass($import);
         $method = $reflectionClass->getMethod('loadAsyncJobs');
-        $method->setAccessible(true);
         $method->invokeArgs($import, []);
         $actual = $import->viewBuilder()->getVar('jobs');
         $expected = [];
@@ -229,7 +225,6 @@ class ImportControllerTest extends TestCase
 
         // api call with exception
         $property = $reflectionClass->getProperty('services');
-        $property->setAccessible(true);
         $property->setValue($import, ['dummy']);
         $apiClient = $this->getMockBuilder(BEditaClient::class)
             ->setConstructorArgs(['https://media.example.com'])
@@ -328,7 +323,6 @@ class ImportControllerTest extends TestCase
         };
         $reflectionClass = new ReflectionClass($import);
         $method = $reflectionClass->getMethod('uploadErrorMessage');
-        $method->setAccessible(true);
         $errors = [
             UPLOAD_ERR_INI_SIZE => __('File is too big, max allowed size is {0}', ini_get('upload_max_filesize')),
             UPLOAD_ERR_FORM_SIZE => __('File is too big, form MAX_FILE_SIZE exceeded'),

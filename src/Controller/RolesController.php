@@ -30,14 +30,12 @@ class RolesController extends AppController
     /**
      * @inheritDoc
      */
-    public function beforeFilter(EventInterface $event): ?Response
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         if (!$this->allowed()) {
             throw new UnauthorizedException(__('You are not authorized to access this resource'));
         }
-
-        return null;
     }
 
     /**

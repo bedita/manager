@@ -24,7 +24,6 @@ use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventInterface;
-use Cake\Http\Client\Response;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\I18n\I18n;
@@ -92,15 +91,13 @@ class ModulesComponent extends Component
     /**
      * @inheritDoc
      */
-    public function beforeFilter(EventInterface $event): ?Response
+    public function beforeFilter(EventInterface $event): void
     {
         /** @var \Authentication\Identity|null $user */
         $user = $this->Authentication->getIdentity();
         if (!empty($user)) {
             $this->getController()->set('modules', $this->getModules());
         }
-
-        return null;
     }
 
     /**
@@ -183,12 +180,19 @@ class ModulesComponent extends Component
      */
     public function translationsEnabled(array $types): bool
     {
-        foreach ($types as $objectType) {
-            $schema = (array)$this->Schema->getSchema($objectType);
-            $translatable = (array)Hash::get($schema, 'translatable');
-            if (count($translatable) > 0) {
-                return true;
+        $internalSchema = $this->Schema->getConfig('internalSchema');
+        $this->Schema->setConfig('internalSchema', false);
+
+        try {
+            foreach ($types as $objectType) {
+                $schema = (array)$this->Schema->getSchema($objectType);
+                $translatable = (array)Hash::get($schema, 'translatable');
+                if (count($translatable) > 0) {
+                    return true;
+                }
             }
+        } finally {
+            $this->Schema->setConfig('internalSchema', $internalSchema);
         }
 
         return false;
@@ -554,6 +558,7 @@ class ModulesComponent extends Component
         $type = $this->getController()->getRequest()->getParam('object_type');
         $rr = $relatedData;
         foreach ($rr as $method => $data) {
+            // $id is empty on new objects, so this fails with 404: forms must not send replaceRelated on create
             $actualRelated = (array)ApiClientProvider::getApiClient()->getRelated($id, $type, $data['relation']);
             $actualRelated = (array)Hash::get($actualRelated, 'data');
             $actualRelated = RelationsTools::toString($actualRelated);
@@ -797,7 +802,7 @@ class ModulesComponent extends Component
             $relatedObjects[] = [
                 'id' => Hash::get($response, 'data.id'),
                 'type' => Hash::get($response, 'data.type'),
-                'meta' => (array)Hash::get($response, 'data.meta'),
+                'meta' => (array)Hash::get($response, 'data.meta'), // object meta, not relation: form params (e.g. location zoom) are lost on create
             ];
         }
 

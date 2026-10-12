@@ -73,9 +73,9 @@ class AsyncJobsController extends AdministrationBaseController
             'page_size' => $this->getRequest()->getQuery('page_size', 100),
             'sort' => $this->getRequest()->getQuery('sort', '-created'),
         ];
-        $service = $this->getRequest()->getQuery('service');
-        if (!empty($service)) {
-            $query['filter'] = ['service' => $service];
+        $filter = $this->getRequest()->getQuery('filter');
+        if (!empty($filter)) {
+            $query['filter'] = $filter;
         }
         try {
             $response = $this->apiClient->get('/async_jobs', $query);

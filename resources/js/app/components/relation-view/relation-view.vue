@@ -690,6 +690,18 @@ export default {
             }));
         },
 
+        /**
+         * Set serialized relations to add and remove, used by custom relation elements
+         *
+         * @param {Object} data Serialized `addRelated` and `removeRelated` json arrays
+         *
+         * @returns {void}
+         */
+        setRelatedData({ addRelated = '[]', removeRelated = '[]' }) {
+            this.addedRelationsData = addRelated;
+            this.removedRelationsData = removeRelated;
+        },
+
         parseStringArray(inputString) {
             let result = [];
             try {

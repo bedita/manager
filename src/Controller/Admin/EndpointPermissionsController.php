@@ -46,6 +46,20 @@ class EndpointPermissionsController extends AdministrationBaseController
     ];
 
     /**
+     * @inheritDoc
+     */
+    protected bool $paginated = true;
+
+    /**
+     * @inheritDoc
+     */
+    protected array $filters = [
+        'endpoint_id' => 'endpoints',
+        'application_id' => 'applications',
+        'role_id' => 'roles',
+    ];
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null
@@ -53,20 +67,26 @@ class EndpointPermissionsController extends AdministrationBaseController
     public function index(): ?Response
     {
         parent::index();
-        $applications = $this->apiClient->get('/admin/applications', []);
-        $applications = Hash::combine((array)$applications, 'data.{n}.id', 'data.{n}.attributes.name');
-        $applications['-'] = '-';
-        $this->set('applications', $applications);
-        $endpoints = $this->apiClient->get('/admin/endpoints', []);
-        $endpoints = Hash::combine((array)$endpoints, 'data.{n}.id', 'data.{n}.attributes.name');
-        $endpoints['-'] = '-';
-        $this->set('endpoints', $endpoints);
-        $roles = $this->apiClient->get('/roles', []);
-        $roles = Hash::combine((array)$roles, 'data.{n}.id', 'data.{n}.attributes.name');
-        $roles['-'] = '-';
-        $this->set('roles', $roles);
+        $this->set('applications', $this->comboOptions('/admin/applications'));
+        $this->set('endpoints', $this->comboOptions('/admin/endpoints'));
+        $this->set('roles', $this->comboOptions('/roles'));
 
         return null;
+    }
+
+    /**
+     * Get `id => name` options from endpoint, sorted by name, with leading `-` (null) option.
+     *
+     * @param string $endpoint The API endpoint
+     * @return array
+     */
+    protected function comboOptions(string $endpoint): array
+    {
+        $response = $this->apiClient->get($endpoint, ['page_size' => 100]);
+        $options = Hash::combine((array)$response, 'data.{n}.id', 'data.{n}.attributes.name');
+        asort($options, SORT_NATURAL | SORT_FLAG_CASE);
+
+        return ['-' => '-'] + $options;
     }
 
     /**

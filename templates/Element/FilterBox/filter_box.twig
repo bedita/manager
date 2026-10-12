@@ -3,6 +3,8 @@
     <div>
         {{ element('FilterBox/filter_box_common', { showFilterSearchByType, hideFilterRelations }) }}
     </div>
+    {% elseif filterContent is defined and filterContent %}
+    <div>{{ filterContent|raw }}</div>
     {% endif %}
 
     <div class="pagination">

@@ -95,7 +95,8 @@ export default {
             } else {
                 this.$refs.checkAllCB.indeterminate = true;
             }
-            const selectedObjects = this.objectsList.filter((o) => val.includes(o.id));
+            const selectedIds = val.map(String);
+            const selectedObjects = this.objectsList.filter((o) => selectedIds.includes(String(o.id)));
             this.selectedObjects = JSON.stringify(selectedObjects);
         },
     },
@@ -148,6 +149,29 @@ export default {
             }
             event.target.classList.add('is-loading-spinner');
             document.querySelector(`form#${formId}`).submit();
+        },
+
+        submitBulkStatus({ status, event }) {
+            if (!['on', 'off', 'draft'].includes(status) || !document.getElementById('bulk-status')) {
+                return;
+            }
+            this.bulkValue = status;
+            this.$nextTick(() => this.bulkActions(event, 'bulk-status'));
+        },
+
+        submitPosition({ action, folderId }) {
+            if (!['copy', 'move'].includes(action) || !folderId) {
+                return;
+            }
+            const form = document.getElementById('bulk-folder');
+            const actionInput = form?.querySelector(`input[name="action"][value="${action}"]`);
+            const folderInput = form?.querySelector('input[name="folderSelected"]');
+            if (!form || !actionInput || !folderInput || !this.selectedRows.length) {
+                return;
+            }
+            actionInput.checked = true;
+            folderInput.value = folderId;
+            form.submit();
         },
 
         /**

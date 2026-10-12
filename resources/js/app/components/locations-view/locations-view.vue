@@ -46,6 +46,18 @@ export default {
         }
     },
 
+    computed: {
+        locationsData() {
+            return JSON.stringify(this.locations);
+        }
+    },
+
+    watch: {
+        relatedData(data) {
+            this.$emit('update-related', data);
+        },
+    },
+
     async created() {
         const requestUrl = `${window.location.href}/related/${this.relationName}`;
         // if url contains view/related, it means that request comes from new object page: ignore it
@@ -122,13 +134,14 @@ export default {
                     isChanged: true,
                 }
             }));
-        }
-    },
+        },
 
-    computed: {
-        locationsData() {
-            return JSON.stringify(this.locations);
-        }
-    }
+        relatedData() {
+            return {
+                addRelated: this.addRelatedData,
+                removeRelated: this.removeRelatedData,
+            };
+        },
+    },
 }
 </script>

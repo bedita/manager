@@ -422,12 +422,10 @@ class ExportControllerTest extends TestCase
 
         // set $this->Export->apiClient
         $property = new ReflectionProperty(ExportController::class, 'apiClient');
-        $property->setAccessible(true);
         $property->setValue($this->Export, $apiClient);
 
         $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('rows');
-        $method->setAccessible(true);
 
         $actual = $method->invokeArgs($this->Export, $arguments);
         static::assertEquals($expected, $actual);
@@ -480,7 +478,6 @@ class ExportControllerTest extends TestCase
     {
         $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('fillDataFromResponse');
-        $method->setAccessible(true);
         $data = [];
         $response = $input['response'];
         $fields = $input['fields'];
@@ -542,7 +539,6 @@ class ExportControllerTest extends TestCase
     {
         $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('getFieldNames');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, [$response]);
         static::assertEquals($expected, $actual);
     }
@@ -606,7 +602,6 @@ class ExportControllerTest extends TestCase
     {
         $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('rowFields');
-        $method->setAccessible(true);
         $data = $input['data'];
         $fields = $input['fields'];
         $row = $method->invokeArgs($this->Export, [&$data, $fields]);
@@ -644,7 +639,6 @@ class ExportControllerTest extends TestCase
     {
         $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('getValue');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, [ $input ]);
         static::assertEquals($expected, $actual);
     }
@@ -660,7 +654,6 @@ class ExportControllerTest extends TestCase
         $this->setLimit($expected);
         $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('limit');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, []);
         static::assertEquals($expected, $actual);
     }
@@ -770,7 +763,6 @@ class ExportControllerTest extends TestCase
         $this->Export->filter = $filter;
         $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('getRelatedFileName');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, [$id, $type, $relation, $format]);
         static::assertStringContainsString($expectedPrefix, $actual);
         static::assertStringContainsString($expectedExtension, $actual);
@@ -801,7 +793,6 @@ class ExportControllerTest extends TestCase
         );
         $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('prepareQuery');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, []);
         static::assertEquals(['filter' => ['status' => 'on'], 'q' => 'gustavo'], $actual);
 
@@ -821,7 +812,6 @@ class ExportControllerTest extends TestCase
         $this->Export->filter = ['filter' => ['type' => 'documents'], 'q' => 'needle'];
         $reflectionClass = new ReflectionClass($this->Export);
         $method = $reflectionClass->getMethod('prepareQuery');
-        $method->setAccessible(true);
         $actual = $method->invokeArgs($this->Export, []);
         static::assertEquals(['filter' => ['type' => 'documents'], 'q' => 'needle'], $actual);
     }

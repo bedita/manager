@@ -67,6 +67,7 @@ const _vueInstance = new Vue({
         ModelIndex: () => import(/* webpackChunkName: "model-index" */'app/pages/model/index'),
         ModelSchema: () => import(/* webpackChunkName: "model-schema" */'app/pages/model/schema.vue'),
         AdminIndex: () => import(/* webpackChunkName: "admin-index" */'app/pages/admin/index'),
+        UserFilter: () => import(/* webpackChunkName: "user-filter" */'app/components/user-filter/user-filter.vue'),
         AdminAppearance: () => import(/* webpackChunkName: "admin-appearance" */'app/pages/admin/appearance'),
         AdminStatistics: () => import(/* webpackChunkName: "admin-statistics" */'app/pages/admin/statistics'),
         RelationsAdd: () => import(/* webpackChunkName: "relations-add" */'app/components/relation-view/relations-add'),
@@ -116,6 +117,7 @@ const _vueInstance = new Vue({
         FieldString: () => import(/* webpackChunkName: "field-string" */'app/components/form/field-string'),
         FieldTextarea: () => import(/* webpackChunkName: "field-textarea" */'app/components/form/field-textarea'),
         FieldTitle: () => import(/* webpackChunkName: "field-title" */'app/components/form/field-title'),
+        BulkActionsBar: () => import(/* webpackChunkName: "bulk-actions-bar" */'app/components/bulk-actions-bar/bulk-actions-bar'),
         CalendarView: () => import(/* webpackChunkName: "calendar-view" */'app/components/calendar-view/calendar-view'),
         ComponentsPlayground: () => import(/* webpackChunkName: "components-playground" */'app/components/components-playground'),
         ObjectInfo: () => import(/* webpackChunkName: "object-info" */'app/components/object-info/object-info'),
@@ -633,6 +635,7 @@ window._vueInstance = _vueInstance;
 
 // use component everywhere in Manager
 Vue.component('AppIcon', AppIcon);
+Vue.component('BulkActionsBar', _vueInstance.$options.components.BulkActionsBar);
 Vue.component('CalendarView', _vueInstance.$options.components.CalendarView);
 Vue.component('ClipboardItem', _vueInstance.$options.components.ClipboardItem);
 Vue.component('DateRangesView', _vueInstance.$options.components.DateRangesView);
@@ -662,3 +665,4 @@ Vue.component('RibbonItem', _vueInstance.$options.components.RibbonItem);
 Vue.component('ViewChildrenParams', _vueInstance.$options.components.ViewChildrenParams);
 Vue.component('UploadedObject', _vueInstance.$options.components.UploadedObject);
 Vue.component('ObjectAnnotations', _vueInstance.$options.components.ObjectAnnotations);
+Vue.component('UserFilter', _vueInstance.$options.components.UserFilter);

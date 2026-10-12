@@ -1042,7 +1042,15 @@ class LayoutHelperTest extends TestCase
     {
         // non admin user
         $view = new View();
-        $layout = new LayoutHelper($view);
+        $layout = new class ($view) extends LayoutHelper {
+            public PermsHelper $Perms;
+
+            public function initialize(array $config): void
+            {
+                $this->Perms = new PermsHelper($this->getView());
+                parent::initialize($config);
+            }
+        };
         $actual = $layout->uiRicheditorConfig();
         static::assertIsArray($actual);
         static::assertEmpty($actual);
