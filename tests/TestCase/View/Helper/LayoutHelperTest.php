@@ -655,6 +655,7 @@ class LayoutHelperTest extends TestCase
             'modules' => ['documents' => [], 'images' => []],
             'uploadable' => ['images'],
             'relationsSchema' => ['whatever'],
+            'objectType' => 'documents',
         ];
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
