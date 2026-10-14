@@ -2,12 +2,12 @@
 
 @mixin responsive-index-columns($breakpoint, $keep-last) {
     @media (max-width: $breakpoint) {
-        .module-index .list-objects .table-header > *:not(:nth-last-child(-n+#{$keep-last})):nth-child(n+4),
-        .module-index .list-objects .table-row > *:not(:nth-last-child(-n+#{$keep-last})):nth-child(n+4) {
+        body:not(.view-admin) .module-index .list-objects .table-header > *:not(:nth-last-child(-n+#{$keep-last})):nth-child(n+4),
+        body:not(.view-admin) .module-index .list-objects .table-row > *:not(:nth-last-child(-n+#{$keep-last})):nth-child(n+4) {
             display: none !important;
         }
-        .module-index .list-objects:has(.table-row > .date_ranges-cell) .table-header > *:not(:nth-last-child(-n+#{$keep-last + 2})):nth-child(n+4),
-        .module-index .list-objects:has(.table-row > .date_ranges-cell) .table-row > *:not(:nth-last-child(-n+#{$keep-last + 2})):nth-child(n+4) {
+        body:not(.view-admin) .module-index .list-objects:has(.table-row > .date_ranges-cell) .table-header > *:not(:nth-last-child(-n+#{$keep-last + 2})):nth-child(n+4),
+        body:not(.view-admin) .module-index .list-objects:has(.table-row > .date_ranges-cell) .table-row > *:not(:nth-last-child(-n+#{$keep-last + 2})):nth-child(n+4) {
             display: none !important;
         }
     }

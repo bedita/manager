@@ -15,6 +15,188 @@ body.view-admin {
     .module-index .table-container .list-objects {
         min-width: 0;
     }
+    .module-index .fieldset .tab.admin-section-header {
+        gap: 0;
+        list-style: none;
+
+        &:focus-visible {
+            outline: 2px solid variables.$info;
+            outline-offset: -2px;
+        }
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+    }
+
+    details[open] > .admin-section-header {
+        &::before {
+            content: '\2013';
+        }
+    }
+
+    .system-info-page {
+        display: grid;
+        gap: variables.$gutter * 2;
+        width: 100%;
+        max-width: 44rem;
+        min-width: 0;
+
+        > section {
+            min-width: 0;
+        }
+
+        .system-info-notice {
+            margin-bottom: variables.$gutter;
+            color: variables.$gray-300;
+            line-height: variables.$line-height-base;
+        }
+    }
+
+    .roles-modules-page {
+        width: 100%;
+        max-width: 44rem;
+        min-width: 0;
+
+        &.module-index .list-objects {
+            display: grid;
+            gap: variables.$gutter * 1.5;
+            min-width: 0;
+        }
+
+        .role-card {
+            min-width: 0;
+            margin: 0;
+        }
+
+        .role-fieldset {
+            margin: 0;
+        }
+
+        .role-header-main {
+            display: flex;
+            flex: 1;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: variables.$gutter * .5 variables.$gutter;
+            min-width: 0;
+        }
+
+        h2.role-name {
+            flex: 0 0 auto;
+            padding: 0;
+        }
+
+        .role-description {
+            color: variables.$gray-300;
+            font-size: variables.$font-size-sm;
+            font-weight: variables.$font-weight-normal;
+        }
+
+        .role-id {
+            flex: 0 0 auto;
+            margin-left: auto;
+            padding: .125rem .5rem;
+            border-radius: 1rem;
+            background: variables.$gray-700;
+            color: variables.$gray-100;
+            font-size: variables.$font-size-ssm;
+        }
+
+        .tab-container {
+            padding: variables.$gutter;
+        }
+
+        .role-modules-container {
+            min-width: 0;
+            overflow-x: auto;
+            margin: 0;
+        }
+
+        .role-modules-header,
+        .role-module-row .input.radio {
+            display: grid;
+            grid-template-columns: 8.75rem repeat(3, minmax(4.25rem, 1fr));
+            align-items: center;
+            min-width: 21.5rem;
+        }
+
+        .role-modules-header {
+            padding: variables.$gutter * .5;
+            background: variables.$gray-800;
+            color: variables.$gray-100;
+            font-size: variables.$font-size-ssm;
+            font-weight: variables.$font-weight-bold;
+            text-align: center;
+
+            span:first-child {
+                text-align: left;
+            }
+        }
+
+        .role-module-row {
+            min-width: 0;
+            margin: 0;
+            padding: variables.$gutter variables.$gutter * .5;
+            border-bottom: 1px solid variables.$gray-700;
+            background: variables.$gray-900;
+
+            &:hover,
+            &:focus-within {
+                background: rgba(variables.$white, .025);
+            }
+
+            .input.radio {
+                margin: 0;
+
+                > input[type="hidden"] {
+                    display: none;
+                }
+            }
+
+            label {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+                line-height: 1.5;
+                cursor: pointer;
+
+                &:first-of-type {
+                    justify-content: flex-start;
+                }
+
+                &:not(:first-of-type) {
+                    white-space: nowrap;
+                }
+            }
+
+            .tag {
+                display: inline-flex;
+                min-width: 0;
+                width: 100%;
+                overflow-wrap: anywhere;
+                text-align: center;
+            }
+        }
+
+        .role-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: variables.$gutter;
+            padding-top: variables.$gutter;
+            border-top: 1px solid variables.$gray-700;
+        }
+
+        .roles-modules-empty {
+            margin: 0;
+            padding: variables.$gutter;
+            border: 1px solid variables.$gray-700;
+            border-radius: 4px;
+            background: variables.$gray-800;
+        }
+    }
     .table-row {
         &.new-record > * {
             padding-top: calc(variables.$gutter * 4) !important;
