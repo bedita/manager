@@ -40,7 +40,7 @@ if (!getenv('BEDITA_API') && file_exists(dirname(__DIR__) . '/tests/.env')) {
 
 Cache::disable();
 
-if (empty(Configure::read('API'))) {
+if (empty(Configure::read('API')) || empty(Configure::read('API.apiBaseUrl')) || empty(Configure::read('API.apiKey'))) {
     Configure::write('API', [
         'apiBaseUrl' => env('BEDITA_API'),
         'apiKey' => env('BEDITA_API_KEY'),
