@@ -144,11 +144,7 @@ class PermsHelper extends Helper
      */
     public function canDo(string $method, ?string $module = null): bool
     {
-        if (!$this->isAllowed($method, $module)) {
-            return false;
-        }
-
-        return $this->userIsAllowed($module);
+        return $this->isAllowed($method, $module) && $this->userIsAllowed($module);
     }
 
     /**
