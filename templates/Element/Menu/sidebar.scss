@@ -29,6 +29,7 @@
 }
 
 .app-module-box {
+    position: relative;
 
     a {
         position: relative;
@@ -36,6 +37,11 @@
         height: variables.$dashboard-item-height;
         background-repeat:no-repeat;
         background-position: center center;
+    }
+
+    &.readonly a:after {
+        height: 100%;
+        opacity: 0.3;
     }
 
     .resource-changed {
@@ -56,6 +62,19 @@
 
     &.draft a {
         background-image: url('/svg/iconDraft.svg');
+    }
+}
+
+.readonly-indicator {
+    position: absolute;
+    top: variables.$gutter * 0.35;
+    right: variables.$gutter * 0.35;
+    z-index: 1;
+    color: white;
+
+    app-icon {
+        width: 16px;
+        height: 16px;
     }
 }
 
