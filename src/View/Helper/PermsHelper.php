@@ -45,12 +45,13 @@ class PermsHelper extends Helper
     /**
      * {@inheritDoc}
      *
-     * Init API and WebAPP base URL
+     * Load module methods and folder permissions support.
      *
      * @return void
      */
     public function initialize(array $config): void
     {
+        $this->allowed = [];
         $modules = (array)$this->_View->get('modules');
         // using foreach instead of Hash::combine
         // to avoid RuntimeError "Hash::combine() needs an equal number of keys + values"
@@ -62,7 +63,7 @@ class PermsHelper extends Helper
         $currentModule = (array)$this->_View->get('currentModule');
         $this->current = (array)Hash::get($currentModule, 'hints.allow');
         $schema = (array)$this->_View->get('foldersSchema');
-        $this->permissionsOnFolders = in_array('Permissions', (array)Hash::get($schema, 'associations'));
+        $this->permissionsOnFolders = in_array('Permissions', (array)Hash::get($schema, 'associations'), true);
     }
 
     /**
@@ -83,7 +84,7 @@ class PermsHelper extends Helper
      */
     public function canCreate(?string $module = null): bool
     {
-        return $this->isAllowed('POST', $module) && $this->userIsAllowed($module);
+        return $this->canDo('POST', $module);
     }
 
     /**
@@ -130,7 +131,24 @@ class PermsHelper extends Helper
      */
     public function canSave(?string $module = null): bool
     {
-        return $this->userIsAdmin() || ($this->isAllowed('PATCH', $module) && $this->userIsAllowed($module));
+        return $this->canDo('PATCH', $module);
+    }
+
+    /**
+     * Check module methods and folder role restrictions.
+     * Administrators bypass folder restrictions, not module methods.
+     *
+     * @param string $method HTTP method, e.g. 'GET', 'POST' or 'PATCH'
+     * @param string|null $module The module
+     * @return bool
+     */
+    public function canDo(string $method, ?string $module = null): bool
+    {
+        if (!$this->isAllowed($method, $module)) {
+            return false;
+        }
+
+        return $this->userIsAdmin() || $this->userIsAllowed($module);
     }
 
     /**
@@ -157,11 +175,13 @@ class PermsHelper extends Helper
      */
     public function canRead(?string $module = null): bool
     {
-        return $this->isAllowed('GET', $module);
+        return $this->canDo('GET', $module);
     }
 
     /**
      * Check if a method is allowed on a module.
+     * An empty current method list preserves the permissive fallback.
+     * Explicit modules without allowed methods are denied.
      *
      * @param string $method Method to check
      * @param string|null $module Module name, if missing or null current module is used.
@@ -174,12 +194,12 @@ class PermsHelper extends Helper
                 return true;
             }
 
-            return in_array($method, $this->current);
+            return in_array($method, $this->current, true);
         }
 
         $allowed = (array)Hash::get($this->allowed, $module);
 
-        return in_array($method, $allowed);
+        return in_array($method, $allowed, true);
     }
 
     /**
@@ -197,12 +217,12 @@ class PermsHelper extends Helper
             return 'write';
         }
         $hiddenModules = Hash::get($roleAccesses, 'hidden', []);
-        if (in_array($moduleName, $hiddenModules)) {
+        if (in_array($moduleName, $hiddenModules, true)) {
             return 'hidden';
         }
         $readonlyModules = Hash::get($roleAccesses, 'readonly', []);
 
-        return in_array($moduleName, $readonlyModules) ? 'read' : 'write';
+        return in_array($moduleName, $readonlyModules, true) ? 'read' : 'write';
     }
 
     /**
@@ -212,7 +232,7 @@ class PermsHelper extends Helper
      */
     public function userIsAdmin(): bool
     {
-        return in_array('admin', $this->userRoles());
+        return in_array('admin', $this->userRoles(), true);
     }
 
     /**
@@ -224,6 +244,9 @@ class PermsHelper extends Helper
     public function userIsAllowed(?string $module): bool
     {
         $objectType = !empty($module) ? $module : $this->_View->get('objectType');
+        if ($objectType === null) {
+            return false;
+        }
         if ($this->permissionsOnFolders === false || $objectType !== 'folders' || $this->userIsAdmin()) {
             return true;
         }
