@@ -112,6 +112,13 @@
     display:none;
 }
 
+.app-module-box-concurrent-editors {
+    &.readonly a:after {
+        height: 100%;
+        opacity: 0.3;
+    }
+}
+
 ul.concurrent-editors {
     margin:0; padding:0;
     li {
