@@ -21,6 +21,16 @@ export default {
         };
     },
     methods: {
+        submitRole(event) {
+            const button = event.currentTarget.querySelector('button[type="submit"]');
+            if (button.disabled) {
+                event.preventDefault();
+                return;
+            }
+            button.disabled = true;
+            button.classList.add('is-loading-spinner');
+            button.setAttribute('aria-busy', 'true');
+        },
         toggleCreate() {
             this.showCreate = !this.showCreate;
             if (!this.showCreate) {
