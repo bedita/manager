@@ -64,7 +64,7 @@ const sassLoaderOptions = {
 // Common Plugins
 let webpackPlugins = [
     new webpack.DefinePlugin({
-        'process.env.NODE_ENV': `${JSON.stringify(ENVIRONMENT.mode)}`
+        'process.env.NODE_ENV': JSON.stringify(ENVIRONMENT.mode)
     }),
 
     new MiniCssExtractPlugin({
@@ -364,6 +364,13 @@ module.exports = {
     watch: devMode,
 
     plugins: webpackPlugins,
+
+    ignoreWarnings: [
+        {
+            module: /\.vue$/,
+            message: /export 'default' \(imported as 'style\d+'\) was not found in .*\.vue\?vue&type=style.*\(module has no exports\)/,
+        },
+    ],
 
     stats: {
         // Display the entry points with the corresponding bundles
