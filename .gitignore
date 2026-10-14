@@ -73,4 +73,11 @@ bundle-report.*.html
 /webroot/js/*.js
 /webroot/js/vendors
 /webroot/manifest.json
+.phpunit.cache/code-coverage
 .phpunit.cache/test-results
+
+# ai tools
+.github/hooks
+.graphifyignore
+/graphify-out/
+.github/copilot-instructions.md
