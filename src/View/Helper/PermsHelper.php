@@ -148,7 +148,7 @@ class PermsHelper extends Helper
             return false;
         }
 
-        return $this->userIsAdmin() || $this->userIsAllowed($module);
+        return $this->userIsAllowed($module);
     }
 
     /**
