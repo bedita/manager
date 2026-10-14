@@ -15,6 +15,7 @@ namespace App\Controller\Admin;
 use App\Utility\ApiConfigTrait;
 use BEdita\SDK\BEditaClientException;
 use Cake\Core\Configure;
+use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
@@ -115,6 +116,7 @@ class RolesModulesController extends AdministrationBaseController
         $roles = array_keys($data);
         $payload = [];
         foreach ($roles as $roleName) {
+            $payload[$roleName] = [];
             foreach ($data[$roleName] as $module => $perms) {
                 if ($perms === 'write') {
                     continue;
@@ -130,6 +132,36 @@ class RolesModulesController extends AdministrationBaseController
         $content = json_decode((string)Hash::get($response, 'data.0.attributes.content'), true);
         $payload = is_array($content) ? array_merge($content, $payload) : $payload;
         $this->saveApiConfig(Inflector::camelize('access_control'), $payload);
+
+        return $this->redirect(['_name' => 'admin:list:roles_modules']);
+    }
+
+    /**
+     * Remove module access configuration without deleting the role.
+     *
+     * @param string $id Role ID.
+     * @return \Cake\Http\Response|null
+     */
+    public function remove(string $id): ?Response
+    {
+        $this->getRequest()->allowMethod(['post']);
+        try {
+            $role = $this->apiClient->get('/roles/' . $id);
+            $roleName = (string)Hash::get($role, 'data.attributes.name');
+            $configs = array_values($this->fetchConfig('AccessControl'));
+            if (empty($configs)) {
+                throw new NotFoundException(__('Module access configuration for this role was not found.'));
+            }
+            $content = json_decode((string)Hash::get($configs, '0.attributes.content'), true, 512, JSON_THROW_ON_ERROR);
+            if (!is_array($content) || !array_key_exists($roleName, $content)) {
+                throw new NotFoundException(__('Module access configuration for this role was not found.'));
+            }
+            unset($content[$roleName]);
+            $this->saveApiConfig('AccessControl', $content);
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), 'error');
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
 
         return $this->redirect(['_name' => 'admin:list:roles_modules']);
     }

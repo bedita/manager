@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-10-08 13:52:04 \n"
+"POT-Creation-Date: 2026-10-14 14:35:17 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -166,6 +166,10 @@ msgstr ""
 msgid "Choose a file"
 msgstr ""
 
+msgid ""
+"Choose module permissions for a role and save to create the configuration."
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -224,6 +228,11 @@ msgid "Create a new category"
 msgstr ""
 
 msgid "Create a new tag"
+msgstr ""
+
+msgid ""
+"Create a non-admin role or allow an existing role to access this Manager "
+"application through the auth endpoint permissions."
 msgstr ""
 
 msgid "Created"
@@ -323,6 +332,9 @@ msgid "Empty-verb"
 msgstr "Empty"
 
 msgid "Enabled"
+msgstr ""
+
+msgid "Endpoint permissions"
 msgstr ""
 
 msgid "Endpoints"
@@ -571,6 +583,14 @@ msgstr ""
 msgid "Modified ↓ Newest on top"
 msgstr ""
 
+msgid "Module access configuration for this role was not found."
+msgstr ""
+
+msgid ""
+"Module access control is not configured. No additional module restrictions "
+"apply."
+msgstr ""
+
 msgid "Module access not authorized"
 msgstr ""
 
@@ -622,6 +642,9 @@ msgstr ""
 msgid ""
 "No auth providers found: you cannot create external auth entries. Create at "
 "least one auth provider first"
+msgstr ""
+
+msgid "No eligible roles available"
 msgstr ""
 
 msgid "No import filters set"
@@ -838,6 +861,14 @@ msgid "Remote URL"
 msgstr ""
 
 msgid "Remove"
+msgstr ""
+
+msgid "Remove module access configuration"
+msgstr ""
+
+msgid ""
+"Remove module access configuration for this role? No additional module "
+"restrictions will apply. API permissions will remain unchanged."
 msgstr ""
 
 msgid "Request password"

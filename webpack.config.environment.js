@@ -83,7 +83,7 @@ if (index) {
 
 // Environment Config Object
 const ENVIRONMENT = {
-    mode: devMode ? JSON.stringify('development') : JSON.stringify('production'),
+    mode: devMode ? 'development' : 'production',
     proxy: proxy,
     host: server_host,
     port: server_port,

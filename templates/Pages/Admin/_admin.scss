@@ -189,7 +189,8 @@ body.view-admin {
             border-top: 1px solid variables.$gray-700;
         }
 
-        .roles-modules-empty {
+        .roles-modules-empty,
+        .roles-modules-notice {
             margin: 0;
             padding: variables.$gutter;
             border: 1px solid variables.$gray-700;
