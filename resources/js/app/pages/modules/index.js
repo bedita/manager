@@ -16,6 +16,7 @@ export default {
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
         DateRangesList: () => import(/* webpackChunkName: "date-ranges-list" */'app/components/date-ranges-list/date-ranges-list'),
         TreeView: () => import(/* webpackChunkName: "tree-view" */'app/components/tree-view/tree-view'),
+        TreeCompact: () => import(/* webpackChunkName: "tree-compact" */'app/components/tree-compact/tree-compact'),
         FilterBoxView: () => import(/* webpackChunkName: "tree-view" */'app/components/filter-box'),
         IndexCell: () => import(/* webpackChunkName: "index-cell" */'app/components/index-cell/index-cell'),
         PermissionToggle: () => import(/* webpackChunkName: "permission-toggle" */'app/components/permission-toggle/permission-toggle'),

@@ -143,6 +143,9 @@ class ModulesController extends AppController
         // custom properties
         $this->set('customProps', $this->Schema->customProps($this->objectType));
 
+        // set all types (use cache)
+        $this->set('allConcreteTypes', $this->Schema->allConcreteTypes());
+
         // set prevNext for views navigations
         $this->setObjectNav($objects);
 
