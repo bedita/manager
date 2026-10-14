@@ -231,7 +231,8 @@ class LayoutHelper extends Helper
             return trim(implode(' ', $classes));
         }
         $classes = count($this->Editors->list()) > 1 ? ['app-module-box-concurrent-editors'] : $classes;
-        $classes = !$this->Perms->canSave() ? array_merge($classes, ['readonly']) : $classes;
+        $module = Hash::get((array)$this->getView()->get('currentModule'), 'name');
+        $classes = !$this->Perms->canSave($module) ? array_merge($classes, ['readonly']) : $classes;
         $classes[] = $this->publishStatus($object);
 
         return trim(implode(' ', $classes));
