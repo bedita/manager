@@ -3,17 +3,23 @@
 {% do _view.assign('title', __('Administration') ~ ' ' ~ __('System information')) %}
 {% do _view.assign('bodyViewClass',  'view-module view-admin') %}
 
-<h2>BEdita Manager</h2>
+<div class="module-index system-info-page">
+    <section>
+        <h2>BEdita Manager</h2>
 
-<system-info data="{{system_info|json_encode}}">
-</system-info>
+        <system-info data="{{system_info|json_encode}}">
+        </system-info>
+    </section>
 
-<h2 class="mt-15">API</h2>
+    <section>
+        <h2>API</h2>
 
-<p class="mb-1">
-    <app-icon icon="carbon:information"></app-icon>
-    {{ __('API could be distributed in multiple nodes. The following data refers to a single node') }}
-</p>
+        <p class="system-info-notice">
+            <app-icon icon="carbon:information"></app-icon>
+            {{ __('API could be distributed in multiple nodes. The following data refers to a single node') }}
+        </p>
 
-<system-info data="{{api_info|json_encode}}">
-</system-info>
+        <system-info data="{{api_info|json_encode}}">
+        </system-info>
+    </section>
+</div>

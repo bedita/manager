@@ -1,19 +1,40 @@
 <template>
     <div class="appearance module-index">
-        <details v-for="property,propertyKey in configs" :key="propertyKey">
-            <summary>{{ title(propertyKey) }}</summary>
+        <details
+            v-for="property,propertyKey in configs"
+            :key="propertyKey"
+            class="fieldset"
+        >
+            <summary class="tab admin-section-header unselectable">
+                <h2>{{ title(propertyKey) }}</h2>
+            </summary>
             <div class="main-container">
-                <div>
-                    <div :id="`container-${propertyKey}`" class="jsoneditor-container"></div>
-                    <json-editor :options="jsonEditorOptions" :target="`container-${propertyKey}`" :text="text(propertyKey, property)" />
+                <div class="appearance-editor">
+                    <div
+                        :id="`container-${propertyKey}`"
+                        class="jsoneditor-container jse-theme-dark"
+                    />
+                    <json-editor
+                        :options="jsonEditorOptions"
+                        :target="`container-${propertyKey}`"
+                        :text="text(propertyKey, property)"
+                    />
                 </div>
-                <div class="ml-05">
-                    <button class="button button-primary button-primary-hover-module-admin is-width-auto" :class="loading && loadingKey === propertyKey ? 'is-loading-spinner' : ''" @click.prevent="save(propertyKey)">
-                        <app-icon icon="carbon:save"></app-icon>
+                <div class="appearance-actions">
+                    <button
+                        class="button button-primary button-primary-hover-module-admin is-width-auto"
+                        :class="loading && loadingKey === propertyKey ? 'is-loading-spinner' : ''"
+                        @click.prevent="save(propertyKey)"
+                    >
+                        <app-icon icon="carbon:save" />
                         <span class="ml-05">{{ msgSave }}</span>
                     </button>
-                    <a class="button button-outlined" :href="wikis[propertyKey]" target="_blank">
-                        <app-icon icon="carbon:launch"></app-icon>
+                    <a
+                        class="button button-outlined"
+                        :href="wikis[propertyKey]"
+                        target="_blank"
+                    >
+                        <app-icon icon="carbon:launch" />
                         <span class="ml-05">{{ msgSeeWikiForHelp }}</span>
                     </a>
                 </div>
@@ -23,6 +44,7 @@
 </template>
 <script>
 import { t } from 'ttag';
+import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
 
 export default {
     name: 'AdminAppearance',
@@ -138,38 +160,39 @@ export default {
     },
 };
 </script>
-<style>
-div.appearance > details>summary {
-  list-style-type: none;
-  outline: none;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
-  padding: 10px;
-  font-size: 1rem;
-}
+<style lang="scss">
+@use "../../../../styles/variables";
 
-div.appearance > details>summary::-webkit-details-marker {
-  display: none;
-}
+.appearance {
+    display: grid;
+    width: 100%;
+    max-width: 44rem;
+    min-width: 0;
 
-div.appearance > details>summary::before {
-  content: '+ ';
-  font-size: 1.2rem;
-}
+    > details {
+        min-width: 0;
+    }
 
-div.appearance > details[open]>summary::before {
-  content: '- ';
-  font-size: 1.2rem;
-}
+    .main-container {
+        display: grid;
+        gap: variables.$gutter;
+        min-width: 0;
+        padding: variables.$gutter;
+    }
 
-div.appearance > details[open]>summary {
-  margin-bottom: 0.5rem;
-}
+    .appearance-editor,
+    .jsoneditor-container {
+        min-width: 0;
+        max-width: 100%;
+    }
 
-div.appearance > details > .main-container {
-  display: flex;
-  justify-content: left;
-  align-items: flex-start;
-  margin-bottom: 1rem;
+    .appearance-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: variables.$gutter * .5;
+        padding-top: variables.$gutter;
+        border-top: 1px solid variables.$gray-700;
+    }
 }
 </style>
