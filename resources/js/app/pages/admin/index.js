@@ -43,8 +43,9 @@ export default {
             });
         },
         remove(e) {
-            const message = t`Remove item. Are you sure?`;
-            const formId = e.target.closest('button').getAttribute('form');
+            const button = e.target.closest('button');
+            const message = button.dataset.confirm || t`Remove item. Are you sure?`;
+            const formId = button.getAttribute('form');
             const form = document.getElementById(formId);
             confirm(message, t`yes, proceed`, form.submit.bind(form));
         },

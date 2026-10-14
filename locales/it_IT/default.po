@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-10-08 13:52:04 \n"
+"POT-Creation-Date: 2026-10-14 14:35:17 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -168,6 +168,12 @@ msgstr "Ordinamento contenuti"
 msgid "Choose a file"
 msgstr "Scegli un file"
 
+msgid ""
+"Choose module permissions for a role and save to create the configuration."
+msgstr ""
+"Scegli i permessi sui moduli per un ruolo e salva per creare la "
+"configurazione."
+
 msgid "City"
 msgstr "Città"
 
@@ -227,6 +233,13 @@ msgstr "Crea nuova categoria"
 
 msgid "Create a new tag"
 msgstr "Crea nuovo tag"
+
+msgid ""
+"Create a non-admin role or allow an existing role to access this Manager "
+"application through the auth endpoint permissions."
+msgstr ""
+"Crea un ruolo diverso da admin oppure consenti a un ruolo esistente di "
+"accedere a questa applicazione Manager tramite i permessi sull'endpoint auth."
 
 msgid "Created"
 msgstr "Creato"
@@ -326,6 +339,9 @@ msgstr "Svuota"
 
 msgid "Enabled"
 msgstr "Abilitato"
+
+msgid "Endpoint permissions"
+msgstr "Permessi endpoint"
 
 msgid "Endpoints"
 msgstr "Endpoint"
@@ -574,6 +590,16 @@ msgstr "Data di modifica ↑ Meno recenti in testa"
 msgid "Modified ↓ Newest on top"
 msgstr "Data di modifica ↓ Più recenti in testa"
 
+msgid "Module access configuration for this role was not found."
+msgstr "Configurazione degli accessi ai moduli non trovata per questo ruolo."
+
+msgid ""
+"Module access control is not configured. No additional module restrictions "
+"apply."
+msgstr ""
+"Il controllo degli accessi ai moduli non è configurato. Non si applicano "
+"restrizioni aggiuntive ai moduli."
+
 msgid "Module access not authorized"
 msgstr "Accesso al modulo non autorizzato"
 
@@ -628,6 +654,9 @@ msgid ""
 msgstr ""
 "Nessun provider di autenticazione trovato: non puoi creare voci di "
 "autenticazione esterne. Crea almeno un provider di autenticazione"
+
+msgid "No eligible roles available"
+msgstr "Nessun ruolo idoneo disponibile"
 
 msgid "No import filters set"
 msgstr "Nessun filtro di importazione impostato"
@@ -846,6 +875,17 @@ msgstr "Indirizzo remoto"
 
 msgid "Remove"
 msgstr "Rimuovi"
+
+msgid "Remove module access configuration"
+msgstr "Rimuovi configurazione accessi ai moduli"
+
+msgid ""
+"Remove module access configuration for this role? No additional module "
+"restrictions will apply. API permissions will remain unchanged."
+msgstr ""
+"Rimuovere la configurazione degli accessi ai moduli per questo ruolo? Non si "
+"applicheranno restrizioni aggiuntive ai moduli. I permessi API resteranno "
+"invariati."
 
 msgid "Request password"
 msgstr "Reimposta password"

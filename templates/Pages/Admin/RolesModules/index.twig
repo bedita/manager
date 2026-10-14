@@ -10,8 +10,23 @@
 
         <div class="list-objects">
 
+            {% if access_control is empty %}
+                <div class="roles-modules-notice" role="status">
+                    <p>{{ __('Module access control is not configured. No additional module restrictions apply.') }}</p>
+                    {% if resources|length > 0 %}
+                        <p>{{ __('Choose module permissions for a role and save to create the configuration.') }}</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+
             {% if resources|length == 0 %}
-                <p class="roles-modules-empty">{{ __('Resources not available') }}</p>
+                <div class="roles-modules-empty">
+                    <p>{{ __('No eligible roles available') }}</p>
+                    <p>{{ __('Create a non-admin role or allow an existing role to access this Manager application through the auth endpoint permissions.') }}</p>
+                    {{ Html.link(__('Roles'), {'_name': 'admin:list:roles'})|raw }}
+                    &middot;
+                    {{ Html.link(__('Endpoint permissions'), {'_name': 'admin:list:endpoint_permissions'})|raw }}
+                </div>
             {% endif %}
 
             {% for resource in resources %}
@@ -23,7 +38,7 @@
                 })|raw }}
                 {% set roleName = resource.attributes.name %}
 
-                <property-view inline-template :tab-open="tabsOpen" tab-name="roles-modules-{{ resource.attributes.name }}">
+                <property-view inline-template :tab-open="tabsOpen" tab-name="roles-modules-{{ resource.attributes.name }}" @remove-role="remove">
 
                     <section class="fieldset role-fieldset">
                         <header
@@ -75,6 +90,17 @@
                                 {% endfor %}
                             </div>
                             <div class="role-actions">
+                                {% if access_control[roleName] is defined %}
+                                    <button
+                                        type="button"
+                                        form="form-remove-role-{{ resource.id }}"
+                                        class="button button-text-white is-width-auto mr-1"
+                                        data-confirm="{{ __('Remove module access configuration for this role? No additional module restrictions will apply. API permissions will remain unchanged.') }}"
+                                        @click.prevent="$emit('remove-role', $event)">
+                                        <app-icon icon="carbon:trash-can"></app-icon>
+                                        <span class="ml-05">{{ __('Remove module access configuration') }}</span>
+                                    </button>
+                                {% endif %}
                                 <button type="submit" class="button button-primary button-primary-hover-module-admin is-width-auto" title="{{ __('Save') }}">
                                     <app-icon icon="carbon:save"></app-icon>
                                     <span class="ml-05">{{ __('Save') }}</span>
@@ -86,6 +112,15 @@
                 </property-view>
 
                 {{ Form.end()|raw }}
+
+                {% if access_control[roleName] is defined %}
+                    {{ Form.create(null, {
+                        'id': 'form-remove-role-' ~ resource.id,
+                        'url': {'_name': 'admin:remove:roles_modules', 'id': resource.id},
+                        'hidden': true,
+                    })|raw }}
+                    {{ Form.end()|raw }}
+                {% endif %}
 
             {% endfor %}
         </div>
