@@ -650,6 +650,8 @@ class PermsHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testUserIdentity` method.
+     *
      * @return array<string, array{array|null, array, bool}>
      */
     public static function userRolesProvider(): array
@@ -666,6 +668,8 @@ class PermsHelperTest extends TestCase
     }
 
     /**
+     * Test user identity.
+     *
      * @param array|null $user Identity data
      * @param array $expected Expected roles
      * @param bool $admin Expected administrator status
@@ -928,6 +932,8 @@ class PermsHelperTest extends TestCase
     }
 
     /**
+     * Data provider for `testParentLocks` method.
+     *
      * @return array<string, array{bool, bool, array, bool}>
      */
     public static function parentsProvider(): array
@@ -951,6 +957,8 @@ class PermsHelperTest extends TestCase
     }
 
     /**
+     * Test parents locks.
+     *
      * @param bool $enabled Whether folder permissions are supported
      * @param bool $admin Whether user is admin
      * @param array $parents Included parents
