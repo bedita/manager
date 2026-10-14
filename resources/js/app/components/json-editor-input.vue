@@ -1,3 +1,9 @@
+<template>
+    <div>
+        <slot />
+    </div>
+</template>
+<script>
 import { JSONEditor } from 'vanilla-jsoneditor';
 
 const options = {
@@ -8,15 +14,11 @@ const options = {
 };
 
 export default {
-    template: `
-    <div>
-        <slot></slot>
-    </div>
-    `,
-
+    name: 'JsonEditorInput',
     props: {
         el: {
             type: HTMLTextAreaElement,
+            default: null,
         },
     },
 
@@ -65,3 +67,4 @@ export default {
         }
     },
 };
+</script>
