@@ -192,5 +192,6 @@ trait ApiConfigTrait
         }
         Cache::delete(CacheTools::cacheKey(static::$cacheKey));
         Cache::delete(CacheTools::cacheKey('properties'));
+        Cache::clear('default'); // to remove also 'home_*' cache data
     }
 }

@@ -151,6 +151,7 @@ class TagsController extends ModelTagsController
     {
         parent::beforeRender($event);
         $this->set('moduleLink', ['_name' => 'tags:index']);
+        $this->set('currentModule', ['name' => 'tags']);
 
         return null;
     }

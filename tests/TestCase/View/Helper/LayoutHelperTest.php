@@ -189,12 +189,12 @@ class LayoutHelperTest extends TestCase
             'app-module-box-concurrent-editors' => [
                 false,
                 true,
-                'app-module-box-concurrent-editors',
+                'app-module-box-concurrent-editors readonly',
             ],
             'publish status' => [
                 false,
                 false,
-                'app-module-box',
+                'app-module-box readonly',
             ],
         ];
     }
@@ -655,6 +655,7 @@ class LayoutHelperTest extends TestCase
             'modules' => ['documents' => [], 'images' => []],
             'uploadable' => ['images'],
             'relationsSchema' => ['whatever'],
+            'objectType' => 'documents',
         ];
         $view = new View($request, null, null, compact('viewVars'));
         $layout = new LayoutHelper($view);
