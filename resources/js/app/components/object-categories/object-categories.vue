@@ -87,6 +87,7 @@
 </template>
 <script>
 import { t } from 'ttag';
+import { categoriesTree } from 'app/helpers/categories';
 
 let debouncedSearchCategory = null;
 
@@ -131,39 +132,12 @@ export default {
     mounted() {
         this.$nextTick(() => {
             this.selected = this.value;
-            this.root = this.modelCategories?.filter(category => category.parent_id === null);
-            this.root?.sort((a, b) => {
-                if (a.label && b.label) {
-                    return a.label.localeCompare(b.label);
-                }
-                return a.name.localeCompare(b.name);
-            });
-            this.children = this.modelCategories?.reduce((acc, category) => {
-                if (!acc[category.parent_id]) {
-                    acc[category.parent_id] = [];
-                }
-                acc[category.parent_id].push(category);
-                return acc;
-            }, {});
-            this.root = this.root?.filter(category => this.children[category.id]);
-            this.common = this.modelCategories?.filter(category => category.parent_id === null && !this.children[category.id]);
-            for (const key in this.children) {
-                this.children[key].sort((a, b) => {
-                    if (a.label && b.label) {
-                        return a.label.localeCompare(b.label);
-                    }
-                    return a.name.localeCompare(b.name);
-                });
-            }
-            this.common?.sort((a, b) => {
-                if (a.label && b.label) {
-                    return a.label.localeCompare(b.label);
-                }
-                return a.name.localeCompare(b.name);
-            });
+            const { common, roots, children } = categoriesTree(this.modelCategories);
+            this.common = common;
+            this.root = roots;
+            this.children = children;
             this.selected = this.value?.map(category => category.name);
-            let groupsNumber = Object.keys(this.children).length;
-            groupsNumber += this.common.length > 0 ? 1 : 0;
+            const groupsNumber = this.root.length + (this.common.length > 0 ? 1 : 0);
             this.forceOpen = groupsNumber <= 3 || this.modelCategories.length <= 20;
             for (const item of this.modelCategories) {
                 if (item.enabled) {
