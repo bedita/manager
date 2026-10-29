@@ -28,6 +28,7 @@
 <script>
 import { Treeselect } from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import { categoriesTree } from 'app/helpers/categories';
 
 export default {
     components: {
@@ -66,11 +67,28 @@ export default {
     },
 
     mounted() {
-        this.categoriesOptions = this.categories?.filter(category => category.enabled)?.map((category) => ({ id: category.id, label: category.label }));
-        this.selectedIds = this.initialCategories?.map(selected => this.categories.find(cat => cat.name == selected.name)?.id);
+        this.categoriesOptions = this.buildOptions();
+        this.selectedIds = this.initialCategories
+            ?.map(selected => this.categories.find(cat => cat.name == selected.name)?.id)
+            .filter(id => id);
     },
 
     methods: {
+        /**
+         * Build tree options: root categories with children are groups, only enabled leaves can be selected.
+         * @returns {Array} Treeselect options
+         */
+        buildOptions() {
+            const { common, roots, children } = categoriesTree(this.categories);
+            const option = (category) => ({ id: category.id, label: category.label || category.name });
+            const leaves = common.filter(category => category.enabled).map(option);
+            const groups = roots
+                .map(root => ({ ...option(root), children: children[root.id].filter(child => child.enabled).map(option) }))
+                .filter(group => group.children.length > 0);
+
+            return [...leaves, ...groups];
+        },
+
         onChange() {
             const selectedCategories = this.categories.filter((cat) => this.selectedIds.includes(cat.id));
             this.$emit('change', selectedCategories);
