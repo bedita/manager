@@ -84,8 +84,6 @@ class UserTokensControllerTest extends TestCase
     {
         if ($this->skip) {
             $this->markTestSkipped('Requires API v6+');
-
-            return;
         }
         $this->UserTokensController->index();
         $keys = [
@@ -119,8 +117,6 @@ class UserTokensControllerTest extends TestCase
     {
         if ($this->skip) {
             $this->markTestSkipped('Requires API v6+');
-
-            return;
         }
         $request = $this->UserTokensController->getRequest()->withQueryParams(['filter' => ['user_id' => 1]]);
         $this->UserTokensController->setRequest($request);
@@ -138,8 +134,6 @@ class UserTokensControllerTest extends TestCase
     {
         if ($this->skip) {
             $this->markTestSkipped('Requires API v6+');
-
-            return;
         }
         $controller = new class ($this->UserTokensController->getRequest()) extends UserTokensController
         {
@@ -164,8 +158,6 @@ class UserTokensControllerTest extends TestCase
     {
         if ($this->skip) {
             $this->markTestSkipped('Requires API v6+');
-
-            return;
         }
         $controller = new class ($this->UserTokensController->getRequest()) extends UserTokensController
         {
@@ -192,8 +184,6 @@ class UserTokensControllerTest extends TestCase
     {
         if ($this->skip) {
             $this->markTestSkipped('Requires API v6+');
-
-            return;
         }
         $controller = new class ($this->UserTokensController->getRequest()) extends UserTokensController
         {
