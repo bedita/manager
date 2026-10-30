@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * BEdita, API-first content management framework
  * Copyright 2025 Atlas Srl, Chialab Srl
@@ -35,7 +36,7 @@ class AuthProvidersController extends AdministrationBaseController
     protected array $properties = [
         'name' => 'string',
         'auth_class' => 'string',
-        'url' => 'string',
+        'url' => 'uri',
         'params' => 'json',
         'enabled' => 'bool',
     ];
