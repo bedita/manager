@@ -83,7 +83,12 @@ class AdminHelper extends Helper
                     ['value' => 0, 'text' => __('No')],
                 ],
             ],
-            'json' => ['label' => false] + Control::json([]),
+            'json' => [
+                'label' => false,
+                'type' => 'textarea',
+                'v-jsoneditor' => 'true',
+                'class' => 'json',
+            ],
             'combo' => [
                 'label' => false,
             ],
