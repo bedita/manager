@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * BEdita, API-first content management framework
  * Copyright 2021 ChannelWeb Srl, Chialab Srl
@@ -12,6 +14,7 @@
  */
 namespace App\View\Helper;
 
+use App\Form\Control;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -54,6 +57,20 @@ class AdminHelper extends Helper
         parent::initialize($config);
 
         $this->options = [
+            'date' => ['label' => false] + Control::date([]),
+            'datetime' => ['label' => false] + Control::datetime([]),
+            'token' => [
+                'label' => false,
+                'type' => 'select',
+                'options' => [
+                    ['text' => 'Access', 'value' => 'access'],
+                    ['text' => 'Otp', 'value' => 'otp'],
+                    ['text' => 'Recovery', 'value' => 'recovery'],
+                    ['text' => 'Refresh', 'value' => 'refresh'],
+                    ['text' => '2fa', 'value' => '2fa'],
+                ],
+            ],
+            'uri' => ['label' => false] + Control::uri([]),
             'text' => [
                 'label' => false,
                 'size' => 25,
@@ -106,13 +123,16 @@ class AdminHelper extends Helper
             return h($label) . $this->Form->hidden($property, compact('value'));
         }
 
-        if (in_array($type, ['bool', 'json', 'text'])) {
+        if (in_array($type, ['bool', 'json', 'text', 'date', 'datetime', 'token'])) {
             if ($type === 'json' && is_array($value)) {
                 $value = json_encode($value);
             }
             $options = $this->options[$type];
             if ($type === 'text') {
                 $options = $this->textOptions($property);
+            }
+            if (in_array($type, ['date', 'datetime'])) {
+                $options['value'] = $value;
             }
 
             return $this->Form->control($property, $options + compact('value'));
