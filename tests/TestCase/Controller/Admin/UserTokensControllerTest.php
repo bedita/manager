@@ -7,6 +7,7 @@ use BEdita\SDK\BEditaClientException;
 use BEdita\WebTools\ApiClientProvider;
 use Cake\Http\ServerRequest;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
@@ -44,6 +45,13 @@ class UserTokensControllerTest extends TestCase
     protected BEditaClient $client;
 
     /**
+     * Skip tests flag for API < 6
+     *
+     * @var bool
+     */
+    protected bool $skip = false;
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void
@@ -62,6 +70,9 @@ class UserTokensControllerTest extends TestCase
         $adminPassword = getenv('BEDITA_ADMIN_PWD');
         $response = $this->client->authenticate($adminUser, $adminPassword);
         $this->client->setupTokens($response['meta']);
+        $beditaApiVersion = (string)Hash::get((array)$this->client->get('/home'), 'meta.version');
+        $apiMajor = substr($beditaApiVersion, 0, strpos($beditaApiVersion, '.'));
+        $this->skip = $apiMajor < 6;
     }
 
     /**
@@ -71,6 +82,11 @@ class UserTokensControllerTest extends TestCase
      */
     public function testBase(): void
     {
+        if ($this->skip) {
+            $this->markTestSkipped('Requires API v6+');
+
+            return;
+        }
         $this->UserTokensController->index();
         $keys = [
             'resources',
@@ -101,6 +117,11 @@ class UserTokensControllerTest extends TestCase
      */
     public function testIndexActiveFilterUserId(): void
     {
+        if ($this->skip) {
+            $this->markTestSkipped('Requires API v6+');
+
+            return;
+        }
         $request = $this->UserTokensController->getRequest()->withQueryParams(['filter' => ['user_id' => 1]]);
         $this->UserTokensController->setRequest($request);
         $this->UserTokensController->index();
@@ -115,6 +136,11 @@ class UserTokensControllerTest extends TestCase
      */
     public function testUsersLabelsEmpty(): void
     {
+        if ($this->skip) {
+            $this->markTestSkipped('Requires API v6+');
+
+            return;
+        }
         $controller = new class ($this->UserTokensController->getRequest()) extends UserTokensController
         {
             /**
@@ -136,6 +162,11 @@ class UserTokensControllerTest extends TestCase
      */
     public function testUsersLabelsNonEmpty(): void
     {
+        if ($this->skip) {
+            $this->markTestSkipped('Requires API v6+');
+
+            return;
+        }
         $controller = new class ($this->UserTokensController->getRequest()) extends UserTokensController
         {
             /**
@@ -159,6 +190,11 @@ class UserTokensControllerTest extends TestCase
      */
     public function testUsersLabelsBEditaClientException(): void
     {
+        if ($this->skip) {
+            $this->markTestSkipped('Requires API v6+');
+
+            return;
+        }
         $controller = new class ($this->UserTokensController->getRequest()) extends UserTokensController
         {
             public function setApiClient(BEditaClient $apiClient): void
