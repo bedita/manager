@@ -100,9 +100,6 @@ class UserTokensController extends AdministrationBaseController
         $applications = $this->apiClient->get('/admin/applications', ['page_size' => 100]);
         $applications = Hash::combine((array)$applications, 'data.{n}.id', 'data.{n}.attributes.name');
         $this->set('applications', $applications);
-        if (empty($applications)) {
-            $this->Flash->warning(__('No applications found: create one first'));
-        }
         $resources = (array)$this->viewBuilder()->getVar('resources');
         $ids = Hash::extract($resources, '{n}.attributes.user_id');
         $activeFilterUserId = (string)$this->getRequest()->getQuery('filter.user_id', '');
