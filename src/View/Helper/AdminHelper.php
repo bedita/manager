@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\View\Helper;
 
 use App\Form\Control;
+use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -50,11 +51,25 @@ class AdminHelper extends Helper
     protected array $options = [];
 
     /**
+     * List of default allowed token types
+     *
+     * @var array
+     */
+    public const DEFAULT_TOKEN_TYPES = ['otp', 'refresh', 'recovery', '2fa', 'access'];
+
+    /**
      * @inheritDoc
      */
     public function initialize(array $config): void
     {
         parent::initialize($config);
+        $confTypes = (array)Configure::read('UserTokens.types');
+        $tokenTypes = array_unique(array_merge(static::DEFAULT_TOKEN_TYPES, $confTypes));
+        sort($tokenTypes);
+        $tokenOptions = [];
+        foreach ($tokenTypes as $type) {
+            $tokenOptions[] = ['text' => Inflector::humanize($type), 'value' => $type];
+        }
 
         $this->options = [
             'date' => ['label' => false] + Control::date([]),
@@ -62,13 +77,7 @@ class AdminHelper extends Helper
             'token' => [
                 'label' => false,
                 'type' => 'select',
-                'options' => [
-                    ['text' => 'Access', 'value' => 'access'],
-                    ['text' => 'Otp', 'value' => 'otp'],
-                    ['text' => 'Recovery', 'value' => 'recovery'],
-                    ['text' => 'Refresh', 'value' => 'refresh'],
-                    ['text' => '2fa', 'value' => '2fa'],
-                ],
+                'options' => $tokenOptions,
             ],
             'uri' => ['label' => false] + Control::uri([]),
             'text' => [

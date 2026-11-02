@@ -877,4 +877,12 @@ return [
     //         ],
     //     ],
     // ],
+
+    /**
+     * Configuration to add specific token types to the default ones, for user tokens.
+     * Default types ('otp', 'refresh', 'recovery', '2fa', 'access') are merged with these.
+     */
+    // 'UserTokens' => [
+    //     'types' => ['custom'],
+    // ],
 ];
