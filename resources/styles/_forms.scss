@@ -146,6 +146,22 @@ form {
     max-width: none;
 }
 
+// Menu as wide as its labels (at least as the control), to read long category labels
+.category-picker {
+    .vue-treeselect__menu {
+        min-width: 100%;
+        width: max-content;
+        max-width: 30rem;
+        padding-right: .5rem;
+    }
+
+    // treeselect fixed table layout makes the menu as wide as its max width
+    .vue-treeselect__option,
+    .vue-treeselect__label-container {
+        table-layout: auto;
+    }
+}
+
 .tag-picker .new-tag {
     display: flex;
     flex-direction: column;
