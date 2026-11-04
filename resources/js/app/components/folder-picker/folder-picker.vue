@@ -1,3 +1,27 @@
+<template>
+    <div class="folder-picker">
+        <label v-if="label">{{ label }}</label>
+        <Treeselect
+            placeholder=""
+            loading-text=""
+            :default-options="initialOptions"
+            :disabled="disabled"
+            :options="options"
+            :load-options="loadOptions"
+            :auto-load-root-options="false"
+            value-format="object"
+            v-model="selectedFolder"
+            @input="onChange"
+        />
+        <input
+            type="hidden"
+            :form="form"
+            name="folderSelected"
+            :value="selectedFolder?.id"
+        >
+    </div>
+</template>
+<script>
 import { Treeselect, LOAD_ROOT_OPTIONS, LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect';
 import '@riophae/vue-treeselect/dist/vue-treeselect.css';
 import { t } from 'ttag';
@@ -20,39 +44,30 @@ const PAGE_SIZE = 100;
  * @prop {String} label Label to show before the select
  */
 export default {
+    name: 'FolderPicker',
     components: {
         Treeselect,
     },
 
-    template: `<div class="folder-picker">
-        <label v-if="label"><: label :></label>
-        <Treeselect
-            placeholder=""
-            loading-text=""
-            v-model="selectedFolder"
-            :default-options="initialOptions"
-            :disabled="disabled"
-            :options="options"
-            :load-options="loadOptions"
-            :auto-load-root-options="false"
-            value-format="object"
-            @input="onChange"
-        />
-        <input type="hidden" :form="form" name="folderSelected" :value="selectedFolder?.id" />
-    </div>`,
-
     props: {
-        disabled: Boolean,
-        initialFolder: String,
-        label: String,
-        form: String,
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
+        initialFolder: {
+            type: Number,
+            default: null,
+        },
+        label: {
+            type: String,
+            default: null,
+        },
+        form: {
+            type: String,
+            default: null,
+        },
     },
 
-    /**
-     * @property {Array} initialOptions Initial options used to pre-select the initial folder
-     * @property {Array} options The list of folder to show in the select
-     * @property {Object} options Currently selected folder (an object in the format {id: ..., label: ...})
-     */
     data() {
         return {
             initialOptions: null,
@@ -63,7 +78,7 @@ export default {
 
     async created() {
         if (this.initialFolder) {
-            const response = await fetch(`${API_URL}api/folders/${this.initialFolder}/children`);
+            const response = await fetch(`${API_URL}api/folders/${this.initialFolder}`);
             const json = await response.json();
             const data = json.data;
             const folder = { id: data.id, label: data.attributes.title };
@@ -102,3 +117,4 @@ export default {
         }
     },
 }
+</script>
