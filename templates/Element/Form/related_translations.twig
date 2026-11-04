@@ -35,7 +35,7 @@
                         :languages="{{ config('Project.config.I18n.languages')|default({"en":"English","it":"Italiano"})|json_encode|escape('html_attr') }}">
                     </language-selector>
 
-                    {% if translatable and object.attributes.lang %}
+                    {% if translatable and object.attributes.lang and Perms.canSave('translations') %}
                         {{ Html.link(__('Add translation'), {
                             '_name': 'translations:add',
                             'object_type': object.type,

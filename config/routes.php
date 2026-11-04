@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Routes configuration
  *
@@ -160,6 +162,7 @@ $routes->scope('/', function (RouteBuilder $routes): void {
             'config',
             'endpoints',
             'external_auth',
+            'user_tokens',
             'roles',
             'roles_modules',
             'endpoint_permissions',

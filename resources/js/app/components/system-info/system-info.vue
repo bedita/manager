@@ -1,15 +1,18 @@
 <template>
     <div class="system-info">
-        <p
+        <div
             v-for="item,key of infos"
             :key="key"
+            class="system-info-entry"
         >
             <template v-if="jsonKeys.includes(key)">
-                <details>
-                    <summary>{{ key }}</summary>
+                <details class="fieldset">
+                    <summary class="tab admin-section-header unselectable">
+                        <h2>{{ key }}</h2>
+                    </summary>
                     <div
                         :id="`container-${hash}-${key}`"
-                        class="jsoneditor-container"
+                        class="jsoneditor-container jse-theme-dark"
                     />
                     <json-editor
                         :name="`${hash}-${key}`"
@@ -19,15 +22,19 @@
                     />
                 </details>
             </template>
-            <template v-else>
-                <span class="key">{{ key }}</span>:
-                <span class="version">{{ item }}</span>
-            </template>
-        </p>
+            <dl
+                class="system-info-row"
+                v-else
+            >
+                <dt>{{ key }}</dt>
+                <dd>{{ item }}</dd>
+            </dl>
+        </div>
     </div>
 </template>
 <script>
 import Vue from 'vue';
+import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
 
 export default {
     name: 'SystemInfo',
@@ -72,12 +79,52 @@ export default {
     },
 }
 </script>
-<style>
-span.key {
-    font-style: italic;
-    color: yellow;
-}
-span.version {
-    font-family: 'Courier New', Courier, monospace;
+<style scoped lang="scss">
+@use "../../../../styles/variables";
+
+.system-info {
+    min-width: 0;
+
+    .system-info-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+        gap: variables.$gutter;
+        margin: 0;
+        padding: variables.$gutter;
+        border-bottom: 1px solid variables.$gray-700;
+
+        &:hover {
+            background: rgba(variables.$white, .025);
+        }
+
+        dt {
+            color: variables.$gray-300;
+        }
+
+        dd {
+            min-width: 0;
+            margin: 0;
+            font-family: variables.$font-family-monospace;
+            font-weight: variables.$font-weight-normal;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .fieldset {
+        margin: variables.$gutter 0;
+    }
+
+    .jsoneditor-container {
+        min-width: 0;
+        max-width: 100%;
+        margin-top: variables.$gutter;
+    }
+
+    @media (max-width: 567px) {
+        .system-info-row {
+            grid-template-columns: minmax(0, 1fr);
+            gap: variables.$gutter * .5;
+        }
+    }
 }
 </style>

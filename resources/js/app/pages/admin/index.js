@@ -21,6 +21,16 @@ export default {
         };
     },
     methods: {
+        submitRole(event) {
+            const button = event.currentTarget.querySelector('button[type="submit"]');
+            if (button.disabled) {
+                event.preventDefault();
+                return;
+            }
+            button.disabled = true;
+            button.classList.add('is-loading-spinner');
+            button.setAttribute('aria-busy', 'true');
+        },
         toggleCreate() {
             this.showCreate = !this.showCreate;
             if (!this.showCreate) {
@@ -33,8 +43,9 @@ export default {
             });
         },
         remove(e) {
-            const message = t`Remove item. Are you sure?`;
-            const formId = e.target.closest('button').getAttribute('form');
+            const button = e.target.closest('button');
+            const message = button.dataset.confirm || t`Remove item. Are you sure?`;
+            const formId = button.getAttribute('form');
             const form = document.getElementById(formId);
             confirm(message, t`yes, proceed`, form.submit.bind(form));
         },

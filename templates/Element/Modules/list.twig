@@ -1,7 +1,7 @@
 <div class="table-container">
     {% if objects and objectType and Perms.canSave(objectType) %}
         <bulk-actions-bar
-            :can-save-folders="{{ Perms.canSave('folders') }}"
+            :can-save-folders="{{ Perms.canSave('folders')|default(0) }}"
             :can-delete="{{ Perms.canDelete({type: objectType}) }}"
             :selected-rows="selectedRows"
             @toggle="toggleAll"

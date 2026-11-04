@@ -223,20 +223,19 @@ class LayoutHelper extends Helper
      */
     public function moduleClass(): string
     {
-        $moduleClasses = ['app-module-box'];
+        $classes = ['app-module-box'];
         $object = (array)$this->getView()->get('object');
         if (!empty($object) && $this->Perms->isLockedByParents((string)Hash::get($object, 'id'))) {
-            $moduleClasses[] = 'locked';
+            $classes[] = 'locked';
 
-            return trim(implode(' ', $moduleClasses));
+            return trim(implode(' ', $classes));
         }
-        $editors = $this->Editors->list();
-        if (count($editors) > 1) {
-            $moduleClasses = ['app-module-box-concurrent-editors'];
-        }
-        $moduleClasses[] = $this->publishStatus($object);
+        $classes = count($this->Editors->list()) > 1 ? ['app-module-box-concurrent-editors'] : $classes;
+        $module = Hash::get((array)$this->getView()->get('currentModule'), 'name');
+        $classes = !$this->Perms->canSave($module) ? array_merge($classes, ['readonly']) : $classes;
+        $classes[] = $this->publishStatus($object);
 
-        return trim(implode(' ', $moduleClasses));
+        return trim(implode(' ', $classes));
     }
 
     /**

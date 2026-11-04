@@ -104,6 +104,18 @@ class AdminHelperTest extends TestCase
                 '1',
                 '1<input type="hidden" name="users" value="1">',
             ],
+            'date value' => [
+                'date',
+                'date',
+                '2025-01-01',
+                '<div class="input datepicker text"><input type="text" name="date" v-datepicker="true" date="true" id="date" value="2025-01-01"></div>',
+            ],
+            'date time value' => [
+                'date',
+                'date',
+                '2025-01-01 12:00:00',
+                '<div class="input datepicker text"><input type="text" name="date" v-datepicker="true" date="true" id="date" value="2025-01-01 12:00:00"></div>',
+            ],
         ];
     }
 

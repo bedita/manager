@@ -62,6 +62,25 @@ You can further configure your BEdita Manager instance in `config/app_local.php`
 
 Have look at the main [Manager configuration wiki page](https://github.com/bedita/manager/wiki/Manager-App-Configuration) on how to customize your Manager instance.
 
+### Module access by role
+
+In **Administration > Roles Modules accesses**, choose **Write**, **Read**, or
+**Hidden** for each module, then save the role. The first save creates the
+application's `AccessControl` configuration if it does not exist. Without this
+configuration, no additional Manager module restrictions apply; API permissions
+still apply.
+
+Only non-admin roles allowed to access the Manager application are listed.
+If no roles are eligible, use the **Roles** and **Endpoint permissions** links
+to create a role or grant it write permission on the `auth` endpoint for this
+Manager application. Admin users are not restricted by module access control.
+Saving a role updates only that role's settings; selecting **Write** for all
+modules removes its previous restrictions.
+Use **Remove module access configuration** to delete the role's entry from
+`AccessControl` entirely. Confirmation is required; the role itself, API
+permissions, and other roles' settings are unchanged. The role remains listed
+and can be configured again.
+
 ## JS Development with webpack
 
 ### Using .env

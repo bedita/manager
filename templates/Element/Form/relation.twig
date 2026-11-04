@@ -181,12 +181,10 @@
                         <span class="ml-05">{{ __('add objects') }}</span>
                     </button>
 
-                    {% if Perms.userIsAdmin() %}
                     <add-related-by-id
                         :object-types="{{ relationsSchema[relationName]['right']|json_encode }}"
                         @found="addRelated"
                     />
-                    {% endif %}
                 </template>
             </div>
         </div>

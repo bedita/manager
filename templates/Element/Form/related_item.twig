@@ -211,6 +211,7 @@
                 <app-icon icon="carbon:launch"></app-icon>
                 <span class="related-button-label ml-05">{{ __('Open') }}</span>
             </a>
+            {% if Perms.canDelete({type: 'translations'}) %}
             <a class="button button-text is-small related-action-button" @click.prevent="relationToggle(related)" v-if="containsId(removedRelated, related.id)" title="{{ __('undo remove') }}" aria-label="{{ __('undo remove') }}">
                 <app-icon icon="carbon:undo"></app-icon>
                 <span class="related-button-label ml-05">{{ __('undo remove') }}</span>
@@ -219,6 +220,7 @@
                 <app-icon icon="carbon:unlink"></app-icon>
                 <span class="related-button-label ml-05">{{ __('remove') }}</span>
             </a>
+            {% endif %}
 
         {% else %}
             <object-info :object-data="related"></object-info>

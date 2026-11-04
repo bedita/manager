@@ -13,6 +13,11 @@
         {% if not Layout.isDashboard() %}
             <div class="{{ Layout.moduleClass()|raw }}">
                 {{ Layout.moduleLink()|raw }}
+                {% if currentModule and currentModule.name and not Perms.canSave(currentModule.name) %}
+                    <span class="readonly-indicator" role="img" aria-label="{{ __('Readonly') }}" title="{{ __('Readonly') }}">
+                        <app-icon icon="carbon:edit-off"></app-icon>
+                    </span>
+                {% endif %}
             </div>
 
             {% if editors|length > 1 %}

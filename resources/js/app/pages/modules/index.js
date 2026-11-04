@@ -83,6 +83,9 @@ export default {
 
     watch: {
         selectedRows(val) {
+            const selectedIds = val.map(String);
+            const selectedObjects = this.objectsList.filter((o) => selectedIds.includes(String(o.id)));
+            this.selectedObjects = JSON.stringify(selectedObjects);
             if (!this.$refs.checkAllCB) {
                 return;
             }
@@ -95,9 +98,6 @@ export default {
             } else {
                 this.$refs.checkAllCB.indeterminate = true;
             }
-            const selectedIds = val.map(String);
-            const selectedObjects = this.objectsList.filter((o) => selectedIds.includes(String(o.id)));
-            this.selectedObjects = JSON.stringify(selectedObjects);
         },
     },
 
