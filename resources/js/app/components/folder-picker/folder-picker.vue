@@ -35,14 +35,6 @@ const API_OPTIONS = {
 };
 const PAGE_SIZE = 100;
 
-/**
- * Folder picker component.
- * Displays a tree-view folders list and allows to pick one.
- *
- * @prop {Boolean} disabled Enable/disable the select
- * @prop {String} initialFolder Id of the folder to pre-select
- * @prop {String} label Label to show before the select
- */
 export default {
     name: 'FolderPicker',
     components: {
