@@ -334,6 +334,22 @@ class LayoutHelperTest extends TestCase
                 ['currentModule' => ['name' => 'folders']],
                 'tree',
             ],
+            'events' => [
+                ['currentModule' => ['name' => 'events'], 'schema' => ['associations' => ['DateRanges']]],
+                'calendar',
+            ],
+            'events configured list' => [
+                ['currentModule' => ['name' => 'events', 'view_type' => 'list'], 'schema' => ['associations' => ['DateRanges']]],
+                'list',
+            ],
+            'folders configured list' => [
+                ['currentModule' => ['name' => 'folders', 'view_type' => 'list']],
+                'list',
+            ],
+            'documents configured unavailable type' => [
+                ['currentModule' => ['name' => 'documents', 'view_type' => 'calendar']],
+                'list',
+            ],
         ];
     }
 
@@ -424,6 +440,10 @@ class LayoutHelperTest extends TestCase
             'folders' => [
                 ['currentModule' => ['name' => 'folders']],
                 ['tree', 'tree-compact', 'list'],
+            ],
+            'events configured list' => [
+                ['currentModule' => ['name' => 'events', 'view_type' => 'list'], 'schema' => ['associations' => ['DateRanges']]],
+                ['calendar', 'list'],
             ],
         ];
     }
