@@ -336,6 +336,7 @@ return [
     //     ],
     //     'events' => [
     //         'color' => '#09c',
+    //         // 'view_type' => 'list', // default index view: 'calendar' or 'list'
     //     ],
     //     'news' => [
     //         'color' => '#036',

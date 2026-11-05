@@ -124,7 +124,18 @@
         </div>
 
         {# other dynamic filters #}
-        <div v-for="filter in dynamicFilters" class="filter-container" :class="[filter.name, filter.type, filter.date ? 'date' : '']">
+        {% set categorizedTypes = [] %}
+        {% for type, typeSchema in schemasByType|default([]) %}
+            {% if typeSchema.categories %}
+                {% set categorizedTypes = categorizedTypes|merge([type]) %}
+            {% endif %}
+        {% endfor %}
+        {% if schemasByType %}
+            {% set showCategories = categorizedTypes|json_encode ~ '.includes(queryFilter.filter.type)' %}
+        {% else %}
+            {% set showCategories = schema and schema.categories ? 'true' : 'false' %}
+        {% endif %}
+        <div v-for="filter in dynamicFilters" v-if="filter.name !== 'categories' || {{ showCategories|escape('html_attr') }}" class="filter-container" :class="[filter.name, filter.type, filter.date ? 'date' : '']">
             <input type="hidden" form="_filters" :name="filter.name" :value="filter.value">
             <label class="filter-label" v-if="filter.name != 'categories' && filter.name != 'tags'"><: t(filter.label || filter.name) | humanize :></label>
 
@@ -154,8 +165,6 @@
                         label=""
                         @change="onCategoryChange"
                     ></category-picker>
-                {% else %}
-                    -
                 {% endif %}
             </span>
 

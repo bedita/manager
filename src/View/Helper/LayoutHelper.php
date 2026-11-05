@@ -272,19 +272,16 @@ class LayoutHelper extends Helper
     }
 
     /**
-     * Return module index default view type
+     * Return module index default view type, configurable via `Modules.<name>.view_type`
      *
      * @return string
      */
     public function moduleIndexDefaultViewType(): string
     {
-        $module = (array)$this->getView()->get('currentModule');
-        $name = (string)Hash::get($module, 'name');
-        $schema = (array)$this->_View->get('schema');
-        $defaultType = in_array('DateRanges', (array)Hash::get($schema, 'associations')) ? 'calendar' : 'list';
-        $defaultType = $name === 'folders' ? 'tree' : $defaultType;
+        $viewTypes = $this->moduleIndexViewTypes();
+        $configured = Hash::get((array)$this->getView()->get('currentModule'), 'view_type');
 
-        return $defaultType;
+        return in_array($configured, $viewTypes, true) ? $configured : $viewTypes[0];
     }
 
     /**
@@ -306,11 +303,16 @@ class LayoutHelper extends Helper
      */
     public function moduleIndexViewTypes(): array
     {
-        $defaultType = $this->moduleIndexDefaultViewType();
-        $defaultList = $defaultType === 'calendar' ? ['calendar', 'list'] : ['list'];
-        $defaultList = $defaultType === 'tree' ? ['tree', 'tree-compact', 'list'] : $defaultList;
+        $module = (array)$this->getView()->get('currentModule');
+        if (Hash::get($module, 'name') === 'folders') {
+            return ['tree', 'tree-compact', 'list'];
+        }
+        $schema = (array)$this->getView()->get('schema');
+        if (in_array('DateRanges', (array)Hash::get($schema, 'associations'))) {
+            return ['calendar', 'list'];
+        }
 
-        return $defaultList;
+        return ['list'];
     }
 
     /**

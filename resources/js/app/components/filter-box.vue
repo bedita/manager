@@ -229,7 +229,10 @@ export default {
 
                     return false;
                 }
-                if (f.type === 'select' && f.options && typeof f.options[0].text === 'undefined') {
+                if (['select', 'radio'].includes(f.type) && Object.keys(f.options || {}).length === 0) {
+                    return false;
+                }
+                if (f.type === 'select' && typeof f.options[0]?.text === 'undefined') {
                     const items = [];
                     Object.keys(f.options).forEach((k) => {
                         items.push({
