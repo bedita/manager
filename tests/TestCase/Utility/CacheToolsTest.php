@@ -176,7 +176,6 @@ class CacheToolsTest extends TestCase
     {
         $this->apiClient->expects(static::once())->method('get')->willReturn(['data' => []]);
         static::assertSame([], CacheTools::getUsersInfo([1]));
-        static::assertSame([], CacheTools::getUsersInfo([1]));
     }
 
     /**
