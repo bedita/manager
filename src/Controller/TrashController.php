@@ -76,15 +76,32 @@ class TrashController extends AppController
             return $this->redirect(['_name' => 'dashboard']);
         }
 
-        $this->set('objects', (array)$response['data']);
+        $objects = (array)$response['data'];
+        $userIds = array_merge(
+            (array)Hash::extract($objects, '{n}.meta.created_by'),
+            (array)Hash::extract($objects, '{n}.meta.modified_by'),
+        );
+        $userIds = array_unique($userIds);
+        $usersInfo = [];
+        try {
+            $usersInfo = CacheTools::getUsersInfo($userIds);
+        } catch (BEditaClientException $e) {
+            $this->log($e->getMessage(), LogLevel::ERROR);
+            $this->Flash->error($e->getMessage(), ['params' => $e]);
+        }
+        $this->set('objects', $objects);
         $this->set('meta', (array)$response['meta']);
         $this->set('links', (array)$response['links']);
+        $this->set('usersInfo', $usersInfo);
         $this->set('types', ['right' => $this->Modules->objectTypes(false)]);
         $this->set('properties', $this->Properties->indexList('trash'));
         $this->set('schema', ['properties' => [
             'title' => ['type' => 'string'],
             'type' => ['type' => 'string'],
             'status' => ['type' => 'string'],
+            'created_by' => ['type' => 'integer'],
+            'modified_by' => ['type' => 'integer'],
+            'created' => ['type' => 'date-time'],
             'modified' => ['type' => 'date-time'],
             'id' => ['type' => 'integer'],
         ]]);

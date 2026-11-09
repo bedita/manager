@@ -221,6 +221,31 @@ class SchemaHelper extends Helper
     }
 
     /**
+     * Format user ID as "Name Surname (email) / id"
+     *
+     * @param int $userId User ID.
+     * @param array $usersInfo Associative array of user info keyed by user ID.
+     * @return string
+     */
+    public function formatUserId(int $userId, array $usersInfo = []): string
+    {
+        if (empty($usersInfo[$userId])) {
+            return (string)$userId;
+        }
+        $user = $usersInfo[$userId];
+        $name = (string)Hash::get($user, 'attributes.name');
+        $surname = (string)Hash::get($user, 'attributes.surname');
+        $email = (string)Hash::get($user, 'attributes.email');
+        $displayName = trim(implode(' ', array_filter([$name, $surname]))) ?: Hash::get($user, 'attributes.username', 'Unknown');
+        $parts = [$displayName];
+        if ($email) {
+            $parts[] = "($email)";
+        }
+
+        return implode(' ', $parts);
+    }
+
+    /**
      * Infer type from property schema in JSON-SCHEMA format
      * Possible return values:
      *
