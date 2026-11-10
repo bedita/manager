@@ -1,6 +1,8 @@
 <template>
     <div class="user-filter">
+        <!-- Autocomplete reads default-value only when mounted. -->
         <autocomplete
+            :key="selectedLabel"
             base-class="user-filter-autocomplete"
             size="100"
             :search="search"
@@ -14,6 +16,7 @@
         <input
             type="hidden"
             :name="name"
+            :form="form"
             :value="selectedId"
         >
     </div>
@@ -34,6 +37,14 @@ export default {
             type: String,
             required: true,
         },
+        form: {
+            type: String,
+            default: '',
+        },
+        value: {
+            type: String,
+            default: null,
+        },
         initialId: {
             type: String,
             default: '',
@@ -50,9 +61,47 @@ export default {
 
     data() {
         return {
-            selectedId: this.initialId,
+            selectedId: this.value ?? this.initialId,
             selectedLabel: this.initialLabel,
         };
+    },
+
+    computed: {
+        userId() {
+            return this.value ?? this.initialId;
+        },
+    },
+
+    watch: {
+        userId: {
+            immediate: true,
+            async handler(id) {
+                if (id === this.selectedId && this.selectedLabel) {
+                    return;
+                }
+                this.selectedId = id;
+                this.selectedLabel = '';
+                if (!id) {
+                    return;
+                }
+                try {
+                    const response = await fetch(`${API_URL}users/list?filter[id]=${encodeURIComponent(id)}&page_size=1`, API_OPTIONS);
+                    if (!response.ok) {
+                        throw new Error(`Unable to load user ${id}: ${response.status}`);
+                    }
+                    const json = await response.json();
+                    const user = json.data.find(user => user.id === id);
+                    if (!user) {
+                        throw new Error(`User ${id} not found`);
+                    }
+                    if (this.selectedId === id) {
+                        this.selectedLabel = this.formatLabel(user.attributes);
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+        },
     },
 
     methods: {
@@ -82,12 +131,14 @@ export default {
         onSubmit(result) {
             this.selectedId = result.id;
             this.selectedLabel = result.label;
+            this.$emit('input', this.selectedId);
         },
 
-        onInput(input) {
-            if (!input) {
+        onInput(event) {
+            if (!event.target.value) {
                 this.selectedId = '';
                 this.selectedLabel = '';
+                this.$emit('input', '');
             }
         },
     },

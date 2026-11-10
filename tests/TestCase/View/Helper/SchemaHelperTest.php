@@ -36,6 +36,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversMethod(SchemaHelper::class, 'formatBoolean')]
 #[CoversMethod(SchemaHelper::class, 'formatDate')]
 #[CoversMethod(SchemaHelper::class, 'formatDateTime')]
+#[CoversMethod(SchemaHelper::class, 'formatUserId')]
 #[CoversMethod(SchemaHelper::class, 'filterList')]
 #[CoversMethod(SchemaHelper::class, 'filterListByType')]
 #[CoversMethod(SchemaHelper::class, 'minimalObjectsList')]
@@ -809,6 +810,59 @@ class SchemaHelperTest extends TestCase
     {
         $actual = $this->Schema->format($value, $schema);
         static::assertSame($expected, $actual);
+    }
+
+    /**
+     * Test `formatUserId` method.
+     *
+     * @return void
+     */
+    public function testFormatUserId(): void
+    {
+        $usersInfo = [
+            1 => [
+                'id' => 1,
+                'attributes' => [
+                    'name' => 'John',
+                    'surname' => 'Doe',
+                    'email' => 'john@example.com',
+                ],
+            ],
+        ];
+
+        $actual = $this->Schema->formatUserId(1, $usersInfo);
+        static::assertSame('John Doe (john@example.com)', $actual);
+    }
+
+    /**
+     * Test `formatUserId` with missing user.
+     *
+     * @return void
+     */
+    public function testFormatUserIdMissing(): void
+    {
+        $actual = $this->Schema->formatUserId(999, []);
+        static::assertSame('999', $actual);
+    }
+
+    /**
+     * Test `formatUserId` with minimal user info.
+     *
+     * @return void
+     */
+    public function testFormatUserIdMinimal(): void
+    {
+        $usersInfo = [
+            2 => [
+                'id' => 2,
+                'attributes' => [
+                    'username' => 'testuser',
+                ],
+            ],
+        ];
+
+        $actual = $this->Schema->formatUserId(2, $usersInfo);
+        static::assertStringContainsString('testuser', $actual);
     }
 
     /**

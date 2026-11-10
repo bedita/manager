@@ -204,6 +204,28 @@
                 </div>
             </span>
 
+            {% if Perms.canRead('users') %}
+            <span v-else-if="filter.name === 'modified_by'">
+                <user-filter
+                    class="mr-05"
+                    name="modified_by"
+                    form="_filters"
+                    placeholder="{{ __('User') }}"
+                    v-model="queryFilter.filter[filter.name]"
+                ></user-filter>
+            </span>
+
+            <span v-else-if="filter.name === 'created_by'">
+                <user-filter
+                    class="mr-05"
+                    name="created_by"
+                    form="_filters"
+                    placeholder="{{ __('User') }}"
+                    v-model="queryFilter.filter[filter.name]"
+                ></user-filter>
+            </span>
+            {% endif %}
+
             <span v-else-if="filter.type === 'select' || filter.type === 'radio'">
                 <select form="_filters" v-model="queryFilter.filter[filter.name]" :id="filter.name">
                     <option value="">

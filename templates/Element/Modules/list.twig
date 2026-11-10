@@ -4,6 +4,7 @@
             :can-save-folders="{{ Perms.canSave('folders')|default(0) }}"
             :can-delete="{{ Perms.canDelete({type: objectType}) }}"
             :selected-rows="selectedRows"
+            :all-checked="allChecked"
             @toggle="toggleAll"
             @remove="trash"
 			@set-status="submitBulkStatus"

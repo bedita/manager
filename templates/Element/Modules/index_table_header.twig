@@ -48,6 +48,26 @@
         </div>
     {% endif %}
 
+    {% if showCreatedBy %}
+        <div class="{{ Link.sortClass('created_by') }}">
+            {% if emptyQuerySearch and Schema.sortable('created_by') %}
+                <a href="{{ Link.sortUrl('created_by') }}">{{ __('Created by') }}</a>
+            {% else %}
+                {{ __('created_by') }}
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if showModifiedBy %}
+        <div class="{{ Link.sortClass('modified_by') }}">
+            {% if emptyQuerySearch and Schema.sortable('modified_by') %}
+                <a href="{{ Link.sortUrl('modified_by') }}">{{ __('Modified by') }}</a>
+            {% else %}
+                {{ __('modified_by') }}
+            {% endif %}
+        </div>
+    {% endif %}
+
     <div class="narrow {{ Link.sortClass('id') }}">
         {% if emptyQuerySearch and Schema.sortable('id') %}
             <a href="{{ Link.sortUrl('id') }}">{{ __('id') }}</a>

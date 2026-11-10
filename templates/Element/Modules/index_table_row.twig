@@ -63,6 +63,14 @@
             <div class="narrow">{{ Time.format(object.meta.modified, 'd MMM YYYY') }} &nbsp; {{ Time.format(object.meta.modified, 'HH:mm') }}</div>
         {% endif %}
 
+        {% if showCreatedBy %}
+            <div class="narrow">{{ Schema.formatUserId(object.meta.created_by, usersInfo) }}</div>
+        {% endif %}
+
+        {% if showModifiedBy %}
+            <div class="narrow">{{ Schema.formatUserId(object.meta.modified_by, usersInfo) }}</div>
+        {% endif %}
+
         <div class="narrow">{{ object.id }}</div>
 
         {# COMMANDS #}

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2026-10-14 14:35:17 \n"
+"POT-Creation-Date: 2026-11-10 07:54:35 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -89,6 +89,9 @@ msgid "Any"
 msgstr ""
 
 msgid "Appearance"
+msgstr ""
+
+msgid "Application"
 msgstr ""
 
 msgid "Applications"
@@ -236,6 +239,9 @@ msgid "Created"
 msgstr ""
 
 msgid "Created By User"
+msgstr ""
+
+msgid "Created by"
 msgstr ""
 
 msgid "Created ↑ Oldest on top"
@@ -574,6 +580,9 @@ msgstr ""
 msgid "Modified By User"
 msgstr ""
 
+msgid "Modified by"
+msgstr ""
+
 msgid "Modified ↑ Oldest on top"
 msgstr ""
 
@@ -846,6 +855,9 @@ msgid "Publishing properties"
 msgstr ""
 
 msgid "Read"
+msgstr ""
+
+msgid "Readonly"
 msgstr ""
 
 msgid "Recovery Mode - Access restricted to admin users"
@@ -1200,6 +1212,9 @@ msgstr ""
 msgid "created"
 msgstr ""
 
+msgid "created_by"
+msgstr ""
+
 msgid "current password"
 msgstr ""
 
@@ -1246,6 +1261,9 @@ msgid "max_attempts"
 msgstr ""
 
 msgid "modified"
+msgstr ""
+
+msgid "modified_by"
 msgstr ""
 
 msgid "name"
@@ -1841,9 +1859,6 @@ msgstr ""
 msgid "Inherited from"
 msgstr ""
 
-msgid "Readonly"
-msgstr ""
-
 msgid "Translatable"
 msgstr ""
 
@@ -2094,6 +2109,9 @@ msgid "Error on deleting category"
 msgstr ""
 
 msgid "Create new"
+msgstr ""
+
+msgid "Select all"
 msgstr ""
 
 msgid "Copy"

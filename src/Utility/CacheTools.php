@@ -94,4 +94,43 @@ class CacheTools
         $cacheKey = self::cacheKey($name);
         Cache::write($cacheKey, $count);
     }
+
+    /**
+     * Read users from individual cache entries, fetching all misses in one API call.
+     * Unavailable users are cached as empty entries until the normal cache expiry.
+     *
+     * @param array $userIds Array of user IDs to fetch.
+     * @return array Associative array: userId => user data
+     */
+    public static function getUsersInfo(array $userIds): array
+    {
+        $usersInfo = [];
+        $missingIds = [];
+        foreach (array_filter(array_unique($userIds)) as $userId) {
+            $user = Cache::read(self::cacheKey(sprintf('user_%d', $userId)));
+            if ($user === null) {
+                $missingIds[] = $userId;
+            } elseif ($user !== []) {
+                $usersInfo[$userId] = $user;
+            }
+        }
+        if ($missingIds === []) {
+            return $usersInfo;
+        }
+        $response = (array)ApiClientProvider::getApiClient()->get('/users', [
+            'filter' => ['id' => $missingIds],
+            'fields' => 'name,surname,email,username',
+            'page_size' => count($missingIds),
+        ]);
+        $fetched = Hash::combine((array)Hash::get($response, 'data'), '{n}.id', '{n}');
+        foreach ($missingIds as $userId) {
+            $user = $fetched[$userId] ?? [];
+            Cache::write(self::cacheKey(sprintf('user_%d', $userId)), $user);
+            if ($user !== []) {
+                $usersInfo[$userId] = $user;
+            }
+        }
+
+        return $usersInfo;
+    }
 }
