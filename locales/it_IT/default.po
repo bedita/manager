@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-10-14 14:35:17 \n"
+"POT-Creation-Date: 2026-11-10 07:54:35 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -95,6 +95,9 @@ msgstr "Qualsiasi"
 
 msgid "Appearance"
 msgstr "Aspetto"
+
+msgid "Application"
+msgstr "Applicazione"
 
 msgid "Applications"
 msgstr "Applicazioni"
@@ -245,6 +248,9 @@ msgid "Created"
 msgstr "Creato"
 
 msgid "Created By User"
+msgstr "Creato da"
+
+msgid "Created by"
 msgstr "Creato da"
 
 msgid "Created ↑ Oldest on top"
@@ -584,6 +590,9 @@ msgstr "Modificato"
 msgid "Modified By User"
 msgstr "Modificato da"
 
+msgid "Modified by"
+msgid "Modified by"
+msgstr "Modificato da"
 msgid "Modified ↑ Oldest on top"
 msgstr "Data di modifica ↑ Meno recenti in testa"
 
@@ -863,6 +872,9 @@ msgstr "Proprietà di pubblicazione"
 
 msgid "Read"
 msgstr "Lettura"
+
+msgid "Readonly"
+msgstr "Sola lettura"
 
 msgid "Recovery Mode - Access restricted to admin users"
 msgstr "Modalità Recovery - Accesso consentito ai soli utenti admin"
@@ -1224,6 +1236,9 @@ msgstr ""
 msgid "created"
 msgstr "creato"
 
+msgid "created_by"
+msgstr "Creato da"
+
 msgid "current password"
 msgstr "password corrente"
 
@@ -1271,6 +1286,9 @@ msgstr "massimo numero tentativi"
 
 msgid "modified"
 msgstr "modificato"
+
+msgid "modified_by"
+msgstr "Modificato da"
 
 msgid "name"
 msgstr "nome"
@@ -1876,9 +1894,6 @@ msgstr "Azione ${ action } eseguita da"
 msgid "Inherited from"
 msgstr "Ereditato da"
 
-msgid "Readonly"
-msgstr "Sola lettura"
-
 msgid "Translatable"
 msgstr "Traducibile"
 
@@ -2136,6 +2151,9 @@ msgstr "Errore durante l'eliminazione della categoria"
 
 msgid "Create new"
 msgstr "Crea nuovo"
+
+msgid "Select all"
+msgstr "Seleziona tutto"
 
 msgid "Copy"
 msgstr "Copia"

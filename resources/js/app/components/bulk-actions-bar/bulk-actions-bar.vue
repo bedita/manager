@@ -1,14 +1,49 @@
 <template>
-    <div class="bulk-actions-bar">
+    <div
+        class="bulk-actions-bar"
+        :class="{ 'trash-actions': trash }"
+    >
         <div class="select-cell narrow">
             <input
                 ref="checkAllCB"
                 type="checkbox"
-                v-model="multi"
-                @click="toggle"
+                :checked="allChecked"
+                :indeterminate.prop="selectedRows.length > 0 && !allChecked"
+                :aria-label="msgSelectAll"
+                @change="toggle"
             >
         </div>
-        <div>
+        <div v-if="trash && canRestore">
+            <button
+                type="button"
+                class="button button-outlined trash-action"
+                :disabled="disabled"
+                :aria-label="msgRestore"
+                v-title="msgRestore"
+                @click="$emit('restore')"
+            >
+                <app-icon
+                    icon="carbon:redo"
+                    :style="{ width: '20px', height: '20px' }"
+                />
+            </button>
+        </div>
+        <div v-if="trash && canDelete === 1">
+            <button
+                type="button"
+                class="button button-outlined trash-action"
+                :disabled="disabled"
+                :aria-label="msgDelete"
+                v-title="msgDelete"
+                @click="remove"
+            >
+                <app-icon
+                    icon="carbon:trash-can"
+                    :style="{ width: '20px', height: '20px' }"
+                />
+            </button>
+        </div>
+        <div v-if="!trash">
             <a
                 class="button button-outlined"
                 :class="{ 'is-disabled': disabled }"
@@ -22,7 +57,7 @@
                 />
             </a>
         </div>
-        <div>
+        <div v-if="!trash">
             <a
                 class="button button-outlined"
                 :class="{ 'is-disabled': disabled }"
@@ -36,7 +71,7 @@
                 />
             </a>
         </div>
-        <div>
+        <div v-if="!trash">
             <a
                 class="button button-outlined"
                 :class="{ 'is-disabled': disabled }"
@@ -52,7 +87,7 @@
         </div>
         <div
             class="copy-folder-action"
-            v-if="canSaveFolders"
+            v-if="!trash && canSaveFolders"
         >
             <a
                 class="button button-outlined"
@@ -86,7 +121,7 @@
         </div>
         <div
             class="move-folder-action"
-            v-if="canSaveFolders"
+            v-if="!trash && canSaveFolders"
         >
             <a
                 class="button button-outlined"
@@ -118,7 +153,7 @@
                 </button>
             </div>
         </div>
-        <div>
+        <div v-if="!trash">
             <a
                 class="button button-outlined"
                 :class="{ 'is-disabled': disabled }"
@@ -144,6 +179,18 @@ export default {
         FolderPicker: () => import(/* webpackChunkName: "folder-picker" */'app/components/folder-picker/folder-picker'),
     },
     props: {
+        allChecked: {
+            type: Boolean,
+            default: false,
+        },
+        trash: {
+            type: Boolean,
+            default: false,
+        },
+        canRestore: {
+            type: Boolean,
+            default: false,
+        },
         canDelete: {
             type: [Number, String],
             default: 0,
@@ -157,14 +204,16 @@ export default {
             default: () => [],
         },
     },
-    emits: ['position', 'remove', 'set-status', 'toggle'],
+    emits: ['position', 'remove', 'restore', 'set-status', 'toggle'],
     data() {
         return {
             copyToFolderShow: false,
             copyFolder: null,
             moveToFolderShow: false,
             moveFolder: null,
-            multi: false,
+            msgDelete: t`Permanently delete`,
+            msgRestore: t`Restore`,
+            msgSelectAll: t`Select all`,
             msgCopy: t`Copy`,
             msgCopyToFolder: t`Copy to folder`,
             msgMove: t`Move`,
@@ -224,7 +273,7 @@ export default {
             this.reset();
         },
         toggle() {
-            this.$emit('toggle', this.multi);
+            this.$emit('toggle', !this.allChecked);
         },
     },
 }
@@ -234,6 +283,9 @@ div.bulk-actions-bar {
     display: grid;
     grid-template-columns: 3rem 3.5rem 3.5rem 3.5rem 3.5rem 3.5rem 3.5rem 3.5rem;
     align-items: center;
+}
+div.bulk-actions-bar.trash-actions {
+    grid-template-columns: 3rem repeat(2, 3.5rem);
 }
 div.bulk-actions-bar > div {
     display: flex;
@@ -316,7 +368,7 @@ div.bulk-actions-bar > .select-cell input[type="checkbox"] {
     border-color: #ced4da;
     color: #6c757d;
 }
-a.button {
+a.button, button.trash-action {
     height: 2.7rem;
     min-width: 2.7rem;
     width: 2.7rem;
@@ -333,17 +385,22 @@ a.button {
     transition: background-color 0.3s ease;
 }
 
-a.button :deep(svg) {
+a.button :deep(svg), button.trash-action :deep(svg) {
     display: block;
 }
 
-a.button:hover {
+a.button:hover, button.trash-action:hover {
     cursor: pointer;
 }
-.is-disabled {
+.is-disabled, button.trash-action:disabled {
     opacity: 0.35;
     pointer-events: none;
     cursor: not-allowed;
+}
+button.trash-action:disabled {
+    color: white !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
 }
 
 @media (max-width: 768px) {

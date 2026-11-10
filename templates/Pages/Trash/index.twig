@@ -5,12 +5,29 @@
 }) }}
 
 {% set ids = Array.extract(objects, '{*}.id') %}
-
 {% set q = _view.request.getQuery()|json_encode|escape %}
+{% set t = 'objects' %}
+{% set tt = _view.request.getQuery('filter.type')|default(['objects']) %}
+{% if tt|length == 1 %}
+    {% set t = tt[0] %}
+{% endif %}
 
 <trash-index inline-template ids='{{ ids|json_encode }}'>
     <div class="module-index">
         <div class="table-container">
+            {% if objects and t %}
+                <bulk-actions-bar
+                    trash
+                    :can-restore="{{ (Perms.canSave(t) or t == 'objects') ? 'true' : 'false' }}"
+                    :can-delete="{{ (Perms.canDelete({type: t}) or t == 'objects') ? 1 : 0 }}"
+                    :selected-rows="selectedRows"
+                    :all-checked="allChecked"
+                    @toggle="toggleAll"
+                    @restore="restoreItem"
+                    @remove="deleteItem"
+                >
+                </bulk-actions-bar>
+            {% endif %}
             <div class="list-objects">
                 {% if objects %}
                     {{ element('Modules/index_table_header', { 'refObject': objects[0], 'showCreatedBy': true, 'showModifiedBy': true }) }}
@@ -24,17 +41,17 @@
             </div>
         </div>
 
-        {% if objects %}
-        <div class="bulk-actions mt-1 has-border-module-{{ currentModule.name }}">
-            <header class="bulk-header">
-                {{ __('Actions on selected items') }}
-            </header>
+        {% if objects and t %}
+            <div class="bulk-actions mt-1 has-border-module-{{ currentModule.name }}">
+                <header class="bulk-header">
+                    {{ __('Actions on selected items') }}
+                </header>
 
-            <div class="is-flex">
-                {% if (objects) and Perms.canSave() %}
-                    {{ Form.create(null, {
+                <div class="is-flex">
+                    {% if (objects) and (Perms.canSave(t) or t == 'objects') %}
+                        {{ Form.create(null, {
                         'id': 'form-restore',
-                        'url': {'_name': 'trash:restore', 'object_type': objectType},
+                        'url': {'_name': 'trash:restore', 'object_type': t},
                         'class': 'mr-1'
                     })|raw }}
                         <input type="hidden" name="ids" v-bind:value="selectedRows">
@@ -43,30 +60,47 @@
                             <app-icon icon="carbon:redo"></app-icon>
                             <span class="ml-05">{{ __('Restore') }}</span>
                         </button>
-                    {{ Form.end()|raw }}
-                {% endif %}
-                {% if (objects) and Perms.canDelete({type: objectType}) %}
-                    {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': objectType}})|raw }}
-                        <input type="hidden" name="ids" v-bind:value="selectedRows">
-                        {% do Form.unlockField('ids') %}
-                        <button @click.prevent="deleteItem" class="button button-primary is-width-auto" :disabled="!selectedRows.length">
-                            <app-icon icon="carbon:trash-can"></app-icon>
-                            <span class="ml-05">{{ __('Delete') }}</span>
-                        </button>
-                    {{ Form.end()|raw }}
-                {% endif %}
+                        {{ Form.end()|raw }}
+                    {% endif %}
+                    {% if (objects) and (Perms.canDelete({type: t}) or t == 'objects') %}
+                        {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': t}})|raw }}
+                            <input type="hidden" name="ids" v-bind:value="selectedRows">
+                            {% do Form.unlockField('ids') %}
+                            <button @click.prevent="deleteItem" class="button button-primary is-width-auto" :disabled="!selectedRows.length">
+                                <app-icon icon="carbon:trash-can"></app-icon>
+                                <span class="ml-05">{{ __('Delete') }}</span>
+                            </button>
+                        {{ Form.end()|raw }}
+                    {% endif %}
+                </div>
             </div>
-        </div>
+            {% if Perms.canSave(t) or t == 'objects' %}
+                {{ Form.create(null, {
+                    'id': 'form-restore',
+                    'url': {'_name': 'trash:restore', 'object_type': t}
+                })|raw }}
+                    <input type="hidden" name="ids" v-bind:value="selectedRows">
+                    {% do Form.unlockField('ids') %}
+                {{ Form.end()|raw }}
+            {% endif %}
+            {% if Perms.canDelete({type: t}) or t == 'objects' %}
+                {{ Form.create(null, {'id': 'form-delete', 'url': {'_name': 'trash:delete', 'object_type': t}})|raw }}
+                    <input type="hidden" name="ids" v-bind:value="selectedRows">
+                    {% do Form.unlockField('ids') %}
+                {{ Form.end()|raw }}
+            {% endif %}
         {% endif %}
 
-        {# Append "Empty" button in commands menu. #}
-        {{ Form.create(null, {'id': 'form-empty-trash', 'url': Url.build({'_name': 'trash:empty'})})|raw }}
-            {{ Form.hidden('query', {'value': q})|raw }}
-        {{ Form.end()|raw }}
-        {# Append "Remove" to sidebar #}
-        {% do _view.append(
-            'app-module-buttons',
-            '<button form="form-empty-trash" class="button button-primary button-primary-hover-module-model is-width-auto"><app-icon icon="carbon:trash-can"></app-icon><span class="ml-05">' ~ __('Empty-verb') ~ '</span></button>'
-        ) %}
+        {% if Perms.canDelete({type: t}) or t == 'objects' %}
+            {# Append "Empty" button in commands menu. #}
+            {{ Form.create(null, {'id': 'form-empty-trash', 'url': Url.build({'_name': 'trash:empty'})})|raw }}
+                {{ Form.hidden('query', {'value': q})|raw }}
+            {{ Form.end()|raw }}
+            {# Append "Remove" to sidebar #}
+            {% do _view.append(
+                'app-module-buttons',
+                '<button form="form-empty-trash" class="button button-primary button-primary-hover-module-model is-width-auto"><app-icon icon="carbon:trash-can"></app-icon><span class="ml-05">' ~ __('Empty-verb') ~ '</span></button>'
+            ) %}
+        {% endif %}
     </div>
 </trash-index>
