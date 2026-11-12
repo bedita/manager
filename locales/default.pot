@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita 4 \n"
-"POT-Creation-Date: 2026-11-10 07:54:35 \n"
+"POT-Creation-Date: 2026-11-12 09:41:29 \n"
 "MIME-Version: 1.0 \n"
 "Content-Transfer-Encoding: 8bit \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -1499,10 +1499,64 @@ msgstr ""
 msgid "December"
 msgstr ""
 
+msgid "Show all object types"
+msgstr ""
+
+msgid "Show top 8 object types"
+msgstr ""
+
+msgid "Filter chart object types"
+msgstr ""
+
+msgid "Search object types"
+msgstr ""
+
+msgid "Selected"
+msgstr ""
+
+msgid "Select all"
+msgstr ""
+
+msgid "Clear all"
+msgstr ""
+
+msgid "No object types match your search."
+msgstr ""
+
+msgid "No chart data for this selection."
+msgstr ""
+
+msgid "Unable to load statistics. Please try again."
+msgstr ""
+
+msgid "Retry"
+msgstr ""
+
+msgid "Showing all object types"
+msgstr ""
+
+msgid "Showing top 8 object types by count"
+msgstr ""
+
 msgid "Contents creation"
 msgstr ""
 
 msgid "All contents"
+msgstr ""
+
+msgid "Statistics totals"
+msgstr ""
+
+msgid "Object type"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Day"
 msgstr ""
 
 msgid "All object types"
@@ -1689,9 +1743,6 @@ msgid "Choose object type"
 msgstr ""
 
 msgid "New content"
-msgstr ""
-
-msgid "Object type"
 msgstr ""
 
 msgid "Parent folder"
@@ -2066,12 +2117,6 @@ msgstr ""
 msgid "Add multiple date ranges"
 msgstr ""
 
-msgid "Day"
-msgstr ""
-
-msgid "Month"
-msgstr ""
-
 msgid "Repeat times"
 msgstr ""
 
@@ -2079,9 +2124,6 @@ msgid "Repeat type"
 msgstr ""
 
 msgid "Required"
-msgstr ""
-
-msgid "Year"
 msgstr ""
 
 msgid "Insert date(s)"
@@ -2109,9 +2151,6 @@ msgid "Error on deleting category"
 msgstr ""
 
 msgid "Create new"
-msgstr ""
-
-msgid "Select all"
 msgstr ""
 
 msgid "Copy"

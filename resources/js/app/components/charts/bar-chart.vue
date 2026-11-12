@@ -23,7 +23,12 @@ export default {
     data() {
         return {
             chartOptions: {
-                responsive: true
+                responsive: true,
+                plugins: {
+                    legend: {
+                        onClick: () => null,
+                    },
+                },
             }
         }
     }
