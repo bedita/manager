@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BEdita Manager \n"
-"POT-Creation-Date: 2026-11-10 07:54:35 \n"
+"POT-Creation-Date: 2026-11-12 09:41:29 \n"
 "PO-Revision-Date:  \n"
 "Last-Translator:  \n"
 "Language-Team: BEdita I18N & I10N Team \n"
@@ -591,8 +591,8 @@ msgid "Modified By User"
 msgstr "Modificato da"
 
 msgid "Modified by"
-msgid "Modified by"
 msgstr "Modificato da"
+
 msgid "Modified ↑ Oldest on top"
 msgstr "Data di modifica ↑ Meno recenti in testa"
 
@@ -1526,11 +1526,65 @@ msgstr "Novembre"
 msgid "December"
 msgstr "Dicembre"
 
+msgid "Show all object types"
+msgstr "Mostra tutti i tipi"
+
+msgid "Show top 8 object types"
+msgstr "Mostra 8 tipi"
+
+msgid "Filter chart object types"
+msgstr "Filtra tipi"
+
+msgid "Search object types"
+msgstr "Cerca tipi"
+
+msgid "Selected"
+msgstr "Selezionati"
+
+msgid "Select all"
+msgstr "Seleziona tutto"
+
+msgid "Clear all"
+msgstr "Cancella tutto"
+
+msgid "No object types match your search."
+msgstr "Nessun tipo corrisponde"
+
+msgid "No chart data for this selection."
+msgstr "Nessun dato disponibile per questa selezione"
+
+msgid "Unable to load statistics. Please try again."
+msgstr "Impossibile caricare le statistiche"
+
+msgid "Retry"
+msgstr "Riprova"
+
+msgid "Showing all object types"
+msgstr "Mostra tutti"
+
+msgid "Showing top 8 object types by count"
+msgstr "Mostra 8 tipi"
+
 msgid "Contents creation"
 msgstr "Creazione contenuti"
 
 msgid "All contents"
 msgstr "Tutti i contenuti"
+
+msgid "Statistics totals"
+msgstr "Totale"
+
+msgid "Object type"
+msgstr "Tipo di oggetto"
+
+msgid "Year"
+msgstr "Anno"
+
+msgid "Month"
+msgstr "Mese"
+
+msgid "Day"
+msgstr "Giorno"
 
 msgid "All object types"
 msgstr "Tutti i tipi di oggetto"
@@ -1725,9 +1779,6 @@ msgstr "Scegli il tipo di oggetto"
 
 msgid "New content"
 msgstr "Nuovo contenuto"
-
-msgid "Object type"
-msgstr "Tipo di oggetto"
 
 msgid "Parent folder"
 msgstr "Cartella genitore"
@@ -2107,12 +2158,6 @@ msgstr "Aggiungi multiplo"
 msgid "Add multiple date ranges"
 msgstr "Aggiungi intervalli multipli di date"
 
-msgid "Day"
-msgstr "Giorno"
-
-msgid "Month"
-msgstr "Mese"
-
 msgid "Repeat times"
 msgstr "Numero di ripetizioni"
 
@@ -2121,9 +2166,6 @@ msgstr "Tipo di ripetizione"
 
 msgid "Required"
 msgstr "Obbligatorio"
-
-msgid "Year"
-msgstr "Anno"
 
 msgid "Insert date(s)"
 msgstr "Inserire data(e)"
@@ -2151,9 +2193,6 @@ msgstr "Errore durante l'eliminazione della categoria"
 
 msgid "Create new"
 msgstr "Crea nuovo"
-
-msgid "Select all"
-msgstr "Seleziona tutto"
 
 msgid "Copy"
 msgstr "Copia"
