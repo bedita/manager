@@ -25,6 +25,12 @@
   },
   "dependencies": {
     "@chialab/typos": "^0.1.1",
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/list": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
+    "@fullcalendar/vue": "^6.1.15",
     "@riophae/vue-treeselect": "^0.4.0",
     "@trevoreyre/autocomplete-vue": "^2.4.1",
     "abortcontroller-polyfill": "^1.7.6",
