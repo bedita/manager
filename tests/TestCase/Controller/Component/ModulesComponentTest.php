@@ -1024,7 +1024,7 @@ class ModulesComponentTest extends TestCase
                 null,
                 [
                     'provider' => 'YouTube',
-                    'provider_uid' => 'v=fE50xrnJnR8',
+                    'provider_uid' => 'fE50xrnJnR8',
                 ],
                 null,
             ],
