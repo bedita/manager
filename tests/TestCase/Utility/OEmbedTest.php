@@ -43,6 +43,10 @@ class OEmbedTest extends TestCase
                 'WGyEelzJaMs',
                 'https://youtu.be/WGyEelzJaMs?si=58cEvfbrPf_ICutz',
             ],
+            'youtube no share link' => [
+                'WGyEelzJaMs',
+                'https://www.youtube.com/WGyEelzJaMs',
+            ],
             'youtube shorts path' => [
                 'WGyEelzJaMs',
                 'https://www.youtube.com/shorts/WGyEelzJaMs?si=58cEvfbrPf_ICutz',
@@ -66,6 +70,10 @@ class OEmbedTest extends TestCase
             'vimeo unlisted link with numeric hash' => [
                 '123456789',
                 'https://vimeo.com/123456789/9876543210?share=copy',
+            ],
+            'other host' => [
+                '123',
+                'https://other.com/123',
             ],
         ];
     }
