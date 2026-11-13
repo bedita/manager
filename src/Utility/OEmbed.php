@@ -31,7 +31,7 @@ class OEmbed
      */
     public function readMetadata(string $url): array
     {
-        $parsed = parse_url($url);
+        $parsed = (array)parse_url($url);
         $host = Hash::get($parsed, 'host', '');
         $provider = $this->findProvider($host);
         $oEmbedUrl = Hash::get($provider, 'url');
@@ -42,7 +42,7 @@ class OEmbed
         $oEmbedUrl = sprintf('%s?url=%s&format=json', $oEmbedUrl, rawurlencode($url));
 
         // custom UID if not found via oEmbed => query or path
-        $providerUID = Hash::get($parsed, 'query', Hash::get($parsed, 'path'));
+        $providerUID = $this->providerUid($parsed, $host);
 
         $meta = $this->fetchJson($oEmbedUrl, (array)Hash::get($provider, 'options'));
         if (empty($meta)) {
@@ -58,6 +58,66 @@ class OEmbed
             'provider_thumbnail' => Hash::get($meta, 'thumbnail_url'),
             'provider_extra' => $meta,
         ];
+    }
+
+    /**
+     * Get provider uid from url and host
+     *
+     * @param array<string, mixed> $parsedUrl The parsed URL array
+     * @param string $host The host
+     * @return string
+     */
+    public function providerUid(array $parsedUrl, string $host): string
+    {
+        $host = strtolower($host);
+        $path = trim((string)Hash::get($parsedUrl, 'path'), '/');
+        $segments = $path === '' ? [] : explode('/', $path);
+        $query = [];
+        parse_str((string)Hash::get($parsedUrl, 'query'), $query);
+
+        if ($host === 'youtu.be') {
+            return $segments[0] ?? '';
+        }
+
+        if (in_array($host, ['youtube.com', 'www.youtube.com'], true)) {
+            foreach (['v', 'list'] as $key) {
+                if (!empty($query[$key])) {
+                    return (string)$query[$key];
+                }
+            }
+            foreach (['embed', 'shorts', 'live', 'v'] as $marker) {
+                $index = array_search($marker, $segments, true);
+                if ($index !== false && isset($segments[$index + 1])) {
+                    return $segments[$index + 1];
+                }
+            }
+
+            return $path;
+        }
+
+        if ($host === 'soundcloud.com') {
+            return $path;
+        }
+
+        if (str_ends_with($host, '.spotify.com')) {
+            return $segments[array_key_last($segments)] ?? '';
+        }
+
+        if ($host === 'vimeo.com' || str_ends_with($host, '.vimeo.com')) {
+            $videoIndex = array_search('video', $segments, true);
+            if ($videoIndex !== false && isset($segments[$videoIndex + 1]) && ctype_digit($segments[$videoIndex + 1])) {
+                return $segments[$videoIndex + 1];
+            }
+            foreach ($segments as $segment) {
+                if (ctype_digit($segment)) {
+                    return $segment;
+                }
+            }
+
+            return $path;
+        }
+
+        return (string)Hash::get($parsedUrl, 'query', $path);
     }
 
     /**
