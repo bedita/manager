@@ -2075,4 +2075,75 @@ class ModulesComponentTest extends TestCase
         $actual = $this->Modules->saveRelatedObjects('123456789', 'folders', $data);
         static::assertSame([], $actual);
     }
+
+    /**
+     * Test that `getModules()` does not pass 'tags' to `translationsEnabled()`.
+     * Tags is a non-object-type module and calling getSchema('tags') would cause an API error.
+     *
+     * @return void
+     */
+    public function testGetModulesDoesNotPassNonObjectTypeModulesToTranslationsEnabled(): void
+    {
+        Cache::clear(SchemaComponent::CACHE_CONFIG);
+        Configure::write('Modules', ['documents' => []]);
+
+        // Setup mock API client
+        $apiClient = $this->getMockBuilder(BEditaClient::class)
+            ->setConstructorArgs(['https://api.example.org'])
+            ->getMock();
+        $schemaCallCount = 0;
+        $schemaCallTypes = [];
+
+        // Mock schema method - should only be called for object types, never for 'tags'
+        $apiClient->method('schema')
+            ->willReturnCallback(
+                function ($type) use (&$schemaCallCount, &$schemaCallTypes) {
+                    $schemaCallCount++;
+                    $schemaCallTypes[] = $type;
+                    static::assertNotSame('tags', $type, 'getSchema should not be called for tags');
+                    if ($type === 'documents') {
+                        return ['translatable' => ['title']];
+                    }
+
+                    return [];
+                },
+            );
+
+        // Mock get method for /home endpoint (modulesFromMeta)
+        $apiClient->method('get')
+            ->willReturnCallback(
+                function ($endpoint) {
+                    if ($endpoint === '/home') {
+                        return [
+                            'meta' => [
+                                'resources' => [
+                                    [
+                                        'name' => 'documents',
+                                        'hints' => ['object_type' => true],
+                                    ],
+                                ],
+                            ],
+                        ];
+                    }
+
+                    return [];
+                },
+            );
+
+        ApiClientProvider::setApiClient($apiClient);
+
+        // Mock Authentication component
+        $appController = $this->Modules->getController();
+        $request = $appController->getRequest()->withAttribute('authentication', $this->getAuthenticationServiceMock());
+        $appController->setRequest($request);
+        $this->Modules->Authentication->setIdentity(new Identity(['id' => 1, 'roles' => ['guest']]));
+
+        // Call getModules - should not throw an error about /model/schema/tags
+        $modules = $this->Modules->getModules();
+
+        // Verify that modules were returned
+        static::assertIsArray($modules);
+        // Verify that schema was called but only for object types
+        static::assertNotContains('tags', $schemaCallTypes, 'schema should not be called with tags');
+    }
 }

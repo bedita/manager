@@ -165,7 +165,9 @@ class ModulesComponent extends Component
             unset($this->modules['tags']);
         }
         $types = array_keys($this->modules);
-        if (isset($this->modules['translations']) && !$this->translationsEnabled($types)) {
+        // Filter out non-object-type modules (like 'tags') before checking translations
+        $objectTypes = array_diff($types, array_keys($this->otherModules));
+        if (isset($this->modules['translations']) && !$this->translationsEnabled($objectTypes)) {
             unset($this->modules['translations']);
         }
 
