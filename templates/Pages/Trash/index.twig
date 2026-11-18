@@ -15,19 +15,6 @@
 <trash-index inline-template ids='{{ ids|json_encode }}'>
     <div class="module-index">
         <div class="table-container">
-            {% if objects and t %}
-                <bulk-actions-bar
-                    trash
-                    :can-restore="{{ (Perms.canSave(t) or t == 'objects') ? 'true' : 'false' }}"
-                    :can-delete="{{ (Perms.canDelete({type: t}) or t == 'objects') ? 1 : 0 }}"
-                    :selected-rows="selectedRows"
-                    :all-checked="allChecked"
-                    @toggle="toggleAll"
-                    @restore="restoreItem"
-                    @remove="deleteItem"
-                >
-                </bulk-actions-bar>
-            {% endif %}
             <div class="list-objects">
                 {% if objects %}
                     {{ element('Modules/index_table_header', { 'refObject': objects[0], 'showCreatedBy': true, 'showModifiedBy': true }) }}

@@ -1,17 +1,4 @@
 <div class="table-container">
-    {% if objects and objectType and Perms.canSave(objectType) %}
-        <bulk-actions-bar
-            :can-save-folders="{{ Perms.canSave('folders')|default(0) }}"
-            :can-delete="{{ Perms.canDelete({type: objectType}) }}"
-            :selected-rows="selectedRows"
-            :all-checked="allChecked"
-            @toggle="toggleAll"
-            @remove="trash"
-			@set-status="submitBulkStatus"
-			@position="submitPosition"
-        >
-        </bulk-actions-bar>
-    {% endif %}
 	<div class="list-objects">
 		{% if objects %}
 			{{ element('Modules/index_table_header', { 'refObject': objects[0] }) }}
