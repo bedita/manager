@@ -151,29 +151,6 @@ export default {
             document.querySelector(`form#${formId}`).submit();
         },
 
-        submitBulkStatus({ status, event }) {
-            if (!['on', 'off', 'draft'].includes(status) || !document.getElementById('bulk-status')) {
-                return;
-            }
-            this.bulkValue = status;
-            this.$nextTick(() => this.bulkActions(event, 'bulk-status'));
-        },
-
-        submitPosition({ action, folderId }) {
-            if (!['copy', 'move'].includes(action) || !folderId) {
-                return;
-            }
-            const form = document.getElementById('bulk-folder');
-            const actionInput = form?.querySelector(`input[name="action"][value="${action}"]`);
-            const folderInput = form?.querySelector('input[name="folderSelected"]');
-            if (!form || !actionInput || !folderInput || !this.selectedRows.length) {
-                return;
-            }
-            actionInput.checked = true;
-            folderInput.value = folderId;
-            form.submit();
-        },
-
         /**
          * Submit bulk export form
          *
