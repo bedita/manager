@@ -1,3 +1,27 @@
+{# trash #}
+{% if not (streams or object.attributes.provider_extra.html) and object.meta.media_url %}
+<property-view inline-template :tab-open="tabsOpen" :is-default-open=true :tab-open-at-start=true>
+    <section class="fieldset">
+        <header @click.prevent="toggleVisibility()"
+            class="tab unselectable"
+            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
+            <h2>{{ __('Media') }}</h2>
+        </header>
+        <div v-show="isOpen" class="tab-container">
+            {% if object.type == 'audios' %}
+            <audio controls src="{{ object.meta.media_url }}"></audio>
+            {% endif %}
+            {% if object.type == 'images' %}
+            <img src="{{ object.meta.media_url }}">
+            {% endif %}
+            {% if object.type == 'videos' %}
+            <video controls src="{{ object.meta.media_url }}"></video>
+            {% endif %}
+        </div>
+    </section>
+</property-view>
+{% endif %}
+
 {% if streams or object.attributes.provider_extra.html %}
 <property-view inline-template :tab-open="tabsOpen" :is-default-open=true :tab-open-at-start=true>
     <section class="fieldset">
@@ -73,6 +97,7 @@
                         }) %}
                     {% endif %}
                 {% endfor %}
+
                 {% set thumbCodes = {
                     notAcceptable: constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE'),
                     notAvailable: constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE'),
