@@ -603,13 +603,13 @@ export default {
                 const response = await fetch(`${BEDITA.base}/api/${this.objectType}/${this.objectId}`, options);
                 const responseJson = await response.json();
                 if (responseJson.error) {
-                    BEDITA.error(responseJson.error);
+                    this.$helpers.handleApiError(responseJson);
                 } else {
                     const captions = responseJson.data.attributes.captions || [];
                     this.reset(captions);
                 }
             } catch (error) {
-                BEDITA.error(error);
+                this.$helpers.handleApiError(error);
             } finally {
                 this.loading = false;
             }

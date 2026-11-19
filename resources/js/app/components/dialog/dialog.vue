@@ -47,7 +47,7 @@
                     </i>
                 </header>
                 <div
-                    class="message mt-1 has-text-size-base"
+                    class="message mt-1"
                     v-html="message"
                     v-if="message"
                 />
