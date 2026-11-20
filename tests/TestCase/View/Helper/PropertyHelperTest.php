@@ -43,6 +43,7 @@ class PropertyHelperTest extends TestCase
      */
     public function setUp(): void
     {
+        parent::setUp();
         // set custom control handlers
         $propsConf = (array)Configure::read('Properties');
         $propsConf['dummies'] = [

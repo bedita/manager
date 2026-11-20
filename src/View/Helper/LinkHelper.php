@@ -184,7 +184,7 @@ class LinkHelper extends Helper
      */
     public function page(int $page): void
     {
-        echo $this->replaceQueryParams(['page' => $page]);
+        echo htmlspecialchars($this->replaceQueryParams(['page' => $page]), ENT_QUOTES, 'UTF-8');
     }
 
     /**
@@ -195,7 +195,7 @@ class LinkHelper extends Helper
      */
     public function pageSize(int $pageSize): void
     {
-        echo $this->replaceQueryParams(['page_size' => $pageSize]);
+        echo htmlspecialchars($this->replaceQueryParams(['page_size' => $pageSize]), ENT_QUOTES, 'UTF-8');
     }
 
     /**
