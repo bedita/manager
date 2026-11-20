@@ -1,27 +1,3 @@
-{# trash #}
-{% if not (streams or object.attributes.provider_extra.html) and object.meta.media_url %}
-<property-view inline-template :tab-open="tabsOpen" :is-default-open=true :tab-open-at-start=true>
-    <section class="fieldset">
-        <header @click.prevent="toggleVisibility()"
-            class="tab unselectable"
-            :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''">
-            <h2>{{ __('Media') }}</h2>
-        </header>
-        <div v-show="isOpen" class="tab-container">
-            {% if object.type == 'audios' %}
-            <audio controls src="{{ object.meta.media_url }}"></audio>
-            {% endif %}
-            {% if object.type == 'images' %}
-            <img src="{{ object.meta.media_url }}">
-            {% endif %}
-            {% if object.type == 'videos' %}
-            <video controls src="{{ object.meta.media_url }}"></video>
-            {% endif %}
-        </div>
-    </section>
-</property-view>
-{% endif %}
-
 {% if streams or object.attributes.provider_extra.html %}
 <property-view inline-template :tab-open="tabsOpen" :is-default-open=true :tab-open-at-start=true>
     <section class="fieldset">
@@ -217,5 +193,52 @@
             </div>
         </section>
     </property-view>
+    {% endif %}
+{% else %}
+    {# trash #}
+    {% if currentModule.name == 'trash' and object.meta.media_url %}
+        <property-view inline-template :tab-open="tabsOpen" :is-default-open=true :tab-open-at-start=true>
+            <section class="fieldset">
+                <header
+                    @click.prevent="toggleVisibility()"
+                    class="tab unselectable"
+                    :class="isOpen? 'open has-border-module-{{ currentModule.name }}' : ''"
+                >
+                    <h2>{{ __('Media') }}</h2>
+                </header>
+                <div v-show="isOpen" class="tab-container">
+                    {% if object.type == 'audios' %}
+                        <audio
+                            width="100%"
+                            controls
+                        >
+                            <source src="{{ object.meta.media_url }}">
+                        </audio>
+                    {% endif %}
+                    {% if object.type == 'images' %}
+                        <figure>
+                            <a
+                                href="{{ object.meta.media_url }}"
+                                target="_blank"
+                            >
+                                <img
+                                    alt=""
+                                    style="min-width:500px;"
+                                    src="{{ object.meta.media_url }}"
+                                >
+                            </a>
+                        </figure>
+                    {% endif %}
+                    {% if object.type == 'videos' %}
+                        <video
+                            width="100%"
+                            controls
+                        >
+                            <source src="{{ object.meta.media_url }}">
+                        </video>
+                    {% endif %}
+                </div>
+            </section>
+        </property-view>
     {% endif %}
 {% endif %}
