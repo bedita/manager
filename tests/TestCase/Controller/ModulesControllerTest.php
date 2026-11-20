@@ -79,6 +79,7 @@ class ModulesControllerTest extends BaseControllerTest
     public function tearDown(): void
     {
         Cache::disable();
+        parent::tearDown();
     }
 
     /**

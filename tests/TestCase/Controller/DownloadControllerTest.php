@@ -32,6 +32,7 @@ class DownloadControllerTest extends TestCase
      */
     public function setUp(): void
     {
+        parent::setUp();
         $this->apiClient = ApiClientProvider::getApiClient();
     }
 
@@ -41,6 +42,7 @@ class DownloadControllerTest extends TestCase
     public function tearDown(): void
     {
         ApiClientProvider::setApiClient($this->apiClient);
+        parent::tearDown();
     }
 
     /**

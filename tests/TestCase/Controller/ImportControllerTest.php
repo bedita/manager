@@ -86,6 +86,7 @@ class ImportControllerTest extends TestCase
     public function tearDown(): void
     {
         ApiClientProvider::setApiClient($this->apiClient);
+        parent::tearDown();
     }
 
     /**

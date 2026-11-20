@@ -99,7 +99,9 @@ try {
     Configure::load('version', 'ini');
     Configure::load('bedita-api-version', 'ini');
 } catch (Exception $e) {
-    exit($e->getMessage() . "\n");
+    ini_set('display_errors', '0');
+    error_log($e->getMessage());
+    exit;
 }
 
 /*
