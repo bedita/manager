@@ -73,7 +73,6 @@
                         }) %}
                     {% endif %}
                 {% endfor %}
-
                 {% set thumbCodes = {
                     notAcceptable: constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_ACCEPTABLE'),
                     notAvailable: constant('BEdita\\WebTools\\View\\Helper\\ThumbHelper::NOT_AVAILABLE'),
@@ -207,7 +206,7 @@
                     <h2>{{ __('Media') }}</h2>
                 </header>
                 <div v-show="isOpen" class="tab-container">
-                    {% if object.type == 'audios' %}
+                    {% if object.type == 'audio' %}
                         <audio
                             width="100%"
                             controls
