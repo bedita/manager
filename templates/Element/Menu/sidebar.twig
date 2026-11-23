@@ -2,7 +2,7 @@
 
     <div class="project-title">
         <div class="app-module-box">
-            {{ Html.link( (project.name ?: 'BEdita Manager'), '/' ) | raw }}
+            {{ Html.link( (config('Project.name') ?: 'BEdita Manager'), '/' ) | raw }}
         </div>
     </div>
 
