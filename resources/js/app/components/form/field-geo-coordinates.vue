@@ -60,7 +60,7 @@ export default {
     mounted() {
         this.$nextTick(() => {
             const v = this.value || '';
-            const [latitude, longitude] = v
+            const [longitude, latitude] = v
                 .replace('POINT(', '')
                 .replace(')', '')
                 .split(' ');
@@ -95,7 +95,7 @@ export default {
                 }
             }
             if (this.latitude && this.longitude) {
-                this.coordinates = `POINT(${this.latitude} ${this.longitude})`;
+                this.coordinates = `POINT(${this.longitude} ${this.latitude})`;
             } else {
                 this.coordinates = '';
             }
